@@ -28,7 +28,7 @@ import { yargsDefaults } from '../helpers'
 import { customOrDefaultTemplatePath, relationsForModel } from '../helpers'
 import { files as serviceFiles } from '../service/service'
 
-const IGNORE_FIELDS_FOR_INPUT = ['id', 'createdAt', 'updatedAt']
+const DEFAULT_IGNORE_FIELDS_FOR_INPUT = ['createdAt', 'updatedAt']
 
 const missingIdConsoleMessage = () => {
   const line1 =
@@ -38,7 +38,7 @@ const missingIdConsoleMessage = () => {
   const line3 = "you'll need to update your schema definition to include"
   const line4 = 'an `@id` column. Read more here: '
   const line5 = chalk.underline.blue(
-    'https://redwoodjs.com/docs/schema-relations'
+    'https://redwoodjs.com/docs/schema-relations',
   )
 
   console.error(
@@ -46,7 +46,7 @@ const missingIdConsoleMessage = () => {
       padding: 1,
       margin: { top: 1, bottom: 3, right: 1, left: 2 },
       borderStyle: 'single',
-    })
+    }),
   )
 }
 
@@ -69,13 +69,14 @@ const modelFieldToSDL = ({
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  const dictionary = {
+  const prismaTypeToGraphqlType = {
     Json: 'JSON',
     Decimal: 'Float',
+    Bytes: 'Byte',
   }
 
   const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
-    dictionary[field.type] || field.type
+    prismaTypeToGraphqlType[field.type] || field.type
   }${field.isList ? ']' : ''}${
     (field.isRequired && required) | field.isList ? '!' : ''
   }`
@@ -91,12 +92,17 @@ const querySDL = (model, docs = false) => {
 }
 
 const inputSDL = (model, required, types = {}, docs = false) => {
+  const ignoredFields = DEFAULT_IGNORE_FIELDS_FOR_INPUT
+
   return model.fields
     .filter((field) => {
-      return (
-        IGNORE_FIELDS_FOR_INPUT.indexOf(field.name) === -1 &&
-        field.kind !== 'object'
-      )
+      const idField = model.fields.find((field) => field.isId)
+
+      if (idField) {
+        ignoredFields.push(idField.name)
+      }
+
+      return ignoredFields.indexOf(field.name) === -1 && field.kind !== 'object'
     })
     .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
@@ -124,6 +130,19 @@ const idType = (model, crud) => {
   return idField.type
 }
 
+const idName = (model, crud) => {
+  if (!crud) {
+    return undefined
+  }
+
+  const idField = model.fields.find((field) => field.isId)
+  if (!idField) {
+    missingIdConsoleMessage()
+    throw new Error('Failed: Could not generate SDL')
+  }
+  return idField.name
+}
+
 const sdlFromSchemaModel = async (name, crud, docs = false) => {
   const model = await getSchema(name)
 
@@ -135,7 +154,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
         .map(async (field) => {
           const model = await getSchema(field.type)
           return model
-        })
+        }),
     )
   ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
 
@@ -147,7 +166,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
         .map(async (field) => {
           const enumDef = await getEnum(field.type)
           return enumDef
-        })
+        }),
     )
   ).reduce((acc, curr) => acc.concat(curr), [])
 
@@ -162,6 +181,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
     createInput: createInputSDL(model, types, docs).join('\n    '),
     updateInput: updateInputSDL(model, types, docs).join('\n    '),
     idType: idType(model, crud),
+    idName: idName(model, crud),
     relations: relationsForModel(model),
     enums,
   }
@@ -181,6 +201,7 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     relations,
     enums,
   } = await sdlFromSchemaModel(name, crud, docs)
@@ -191,7 +212,7 @@ export const files = async ({
     templatePath: 'sdl.ts.template',
   })
 
-  let template = generateTemplate(templatePath, {
+  let template = await generateTemplate(templatePath, {
     docs,
     modelName,
     modelDescription,
@@ -201,17 +222,18 @@ export const files = async ({
     createInput,
     updateInput,
     idType,
+    idName,
     enums,
   })
 
   const extension = typescript ? 'ts' : 'js'
   let outputPath = path.join(
     getPaths().api.graphql,
-    `${camelcase(pluralize(name))}.sdl.${extension}`
+    `${camelcase(pluralize(name))}.sdl.${extension}`,
   )
 
   if (typescript) {
-    template = transformTSToJS(outputPath, template)
+    template = await transformTSToJS(outputPath, template)
   }
 
   return {
@@ -262,8 +284,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-sdl'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-sdl',
+      )}`,
     )
 
   // Merge default options in
@@ -323,7 +345,11 @@ export const handler = async ({
           },
         },
       ].filter(Boolean),
-      { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+      {
+        rendererOptions: { collapseSubtasks: false },
+        exitOnError: true,
+        silentRendererCondition: process.env.NODE_ENV === 'test',
+      },
     )
 
     if (rollback && !force) {

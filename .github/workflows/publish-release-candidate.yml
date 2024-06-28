@@ -25,10 +25,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup node
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: ⬢ Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: 🏷 Check git tags
         run: |
@@ -62,24 +65,8 @@ jobs:
           #  This is required because lerna uses tags to determine the version.
           fetch-depth: 0
 
-      - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: 🐈 Set up yarn cache
-        uses: ./.github/actions/set-up-yarn-cache
-
-      - name: 🐈 Yarn install
-        run: yarn install --inline-builds
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: ✅ Check constraints, dependencies, and package.json's
-        uses: ./tasks/check
-
-      - name: 🏗 Build
-        run: yarn build
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
 
       - name: 🔎 Lint
         run: yarn lint

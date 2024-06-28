@@ -1,4 +1,4 @@
-import { findUp } from './findUp'
+import { findUp } from './findUp.js'
 
 const CONFIG_FILE_NAME = 'redwood.toml'
 
@@ -7,7 +7,7 @@ const CONFIG_FILE_NAME = 'redwood.toml'
  */
 const getConfigPathCache = new Map<string, string>()
 export const getConfigPath = (
-  cwd: string = process.env.RWJS_CWD ?? process.cwd()
+  cwd: string = process.env.RWJS_CWD ?? process.cwd(),
 ): string => {
   if (getConfigPathCache.has(cwd)) {
     return getConfigPathCache.get(cwd) as string
@@ -15,7 +15,7 @@ export const getConfigPath = (
   const configPath = findUp(CONFIG_FILE_NAME, cwd)
   if (!configPath) {
     throw new Error(
-      `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`
+      `Could not find a "${CONFIG_FILE_NAME}" file, are you sure you're in a Redwood project?`,
     )
   }
   getConfigPathCache.set(cwd, configPath)

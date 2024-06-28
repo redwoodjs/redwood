@@ -1,4 +1,5 @@
-import yargs from 'yargs'
+import { describe, it, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
 import {
   DEFAULT_LENGTH,
@@ -35,7 +36,7 @@ describe('generateSecret', () => {
     console.info = (...args) => (output += args.join(' ') + '\n')
     process.stdout.write = (str) => (output += str)
 
-    const { raw } = yargs
+    const { raw } = yargs()
       .command('secret', false, builder, handler)
       .parse('secret --raw')
 

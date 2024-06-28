@@ -1,6 +1,8 @@
 .idea
 .DS_Store
-.env
+.env*
+!.env.example
+!.env.defaults
 .netlify
 .redwood/*
 !.redwood/README.md

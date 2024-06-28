@@ -1,10 +1,10 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "6.0.7",
+  "version": "7.0.0",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/codemods"
   },
   "license": "MIT",
@@ -15,48 +15,46 @@
   "scripts": {
     "build": "yarn build:js",
     "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build:pack": "yarn pack -o redwoodjs-codemods.tgz",
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
     "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",
-    "test": "NODE_ENV=test jest",
-    "test:watch": "yarn test --watch"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/cli": "7.23.4",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.24.5",
     "@babel/traverse": "^7.22.20",
-    "@iarna/toml": "2.2.5",
-    "@redwoodjs/project-config": "6.0.7",
-    "@svgr/core": "8.0.0",
-    "@svgr/plugin-jsx": "8.0.1",
-    "@vscode/ripgrep": "1.15.6",
-    "@whatwg-node/fetch": "0.9.14",
+    "@redwoodjs/project-config": "workspace:*",
+    "@svgr/core": "8.1.0",
+    "@svgr/plugin-jsx": "8.1.0",
+    "@vscode/ripgrep": "1.15.9",
+    "@whatwg-node/fetch": "0.9.17",
     "cheerio": "1.0.0-rc.12",
-    "core-js": "3.33.3",
+    "core-js": "3.37.1",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "jest": "29.7.0",
     "jscodeshift": "0.15.0",
     "pascalcase": "1.0.0",
-    "prettier": "2.8.8",
+    "prettier": "3.3.2",
     "tasuku": "2.0.1",
-    "typescript": "5.3.2",
+    "typescript": "5.4.5",
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@types/babel__core": "7.20.4",
+    "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.8",
     "@types/jscodeshift": "0.11.6",
-    "@types/prettier": "2.7.3",
-    "@types/yargs": "17.0.31",
+    "@types/yargs": "17.0.32",
     "fs-extra": "11.2.0",
-    "tempy": "1.0.1"
+    "tempy": "1.0.1",
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

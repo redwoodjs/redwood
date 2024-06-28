@@ -1,6 +1,231 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`in javascript (default) mode creates a edit page 1`] = `
+exports[`'use client' directive > creates a new EditPostCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import { navigate, routes } from '@redwoodjs/router'
+
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import PostForm from 'src/components/Post/PostForm'
+
+export const QUERY = gql\`
+  query EditPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+const UPDATE_POST_MUTATION = gql\`
+  mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
+    updatePost(id: $id, input: $input) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ post }) => {
+  const [updatePost, { loading, error }] = useMutation(UPDATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post updated')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const onSave = (input, id) => {
+    updatePost({ variables: { id, input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">
+          Edit Post {post?.id}
+        </h2>
+      </header>
+      <div className="rw-segment-main">
+        <PostForm post={post} onSave={onSave} error={error} loading={loading} />
+      </div>
+    </div>
+  )
+}
+"
+`;
+
+exports[`'use client' directive > creates a new NewPost component with the 'use client' directive 1`] = `
+"'use client'
+
+import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+
+import { toast } from '@redwoodjs/web/toast'
+
+import PostForm from 'src/components/Post/PostForm'
+
+const CREATE_POST_MUTATION = gql\`
+  mutation CreatePostMutation($input: CreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+\`
+
+const NewPost = () => {
+  const [createPost, { loading, error }] = useMutation(CREATE_POST_MUTATION, {
+    onCompleted: () => {
+      toast.success('Post created')
+      navigate(routes.posts())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const onSave = (input) => {
+    createPost({ variables: { input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New Post</h2>
+      </header>
+      <div className="rw-segment-main">
+        <PostForm onSave={onSave} loading={loading} error={error} />
+      </div>
+    </div>
+  )
+}
+
+export default NewPost
+"
+`;
+
+exports[`'use client' directive > creates a new PostCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import Post from 'src/components/Post/Post'
+
+export const QUERY = gql\`
+  query FindPostById($id: Int!) {
+    post: post(id: $id) {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Post not found</div>
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ post }) => {
+  return <Post post={post} />
+}
+"
+`;
+
+exports[`'use client' directive > creates a new PostsCell cell with the 'use client' directive 1`] = `
+"'use client'
+
+import { Link, routes } from '@redwoodjs/router'
+
+import Posts from 'src/components/Post/Posts'
+
+export const QUERY = gql\`
+  query FindPosts {
+    posts {
+      id
+      title
+      slug
+      author
+      body
+      image
+      postedAt
+      isPinned
+      readTime
+      rating
+      upvotes
+      metadata
+      hugeNumber
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => {
+  return (
+    <div className="rw-text-center">
+      {'No posts yet. '}
+      <Link to={routes.newPost()} className="rw-link">
+        {'Create one?'}
+      </Link>
+    </div>
+  )
+}
+
+export const Failure = ({ error }) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ posts }) => {
+  return <Posts posts={posts} />
+}
+"
+`;
+
+exports[`in javascript (default) mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
 const EditPostPage = ({ id }) => {
@@ -11,7 +236,7 @@ export default EditPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a form component 1`] = `
+exports[`in javascript (default) mode > creates a form component 1`] = `
 "import {
   Form,
   FormError,
@@ -273,7 +498,7 @@ export default PostForm
 "
 `;
 
-exports[`in javascript (default) mode creates a formatters function file 1`] = `
+exports[`in javascript (default) mode > creates a formatters function file 1`] = `
 "import React from 'react'
 
 import humanize from 'humanize-string'
@@ -335,7 +560,7 @@ export const checkboxInputTag = (checked) => {
 "
 `;
 
-exports[`in javascript (default) mode creates a formatters function test file 1`] = `
+exports[`in javascript (default) mode > creates a formatters function test file 1`] = `
 "import { render, waitFor, screen } from '@redwoodjs/testing/web'
 
 import {
@@ -531,7 +756,7 @@ describe('checkboxInputTag', () => {
 "
 `;
 
-exports[`in javascript (default) mode creates a index page 1`] = `
+exports[`in javascript (default) mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/Post/PostsCell'
 
 const PostsPage = () => {
@@ -542,7 +767,7 @@ export default PostsPage
 "
 `;
 
-exports[`in javascript (default) mode creates a layout 1`] = `
+exports[`in javascript (default) mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -575,9 +800,10 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in javascript (default) mode creates a new component 1`] = `
+exports[`in javascript (default) mode > creates a new component 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/Post/PostForm'
@@ -621,9 +847,10 @@ export default NewPost
 "
 `;
 
-exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates a new component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
@@ -670,7 +897,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in javascript (default) mode creates a new page 1`] = `
+exports[`in javascript (default) mode > creates a new page 1`] = `
 "import NewPost from 'src/components/Post/NewPost'
 
 const NewPostPage = () => {
@@ -681,7 +908,7 @@ export default NewPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a show cell 1`] = `
+exports[`in javascript (default) mode > creates a show cell 1`] = `
 "import Post from 'src/components/Post/Post'
 
 export const QUERY = gql\`
@@ -718,9 +945,10 @@ export const Success = ({ post }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates a show component 1`] = `
+exports[`in javascript (default) mode > creates a show component 1`] = `
 "import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
@@ -838,7 +1066,7 @@ export default Post
 "
 `;
 
-exports[`in javascript (default) mode creates a show page 1`] = `
+exports[`in javascript (default) mode > creates a show page 1`] = `
 "import PostCell from 'src/components/Post/PostCell'
 
 const PostPage = ({ id }) => {
@@ -849,7 +1077,7 @@ export default PostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a stylesheet 1`] = `
+exports[`in javascript (default) mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -1250,9 +1478,9 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
+exports[`in javascript (default) mode > creates an edit cell 1`] = `undefined`;
 
-exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates an edit component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 
 import { useMutation } from '@redwoodjs/web'
@@ -1269,6 +1497,7 @@ export const QUERY = gql\`
     }
   }
 \`
+
 const UPDATE_USER_PROFILE_MUTATION = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
@@ -1327,7 +1556,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index cell 1`] = `
+exports[`in javascript (default) mode > creates an index cell 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 
 import Posts from 'src/components/Post/Posts'
@@ -1375,9 +1604,10 @@ export const Success = ({ posts }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index component 1`] = `
+exports[`in javascript (default) mode > creates an index component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Post/PostsCell'
@@ -1492,7 +1722,161 @@ export default PostsList
 "
 `;
 
-exports[`in typescript mode creates a edit page 1`] = `
+exports[`in javascript (default) mode > generated form matches expectations 1`] = `
+"import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  RadioField,
+  Submit,
+} from '@redwoodjs/forms'
+
+const PixelForm = (props) => {
+  const onSubmit = (data) => {
+    if (data.geometry === '') {
+      data.geometry = null
+    }
+
+    props.onSave(data, props?.pixel?.id)
+  }
+
+  return (
+    <div className="rw-form-wrapper">
+      <Form onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
+        />
+
+        <Label
+          name="color"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Color
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-0"
+            name="color"
+            defaultValue="RED"
+            defaultChecked={props.pixel?.color?.includes('RED')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Red</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-1"
+            name="color"
+            defaultValue="GREEN"
+            defaultChecked={props.pixel?.color?.includes('GREEN')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Green</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-2"
+            name="color"
+            defaultValue="BLUE"
+            defaultChecked={props.pixel?.color?.includes('BLUE')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Blue</div>
+        </div>
+
+        <FieldError name="color" className="rw-field-error" />
+
+        <Label
+          name="geometry"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Geometry
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-none"
+            name="geometry"
+            defaultValue=""
+            defaultChecked={!props.pixel?.geometry}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div className="rw-check-radio-item-none">None</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-0"
+            name="geometry"
+            defaultValue="TRIANGULAR"
+            defaultChecked={props.pixel?.geometry?.includes('TRIANGULAR')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Triangular</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-1"
+            name="geometry"
+            defaultValue="STRIPES"
+            defaultChecked={props.pixel?.geometry?.includes('STRIPES')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Stripes</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-2"
+            name="geometry"
+            defaultValue="DIAGONAL"
+            defaultChecked={props.pixel?.geometry?.includes('DIAGONAL')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+
+          <div>Diagonal</div>
+        </div>
+
+        <FieldError name="geometry" className="rw-field-error" />
+
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default PixelForm
+"
+`;
+
+exports[`in typescript mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
 type PostPageProps = {
@@ -1507,8 +1891,11 @@ export default EditPostPage
 "
 `;
 
-exports[`in typescript mode creates a form component 1`] = `
-"import {
+exports[`in typescript mode > creates a form component 1`] = `
+"import type { EditPostById, UpdatePostInput } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
+import {
   Form,
   FormError,
   FieldError,
@@ -1520,9 +1907,6 @@ exports[`in typescript mode creates a form component 1`] = `
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditPostById, UpdatePostInput } from 'types/graphql'
-import type { RWGqlError } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -1781,7 +2165,7 @@ export default PostForm
 "
 `;
 
-exports[`in typescript mode creates a formatters function file 1`] = `
+exports[`in typescript mode > creates a formatters function file 1`] = `
 "import React from 'react'
 
 import humanize from 'humanize-string'
@@ -1843,7 +2227,7 @@ export const checkboxInputTag = (checked: boolean) => {
 "
 `;
 
-exports[`in typescript mode creates a formatters function test file 1`] = `
+exports[`in typescript mode > creates a formatters function test file 1`] = `
 "import { render, waitFor, screen } from '@redwoodjs/testing/web'
 
 import {
@@ -2039,7 +2423,7 @@ describe('checkboxInputTag', () => {
 "
 `;
 
-exports[`in typescript mode creates a index page 1`] = `
+exports[`in typescript mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/Post/PostsCell'
 
 const PostsPage = () => {
@@ -2050,7 +2434,7 @@ export default PostsPage
 "
 `;
 
-exports[`in typescript mode creates a layout 1`] = `
+exports[`in typescript mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -2091,16 +2475,24 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in typescript mode creates a new component 1`] = `
-"import { navigate, routes } from '@redwoodjs/router'
+exports[`in typescript mode > creates a new component 1`] = `
+"import type {
+  CreatePostMutation,
+  CreatePostInput,
+  CreatePostMutationVariables,
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/Post/PostForm'
 
-import type { CreatePostInput } from 'types/graphql'
-
-const CREATE_POST_MUTATION = gql\`
+const CREATE_POST_MUTATION: TypedDocumentNode<
+  CreatePostMutation,
+  CreatePostMutationVariables
+> = gql\`
   mutation CreatePostMutation($input: CreatePostInput!) {
     createPost(input: $input) {
       id
@@ -2139,16 +2531,24 @@ export default NewPost
 "
 `;
 
-exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { navigate, routes } from '@redwoodjs/router'
+exports[`in typescript mode > creates a new component with int foreign keys converted in onSave 1`] = `
+"import type {
+  CreateUserProfileMutation,
+  CreateUserProfileInput,
+  CreateUserProfileMutationVariables,
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
-import type { CreateUserProfileInput } from 'types/graphql'
-
-const CREATE_USER_PROFILE_MUTATION = gql\`
+const CREATE_USER_PROFILE_MUTATION: TypedDocumentNode<
+  CreateUserProfileMutation,
+  CreateUserProfileMutationVariables
+> = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
       id
@@ -2190,7 +2590,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in typescript mode creates a new page 1`] = `
+exports[`in typescript mode > creates a new page 1`] = `
 "import NewPost from 'src/components/Post/NewPost'
 
 const NewPostPage = () => {
@@ -2201,57 +2601,72 @@ export default NewPostPage
 "
 `;
 
-exports[`in typescript mode creates a show cell 1`] = `
-"import type { FindPostById } from 'types/graphql'
+exports[`in typescript mode > creates a show cell 1`] = `
+"import type { FindPostById, FindPostByIdVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import Post from 'src/components/Post/Post'
 
-export const QUERY = gql\`
-  query FindPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      slug
-      author
-      body
-      image
-      postedAt
-      isPinned
-      readTime
-      rating
-      upvotes
-      metadata
-      hugeNumber
+export const QUERY: TypedDocumentNode<FindPostById, FindPostByIdVariables> =
+  gql\`
+    query FindPostById($id: Int!) {
+      post: post(id: $id) {
+        id
+        title
+        slug
+        author
+        body
+        image
+        postedAt
+        isPinned
+        readTime
+        rating
+        upvotes
+        metadata
+        hugeNumber
+      }
     }
-  }
-\`
+  \`
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Post not found</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<FindPostByIdVariables>) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
+export const Success = ({
+  post,
+}: CellSuccessProps<FindPostById, FindPostByIdVariables>) => {
   return <Post post={post} />
 }
 "
 `;
 
-exports[`in typescript mode creates a show component 1`] = `
-"import { Link, routes, navigate } from '@redwoodjs/router'
+exports[`in typescript mode > creates a show component 1`] = `
+"import type {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  FindPostById,
+} from 'types/graphql'
+
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
-import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
-
-const DELETE_POST_MUTATION = gql\`
+const DELETE_POST_MUTATION: TypedDocumentNode<
+  DeletePostMutation,
+  DeletePostMutationVariables
+> = gql\`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
       id
@@ -2368,7 +2783,7 @@ export default Post
 "
 `;
 
-exports[`in typescript mode creates a show page 1`] = `
+exports[`in typescript mode > creates a show page 1`] = `
 "import PostCell from 'src/components/Post/PostCell'
 
 type PostPageProps = {
@@ -2383,7 +2798,7 @@ export default PostPage
 "
 `;
 
-exports[`in typescript mode creates a stylesheet 1`] = `
+exports[`in typescript mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -2784,17 +3199,25 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in typescript mode creates an edit cell 1`] = `
-"import type { EditPostById, UpdatePostInput } from 'types/graphql'
+exports[`in typescript mode > creates an edit cell 1`] = `
+"import type {
+  EditPostById,
+  UpdatePostInput,
+  UpdatePostMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/Post/PostForm'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<EditPostById> = gql\`
   query EditPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -2813,7 +3236,11 @@ export const QUERY = gql\`
     }
   }
 \`
-const UPDATE_POST_MUTATION = gql\`
+
+const UPDATE_POST_MUTATION: TypedDocumentNode<
+  EditPostById,
+  UpdatePostMutationVariables
+> = gql\`
   mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       id
@@ -2870,17 +3297,25 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 "
 `;
 
-exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
+exports[`in typescript mode > creates an edit component with int foreign keys converted in onSave 1`] = `
+"import type {
+  EditUserProfileById,
+  UpdateUserProfileInput,
+  UpdateUserProfileMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfile/UserProfileForm'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<EditUserProfileById> = gql\`
   query EditUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -2889,7 +3324,11 @@ export const QUERY = gql\`
     }
   }
 \`
-const UPDATE_USER_PROFILE_MUTATION = gql\`
+
+const UPDATE_USER_PROFILE_MUTATION: TypedDocumentNode<
+  EditUserProfileById,
+  UpdateUserProfileMutationVariables
+> = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
     $input: UpdateUserProfileInput!
@@ -2952,15 +3391,19 @@ export const Success = ({
 "
 `;
 
-exports[`in typescript mode creates an index cell 1`] = `
-"import type { FindPosts } from 'types/graphql'
+exports[`in typescript mode > creates an index cell 1`] = `
+"import type { FindPosts, FindPostsVariables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import Posts from 'src/components/Post/Posts'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<FindPosts, FindPostsVariables> = gql\`
   query FindPosts {
     posts {
       id
@@ -2993,19 +3436,28 @@ export const Empty = () => {
   )
 }
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<FindPosts>) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
+export const Success = ({
+  posts,
+}: CellSuccessProps<FindPosts, FindPostsVariables>) => {
   return <Posts posts={posts} />
 }
 "
 `;
 
-exports[`in typescript mode creates an index component 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+exports[`in typescript mode > creates an index component 1`] = `
+"import type {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  FindPosts,
+} from 'types/graphql'
+
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Post/PostsCell'
@@ -3016,9 +3468,10 @@ import {
   truncate,
 } from 'src/lib/formatters'
 
-import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
-
-const DELETE_POST_MUTATION = gql\`
+const DELETE_POST_MUTATION: TypedDocumentNode<
+  DeletePostMutation,
+  DeletePostMutationVariables
+> = gql\`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
       id
@@ -3122,7 +3575,166 @@ export default PostsList
 "
 `;
 
-exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`] = `
+exports[`in typescript mode > generated form matches expectations 1`] = `
+"import type { EditPixelById, UpdatePixelInput } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
+import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  RadioField,
+  Submit,
+} from '@redwoodjs/forms'
+
+type FormPixel = NonNullable<EditPixelById['pixel']>
+
+interface PixelFormProps {
+  pixel?: EditPixelById['pixel']
+  onSave: (data: UpdatePixelInput, id?: FormPixel['id']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const PixelForm = (props: PixelFormProps) => {
+  const onSubmit = (data: FormPixel) => {
+    if (data.geometry === '') {
+      data.geometry = null
+    }
+
+    props.onSave(data, props?.pixel?.id)
+  }
+
+  return (
+    <div className="rw-form-wrapper">
+      <Form<FormPixel> onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
+        />
+
+        <Label
+          name="color"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Color
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-0"
+            name="color"
+            defaultValue="RED"
+            defaultChecked={props.pixel?.color?.includes('RED')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Red</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-1"
+            name="color"
+            defaultValue="GREEN"
+            defaultChecked={props.pixel?.color?.includes('GREEN')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Green</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-color-2"
+            name="color"
+            defaultValue="BLUE"
+            defaultChecked={props.pixel?.color?.includes('BLUE')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Blue</div>
+        </div>
+
+        <FieldError name="color" className="rw-field-error" />
+
+        <Label
+          name="geometry"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Geometry
+        </Label>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-none"
+            name="geometry"
+            defaultValue=""
+            defaultChecked={!props.pixel?.geometry}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div className="rw-check-radio-item-none">None</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-0"
+            name="geometry"
+            defaultValue="TRIANGULAR"
+            defaultChecked={props.pixel?.geometry?.includes('TRIANGULAR')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Triangular</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-1"
+            name="geometry"
+            defaultValue="STRIPES"
+            defaultChecked={props.pixel?.geometry?.includes('STRIPES')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Stripes</div>
+        </div>
+
+        <div className="rw-check-radio-items">
+          <RadioField
+            id="pixel-geometry-2"
+            name="geometry"
+            defaultValue="DIAGONAL"
+            defaultChecked={props.pixel?.geometry?.includes('DIAGONAL')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>Diagonal</div>
+        </div>
+
+        <FieldError name="geometry" className="rw-field-error" />
+
+        <div className="rw-button-group">
+          <Submit disabled={props.loading} className="rw-button rw-button-blue">
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default PixelForm
+"
+`;
+
+exports[`tailwind flag > set to \`false\` generates a scaffold.css with raw CSS 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -3523,7 +4135,7 @@ exports[`tailwind flag set to \`false\` generates a scaffold.css with raw CSS 1`
 "
 `;
 
-exports[`tailwind flag set to \`true\` generates a scaffold.css with Tailwind components 1`] = `
+exports[`tailwind flag > set to \`true\` generates a scaffold.css with Tailwind components 1`] = `
 ".rw-scaffold {
   @apply bg-white text-gray-600;
 }

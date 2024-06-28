@@ -4,6 +4,7 @@ import type {
   RedirectRequest,
 } from '@azure/msal-browser'
 import { renderHook, act } from '@testing-library/react'
+import { vi, it, expect, describe, beforeAll, beforeEach } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
@@ -79,7 +80,7 @@ const azureActiveDirectoryMockClient: Partial<AzureActiveDirectoryClient> = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -118,12 +119,12 @@ beforeEach(() => {
 function getAzureActiveDirectoryAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     azureActiveDirectoryMockClient as AzureActiveDirectoryClient,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

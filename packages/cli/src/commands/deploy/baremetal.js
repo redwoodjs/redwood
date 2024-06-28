@@ -1,9 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
-import toml from '@iarna/toml'
 import boxen from 'boxen'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
+import * as toml from 'smol-toml'
 import { env as envInterpolation } from 'string-env-interpolation'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
@@ -12,6 +12,8 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
+
+import { SshExecutor } from './baremetal/SshExecutor'
 
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'
@@ -126,52 +128,21 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood Baremetal Deploy Reference',
-      'https://redwoodjs.com/docs/cli-commands#deploy'
-    )}\n`
+      'https://redwoodjs.com/docs/cli-commands#deploy',
+    )}\n`,
   )
-}
-
-// Executes a single command via SSH connection. Displays an error and will
-// exit() with the same code returned from the SSH command.
-const sshExec = async (ssh, path, command, args) => {
-  let sshCommand = command
-
-  if (args) {
-    sshCommand += ` ${args.join(' ')}`
-  }
-
-  const result = await ssh.execCommand(sshCommand, {
-    cwd: path,
-  })
-
-  if (result.code !== 0) {
-    console.error(c.error(`\nDeploy failed!`))
-    console.error(
-      c.error(`Error while running command \`${command} ${args.join(' ')}\`:`)
-    )
-    console.error(
-      boxen(result.stderr, {
-        padding: { top: 0, bottom: 0, right: 1, left: 1 },
-        margin: 0,
-        borderColor: 'red',
-      })
-    )
-    process.exit(result.code)
-  }
-
-  return result
 }
 
 export const throwMissingConfig = (name) => {
   throw new Error(
-    `"${name}" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml`
+    `"${name}" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml`,
   )
 }
 
 export const verifyConfig = (config, yargs) => {
   if (!yargs.environment) {
     throw new Error(
-      'Must specify an environment to deploy to, ex: `yarn rw deploy baremetal production`'
+      'Must specify an environment to deploy to, ex: `yarn rw deploy baremetal production`',
     )
   }
 
@@ -199,7 +170,7 @@ export const verifyServerConfig = (config) => {
 }
 
 const symlinkCurrentCommand = async (dir, ssh, path) => {
-  return await sshExec(ssh, path, 'ln', [
+  return await ssh.exec(path, 'ln', [
     SYMLINK_FLAGS,
     dir,
     CURRENT_RELEASE_SYMLINK_NAME,
@@ -207,7 +178,7 @@ const symlinkCurrentCommand = async (dir, ssh, path) => {
 }
 
 const restartProcessCommand = async (processName, ssh, serverConfig, path) => {
-  return await sshExec(ssh, path, serverConfig.monitorCommand, [
+  return await ssh.exec(path, serverConfig.monitorCommand, [
     'restart',
     processName,
   ])
@@ -229,11 +200,11 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
     tasks.push({
       title: `Enabling maintenance page...`,
       task: async () => {
-        await sshExec(ssh, deployPath, 'cp', [
+        await ssh.exec(deployPath, 'cp', [
           pathJoin('web', 'dist', '200.html'),
           pathJoin('web', 'dist', '200.html.orig'),
         ])
-        await sshExec(ssh, deployPath, 'ln', [
+        await ssh.exec(deployPath, 'ln', [
           SYMLINK_FLAGS,
           pathJoin('..', 'src', 'maintenance.html'),
           pathJoin('web', 'dist', '200.html'),
@@ -245,7 +216,7 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
       tasks.push({
         title: `Stopping ${serverConfig.processNames.join(', ')} processes...`,
         task: async () => {
-          await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
+          await ssh.exec(serverConfig.path, serverConfig.monitorCommand, [
             'stop',
             serverConfig.processNames.join(' '),
           ])
@@ -256,7 +227,7 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
     tasks.push({
       title: `Starting ${serverConfig.processNames.join(', ')} processes...`,
       task: async () => {
-        await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
+        await ssh.exec(serverConfig.path, serverConfig.monitorCommand, [
           'start',
           serverConfig.processNames.join(' '),
         ])
@@ -267,10 +238,10 @@ export const maintenanceTasks = (status, ssh, serverConfig) => {
       tasks.push({
         title: `Disabling maintenance page...`,
         task: async () => {
-          await sshExec(ssh, deployPath, 'rm', [
+          await ssh.exec(deployPath, 'rm', [
             pathJoin('web', 'dist', '200.html'),
           ])
-          await sshExec(ssh, deployPath, 'cp', [
+          await ssh.exec(deployPath, 'cp', [
             pathJoin('web', 'dist', '200.html.orig'),
             pathJoin('web', 'dist', '200.html'),
           ])
@@ -294,13 +265,11 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
       title: `Rolling back ${rollbackCount} release(s)...`,
       task: async () => {
         const currentLink = (
-          await sshExec(ssh, serverConfig.path, 'readlink', ['-f', 'current'])
+          await ssh.exec(serverConfig.path, 'readlink', ['-f', 'current'])
         ).stdout
           .split('/')
           .pop()
-        const dirs = (
-          await sshExec(ssh, serverConfig.path, 'ls', ['-t'])
-        ).stdout
+        const dirs = (await ssh.exec(serverConfig.path, 'ls', ['-t'])).stdout
           .split('\n')
           .filter((dirs) => !dirs.match(/current/))
 
@@ -312,13 +281,13 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
           await symlinkCurrentCommand(
             dirs[rollbackIndex],
             ssh,
-            serverConfig.path
+            serverConfig.path,
           )
         } else {
           throw new Error(
             `Cannot rollback ${rollbackCount} release(s): ${
               dirs.length - dirs.indexOf(currentLink) - 1
-            } previous release(s) available`
+            } previous release(s) available`,
           )
         }
       },
@@ -334,7 +303,7 @@ export const rollbackTasks = (count, ssh, serverConfig) => {
             processName,
             ssh,
             serverConfig,
-            serverConfig.path
+            serverConfig.path,
           )
         },
       })
@@ -348,7 +317,7 @@ export const lifecycleTask = (
   lifecycle,
   task,
   skip,
-  { serverLifecycle, ssh, cmdPath }
+  { serverLifecycle, ssh, cmdPath },
 ) => {
   if (serverLifecycle[lifecycle]?.[task]) {
     const tasks = []
@@ -357,7 +326,7 @@ export const lifecycleTask = (
       tasks.push({
         title: `${titleCase(lifecycle)} ${task}: \`${command}\``,
         task: async () => {
-          await sshExec(ssh, cmdPath, command)
+          await ssh.exec(cmdPath, command)
         },
         skip: () => skip,
       })
@@ -378,6 +347,13 @@ export const commandWithLifecycleEvents = ({ name, config, skip, command }) => {
   return tasks.flat().filter((t) => t)
 }
 
+/**
+ * @param {Yargs} yargs
+ * @param {SshExecutor} ssh
+ * @param {*} serverConfig
+ * @param {*} serverLifecycle
+ * @returns Yargs tasks
+ */
 export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   const cmdPath = pathJoin(serverConfig.path, yargs.releaseDir)
   const config = { yargs, ssh, serverConfig, serverLifecycle, cmdPath }
@@ -391,7 +367,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
       command: {
         title: `Cloning \`${serverConfig.branch}\` branch...`,
         task: async () => {
-          await sshExec(ssh, serverConfig.path, 'git', [
+          await ssh.exec(serverConfig.path, 'git', [
             'clone',
             `--branch=${serverConfig.branch}`,
             `--depth=1`,
@@ -400,7 +376,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           ])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -411,10 +387,10 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
       command: {
         title: `Symlink .env...`,
         task: async () => {
-          await sshExec(ssh, cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
+          await ssh.exec(cmdPath, 'ln', [SYMLINK_FLAGS, '../.env', '.env'])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -425,12 +401,12 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
       command: {
         title: `Installing dependencies...`,
         task: async () => {
-          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+          await ssh.exec(cmdPath, serverConfig.packageManagerCommand, [
             'install',
           ])
         },
       },
-    })
+    }),
   )
 
   tasks.push(
@@ -441,25 +417,25 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
       command: {
         title: `DB Migrations...`,
         task: async () => {
-          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+          await ssh.exec(cmdPath, serverConfig.packageManagerCommand, [
             'rw',
             'prisma',
             'migrate',
             'deploy',
           ])
-          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+          await ssh.exec(cmdPath, serverConfig.packageManagerCommand, [
             'rw',
             'prisma',
             'generate',
           ])
-          await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+          await ssh.exec(cmdPath, serverConfig.packageManagerCommand, [
             'rw',
             'dataMigrate',
             'up',
           ])
         },
       },
-    })
+    }),
   )
 
   for (const side of serverConfig.sides) {
@@ -471,14 +447,14 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
         command: {
           title: `Building ${side}...`,
           task: async () => {
-            await sshExec(ssh, cmdPath, serverConfig.packageManagerCommand, [
+            await ssh.exec(cmdPath, serverConfig.packageManagerCommand, [
               'rw',
               'build',
               side,
             ])
           },
         },
-      })
+      }),
     )
   }
 
@@ -494,7 +470,7 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
         },
         skip: () => !yargs.update,
       },
-    })
+    }),
   )
 
   if (serverConfig.processNames) {
@@ -508,28 +484,20 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
             command: {
               title: `Starting ${processName} process for the first time...`,
               task: async () => {
-                await sshExec(
-                  ssh,
-                  serverConfig.path,
-                  serverConfig.monitorCommand,
-                  [
-                    'start',
-                    pathJoin(
-                      CURRENT_RELEASE_SYMLINK_NAME,
-                      'ecosystem.config.js'
-                    ),
-                    '--only',
-                    processName,
-                  ]
-                )
+                await ssh.exec(serverConfig.path, serverConfig.monitorCommand, [
+                  'start',
+                  pathJoin(CURRENT_RELEASE_SYMLINK_NAME, 'ecosystem.config.js'),
+                  '--only',
+                  processName,
+                ])
               },
             },
-          })
+          }),
         )
         tasks.push({
           title: `Saving ${processName} state for future startup...`,
           task: async () => {
-            await sshExec(ssh, serverConfig.path, serverConfig.monitorCommand, [
+            await ssh.exec(serverConfig.path, serverConfig.monitorCommand, [
               'save',
             ])
           },
@@ -548,11 +516,11 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
                   processName,
                   ssh,
                   serverConfig,
-                  serverConfig.path
+                  serverConfig.path,
                 )
               },
             },
-          })
+          }),
         )
       }
     }
@@ -569,14 +537,13 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           // add 2 to skip `current` and start on the keepReleases + 1th release
           const fileStartIndex = serverConfig.keepReleases + 2
 
-          await sshExec(
-            ssh,
+          await ssh.exec(
             serverConfig.path,
-            `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`
+            `ls -t | tail -n +${fileStartIndex} | xargs rm -rf`,
           )
         },
       },
-    })
+    }),
   )
 
   return tasks.flat().filter((e) => e)
@@ -589,7 +556,7 @@ const mergeLifecycleEvents = (lifecycle, other) => {
   for (const hook of LIFECYCLE_HOOKS) {
     for (const key in other[hook]) {
       lifecycleCopy[hook][key] = (lifecycleCopy[hook][key] || []).concat(
-        other[hook][key]
+        other[hook][key],
       )
     }
   }
@@ -620,6 +587,11 @@ export const parseConfig = (yargs, rawConfigToml) => {
   return { envConfig, envLifecycle }
 }
 
+/**
+ * @param {Yargs} yargs
+ * @param {SshExecutor} ssh
+ * @returns Yargs tasks
+ */
 export const commands = (yargs, ssh) => {
   const deployConfig = fs
     .readFileSync(pathJoin(getPaths().base, CONFIG_FILENAME))
@@ -657,13 +629,13 @@ export const commands = (yargs, ssh) => {
 
     if (yargs.maintenance) {
       tasks = tasks.concat(
-        maintenanceTasks(yargs.maintenance, ssh, serverConfig)
+        maintenanceTasks(yargs.maintenance, ssh, serverConfig),
       )
     } else if (yargs.rollback) {
       tasks = tasks.concat(rollbackTasks(yargs.rollback, ssh, serverConfig))
     } else {
       tasks = tasks.concat(
-        deployTasks(yargs, ssh, serverConfig, serverLifecycle)
+        deployTasks(yargs, ssh, serverConfig, serverLifecycle),
       )
     }
 
@@ -700,8 +672,7 @@ export const handler = async (yargs) => {
     verbose: yargs.verbose,
   })
 
-  const { NodeSSH } = require('node-ssh')
-  const ssh = new NodeSSH()
+  const ssh = new SshExecutor(yargs.verbose)
 
   try {
     const tasks = new Listr(commands(yargs, ssh), {
@@ -717,7 +688,7 @@ export const handler = async (yargs) => {
         padding: { top: 0, bottom: 0, right: 1, left: 1 },
         margin: 0,
         borderColor: 'red',
-      })
+      }),
     )
 
     process.exit(e?.exitCode || 1)

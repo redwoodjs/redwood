@@ -7,6 +7,8 @@ import fse from 'fs-extra'
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
+import * as nftPacker from '../packing/nft'
+
 const ZIPBALL_DIR = './api/dist/zipball'
 
 export function zipDirectory(source, out) {
@@ -27,7 +29,7 @@ export function zipDirectory(source, out) {
 // returns a tuple of [filePath, fileContent]
 export function generateEntryFile(functionAbsolutePath, name) {
   const relativeImport = ensurePosixPath(
-    path.relative(getPaths().base, functionAbsolutePath)
+    path.relative(getPaths().base, functionAbsolutePath),
   )
   return [
     `${ZIPBALL_DIR}/${name}/${name}.js`,
@@ -46,8 +48,8 @@ export async function packageSingleFunction(functionFile) {
     copyPromises.push(
       fse.copy(
         './' + singleDependencyPath,
-        `${ZIPBALL_DIR}/${functionName}/${singleDependencyPath}`
-      )
+        `${ZIPBALL_DIR}/${functionName}/${singleDependencyPath}`,
+      ),
     )
   }
 
@@ -59,9 +61,9 @@ export async function packageSingleFunction(functionFile) {
   copyPromises.push(functionEntryPromise)
 
   await Promise.all(copyPromises)
-  await exports.zipDirectory(
+  await zipDirectory(
     `${ZIPBALL_DIR}/${functionName}`,
-    `${ZIPBALL_DIR}/${functionName}.zip`
+    `${ZIPBALL_DIR}/${functionName}.zip`,
   )
   await fse.remove(`${ZIPBALL_DIR}/${functionName}`)
   return
@@ -69,5 +71,5 @@ export async function packageSingleFunction(functionFile) {
 
 export function nftPack() {
   const filesToBePacked = findApiDistFunctions()
-  return Promise.all(filesToBePacked.map(exports.packageSingleFunction))
+  return Promise.all(filesToBePacked.map(nftPacker.packageSingleFunction))
 }

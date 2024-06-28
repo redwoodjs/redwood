@@ -1,23 +1,76 @@
 {
   "name": "@redwoodjs/web",
-  "version": "6.0.7",
+  "version": "7.0.0",
+  "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/web"
   },
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "cross-env": "./dist/bins/cross-env.js",
-    "msw": "./dist/bins/msw.js",
-    "redwood": "./dist/bins/redwood.js",
-    "rw": "./dist/bins/redwood.js",
-    "rwfw": "./dist/bins/rwfw.js",
-    "storybook": "./dist/bins/storybook.js",
-    "tsc": "./dist/bins/tsc.js",
-    "webpack": "./dist/bins/webpack.js"
+    "cross-env": "./dist/cjs/bins/cross-env.js",
+    "msw": "./dist/cjs/bins/msw.js",
+    "redwood": "./dist/cjs/bins/redwood.js",
+    "rw": "./dist/cjs/bins/redwood.js",
+    "rwfw": "./dist/cjs/bins/rwfw.js",
+    "storybook": "./dist/cjs/bins/storybook.js",
+    "tsc": "./dist/cjs/bins/tsc.js",
+    "webpack": "./dist/cjs/bins/webpack.js"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./serverInject": {
+      "require": "./dist/cjs/components/ServerInject.js",
+      "import": "./dist/components/ServerInject.js",
+      "types": "./dist/components/ServerInject.d.ts",
+      "default": "./dist/components/ServerInject.js"
+    },
+    "./dist/components/*": {
+      "require": "./dist/cjs/components/*.js",
+      "import": "./dist/components/*.js"
+    },
+    "./dist/apollo/suspense": {
+      "require": "./dist/cjs/apollo/suspense.js",
+      "import": "./dist/apollo/suspense.js"
+    },
+    "./dist/apollo/sseLink": {
+      "require": "./dist/cjs/apollo/sseLink.js",
+      "import": "./dist/apollo/sseLink.js"
+    },
+    "./dist/graphql.js": {
+      "require": "./dist/cjs/graphql.js",
+      "import": "./dist/graphql.js"
+    },
+    "./webpackEntry": {
+      "default": "./dist/entry/index.js"
+    },
+    "./toast": {
+      "require": "./dist/cjs/toast/index.js",
+      "import": "./dist/toast/index.js",
+      "types": "./dist/toast/index.d.ts"
+    },
+    "./apollo": {
+      "require": "./dist/cjs/apollo/index.js",
+      "import": "./dist/apollo/index.js",
+      "types": "./dist/apollo/index.d.ts",
+      "default": "./dist/cjs/apollo/index.js"
+    },
+    "./forceEsmApollo": {
+      "require": "./dist/apollo/index.js",
+      "import": "./dist/apollo/index.js"
+    }
   },
   "files": [
     "dist",
@@ -26,47 +79,51 @@
     "src/entry"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
-    "build:types": "tsc --build --verbose",
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-web.tgz",
+    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest",
+    "test": "vitest run",
     "test:types": "tstyche",
-    "test:watch": "yarn test --watch"
+    "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.8.8",
-    "@babel/runtime-corejs3": "7.23.5",
-    "@redwoodjs/auth": "6.0.7",
-    "core-js": "3.33.3",
+    "@apollo/client": "3.9.9",
+    "@babel/runtime-corejs3": "7.24.5",
+    "@redwoodjs/auth": "workspace:*",
+    "core-js": "3.37.1",
     "graphql": "16.8.1",
-    "graphql-sse": "2.4.0",
+    "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
-    "react-helmet-async": "1.3.0",
+    "react-helmet-async": "2.0.5",
     "react-hot-toast": "2.4.1",
     "stacktracey": "2.1.8",
     "ts-toolbelt": "9.6.0"
   },
   "devDependencies": {
-    "@apollo/experimental-nextjs-app-support": "0.5.1",
-    "@babel/cli": "7.23.4",
+    "@apollo/client-react-streaming": "0.10.0",
+    "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "5.17.0",
-    "@testing-library/react": "14.1.2",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
-    "@types/testing-library__jest-dom": "5.14.9",
-    "jest": "29.7.0",
-    "nodemon": "3.0.2",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913",
-    "tstyche": "1.0.0-beta.3",
-    "typescript": "5.3.2"
+    "@babel/plugin-transform-runtime": "7.24.3",
+    "@babel/runtime": "7.24.5",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@rollup/plugin-babel": "6.0.4",
+    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/react": "14.3.1",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "nodemon": "3.1.3",
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-dom": "19.0.0-beta-04b058868c-20240508",
+    "tstyche": "2.0.0",
+    "tsx": "4.15.6",
+    "typescript": "5.4.5",
+    "vitest": "1.6.0"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

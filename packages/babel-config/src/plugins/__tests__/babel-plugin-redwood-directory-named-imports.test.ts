@@ -65,7 +65,7 @@ describe('directory named imports', () => {
             },
           ],
         ],
-      }).code
+      })?.code
       expect(babeled).toMatch(output)
     })
   })

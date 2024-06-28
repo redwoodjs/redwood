@@ -34,7 +34,7 @@ export type { PubSub }
 export { createPubSub, InMemoryLiveQueryStore }
 
 export const liveDirectiveTypeDefs = print(
-  astFromDirective(GraphQLLiveDirective)
+  astFromDirective(GraphQLLiveDirective),
 )
 
 export type LiveQueryStorageMechanism =
@@ -114,7 +114,7 @@ export class RedisLiveQueryStore {
     pub: PublishClientType,
     sub: SubscribeClientType,
     channel: string,
-    liveQueryStore: InMemoryLiveQueryStore
+    liveQueryStore: InMemoryLiveQueryStore,
   ) {
     this.pub = pub
     this.sub = sub
@@ -182,7 +182,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
         options.liveQueries.store.redis.publishClient,
         options.liveQueries.store.redis.subscribeClient,
         options.liveQueries.store.redis.channel || 'live-query-invalidations',
-        inMemoryLiveQueryStore
+        inMemoryLiveQueryStore,
       ) as unknown as InMemoryLiveQueryStore
       liveQueryPlugin = useLiveQuery({
         liveQueryStore,

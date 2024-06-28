@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
@@ -16,7 +16,7 @@ const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
 const TSCONFIG_TEMPLATE = path.resolve(
   __dirname,
   'templates',
-  'tsconfig.json.template'
+  'tsconfig.json.template',
 )
 
 export const files = ({ name, typescript = false }) => {
@@ -52,8 +52,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-script'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-script',
+      )}`,
     )
 
   Object.entries(yargsDefaults).forEach(([option, config]) => {
@@ -69,7 +69,7 @@ export const handler = async ({ force, ...args }) => {
   })
 
   const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-    'After modifying your script, you can invoke it like:'
+    'After modifying your script, you can invoke it like:',
   )}
 
      yarn rw exec ${args.name}
@@ -94,7 +94,7 @@ export const handler = async ({ force, ...args }) => {
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

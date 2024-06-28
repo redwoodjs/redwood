@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 
-import { Redirect } from './links'
-import { routes } from './router'
+import type { GeneratedRoutesMap } from './analyzeRoutes'
+import { namedRoutes } from './namedRoutes'
+import { Redirect } from './redirect'
 import { useRouterState } from './router-context'
-import type { GeneratedRoutesMap } from './util'
 
 interface AuthenticatedRouteProps {
   children: React.ReactNode
@@ -38,15 +38,18 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
-      // We reassign the type like this, because AvailableRoutes is generated in the user's project
-      if (!(routes as GeneratedRoutesMap)[unauthenticated]) {
+      // We type cast like this, because AvailableRoutes is generated in the
+      // user's project
+      const generatedRoutesMap = namedRoutes as GeneratedRoutesMap
+
+      if (!generatedRoutesMap[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = (routes as GeneratedRoutesMap)[unauthenticated]()
+        unauthenticatedPath = generatedRoutesMap[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&
@@ -55,12 +58,12 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
           throw new Error(
             `Redirecting to route "${unauthenticated}" would require route ` +
               'parameters, which currently is not supported. Please choose ' +
-              'a different route'
+              'a different route',
           )
         }
 
         throw new Error(
-          `Could not redirect to the route named ${unauthenticated}`
+          `Could not redirect to the route named ${unauthenticated}`,
         )
       }
 

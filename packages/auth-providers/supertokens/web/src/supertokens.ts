@@ -21,9 +21,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(superTokens)
 

@@ -9,6 +9,7 @@ test('Loads Cell stories', async ({ page }: PlaywrightTestArgs) => {
 
   // Click text=BlogPostCell
   await page.locator('text=/\\bBlogPostCell\\b/').click()
+  await page.getByRole('link', { name: 'Loading' }).click()
 
   await expect(page).toHaveURL(
     `http://localhost:7910/?path=/story/cells-blogpostcell--loading`

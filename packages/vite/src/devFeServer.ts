@@ -1,17 +1,32 @@
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
+import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import {
+  createPerRequestMap,
+  createServerStorage,
+} from '@redwoodjs/server-store'
 
-import { collectCssPaths, componentsModules } from './streaming/collectCss'
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
-import { ensureProcessDirWeb } from './utils'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { createMiddlewareRouter } from './middleware/register.js'
+import type { Middleware } from './middleware/types.js'
+import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import {
+  convertExpressHeaders,
+  ensureProcessDirWeb,
+  getFullUrl,
+} from './utils.js'
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
@@ -19,10 +34,12 @@ globalThis.__REDWOOD__PRERENDER_PAGES = {}
 async function createServer() {
   ensureProcessDirWeb()
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
   const app = express()
   const rwPaths = getPaths()
+
+  const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
 
   // ~~~ Dev time validations ~~~~
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
@@ -32,13 +49,13 @@ async function createServer() {
     throw new Error(
       'Vite entry points not found. Please check that your project has ' +
         'an entry.client.{jsx,tsx} and entry.server.{jsx,tsx} file in ' +
-        'the web/src directory.'
+        'the web/src directory.',
     )
   }
 
   if (!rwPaths.web.viteConfig) {
     throw new Error(
-      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`'
+      'Vite config not found. You need to setup your project with Vite using `yarn rw setup vite`',
     )
   }
   // ~~~~ Dev time validations ~~~~
@@ -48,39 +65,96 @@ async function createServer() {
   // can take control
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
+    plugins: [
+      cjsInterop({
+        dependencies: [
+          // Skip ESM modules: rwjs/auth, rwjs/web
+          '@redwoodjs/forms',
+          '@redwoodjs/prerender/*',
+          '@redwoodjs/router',
+          '@redwoodjs/auth-*',
+        ],
+      }),
+      rscEnabled && rscRoutesAutoLoader(),
+    ],
     server: { middlewareMode: true },
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
   })
 
+  const serverStorage = createServerStorage()
+
+  // create a handler that will invoke middleware with or without a route
+  // The DEV one will create a new middleware router on each request
+  const handleWithMiddleware = (route?: RouteSpec) => {
+    return createServerAdapter(async (req: Request) => {
+      // Recreate middleware router on each request in dev
+      const middlewareRouter = await createMiddlewareRouter(vite)
+      const middleware = middlewareRouter.find(
+        req.method as HTTPMethod,
+        req.url,
+      )?.handler as Middleware | undefined
+
+      if (!middleware) {
+        return new Response('No middleware found', { status: 404 })
+      }
+
+      const [mwRes] = await invoke(req, middleware, {
+        route,
+        viteDevServer: vite,
+      })
+
+      return mwRes.toResponse()
+    })
+  }
+
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
+  app.use('*', (req, _res, next) => {
+    const fullUrl = getFullUrl(req)
+
+    const perReqStore = createPerRequestMap({
+      // Convert express headers to fetch header
+      headers: convertExpressHeaders(req.headersDistinct),
+      fullUrl,
+    })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
+
+  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+  app.use(
+    '/rw-rsc',
+    createRscRequestHandler({
+      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+      viteDevServer: vite,
+    }),
+  )
+
   const routes = getProjectRoutes()
 
-  for (const route of routes) {
-    const routeHandler = await createReactStreamingHandler(
-      {
-        route,
-        clientEntryPath: rwPaths.web.entryClient as string,
-        getStylesheetLinks: () => getCssLinks(rwPaths, route, vite),
+  const routeHandler = await createReactStreamingHandler(
+    {
+      routes,
+      clientEntryPath: rwPaths.web.entryClient as string,
+      getStylesheetLinks: (route) => {
+        // In dev route is a RouteSpec, with additional properties
+        return getCssLinks({ rwPaths, route: route as RouteSpec, vite })
       },
-      vite
-    )
+      // Recreate middleware router on each request in dev
+      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+    },
+    vite,
+  )
 
-    // @TODO if it is a 404, hand over to 404 handler
-    if (!route.matchRegexString) {
-      continue
-    }
+  app.get('*', createServerAdapter(routeHandler))
 
-    // @TODO we no longer need to use the regex
-    const expressPathDef = route.hasParams
-      ? route.matchRegexString
-      : route.pathDefinition
-
-    app.get(expressPathDef, createServerAdapter(routeHandler))
-  }
+  // invokes middleware for any POST request for auth
+  app.post('*', handleWithMiddleware())
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
@@ -105,10 +179,18 @@ process.stdin.on('data', async (data) => {
  * Passed as a getter to the createReactStreamingHandler function, because
  * at the time of creating the handler, the ViteDevServer hasn't analysed the module graph yet
  */
-function getCssLinks(rwPaths: Paths, route: RouteSpec, vite: ViteDevServer) {
+function getCssLinks({
+  rwPaths,
+  route,
+  vite,
+}: {
+  rwPaths: Paths
+  route?: RouteSpec
+  vite: ViteDevServer
+}) {
   const appAndRouteModules = componentsModules(
-    [rwPaths.web.app, route.filePath].filter(Boolean) as string[],
-    vite
+    [rwPaths.web.app, route && route.filePath].filter(Boolean) as string[],
+    vite,
   )
 
   const collectedCss = collectCssPaths(appAndRouteModules)

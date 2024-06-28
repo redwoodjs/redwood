@@ -1,8 +1,8 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
@@ -76,7 +76,7 @@ export async function check() {
 
     // Read package.json and extract the @redwood/core version
     const packageJson = JSON.parse(
-      fs.readFileSync(path.join(getPaths().base, 'package.json'))
+      fs.readFileSync(path.join(getPaths().base, 'package.json')),
     )
     let localVersion = packageJson.devDependencies['@redwoodjs/core']
 
@@ -92,7 +92,7 @@ export async function check() {
       try {
         remoteVersions.set(
           tag,
-          await latestVersion('@redwoodjs/core', { version: tag })
+          await latestVersion('@redwoodjs/core', { version: tag }),
         )
       } catch (error) {
         // This error may result as the ability of the user to specify arbitrary tags within their config file
@@ -217,11 +217,11 @@ export function readUpdateDataFile() {
       fs.mkdirSync(getPersistenceDirectory(), { recursive: true })
     }
     const persistedData = JSON.parse(
-      fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json'))
+      fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json')),
     )
     // Reconstruct the map
     persistedData.remoteVersions = new Map(
-      Object.entries(persistedData.remoteVersions)
+      Object.entries(persistedData.remoteVersions),
     )
     return persistedData
   } catch (error) {
@@ -254,7 +254,7 @@ function updateUpdateDataFile({
   const updatedData = {
     localVersion: localVersion ?? existingData.localVersion,
     remoteVersions: Object.fromEntries(
-      remoteVersions ?? existingData.remoteVersions
+      remoteVersions ?? existingData.remoteVersions,
     ),
     checkedAt: checkedAt ?? existingData.checkedAt,
     shownAt: shownAt ?? existingData.shownAt,
@@ -262,7 +262,7 @@ function updateUpdateDataFile({
 
   fs.writeFileSync(
     path.join(getPersistenceDirectory(), 'data.json'),
-    JSON.stringify(updatedData, null, 2)
+    JSON.stringify(updatedData, null, 2),
   )
 }
 

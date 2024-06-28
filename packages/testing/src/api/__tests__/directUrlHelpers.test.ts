@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import { it, expect } from 'vitest'
+
 import { checkAndReplaceDirectUrl, getDefaultDb } from '../directUrlHelpers'
 
 const FIXTURE_DIR_PATH = path.resolve('..', '..', '__fixtures__')
@@ -14,9 +16,9 @@ it("does nothing if directUrl isn't set", () => {
   checkAndReplaceDirectUrl(
     fs.readFileSync(
       path.join(NO_DIRECT_URL_FIXTURE_PATH, 'api', 'db', 'schema.prisma'),
-      'utf-8'
+      'utf-8',
     ),
-    getDefaultDb(NO_DIRECT_URL_FIXTURE_PATH)
+    getDefaultDb(NO_DIRECT_URL_FIXTURE_PATH),
   )
 
   expect(process.env.DIRECT_URL).toBeUndefined()
@@ -32,9 +34,9 @@ it("overwrites directUrl if it's set", () => {
   const directUrlEnvVar = checkAndReplaceDirectUrl(
     fs.readFileSync(
       path.join(DIRECT_URL_FIXTURE_PATH, 'api', 'db', 'schema.prisma'),
-      'utf-8'
+      'utf-8',
     ),
-    defaultDb
+    defaultDb,
   )
 
   expect(process.env[directUrlEnvVar as string]).toBe(defaultDb)

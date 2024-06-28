@@ -13,8 +13,7 @@ import type { AuthContextPayload, Decoder } from '@redwoodjs/api'
 import type { CorsConfig } from '@redwoodjs/api'
 import type { RedwoodRealtimeOptions } from '@redwoodjs/realtime'
 
-import type { DirectiveGlobImports } from 'src/directives/makeDirectives'
-
+import type { DirectiveGlobImports } from './directives/makeDirectives'
 import type {
   useRedwoodDirectiveReturn,
   DirectivePluginOptions,
@@ -58,8 +57,8 @@ export type { useRedwoodDirectiveReturn, DirectivePluginOptions }
 export type GetCurrentUser = (
   decoded: AuthContextPayload[0],
   raw: AuthContextPayload[1],
-  req?: AuthContextPayload[2]
-) => Promise<null | Record<string, unknown> | string>
+  req?: AuthContextPayload[2],
+) => Promise<null | Record<string, unknown>>
 
 export type GenerateGraphiQLHeader = () => string
 
@@ -256,7 +255,7 @@ export type GraphQLYogaOptions = {
  *
  * Note: RedwoodRealtime is not supported
  */
-export type GraphQLHandlerOptions = Omit<GraphQLYogaOptions, 'realtime'>
+export type GraphQLHandlerOptions = GraphQLYogaOptions
 
 export type GraphiQLOptions = Pick<
   GraphQLYogaOptions,

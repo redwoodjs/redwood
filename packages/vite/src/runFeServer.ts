@@ -5,23 +5,33 @@
 // UPDATE: We decided to name the package @redwoodjs/web-server instead of
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
-import fs from 'fs/promises'
-import path from 'path'
+import path from 'node:path'
+import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
 // @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
+import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import {
+  createPerRequestMap,
+  createServerStorage,
+} from '@redwoodjs/server-store'
 
-import { createRscRequestHandler } from './rsc/rscRequestHandler'
-import { setClientEntries } from './rsc/rscWorkerCommunication'
-import { createReactStreamingHandler } from './streaming/createReactStreamingHandler'
-import { registerFwGlobals } from './streaming/registerGlobals'
-import type { RWRouteManifest } from './types'
+import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
+import { invoke } from './middleware/invokeMiddleware.js'
+import { createMiddlewareRouter } from './middleware/register.js'
+import type { Middleware } from './middleware/types.js'
+import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
+import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
+import { setClientEntries } from './rsc/rscWorkerCommunication.js'
+import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
+import type { RWRouteManifest } from './types.js'
+import { convertExpressHeaders, getFullUrl } from './utils.js'
 
 /**
  * TODO (STREAMING)
@@ -45,65 +55,96 @@ export async function runFeServer() {
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  registerFwGlobals()
+  registerFwGlobalsAndShims()
 
-  try {
-    // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
-    // TODO (RSC) Remove the try/catch, or at least the if-statement in there
-    // once RSC is always enabled
-    await setClientEntries('load')
-  } catch (e) {
-    if (rwConfig.experimental?.rsc?.enabled) {
+  if (rscEnabled) {
+    try {
+      // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
+      await setClientEntries()
+    } catch (e) {
       console.error('Failed to load client entries')
       console.error(e)
       process.exit(1)
     }
   }
 
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const routeManifest: RWRouteManifest = await import(
-  //   rwPaths.web.routeManifest, { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const routeManifestStr = await fs.readFile(rwPaths.web.routeManifest, 'utf-8')
-  const routeManifest: RWRouteManifest = JSON.parse(routeManifestStr)
+  const routeManifestUrl = url.pathToFileURL(rwPaths.web.routeManifest).href
+  const routeManifest: RWRouteManifest = (
+    await import(routeManifestUrl, { with: { type: 'json' } })
+  ).default
 
-  // TODO See above about using `import { with: { type: 'json' } }` instead
-  const manifestPath = path.join(rwPaths.web.dist, 'client-build-manifest.json')
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const buildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  const clientBuildManifestUrl = url.pathToFileURL(
+    path.join(rwPaths.web.distBrowser, 'client-build-manifest.json'),
+  ).href
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(clientBuildManifestUrl, { with: { type: 'json' } })
+  ).default
 
-  if (rwConfig.experimental?.rsc?.enabled) {
-    console.log('='.repeat(80))
-    console.log('buildManifest', buildManifest)
-    console.log('='.repeat(80))
+  // Even though `entry.server.tsx` is the main entry point for SSR, we still
+  // need to read the client build manifest and find `entry.client.tsx` to get
+  // the correct links to insert for the initial CSS files that will eventually
+  // be rendered when the finalized html output is being streamed to the
+  // browser. We also need it to tell React what JS bundle contains
+  // `hydrateRoot` when it'll eventually get to hydrating things in the browser
+  //
+  // So, `clientEntry` is used to find the initial JS bundle to load in the
+  // browser and also to discover CSS files that will be needed to render the
+  // initial page.
+  //
+  // In addition to all the above the discovered CSS files are also passed to
+  // all middleware that have been registered
+  const clientEntry = rscEnabled
+    ? clientBuildManifest['entry.client.tsx'] ||
+      clientBuildManifest['entry.client.jsx']
+    : Object.values(clientBuildManifest).find(
+        (manifestItem) => manifestItem.isEntry,
+      )
+
+  if (!clientEntry) {
+    throw new Error('Could not find client entry in build manifest')
   }
 
-  const indexEntry = Object.values(buildManifest).find((manifestItem) => {
-    return manifestItem.isEntry
-  })
+  // @MARK: In prod, we create it once up front!
+  const middlewareRouter = await createMiddlewareRouter()
+  const serverStorage = createServerStorage()
 
-  if (!indexEntry) {
-    throw new Error('Could not find index.html in build manifest')
+  const handleWithMiddleware = () => {
+    return createServerAdapter(async (req: Request) => {
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
+
+      const handler = matchedMw?.handler as Middleware | undefined
+
+      if (!matchedMw) {
+        return new Response('No middleware found', { status: 404 })
+      }
+
+      const [mwRes] = await invoke(req, handler, {
+        params: matchedMw?.params,
+      })
+
+      return mwRes.toResponse()
+    })
   }
 
   // 1. Use static handler for assets
   // For CF workers, we'd need an equivalent of this
   app.use(
     '/assets',
-    express.static(rwPaths.web.dist + '/assets', { index: false })
+    express.static(rwPaths.web.distBrowser + '/assets', { index: false }),
   )
+
+  app.use('*', (req, _res, next) => {
+    const fullUrl = getFullUrl(req)
+    const headers = convertExpressHeaders(req.headersDistinct)
+    // Convert express headers to fetch headers
+    const perReqStore = createPerRequestMap({ headers, fullUrl })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
 
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
@@ -114,66 +155,49 @@ export async function runFeServer() {
     // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
     // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
-      changeOrigin: true,
+      changeOrigin: false,
       pathRewrite: {
         [`^${rwConfig.web.apiUrl}`]: '', // remove base path
       },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
-    })
+    }),
   )
 
-  const getStylesheetLinks = () => indexEntry.css || []
-  const clientEntry = '/' + indexEntry.file
-
-  for (const route of Object.values(routeManifest)) {
-    // if it is a 404, register it at the end somehow.
-    if (!route.matchRegexString) {
-      continue
-    }
-
-    // @TODO: we don't need regexes here
-    // Param matching, etc. all handled within the route handler now
-    const expressPathDef = route.hasParams
-      ? route.matchRegexString
-      : route.pathDefinition
-
-    if (!getConfig().experimental?.rsc?.enabled) {
-      const routeHandler = await createReactStreamingHandler({
-        route,
-        clientEntryPath: clientEntry,
-        getStylesheetLinks,
-      })
-
-      // Wrap with whatg/server adapter. Express handler -> Fetch API handler
-      app.get(expressPathDef, createServerAdapter(routeHandler))
-    } else {
-      console.log('expressPathDef', expressPathDef)
-
-      // This is for RSC only. And only for now, until we have SSR working we
-      // with RSC. This maps /, /about, etc to index.html
-      app.get(expressPathDef, (req, res, next) => {
-        // Serve index.html for all routes, to let client side routing take
-        // over
-        req.url = '/'
-        // Without this, we get a flash of a url with a trailing slash. Still
-        // works, but doesn't look nice
-        // For example, if we navigate to /about we'll see a flash of /about/
-        // before returning to /about
-        req.originalUrl = '/'
-
-        return express.static(rwPaths.web.dist)(req, res, next)
-      })
-    }
-  }
-
   // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use('/rw-rsc', createRscRequestHandler())
+  app.use(
+    '/rw-rsc',
+    createRscRequestHandler({
+      getMiddlewareRouter: async () => middlewareRouter,
+    }),
+  )
+
+  // Static asset handling MUST be defined before our catch all routing handler below
+  // otherwise it will catch all requests for static assets and return a 404.
+  // Placing this here defines our precedence for static asset handling - that we favor
+  // the static assets over any application routing.
+  app.use(express.static(rwPaths.web.distBrowser, { index: false }))
+
+  const getStylesheetLinks = rscEnabled
+    ? getRscStylesheetLinkGenerator(clientEntry.css)
+    : () => clientEntry.css || []
+
+  const routeHandler = await createReactStreamingHandler({
+    routes: Object.values(routeManifest),
+    clientEntryPath: clientEntry.file,
+    getStylesheetLinks,
+    getMiddlewareRouter: async () => middlewareRouter,
+  })
+
+  // Wrap with whatwg/server adapter. Express handler -> Fetch API handler
+  app.get('*', createServerAdapter(routeHandler))
+
+  app.post('*', handleWithMiddleware())
 
   app.listen(rwConfig.web.port)
   console.log(
-    `Started production FE server on http://localhost:${rwConfig.web.port}`
+    `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
 }
 

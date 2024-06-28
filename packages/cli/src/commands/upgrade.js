@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
@@ -20,7 +20,7 @@ export const builder = (yargs) => {
   yargs
     .example(
       'rw upgrade -t 0.20.1-canary.5',
-      'Specify a version. URL for Version History:\nhttps://www.npmjs.com/package/@redwoodjs/core'
+      'Specify a version. URL for Version History:\nhttps://www.npmjs.com/package/@redwoodjs/core',
     )
     .option('dry-run', {
       alias: 'd',
@@ -49,11 +49,11 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference for the upgrade command',
-        'https://redwoodjs.com/docs/cli-commands#upgrade'
+        'https://redwoodjs.com/docs/cli-commands#upgrade',
       )}.\nAnd the ${terminalLink(
         'GitHub releases page',
-        'https://github.com/redwoodjs/redwood/releases'
-      )} for more information on the current release.`
+        'https://github.com/redwoodjs/redwood/releases',
+      )} for more information on the current release.`,
     )
 }
 
@@ -76,8 +76,8 @@ export const validateTag = (tag) => {
     // Stop execution
     throw new Error(
       c.error(
-        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or a valid semver version\n"
-      )
+        "Invalid tag supplied. Supported values: 'rc', 'canary', 'latest', 'next', 'experimental', or a valid semver version\n",
+      ),
     )
   }
 
@@ -112,6 +112,11 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
+        title: 'Downloading yarn patches',
+        task: (ctx) => downloadYarnPatches(ctx, { dryRun, verbose }),
+        enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
+      },
+      {
         title: 'Running yarn install',
         task: (ctx) => yarnInstall(ctx, { dryRun, verbose }),
         skip: () => dryRun,
@@ -132,7 +137,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
           const version = ctx.versionToUpgradeTo
           const messageSections = [
             `One more thing...\n\n   ${c.warning(
-              `🎉 Your project has been upgraded to RedwoodJS ${version}!`
+              `🎉 Your project has been upgraded to RedwoodJS ${version}!`,
             )} \n\n`,
           ]
           // Show links when switching to 'latest' or 'rc', undefined is essentially an alias of 'latest'
@@ -140,11 +145,11 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
             messageSections.push(
               `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
                 `Redwood community discussion`,
-                `https://community.redwoodjs.com/search?q=${version}%23announcements`
+                `https://community.redwoodjs.com/search?q=${version}%23announcements`,
               )}\n   ❖ ${terminalLink(
                 `GitHub Release notes`,
-                `https://github.com/redwoodjs/redwood/releases` // intentionally not linking to specific version
-              )} \n\n`
+                `https://github.com/redwoodjs/redwood/releases`, // intentionally not linking to specific version
+              )} \n\n`,
             )
           }
           // @MARK
@@ -157,14 +162,14 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
               isValidRedwoodJSTag(tag)
             ) {
               additionalMessages.push(
-                `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`
+                `   ❖ You may want to update your redwood.toml config so that \`notifications.versionUpdates\` includes "${tag}"\n`,
               )
             }
             // Append additional messages with a header
             if (additionalMessages.length > 0) {
               messageSections.push(
                 `   📢 ${c.warning(`We'd also like to remind you that:`)} \n`,
-                ...additionalMessages
+                ...additionalMessages,
               )
             }
           }
@@ -175,7 +180,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
     {
       renderer: verbose && 'verbose',
       rendererOptions: { collapseSubtasks: false },
-    }
+    },
   )
 
   await tasks.run()
@@ -192,11 +197,11 @@ async function yarnInstall({ verbose }) {
         stdio: verbose ? 'inherit' : 'pipe',
 
         cwd: getPaths().base,
-      }
+      },
     )
   } catch (e) {
     throw new Error(
-      'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing'
+      'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing',
     )
   }
 }
@@ -205,7 +210,7 @@ async function setLatestVersionToContext(ctx, tag) {
   try {
     const foundVersion = await latestVersion(
       '@redwoodjs/core',
-      tag ? { version: tag } : {}
+      tag ? { version: tag } : {},
     )
 
     ctx.versionToUpgradeTo = foundVersion
@@ -220,12 +225,12 @@ async function setLatestVersionToContext(ctx, tag) {
  */
 function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
   const pkg = JSON.parse(
-    fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8')
+    fs.readFileSync(path.join(pkgPath, 'package.json'), 'utf-8'),
   )
 
   if (pkg.dependencies) {
-    for (const depName of Object.keys(pkg.dependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
+    for (const depName of Object.keys(pkg.dependencies).filter(
+      (x) => x.startsWith('@redwoodjs/') && x !== '@redwoodjs/studio',
     )) {
       if (verbose || dryRun) {
         console.log(` - ${depName}: ${pkg.dependencies[depName]} => ${version}`)
@@ -234,12 +239,12 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
     }
   }
   if (pkg.devDependencies) {
-    for (const depName of Object.keys(pkg.devDependencies).filter((x) =>
-      x.startsWith('@redwoodjs/')
+    for (const depName of Object.keys(pkg.devDependencies).filter(
+      (x) => x.startsWith('@redwoodjs/') && x !== '@redwoodjs/studio',
     )) {
       if (verbose || dryRun) {
         console.log(
-          ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`
+          ` - ${depName}: ${pkg.devDependencies[depName]} => ${version}`,
         )
       }
       pkg.devDependencies[depName] = `${version}`
@@ -249,7 +254,7 @@ function updatePackageJsonVersion(pkgPath, version, { dryRun, verbose }) {
   if (!dryRun) {
     fs.writeFileSync(
       path.join(pkgPath, 'package.json'),
-      JSON.stringify(pkg, undefined, 2)
+      JSON.stringify(pkg, undefined, 2),
     )
   }
 }
@@ -274,7 +279,7 @@ function updateRedwoodDepsForAllSides(ctx, options) {
           updatePackageJsonVersion(basePath, ctx.versionToUpgradeTo, options),
         skip: () => !fs.existsSync(pkgJsonPath),
       }
-    })
+    }),
   )
 }
 
@@ -318,13 +323,13 @@ async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
               if (!depName.startsWith('@redwoodjs/')) {
                 if (verbose || dryRun) {
                   console.log(
-                    ` - ${depName}: ${localPackageJson.dependencies[depName]} => ${depVersion}`
+                    ` - ${depName}: ${localPackageJson.dependencies[depName]} => ${depVersion}`,
                   )
                 }
 
                 localPackageJson.dependencies[depName] = depVersion
               }
-            }
+            },
           )
 
           Object.entries(templatePackageJson.devDependencies || {}).forEach(
@@ -333,25 +338,90 @@ async function updatePackageVersionsFromTemplate(ctx, { dryRun, verbose }) {
               if (!depName.startsWith('@redwoodjs/')) {
                 if (verbose || dryRun) {
                   console.log(
-                    ` - ${depName}: ${localPackageJson.devDependencies[depName]} => ${depVersion}`
+                    ` - ${depName}: ${localPackageJson.devDependencies[depName]} => ${depVersion}`,
                   )
                 }
 
                 localPackageJson.devDependencies[depName] = depVersion
               }
-            }
+            },
           )
 
           if (!dryRun) {
             fs.writeFileSync(
               pkgJsonPath,
-              JSON.stringify(localPackageJson, null, 2)
+              JSON.stringify(localPackageJson, null, 2),
             )
           }
         },
         skip: () => !fs.existsSync(pkgJsonPath),
       }
-    })
+    }),
+  )
+}
+
+async function downloadYarnPatches(ctx, { dryRun, verbose }) {
+  if (!ctx.versionToUpgradeTo) {
+    throw new Error('Failed to upgrade')
+  }
+
+  const githubToken =
+    process.env.GH_TOKEN ||
+    process.env.GITHUB_TOKEN ||
+    process.env.REDWOOD_GITHUB_TOKEN
+
+  const res = await fetch(
+    'https://api.github.com/repos/redwoodjs/redwood/git/trees/main?recursive=1',
+    {
+      headers: {
+        Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
+        ['X-GitHub-Api-Version']: '2022-11-28',
+        Accept: 'application/vnd.github+json',
+      },
+    },
+  )
+
+  const json = await res.json()
+  const patches = json.tree?.filter((patchInfo) =>
+    patchInfo.path.startsWith(
+      'packages/create-redwood-app/templates/ts/.yarn/patches/',
+    ),
+  )
+
+  const patchDir = path.join(getPaths().base, '.yarn', 'patches')
+
+  if (verbose) {
+    console.log('Creating patch directory', patchDir)
+  }
+
+  if (!dryRun) {
+    fs.mkdirSync(patchDir, { recursive: true })
+  }
+
+  return new Listr(
+    (patches || []).map((patch) => {
+      return {
+        title: `Downloading ${patch.path}`,
+        task: async () => {
+          const res = await fetch(patch.url)
+          const patchMeta = await res.json()
+          const patchPath = path.join(
+            getPaths().base,
+            '.yarn',
+            'patches',
+            path.basename(patch.path),
+          )
+
+          if (verbose) {
+            console.log('Writing patch', patchPath)
+          }
+
+          if (!dryRun) {
+            await fs.writeFile(patchPath, patchMeta.content, 'base64')
+          }
+        },
+      }
+    }),
   )
 }
 
@@ -366,7 +436,7 @@ async function refreshPrismaClient(task, { verbose }) {
   } catch (e) {
     task.skip('Refreshing the Prisma client caused an Error.')
     console.log(
-      'You may need to update your prisma client manually: $ yarn rw prisma generate'
+      'You may need to update your prisma client manually: $ yarn rw prisma generate',
     )
     console.log(c.error(e.message))
   }
@@ -390,11 +460,6 @@ export const getCmdMajorVersion = async (command) => {
 const dedupeDeps = async (task, { verbose }) => {
   try {
     const yarnVersion = await getCmdMajorVersion('yarn')
-    const npxVersion = await getCmdMajorVersion('npx')
-    let npxArgs = []
-    if (npxVersion > 6) {
-      npxArgs = ['--yes']
-    }
 
     const baseExecaArgsForDedupe = {
       shell: true,
@@ -404,16 +469,18 @@ const dedupeDeps = async (task, { verbose }) => {
     if (yarnVersion > 1) {
       await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
     } else {
-      await execa(
-        'npx',
-        [...npxArgs, 'yarn-deduplicate'],
-        baseExecaArgsForDedupe
+      // Redwood projects should not be using yarn 1.x as we specify a version of yarn in the package.json
+      // with "packageManager": "yarn@4.1.1" or similar.
+      // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
+      // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
+      task.skip(
+        "Yarn 1.x doesn't support dedupe directly. Please upgrade yarn or use npx with `npx yarn-deduplicate` manually.",
       )
     }
   } catch (e) {
     console.log(c.error(e.message))
     throw new Error(
-      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing'
+      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing',
     )
   }
   await yarnInstall({ verbose })

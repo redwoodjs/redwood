@@ -1,6 +1,5 @@
-import fs from 'fs'
-
 import { getConfig, getDMMF } from '@prisma/internals'
+import fs from 'fs-extra'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -53,7 +52,7 @@ export const getSchema = async (name) => {
     const modelName = await getExistingModelName(name)
     if (!modelName) {
       throw new Error(
-        `No schema definition found for \`${name}\` in schema.prisma file`
+        `No schema definition found for \`${name}\` in schema.prisma file`,
       )
     }
     if (!schemaMemo[modelName]) {
@@ -101,7 +100,7 @@ export const getEnum = async (name) => {
       return model
     } else {
       throw new Error(
-        `No enum schema definition found for \`${name}\` in schema.prisma file`
+        `No enum schema definition found for \`${name}\` in schema.prisma file`,
       )
     }
   }
@@ -132,7 +131,7 @@ export async function verifyModelName(options) {
 
   if (modelName === undefined) {
     throw new Error(
-      `"${options.name}" model not found, check if it exists in "./api/db/schema.prisma"`
+      `"${options.name}" model not found, check if it exists in "./api/db/schema.prisma"`,
     )
   }
 

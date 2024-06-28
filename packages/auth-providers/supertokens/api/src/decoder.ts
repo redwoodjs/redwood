@@ -26,7 +26,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
         function (err: Error | null, key?: SigningKey) {
           const signingKey = key?.getPublicKey()
           callback(err, signingKey)
-        }
+        },
       )
     }
 

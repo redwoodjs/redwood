@@ -228,7 +228,7 @@ module.exports = (webpackEnv) => {
        */
       app:
         redwoodPaths.web.index ||
-        require.resolve('@redwoodjs/web/dist/entry/index.js'),
+        require.resolve('@redwoodjs/web/webpackEntry'),
     },
     resolve: {
       extensions: ['.wasm', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -237,14 +237,15 @@ module.exports = (webpackEnv) => {
         'styled-components': path.resolve(
           redwoodPaths.base,
           'node_modules',
-          'styled-components'
+          'styled-components',
         ),
         '~redwood-app-root': path.resolve(redwoodPaths.web.app),
+        '~redwood-app-routes': path.resolve(redwoodPaths.web.routes),
         react: path.resolve(redwoodPaths.base, 'node_modules', 'react'),
         'react-hook-form': path.resolve(
           redwoodPaths.base,
           'node_modules',
-          'react-hook-form'
+          'react-hook-form',
         ),
       },
     },

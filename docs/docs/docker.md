@@ -7,7 +7,7 @@ description: Redwood's Dockerfile
 :::note The Dockerfile is experimental
 
 Redwood's Dockerfile is the collective effort of several hard-working community members.
-We've worked hard to optimize the it, but expect changes as we collaborate with users and deploy providers.
+We've worked hard to optimize it, but expect changes as we collaborate with users and deploy providers.
 
 :::
 
@@ -23,7 +23,6 @@ yarn rw experimental setup-docker
 
 The setup commands does several things:
 - writes four files: `Dockerfile`, `.dockerignore`, `docker-compose.dev.yml`, and `docker-compose.prod.yml`
-- adds the official yarn [workspace-tools](https://v3.yarnpkg.com/features/plugins#official-plugins) plugin to configure yarn with the ability to only install production dependencies
 - adds the `@redwoodjs/api-server` and `@redwoodjs/web-server` packages to the api and web sides respectively
 - edits the `browser.open` setting in the `redwood.toml` (right now, if it's set to `true`, it'll break the dev server when running the `docker-compose.dev.yml`)
 
@@ -45,6 +44,8 @@ docker compose -f ./docker-compose.prod.yml up
 
 If your api side or web side depend on env vars at build time, you may need to supply them as `--build-args`, or in the compose files.
 
+This is often the most tedious part of setting up Docker. Have ideas of how it could be better? Let us know on the [forums](https://community.redwoodjs.com/)!
+
 :::
 
 The first time you do this, you'll have to use the `console` stage to go in and migrate the database—just like you would with a Redwood app on your machine:
@@ -54,7 +55,11 @@ docker compose -f ./docker-compose.dev.yml run --rm -it console /bin/bash
 root@...:/home/node/app# yarn rw prisma migrate dev
 ```
 
-## The Dockerfile in detail
+:::important 
+If you are using a [Server File](#using-the-server-file) then you should [change the command](#command) that runs the `api_serve` service.
+:::
+
+## Dockerfile
 
 The documentation here goes through and explains every line of Redwood's Dockerfile.
 If you'd like to see the whole Dockerfile for reference, you can find it [here](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/experimental/templates/docker/Dockerfile) or by setting it up in your project: `yarn rw experimental setup-docker`.
@@ -67,13 +72,12 @@ The `base` stage installs dependencies.
 It's used as the base image for the build stages and the `console` stage.
 
 ```Dockerfile
-FROM node:18-bookworm-slim as base
+FROM node:20-bookworm-slim as base
 ```
 
-We use a Node.js 18 image as the base image because that's the version Redwood targets.
+We use a Node.js 20 image as the base image because that's the version Redwood targets.
 "bookworm" is the codename for the current stable distribution of Debian (version 12).
-We think it's important to pin the version of the OS just like we pin the version of Node.js.
-Lastly, the "slim" variant of the `node:18-bookworm` image only includes what Node.js needs which reduces the image's size while making it more secure.
+Lastly, the "slim" variant of the `node:20-bookworm` image only includes what Node.js needs which reduces the image's size while making it more secure.
 
 :::tip Why not alpine?
 
@@ -81,9 +85,18 @@ While alpine may be smaller, it uses musl, a different C standard library.
 In developing this Dockerfile, we prioritized security over size.
 
 If you know what you're doing feel free to change this—it's your Dockerfile now!
-Just remember to change the `apt-get` instructions below too if needed.
+Just remember to change the `apt-get` instructions further down too if needed.
 
 :::
+
+Moving on, next we have `corepack enable`:
+
+```Dockerfile
+RUN corepack enable
+```
+
+[Corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html), Node's manager for package managers, needs to be enabled so that Yarn can use the `packageManager` field in your project's root `package.json` to pick the right version of itself.
+If you'd rather check in the binary, you still can, but you'll need to remember to copy it over (i.e. `COPY --chown=node:node .yarn/releases .yarn/releases`).
 
 ```Dockerfile
 RUN apt-get update && apt-get install -y \
@@ -92,10 +105,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-The `node:18-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
+The `node:20-bookworm-slim` image doesn't have [OpenSSL](https://www.openssl.org/), which [seems to be a bug](https://github.com/nodejs/docker-node/issues/1919).
 (It was included in the "bullseye" image, the codename for Debian 11.)
-On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies).
-We install it, and Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more.
+On Linux, [Prisma needs OpenSSL](https://www.prisma.io/docs/reference/system-requirements#linux-runtime-dependencies), so we install it here via Ubuntu's package manager APT.
+Python and its dependencies are there ready to be uncommented if you need them. See the [Troubleshooting](#python) section for more information.
 
 [It's recommended](https://docs.docker.com/develop/develop-images/instructions/#apt-get) to combine `apt-get update` and `apt-get install -y` in the same `RUN` statement for cache busting.
 After installing, we clean up the apt cache to keep the layer lean. (Running `apt-get clean` isn't required—[official Debian images do it automatically](https://github.com/moby/moby/blob/03e2923e42446dbb830c654d0eec323a0b4ef02a/contrib/mkimage/debootstrap#L82-L105).)
@@ -106,14 +119,12 @@ USER node
 
 This and subsequent `chown` options in `COPY` instructions are for security.
 [Services that can run without privileges should](https://docs.docker.com/develop/develop-images/instructions/#user).
-The Node.js image includes a user, `node`, created with an explicit `uid` and `gid`.
+The Node.js image includes a user, `node`, created with an explicit `uid` and `gid` (`1000`).
 We reuse it.
 
 ```Dockerfile
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
 COPY --chown=node:node package.json .
 COPY --chown=node:node api/package.json api/
@@ -123,11 +134,14 @@ COPY --chown=node:node yarn.lock .
 
 Here we copy the minimum set of files that the `yarn install` step needs.
 The order isn't completely arbitrary—it tries to maximize [Docker's layer caching](https://docs.docker.com/build/cache/).
-We expect `yarn.lock` to change more than the package.json files, the package.json files to change more than `.yarnrc.yml` , and `.yarnrc.yml` to change more than the binary, etc.
+We expect `yarn.lock` to change more than the `package.json`s and the `package.json`s  to change more than `.yarnrc.yml`.
 That said, it's hard to argue that these files couldn't be arranged differently, or that the `COPY` instructions couldn't be combined.
 The important thing is that they're all here, before the `yarn install` step:
 
 ```Dockerfile
+RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
+
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
     CI=1 yarn install
@@ -137,6 +151,8 @@ This step installs all your project's dependencies—production and dev.
 Since we use multi-stage builds, your production images won't pay for the dev dependencies installed in this step.
 The build stages need the dev dependencies.
 
+The `mkdir` steps are a workaround for a permission error. We're working on removing them, but for now if you remove them the install step will probably fail.
+
 This step is a bit more involved than the others.
 It uses a [cache mount](https://docs.docker.com/build/cache/#use-your-package-manager-wisely).
 Yarn operates in three steps: resolution, fetch, and link.
@@ -145,11 +161,8 @@ We could disable it all together, but by using a cache mount, we can still get t
 We set it to the default directory here, but you can change its location in `.yarnrc.yml`.
 If you've done so you'll have to change it here too.
 
-The last thing to note is that we designate the node user.
-[The node user's `uid` is `1000`](https://github.com/nodejs/docker-node/blob/57d57436d1cb175e5f7c8d501df5893556c886c2/18/bookworm-slim/Dockerfile#L3-L4).
-
 One more thing to note: without setting `CI=1`, depending on the deploy provider, yarn may think it's in a TTY, making the logs difficult to read. With this set, yarn adapts accordingly.
-Enabling CI enables [immutable installs](https://v3.yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://v3.yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended. For more information on those settings:
+Enabling CI enables [immutable installs](https://v3.yarnpkg.com/configuration/yarnrc#enableImmutableInstalls) and [inline builds](https://v3.yarnpkg.com/configuration/yarnrc#enableInlineBuilds), both of which are highly recommended.
 
 ```Dockerfile
 COPY --chown=node:node redwood.toml .
@@ -161,11 +174,13 @@ We'll need these config files for the build and production stages.
 The `redwood.toml` file is Redwood's de-facto config file.
 Both the build and serve stages read it to enable and configure functionality.
 
-`.env.defaults` is ok to include.
-This file is committed to git, but `.env` is not.
+:::warning `.env.defaults` is ok to include but `.env` is not
+
 If you add a secret to the Dockerfile, it can be excavated.
 While it's technically true that multi stage builds add a sort of security layer, it's not a best practice.
 Leave them out and look to your deploy provider for further configuration.
+
+:::
 
 ### The `api_build` stage
 
@@ -180,17 +195,19 @@ FROM base as api_build
 # ARG MY_BUILD_TIME_ENV_VAR
 
 COPY --chown=node:node api api
-RUN yarn redwood build api
+RUN yarn rw build api
 ```
 
-After the work we did in the base stage, building the api side amounts to copying in the api directory and running `yarn redwood build api`.
+After the work we did in the base stage, building the api side amounts to copying in the api directory and running `yarn rw build api`.
 
 ### The `api_serve` stage
 
 The `api_serve` stage serves your GraphQL api and functions:
 
 ```Dockerfile
-FROM node:18-bookworm-slim as api_serve
+FROM node:20-bookworm-slim as api_serve
+
+RUN corepack enable
 
 RUN apt-get update && apt-get install -y \
     openssl \
@@ -198,7 +215,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-We don't start from the `base` stage, but begin anew with the `node:18-bookworm-slim` image.
+We don't start from the `base` stage, but begin anew with the `node:20-bookworm-slim` image.
 Since this is a production stage, it's important for it to be as small as possible.
 Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) enables this.
 
@@ -206,19 +223,18 @@ Docker's [multi-stage builds](https://docs.docker.com/build/building/multi-stage
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .yarnrc.yml
-COPY --chown=node:node api/package.json .
+COPY --chown=node:node package.json .
+COPY --chown=node:node api/package.json api/
 COPY --chown=node:node yarn.lock yarn.lock
 ```
-
-The thing that's easy to miss here is that we're copying the `api/package.json` file into the base directory, so that it's just `package.json` in the image.
-This is for the production `yarn install` in the next step.
 
 Like other `COPY` instructions, ordering these files with care enables layering caching.
 
 ```Dockerfile
+RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
+
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
     CI=1 yarn workspaces focus api --production
@@ -226,7 +242,7 @@ RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
 
 This is a critical step for image size.
 We don't use the regular `yarn install` command.
-Using the [official workspaces plugin](https://github.com/yarnpkg/berry/tree/master/packages/plugin-workspace-tools)—which will be included by default in yarn v4—we "focus" on the api workspace, only installing its production dependencies.
+Using the [official workspaces plugin](https://github.com/yarnpkg/berry/tree/master/packages/plugin-workspace-tools)—which is included by default in yarn v4—we "focus" on the api workspace, only installing its production dependencies.
 
 The cache mount will be populated at this point from the install in the `base` stage, so the fetch step should fly by.
 
@@ -241,23 +257,39 @@ COPY --chown=node:node --from=api_build /home/node/app/node_modules/.prisma /hom
 ```
 
 Here's where we really take advantage of multi-stage builds by copying from the `api_build` stage.
-All the building has been done for us—now we can just grab the artifacts without having to lug around the dev dependencies.
+At this point all the building has been done. Now we can just grab the artifacts without having to lug around the dev dependencies.
 
-There's one more thing that was built—the prisma client in `node_modules/.prisma`.
-We need to grab it too.
-
-```Dockerfile
-ENV NODE_ENV=production
-
-CMD [ "node_modules/.bin/rw-server", "api", "--load-env-files" ]
-```
+There's one more thing that was built: the prisma client in `node_modules/.prisma`.
+We need to grab it, too.
 
 Lastly, the default command is to start the api server using the bin from the `@redwoodjs/api-server` package.
 You can override this command if you have more specific needs.
 
-Note that the Redwood CLI isn't available anymore.
+```Dockerfile
+ENV NODE_ENV=production
+
+# default api serve command
+# ---------
+# If you are using a custom server file, you must use the following
+# command to launch your server instead of the default api-server below.
+# This is important if you intend to configure GraphQL to use Realtime.
+#
+# CMD [ "./api/dist/server.js" ]
+CMD [ "node_modules/.bin/rw-server", "api" ]
+```
+
+:::important 
+If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
+
+Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
+:::
+
+
+Note that the Redwood CLI isn't available anymore. (It's a dev dependency.)
 To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
+
+
 
 ### The `web_build` stage
 
@@ -267,10 +299,10 @@ This `web_build` builds the web side:
 FROM base as web_build
 
 COPY --chown=node:node web web
-RUN node_modules/.bin/redwood build web --no-prerender
+RUN yarn rw build web --no-prerender
 ```
 
-After the work we did in the base stage, building the web side amounts to copying in the web directory and running `yarn redwood build web`.
+After the work we did in the base stage, building the web side amounts to copying in the web directory and running `yarn rw build web`.
 
 This stage is a bit of a simplification.
 It foregoes Redwood's prerendering (SSG) capability.
@@ -287,7 +319,7 @@ The `web_prerender_build` stage builds the web side with prerender.
 FROM api_build as web_build_with_prerender
 
 COPY --chown=node:node web web
-RUN yarn redwood build web
+RUN yarn rw build web
 ```
 
 Building the web side with prerendering poses a challenge.
@@ -297,16 +329,20 @@ The key line here is the first one—this stage uses the `api_build` stage as it
 ### The `web_serve` stage
 
 ```Dockerfile
-FROM node:18-bookworm-slim as web_serve
+FROM node:20-bookworm-slim as web_serve
+
+RUN corepack enable
 
 USER node
 WORKDIR /home/node/app
 
-COPY --chown=node:node .yarn/plugins .yarn/plugins
-COPY --chown=node:node .yarn/releases .yarn/releases
 COPY --chown=node:node .yarnrc.yml .
-COPY --chown=node:node web/package.json .
+COPY --chown=node:node package.json .
+COPY --chown=node:node web/package.json web/
 COPY --chown=node:node yarn.lock .
+
+RUN mkdir -p /home/node/.yarn/berry/index
+RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
     --mount=type=cache,target=/home/node/.cache,uid=1000 \
@@ -319,9 +355,9 @@ COPY --chown=node:node .env.defaults .env.defaults
 COPY --chown=node:node --from=web_build /home/node/app/web/dist /home/node/app/web/dist
 
 ENV NODE_ENV=production \
-    API_HOST=http://api:8911
+    API_PROXY_TARGET=http://api:8911
 
-CMD "node_modules/.bin/rw-web-server" "--apiHost" "$API_HOST"
+CMD "node_modules/.bin/rw-web-server" "--api-proxy-target" "$API_PROXY_TARGET"
 ```
 
 Most of this stage is similar to the `api_serve` stage, except that we're copying from the `web_build` stage instead of the `api_build`.
@@ -411,7 +447,7 @@ It's because your project depends on Python and the image doesn't provide it.
 It's easy to fix: just add `python3` and its dependencies (usually `make` and `gcc`):
 
 ```diff
-  FROM node:18-bookworm-slim as base
+  FROM node:20-bookworm-slim as base
 
   RUN apt-get update && apt-get install -y \
       openssl \
@@ -450,3 +486,237 @@ yarn why @supabase/supabase-js
 ```
 
 In this case, it looks like it's ultimately because of our auth provider, `@supabase/supabase-js`.
+
+## Using the Server File
+
+Redwood v7 introduced a new entry point to Redwood's api server: the server file at `api/src/server.ts`.
+The server file was made with Docker in mind. It allows you to
+
+1. have control over how the api server starts,
+2. customize the server as much as you want, and
+3. minimize the number of dependencies needed to start the api server process (all you need is Node.js!)
+
+Get started by running the setup command:
+
+```
+yarn rw setup server-file
+```
+
+This should give you a new file at `api/src/server.ts`:
+
+```typescript title="api/src/server.ts"
+import { createServer } from '@redwoodjs/api-server'
+
+import { logger } from 'src/lib/logger'
+
+async function main() {
+  const server = await createServer({
+    logger,
+  })
+
+  await server.start()
+}
+
+main()
+```
+
+Without the server file, to start the api side, you'd use binaries provided by `@redwoodjs/api-server` such as `yarn rw-server api` (you may also see this as `./node_modules/.bin/rw-server api`).
+
+With the server file, there's no indirection. Just use `node`:
+
+```
+yarn node api/dist/server.js
+```
+
+### Building
+
+You can't run the server file directly with Node.js; it has to be built first:
+
+
+```
+yarn rw build api
+```
+
+The api serve stage in the Dockerfile pulls from the api build stage, so things are already in the right order there. Similarly, for `yarn rw dev`, the dev server will build and reload the server file for you. 
+
+
+### Command
+
+That means you will swap the `CMD` instruction in the api server stage:
+
+```diff
+  ENV NODE_ENV=production
+
+- CMD [ "node_modules/.bin/rw-server", "api" ]
++ CMD [ "api/dist/server.js" ]
+```
+
+:::important 
+If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
+
+Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
+:::
+
+### Configuring the server
+
+There are three ways you may wish to configure the server.
+
+#### Underlying Fastify server
+First, you can configure how the underlying Fastify server is instantiated via the`fastifyServerOptions` passed to the `createServer` function:
+
+```ts title="api/src/server.ts"
+const server = await createServer({
+  logger,
+  // highlight-start
+  fastifyServerOptions: {
+    // ...
+  }
+  // highlight-end
+})
+```
+
+For the complete list of options, see [Fastify's documentation](https://fastify.dev/docs/latest/Reference/Server/#factory).
+
+#### Configure the redwood API plugin
+Second, you may want to alter the behavior of redwood's API plugin itself. To do this we provide a `configureApiServer(server)` option where you can do anything you wish to the fastify instance before the API plugin is registered. Two examples are given below.
+
+##### Example: Compressing Payloads and Rate Limiting
+
+Let's say that we want to compress payloads and add rate limiting.
+We want to compress payloads only if they're larger than 1KB, preferring deflate to gzip,
+and we want to limit IP addresses to 100 requests in a five minute window.
+We can leverage two Fastify ecosystem plugins, [@fastify/compress](https://github.com/fastify/fastify-compress) and [@fastify/rate-limit](https://github.com/fastify/fastify-rate-limit) respectively.
+
+First, you'll need to install these packages:
+
+```
+yarn workspace api add @fastify/compress @fastify/rate-limit
+```
+
+Then register them with the appropriate config:
+
+```ts title="api/src/server.ts"
+const server = await createServer({
+  logger,
+  async configureApiServer(server) {
+    await server.register(import('@fastify/compress'), {
+      global: true,
+      threshold: 1024,
+      encodings: ['deflate', 'gzip'],
+    })
+    
+    await server.register(import('@fastify/rate-limit'), {
+      max: 100,
+      timeWindow: '5 minutes',
+    })
+  }
+})
+
+```
+
+##### Example: File Uploads
+
+If you try to POST file content to the api server such as images or PDFs, you may see the following error from Fastify:
+
+```json
+{
+  "statusCode": 400,
+  "code": "FST_ERR_CTP_INVALID_CONTENT_LENGTH",
+  "error": "Bad Request",
+  "message": "Request body size did not match Content-Length"
+}
+```
+
+This's because Fastify [only supports `application/json` and `text/plain` content types natively](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/).
+While Redwood configures the api server to also accept `application/x-www-form-urlencoded` and  `multipart/form-data`, if you want to support other content or MIME types (likes images or PDFs), you'll need to configure them here in the server file.
+
+You can use Fastify's `addContentTypeParser` function to allow uploads of the content types your application needs.
+For example, to support image file uploads you'd tell Fastify to allow `/^image\/.*/` content types:
+
+```ts title="api/src/server.ts"
+const server = await createServer({
+  logger,
+  configureApiServer(server){
+    server.addContentTypeParser(/^image\/.*/, (_req, payload, done) => {
+      payload.on('end', () => {
+        done()
+      })
+    })
+  }
+})
+```
+
+The regular expression (`/^image\/.*/`) above allows all image content or MIME types because [they start with "image"](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
+
+Now, when you POST those content types to a function served by the api server, you can access the file content on `event.body`.
+
+#### Additional Fastify plugins
+Finally, you can register additional Fastify plugins on the server instance:
+
+```ts title="api/src/server.ts"
+const server = await createServer({
+  logger,
+})
+
+// highlight-next-line
+server.register(myFastifyPlugin)
+``` 
+
+:::note Fastify encapsulation
+
+Fastify is built around the concept of [encapsulation](https://fastify.dev/docs/latest/Reference/Encapsulation/). It is important to note that redwood's API plugin cannot be mutated after it is registered, see [here](https://fastify.dev/docs/latest/Reference/Plugins/#asyncawait). This is why you must use the `configureApiServer` option to do as shown above. 
+
+:::
+
+### The `start` method
+
+Since there's a few different ways to configure the host and port the server listens at, the server instance returned by `createServer` has a special `start` method:
+
+```ts title="api/src/server.ts"
+await server.start()
+```
+
+`start` is a thin wrapper around [`listen`](https://fastify.dev/docs/latest/Reference/Server/#listen).
+It takes the same arguments as `listen`, except for host and port. It computes those in the following way, in order of precedence:
+
+1. `--apiHost` or `--apiPort` flags:
+
+  ```
+  yarn node api/dist/server.js --apiHost 0.0.0.0 --apiPort 8913
+  ```
+
+2. `REDWOOD_API_HOST` or `REDWOOD_API_PORT` env vars:
+
+  ```
+  export REDWOOD_API_HOST='0.0.0.0'
+  export REDWOOD_API_PORT='8913'
+  yarn node api/dist/server.js
+  ```
+
+3. `[api].host` and `[api].port` in `redwood.toml`:
+
+  ```toml title="redwood.toml"
+  [api]
+    host = '0.0.0.0'
+    port = 8913
+  ```
+
+If you'd rather not have `createServer` parsing `process.argv`, you can disable it via `parseArgv`:
+
+```ts title="api/src/server.ts"
+await createServer({
+  parseArgv: false,
+})
+```
+
+And if you'd rather it do none of this, just change `start` to `listen` and specify the host and port inline:
+
+```ts title="api/src/server.ts"
+await server.listen({
+  host: '0.0.0.0',
+  port: 8913,
+})
+```
+
+If you don't specify a host, `createServer` uses `NODE_ENV` to set it. If `NODE_ENV` is production, it defaults to `'0.0.0.0'` and `'::'` otherwise.
+The Dockerfile sets `NODE_ENV` to production so that things work out of the box.

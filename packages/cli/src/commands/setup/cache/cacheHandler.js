@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addEnvVarTask } from '@redwoodjs/cli-helpers'
@@ -34,7 +34,7 @@ export const handler = async ({ client, force }) => {
       task: () => {
         const template = fs
           .readFileSync(
-            path.join(__dirname, 'templates', `${client}.ts.template`)
+            path.join(__dirname, 'templates', `${client}.ts.template`),
           )
           .toString()
 
@@ -43,14 +43,14 @@ export const handler = async ({ client, force }) => {
           template,
           {
             overwriteExisting: force,
-          }
+          },
         )
       },
     },
     addEnvVarTask(
       'CACHE_HOST',
       CLIENT_HOST_MAP[client],
-      `Where your ${client} server lives for service caching`
+      `Where your ${client} server lives for service caching`,
     ),
     {
       title: 'One more thing...',

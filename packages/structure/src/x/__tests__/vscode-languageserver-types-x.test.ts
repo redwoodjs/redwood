@@ -1,3 +1,4 @@
+import { describe, it, expect, test } from 'vitest'
 import {
   DiagnosticSeverity,
   Position,
@@ -27,7 +28,7 @@ describe('Position_compare', () => {
     x(0, 2, 1, 0, 'smaller')
     function x(l1: number, c1: number, l2: number, c2: number, r: string) {
       expect(
-        Position_compare(Position.create(l1, c1), Position.create(l2, c2))
+        Position_compare(Position.create(l1, c1), Position.create(l2, c2)),
       ).toEqual(r)
     }
   })
@@ -81,7 +82,7 @@ describe('Position_fromOffset', () => {
       offset: number,
       text: string,
       expectedLine: number,
-      expectedCharacter: number
+      expectedCharacter: number,
     ) {
       const pos = Position_fromOffset(offset, text)
       pos //?

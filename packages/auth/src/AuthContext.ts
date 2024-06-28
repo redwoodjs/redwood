@@ -16,7 +16,7 @@ export interface AuthContextInterface<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 > {
   /** Determining your current authentication state */
   loading: boolean
@@ -93,7 +93,7 @@ export function createAuthContext<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >() {
   return React.createContext<
     | AuthContextInterface<

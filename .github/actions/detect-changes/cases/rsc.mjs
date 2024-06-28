@@ -15,14 +15,15 @@ export function rscChanged(changedFiles){
       changedFile.startsWith('tasks/smoke-tests/rsa/') ||
       changedFile.startsWith('tasks/smoke-tests/basePlaywright.config.ts') ||
       changedFile.startsWith('.github/actions/set-up-rsa-project/') ||
-      changedFile.startsWith('.github/actions/set-up-rsc-external-packages-project/') ||
+      changedFile.startsWith('.github/actions/set-up-rsc-kitchen-sink-project/') ||
       changedFile.startsWith('.github/actions/set-up-rsc-project/') ||
       changedFile.startsWith('packages/internal/') ||
       changedFile.startsWith('packages/project-config/') ||
       changedFile.startsWith('packages/web/') ||
       changedFile.startsWith('packages/vite/') ||
+      changedFile.startsWith('packages/router/') ||
       changedFile.startsWith('__fixtures__/test-project-rsa') ||
-      changedFile.startsWith('__fixtures__/test-project-rsc-external-packages')
+      changedFile.startsWith('__fixtures__/test-project-rsc-kitchen-sink')
     ) {
       console.log('RSC change detected:', changedFile)
       return true

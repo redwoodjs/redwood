@@ -1,12 +1,15 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
+import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-jest.mock('jsonwebtoken', () => {
+vi.mock('jsonwebtoken', () => {
   return {
-    verify: jest.fn(),
-    decode: jest.fn(),
+    default: {
+      verify: vi.fn(),
+      decode: vi.fn(),
+    },
   }
 })
 
@@ -36,7 +39,7 @@ test('throws if SUPERTOKENS_JWKS_URL env var is not set', async () => {
   delete process.env.SUPERTOKENS_JWKS_URL
 
   await expect(authDecoder('token', 'supertokens', req)).rejects.toThrow(
-    'SUPERTOKENS_JWKS_URL env var is not set'
+    'SUPERTOKENS_JWKS_URL env var is not set',
   )
 })
 

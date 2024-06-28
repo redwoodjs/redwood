@@ -2,8 +2,9 @@
 globalThis.__dirname = __dirname
 import '../../../lib/test'
 
-jest.mock('listr2')
+vi.mock('listr2')
 import { Listr } from 'listr2'
+import { vi, test, expect } from 'vitest'
 
 import * as helpers from '../helpers'
 
@@ -15,7 +16,7 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
       return [
         {
           title: 'Cool beans, with rad sauce',
-          task: jest.fn(),
+          task: vi.fn(),
           enabled: () => true,
         },
       ]
@@ -44,6 +45,6 @@ test('createYargsForComponentGeneration generates a yargs handler as expected', 
       expect.objectContaining({
         title: 'Cool beans, with rad sauce',
       }),
-    ])
+    ]),
   )
 })

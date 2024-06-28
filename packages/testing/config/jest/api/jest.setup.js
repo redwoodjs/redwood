@@ -4,7 +4,6 @@
 // @NOTE without these imports in the setup file, mockCurrentUser
 // will remain undefined in the user's tests
 // Remember to use specific imports
-const { setContext } = require('@redwoodjs/graphql-server/dist/globalContext')
 const { defineScenario } = require('@redwoodjs/testing/dist/api/scenario')
 
 // @NOTE we do this because jest.setup.js runs every time in each context
@@ -83,8 +82,12 @@ const getProjectDb = () => {
   return db
 }
 
+/**
+ * Wraps "it" or "test", to seed and teardown the scenario after each test
+ * This one passes scenario data to the test function
+ */
 const buildScenario =
-  (it, testPath) =>
+  (itFunc, testPath) =>
   (...args) => {
     let scenarioName, testName, testFunc
 
@@ -97,39 +100,57 @@ const buildScenario =
       throw new Error('scenario() requires 2 or 3 arguments')
     }
 
-    return it(testName, async () => {
-      const path = require('path')
-      const testFileDir = path.parse(testPath)
-      // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
-      const testFileNameParts = testFileDir.name.split('.')
-      const testFilePath = `${testFileDir.dir}/${testFileNameParts
-        .slice(0, testFileNameParts.length - 1)
-        .join('.')}.scenarios`
-      let allScenarios, scenario, result
-
-      try {
-        allScenarios = require(testFilePath)
-      } catch (e) {
-        // ignore error if scenario file not found, otherwise re-throw
-        if (e.code !== 'MODULE_NOT_FOUND') {
-          throw e
-        }
-      }
-
-      if (allScenarios) {
-        if (allScenarios[scenarioName]) {
-          scenario = allScenarios[scenarioName]
-        } else {
-          throw new Error(
-            `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`
-          )
-        }
-      }
+    return itFunc(testName, async () => {
+      let { scenario } = loadScenarios(testPath, scenarioName)
 
       const scenarioData = await seedScenario(scenario)
-      result = await testFunc(scenarioData)
+      try {
+        const result = await testFunc(scenarioData)
 
-      return result
+        return result
+      } finally {
+        // Make sure to cleanup, even if test fails
+        if (wasDbUsed()) {
+          await teardown()
+        }
+      }
+    })
+  }
+
+/**
+ * This creates a describe() block that will seed the scenario ONCE before all tests in the block
+ * Note that you need to use the getScenario() function to get the data.
+ */
+const buildDescribeScenario =
+  (describeFunc, testPath) =>
+  (...args) => {
+    let scenarioName, describeBlockName, describeBlock
+
+    if (args.length === 3) {
+      ;[scenarioName, describeBlockName, describeBlock] = args
+    } else if (args.length === 2) {
+      scenarioName = DEFAULT_SCENARIO
+      ;[describeBlockName, describeBlock] = args
+    } else {
+      throw new Error('describeScenario() requires 2 or 3 arguments')
+    }
+
+    return describeFunc(describeBlockName, () => {
+      let scenarioData
+      beforeAll(async () => {
+        let { scenario } = loadScenarios(testPath, scenarioName)
+        scenarioData = await seedScenario(scenario)
+      })
+
+      afterAll(async () => {
+        if (wasDbUsed()) {
+          await teardown()
+        }
+      })
+
+      const getScenario = () => scenarioData
+
+      describeBlock(getScenario)
     })
   }
 
@@ -141,7 +162,7 @@ const teardown = async () => {
   for (const modelName of teardownOrder) {
     try {
       await getProjectDb().$executeRawUnsafe(
-        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`
+        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`,
       )
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
@@ -173,12 +194,11 @@ const seedScenario = async (scenario) => {
       for (const [name, createArgs] of Object.entries(namedFixtures)) {
         if (typeof createArgs === 'function') {
           scenarios[model][name] = await getProjectDb()[model].create(
-            createArgs(scenarios)
+            createArgs(scenarios),
           )
         } else {
-          scenarios[model][name] = await getProjectDb()[model].create(
-            createArgs
-          )
+          scenarios[model][name] =
+            await getProjectDb()[model].create(createArgs)
         }
       }
     }
@@ -190,10 +210,14 @@ const seedScenario = async (scenario) => {
 
 global.scenario = buildScenario(global.it, global.testPath)
 global.scenario.only = buildScenario(global.it.only, global.testPath)
-
-global.mockCurrentUser = (currentUser) => {
-  setContext({ currentUser })
-}
+global.describeScenario = buildDescribeScenario(
+  global.describe,
+  global.testPath,
+)
+global.describeScenario.only = buildDescribeScenario(
+  global.describe.only,
+  global.testPath,
+)
 
 /**
  *
@@ -218,24 +242,41 @@ const wasDbUsed = () => {
   }
 }
 
-beforeEach(() => {
-  // Attempt to emulate the request context isolation behavior
-  const mockContextStore = new Map()
-  mockContextStore.set('context', {})
-  jest
-    .spyOn(
-      require('@redwoodjs/graphql-server/dist/globalContextStore'),
-      'getAsyncStoreInstance'
-    )
-    // @ts-expect-error - We are not providing the full functionality of the AsyncLocalStorage in this returned object
-    .mockImplementation(() => {
-      return {
-        getStore: () => {
-          return mockContextStore
-        },
+// Attempt to emulate the request context isolation behavior
+// This is a little more complicated than it would necessarily need to be
+// but we're following the same pattern as in `@redwoodjs/context`
+const mockContextStore = new Map()
+const mockContext = new Proxy(
+  {},
+  {
+    get: (_target, prop) => {
+      // Handle toJSON() calls, i.e. JSON.stringify(context)
+      if (prop === 'toJSON') {
+        return () => mockContextStore.get('context')
       }
-    })
+      return mockContextStore.get('context')[prop]
+    },
+    set: (_target, prop, value) => {
+      const ctx = mockContextStore.get('context')
+      ctx[prop] = value
+      return true
+    },
+  },
+)
+jest.mock('@redwoodjs/context', () => {
+  return {
+    context: mockContext,
+    setContext: (newContext) => {
+      mockContextStore.set('context', newContext)
+    },
+  }
 })
+beforeEach(() => {
+  mockContextStore.set('context', {})
+})
+global.mockCurrentUser = (currentUser) => {
+  mockContextStore.set('context', { currentUser })
+}
 
 beforeAll(async () => {
   if (wasDbUsed()) {
@@ -249,8 +290,33 @@ afterAll(async () => {
   }
 })
 
-afterEach(async () => {
-  if (wasDbUsed()) {
-    await teardown()
+function loadScenarios(testPath, scenarioName) {
+  const path = require('path')
+  const testFileDir = path.parse(testPath)
+  // e.g. ['comments', 'test'] or ['signup', 'state', 'machine', 'test']
+  const testFileNameParts = testFileDir.name.split('.')
+  const testFilePath = `${testFileDir.dir}/${testFileNameParts
+    .slice(0, testFileNameParts.length - 1)
+    .join('.')}.scenarios`
+  let allScenarios, scenario
+
+  try {
+    allScenarios = require(testFilePath)
+  } catch (e) {
+    // ignore error if scenario file not found, otherwise re-throw
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
+    }
   }
-})
+
+  if (allScenarios) {
+    if (allScenarios[scenarioName]) {
+      scenario = allScenarios[scenarioName]
+    } else {
+      throw new Error(
+        `UndefinedScenario: There is no scenario named "${scenarioName}" in ${testFilePath}.{js,ts}`,
+      )
+    }
+  }
+  return { scenario }
+}

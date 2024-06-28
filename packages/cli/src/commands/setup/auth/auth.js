@@ -21,8 +21,8 @@ export async function builder(yargs) {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-auth'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-auth',
+      )}`,
     )
     // Command "redirects" for auth providers we used to support
     .command(...redirectCommand('ethereum'))
@@ -44,7 +44,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       ['azure-active-directory', 'azureActiveDirectory'],
@@ -57,11 +57,11 @@ export async function builder(yargs) {
           verbose: args.verbose,
         })
         const handler = await getAuthHandler(
-          '@redwoodjs/auth-azure-active-directory-setup'
+          '@redwoodjs/auth-azure-active-directory-setup',
         )
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'clerk',
@@ -76,7 +76,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'custom',
@@ -91,18 +91,31 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'dbAuth',
       'Set up auth for dbAuth',
       (yargs) => {
-        return standardAuthBuilder(yargs).option('webauthn', {
-          alias: 'w',
-          default: null,
-          description: 'Include WebAuthn support (TouchID/FaceID)',
-          type: 'boolean',
-        })
+        return standardAuthBuilder(yargs)
+          .option('webauthn', {
+            alias: 'w',
+            default: null,
+            description: 'Include WebAuthn support (TouchID/FaceID)',
+            type: 'boolean',
+          })
+          .option('createUserModel', {
+            alias: 'u',
+            default: null,
+            description: 'Create a User database model',
+            type: 'boolean',
+          })
+          .option('generateAuthPages', {
+            alias: 'g',
+            default: null,
+            description: 'Generate auth pages (login, signup, etc.)',
+            type: 'boolean',
+          })
       },
       async (args) => {
         recordTelemetryAttributes({
@@ -114,7 +127,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'firebase',
@@ -129,7 +142,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'netlify',
@@ -144,7 +157,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'supabase',
@@ -159,7 +172,7 @@ export async function builder(yargs) {
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'supertokens',
@@ -172,11 +185,11 @@ export async function builder(yargs) {
           verbose: args.verbose,
         })
         const handler = await getAuthHandler(
-          '@redwoodjs/auth-supertokens-setup'
+          '@redwoodjs/auth-supertokens-setup',
         )
         console.log()
         handler(args)
-      }
+      },
     )
 }
 
@@ -207,7 +220,7 @@ function redirectCommand(provider) {
 function getRedirectMessage(provider) {
   return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
     'Custom Auth',
-    'https://redwoodjs.com/docs/canary/auth/custom'
+    'https://redwoodjs.com/docs/canary/auth/custom',
   )}`
 }
 
@@ -219,17 +232,31 @@ async function getAuthHandler(module) {
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
-    const { stdout } = await execa.command(
-      `yarn npm info ${module} --fields versions --json`
-    )
-
     // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
     // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
     if (version.includes('+')) {
       version = version.split('+')[0]
     }
 
-    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+    let packument
+
+    try {
+      const packumentResponse = await fetch(
+        `https://registry.npmjs.org/${module}`,
+      )
+
+      packument = await packumentResponse.json()
+
+      if (packument.error) {
+        throw new Error(packument.error)
+      }
+    } catch (error) {
+      throw new Error(
+        `Couldn't fetch packument for ${module}: ${error.message}`,
+      )
+    }
+
+    const versionIsPublished = Object.keys(packument.versions).includes(version)
 
     if (!versionIsPublished) {
       // Fallback to canary. This is most likely because it's a new package
@@ -257,7 +284,7 @@ async function getAuthHandler(module) {
  */
 function isInstalled(module) {
   const { dependencies, devDependencies } = fs.readJSONSync(
-    path.join(getPaths().base, 'package.json')
+    path.join(getPaths().base, 'package.json'),
   )
 
   const deps = {

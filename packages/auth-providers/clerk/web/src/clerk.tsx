@@ -20,10 +20,10 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
   },
-  authImplementationOptions?: AuthImplementationOptions
+  authImplementationOptions?: AuthImplementationOptions,
 ) {
   const authImplementation = createAuthImplementation(authImplementationOptions)
 
@@ -48,7 +48,7 @@ function createAuthImplementation({
     },
     logout: async (
       callbackOrOptions?: SignOutCallback | SignOutOptions,
-      options?: SignOutOptions
+      options?: SignOutOptions,
     ) => {
       const clerk = (window as any).Clerk as Clerk
       return clerk?.signOut(callbackOrOptions as any, options)

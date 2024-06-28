@@ -4,12 +4,13 @@ import '../../../../lib/test'
 
 import path from 'path'
 
-import yargs from 'yargs'
+import { test, expect } from 'vitest'
+import yargs from 'yargs/yargs'
 
 import * as directive from '../directive'
 
-test('creates a JavaScript validator directive', () => {
-  const output = directive.files({
+test('creates a JavaScript validator directive', async () => {
+  const output = await directive.files({
     name: 'require-admin', // checking camel casing too!
     typescript: false,
     tests: true,
@@ -17,10 +18,10 @@ test('creates a JavaScript validator directive', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.js'
+    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.js',
   )
   const expectedTestOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.test.js'
+    '/path/to/project/api/src/directives/requireAdmin/requireAdmin.test.js',
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
@@ -29,8 +30,8 @@ test('creates a JavaScript validator directive', () => {
   expect(output[expectedTestOutputPath]).toMatchSnapshot('js directive test')
 })
 
-test('creates a TypeScript transformer directive', () => {
-  const output = directive.files({
+test('creates a TypeScript transformer directive', async () => {
+  const output = await directive.files({
     name: 'bazinga-foo_bar', // checking camel casing too!
     typescript: true,
     tests: true,
@@ -38,10 +39,10 @@ test('creates a TypeScript transformer directive', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.ts'
+    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.ts',
   )
   const expectedTestOutputPath = path.normalize(
-    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.test.ts'
+    '/path/to/project/api/src/directives/bazingaFooBar/bazingaFooBar.test.ts',
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
@@ -51,7 +52,7 @@ test('creates a TypeScript transformer directive', () => {
 })
 
 test('keeps Directive in name', () => {
-  const { name } = yargs
+  const { name } = yargs()
     .command('directive <name>', false, directive.builder)
     .parse('directive BazingaDirective')
 

@@ -149,12 +149,12 @@ yarn run v1.22.4
 > [ { id: 1, email: 'tom@redwoodjs.com', name: 'Tom'  } ]
 ```
 
-## dataMigrate
+## data-migrate
 
 Data migration tools.
 
-```
-yarn redwood dataMigrate <command>
+```bash
+yarn redwood data-migrate <command>
 ```
 
 | Command   | Description                                                                                 |
@@ -162,24 +162,24 @@ yarn redwood dataMigrate <command>
 | `install` | Appends `DataMigration` model to `schema.prisma`, creates `api/db/dataMigrations` directory |
 | `up`      | Executes outstanding data migrations                                                        |
 
-### dataMigrate install
+### data-migrate install
 
 - Appends a `DataMigration` model to `schema.prisma` for tracking which data migrations have already run.
 - Creates a DB migration using `yarn redwood prisma migrate dev --create-only create_data_migrations`.
 - Creates `api/db/dataMigrations` directory to contain data migration scripts
 
 ```bash
-yarn redwood dataMigrate install
+yarn redwood data-migrate install
 ```
 
-### dataMigrate up
+### data-migrate up
 
 Executes outstanding data migrations against the database. Compares the list of files in `api/db/dataMigrations` to the records in the `DataMigration` table in the database and executes any files not present.
 
 If an error occurs during script execution, any remaining scripts are skipped and console output will let you know the error and how many subsequent scripts were skipped.
 
 ```bash
-yarn redwood dataMigrate up
+yarn redwood data-migrate up
 ```
 
 ## dev
@@ -368,7 +368,6 @@ yarn redwood destroy <type>
 | `sdl <model>`        | Destroy a GraphQL schema and service component based on a given DB schema Model |
 | `service <name>`     | Destroy a service component                                                     |
 | `directive <name>`   | Destroy a directive                                                             |
-| `graphiql`           | Destroy a generated graphiql file                                               |
 
 ## exec
 
@@ -621,6 +620,11 @@ to redirect the user to once their log in/sign up is successful.
 If you'd rather create your own, you might want to start from the generated
 pages anyway as they'll contain the other code you need to actually submit the
 log in credentials or sign up fields to the server for processing.
+
+:::important
+This `generate dbAuth` command simply adds the pages. You must add the necessary dbAuth functions and
+app setup by running `yarn rw setup auth dbAuth` to fully use dbAuth.
+:::
 
 ### generate directive
 
@@ -1189,9 +1193,6 @@ yarn redwood generate sdl <model>
 
 The sdl will inspect your `schema.prisma` and will do its best with relations. Schema to generators isn't one-to-one yet (and might never be).
 
-<!-- See limited generator support for relations
-https://community.redwoodjs.com/t/prisma-beta-2-and-redwoodjs-limited-generator-support-for-relations-with-workarounds/361 -->
-
 | Arguments & Options  | Description                                                                                                                                                                                            |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `model`              | Model to generate the sdl for                                                                                                                                                                          |
@@ -1623,16 +1624,6 @@ If you wanted to seed your database using a different method (like `psql` and an
 
 In addition, you can [code along with Ryan Chenkie](https://www.youtube.com/watch?v=2LwTUIqjbPo), and learn how libraries like [faker](https://www.npmjs.com/package/faker) can help you create a large, realistic database fast, especially in tandem with Prisma's [createMany](https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany).
 
-<!-- ### generate -->
-
-<!-- Generate artifacts (e.g. Prisma Client). -->
-
-<!-- > 👉 Quick link to the [Prisma CLI Reference](https://www.prisma.io/docs/reference/api-reference/command-reference#generate). -->
-
-<!-- ``` -->
-<!-- yarn redwood prisma generate -->
-<!-- ``` -->
-
 **Log Formatting**
 
 If you use the Redwood Logger as part of your seed script, you can pipe the command to the LogFormatter to output prettified logs.
@@ -1710,16 +1701,6 @@ Create a migration from changes in Prisma schema, apply it to the database, trig
 yarn redwood prisma migrate dev
 ```
 
-<!-- #### reset -->
-
-<!-- Reset your database and apply all migrations, all data will be lost. -->
-
-<!-- > 👉 Quick link to the [Prisma CLI Reference](https://www.prisma.io/docs/reference/api-reference/command-reference#migrate-reset). -->
-
-<!-- ``` -->
-<!-- yarn redwood prisma migrate reset -->
-<!-- ``` -->
-
 #### prisma migrate deploy
 
 Apply pending migrations to update the database schema in production/staging.
@@ -1793,27 +1774,6 @@ yarn redwood setup auth <provider>
 #### Usage
 
 See [Authentication](authentication.md).
-
-### setup graphiQL headers
-
-Redwood automatically sets up your authentication headers in your GraphiQL playground. Currently supported auth providers include Supabase, dbAuth, and Netlify.
-
-A `generateGraphiQLHeader` file will be created in your `api/lib` folder and included in your gitignore. You can edit this file to customize your header. The function in the file is passed into your `createGraphQLHandler` and only called in dev.
-
-```
-yarn redwood setup graphiql <provider>
-```
-
-If you're using `dbAuth`, make sure the `-i` id you provided is not logged in from the web app.
-
-| Arguments & Options | Description                                                                                                                                           |
-| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `provider`          | Auth provider to configure. Choices are `dbAuth`, `netlify`, and `supabase`                                                                           |
-| `--id, -i`          | Unique id to identify current user (required only for DBAuth)                                                                                         |
-| `--token, -t`       | Generated JWT token. If not provided, a mock JWT payload is returned in `api/lib/generateGraphiQLHeader` that can be modified and turned into a token |
-| `--expiry, -e`      | Token expiry in minutes. Default is 60                                                                                                                |
-| `--view, -v`        | Print out generated headers to console                                                                                                                |
-
 
 ### setup cache
 
@@ -1999,10 +1959,75 @@ We perform a simple compatibility check in an attempt to make you aware of poten
 
 It's the author of the npm package's responsibility to specify the correct compatibility range, so **you should always research the packages you use with this command**. Especially since they will be executing code on your machine!
 
+### setup graphql
+
+This command creates the necessary files to support GraphQL features like fragments and trusted documents.
+
+#### Usage
+
+Run `yarn rw setup graphql <feature>`
+
+#### setup graphql fragments
+
+This command creates the necessary configuration to start using [GraphQL Fragments](./graphql/fragments.md).
+
+```
+yarn redwood setup graphql fragments
+```
+
+| Arguments & Options | Description                              |
+| :------------------ | :--------------------------------------- |
+| `--force, -f`       | Overwrite existing files and skip checks |
+
+#### Usage
+
+Run `yarn rw setup graphql fragments`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql fragments
+✔ Update Redwood Project Configuration to enable GraphQL Fragments
+✔ Generate possibleTypes.ts
+✔ Import possibleTypes in App.tsx
+✔ Add possibleTypes to the GraphQL cache config
+```
+
+#### setup graphql trusted-documents
+
+This command creates the necessary configuration to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
+
+
+```
+yarn redwood setup graphql trusted-documents
+```
+
+#### Usage
+
+Run `yarn rw setup graphql trusted-documents`
+
+#### Example
+
+```bash
+~/redwood-app$ yarn rw setup graphql trusted-documents
+✔ Update Redwood Project Configuration to enable GraphQL Trusted Documents ...
+✔ Generating Trusted Documents store ...
+✔ Configuring the GraphQL Handler to use a Trusted Documents store ...
+```
+
+
+If you have not setup the RedwoodJS server file, it will be setup:
+
+```bash
+✔ Adding the experimental server file...
+✔ Adding config to redwood.toml...
+✔ Adding required api packages...
+```
+
+
 ### setup realtime
 
 This command creates the necessary files, installs the required packages, and provides examples to setup RedwoodJS Realtime from GraphQL live queries and subscriptions. See the Realtime docs for more information.
-
 
 ```
 yarn redwood setup realtime
@@ -2113,7 +2138,7 @@ yarn redwood test [side..]
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
 
-## type-check
+## type-check (alias tsc or tc)
 
 Runs a TypeScript compiler check on both the api and the web sides.
 

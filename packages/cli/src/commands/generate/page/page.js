@@ -85,9 +85,9 @@ export const paramVariants = (path) => {
   }
 }
 
-export const files = ({ name, tests, stories, typescript, ...rest }) => {
+export const files = async ({ name, tests, stories, typescript, ...rest }) => {
   const extension = typescript ? '.tsx' : '.jsx'
-  const pageFile = templateForComponentFile({
+  const pageFile = await templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     extension,
@@ -97,7 +97,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     templateVars: rest,
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
@@ -107,7 +107,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     templateVars: rest,
   })
 
-  const storiesFile = templateForComponentFile({
+  const storiesFile = await templateForComponentFile({
     name,
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
@@ -115,7 +115,7 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
     generator: 'page',
     templatePath:
       rest.paramName !== ''
-        ? 'stories.tsx.parametersTemplate'
+        ? 'stories.tsx.parameters.template'
         : 'stories.tsx.template',
     templateVars: rest,
   })
@@ -135,20 +135,24 @@ export const files = ({ name, tests, stories, typescript, ...rest }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const routes = ({ name, path }) => {
   return [
     `<Route path="${path}" page={${pascalcase(name)}Page} name="${camelcase(
-      name
+      name,
     )}" />`,
   ]
 }
@@ -241,7 +245,7 @@ export const handler = async ({
         title: 'Updating routes file...',
         task: async () => {
           addRoutesToRouterTask(
-            routes({ name: pageName, path: pathName(path, pageName) })
+            routes({ name: pageName, path: pathName(path, pageName) }),
           )
         },
       },
@@ -264,15 +268,15 @@ export const handler = async ({
         task: (ctx, task) => {
           task.title =
             `One more thing...\n\n` +
-            `   ${c.warning('Page created! A note about <MetaTags>:')}\n\n` +
-            `   At the top of your newly created page is a <MetaTags> component,\n` +
+            `   ${c.warning('Page created! A note about <Metadata>:')}\n\n` +
+            `   At the top of your newly created page is a <Metadata> component,\n` +
             `   which contains the title and description for your page, essential\n` +
             `   to good SEO. Check out this page for best practices: \n\n` +
             `   https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets\n`
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

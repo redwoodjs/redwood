@@ -154,8 +154,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          )
+            {} as GraphQLResolveInfo,
+          ),
       ).toEqual("I'm defined in the resolver.")
     })
 
@@ -166,8 +166,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          )
+            {} as GraphQLResolveInfo,
+          ),
       ).toEqual("I'm defined in the resolver.")
     })
 
@@ -178,8 +178,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          ))
+            {} as GraphQLResolveInfo,
+          )),
       ).toEqual("I'm defined in the service.")
     })
   })
@@ -195,8 +195,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          )
+            {} as GraphQLResolveInfo,
+          ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
@@ -207,8 +207,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          )
+            {} as GraphQLResolveInfo,
+          ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
@@ -219,8 +219,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          ))
+            {} as GraphQLResolveInfo,
+          )),
       ).toEqual("MyOwnType: I'm defined in the services.")
     })
   })
@@ -252,7 +252,7 @@ describe('makeMergedSchema', () => {
       const res = await graphql({ schema, source: query })
       expect(res.errors).toEqual([
         new GraphQLError(
-          'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver'
+          'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver',
         ),
       ])
       expect((res.data as any).searchTypeSameFields).toBeNull()
@@ -271,7 +271,7 @@ describe('makeMergedSchema', () => {
       const res = await graphql({ schema, source: query })
       expect(res.errors).toBeUndefined()
       expect((res.data as any).searchTypeSameFieldsWithTypename.name).toBe(
-        'MySecondType'
+        'MySecondType',
       )
     })
   })

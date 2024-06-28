@@ -21,7 +21,10 @@ import { importStatementPath } from '@redwoodjs/project-config'
  * // services.nested_c = require('src/services/nested/c.js')
  * ```
  */
-export default function ({ types: t }: { types: typeof types }): PluginObj {
+export default function (
+  { types: t }: { types: typeof types },
+  { projectIsEsm = false }: { projectIsEsm?: boolean } = {},
+): PluginObj {
   return {
     name: 'babel-plugin-redwood-import-dir',
     visitor: {
@@ -39,9 +42,9 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           t.variableDeclaration('let', [
             t.variableDeclarator(
               t.identifier(importName),
-              t.objectExpression([])
+              t.objectExpression([]),
             ),
-          ])
+          ]),
         )
 
         const importGlob = importStatementPath(p.node.source.value)
@@ -71,11 +74,15 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
             t.importDeclaration(
               [
                 t.importNamespaceSpecifier(
-                  t.identifier(importName + '_' + fpVarName)
+                  t.identifier(importName + '_' + fpVarName),
                 ),
               ],
-              t.stringLiteral(filePathWithoutExtension)
-            )
+              t.stringLiteral(
+                projectIsEsm
+                  ? `${filePathWithoutExtension}.js`
+                  : filePathWithoutExtension,
+              ),
+            ),
           )
 
           // + <importName>.<fpVarName> = <importName_fpVarName>
@@ -86,11 +93,11 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
                 '=',
                 t.memberExpression(
                   t.identifier(importName),
-                  t.identifier(fpVarName)
+                  t.identifier(fpVarName),
                 ),
-                t.identifier(importName + '_' + fpVarName)
-              )
-            )
+                t.identifier(importName + '_' + fpVarName),
+              ),
+            ),
           )
         }
 

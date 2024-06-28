@@ -16,9 +16,9 @@ export const handler = () => {
       } catch (e: any) {
         taskContext.setError(
           'Failed to detect cells susceptible to the new Empty behavior in your project \n' +
-            e?.message
+            e?.message,
         )
       }
-    }
+    },
   )
 }

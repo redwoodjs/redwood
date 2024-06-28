@@ -25,12 +25,12 @@ export class StudioMailHandler extends AbstractMailHandler {
   async send(
     renderedContent: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
-    handlerOptions?: HandlerOptions
+    handlerOptions?: HandlerOptions,
   ): Promise<MailResult> {
     return this.nodemailerHandler.send(
       renderedContent,
       sendOptions,
-      handlerOptions
+      handlerOptions,
     )
   }
 

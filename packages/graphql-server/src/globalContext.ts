@@ -2,8 +2,14 @@
 
 import { getAsyncStoreInstance } from './globalContextStore'
 
+/**
+ * @deprecated This type will be available only from the `@redwoodjs/context` package in a future release.
+ */
 export interface GlobalContext extends Record<string, unknown> {}
 
+/**
+ * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.
+ */
 export const createContextProxy = (target: GlobalContext) => {
   return new Proxy<GlobalContext>(target, {
     get: (_target, property: string) => {
@@ -21,6 +27,9 @@ export const createContextProxy = (target: GlobalContext) => {
   })
 }
 
+/**
+ * @deprecated This value will be available only from the `@redwoodjs/context` package in a future release.
+ */
 export let context: GlobalContext = createContextProxy({})
 
 /**
@@ -30,6 +39,8 @@ export let context: GlobalContext = createContextProxy({})
  *
  * If you wish to extend the context simply use the `context` object directly,
  * such as `context.magicNumber = 1`, or `setContext({ ...context, magicNumber: 1 })`
+ *
+ * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.
  */
 export const setContext = (newContext: GlobalContext): GlobalContext => {
   // re-init the proxy against the new context object,

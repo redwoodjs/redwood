@@ -9,6 +9,7 @@ const {
   getExecaOptions,
   applyCodemod,
   updatePkgJsonScripts,
+  exec,
 } = require('./util')
 
 // This variable gets used in other functions
@@ -295,7 +296,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
         // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
         task: () =>
           execa(
-            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@0.4.1',
+            'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@^0.5.12',
             [],
             getExecaOptions(outputPath)
           ),
@@ -317,7 +318,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild, verbose }) {
             ['--force', linkWithLatestFwBuild && '--no-install'].filter(
               Boolean
             ),
-            execaOptions
+            getExecaOptions(outputPath)
           )
         },
       },
@@ -367,7 +368,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     await execa(
       'yarn rw setup auth dbAuth --force --no-webauthn',
       [],
-      execaOptions
+      getExecaOptions(outputPath)
     )
 
     // Restore postinstall script
@@ -379,7 +380,7 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     })
 
     if (linkWithLatestFwBuild) {
-      await execa('yarn rwfw project:copy', [], execaOptions)
+      await execa('yarn rwfw project:copy', [], getExecaOptions(outputPath))
     }
 
     await execa(
@@ -467,10 +468,13 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     // set fullName when signing up
     const pathAuthTs = `${OUTPUT_PATH}/api/src/functions/auth.ts`
     const contentAuthTs = fs.readFileSync(pathAuthTs).toString()
-    const resultsAuthTs = contentAuthTs.replace(
-      '// name: userAttributes.name',
-      "fullName: userAttributes['full-name']"
-    )
+    const resultsAuthTs = contentAuthTs
+      .replace('name: string', "'full-name': string")
+      .replace('userAttributes: _userAttributes', 'userAttributes')
+      .replace(
+        '// name: userAttributes.name',
+        "fullName: userAttributes['full-name']"
+      )
 
     fs.writeFileSync(pathAuthTs, resultsAuthTs)
   }
@@ -486,12 +490,12 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
           const createPage = createBuilder('yarn redwood g page')
           await createPage('double')
 
-          const doublePageContent = `import { MetaTags } from '@redwoodjs/web'
+          const doublePageContent = `import { Metadata } from '@redwoodjs/web'
 
 const DoublePage = () => {
   return (
     <>
-      <MetaTags title="Double" description="Double page" />
+      <Metadata title="Double" description="Double page" og />
 
       <h1 className="mb-1 mt-2 text-xl font-semibold">DoublePage</h1>
       <p>
@@ -589,7 +593,7 @@ export default DoublePage`
           return execa(
             `yarn rw prisma migrate dev --name create_post_user`,
             [],
-            execaOptions
+            getExecaOptions(outputPath)
           )
         },
       },
@@ -604,7 +608,7 @@ export default DoublePage`
             fullPath('api/src/services/posts/posts.scenarios')
           )
 
-          await execa(`yarn rwfw project:copy`, [], execaOptions)
+          await execa(`yarn rwfw project:copy`, [], getExecaOptions(outputPath))
         },
       },
       {
@@ -626,7 +630,7 @@ export default DoublePage`
           await execa(
             `yarn rw prisma migrate dev --name create_contact`,
             [],
-            execaOptions
+            getExecaOptions(outputPath)
           )
 
           await generateScaffold('contacts')
@@ -718,6 +722,29 @@ export default DoublePage`
         },
       },
       {
+        title: 'Add describeScenario tests',
+        task: async () => {
+          // Copy contact.scenarios.ts, because scenario tests look for the same filename
+          fs.copyFileSync(
+            fullPath('api/src/services/contacts/contacts.scenarios'),
+            fullPath('api/src/services/contacts/describeContacts.scenarios')
+          )
+
+          // Create describeContacts.test.ts
+          const describeScenarioFixture = path.join(
+            __dirname,
+            'templates',
+            'api',
+            'contacts.describeScenario.test.ts.template'
+          )
+
+          fs.copyFileSync(
+            describeScenarioFixture,
+            fullPath('api/src/services/contacts/describeContacts.test')
+          )
+        },
+      },
+      {
         // This is probably more of a web side task really, but the scaffolded
         // pages aren't generated until we get here to the api side tasks. So
         // instead of doing some up in the web side tasks, and then the rest
@@ -735,7 +762,6 @@ export default DoublePage`
 }
 
 /**
- *
  * Separates the streaming-ssr related steps. These are all web tasks,
  * if we choose to move them later
  * @param {string} outputPath
@@ -773,8 +799,128 @@ async function streamingTasks(outputPath, { verbose }) {
   })
 }
 
+/**
+ * Tasks to add GraphQL Fragments support to the test-project, and some queries
+ * to test fragments
+ */
+async function fragmentsTasks(outputPath, { verbose }) {
+  OUTPUT_PATH = outputPath
+
+  const tasks = [
+    {
+      title: 'Enable fragments',
+      task: async () => {
+        const redwoodTomlPath = path.join(outputPath, 'redwood.toml')
+        const redwoodToml = fs.readFileSync(redwoodTomlPath).toString()
+        const newRedwoodToml = redwoodToml + '\n[graphql]\n  fragments = true\n'
+        fs.writeFileSync(redwoodTomlPath, newRedwoodToml)
+      },
+    },
+    {
+      title: 'Adding produce and stall models to prisma',
+      task: async () => {
+        // Need both here since they have a relation
+        const { produce, stall } = await import('./codemods/models.js')
+
+        addModel(produce)
+        addModel(stall)
+
+        return exec(
+          'yarn rw prisma migrate dev --name create_produce_stall',
+          [],
+          getExecaOptions(outputPath)
+        )
+      },
+    },
+    {
+      title: 'Seed fragments data',
+      task: async () => {
+        await applyCodemod(
+          'seedFragments.ts',
+          fullPath('scripts/seed.ts', { addExtension: false })
+        )
+
+        await exec('yarn rw prisma db seed', [], getExecaOptions(outputPath))
+      },
+    },
+    {
+      title: 'Generate SDLs for produce and stall',
+      task: async () => {
+        const generateSdl = createBuilder('yarn redwood g sdl')
+
+        await generateSdl('stall')
+        await generateSdl('produce')
+
+        await applyCodemod(
+          'producesSdl.ts',
+          fullPath('api/src/graphql/produces.sdl')
+        )
+      },
+    },
+    {
+      title: 'Copy components from templates',
+      task: () => {
+        const templatesPath = path.join(__dirname, 'templates', 'web')
+        const componentsPath = path.join(
+          OUTPUT_PATH,
+          'web',
+          'src',
+          'components'
+        )
+
+        for (const fileName of [
+          'Card.tsx',
+          'FruitInfo.tsx',
+          'ProduceInfo.tsx',
+          'StallInfo.tsx',
+          'VegetableInfo.tsx',
+        ]) {
+          const templatePath = path.join(templatesPath, fileName)
+          const componentPath = path.join(componentsPath, fileName)
+
+          fs.writeFileSync(componentPath, fs.readFileSync(templatePath))
+        }
+      },
+    },
+    {
+      title: 'Copy sdl and service for groceries from templates',
+      task: () => {
+        const templatesPath = path.join(__dirname, 'templates', 'api')
+        const graphqlPath = path.join(OUTPUT_PATH, 'api', 'src', 'graphql')
+        const servicesPath = path.join(OUTPUT_PATH, 'api', 'src', 'services')
+
+        const sdlTemplatePath = path.join(templatesPath, 'groceries.sdl.ts')
+        const sdlPath = path.join(graphqlPath, 'groceries.sdl.ts')
+        const serviceTemplatePath = path.join(templatesPath, 'groceries.ts')
+        const servicePath = path.join(servicesPath, 'groceries.ts')
+
+        fs.writeFileSync(sdlPath, fs.readFileSync(sdlTemplatePath))
+        fs.writeFileSync(servicePath, fs.readFileSync(serviceTemplatePath))
+      },
+    },
+    {
+      title: 'Creating Groceries page',
+      task: async () => {
+        await createPage('groceries')
+
+        await applyCodemod(
+          'groceriesPage.ts',
+          fullPath('web/src/pages/GroceriesPage/GroceriesPage')
+        )
+      },
+    },
+  ]
+
+  return new Listr(tasks, {
+    exitOnError: true,
+    renderer: verbose && 'verbose',
+    renderOptions: { collapseSubtasks: false },
+  })
+}
+
 module.exports = {
   apiTasks,
   webTasks,
   streamingTasks,
+  fragmentsTasks,
 }

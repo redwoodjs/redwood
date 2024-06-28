@@ -1,5 +1,7 @@
 import { sep } from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 import { URL_file, URL_toFile } from '../URL'
 
 describe('URL_fromFile', () => {

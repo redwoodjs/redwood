@@ -27,6 +27,7 @@ module.exports = {
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
+    'packages/cli/**/__testfixtures__/**/*',
     'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
   ],
@@ -68,7 +69,6 @@ module.exports = {
         browser: true,
       },
       globals: {
-        React: 'readonly', // We auto-import React via Babel.
         window: 'off', // Developers should use `global` instead of window. Since window is undefined in NodeJS.
       },
     },

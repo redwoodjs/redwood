@@ -1,12 +1,10 @@
+import enq from 'enquirer'
 import execa from 'execa'
 import semver from 'semver'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 import { getPaths } from '@redwoodjs/project-config'
 
-const { Select } = require('enquirer')
-
-// TODO: Yarn3 requirement? What do we do, just not run? I'm not sure about this one.
 export async function handler({ npmPackage, force, _: _args }) {
   // Extract package name and version which the user provided
   const isScoped = npmPackage.startsWith('@')
@@ -21,14 +19,14 @@ export async function handler({ npmPackage, force, _: _args }) {
   // If we're using force don't attempt anything fancy, just run the package after some messaging
   if (force) {
     console.log(
-      'No compatibility check will be performed because you used the --force flag.'
+      'No compatibility check will be performed because you used the --force flag.',
     )
     if (
       semver.parse(packageVersion) !== null &&
       semver.lt(packageVersion, '1.0.0')
     ) {
       console.log(
-        'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+        'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
       )
     }
     await runPackage(packageName, packageVersion, additionalOptionsToForward)
@@ -84,7 +82,7 @@ export async function handler({ npmPackage, force, _: _args }) {
     compatible.tag ? ` (${compatible.tag})` : ''
   }`
   console.log(
-    `The version ${preferredVersionText} of '${packageName}' is not compatible with your RedwoodJS project version.\nThe latest version compatible with your project is ${latestCompatibleVersionText}.`
+    `The version ${preferredVersionText} of '${packageName}' is not compatible with your RedwoodJS project version.\nThe latest version compatible with your project is ${latestCompatibleVersionText}.`,
   )
 
   const decision = await promptWithChoices('What would you like to do?', [
@@ -134,7 +132,7 @@ async function showExperimentalWarning(version) {
         name: 'no',
         message: 'No',
       },
-    ]
+    ],
   )
   if (decision === 'no') {
     process.exit()
@@ -157,7 +155,7 @@ async function runPackage(packageName, version, options = []) {
 
 async function promptWithChoices(message, choices) {
   try {
-    const prompt = new Select({
+    const prompt = new enq.Select({
       name: message.substring(0, 8).toLowerCase(),
       message,
       choices,

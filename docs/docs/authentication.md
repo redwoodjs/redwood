@@ -5,7 +5,7 @@ description: Set up an authentication provider
 # Authentication
 
 Redwood has integrated auth end to end, from the web side to the api side.
-On the web side, the router can protect pages via the `Private` component (or the `Set` component via the `private` prop), and even restrict access at the role-level.
+On the web side, the router can protect pages via the `PrivateSet` component, and even restrict access at the role-level.
 And if you'd prefer to work with the primitives, the `useAuth` hook exposes all the pieces to build the experience you want.
 
 Likewise, the api side is locked down by default: all SDLs are generated with the `@requireAuth` directive, ensuring that making things publicly available is something that you opt in to rather than out of.
@@ -26,7 +26,7 @@ Redwood has a simple API to integrate any auth provider you can think of. But to
 - [Firebase](./auth/firebase.md)
 - [Netlify](./auth/netlify.md)
 - [Supabase](./auth/supabase.md)
-- SuperTokens
+- [SuperTokens](./auth/supertokens.md)
 
 :::tip how to tell if an integration is official
 
@@ -117,11 +117,11 @@ Much of what the functions it returns do is self explanatory, but the options th
 
 ### Protecting routes
 
-You can require that a user be authenticated to navigate to a route by wrapping it in the `Private` component or the `Set` component with the `private` prop set to `true`.
+You can require that a user be authenticated to navigate to a route by wrapping it in the `PrivateSet` component.
 An unauthenticated user will be redirected to the route specified in either component's `unauthenticated` prop:
 
 ```tsx title="web/src/Routes.tsx"
-import { Router, Route, Private } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
@@ -129,21 +129,20 @@ const Routes = () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
 
-      // highlight-start
+      // highlight-next-line
       <PrivateSet unauthenticated="login">
-      // highlight-end
         <Route path="/admin" page={AdminPage} name="admin" />
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      <PrivateSet>
+      </PrivateSet>
     </Router>
   )
 }
 ```
 
-You can also restrict access by role by passing a role or an array of roles to the `Private` or `Set` component's `hasRole` prop:
+You can also restrict access by role by passing a role or an array of roles to the `PrivateSet` component's `roles` prop:
 
 ```tsx title="web/src/Routes.tsx"
-import { Router, Route, Private, Set } from '@redwoodjs/router'
+import { Router, Route, PrivateSet } from '@redwoodjs/router'
 
 const Routes = () => {
   return (
@@ -154,21 +153,25 @@ const Routes = () => {
 
       <PrivateSet unauthenticated="login">
         <Route path="/secret-page" page={SecretPage} name="secret" />
-      <PrivateSet>
+      </PrivateSet>
 
       // highlight-next-line
-      <Set private unauthenticated="forbidden" hasRole="admin">
+      <PrivateSet unauthenticated="forbidden" roles="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
-      </Set>
+      </PrivateSet>
 
       // highlight-next-line
-      <PrivateSet unauthenticated="forbidden" hasRole={['author', 'editor']}>
+      <PrivateSet unauthenticated="forbidden" roles={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
-      <PrivateSet>
+      </PrivateSet>
     </Router>
   )
 }
 ```
+
+:::note Note about roles
+A route is permitted when authenticated and user has **any** of the provided roles such as `"admin"` or `["admin", "editor"]`.
+:::
 
 ### api-side currentUser
 

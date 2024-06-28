@@ -1,3 +1,5 @@
+import { beforeEach, afterEach, describe, test, expect, vi } from 'vitest'
+
 import { createVerifier } from '../index'
 
 const payload = 'No more secrets, Marty.'
@@ -6,11 +8,11 @@ const secret = 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME'
 const { sign, verify } = createVerifier('skipVerifier')
 
 beforeEach(() => {
-  jest.spyOn(console, 'warn').mockImplementation(jest.fn())
+  vi.spyOn(console, 'warn').mockImplementation(vi.fn())
 })
 
 afterEach(() => {
-  jest.spyOn(console, 'warn').mockRestore()
+  vi.spyOn(console, 'warn').mockRestore()
 })
 
 describe('skips verification verifier', () => {

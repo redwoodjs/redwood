@@ -35,7 +35,7 @@ export const RESERVED_TYPES = [
 
 export function validateSchema(
   schemaDocumentNode: DocumentNode,
-  typesToCheck: string[] = ['Query', 'Mutation']
+  typesToCheck: string[] = ['Query', 'Mutation'],
 ) {
   const validationOutput: string[] = []
   const reservedNameValidationOutput: Record<string, any> = []
@@ -112,7 +112,7 @@ export function validateSchema(
                     // check list (array)
                     if (arg.value.kind === Kind.LIST) {
                       const invalidValues = arg.value.values?.filter(
-                        (val) => val.kind !== Kind.STRING
+                        (val) => val.kind !== Kind.STRING,
                       )
                       if (invalidValues.length > 0) {
                         invalidValues.forEach((invalid) => {
@@ -135,26 +135,26 @@ export function validateSchema(
 
   if (validationOutput.length > 0) {
     const fieldsWithoutDirectives = validationOutput.map(
-      (field) => `- ${field}`
+      (field) => `- ${field}`,
     )
 
     throw new Error(
       `${DIRECTIVE_REQUIRED_ERROR_MESSAGE} for\n${fieldsWithoutDirectives.join(
-        '\n'
-      )} \n`
+        '\n',
+      )} \n`,
     )
   }
 
   if (directiveRoleValidationOutput.length > 0) {
     const fieldWithInvalidRoleValues = directiveRoleValidationOutput.map(
       (field: Record<string, any>) =>
-        `- ${field.fieldName} has an invalid ${field.invalid}`
+        `- ${field.fieldName} has an invalid ${field.invalid}`,
     )
 
     throw new RangeError(
       `${DIRECTIVE_INVALID_ROLE_TYPES_ERROR_MESSAGE}\n\n${fieldWithInvalidRoleValues.join(
-        '\n'
-      )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`
+        '\n',
+      )} \n\nFor example: @requireAuth(roles: "admin") or @requireAuth(roles: ["admin", "editor"])`,
     )
   }
 
@@ -162,7 +162,7 @@ export function validateSchema(
     const reservedNameMsg = reservedNameValidationOutput.map(
       (output: Record<string, any>) => {
         return `The ${output.objectType} named '${output.name}' is a reserved GraphQL name.\nPlease rename it to something more specific, like: Application${output.name}.\n`
-      }
+      },
     )
     throw new TypeError(reservedNameMsg.join('\n'))
   }
@@ -185,7 +185,7 @@ export const loadAndValidateSdls = async () => {
         }),
       ],
       cwd: getPaths().api.src,
-    }
+    },
   )
 
   // The output of the above function doesn't give us the documents directly

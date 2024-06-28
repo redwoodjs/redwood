@@ -23,7 +23,7 @@ export const handler = () => {
       })
     } catch {
       console.error(
-        "Couldn't update @auth0/auth0-spa-js; you'll have to upgrade it manually to the latest v2.x.x version"
+        "Couldn't update @auth0/auth0-spa-js; you'll have to upgrade it manually to the latest v2.x.x version",
       )
     }
 

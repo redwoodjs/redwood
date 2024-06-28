@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`creates a JavaScript validator directive: js directive 1`] = `
+exports[`creates a JavaScript validator directive > js directive 1`] = `
 "import { createValidatorDirective } from '@redwoodjs/graphql-server'
 
 import { logger } from 'src/lib/logger'
@@ -42,7 +42,7 @@ export default requireAdmin
 "
 `;
 
-exports[`creates a JavaScript validator directive: js directive test 1`] = `
+exports[`creates a JavaScript validator directive > js directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import requireAdmin from './requireAdmin'
@@ -64,7 +64,7 @@ describe('requireAdmin directive', () => {
 "
 `;
 
-exports[`creates a TypeScript transformer directive: ts directive 1`] = `
+exports[`creates a TypeScript transformer directive > ts directive 1`] = `
 "import {
   createTransformerDirective,
   TransformerDirectiveFunc,
@@ -109,7 +109,7 @@ export default bazingaFooBar
 "
 `;
 
-exports[`creates a TypeScript transformer directive: ts directive test 1`] = `
+exports[`creates a TypeScript transformer directive > ts directive test 1`] = `
 "import { mockRedwoodDirective, getDirectiveName } from '@redwoodjs/testing/api'
 
 import bazingaFooBar from './bazingaFooBar'

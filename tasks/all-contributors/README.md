@@ -33,7 +33,7 @@ In general, this is a three-part process:
 > **NOTE:**
 > Do not add [bot] accounts to the files.
 >
-> Also, members of the Core Team are manually added to the #core-team section. To avoid duplication, do not add the following profiles to the files below:
+> Also, members of the Core Team are manually added to the relevant section of #contributors. To avoid duplication, do not add the following profiles to .all-contributorsrc:
 > - peterp
 > - thedavidprice
 > - mojombo
@@ -82,7 +82,6 @@ Don't forget to commit and PR changes.
 
 ## Roadmap
 - [ ] Create a script to handle Step 1 (check and add new contributors for each repo)
-- [ ] Add the script to the end of the `yarn release` script to update with releases
 
 ## Contributing
 Help with this project is welcome and needed! No specific experience required. You'll want to be familiar with:

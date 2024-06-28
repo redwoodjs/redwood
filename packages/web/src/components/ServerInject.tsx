@@ -1,28 +1,24 @@
-import type { ReactNode } from 'react'
-import React, { Fragment, useContext, useId } from 'react'
+import React, { Fragment, createContext, useContext, useId } from 'react'
 
 /**
- *
  * Inspired by Next's useServerInsertedHTML, originally designed for CSS-in-JS
  * for now it seems the only way to inject html with streaming is to use a context
  *
  * We use this for <head> tags, and for apollo cache hydration
  *
  * Until https://github.com/reactjs/rfcs/pull/219 makes it into react
- *
  */
 
-export type RenderCallback = () => ReactNode
+export type RenderCallback = () => React.ReactNode
 
-export const ServerHtmlContext = React.createContext<
-  ((things: RenderCallback) => void) | null
->(null)
+export const ServerHtmlContext = createContext<
+  (callback: RenderCallback) => void
+>(() => {})
 
 /**
- *
- *  Use this factory, once per request.
- *  This is to ensure that injectionState is isolated to the request
- *  and not shared between requests.
+ * Use this factory, once per request.
+ * This is to ensure that injectionState is isolated to the request
+ * and not shared between requests.
  */
 export const createInjector = () => {
   const injectionState: Set<RenderCallback> = new Set([])
@@ -34,7 +30,7 @@ export const createInjector = () => {
   return { injectToPage, injectionState }
 }
 
-// @NOTE do not instatiate the provider value here, so that we can ensure
+// @NOTE do not instantiate the provider value here, so that we can ensure
 // context isolation. This is done in streamHelpers currently,
 // using the createInjector factory, once per request
 export const ServerHtmlProvider = ServerHtmlContext.Provider
@@ -69,15 +65,4 @@ export function useServerInsertedHTML(callback: () => React.ReactNode): void {
   if (addInsertedServerHTMLCallback) {
     addInsertedServerHTMLCallback(callback)
   }
-}
-
-// @TODO use this in streamHelpers final block
-export const AppendToHead = ({ tagsToAppend }: { tagsToAppend: string }) => {
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `document?.head.append(${tagsToAppend})`,
-      }}
-    />
-  )
 }

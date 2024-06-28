@@ -14,7 +14,7 @@ export class RWServiceFunction extends BaseNode {
   constructor(
     public name: string,
     public node: tsm.FunctionDeclaration | tsm.ArrowFunction,
-    public parent: RWService
+    public parent: RWService,
   ) {
     super()
   }
@@ -31,7 +31,7 @@ export class RWServiceFunction extends BaseNode {
 
   @lazy() get sdlField(): RWSDLField | undefined {
     return this.parent.sdl?.implementableFields?.find(
-      (f) => f.name === this.name
+      (f) => f.name === this.name,
     )
   }
 

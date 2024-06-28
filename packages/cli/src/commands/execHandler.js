@@ -103,7 +103,7 @@ export const handler = async (args) => {
     require.resolve(scriptPath)
   } catch {
     console.error(
-      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`)
+      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`),
     )
 
     printAvailableScriptsToConsole()

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`"equipment" with list flag 1`] = `
 "export const QUERY = gql\`
@@ -52,11 +52,11 @@ export const Success = ({ equipment }) => {
 "
 `;
 
-exports[`Kebab case words creates a cell component with a kebabCase word name 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list component with a custom id field 1`] = `
 "export const QUERY = gql\`
-  query FindUserProfileQuery($id: Int!) {
-    userProfile: userProfile(id: $id) {
-      id
+  query CustomIdFieldsQuery {
+    customIdFields {
+      uuid
     }
   }
 \`
@@ -69,28 +69,33 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ userProfile }) => {
-  return <div>{JSON.stringify(userProfile)}</div>
+export const Success = ({ customIdFields }) => {
+  return (
+    <ul>
+      {customIdFields.map((item) => {
+        return <li key={item.uuid}>{JSON.stringify(item)}</li>
+      })}
+    </ul>
+  )
 }
 "
 `;
 
-exports[`Kebab case words creates a cell mock with a kebabCase word name 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list mock with a custom id field 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
-  userProfile: {
-    id: 42,
-  },
+  customIdFields: [{ uuid: '42' }, { uuid: '43' }, { uuid: '44' }],
 })
 "
 `;
 
-exports[`Kebab case words creates a cell stories with a kebabCase word name 1`] = `
-"import { Loading, Empty, Failure, Success } from './UserProfileCell'
-import { standard } from './UserProfileCell.mock'
+exports[`Custom Id Field files > List cell > creates a cell list stories with a custom id field 1`] = `
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
+import { standard } from './CustomIdFieldsCell.mock'
 
 const meta = {
-  title: 'Cells/UserProfileCell',
+  title: 'Cells/CustomIdFieldsCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -121,7 +126,237 @@ export const success = {
 "
 `;
 
-exports[`Kebab case words creates a cell test with a kebabCase word name 1`] = `
+exports[`Custom Id Field files > List cell > creates a cell list test with a custom id field 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
+import { standard } from './CustomIdFieldsCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('CustomIdFieldsCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success customIdFields={standard().customIdFields} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`Custom Id Field files > Single cell > creates a cell component with a custom id field 1`] = `
+"export const QUERY = gql\`
+  query FindCustomIdFieldQuery($id: String!) {
+    customIdField: customIdField(uuid: $id) {
+      uuid
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
+)
+
+export const Success = ({ customIdField }) => {
+  return <div>{JSON.stringify(customIdField)}</div>
+}
+"
+`;
+
+exports[`Custom Id Field files > Single cell > creates a cell mock with a custom id field 1`] = `
+"// Define your own mock data here:
+export const standard = (/* vars, { ctx, req } */) => ({
+  customIdField: {
+    uuid: '42',
+  },
+})
+"
+`;
+
+exports[`Custom Id Field files > Single cell > creates a cell stories with a custom id field 1`] = `
+"import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
+import { standard } from './CustomIdFieldCell.mock'
+
+const meta = {
+  title: 'Cells/CustomIdFieldCell',
+  tags: ['autodocs'],
+}
+
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
+}
+
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
+}
+
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
+}
+
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
+"
+`;
+
+exports[`Custom Id Field files > Single cell > creates a cell test with a custom id field 1`] = `
+"import { render } from '@redwoodjs/testing/web'
+import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
+import { standard } from './CustomIdFieldCell.mock'
+
+// Generated boilerplate tests do not account for all circumstances
+// and can fail without adjustments, e.g. Float and DateTime types.
+//           Please refer to the RedwoodJS Testing Docs:
+//        https://redwoodjs.com/docs/testing#testing-cells
+// https://redwoodjs.com/docs/testing#jest-expect-type-considerations
+
+describe('CustomIdFieldCell', () => {
+  it('renders Loading successfully', () => {
+    expect(() => {
+      render(<Loading />)
+    }).not.toThrow()
+  })
+
+  it('renders Empty successfully', async () => {
+    expect(() => {
+      render(<Empty />)
+    }).not.toThrow()
+  })
+
+  it('renders Failure successfully', async () => {
+    expect(() => {
+      render(<Failure error={new Error('Oh no')} />)
+    }).not.toThrow()
+  })
+
+  // When you're ready to test the actual output of your component render
+  // you could test that, for example, certain text is present:
+  //
+  // 1. import { screen } from '@redwoodjs/testing/web'
+  // 2. Add test: expect(screen.getByText('Hello, world')).toBeInTheDocument()
+
+  it('renders Success successfully', async () => {
+    expect(() => {
+      render(<Success customIdField={standard().customIdField} />)
+    }).not.toThrow()
+  })
+})
+"
+`;
+
+exports[`Kebab case words > creates a cell component with a kebabCase word name 1`] = `
+"export const QUERY = gql\`
+  query FindUserProfileQuery($id: Int!) {
+    userProfile: userProfile(id: $id) {
+      id
+    }
+  }
+\`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => <div>Empty</div>
+
+export const Failure = ({ error }) => (
+  <div style={{ color: 'red' }}>Error: {error?.message}</div>
+)
+
+export const Success = ({ userProfile }) => {
+  return <div>{JSON.stringify(userProfile)}</div>
+}
+"
+`;
+
+exports[`Kebab case words > creates a cell mock with a kebabCase word name 1`] = `
+"// Define your own mock data here:
+export const standard = (/* vars, { ctx, req } */) => ({
+  userProfile: {
+    id: 42,
+  },
+})
+"
+`;
+
+exports[`Kebab case words > creates a cell stories with a kebabCase word name 1`] = `
+"import { Loading, Empty, Failure, Success } from './UserProfileCell'
+import { standard } from './UserProfileCell.mock'
+
+const meta = {
+  title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
+}
+
+export default meta
+
+export const loading = {
+  render: () => {
+    return Loading ? <Loading /> : <></>
+  },
+}
+
+export const empty = {
+  render: () => {
+    return Empty ? <Empty /> : <></>
+  },
+}
+
+export const failure = {
+  render: (args) => {
+    return Failure ? <Failure error={new Error('Oh no')} {...args} /> : <></>
+  },
+}
+
+export const success = {
+  render: (args) => {
+    return Success ? <Success {...standard()} {...args} /> : <></>
+  },
+}
+"
+`;
+
+exports[`Kebab case words > creates a cell test with a kebabCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -166,7 +401,7 @@ describe('UserProfileCell', () => {
 "
 `;
 
-exports[`Multiword files creates a cell component with a multi word name 1`] = `
+exports[`Multiword files > creates a cell component with a multi word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -189,7 +424,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`Multiword files creates a cell mock with a multi word name 1`] = `
+exports[`Multiword files > creates a cell mock with a multi word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -199,12 +434,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Multiword files creates a cell stories with a multi word name 1`] = `
+exports[`Multiword files > creates a cell stories with a multi word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -235,7 +471,7 @@ export const success = {
 "
 `;
 
-exports[`Multiword files creates a cell test with a multi word name 1`] = `
+exports[`Multiword files > creates a cell test with a multi word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -280,7 +516,7 @@ describe('UserProfileCell', () => {
 "
 `;
 
-exports[`Single word files creates a cell component with a single word name 1`] = `
+exports[`Single word files > creates a cell component with a single word name 1`] = `
 "export const QUERY = gql\`
   query FindUserQuery($id: Int!) {
     user: user(id: $id) {
@@ -303,7 +539,7 @@ export const Success = ({ user }) => {
 "
 `;
 
-exports[`Single word files creates a cell mock with a single word name 1`] = `
+exports[`Single word files > creates a cell mock with a single word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   user: {
@@ -313,12 +549,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Single word files creates a cell stories with a single word name 1`] = `
+exports[`Single word files > creates a cell stories with a single word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
 const meta = {
   title: 'Cells/UserCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -349,7 +586,7 @@ export const success = {
 "
 `;
 
-exports[`Single word files creates a cell test with a single word name 1`] = `
+exports[`Single word files > creates a cell test with a single word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
@@ -394,7 +631,7 @@ describe('UserCell', () => {
 "
 `;
 
-exports[`Snake case words creates a cell component with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell component with a snakeCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -417,7 +654,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`Snake case words creates a cell mock with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell mock with a snakeCase word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -427,12 +664,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`Snake case words creates a cell stories with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell stories with a snakeCase word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -463,7 +701,7 @@ export const success = {
 "
 `;
 
-exports[`Snake case words creates a cell test with a snakeCase word name 1`] = `
+exports[`Snake case words > creates a cell test with a snakeCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -511,9 +749,16 @@ describe('UserProfileCell', () => {
 exports[`TypeScript: generates list cells if list flag passed in 1`] = `
 "import type { FindBazingaQuery, FindBazingaQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<
+  FindBazingaQuery,
+  FindBazingaQueryVariables
+> = gql\`
   query FindBazingaQuery($id: Int!) {
     bazinga: bazinga(id: $id) {
       id
@@ -592,6 +837,7 @@ import { standard } from './BazingaCell.mock'
 
 const meta: Meta = {
   title: 'Cells/BazingaCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -633,17 +879,22 @@ export const standard = (/* vars, { ctx, req } */) => ({
 `;
 
 exports[`TypeScript: generates list cells if name is plural 1`] = `
-"import type { MembersQuery } from 'types/graphql'
+"import type { MembersQuery, MembersQueryVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql\`
-  query MembersQuery {
-    members {
-      id
+export const QUERY: TypedDocumentNode<MembersQuery, MembersQueryVariables> =
+  gql\`
+    query MembersQuery {
+      members {
+        id
+      }
     }
-  }
-\`
+  \`
 
 export const Loading = () => <div>Loading...</div>
 
@@ -665,7 +916,7 @@ export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
 "
 `;
 
-exports[`camelCase words creates a cell component with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell component with a camelCase word name 1`] = `
 "export const QUERY = gql\`
   query FindUserProfileQuery($id: Int!) {
     userProfile: userProfile(id: $id) {
@@ -688,7 +939,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`camelCase words creates a cell mock with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell mock with a camelCase word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
@@ -698,12 +949,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
 "
 `;
 
-exports[`camelCase words creates a cell stories with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell stories with a camelCase word name 1`] = `
 "import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
 const meta = {
   title: 'Cells/UserProfileCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -734,7 +986,7 @@ export const success = {
 "
 `;
 
-exports[`camelCase words creates a cell test with a camelCase word name 1`] = `
+exports[`camelCase words > creates a cell test with a camelCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
@@ -853,6 +1105,7 @@ import { standard } from './AddressCell.mock'
 
 const meta = {
   title: 'Cells/AddressCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -973,6 +1226,7 @@ import { standard } from './AddressesCell.mock'
 
 const meta = {
   title: 'Cells/AddressesCell',
+  tags: ['autodocs'],
 }
 
 export default meta
@@ -1091,6 +1345,7 @@ import { standard } from './MembersCell.mock'
 
 const meta = {
   title: 'Cells/MembersCell',
+  tags: ['autodocs'],
 }
 
 export default meta

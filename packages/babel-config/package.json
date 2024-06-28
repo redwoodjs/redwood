@@ -1,9 +1,9 @@
 {
   "name": "@redwoodjs/babel-config",
-  "version": "6.0.7",
+  "version": "7.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/babel-config"
   },
   "license": "MIT",
@@ -13,12 +13,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.mjs && run build:types",
+    "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-babel-config.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
-    "test:watch": "run test --watch"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@babel/core": "^7.22.20",
@@ -27,28 +28,30 @@
     "@babel/plugin-transform-private-methods": "^7.22.5",
     "@babel/plugin-transform-private-property-in-object": "^7.22.11",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
-    "@babel/plugin-transform-runtime": "7.23.4",
+    "@babel/plugin-transform-runtime": "7.24.3",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
     "@babel/register": "^7.22.15",
-    "@babel/runtime-corejs3": "7.23.5",
+    "@babel/runtime-corejs3": "7.24.5",
     "@babel/traverse": "^7.22.20",
-    "@redwoodjs/project-config": "6.0.7",
+    "@redwoodjs/project-config": "workspace:*",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
-    "babel-plugin-module-resolver": "5.0.0",
-    "core-js": "3.33.3",
+    "babel-plugin-module-resolver": "5.0.2",
+    "core-js": "3.37.1",
     "fast-glob": "3.3.2",
     "graphql": "16.8.1",
-    "typescript": "5.3.2"
+    "typescript": "5.4.5"
   },
   "devDependencies": {
-    "@types/babel-plugin-tester": "9.0.9",
-    "@types/babel__core": "7.20.4",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/babel-plugin-tester": "9.0.10",
+    "@types/babel__core": "7.20.5",
+    "@types/node": "20.12.12",
     "babel-plugin-tester": "11.0.4",
-    "esbuild": "0.19.5",
-    "jest": "29.7.0"
+    "tsx": "4.15.6",
+    "vitest": "1.6.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

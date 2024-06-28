@@ -1,12 +1,12 @@
 // mock Telemetry for CLI commands so they don't try to spawn a process
-jest.mock('@redwoodjs/telemetry', () => {
+vi.mock('@redwoodjs/telemetry', () => {
   return {
-    errorTelemetry: () => jest.fn(),
-    timedTelemetry: () => jest.fn(),
+    errorTelemetry: () => vi.fn(),
+    timedTelemetry: () => vi.fn(),
   }
 })
 
-jest.mock('@redwoodjs/cli-helpers', () => {
+vi.mock('@redwoodjs/cli-helpers', () => {
   return {
     getPaths: () => {
       return {
@@ -18,24 +18,22 @@ jest.mock('@redwoodjs/cli-helpers', () => {
         base: '',
       }
     },
-    standardAuthHandler: () => jest.fn(),
+    standardAuthHandler: () => vi.fn(),
   }
 })
 
-// This will load packages/auth-providers/supertokens/setup/__mocks__/fs.js
-jest.mock('fs')
-
-const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
-  __setMockFiles: (files: Record<string, string>) => void
-}
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
 import fs from 'fs'
+
+import { vol } from 'memfs'
+import { vi, describe, it, expect } from 'vitest'
 
 import { addRoutingLogic } from '../setupHandler'
 
 describe('addRoutingLogic', () => {
   it('modifies the Routes.{jsx,tsx} file', () => {
-    mockFS.__setMockFiles({
+    vol.fromJSON({
       'Routes.tsx':
         "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
         `
@@ -59,7 +57,7 @@ export default Routes
 
     addRoutingLogic.task()
 
-    expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
+    expect(fs.readFileSync('Routes.tsx', 'utf-8')).toMatchInlineSnapshot(`
           "// In this file, all Page components from 'src/pages' are auto-imported.
 
           import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
@@ -88,7 +86,7 @@ export default Routes
   })
 
   it('handles a Routes.{jsx,tsx} file with a legacy setup', () => {
-    mockFS.__setMockFiles({
+    vol.fromJSON({
       'Routes.tsx':
         "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
         `
@@ -118,7 +116,7 @@ export default Routes
 
     addRoutingLogic.task()
 
-    expect(mockFS.readFileSync('Routes.tsx')).toMatchInlineSnapshot(`
+    expect(fs.readFileSync('Routes.tsx', 'utf-8')).toMatchInlineSnapshot(`
       "// In this file, all Page components from 'src/pages' are auto-imported.
 
 
@@ -134,7 +132,7 @@ export default Routes
           return getRoutingComponent(PreBuiltUI)
         }
 
-        
+
 
         return (
           <Router useAuth={useAuth}>

@@ -23,7 +23,7 @@ const baseConfig = {
 
   stories: [
     `${importStatementPath(
-      redwoodProjectPaths.web.src
+      redwoodProjectPaths.web.src,
     )}/**/*.stories.@(js|jsx|ts|tsx|mdx)`,
   ],
 
@@ -48,13 +48,21 @@ const baseConfig = {
 
     // We replace imports to "@redwoodjs/router" with our own implementation in "@redwoodjs/testing"
     sbConfig.resolve.alias['@redwoodjs/router$'] = require.resolve(
-      '@redwoodjs/testing/dist/web/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js',
     )
     // This allows us to mock `createAuthentication` which is used by auth
     // clients, which in turn lets us mock `useAuth` in tests
     sbConfig.resolve.alias['@redwoodjs/auth$'] = require.resolve(
-      '@redwoodjs/testing/dist/web/mockAuth.js'
+      '@redwoodjs/testing/dist/web/mockAuth.js',
     )
+
+    // Force loading the ESM version of ApolloProvider in Storybook
+    // I'm unsure why storybook-webpack does not work with the CJS version
+    // All other cases are fine with the CJS import.
+    sbConfig.resolve.alias['@redwoodjs/web/apollo$'] = require.resolve(
+      '@redwoodjs/web/forceEsmApollo',
+    )
+
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       redwoodProjectPaths.web.routes
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] =
@@ -74,11 +82,12 @@ const baseConfig = {
       }
     }
 
-    const userPreviewPath = fs.existsSync(
-      redwoodProjectPaths.web.storybookPreviewConfig
-    )
-      ? redwoodProjectPaths.web.storybookPreviewConfig
-      : './preview.example.js'
+    let userPreviewPath = './preview.example.js'
+
+    if (redwoodProjectPaths.web.storybookPreviewConfig) {
+      userPreviewPath = redwoodProjectPaths.web.storybookPreviewConfig
+    }
+
     sbConfig.resolve.alias['~__REDWOOD__USER_STORYBOOK_PREVIEW_CONFIG'] =
       userPreviewPath
 
@@ -106,11 +115,11 @@ const baseConfig = {
 
     // ** LOADERS **
     const sbMdxRule = sbConfig.module.rules.find(
-      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString()
+      (rule) => rule.test.toString() === /(stories|story)\.mdx$/.toString(),
     )
     console.assert(sbMdxRule, 'Storybook MDX rule not found')
     sbConfig.module.rules = [...rwConfig.module.rules, sbMdxRule].filter(
-      Boolean
+      Boolean,
     )
 
     // See https://community.redwoodjs.com/t/mocking-node-modules-on-the-web-side-with-webpack-config-in-storybook/1392.

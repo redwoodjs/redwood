@@ -69,20 +69,18 @@ async function setUpRscProject(
     REDWOOD_FRAMEWORK_PATH,
     'packages/cli/dist/index.js'
   )
-  const rwfwBinPath = path.join(
-    REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/rwfw.js'
-  )
 
   console.log(`Creating project at ${rscProjectPath}`)
   console.log()
-  await exec('npx', [
-    '-y',
-    'create-redwood-app@canary',
+  await exec('yarn', [
+    'create',
+    'redwood-app',
     '-y',
     '--no-git',
     rscProjectPath,
   ])
+  await execInProject('yarn install')
+  await execInProject('yarn rw upgrade -t canary')
 
   console.log(`Setting up Streaming/SSR in ${rscProjectPath}`)
   const cmdSetupStreamingSSR = `node ${rwBinPath} experimental setup-streaming-ssr -f`
@@ -93,14 +91,10 @@ async function setUpRscProject(
   await execInProject(`node ${rwBinPath} experimental setup-rsc`)
   console.log()
 
-  console.log(`Copying over framework files to ${rscProjectPath}`)
-  await execInProject(`node ${rwfwBinPath} project:copy`, {
+  console.log('Syncing framework')
+  await execInProject('yarn rwfw project:tarsync --verbose', {
     env: { RWFW_PATH: REDWOOD_FRAMEWORK_PATH },
   })
-  console.log()
-
-  console.log('Installing dependencies')
-  await execInProject('yarn install')
   console.log()
 
   console.log(`Building project in ${rscProjectPath}`)

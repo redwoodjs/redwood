@@ -19,7 +19,7 @@ export const handler = () => {
     })
 
     setOutput(
-      'All done! Your file contents have not been changed just the extension.'
+      'All done! Your file contents have not been changed just the extension.',
     )
   })
 }

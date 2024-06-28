@@ -1,5 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 <% if (paramName !== '') { %>
 type ${pascalName}PageProps = {
   ${paramName}: ${paramType}
@@ -8,7 +8,7 @@ type ${pascalName}PageProps = {
 const ${pascalName}Page = (<%- paramName === '' ? '' : `${propParam}: ${pascalName}PageProps` %>) => {
   return (
     <>
-      <MetaTags title="${pascalName}" description="${pascalName} page" />
+      <Metadata title="${pascalName}" description="${pascalName} page" />
 
       <h1>${pascalName}Page</h1>
       <p>

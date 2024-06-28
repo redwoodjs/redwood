@@ -12,7 +12,7 @@ describe('Populates context', () => {
     expect(spiedPlugin.spies.beforeContextBuilding).toHaveBeenCalledWith(
       expect.objectContaining({
         context: expect.objectContaining(obj),
-      })
+      }),
     )
   }
 
@@ -34,7 +34,7 @@ describe('Populates context', () => {
         // @NOTE add spy here to check if context has been changed
         spiedPlugin.plugin,
       ],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testQuery, {}, {})
@@ -59,7 +59,7 @@ describe('Populates context', () => {
         // @NOTE add spy here to check if context has been changed
         spiedPlugin.plugin,
       ],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testQuery, {}, {})

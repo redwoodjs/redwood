@@ -1,10 +1,10 @@
 import fs from 'fs'
 
-import toml from '@iarna/toml'
 import merge from 'deepmerge'
+import * as toml from 'smol-toml'
 import { env as envInterpolation } from 'string-env-interpolation'
 
-import { getConfigPath } from './configPath'
+import { getConfigPath } from './configPath.js'
 
 export enum TargetEnum {
   NODE = 'node',
@@ -21,7 +21,7 @@ export enum BundlerEnum {
 export interface NodeTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.NODE
@@ -33,7 +33,7 @@ export interface NodeTargetConfig {
 interface BrowserTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.BROWSER
@@ -75,7 +75,7 @@ interface AuthImpersonationConfig {
 }
 
 interface StudioConfig {
-  inMemory: boolean
+  basePort: number
   graphiql?: GraphiQLStudioConfig
 }
 
@@ -97,13 +97,13 @@ export interface Config {
   notifications: {
     versionUpdates: string[]
   }
+  studio: StudioConfig
   experimental: {
     opentelemetry: {
       enabled: boolean
       wrapApi: boolean
       apiSdk?: string
     }
-    studio: StudioConfig
     cli: {
       autoInstall: boolean
       plugins: CLIPlugin[]
@@ -118,6 +118,10 @@ export interface Config {
     realtime: {
       enabled: boolean
     }
+    reactCompiler: {
+      enabled: boolean
+      lintOnly: boolean
+    }
   }
 }
 
@@ -131,7 +135,6 @@ export interface CLIPlugin {
 const DEFAULT_CONFIG: Config = {
   web: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
@@ -144,7 +147,6 @@ const DEFAULT_CONFIG: Config = {
   },
   api: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
@@ -164,30 +166,30 @@ const DEFAULT_CONFIG: Config = {
   notifications: {
     versionUpdates: [],
   },
+  studio: {
+    basePort: 4318,
+    graphiql: {
+      authImpersonation: {
+        authProvider: undefined,
+        userId: undefined,
+        email: undefined,
+        jwtSecret: 'secret',
+      },
+    },
+  },
   experimental: {
     opentelemetry: {
       enabled: false,
       wrapApi: true,
-      apiSdk: undefined,
-    },
-    studio: {
-      inMemory: false,
-      graphiql: {
-        endpoint: 'graphql',
-        authImpersonation: {
-          authProvider: undefined,
-          userId: undefined,
-          email: undefined,
-          roles: undefined,
-          jwtSecret: 'secret',
-        },
-      },
     },
     cli: {
       autoInstall: true,
       plugins: [
         {
           package: '@redwoodjs/cli-storybook',
+        },
+        {
+          package: '@redwoodjs/cli-storybook-vite',
         },
         {
           package: '@redwoodjs/cli-data-migrate',
@@ -203,6 +205,10 @@ const DEFAULT_CONFIG: Config = {
     },
     realtime: {
       enabled: false,
+    },
+    reactCompiler: {
+      enabled: false,
+      lintOnly: false,
     },
   },
 }

@@ -82,7 +82,7 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example subscription ...`,
         enabled: () => functionType === 'subscription',
-        task: () => {
+        task: async () => {
           // sdl
 
           const exampleSdlTemplateContent = path.resolve(
@@ -90,17 +90,17 @@ export async function handler({ name, type, force, verbose }) {
             'templates',
             'subscriptions',
             'blank',
-            `blank.sdl.ts.template`
+            `blank.sdl.ts.template`,
           )
 
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `${name}.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `${name}.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
 
@@ -109,17 +109,17 @@ export async function handler({ name, type, force, verbose }) {
             'templates',
             'subscriptions',
             'blank',
-            `blank.service.ts.template`
+            `blank.service.ts.template`,
           )
           const serviceFile = path.join(
             redwoodPaths.api.services,
             `${name}`,
-            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // subscription
 
@@ -128,41 +128,47 @@ export async function handler({ name, type, force, verbose }) {
             'templates',
             'subscriptions',
             'blank',
-            `blank.ts.template`
+            `blank.ts.template`,
           )
 
           const exampleFile = path.join(
             redwoodPaths.api.subscriptions,
             `${name}`,
-            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
 
           const setupScriptContent = ts
             ? exampleSubscriptionTemplateContent
-            : transformTSToJS(exampleFile, exampleSubscriptionTemplateContent)
+            : await transformTSToJS(
+                exampleFile,
+                exampleSubscriptionTemplateContent,
+              )
 
           // write all files
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
-              }
+              },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
-              }
+              },
             ),
             writeFile(
               exampleFile,
-              generateTemplate(setupScriptContent, templateVariables(name)),
+              await generateTemplate(
+                setupScriptContent,
+                templateVariables(name),
+              ),
               {
                 overwriteExisting: force,
-              }
+              },
             ),
           ]
         },
@@ -170,22 +176,22 @@ export async function handler({ name, type, force, verbose }) {
       {
         title: `Adding ${name} example live query ...`,
         enabled: () => functionType === 'liveQuery',
-        task: () => {
+        task: async () => {
           // sdl
           const exampleSdlTemplateContent = path.resolve(
             __dirname,
             'templates',
             'liveQueries',
             'blank',
-            `blank.sdl.ts.template`
+            `blank.sdl.ts.template`,
           )
           const sdlFile = path.join(
             redwoodPaths.api.graphql,
-            `${name}.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `${name}.sdl.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
           const sdlContent = ts
             ? exampleSdlTemplateContent
-            : transformTSToJS(sdlFile, exampleSdlTemplateContent)
+            : await transformTSToJS(sdlFile, exampleSdlTemplateContent)
 
           // service
           const exampleServiceTemplateContent = path.resolve(
@@ -193,33 +199,33 @@ export async function handler({ name, type, force, verbose }) {
             'templates',
             'liveQueries',
             'blank',
-            'blank.service.ts.template'
+            'blank.service.ts.template',
           )
 
           const serviceFile = path.join(
             redwoodPaths.api.services,
             `${name}`,
-            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`
+            `${name}.${isTypeScriptProject() ? 'ts' : 'js'}`,
           )
           const serviceContent = ts
             ? exampleServiceTemplateContent
-            : transformTSToJS(serviceFile, exampleServiceTemplateContent)
+            : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
           // write all files
           return [
             writeFile(
               sdlFile,
-              generateTemplate(sdlContent, templateVariables(name)),
+              await generateTemplate(sdlContent, templateVariables(name)),
               {
                 overwriteExisting: force,
-              }
+              },
             ),
             writeFile(
               serviceFile,
-              generateTemplate(serviceContent, templateVariables(name)),
+              await generateTemplate(serviceContent, templateVariables(name)),
               {
                 overwriteExisting: force,
-              }
+              },
             ),
           ]
         },
@@ -229,7 +235,7 @@ export async function handler({ name, type, force, verbose }) {
         task: async () => {
           await generateTypes()
           console.log(
-            'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n'
+            'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n',
           )
         },
       },
@@ -237,7 +243,7 @@ export async function handler({ name, type, force, verbose }) {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

@@ -1,12 +1,13 @@
 import { cache, use, useEffect, useState } from 'react'
 import type { ReactElement } from 'react'
 
+import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
-import { StatusError } from './lib/StatusError'
+import { StatusError } from './lib/StatusError.js'
 
 const checkStatus = async (
-  responsePromise: Promise<Response>
+  responsePromise: Promise<Response>,
 ): Promise<Response> => {
   const response = await responsePromise
 
@@ -17,91 +18,120 @@ const checkStatus = async (
   return response
 }
 
-export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
-  type SetRerender = (
-    rerender: (next: [ReactElement, string]) => void
-  ) => () => void
-  const fetchRSC = cache(
-    (serializedProps: string): readonly [React.ReactElement, SetRerender] => {
-      console.log('fetchRSC serializedProps', serializedProps)
+const BASE_PATH = '/rw-rsc/'
 
-      let rerender: ((next: [ReactElement, string]) => void) | undefined
-      const setRerender: SetRerender = (fn) => {
-        rerender = fn
-        return () => {
-          rerender = undefined
-        }
-      }
+type SetRerender = (
+  rerender: (next: [Thenable<ReactElement>, string]) => void,
+) => () => void
 
-      const searchParams = new URLSearchParams()
-      searchParams.set('props', serializedProps)
+function fetchRSC(
+  rscId: string,
+  serializedProps: string,
+): readonly [Thenable<ReactElement>, SetRerender] {
+  console.log('fetchRSC serializedProps', serializedProps)
 
-      const options = {
-        async callServer(rsfId: string, args: unknown[]) {
-          console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
-          const isMutating = !!mutationMode
-          const searchParams = new URLSearchParams()
-          searchParams.set('action_id', rsfId)
-          let id: string
+  let rerender: ((next: [Thenable<ReactElement>, string]) => void) | undefined
 
-          if (isMutating) {
-            id = rscId
-            searchParams.set('props', serializedProps)
-          } else {
-            id = '_'
-          }
-
-          const response = fetch(basePath + id + '/' + searchParams, {
-            method: 'POST',
-            body: await encodeReply(args),
-            headers: {
-              'rw-rsc': '1',
-            },
-          })
-
-          const data = createFromFetch(response, options)
-
-          if (isMutating) {
-            rerender?.([data, serializedProps])
-          }
-
-          return data
-        },
-      }
-
-      const prefetched = (globalThis as any).__WAKU_PREFETCHED__?.[rscId]?.[
-        serializedProps
-      ]
-
-      console.log(
-        'fetchRSC before createFromFetch',
-        basePath + rscId + '/' + searchParams
-      )
-
-      const response =
-        prefetched ||
-        fetch(basePath + rscId + '/' + searchParams, {
-          headers: {
-            'rw-rsc': '1',
-          },
-        })
-      const data = createFromFetch(checkStatus(response), options)
-      console.log('fetchRSC after createFromFetch. data:', data)
-
-      return [data, setRerender]
+  const setRerender: SetRerender = (fn) => {
+    rerender = fn
+    return () => {
+      rerender = undefined
     }
+  }
+
+  const searchParams = new URLSearchParams()
+  searchParams.set('props', serializedProps)
+
+  const options: Options<unknown[], ReactElement> = {
+    // React will hold on to `callServer` and use that when it detects a
+    // server action is invoked (like `action={onSubmit}` in a <form>
+    // element). So for now at least we need to send it with every RSC
+    // request, so React knows what `callServer` method to use for server
+    // actions inside the RSC.
+    callServer: async function (rsfId: string, args: unknown[]) {
+      // `args` is often going to be an array with just a single element,
+      // and that element will be FormData
+      console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+
+      const isMutating = !!mutationMode
+      const searchParams = new URLSearchParams()
+      searchParams.set('action_id', rsfId)
+      let id: string
+
+      if (isMutating) {
+        id = rscId
+        searchParams.set('props', serializedProps)
+      } else {
+        id = '_'
+      }
+
+      const response = fetch(BASE_PATH + id + '?' + searchParams, {
+        method: 'POST',
+        body: await encodeReply(args),
+        headers: {
+          'rw-rsc': '1',
+        },
+      })
+
+      // I'm not sure this recursive use of `options` is needed. I briefly
+      // tried without it, and things seemed to work. But keeping it for
+      // now, until we learn more.
+      const data = createFromFetch(response, options)
+
+      if (isMutating) {
+        rerender?.([data, serializedProps])
+      }
+
+      return data
+    },
+  }
+
+  const prefetched = (globalThis as any).__WAKU_PREFETCHED__?.[rscId]?.[
+    serializedProps
+  ]
+
+  console.log(
+    'fetchRSC before createFromFetch',
+    BASE_PATH + rscId + '?' + searchParams,
   )
+
+  const response =
+    prefetched ||
+    fetch(BASE_PATH + rscId + '?' + searchParams, {
+      headers: {
+        'rw-rsc': '1',
+      },
+    })
+  const data = createFromFetch(checkStatus(response), options)
+  console.log('fetchRSC after createFromFetch. data:', data)
+
+  return [data, setRerender]
+}
+
+export function renderFromRscServer<TProps>(rscId: string) {
+  console.log('serve rscId (renderFromRscServer)', rscId)
+
+  if (typeof window === 'undefined') {
+    throw new Error(
+      'renderFromRscServer should only be used in a real browser ' +
+        'environment. Did you mean to use renderFromDist in clientSsr.ts ' +
+        'instead?',
+    )
+  }
+
+  const cachedFetchRSC = cache(fetchRSC)
 
   // Create temporary client component that wraps the ServerComponent returned
   // by the `createFromFetch` call.
-  const ServerComponent = (props: Props) => {
-    console.log('ServerComponent props', props)
+  const ServerComponent = (props: TProps) => {
+    console.log('ServerComponent', rscId, 'props', props)
 
     // FIXME we blindly expect JSON.stringify usage is deterministic
     const serializedProps = JSON.stringify(props || {})
-    const [data, setRerender] = fetchRSC(serializedProps)
+    const [data, setRerender] = cachedFetchRSC(rscId, serializedProps)
     const [state, setState] = useState<
-      [dataToOverride: ReactElement, lastSerializedProps: string] | undefined
+      | [dataToOverride: Thenable<ReactElement>, lastSerializedProps: string]
+      | undefined
     >()
 
     // MARK Should this be useLayoutEffect?
@@ -117,12 +147,18 @@ export function serve<Props>(rscId: string, basePath = '/rw-rsc/') {
       }
     }
 
-    // FIXME The type error
-    // "Cannot read properties of null (reading 'alternate')"
-    // is caused with startTransition.
-    // Not sure if it's a React bug or our misusage.
-    // For now, using `use` seems to fix it. Is it a correct fix?
-    return use(dataToReturn as any) as typeof dataToReturn
+    // `use()` will throw a `SuspenseException` as long as `dataToReturn` is
+    // unfulfilled. React internally tracks this promise and re-renders this
+    // component when the promise resolves. When the promise is resolved no
+    // exception will be thrown and the actual value of the promise will be
+    // returned instead
+    // The closest suspense boundary will render its fallback when the
+    // exception is thrown
+    return use(dataToReturn)
+
+    // TODO (RSC): Might be an issue with `use` above with startTransition
+    // according to the waku sources I copied this from. We need to figure out
+    // if this is the right way to do things
   }
 
   return ServerComponent

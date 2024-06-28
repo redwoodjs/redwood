@@ -37,7 +37,7 @@ export class ChunkReferencesPlugin {
 
       compilation.emitAsset(
         this.options.outputFile,
-        new compiler.webpack.sources.RawSource(JSON.stringify(output, null, 2))
+        new compiler.webpack.sources.RawSource(JSON.stringify(output, null, 2)),
       )
     })
   }

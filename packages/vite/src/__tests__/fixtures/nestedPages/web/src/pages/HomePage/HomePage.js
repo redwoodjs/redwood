@@ -1,4 +1,4 @@
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import Hero from 'src/components/Hero/Hero'
 import { useTranslation, Trans } from 'react-i18next'
 import Highlight from 'react-highlight'
@@ -8,7 +8,7 @@ const HomePage = () => {
 
   return (
     <>
-      <MetaTags
+      <Metadata
         title="RedwoodJS: The Full-stack JS Framework"
         description="Grow from side project to startup with RedwoodJS. Combines React, GraphQL and Prisma for a full-stack app framework."
       />

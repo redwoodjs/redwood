@@ -1,11 +1,11 @@
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import JobProfilesCell from 'src/components/Jobs/JobProfilesCell'
 
 const AllJobProfilesPage = () => {
   return (
     <>
-      <MetaTags title="AllJobProfiles" description="AllJobProfiles page" />
+      <Metadata title="AllJobProfiles" description="AllJobProfiles page" />
 
       <section className="max-w-screen-lg mx-auto mt-36 mb-24">
         <header className="text-center">

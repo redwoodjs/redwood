@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest'
+
 import { getDevNodeOptions } from '../../commands/devHandler'
 
 describe('getNodeOptions', () => {
@@ -5,23 +7,22 @@ describe('getNodeOptions', () => {
 
   it('defaults to enable-source-maps', () => {
     const nodeOptions = getDevNodeOptions()
-    expect(nodeOptions).toEqual(`NODE_OPTIONS=${enableSourceMapsOption}`)
+    expect(nodeOptions).toEqual(enableSourceMapsOption)
   })
 
   it("doesn't specify `--enable-source-maps` twice", () => {
-    process.env.NODE_OPTIONS = `NODE_OPTIONS=${enableSourceMapsOption}`
+    process.env.NODE_OPTIONS = enableSourceMapsOption
 
     const nodeOptions = getDevNodeOptions()
-    expect(nodeOptions).toEqual(`NODE_OPTIONS=${enableSourceMapsOption}`)
+    expect(nodeOptions).toEqual(enableSourceMapsOption)
   })
 
   it('merges existing options with `--enable-source-maps`', () => {
     const existingOptions = '--inspect --no-experimental-fetch'
-    process.env.NODE_OPTIONS = `NODE_OPTIONS=${existingOptions}`
+    process.env.NODE_OPTIONS = existingOptions
 
     const nodeOptions = getDevNodeOptions()
-    expect(nodeOptions).toEqual(
-      `NODE_OPTIONS=${existingOptions} ${enableSourceMapsOption}`
-    )
+
+    expect(nodeOptions).toEqual(`${existingOptions} ${enableSourceMapsOption}`)
   })
 })

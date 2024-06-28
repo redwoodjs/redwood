@@ -4,7 +4,7 @@ import path from 'node:path'
 import type { ExecaError } from 'execa'
 import execa from 'execa'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { BundlerEnum, getConfig, getPaths } from '@redwoodjs/project-config'
 // Allow import of untyped package
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -21,12 +21,22 @@ export async function handler({
   port,
   smokeTest,
 }: StorybookYargsOptions) {
+  // Notice to vite users to try `yarn rw storybook-vite`. This will eventually be the default
+  // once we have removed webpack. Until then we give a small nudge to vite users to try it out.
+  if (getConfig().web.bundler === BundlerEnum.VITE) {
+    console.log(
+      c.bold(
+        `\nIt looks like you're using vite, please try:\n\n  yarn rw storybook-vite\n\nThis will run storybook using vite which should be a much nicer experience for you.\nYou can find out more at: https://community.redwoodjs.com/t/7212\n\n`,
+      ),
+    )
+  }
+
   // We add a stub file to type generation because users don't have Storybook
   // installed when they first start a project. We need to remove the file once
   // they install Storybook so that the real types come through.
   fs.rmSync(
     path.join(getPaths().generated.types.includes, 'web-storybook.d.ts'),
-    { force: true }
+    { force: true },
   )
 
   // Check for conflicting options
@@ -37,8 +47,8 @@ export async function handler({
   if (build && open) {
     console.warn(
       c.warning(
-        'Warning: --open option has no effect when running Storybook build'
-      )
+        'Warning: --open option has no effect when running Storybook build',
+      ),
     )
   }
 
@@ -53,11 +63,11 @@ export async function handler({
   // Create the `MockServiceWorker.js` file. See https://mswjs.io/docs/cli/init.
   await execa.command(
     `yarn msw init "${staticAssetsFolder}" --no-save`,
-    execaOptions
+    execaOptions,
   )
 
   const storybookConfigPath = path.dirname(
-    require.resolve('@redwoodjs/testing/config/storybook/main.js')
+    require.resolve('@redwoodjs/testing/config/storybook/main.js'),
   )
 
   let command = ''

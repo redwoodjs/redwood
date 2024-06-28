@@ -1,6 +1,6 @@
 import { getConfig } from './lib'
 import {
-  loadCommadCache,
+  loadCommandCache,
   checkPluginListAndWarn,
   saveCommandCache,
   loadPluginPackage,
@@ -30,7 +30,7 @@ export async function loadPlugins(yargs) {
 
   // TODO: We should have some mechanism to fetch the cache from an online or precomputed
   // source this will allow us to have a cache hit on the first run of a command
-  const pluginCommandCache = loadCommadCache()
+  const pluginCommandCache = loadCommandCache()
 
   // Check if the command is built in to the base CLI package
   if (
@@ -46,7 +46,7 @@ export async function loadPlugins(yargs) {
 
   // Plugins are enabled unless explicitly disabled
   const enabledPlugins = plugins.filter(
-    (p) => p.package !== undefined && (p.enabled ?? true)
+    (p) => p.package !== undefined && (p.enabled ?? true),
   )
 
   // Print warnings about any invalid plugins
@@ -72,9 +72,9 @@ export async function loadPlugins(yargs) {
   }
 
   // Order alphabetically but with @redwoodjs namespace first, orders the help output
-  const namespaces = Array.from(
-    thirdPartyPackages.map((p) => p.split('/')[0])
-  ).sort()
+  const namespaces = Array.from(thirdPartyPackages)
+    .map((p) => p.split('/')[0])
+    .sort()
   if (redwoodPackages.size > 0) {
     namespaces.unshift('@redwoodjs')
   }
@@ -101,7 +101,7 @@ export async function loadPlugins(yargs) {
             redwoodPluginPackage,
             pluginCommandCache,
             autoInstall,
-            true
+            true,
           )
           yargs.command(commands)
         }
@@ -137,13 +137,13 @@ export async function loadPlugins(yargs) {
           redwoodPluginPackage,
           pluginCommandCache,
           autoInstall,
-          true
+          true,
         )
         yargs.command(commands)
       }
     } else {
       const packagesForNamespace = Array.from(thirdPartyPackages).filter((p) =>
-        p.startsWith(namespaceInUse)
+        p.startsWith(namespaceInUse),
       )
       for (const packageForNamespace of packagesForNamespace) {
         // We'll load the plugin information from the cache if there is a cache entry
@@ -151,7 +151,7 @@ export async function loadPlugins(yargs) {
           packageForNamespace,
           pluginCommandCache,
           autoInstall,
-          true
+          true,
         )
         yargs.command({
           command: `${namespaceInUse} <command>`,
@@ -187,7 +187,7 @@ export async function loadPlugins(yargs) {
     for (const [command, info] of Object.entries(cacheEntry)) {
       commandFirstWords.push(command.split(' ')[0])
       commandFirstWords.push(
-        ...(info.aliases?.map((a) => a.split(' ')[0]) ?? [])
+        ...(info.aliases?.map((a) => a.split(' ')[0]) ?? []),
       )
     }
     if (
@@ -220,7 +220,7 @@ export async function loadPlugins(yargs) {
       packageToLoad,
       pluginCommandCache,
       autoInstall,
-      false
+      false,
     )
     commandsToRegister.push(...commands)
   } else {
@@ -232,13 +232,13 @@ export async function loadPlugins(yargs) {
         packageToLoad,
         pluginCommandCache,
         autoInstall,
-        true
+        true,
       )
       commandsToRegister.push(...commands)
     }
   }
 
-  // We need to nest the commands under the namespace rememebering that the
+  // We need to nest the commands under the namespace remembering that the
   // @redwoodjs namespace is special and doesn't need to be nested
   if (namespaceInUse === '@redwoodjs') {
     yargs.command(commandsToRegister)
@@ -279,7 +279,7 @@ async function loadCommandsFromCacheOrPackage(
   packageName,
   cache,
   autoInstall,
-  readFromCache
+  readFromCache,
 ) {
   let cacheEntry = undefined
   if (readFromCache) {
@@ -302,12 +302,21 @@ async function loadCommandsFromCacheOrPackage(
     const commands = plugin.commands ?? []
     const cacheUpdate = {}
     for (const command of commands) {
-      cacheUpdate[command.command] = {
+      const info = {
         aliases: command.aliases,
         description: command.description,
       }
+
+      // If we have any information about the command we'll update the cache
+      if (Object.values(info).some((value) => value !== undefined)) {
+        cacheUpdate[command.command] = info
+      }
     }
-    cache[packageName] = cacheUpdate
+
+    // Only update the entry if we got any cache information
+    if (Object.keys(cacheUpdate).length > 0) {
+      cache[packageName] = cacheUpdate
+    }
     return commands
   }
 

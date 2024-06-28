@@ -2,8 +2,10 @@ import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 
-import type { GlobalContext } from '../../index'
-import { context, getAsyncStoreInstance, setContext } from '../../index'
+import type { GlobalContext } from '@redwoodjs/context'
+import { context, setContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodGlobalContextSetter } from '../useRedwoodGlobalContextSetter'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
@@ -16,7 +18,7 @@ test('Context is correctly populated', async () => {
       useRedwoodPopulateContext({ foo: 'bar' }),
       useRedwoodGlobalContextSetter(),
     ],
-    testSchema
+    testSchema,
   )
 
   await getAsyncStoreInstance().run(
@@ -27,7 +29,7 @@ test('Context is correctly populated', async () => {
       expect(context.hello).toBe('world')
       expect(context.foo).toBe('bar')
       expect(context.bazinga).toBeUndefined()
-    }
+    },
   )
 })
 
@@ -40,7 +42,7 @@ test('Plugin lets you populate context at any point in the lifecycle', async () 
       useRedwoodPopulateContext({ foo: 'bar' }),
       useRedwoodPopulateContext({ bazinga: 'new value!' }),
     ],
-    testSchema
+    testSchema,
   )
 
   await getAsyncStoreInstance().run(
@@ -51,7 +53,7 @@ test('Plugin lets you populate context at any point in the lifecycle', async () 
       expect(context.hello).toBe('world')
       expect(context.foo).toBe('bar')
       expect(context.bazinga).toBe('new value!')
-    }
+    },
   )
 })
 
@@ -63,7 +65,7 @@ test('setContext erases the existing context', async () => {
       useRedwoodPopulateContext({ foo: 'bar' }),
       useRedwoodGlobalContextSetter(),
     ],
-    testSchema
+    testSchema,
   )
 
   await getAsyncStoreInstance().run(
@@ -75,6 +77,6 @@ test('setContext erases the existing context', async () => {
       expect(context.hello).toBeUndefined()
       expect(context.foo).toBeUndefined()
       expect(context.bazinga).toBe('new value!')
-    }
+    },
   )
 })

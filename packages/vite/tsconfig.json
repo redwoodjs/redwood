@@ -1,14 +1,16 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist"
   },
   "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
   "references": [
+    { "path": "../cookie-jar" },
     { "path": "../internal" },
     { "path": "../project-config" },
+    { "path": "../router" },
+    { "path": "../server-store" },
     { "path": "../web" }
   ]
 }

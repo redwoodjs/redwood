@@ -1,8 +1,8 @@
 // Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   ${camelName}: [
-    { id: ${mockIdValues[0]} },
-    { id: ${mockIdValues[1]} },
-    { id: ${mockIdValues[2]} }
+    { ${idName}: ${mockIdValues[0]} },
+    { ${idName}: ${mockIdValues[1]} },
+    { ${idName}: ${mockIdValues[2]} }
   ]
   })

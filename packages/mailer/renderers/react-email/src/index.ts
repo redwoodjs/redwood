@@ -15,7 +15,7 @@ export class ReactEmailRenderer extends AbstractMailRenderer {
   render(
     template: Parameters<typeof reactEmailRender>[0],
     options: RendererOptions,
-    _utilities?: MailUtilities
+    _utilities?: MailUtilities,
   ): MailRenderedContent {
     const outputFormat = options.outputFormat ?? 'both'
     const renderHTML = outputFormat === 'both' || outputFormat === 'html'

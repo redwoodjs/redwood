@@ -1,43 +1,42 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "6.0.7",
+  "version": "7.0.0",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/web-server"
   },
   "license": "MIT",
-  "main": "./dist/server.js",
+  "main": "./dist/cliConfig.js",
+  "types": "./dist/cliConfig.d.ts",
   "bin": {
-    "rw-web-server": "./dist/server.js"
+    "rw-web-server": "./dist/bin.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn node ./build.mjs && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-web-server.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
     "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "echo \"No tests yet\"",
-    "test:watch": "echo \"No tests yet\""
+    "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@fastify/http-proxy": "9.3.0",
-    "@fastify/static": "6.12.0",
-    "@redwoodjs/project-config": "6.0.7",
+    "@redwoodjs/fastify-web": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fast-glob": "3.3.2",
-    "fastify": "4.24.3",
-    "yargs-parser": "21.1.1"
+    "fastify": "4.27.0",
+    "fs-extra": "11.2.0",
+    "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@types/yargs-parser": "21.0.3",
-    "esbuild": "0.19.5",
-    "typescript": "5.3.2"
+    "@redwoodjs/framework-tools": "workspace:*",
+    "tsx": "4.15.6",
+    "typescript": "5.4.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

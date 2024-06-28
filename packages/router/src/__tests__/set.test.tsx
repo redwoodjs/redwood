@@ -2,10 +2,11 @@ import * as React from 'react'
 import type { ReactNode } from 'react'
 
 import { act, render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import { beforeEach, test, describe, vi, expect } from 'vitest'
 
 import { navigate } from '../history'
-import { Route, Router } from '../router'
+import { Route } from '../Route'
+import { Router } from '../router'
 import { Set } from '../Set'
 
 // SETUP
@@ -173,8 +174,8 @@ describe('Navigating Sets', () => {
   const Page = () => <h1>Page</h1>
 
   test('Sets should not cause a re-mount of wrap components when navigating within the set', async () => {
-    const layoutOneMount = jest.fn()
-    const layoutOneUnmount = jest.fn()
+    const layoutOneMount = vi.fn()
+    const layoutOneUnmount = vi.fn()
 
     const Layout1 = ({ children }: LayoutProps) => {
       React.useEffect(() => {
@@ -222,8 +223,8 @@ describe('Navigating Sets', () => {
   })
 
   test('Sets should make wrap components remount when navigating between separate sets with the same wrap component', async () => {
-    const layoutOneMount = jest.fn()
-    const layoutOneUnmount = jest.fn()
+    const layoutOneMount = vi.fn()
+    const layoutOneUnmount = vi.fn()
 
     const Layout1 = ({ children }: LayoutProps) => {
       React.useEffect(() => {

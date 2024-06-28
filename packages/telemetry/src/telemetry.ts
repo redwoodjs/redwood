@@ -36,7 +36,7 @@ const spawnProcess = (...args: Array<string>) => {
       '--root',
       getPaths().base,
     ],
-    spawnOptions
+    spawnOptions,
   ).unref()
 }
 
@@ -44,7 +44,7 @@ const spawnProcess = (...args: Array<string>) => {
 export const timedTelemetry = async (
   argv: Array<string>,
   options: Record<string, unknown>,
-  func: (...args: any[]) => any
+  func: (...args: any[]) => any,
 ) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return func.call(this)
@@ -60,7 +60,7 @@ export const timedTelemetry = async (
     '--duration',
     duration.toString(),
     '--type',
-    JSON.stringify(options.type)
+    JSON.stringify(options.type),
   )
 
   return result

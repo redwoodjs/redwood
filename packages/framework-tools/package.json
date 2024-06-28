@@ -1,0 +1,35 @@
+{
+  "name": "@redwoodjs/framework-tools",
+  "version": "7.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/framework-tools"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "types": "./dist/buildDefaults.d.ts",
+    "default": "./dist/buildDefaults.js"
+  },
+  "types": "./dist/buildDefaults.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.ts && run build:types",
+    "build:types": "tsc --build --verbose"
+  },
+  "dependencies": {
+    "esbuild": "0.21.3",
+    "fast-glob": "3.3.2",
+    "fs-extra": "11.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "11.0.4",
+    "tsx": "4.15.6",
+    "typescript": "5.4.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

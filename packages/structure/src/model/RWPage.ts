@@ -9,9 +9,9 @@ import type { RWProject } from './RWProject'
 
 export class RWPage extends FileNode {
   constructor(
-    public const_: string,
+    public constName: string,
     public path: string,
-    public parent: RWProject
+    public parent: RWProject,
   ) {
     super()
   }
@@ -20,7 +20,7 @@ export class RWPage extends FileNode {
   }
   @lazy() get route() {
     return this.parent.router.routes.find(
-      (r) => r.page_identifier_str === this.const_
+      (r) => r.page_identifier_str === this.constName,
     )
   }
   @lazy() get layoutName(): string | undefined {
@@ -29,7 +29,7 @@ export class RWPage extends FileNode {
       return undefined
     }
     for (const tag of this.sf.getDescendantsOfKind(
-      tsm.SyntaxKind.JsxOpeningElement
+      tsm.SyntaxKind.JsxOpeningElement,
     )) {
       const t = tag.getTagNameNode().getText() //?
       if (candidates.includes(t)) {

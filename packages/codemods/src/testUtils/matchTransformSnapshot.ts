@@ -2,19 +2,24 @@ import fs from 'fs'
 import path from 'path'
 
 import tempy from 'tempy'
+import { expect } from 'vitest'
 
 import runTransform from '../lib/runTransform'
 
 import { formatCode } from './index'
 
 export interface MatchTransformSnapshotFunction {
-  (transformName: string, fixtureName?: string, parser?: 'ts' | 'tsx'): void
+  (
+    transformName: string,
+    fixtureName?: string,
+    parser?: 'ts' | 'tsx',
+  ): Promise<void>
 }
 
 export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
   transformName,
   fixtureName,
-  parser
+  parser,
 ) => {
   const tempFilePath = tempy.file()
 
@@ -25,13 +30,30 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
     throw new Error('Could not find test path')
   }
 
-  // Use require.resolve, so we can pass in ts/js/tsx/jsx without specifying
-  const fixturePath = require.resolve(
-    path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
+  let fixturePath
+
+  const maybeFixturePath = path.join(
+    testPath,
+    '../../__testfixtures__',
+    `${fixtureName}.input`,
   )
 
+  for (const extension of ['ts', 'tsx', 'js', 'jsx']) {
+    try {
+      fixturePath = require.resolve(`${maybeFixturePath}.${extension}`)
+    } catch (e) {
+      continue
+    }
+  }
+
+  if (!fixturePath) {
+    throw new Error(
+      `Could not find fixture for ${fixtureName} in ${maybeFixturePath}`,
+    )
+  }
+
   const transformPath = require.resolve(
-    path.join(testPath, '../../', transformName)
+    path.join(testPath, '../../', `${transformName}.ts`),
   )
 
   // Step 1: Copy fixture to temp file
@@ -53,8 +75,10 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
 
   const expectedOutput = fs.readFileSync(
     fixturePath.replace('.input.', '.output.'),
-    'utf-8'
+    'utf-8',
   )
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
+  expect(await formatCode(transformedContent)).toEqual(
+    await formatCode(expectedOutput),
+  )
 }

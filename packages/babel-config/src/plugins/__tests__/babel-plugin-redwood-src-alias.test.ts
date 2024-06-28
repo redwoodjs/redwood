@@ -6,7 +6,7 @@ import plugin from '../babel-plugin-redwood-src-alias'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../../__fixtures__/empty-project'
+  '../../../../../__fixtures__/empty-project',
 )
 
 describe('babel plugin redwood import dir - graphql function', () => {

@@ -1,69 +1,142 @@
 import path from 'path'
 
-import isbot from 'isbot'
+import { Response } from '@whatwg-node/fetch'
+import type Router from 'find-my-way'
+import type { HTTPMethod } from 'find-my-way'
+import { createIsbotFromList, list as isbotList } from 'isbot'
 import type { ViteDevServer } from 'vite'
 
-import type { RWRouteManifestItem } from '@redwoodjs/internal'
+import { middlewareDefaultAuthProviderState } from '@redwoodjs/auth/dist/AuthProvider/AuthProviderState.js'
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
-import { matchPath } from '@redwoodjs/router'
+import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import { reactRenderToStreamResponse } from './streamHelpers'
-import { loadAndRunRouteHooks } from './triggerRouteHooks'
+import { invoke } from '../middleware/invokeMiddleware.js'
+import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
+import type { Middleware } from '../middleware/types.js'
+import type { EntryServer } from '../types.js'
+import { makeFilePath, ssrLoadEntryServer } from '../utils.js'
+
+import { reactRenderToStreamResponse } from './streamHelpers.js'
+import { loadAndRunRouteHooks } from './triggerRouteHooks.js'
 
 interface CreateReactStreamingHandlerOptions {
-  route: RWRouteManifestItem
+  routes: RWRouteManifestItem[]
   clientEntryPath: string
-  getStylesheetLinks: () => string[]
+  getStylesheetLinks: (route?: RWRouteManifestItem | RouteSpec) => string[]
+  getMiddlewareRouter: () => Promise<Router.Instance<any>>
 }
 
-const checkUaForSeoCrawler = isbot.spawn()
-checkUaForSeoCrawler.exclude(['chrome-lighthouse'])
+// Create an isbot instance that ignores the Chrome Lighthouse user agent
+const isbot = createIsbotFromList(
+  isbotList.filter((record) => !record.includes('chrome-lighthouse')),
+)
 
 export const createReactStreamingHandler = async (
   {
-    route,
+    routes,
     clientEntryPath,
     getStylesheetLinks,
+    getMiddlewareRouter,
   }: CreateReactStreamingHandlerOptions,
-  viteDevServer?: ViteDevServer
+  viteDevServer?: ViteDevServer,
 ) => {
-  const { redirect, routeHooks, bundle } = route
   const rwPaths = getPaths()
-
+  const rwConfig = getConfig()
   const isProd = !viteDevServer
+  const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
+  let entryServerImport: EntryServer
+  let fallbackDocumentImport: Record<string, any>
+  const rscEnabled = rwConfig.experimental?.rsc?.enabled
 
-  let entryServerImport: any
-  let fallbackDocumentImport: any
-
+  // Load the entries for prod only once, not in each handler invocation
+  // Dev is the opposite, we load it every time to pick up changes
   if (isProd) {
-    // TODO (RSC) Consolidate paths, so we can have the same code for SSR and RSC
-    if (getConfig().experimental?.rsc?.enabled) {
+    if (rscEnabled) {
       entryServerImport = await import(
-        makeFilePath(
-          path.join(rwPaths.web.distServer, 'assets', 'entry.server.js')
-        )
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(path.join(rwPaths.web.distServer, 'assets', 'Document.js'))
+        makeFilePath(rwPaths.web.distSsrEntryServer)
       )
     } else {
       entryServerImport = await import(
-        makeFilePath(rwPaths.web.distEntryServer)
-      )
-      fallbackDocumentImport = await import(
-        makeFilePath(rwPaths.web.distDocumentServer)
+        makeFilePath(rwPaths.web.distSsrEntryServer)
       )
     }
+
+    fallbackDocumentImport = await import(
+      makeFilePath(rwPaths.web.distSsrDocument)
+    )
   }
 
   // @NOTE: we are returning a FetchAPI handler
   return async (req: Request) => {
-    if (redirect) {
+    let mwResponse = MiddlewareResponse.next()
+
+    // Default auth state
+    let decodedAuthState: ServerAuthState = {
+      ...middlewareDefaultAuthProviderState,
+      cookieHeader: req.headers.get('cookie'),
+      roles: [],
+    }
+
+    // @TODO: Make the currentRoute 404?
+    let currentRoute: RWRouteManifestItem | undefined
+    let parsedParams: any = {}
+
+    const currentUrl = new URL(req.url)
+
+    // @TODO validate this is correct
+    for (const route of routes) {
+      const { match, ...rest } = matchPath(
+        route.pathDefinition,
+        currentUrl.pathname,
+      )
+
+      if (match) {
+        currentRoute = route
+        parsedParams = rest
+
+        break
+      }
+    }
+
+    // Using a function to get the CSS links because we need to wait for the
+    // vite dev server to analyze the module graph
+    const cssLinks = getStylesheetLinks(currentRoute)
+
+    // ~~~ Middleware Handling ~~~
+    if (middlewareRouter) {
+      const matchedMw = middlewareRouter.find(req.method as HTTPMethod, req.url)
+      ;[mwResponse, decodedAuthState] = await invoke(
+        req,
+        matchedMw?.handler as Middleware | undefined,
+        {
+          route: currentRoute,
+          cssPaths: cssLinks,
+          params: matchedMw?.params,
+          viteDevServer,
+        },
+      )
+
+      // If mwResponse is a redirect, short-circuit here, and skip React rendering
+      // If the response has a body, no need to render react.
+      if (mwResponse.isRedirect() || mwResponse.body) {
+        return mwResponse.toResponse()
+      }
+    }
+
+    // ~~~ Middleware Handling ~~~
+
+    if (!currentRoute) {
+      throw new Error('404 handling not implemented')
+    }
+
+    if (currentRoute.redirect) {
       return new Response(null, {
         status: 302,
         headers: {
-          Location: redirect.to,
+          Location: currentRoute.redirect.to,
         },
       })
     }
@@ -71,11 +144,9 @@ export const createReactStreamingHandler = async (
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
-      entryServerImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.entryServer as string // already validated in dev server
-      )
+      entryServerImport = await ssrLoadEntryServer(viteDevServer)
       fallbackDocumentImport = await viteDevServer.ssrLoadModule(
-        rwPaths.web.document
+        rwPaths.web.document,
       )
     }
 
@@ -85,18 +156,13 @@ export const createReactStreamingHandler = async (
     const FallbackDocument =
       fallbackDocumentImport.Document || fallbackDocumentImport.default
 
-    const { pathname: currentPathName } = new URL(req.url)
-
-    // @TODO validate this is correct
-    const parsedParams = matchPath(route.pathDefinition, currentPathName)
-
     let metaTags: TagDescriptor[] = []
 
-    let routeHookPath = routeHooks
+    let routeHookPath = currentRoute.routeHooks
 
     if (isProd) {
-      routeHookPath = routeHooks
-        ? path.join(rwPaths.web.distRouteHooks, routeHooks)
+      routeHookPath = currentRoute.routeHooks
+        ? path.join(rwPaths.web.distRouteHooks, currentRoute.routeHooks)
         : null
     }
 
@@ -112,28 +178,25 @@ export const createReactStreamingHandler = async (
 
     metaTags = routeHookOutput.meta
 
-    const jsBundles = [
-      clientEntryPath, // @NOTE: must have slash in front
-      bundle && '/' + bundle,
-    ].filter(Boolean) as string[]
+    // On dev, we don't need to add the slash (for windows support) any more
+    const jsBundles = [viteDevServer ? clientEntryPath : '/' + clientEntryPath]
+    if (currentRoute.bundle) {
+      jsBundles.push('/' + currentRoute.bundle)
+    }
 
-    const isSeoCrawler = checkUaForSeoCrawler(
-      req.headers.get('user-agent') || ''
-    )
-
-    // Using a function to get the CSS links because we need to wait for the
-    // vite dev server to analyze the module graph
-    const cssLinks = getStylesheetLinks()
+    const isSeoCrawler = isbot(req.headers.get('user-agent') || '')
 
     const reactResponse = await reactRenderToStreamResponse(
+      mwResponse,
       {
         ServerEntry,
         FallbackDocument,
-        currentPathName,
+        currentUrl,
         metaTags,
         cssLinks,
         isProd,
         jsBundles,
+        authState: decodedAuthState,
       },
       {
         waitForAllReady: isSeoCrawler,
@@ -144,14 +207,9 @@ export const createReactStreamingHandler = async (
 
           console.error(err)
         },
-      }
+      },
     )
 
     return reactResponse
   }
-}
-
-function makeFilePath(path: string): string {
-  // Without this, absolute paths can't be imported on Windows
-  return 'file:///' + path
 }

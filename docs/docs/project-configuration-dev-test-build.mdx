@@ -3,7 +3,7 @@ title: Project Configuration
 description: Advanced project configuration
 ---
 
-import ReactPlayer from 'react-player'
+import ReactPlayer from './ReactPlayer'
 
 # Project Configuration: Dev, Test, Build
 
@@ -222,3 +222,17 @@ Admittedly, the `.yarn` folder won't change that often, so this may not be
 the best example. But we thought we'd share this technique with you
 so that you'd know how to apply it to any folders that you know change very often,
 and how to tell VSCode not to bother wasting any CPU cycles on them.
+
+## Trailing whitespace
+
+If you're using VS Code, or another editor that supports
+[EditorConfig](https://editorconfig.org), trailing whitespace will be trimmed
+in source files, but preserved in html, markdown and mjml files when saving.
+
+This behavior is controlled by `.vscode/settings` or `.editorconfig` depending
+on your editor.
+
+In JavaScript and TypeScript files trailing whitespace has no significance,
+but for html, markdown and mjml it does. That's why the behavior is different
+for those files. If you don't like the default behavior Redwood has configured
+for you, you're free to change the settings in those two files.

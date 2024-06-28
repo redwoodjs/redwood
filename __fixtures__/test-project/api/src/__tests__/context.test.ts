@@ -10,5 +10,5 @@ test('Set a mock user on the context', async () => {
 })
 
 test('Context is isolated between tests', () => {
-  expect(context).toStrictEqual({ currentUser: undefined })
+  expect(context).toStrictEqual({})
 })

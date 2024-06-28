@@ -1,6 +1,6 @@
 import execa from 'execa'
 
-import { getPaths } from './paths'
+import { getPaths } from './paths.js'
 
 export const addWebPackages = (webPackages: string[]) => ({
   title: 'Adding required web packages...',

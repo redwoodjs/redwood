@@ -3,8 +3,8 @@ import path from 'path'
 
 import fg from 'fast-glob'
 
-import { getConfig } from './config'
-import { getConfigPath } from './configPath'
+import { getConfig } from './config.js'
+import { getConfigPath } from './configPath.js'
 
 export interface NodeTargetPaths {
   base: string
@@ -28,6 +28,7 @@ export interface NodeTargetPaths {
 export interface WebPaths {
   base: string
   src: string
+  storybook: string
   app: string
   document: string
   generators: string
@@ -42,17 +43,18 @@ export interface WebPaths {
   viteConfig: string | null // because vite is opt-in only
   entryClient: string | null
   entryServer: string | null
-  entries: string | null
   postcss: string
   storybookConfig: string
-  storybookPreviewConfig: string
+  storybookPreviewConfig: string | null
   storybookManagerConfig: string
   dist: string
-  distServer: string
-  distEntryServer: string
-  distDocumentServer: string
+  distBrowser: string
+  distRsc: string
+  distSsr: string
+  distSsrDocument: string
+  distSsrEntryServer: string
   distRouteHooks: string
-  distServerEntries: string
+  distRscEntries: string
   routeManifest: string
   types: string
   graphql: string
@@ -78,7 +80,7 @@ export interface PagesDependency {
   /** the variable to which the import is assigned */
   importName: string
   /** @alias importName */
-  const: string
+  constName: string
   /** absolute path without extension */
   importPath: string
   /** absolute path with extension */
@@ -103,6 +105,7 @@ const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
 const PATH_WEB_DIR_COMPONENTS = 'web/src/components'
+const PATH_WEB_DIR_STORYBOOK_CONFIG = 'web/.storybook'
 const PATH_WEB_DIR_SRC = 'web/src'
 const PATH_WEB_DIR_SRC_APP = 'web/src/App'
 const PATH_WEB_DIR_SRC_DOCUMENT = 'web/src/Document'
@@ -114,22 +117,24 @@ const PATH_WEB_DIR_CONFIG_WEBPACK = 'web/config/webpack.config.js'
 const PATH_WEB_DIR_CONFIG_VITE = 'web/vite.config' // .js,.ts
 const PATH_WEB_DIR_ENTRY_CLIENT = 'web/src/entry.client' // .jsx,.tsx
 const PATH_WEB_DIR_ENTRY_SERVER = 'web/src/entry.server' // .jsx,.tsx
-const PATH_WEB_DIR_ENTRIES = 'web/src/entries' // .js,.ts
 const PATH_WEB_DIR_GRAPHQL = 'web/src/graphql' // .js,.ts
 
 const PATH_WEB_DIR_CONFIG_POSTCSS = 'web/config/postcss.config.js'
 const PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG = 'web/config/storybook.config.js'
-const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview.js'
+const PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW = 'web/config/storybook.preview' // .js, .tsx
 const PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER = 'web/config/storybook.manager.js'
-
 const PATH_WEB_DIR_DIST = 'web/dist'
-const PATH_WEB_DIR_DIST_SERVER = 'web/dist/server'
-const PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER = 'web/dist/server/entry.server.js'
-const PATH_WEB_DIR_DIST_DOCUMENT = 'web/dist/server/Document.js'
 
-const PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS = 'web/dist/server/routeHooks'
-const PATH_WEB_DIR_DIST_SERVER_ENTRIES = 'web/dist/server/entries.js'
-const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/server/route-manifest.json'
+// Used by Streaming & RSC builds to output to their individual folders
+const PATH_WEB_DIR_DIST_BROWSER = 'web/dist/browser'
+const PATH_WEB_DIR_DIST_RSC = 'web/dist/rsc'
+const PATH_WEB_DIR_DIST_SSR = 'web/dist/ssr'
+
+const PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER = 'web/dist/ssr/entry.server.mjs'
+const PATH_WEB_DIR_DIST_SSR_DOCUMENT = 'web/dist/ssr/Document.mjs'
+const PATH_WEB_DIR_DIST_SSR_ROUTEHOOKS = 'web/dist/ssr/routeHooks'
+const PATH_WEB_DIR_DIST_RSC_ENTRIES = 'web/dist/rsc/entries.mjs'
+const PATH_WEB_DIR_ROUTE_MANIFEST = 'web/dist/ssr/route-manifest.json'
 
 /**
  * The Redwood config file is used as an anchor for the base directory of a project.
@@ -148,7 +153,7 @@ export const getBaseDirFromFile = (file: string) => {
  */
 export const resolveFile = (
   filePath: string,
-  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx']
+  extensions: string[] = ['.js', '.tsx', '.ts', '.jsx'],
 ): string | null => {
   for (const extension of extensions) {
     const p = `${filePath}${extension}`
@@ -214,10 +219,11 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       components: path.join(BASE_DIR, PATH_WEB_DIR_COMPONENTS),
       layouts: path.join(BASE_DIR, PATH_WEB_DIR_LAYOUTS),
       src: path.join(BASE_DIR, PATH_WEB_DIR_SRC),
+      storybook: path.join(BASE_DIR, PATH_WEB_DIR_STORYBOOK_CONFIG),
       generators: path.join(BASE_DIR, PATH_WEB_DIR_GENERATORS),
       app: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_APP)) as string,
       document: resolveFile(
-        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT)
+        path.join(BASE_DIR, PATH_WEB_DIR_SRC_DOCUMENT),
       ) as string,
       index: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_SRC_INDEX)), // old webpack entry point
       html: path.join(BASE_DIR, PATH_WEB_INDEX_HTML),
@@ -227,30 +233,30 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       postcss: path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_POSTCSS),
       storybookConfig: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG
+        PATH_WEB_DIR_CONFIG_STORYBOOK_CONFIG,
       ),
-      storybookPreviewConfig: path.join(
-        BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW
+      storybookPreviewConfig: resolveFile(
+        path.join(BASE_DIR, PATH_WEB_DIR_CONFIG_STORYBOOK_PREVIEW),
       ),
       storybookManagerConfig: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER
+        PATH_WEB_DIR_CONFIG_STORYBOOK_MANAGER,
       ),
       dist: path.join(BASE_DIR, PATH_WEB_DIR_DIST),
-      distServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER),
-      distEntryServer: path.join(
+      distBrowser: path.join(BASE_DIR, PATH_WEB_DIR_DIST_BROWSER),
+      distRsc: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC),
+      distSsr: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR),
+      distSsrDocument: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_DOCUMENT),
+      distSsrEntryServer: path.join(
         BASE_DIR,
-        PATH_WEB_DIR_DIST_SERVER_ENTRY_SERVER
+        PATH_WEB_DIR_DIST_SSR_ENTRY_SERVER,
       ),
-      distDocumentServer: path.join(BASE_DIR, PATH_WEB_DIR_DIST_DOCUMENT),
-      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ROUTEHOOKS),
-      distServerEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SERVER_ENTRIES),
+      distRouteHooks: path.join(BASE_DIR, PATH_WEB_DIR_DIST_SSR_ROUTEHOOKS),
+      distRscEntries: path.join(BASE_DIR, PATH_WEB_DIR_DIST_RSC_ENTRIES),
       routeManifest: path.join(BASE_DIR, PATH_WEB_DIR_ROUTE_MANIFEST),
       types: path.join(BASE_DIR, 'web/types'),
       entryClient: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_CLIENT)), // new vite/stream entry point for client
       entryServer: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRY_SERVER)),
-      entries: resolveFile(path.join(BASE_DIR, PATH_WEB_DIR_ENTRIES)),
       graphql: path.join(BASE_DIR, PATH_WEB_DIR_GRAPHQL),
     },
   }
@@ -300,7 +306,7 @@ export const getAppRouteHook = (forProd = false) => {
   if (forProd) {
     const distAppRouteHook = path.join(
       rwPaths.web.distRouteHooks,
-      'App.routeHooks.js'
+      'App.routeHooks.js',
     )
 
     try {
@@ -323,7 +329,7 @@ export const getAppRouteHook = (forProd = false) => {
  * is used by structure, babel auto-importer and the eslint plugin.
  */
 export const processPagesDir = (
-  webPagesDir: string = getPaths().web.pages
+  webPagesDir: string = getPaths().web.pages,
 ): Array<PagesDependency> => {
   const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
     cwd: webPagesDir,
@@ -334,13 +340,13 @@ export const processPagesDir = (
 
     const importName = p.dir.replace(/\//g, '')
     const importPath = importStatementPath(
-      path.join(webPagesDir, p.dir, p.name)
+      path.join(webPagesDir, p.dir, p.name),
     )
 
     const importStatement = `const ${importName} = { name: '${importName}', loader: import('${importPath}') }`
     return {
       importName,
-      const: importName,
+      constName: importName,
       importPath,
       path: path.join(webPagesDir, pagePath),
       importStatement,
@@ -388,4 +394,38 @@ export const importStatementPath = (path: string) => {
   }
 
   return importPath
+}
+
+// Small collection of ESM helpers.
+
+function packageJsonIsEsm(packageJsonPath: string) {
+  const packageJsonContents = JSON.parse(
+    fs.readFileSync(packageJsonPath, 'utf-8'),
+  )
+  return packageJsonContents.type === 'module'
+}
+
+export function projectRootIsEsm() {
+  return packageJsonIsEsm(path.join(getPaths().base, 'package.json'))
+}
+
+export function projectSideIsEsm(side: 'api' | 'web') {
+  const redwoodProjectPaths = getPaths()
+  return packageJsonIsEsm(
+    path.join(redwoodProjectPaths[side].base, 'package.json'),
+  )
+}
+
+export function projectIsEsm() {
+  if (!projectRootIsEsm()) {
+    return false
+  }
+
+  for (const side of ['api', 'web'] as const) {
+    if (!projectSideIsEsm(side)) {
+      return false
+    }
+  }
+
+  return true
 }

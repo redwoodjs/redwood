@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`handler can be called with PascalCase model name 1`] = `
+exports[`handler > can be called with PascalCase model name 1`] = `
 {
   "fileContent": "export const schema = gql\`
   type User {
@@ -39,7 +39,7 @@ exports[`handler can be called with PascalCase model name 1`] = `
 }
 `;
 
-exports[`handler can be called with PascalCase model name 2`] = `
+exports[`handler > can be called with PascalCase model name 2`] = `
 {
   "fileContent": "export const standard = defineScenario({
   user: {
@@ -52,7 +52,7 @@ exports[`handler can be called with PascalCase model name 2`] = `
 }
 `;
 
-exports[`handler can be called with PascalCase model name 3`] = `
+exports[`handler > can be called with PascalCase model name 3`] = `
 {
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
@@ -105,7 +105,7 @@ describe('users', () => {
 }
 `;
 
-exports[`handler can be called with PascalCase model name 4`] = `
+exports[`handler > can be called with PascalCase model name 4`] = `
 {
   "fileContent": "import { db } from 'src/lib/db'
 
@@ -148,7 +148,7 @@ export const User = {
 }
 `;
 
-exports[`handler can be called with PascalCase model name 5`] = `
+exports[`handler > can be called with PascalCase model name 5`] = `
 {
   "fileContent": "export const schema = gql\`
   type CustomData {
@@ -181,7 +181,7 @@ exports[`handler can be called with PascalCase model name 5`] = `
 }
 `;
 
-exports[`handler can be called with PascalCase model name 6`] = `
+exports[`handler > can be called with PascalCase model name 6`] = `
 {
   "fileContent": "export const standard = defineScenario({
   customData: {
@@ -194,7 +194,7 @@ exports[`handler can be called with PascalCase model name 6`] = `
 }
 `;
 
-exports[`handler can be called with PascalCase model name 7`] = `
+exports[`handler > can be called with PascalCase model name 7`] = `
 {
   "fileContent": "import {
   customDatums,
@@ -257,7 +257,7 @@ describe('customDatums', () => {
 }
 `;
 
-exports[`handler can be called with PascalCase model name 8`] = `
+exports[`handler > can be called with PascalCase model name 8`] = `
 {
   "fileContent": "import { db } from 'src/lib/db'
 
@@ -294,7 +294,7 @@ export const deleteCustomData = ({ id }) => {
 }
 `;
 
-exports[`handler can be called with camelCase model name 1`] = `
+exports[`handler > can be called with camelCase model name 1`] = `
 {
   "fileContent": "export const schema = gql\`
   type User {
@@ -333,7 +333,7 @@ exports[`handler can be called with camelCase model name 1`] = `
 }
 `;
 
-exports[`handler can be called with camelCase model name 2`] = `
+exports[`handler > can be called with camelCase model name 2`] = `
 {
   "fileContent": "export const standard = defineScenario({
   user: {
@@ -346,7 +346,7 @@ exports[`handler can be called with camelCase model name 2`] = `
 }
 `;
 
-exports[`handler can be called with camelCase model name 3`] = `
+exports[`handler > can be called with camelCase model name 3`] = `
 {
   "fileContent": "import { users, user, createUser, updateUser, deleteUser } from './users'
 
@@ -399,7 +399,7 @@ describe('users', () => {
 }
 `;
 
-exports[`handler can be called with camelCase model name 4`] = `
+exports[`handler > can be called with camelCase model name 4`] = `
 {
   "fileContent": "import { db } from 'src/lib/db'
 
@@ -442,7 +442,7 @@ export const User = {
 }
 `;
 
-exports[`handler can be called with camelCase model name 5`] = `
+exports[`handler > can be called with camelCase model name 5`] = `
 {
   "fileContent": "export const schema = gql\`
   type CustomData {
@@ -475,7 +475,7 @@ exports[`handler can be called with camelCase model name 5`] = `
 }
 `;
 
-exports[`handler can be called with camelCase model name 6`] = `
+exports[`handler > can be called with camelCase model name 6`] = `
 {
   "fileContent": "export const standard = defineScenario({
   customData: {
@@ -488,7 +488,7 @@ exports[`handler can be called with camelCase model name 6`] = `
 }
 `;
 
-exports[`handler can be called with camelCase model name 7`] = `
+exports[`handler > can be called with camelCase model name 7`] = `
 {
   "fileContent": "import {
   customDatums,
@@ -551,7 +551,7 @@ describe('customDatums', () => {
 }
 `;
 
-exports[`handler can be called with camelCase model name 8`] = `
+exports[`handler > can be called with camelCase model name 8`] = `
 {
   "fileContent": "import { db } from 'src/lib/db'
 
@@ -588,7 +588,7 @@ export const deleteCustomData = ({ id }) => {
 }
 `;
 
-exports[`with graphql documentations in javascript mode creates a multi word sdl file 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   """
   Representation of UserProfile.
@@ -658,7 +658,7 @@ exports[`with graphql documentations in javascript mode creates a multi word sdl
 "
 `;
 
-exports[`with graphql documentations in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   """
   Representation of UserProfile.
@@ -728,7 +728,64 @@ exports[`with graphql documentations in javascript mode creates a multi word sdl
 "
 `;
 
-exports[`with graphql documentations in javascript mode creates a sdl file with enum definitions 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a sdl file with Byte definitions 1`] = `
+"export const schema = gql\`
+  """
+  Representation of Key.
+  """
+  type Key {
+    "Description for id."
+    id: Int!
+
+    "Description for publicKey."
+    publicKey: Byte!
+  }
+
+  """
+  About queries
+  """
+  type Query {
+    "Fetch Keys."
+    keys: [Key!]! @requireAuth
+
+    "Fetch a Key by id."
+    key(id: Int!): Key @requireAuth
+  }
+
+  """
+  Autogenerated input type of InputKey.
+  """
+  input CreateKeyInput {
+    "Description for publicKey."
+    publicKey: Byte!
+  }
+
+  """
+  Autogenerated input type of UpdateKey.
+  """
+  input UpdateKeyInput {
+    "Description for publicKey."
+    publicKey: Byte
+  }
+
+  """
+  About mutations
+  """
+  type Mutation {
+    "Creates a new Key."
+    createKey(input: CreateKeyInput!): Key! @requireAuth
+
+    "Updates an existing Key."
+    updateKey(id: Int!, input: UpdateKeyInput!): Key! @requireAuth
+
+    "Deletes an existing Key."
+    deleteKey(id: Int!): Key! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`with graphql documentations > in javascript mode > creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   """
   A shoe worn by a user.
@@ -794,7 +851,7 @@ exports[`with graphql documentations in javascript mode creates a sdl file with 
 "
 `;
 
-exports[`with graphql documentations in javascript mode creates a sdl file with json definitions 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   """
   A photograph taken by a user.
@@ -860,7 +917,7 @@ exports[`with graphql documentations in javascript mode creates a sdl file with 
 "
 `;
 
-exports[`with graphql documentations in javascript mode creates a single word sdl file 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a single word sdl file 1`] = `
 "export const schema = gql\`
   """
   Representation of User.
@@ -921,7 +978,7 @@ exports[`with graphql documentations in javascript mode creates a single word sd
 "
 `;
 
-exports[`with graphql documentations in javascript mode creates a single word sdl file with CRUD actions 1`] = `
+exports[`with graphql documentations > in javascript mode > creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   """
   Representation of Post.
@@ -1023,7 +1080,7 @@ exports[`with graphql documentations in javascript mode creates a single word sd
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a multi word sdl file 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   """
   Representation of UserProfile.
@@ -1093,7 +1150,7 @@ exports[`with graphql documentations in typescript mode creates a multi word sdl
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   """
   Representation of UserProfile.
@@ -1163,7 +1220,64 @@ exports[`with graphql documentations in typescript mode creates a multi word sdl
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a sdl file with enum definitions 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a sdl file with Byte definitions 1`] = `
+"export const schema = gql\`
+  """
+  Representation of Key.
+  """
+  type Key {
+    "Description for id."
+    id: Int!
+
+    "Description for publicKey."
+    publicKey: Byte!
+  }
+
+  """
+  About queries
+  """
+  type Query {
+    "Fetch Keys."
+    keys: [Key!]! @requireAuth
+
+    "Fetch a Key by id."
+    key(id: Int!): Key @requireAuth
+  }
+
+  """
+  Autogenerated input type of InputKey.
+  """
+  input CreateKeyInput {
+    "Description for publicKey."
+    publicKey: Byte!
+  }
+
+  """
+  Autogenerated input type of UpdateKey.
+  """
+  input UpdateKeyInput {
+    "Description for publicKey."
+    publicKey: Byte
+  }
+
+  """
+  About mutations
+  """
+  type Mutation {
+    "Creates a new Key."
+    createKey(input: CreateKeyInput!): Key! @requireAuth
+
+    "Updates an existing Key."
+    updateKey(id: Int!, input: UpdateKeyInput!): Key! @requireAuth
+
+    "Deletes an existing Key."
+    deleteKey(id: Int!): Key! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`with graphql documentations > in typescript mode > creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   """
   A shoe worn by a user.
@@ -1229,7 +1343,7 @@ exports[`with graphql documentations in typescript mode creates a sdl file with 
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a sdl file with json definitions 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   """
   A photograph taken by a user.
@@ -1295,7 +1409,7 @@ exports[`with graphql documentations in typescript mode creates a sdl file with 
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a single word sdl file 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a single word sdl file 1`] = `
 "export const schema = gql\`
   """
   Representation of User.
@@ -1356,7 +1470,7 @@ exports[`with graphql documentations in typescript mode creates a single word sd
 "
 `;
 
-exports[`with graphql documentations in typescript mode creates a single word sdl file with CRUD actions 1`] = `
+exports[`with graphql documentations > in typescript mode > creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   """
   Representation of Post.
@@ -1458,7 +1572,7 @@ exports[`with graphql documentations in typescript mode creates a single word sd
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a multi word sdl file 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {
     id: Int!
@@ -1492,7 +1606,7 @@ exports[`without graphql documentations in javascript mode creates a multi word 
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a multi word sdl file with CRUD actions 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type UserProfile {
     id: Int!
@@ -1526,7 +1640,36 @@ exports[`without graphql documentations in javascript mode creates a multi word 
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a sdl file with enum definitions 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a sdl file with Byte definitions 1`] = `
+"export const schema = gql\`
+  type Key {
+    id: Int!
+    publicKey: Byte!
+  }
+
+  type Query {
+    keys: [Key!]! @requireAuth
+    key(id: Int!): Key @requireAuth
+  }
+
+  input CreateKeyInput {
+    publicKey: Byte!
+  }
+
+  input UpdateKeyInput {
+    publicKey: Byte
+  }
+
+  type Mutation {
+    createKey(input: CreateKeyInput!): Key! @requireAuth
+    updateKey(id: Int!, input: UpdateKeyInput!): Key! @requireAuth
+    deleteKey(id: Int!): Key! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`without graphql documentations > in javascript mode > creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   type Shoe {
     id: Int!
@@ -1561,7 +1704,7 @@ exports[`without graphql documentations in javascript mode creates a sdl file wi
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a sdl file with json definitions 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   type Photo {
     id: Int!
@@ -1593,7 +1736,7 @@ exports[`without graphql documentations in javascript mode creates a sdl file wi
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a single word sdl file 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a single word sdl file 1`] = `
 "export const schema = gql\`
   type User {
     id: Int!
@@ -1622,7 +1765,7 @@ exports[`without graphql documentations in javascript mode creates a single word
 "
 `;
 
-exports[`without graphql documentations in javascript mode creates a single word sdl file with CRUD actions 1`] = `
+exports[`without graphql documentations > in javascript mode > creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type Post {
     id: Int!
@@ -1666,7 +1809,7 @@ exports[`without graphql documentations in javascript mode creates a single word
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a multi word sdl file 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {
     id: Int!
@@ -1700,7 +1843,7 @@ exports[`without graphql documentations in typescript mode creates a multi word 
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a multi word sdl file with CRUD actions 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a multi word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type UserProfile {
     id: Int!
@@ -1734,7 +1877,36 @@ exports[`without graphql documentations in typescript mode creates a multi word 
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a sdl file with enum definitions 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a sdl file with Byte definitions 1`] = `
+"export const schema = gql\`
+  type Key {
+    id: Int!
+    publicKey: Byte!
+  }
+
+  type Query {
+    keys: [Key!]! @requireAuth
+    key(id: Int!): Key @requireAuth
+  }
+
+  input CreateKeyInput {
+    publicKey: Byte!
+  }
+
+  input UpdateKeyInput {
+    publicKey: Byte
+  }
+
+  type Mutation {
+    createKey(input: CreateKeyInput!): Key! @requireAuth
+    updateKey(id: Int!, input: UpdateKeyInput!): Key! @requireAuth
+    deleteKey(id: Int!): Key! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`without graphql documentations > in typescript mode > creates a sdl file with enum definitions 1`] = `
 "export const schema = gql\`
   type Shoe {
     id: Int!
@@ -1769,7 +1941,7 @@ exports[`without graphql documentations in typescript mode creates a sdl file wi
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a sdl file with json definitions 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a sdl file with json definitions 1`] = `
 "export const schema = gql\`
   type Photo {
     id: Int!
@@ -1801,7 +1973,7 @@ exports[`without graphql documentations in typescript mode creates a sdl file wi
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a single word sdl file 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a single word sdl file 1`] = `
 "export const schema = gql\`
   type User {
     id: Int!
@@ -1830,7 +2002,7 @@ exports[`without graphql documentations in typescript mode creates a single word
 "
 `;
 
-exports[`without graphql documentations in typescript mode creates a single word sdl file with CRUD actions 1`] = `
+exports[`without graphql documentations > in typescript mode > creates a single word sdl file with CRUD actions 1`] = `
 "export const schema = gql\`
   type Post {
     id: Int!

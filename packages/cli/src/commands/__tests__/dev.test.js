@@ -1,8 +1,8 @@
 import '../../lib/mockTelemetry'
 
-jest.mock('concurrently', () => ({
+vi.mock('concurrently', () => ({
   __esModule: true, // this property makes it work
-  default: jest.fn().mockReturnValue({
+  default: vi.fn().mockReturnValue({
     result: {
       catch: () => {},
     },
@@ -10,30 +10,39 @@ jest.mock('concurrently', () => ({
 }))
 
 // dev checks for existence of api/src and web/src folders
-jest.mock('fs', () => {
+vi.mock('fs-extra', async () => {
+  const actualFs = await vi.importActual('fs-extra')
   return {
-    ...jest.requireActual('fs'),
-    readFileSync: () => 'File content',
-    existsSync: () => true,
+    default: {
+      ...actualFs,
+      readFileSync: () => 'File content',
+      existsSync: () => true,
+    },
   }
 })
 
-jest.mock('@redwoodjs/internal/dist/dev', () => {
+vi.mock('@redwoodjs/internal/dist/dev', () => {
   return {
-    shutdownPort: jest.fn(),
+    shutdownPort: vi.fn(),
   }
 })
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async () => {
+  const actualProjectConfig = await vi.importActual('@redwoodjs/project-config')
+
   return {
-    getConfig: jest.fn(),
+    getConfig: vi.fn(),
     getConfigPath: () => '/mocked/project/redwood.toml',
+    resolveFile: actualProjectConfig.resolveFile,
     getPaths: () => {
       return {
         api: {
+          base: '/mocked/project/api',
+          src: '/mocked/project/api/src',
           dist: '/mocked/project/api/dist',
         },
         web: {
+          base: '/mocked/project/web',
           dist: '/mocked/project/web/dist',
         },
         generated: {
@@ -44,13 +53,13 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('../../lib/generatePrismaClient', () => {
+vi.mock('../../lib/generatePrismaClient', () => {
   return {
-    generatePrismaClient: jest.fn().mockResolvedValue(true),
+    generatePrismaClient: vi.fn().mockResolvedValue(true),
   }
 })
 
-jest.mock('../../lib/ports', () => {
+vi.mock('../../lib/ports', () => {
   return {
     // We're not actually going to use the port, so it's fine to just say it's
     // free. It prevents the tests from failing if the ports are already in use
@@ -61,6 +70,7 @@ jest.mock('../../lib/ports', () => {
 
 import concurrently from 'concurrently'
 import { find } from 'lodash'
+import { vi, describe, afterEach, it, expect } from 'vitest'
 
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -69,7 +79,7 @@ import { handler } from '../dev'
 
 describe('yarn rw dev', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('Should run api and web dev servers, and generator watcher by default', async () => {
@@ -101,11 +111,11 @@ describe('yarn rw dev', () => {
 
     // Uses absolute path, so not doing a snapshot
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development rw-vite-dev'
+      'yarn cross-env NODE_ENV=development rw-vite-dev',
     )
 
-    expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -140,11 +150,11 @@ describe('yarn rw dev', () => {
 
     // Uses absolute path, so not doing a snapshot
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development rw-dev-fe'
+      'yarn cross-env NODE_ENV=development rw-dev-fe',
     )
 
-    expect(apiCommand.command).toMatchInlineSnapshot(
-      `"yarn cross-env NODE_ENV=development NODE_OPTIONS=--enable-source-maps yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter""`
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
@@ -175,8 +185,8 @@ describe('yarn rw dev', () => {
 
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
-    expect(apiCommand.command).toContain(
-      'yarn rw-api-server-watch --port 8911 --debug-port 90909090'
+    expect(apiCommand.command.replace(/\s+/g, ' ')).toContain(
+      'yarn rw-api-server-watch --port 8911 --debug-port 90909090',
     )
   })
 
@@ -232,7 +242,7 @@ describe('yarn rw dev', () => {
     const webCommand = find(concurrentlyArgs, { name: 'web' })
 
     expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development rw-vite-dev'
+      'yarn cross-env NODE_ENV=development rw-vite-dev',
     )
   })
 })

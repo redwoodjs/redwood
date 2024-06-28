@@ -1,42 +1,27 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import url from 'node:url'
 
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
-import type { RWRouteManifest } from './types'
+import type { RWRouteManifest } from './types.js'
 
 /**
  * RSC build. Step 6.
  * Generate a route manifest file for the web server side.
  */
 export async function buildRouteManifest() {
-  const webRouteManifest = getPaths().web.routeManifest
+  const rwPaths = getPaths()
 
-  // TODO When https://github.com/tc39/proposal-import-attributes and
-  // https://github.com/microsoft/TypeScript/issues/53656 have both landed we
-  // should try to do this instead:
-  // const clientBuildManifest: ViteBuildManifest = await import(
-  //   path.join(getPaths().web.dist, 'client-build-manifest.json'),
-  //   { with: { type: 'json' } }
-  // )
-  // NOTES:
-  //  * There's a related babel plugin here
-  //    https://babeljs.io/docs/babel-plugin-syntax-import-attributes
-  //     * Included in `preset-env` if you set `shippedProposals: true`
-  //  * We had this before, but with `assert` instead of `with`. We really
-  //    should be using `with`. See motivation in issues linked above.
-  //  * With `assert` and `@babel/plugin-syntax-import-assertions` the
-  //    code compiled and ran properly, but Jest tests failed, complaining
-  //    about the syntax.
-  const manifestPath = path.join(
-    getPaths().web.dist,
-    'client-build-manifest.json'
-  )
-  const buildManifestStr = await fs.readFile(manifestPath, 'utf-8')
-  const clientBuildManifest: ViteBuildManifest = JSON.parse(buildManifestStr)
+  const buildManifestUrl = url.pathToFileURL(
+    path.join(getPaths().web.distBrowser, 'client-build-manifest.json'),
+  ).href
+  const clientBuildManifest: ViteBuildManifest = (
+    await import(buildManifestUrl, { with: { type: 'json' } })
+  ).default
 
   const routesList = getProjectRoutes()
 
@@ -44,7 +29,10 @@ export async function buildRouteManifest() {
     acc[route.pathDefinition] = {
       name: route.name,
       bundle: route.relativeFilePath
-        ? clientBuildManifest[route.relativeFilePath]?.file ?? null
+        ? // @TODO(RSC_DC): this no longer resolves to anything i.e. its always null
+          // Because the clientBuildManifest has no pages, because all pages are Server-components?
+          // This may be a non-issue, because RSC pages don't need a client bundle per page (or atleast not the same bundle)
+          clientBuildManifest[route.relativeFilePath]?.file ?? null
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path
@@ -58,7 +46,11 @@ export async function buildRouteManifest() {
             permanent: false,
           }
         : null,
-      renderMode: route.renderMode,
+      relativeFilePath: route.relativeFilePath,
+      isPrivate: route.isPrivate,
+      unauthenticated: route.unauthenticated,
+      roles: route.roles,
+      pageIdentifier: route.pageIdentifier,
     }
 
     return acc
@@ -66,14 +58,16 @@ export async function buildRouteManifest() {
 
   console.log('routeManifest', JSON.stringify(routeManifest, null, 2))
 
+  const webRouteManifest = rwPaths.web.routeManifest
+  await fs.mkdir(rwPaths.web.distSsr, { recursive: true })
   return fs.writeFile(webRouteManifest, JSON.stringify(routeManifest, null, 2))
 }
 
 // TODO (STREAMING) Hacky work around because when you don't have a App.routeHook, esbuild doesn't create
-// the pages folder in the dist/server/routeHooks directory.
+// the pages folder in the dist/ssr/routeHooks directory.
 // @MARK need to change to .mjs here if we use esm
 const FIXME_constructRouteHookPath = (
-  routeHookSrcPath: string | null | undefined
+  routeHookSrcPath: string | null | undefined,
 ) => {
   const rwPaths = getPaths()
   if (!routeHookSrcPath) {

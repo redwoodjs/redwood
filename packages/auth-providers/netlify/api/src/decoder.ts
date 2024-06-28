@@ -1,4 +1,4 @@
-import type { Context as LambdaContext, ClientContext } from 'aws-lambda'
+import type { ClientContext } from 'aws-lambda'
 import jwt, { TokenExpiredError } from 'jsonwebtoken'
 
 import type { Decoder } from '@redwoodjs/api'
@@ -15,11 +15,7 @@ interface NetlifyTokenPayload extends Record<string, unknown> {
   user_metadata: Record<string, unknown>
 }
 
-export const authDecoder: Decoder = async (
-  token: string,
-  type: string,
-  req: { context: LambdaContext }
-) => {
+export const authDecoder: Decoder = async (token, type, req) => {
   if (type !== 'netlify') {
     return null
   }
@@ -41,13 +37,13 @@ export const authDecoder: Decoder = async (
     if (nowTimestamp >= decodedToken.exp) {
       throw new TokenExpiredError(
         'jwt expired',
-        new Date(decodedToken.exp * 1000)
+        new Date(decodedToken.exp * 1000),
       )
     }
 
     return decodedToken
   } else {
-    const clientContext = req.context.clientContext as NetlifyContext
+    const clientContext = req.context?.clientContext as NetlifyContext
     return clientContext?.user || null
   }
 }

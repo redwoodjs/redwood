@@ -1,7 +1,7 @@
-import fs from 'fs'
 import path from 'path'
 
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -24,11 +24,11 @@ export const handler = async ({ force }) => {
                 path.resolve(
                   __dirname,
                   'templates',
-                  'webpack.config.js.template'
-                )
+                  'webpack.config.js.template',
+                ),
               )
               .toString(),
-            { overwriteExisting: force }
+            { overwriteExisting: force },
           )
         },
       },
@@ -37,16 +37,16 @@ export const handler = async ({ force }) => {
         task: (_ctx, task) => {
           task.title = `One more thing...\n
           ${c.green(
-            'Quick link to the docs on configuring custom webpack config:'
+            'Quick link to the docs on configuring custom webpack config:',
           )}
           ${chalk.hex('#e8e8e8')(
-            'https://redwoodjs.com/docs/webpack-configuration#configuring-webpack'
+            'https://redwoodjs.com/docs/webpack-configuration#configuring-webpack',
           )}
         `
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

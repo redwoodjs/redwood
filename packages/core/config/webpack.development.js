@@ -75,7 +75,7 @@ const getProxyConfig = () => {
 
   console.error('Error: `apiUrl` is configured incorrectly.')
   console.error(
-    'It should be an absolute path (thats starts with `/`) or an absolute URI that starts with `http[s]://`'
+    'It should be an absolute path (thats starts with `/`) or an absolute URI that starts with `http[s]://`',
   )
   process.exit(1)
 }

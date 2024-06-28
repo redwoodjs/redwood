@@ -1,3 +1,14 @@
+import {
+  vi,
+  describe,
+  test,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'vitest'
+
 import { AbstractMailHandler } from '../handler'
 import { Mailer } from '../mailer'
 import { AbstractMailRenderer } from '../renderer'
@@ -14,7 +25,7 @@ class MockMailHandler extends AbstractMailHandler {
     _renderedContent: MailRenderedContent,
     _sendOptions: MailSendOptionsComplete,
     _handlerOptions?: Record<string | number | symbol, unknown> | undefined,
-    _utilities?: MailUtilities | undefined
+    _utilities?: MailUtilities | undefined,
   ): MailResult | Promise<MailResult> {
     // do nothing
     return {}
@@ -28,7 +39,7 @@ class MockMailRenderer extends AbstractMailRenderer {
   render(
     _template: unknown,
     _options: MailRendererOptions<unknown>,
-    _utilities?: MailUtilities | undefined
+    _utilities?: MailUtilities | undefined,
   ): MailRenderedContent {
     // do nothing
     return {
@@ -61,13 +72,13 @@ describe('Uses the correct modes', () => {
 
   beforeAll(() => {
     // prevent console output
-    jest.spyOn(console, 'log').mockImplementation(() => {})
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-    jest.spyOn(console, 'debug').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    vi.spyOn(console, 'debug').mockImplementation(() => {})
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('starts in test mode', () => {
@@ -90,7 +101,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: true,
           },
-        }).mode
+        }).mode,
       ).toBe('test')
       expect(
         new Mailer({
@@ -98,7 +109,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('test')
     })
 
@@ -109,7 +120,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: () => true,
           },
-        }).mode
+        }).mode,
       ).toBe('test')
       expect(
         new Mailer({
@@ -117,7 +128,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: () => false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('test')
     })
 
@@ -131,7 +142,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for test mode"`
+        `[Error: Invalid 'when' configuration for test mode]`,
       )
 
       expect(() => {
@@ -143,7 +154,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for test mode"`
+        `[Error: Invalid 'when' configuration for test mode]`,
       )
     })
   })
@@ -171,7 +182,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).toBe('development')
       expect(
         new Mailer({
@@ -182,7 +193,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('development')
     })
 
@@ -196,7 +207,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).toBe('development')
       expect(
         new Mailer({
@@ -207,7 +218,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('development')
     })
 
@@ -224,7 +235,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for development mode"`
+        `[Error: Invalid 'when' configuration for development mode]`,
       )
 
       expect(() => {
@@ -239,7 +250,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Invalid 'when' configuration for development mode"`
+        `[Error: Invalid 'when' configuration for development mode]`,
       )
     })
   })
@@ -267,7 +278,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).toBe('production')
       expect(
         new Mailer({
@@ -278,7 +289,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('production')
     })
 
@@ -292,7 +303,7 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).toBe('production')
       expect(
         new Mailer({
@@ -303,14 +314,14 @@ describe('Uses the correct modes', () => {
           test: {
             when: false,
           },
-        }).mode
+        }).mode,
       ).not.toBe('production')
     })
   })
 
   describe('warns about null handlers', () => {
     beforeAll(() => {
-      jest.spyOn(console, 'warn').mockImplementation(() => {})
+      vi.spyOn(console, 'warn').mockImplementation(() => {})
     })
 
     test('test', () => {
@@ -323,7 +334,7 @@ describe('Uses the correct modes', () => {
         },
       })
       expect(console.warn).toBeCalledWith(
-        'The test handler is null, this will prevent mail from being processed in test mode'
+        'The test handler is null, this will prevent mail from being processed in test mode',
       )
     })
 
@@ -337,14 +348,14 @@ describe('Uses the correct modes', () => {
         },
       })
       expect(console.warn).toBeCalledWith(
-        'The development handler is null, this will prevent mail from being processed in development mode'
+        'The development handler is null, this will prevent mail from being processed in development mode',
       )
     })
   })
 
   describe('attempts to use fallback handlers', () => {
     beforeAll(() => {
-      jest.spyOn(console, 'warn').mockImplementation(() => {})
+      vi.spyOn(console, 'warn').mockImplementation(() => {})
     })
 
     test('test', () => {
@@ -357,7 +368,7 @@ describe('Uses the correct modes', () => {
         },
       })
       expect(console.warn).toBeCalledWith(
-        "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode"
+        "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode",
       )
     })
 
@@ -371,7 +382,7 @@ describe('Uses the correct modes', () => {
         },
       })
       expect(console.warn).toBeCalledWith(
-        "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode"
+        "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode",
       )
     })
   })
@@ -388,7 +399,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified test handler 'handlerC' is not defined"`
+        `[Error: The specified test handler 'handlerC' is not defined]`,
       )
     })
     test('development', () => {
@@ -402,7 +413,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified development handler 'handlerC' is not defined"`
+        `[Error: The specified development handler 'handlerC' is not defined]`,
       )
     })
     test('production', () => {
@@ -422,7 +433,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default handler 'handlerC' is not defined"`
+        `[Error: The specified default handler 'handlerC' is not defined]`,
       )
     })
   })
@@ -442,7 +453,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`,
       )
     })
     test('development', () => {
@@ -459,7 +470,7 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`,
       )
     })
     test('production', () => {
@@ -479,13 +490,13 @@ describe('Uses the correct modes', () => {
           },
         })
       }).toThrowErrorMatchingInlineSnapshot(
-        `"The specified default renderer 'rendererC' is not defined"`
+        `[Error: The specified default renderer 'rendererC' is not defined]`,
       )
     })
   })
 
   describe('calls the correct handler and renderer function', () => {
-    jest.spyOn(console, 'debug').mockImplementation(() => {})
+    vi.spyOn(console, 'debug').mockImplementation(() => {})
 
     describe('test', () => {
       const testHandler = new MockMailHandler()
@@ -522,12 +533,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 
@@ -578,7 +589,7 @@ describe('Uses the correct modes', () => {
             to: 'to@example.com',
             subject: 'Test',
             from: 'from@example.com',
-          }
+          },
         )
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
@@ -622,12 +633,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 
@@ -678,7 +689,7 @@ describe('Uses the correct modes', () => {
             to: 'to@example.com',
             subject: 'Test',
             from: 'from@example.com',
-          }
+          },
         )
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
@@ -723,12 +734,12 @@ describe('Uses the correct modes', () => {
         const handlerKeys = Object.keys(mailer.handlers)
         for (let i = 0; i < handlerKeys.length; i++) {
           const key = handlerKeys[i]
-          jest.spyOn(mailer.handlers[key], 'send')
+          vi.spyOn(mailer.handlers[key], 'send')
         }
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
           const key = rendererKeys[i]
-          jest.spyOn(mailer.renderers[key], 'render')
+          vi.spyOn(mailer.renderers[key], 'render')
         }
       })
 
@@ -779,7 +790,7 @@ describe('Uses the correct modes', () => {
             to: 'to@example.com',
             subject: 'Test',
             from: 'from@example.com',
-          }
+          },
         )
         const rendererKeys = Object.keys(mailer.renderers)
         for (let i = 0; i < rendererKeys.length; i++) {
@@ -843,12 +854,12 @@ describe('Uses the correct modes', () => {
       },
     })
     expect(
-      mailerExplicitlyNullDevelopmentHandler.getDevelopmentHandler()
+      mailerExplicitlyNullDevelopmentHandler.getDevelopmentHandler(),
     ).toBeNull()
 
     const mailerNoDevelopmentHandlerDefined = new Mailer(baseConfig)
     expect(
-      mailerNoDevelopmentHandlerDefined.getDevelopmentHandler()
+      mailerNoDevelopmentHandlerDefined.getDevelopmentHandler(),
     ).not.toBeNull()
   })
 

@@ -1,7 +1,9 @@
-import { vol } from 'memfs'
+import { vol, fs as memfs } from 'memfs'
+import { vi } from 'vitest'
 
-import { getPaths, ensurePosixPath } from '@redwoodjs/project-config'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
+import type { PluginList } from '../api'
 import {
   getApiSideBabelConfigPath,
   getApiSideBabelPlugins,
@@ -9,7 +11,7 @@ import {
   TARGETS_NODE,
 } from '../api'
 
-jest.mock('fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ ...memfs, default: { ...memfs } }))
 
 const redwoodProjectPath = '/redwood-app'
 process.env.RWJS_CWD = redwoodProjectPath
@@ -20,7 +22,7 @@ afterEach(() => {
 
 describe('api', () => {
   test("TARGETS_NODE hasn't unintentionally changed", () => {
-    expect(TARGETS_NODE).toMatchInlineSnapshot(`"18.16"`)
+    expect(TARGETS_NODE).toMatchInlineSnapshot(`"20.10"`)
   })
 
   describe('getApiSideBabelPresets', () => {
@@ -57,14 +59,14 @@ describe('api', () => {
             {
               "corejs": {
                 "proposals": true,
-                "version": "3.33",
+                "version": "3.37",
               },
               "exclude": [
                 "@babel/plugin-transform-class-properties",
                 "@babel/plugin-transform-private-methods",
               ],
               "targets": {
-                "node": "18.16",
+                "node": "20.10",
               },
               "useBuiltIns": "usage",
             },
@@ -83,12 +85,12 @@ describe('api', () => {
             'babel.config.js': '',
           },
         },
-        redwoodProjectPath
+        redwoodProjectPath,
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
-      expect(ensurePosixPath(apiSideBabelConfigPath)).toMatch(
-        '/redwood-app/api/babel.config.js'
+      expect(ensurePosixPath(apiSideBabelConfigPath || '')).toMatch(
+        '/redwood-app/api/babel.config.js',
       )
     })
 
@@ -98,7 +100,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath
+        redwoodProjectPath,
       )
 
       const apiSideBabelConfigPath = getApiSideBabelConfigPath()
@@ -113,7 +115,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath
+        redwoodProjectPath,
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins()
@@ -174,7 +176,7 @@ describe('api', () => {
             proposals: true,
             version: 3,
           },
-          version: '7.23.5',
+          version: '7.24.5',
         },
       ])
 
@@ -185,9 +187,17 @@ describe('api', () => {
         },
       ])
 
+      type ModuleResolverConfig = {
+        root: string[]
+        alias: Record<string, string>
+        cwd: string
+        loglevel: string
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
-        (plugin) => plugin[0] === 'babel-plugin-module-resolver'
-      )
+        (plugin) => plugin[0] === 'babel-plugin-module-resolver',
+      )! as [any, ModuleResolverConfig, any]
 
       expect(babelPluginModuleResolverConfig).toMatchObject({
         alias: {
@@ -199,7 +209,7 @@ describe('api', () => {
       })
 
       expect(babelPluginModuleResolverConfig.root[0]).toMatch(
-        getPaths().api.base
+        getPaths().api.base,
       )
 
       expect(apiSideBabelPlugins).toContainEqual([
@@ -212,7 +222,7 @@ describe('api', () => {
             },
             {
               members: ['context'],
-              path: '@redwoodjs/graphql-server',
+              path: '@redwoodjs/context',
             },
           ],
         },
@@ -226,7 +236,7 @@ describe('api', () => {
           'redwood.toml': '',
           api: {},
         },
-        redwoodProjectPath
+        redwoodProjectPath,
       )
 
       const apiSideBabelPlugins = getApiSideBabelPlugins({
@@ -238,12 +248,12 @@ describe('api', () => {
   })
 })
 
-function getPluginAliases(plugins) {
+function getPluginAliases(plugins: PluginList) {
   return plugins.reduce((pluginAliases, plugin) => {
     if (plugin.length !== 3) {
       return pluginAliases
     }
 
     return [...pluginAliases, plugin[2]]
-  }, [])
+  }, [] as any)
 }

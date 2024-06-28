@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
 export const useResetPassword = <
   TUser,
@@ -15,7 +15,7 @@ export const useResetPassword = <
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -31,7 +31,7 @@ export const useResetPassword = <
     TResetPassword,
     TValidateResetToken,
     TClient
-  >
+  >,
 ) => {
   return useCallback(
     async (options?: TResetPasswordOptions) => {
@@ -39,10 +39,10 @@ export const useResetPassword = <
         return await authImplementation.resetPassword(options)
       } else {
         throw new Error(
-          `Auth client ${authImplementation.type} does not implement this function`
+          `Auth client ${authImplementation.type} does not implement this function`,
         )
       }
     },
-    [authImplementation]
+    [authImplementation],
   )
 }

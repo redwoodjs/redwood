@@ -92,6 +92,8 @@ async function exec(...args) {
       if (exitCode !== 0) {
         throw new ExecaError({ stdout, stderr, exitCode })
       }
+
+      return { stdout, stderr, exitCode }
     })
     .catch((error) => {
       if (error instanceof ExecaError) {

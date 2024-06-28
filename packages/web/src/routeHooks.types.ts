@@ -1,4 +1,4 @@
-import type { TagDescriptor } from './components/htmlTags'
+import type { TagDescriptor } from './components/htmlTags.js'
 
 export type RouteHookOutput = {
   meta: TagDescriptor[]
@@ -13,5 +13,5 @@ export interface RouteHookEvent {
 }
 
 export type MetaHook = (
-  event: RouteHookEvent
+  event: RouteHookEvent,
 ) => Promise<TagDescriptor[] | TagDescriptor> | TagDescriptor[] | TagDescriptor

@@ -1,4 +1,4 @@
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', () => {
   return {
     getPaths: () => {
       const path = require('path')
@@ -8,49 +8,52 @@ jest.mock('@redwoodjs/project-config', () => {
     },
   }
 })
-jest.mock('@redwoodjs/cli-helpers', () => {
+vi.mock('@redwoodjs/cli-helpers', () => {
   return {
-    getCompatibilityData: jest.fn(() => {
+    getCompatibilityData: vi.fn(() => {
       throw new Error('Mock Not Implemented')
     }),
   }
 })
-jest.mock('fs')
-jest.mock('execa', () =>
-  jest.fn((cmd, params) => ({
+vi.mock('fs-extra')
+vi.mock('execa', () => ({
+  default: vi.fn((cmd, params) => ({
     cmd,
     params,
-  }))
-)
-jest.mock('enquirer', () => {
+  })),
+}))
+
+vi.mock('enquirer', () => {
   return {
-    Select: jest.fn(() => {
-      return {
-        run: jest.fn(() => {
-          throw new Error('Mock Not Implemented')
-        }),
-      }
-    }),
+    default: {
+      Select: vi.fn(() => {
+        return {
+          run: vi.fn(() => {
+            throw new Error('Mock Not Implemented')
+          }),
+        }
+      }),
+    },
   }
 })
 
-import fs from 'fs'
 import path from 'path'
 
+import enq from 'enquirer'
 import execa from 'execa'
+import { vol } from 'memfs'
+import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
 import { handler } from '../packageHandler'
 
-const { Select } = require('enquirer')
-
 describe('packageHandler', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {})
-    jest.spyOn(console, 'error').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'error').mockImplementation(() => {})
 
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['package.json']: JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '1.0.0',
@@ -60,8 +63,8 @@ describe('packageHandler', () => {
   })
 
   afterEach(() => {
-    fs.__setMockFiles({})
-    jest.clearAllMocks()
+    vol.reset()
+    vi.clearAllMocks()
   })
 
   test('using force does not check compatibility', async () => {
@@ -72,7 +75,7 @@ describe('packageHandler', () => {
     })
 
     expect(console.log).toHaveBeenCalledWith(
-      'No compatibility check will be performed because you used the --force flag.'
+      'No compatibility check will be performed because you used the --force flag.',
     )
     expect(getCompatibilityData).not.toHaveBeenCalled()
   })
@@ -89,7 +92,7 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).not.toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
 
     await handler({
@@ -98,7 +101,7 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
   })
 
@@ -107,9 +110,9 @@ describe('packageHandler', () => {
       throw new Error('No compatible version found')
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'cancel'),
+        run: vi.fn(() => 'cancel'),
       }
     })
     await handler({
@@ -117,12 +120,12 @@ describe('packageHandler', () => {
       force: false,
       _: ['setup', 'package'],
     })
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).not.toHaveBeenCalled()
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'continue'),
+        run: vi.fn(() => 'continue'),
       }
     })
     await handler({
@@ -130,7 +133,7 @@ describe('packageHandler', () => {
       force: false,
       _: ['setup', 'package'],
     })
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenCalledWith('yarn', ['dlx', 'some-package@latest'], {
       stdio: 'inherit',
       cwd: path.join('mocked', 'project'),
@@ -177,9 +180,9 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'useLatestCompatibleVersion'),
+        run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
     })
     await handler({
@@ -190,9 +193,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      'latest'
+      'latest',
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -200,12 +203,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'usePreferredVersion'),
+        run: vi.fn(() => 'usePreferredVersion'),
       }
     })
     await handler({
@@ -216,9 +219,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      'latest'
+      'latest',
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -226,12 +229,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'cancel'),
+        run: vi.fn(() => 'cancel'),
       }
     })
     await handler({
@@ -242,9 +245,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      'latest'
+      'latest',
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
@@ -289,9 +292,9 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'useLatestCompatibleVersion'),
+        run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
     })
     await handler({
@@ -302,9 +305,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      'stable'
+      'stable',
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -312,12 +315,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'usePreferredVersion'),
+        run: vi.fn(() => 'usePreferredVersion'),
       }
     })
     await handler({
@@ -328,9 +331,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      'stable'
+      'stable',
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -338,12 +341,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'cancel'),
+        run: vi.fn(() => 'cancel'),
       }
     })
     await handler({
@@ -354,9 +357,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      'stable'
+      'stable',
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
@@ -400,9 +403,9 @@ describe('packageHandler', () => {
       }
     })
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'useLatestCompatibleVersion'),
+        run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
     })
     await handler({
@@ -413,9 +416,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -423,12 +426,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'usePreferredVersion'),
+        run: vi.fn(() => 'usePreferredVersion'),
       }
     })
     await handler({
@@ -439,9 +442,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       2,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
-    expect(Select).toHaveBeenCalledTimes(2)
+    expect(enq.Select).toHaveBeenCalledTimes(2)
     expect(execa).toHaveBeenNthCalledWith(
       2,
       'yarn',
@@ -449,12 +452,12 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
 
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'cancel'),
+        run: vi.fn(() => 'cancel'),
       }
     })
     await handler({
@@ -465,9 +468,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       3,
       'some-package',
-      '1.0.0'
+      '1.0.0',
     )
-    expect(Select).toHaveBeenCalledTimes(3)
+    expect(enq.Select).toHaveBeenCalledTimes(3)
     expect(execa).toBeCalledTimes(2) // Only called for the previous two select options
   })
 
@@ -492,13 +495,13 @@ describe('packageHandler', () => {
       _: ['setup', 'package'],
     })
     expect(console.log).toHaveBeenCalledWith(
-      'Be aware that this package is under version 1.0.0 and so should be considered experimental.'
+      'Be aware that this package is under version 1.0.0 and so should be considered experimental.',
     )
 
     // No force should prompt
-    Select.mockImplementation(() => {
+    enq.Select.mockImplementation(() => {
       return {
-        run: jest.fn(() => 'useLatestCompatibleVersion'),
+        run: vi.fn(() => 'useLatestCompatibleVersion'),
       }
     })
     await handler({
@@ -509,9 +512,9 @@ describe('packageHandler', () => {
     expect(getCompatibilityData).toHaveBeenNthCalledWith(
       1,
       'some-package',
-      '0.0.1'
+      '0.0.1',
     )
-    expect(Select).toHaveBeenCalledTimes(1)
+    expect(enq.Select).toHaveBeenCalledTimes(1)
     expect(execa).toHaveBeenNthCalledWith(
       1,
       'yarn',
@@ -519,7 +522,7 @@ describe('packageHandler', () => {
       {
         stdio: 'inherit',
         cwd: path.join('mocked', 'project'),
-      }
+      },
     )
   })
 })

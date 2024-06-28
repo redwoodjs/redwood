@@ -8,7 +8,8 @@ export function ssrChanged(changedFiles){
   for (const changedFile of changedFiles) {
     if (
       changedFile.startsWith('tasks/smoke-tests/streaming-ssr') ||
-      changedFile.startsWith('tasks/smoke-tests/basePlaywright.config.ts') ||
+      changedFile === 'tasks/smoke-tests/basePlaywright.config.ts' ||
+      changedFile === 'tasks/test-project/codemods/delayedPage.js' ||
       changedFile.startsWith('packages/internal/') ||
       changedFile.startsWith('packages/project-config/') ||
       changedFile.startsWith('packages/web/') ||

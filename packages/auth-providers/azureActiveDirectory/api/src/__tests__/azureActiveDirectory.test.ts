@@ -1,11 +1,14 @@
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
+import { vi, test, beforeAll, afterAll, expect, describe } from 'vitest'
 
 import { authDecoder } from '../decoder'
 
-jest.mock('jsonwebtoken', () => ({
-  verify: jest.fn(),
-  decode: jest.fn(),
+vi.mock('jsonwebtoken', () => ({
+  default: {
+    verify: vi.fn(),
+    decode: vi.fn(),
+  },
 }))
 
 const req = {
@@ -35,7 +38,7 @@ test('throws if AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set', async () =
   process.env.AZURE_ACTIVE_DIRECTORY_JTW_ISSUER = 'jwt-issuer'
 
   await expect(
-    authDecoder('token', 'azureActiveDirectory', req)
+    authDecoder('token', 'azureActiveDirectory', req),
   ).rejects.toThrow('AZURE_ACTIVE_DIRECTORY_AUTHORITY env var is not set')
 })
 

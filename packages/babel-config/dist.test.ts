@@ -4,7 +4,7 @@ const distPath = path.join(__dirname, 'dist')
 
 describe('dist', () => {
   it('exports', async () => {
-    const mod = await import(path.join(distPath, 'index.js'))
+    const { default: mod } = await import(path.join(distPath, 'index.js'))
 
     expect(mod).toMatchInlineSnapshot(`
       {
@@ -13,11 +13,11 @@ describe('dist', () => {
             "proposals": true,
             "version": 3,
           },
-          "version": "7.23.5",
+          "version": "7.24.5",
         },
-        "CORE_JS_VERSION": "3.33",
-        "RUNTIME_CORE_JS_VERSION": "7.23.5",
-        "TARGETS_NODE": "18.16",
+        "CORE_JS_VERSION": "3.37",
+        "RUNTIME_CORE_JS_VERSION": "7.24.5",
+        "TARGETS_NODE": "20.10",
         "getApiSideBabelConfigPath": [Function],
         "getApiSideBabelPlugins": [Function],
         "getApiSideBabelPresets": [Function],
@@ -31,7 +31,6 @@ describe('dist', () => {
         "getWebSideDefaultBabelConfig": [Function],
         "getWebSideOverrides": [Function],
         "parseTypeScriptConfigFiles": [Function],
-        "prebuildApiFile": [Function],
         "prebuildWebFile": [Function],
         "registerApiSideBabelHook": [Function],
         "registerBabel": [Function],

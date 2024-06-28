@@ -16,6 +16,7 @@ import ${pascalName} from './${pascalName}'
 
 const meta: Meta<typeof ${pascalName}> = {
   component: ${pascalName},
+  tags: ['autodocs']
 }
 
 export default meta

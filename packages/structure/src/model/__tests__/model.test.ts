@@ -1,5 +1,7 @@
 import { basename, resolve } from 'path'
 
+import { describe, it, expect } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { URL_file } from '../../x/URL'
 import { RWProject } from '../RWProject'
@@ -20,14 +22,14 @@ describe('Redwood Project Model', () => {
         'EditUserPage',
         'FooPage',
         'BarPage',
-      ])
+      ]),
     )
     for (const page of project.pages) {
       page.basenameNoExt
       page.route?.id
     }
     expect(
-      project.sdls.map((s) => s.name).sort((a, b) => (a < b ? -1 : 1))
+      project.sdls.map((s) => s.name).sort((a, b) => (a < b ? -1 : 1)),
     ).toEqual(['currentUser', 'todos'])
 
     for (const c of project.components) {
@@ -72,7 +74,7 @@ describe('Cells', () => {
     const cells = project.cells
     expect(cells).toHaveLength(1)
     expect(cells.map((cell) => basename(cell.filePath))).not.toContain(
-      'TableCell.js'
+      'TableCell.js',
     )
   })
 
@@ -91,7 +93,7 @@ describe('Cells', () => {
     const x = await cell?.collectDiagnostics()
     expect(x).not.toBeUndefined()
     expect(x?.map((e) => e.diagnostic.message)).toContain(
-      'We recommend that you name your query operation'
+      'We recommend that you name your query operation',
     )
   })
 })
@@ -109,7 +111,39 @@ describe.skip('env vars', () => {
   })
 })
 
+describe('Redwood Page detection', () => {
+  it('detects pages', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+    const pages = routes.map((r) => r.page).sort()
+    const pageConstants = pages.map((p) => p?.constName)
+    // Note: Pages can be duplicated if used by multiple routes, we use a Set
+    expect(pageConstants).toEqual([
+      'HomePage',
+      'TypeScriptPage',
+      'FooPage',
+      'BarPage',
+      'PrivatePage',
+      'PrivatePage',
+      'PrivatePage',
+      'NotFoundPage',
+      undefined,
+    ])
+  })
+})
+
 describe('Redwood Route detection', () => {
+  it('detects the page identifier for a route', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const pageIdentifiers = routes.map((r) => r.page_identifier_str)
+
+    expect(pageIdentifiers.length).toBe(9)
+    expect(pageIdentifiers).toMatchSnapshot()
+  })
   it('detects routes with the prerender prop', async () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
@@ -121,7 +155,7 @@ describe('Redwood Route detection', () => {
       // interested in
       .map(({ name, path }) => ({ name, path }))
 
-    expect(prerenderRoutes.length).toBe(6)
+    expect(prerenderRoutes.length).toBe(8)
     expect(prerenderRoutes).toContainEqual({ name: 'home', path: '/' })
     expect(prerenderRoutes).toContainEqual({
       name: 'typescriptPage',
@@ -138,6 +172,87 @@ describe('Redwood Route detection', () => {
       path: '/private-page',
     })
   })
+  it('detects authenticated routes', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes.length).toBe(3)
+  })
+
+  it('detects name and path for an authenticated route', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[1].name).toBe('privatePageAdmin')
+    expect(authenticatedRoutes[1].path).toBe('/private-page-admin')
+    expect(authenticatedRoutes[1].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[1].roles).toBeTypeOf('string')
+    expect(authenticatedRoutes[1].roles).toContain('admin')
+  })
+
+  it('detects roles for an authenticated route when roles is a string of a single role', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[1].name).toBe('privatePageAdmin')
+    expect(authenticatedRoutes[1].path).toBe('/private-page-admin')
+    expect(authenticatedRoutes[1].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[1].roles).toBeTypeOf('string')
+    expect(authenticatedRoutes[1].roles).toContain('admin')
+  })
+
+  it('detects roles for an authenticated route when roles is an array of a roles', async () => {
+    const projectRoot = getFixtureDir('example-todo-main')
+    const project = new RWProject({ projectRoot, host: new DefaultHost() })
+    const routes = project.getRouter().routes
+
+    const authenticatedRoutes = routes
+      .filter((r) => r.isPrivate)
+      .map(({ name, path, unauthenticated, roles }) => ({
+        name,
+        path,
+        unauthenticated,
+        roles,
+      }))
+
+    expect(authenticatedRoutes[2].name).toBe('privatePageAdminSuper')
+    expect(authenticatedRoutes[2].path).toBe('/private-page-admin-super')
+    expect(authenticatedRoutes[2].unauthenticated).toBe('home')
+    expect(authenticatedRoutes[2].roles).toBeInstanceOf(Array)
+    expect(authenticatedRoutes[2].roles).toContain('owner')
+    expect(authenticatedRoutes[2].roles).toContain('superuser')
+    expect(authenticatedRoutes[2].roles).not.toContain('member')
+  })
 })
 
 function getFixtureDir(
@@ -145,7 +260,7 @@ function getFixtureDir(
     | 'example-todo-main-with-errors'
     | 'example-todo-main'
     | 'empty-project'
-    | 'test-project'
+    | 'test-project',
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

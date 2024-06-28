@@ -1,6 +1,6 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
@@ -23,11 +23,11 @@ export const handler = async ({ force, skipExamples }) => {
         title: `Adding api/src/lib/mailer.${
           projectIsTypescript ? 'ts' : 'js'
         }...`,
-        task: () => {
+        task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            'mailer.ts.template'
+            'mailer.ts.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
@@ -36,11 +36,11 @@ export const handler = async ({ force, skipExamples }) => {
 
           const mailerPath = path.join(
             getPaths().api.lib,
-            `mailer.${projectIsTypescript ? 'ts' : 'js'}`
+            `mailer.${projectIsTypescript ? 'ts' : 'js'}`,
           )
           const mailerContent = projectIsTypescript
             ? templateContent
-            : transformTSToJS(mailerPath, templateContent)
+            : await transformTSToJS(mailerPath, templateContent)
 
           return writeFile(mailerPath, mailerContent, {
             overwriteExisting: force,
@@ -59,11 +59,11 @@ export const handler = async ({ force, skipExamples }) => {
       {
         title: `Adding example ReactEmail mail template`,
         skip: () => skipExamples,
-        task: () => {
+        task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            're-example.tsx.template'
+            're-example.tsx.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
@@ -73,11 +73,11 @@ export const handler = async ({ force, skipExamples }) => {
           const exampleTemplatePath = path.join(
             getPaths().api.mail,
             'Example',
-            `Example.${projectIsTypescript ? 'tsx' : 'jsx'}`
+            `Example.${projectIsTypescript ? 'tsx' : 'jsx'}`,
           )
           const exampleTemplateContent = projectIsTypescript
             ? templateContent
-            : transformTSToJS(exampleTemplatePath, templateContent)
+            : await transformTSToJS(exampleTemplatePath, templateContent)
 
           return writeFile(exampleTemplatePath, exampleTemplateContent, {
             overwriteExisting: force,
@@ -106,7 +106,7 @@ export const handler = async ({ force, skipExamples }) => {
     ],
     {
       rendererOptions: { collapseSubtasks: false },
-    }
+    },
   )
 
   try {

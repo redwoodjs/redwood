@@ -1,12 +1,8 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    },
     "allowJs": true
   },
   "include": ["./src/**/*", "ambient.d.ts"],
@@ -15,7 +11,7 @@
     { "path": "../router" },
     { "path": "../internal" },
     { "path": "../project-config" },
-    { "path": "../auth" },
+    { "path": "../auth/tsconfig.build.json" },
     { "path": "../structure" }
   ]
 }

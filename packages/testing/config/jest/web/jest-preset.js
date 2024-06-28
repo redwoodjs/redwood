@@ -47,27 +47,27 @@ module.exports = {
     '^react-dom$': path.join(NODE_MODULES_PATH, 'react-dom'),
     '^@apollo/client/react$': path.join(
       NODE_MODULES_PATH,
-      '@apollo/client/react'
+      '@apollo/client/react',
     ),
     // We replace imports to "@redwoodjs/router" with our own "mock" implementation.
     '^@redwoodjs/router$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/dist/web/MockRouter.js'
+      '@redwoodjs/testing/dist/web/MockRouter.js',
     ),
-    '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web'),
+    '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web/dist/cjs'),
 
     // This allows us to mock `createAuthentication` which is used by auth
     // clients, which in turn lets us mock `useAuth` in tests
     '^@redwoodjs/auth$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/dist/web/mockAuth.js'
+      '@redwoodjs/testing/dist/web/mockAuth.js',
     ),
 
     // @NOTE: Import @redwoodjs/testing in web tests, and it automatically remaps to the web side only
     // This is to prevent web stuff leaking into api, and vice versa
     '^@redwoodjs/testing$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/web'
+      '@redwoodjs/testing/web',
     ),
     '~__REDWOOD__USER_ROUTES_FOR_MOCK': rwjsPaths.web.routes,
     '~__REDWOOD__USER_AUTH_FOR_MOCK': path.join(rwjsPaths.web.src, 'auth'),

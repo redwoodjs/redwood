@@ -6,7 +6,7 @@ import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export async function handler({ force: forceArg }: Args) {
@@ -19,7 +19,7 @@ export async function handler({ force: forceArg }: Args) {
     webPackages: ['firebase@^10', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
       // Note that the version of this package should be exactly the same as the version in `@redwoodjs/auth-firebase-api` .
-      'firebase-admin@11.10.1',
+      'firebase-admin@12.1.1',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [

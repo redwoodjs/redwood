@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Generates GraphQL schema 1`] = `
 "directive @requireAuth(roles: [String]) on FIELD_DEFINITION
@@ -6,6 +6,8 @@ exports[`Generates GraphQL schema 1`] = `
 directive @skipAuth on FIELD_DEFINITION
 
 scalar BigInt
+
+scalar Byte
 
 scalar Date
 
@@ -75,6 +77,8 @@ directive @requireAuth(roles: [String]) on FIELD_DEFINITION
 directive @skipAuth on FIELD_DEFINITION
 
 scalar BigInt
+
+scalar Byte
 
 scalar Date
 

@@ -2,6 +2,8 @@ globalThis.__dirname = __dirname
 // Load mocks
 import '../../../../lib/test'
 
+import { describe, test, expect } from 'vitest'
+
 import * as service from '../service'
 
 describe('the scenario generator', () => {
@@ -211,14 +213,13 @@ describe('the scenario generator', () => {
   })
 
   test('fieldsToScenario returns scenario data for nested relations', async () => {
-    const { scalarFields, relations, foreignKeys } = await service.parseSchema(
-      'UserProfile'
-    )
+    const { scalarFields, relations, foreignKeys } =
+      await service.parseSchema('UserProfile')
 
     const scenario = await service.fieldsToScenario(
       scalarFields,
       relations,
-      foreignKeys
+      foreignKeys,
     )
 
     expect(scenario.user).toEqual(
@@ -226,7 +227,7 @@ describe('the scenario generator', () => {
         create: expect.objectContaining({
           email: expect.any(String),
         }),
-      })
+      }),
     )
   })
 })

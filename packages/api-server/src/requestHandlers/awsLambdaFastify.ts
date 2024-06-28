@@ -8,8 +8,8 @@ import qs from 'qs'
 
 import { mergeMultiValueHeaders, parseBody } from './utils'
 
-const lambdaEventForFastifyRequest = (
-  request: FastifyRequest
+export const lambdaEventForFastifyRequest = (
+  request: FastifyRequest,
 ): APIGatewayProxyEvent => {
   return {
     httpMethod: request.method,
@@ -28,7 +28,7 @@ const lambdaEventForFastifyRequest = (
 
 const fastifyResponseForLambdaResult = (
   reply: FastifyReply,
-  lambdaResult: APIGatewayProxyResult
+  lambdaResult: APIGatewayProxyResult,
 ) => {
   const {
     statusCode = 200,
@@ -38,7 +38,7 @@ const fastifyResponseForLambdaResult = (
   } = lambdaResult
   const mergedHeaders = mergeMultiValueHeaders(headers, multiValueHeaders)
   Object.entries(mergedHeaders).forEach(([name, values]) =>
-    values.forEach((value) => reply.header(name, value))
+    values.forEach((value) => reply.header(name, value)),
   )
   reply.status(statusCode)
 
@@ -54,7 +54,7 @@ const fastifyResponseForLambdaResult = (
 const fastifyResponseForLambdaError = (
   req: FastifyRequest,
   reply: FastifyReply,
-  error: Error
+  error: Error,
 ) => {
   req.log.error(error)
   reply.status(500).send()
@@ -63,7 +63,7 @@ const fastifyResponseForLambdaError = (
 export const requestHandler = async (
   req: FastifyRequest,
   reply: FastifyReply,
-  handler: Handler
+  handler: Handler,
 ) => {
   // We take the fastify request object and convert it into a lambda function event.
   const event = lambdaEventForFastifyRequest(req)
@@ -85,7 +85,7 @@ export const requestHandler = async (
     event,
     // @ts-expect-error - Add support for context: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/0bb210867d16170c4a08d9ce5d132817651a0f80/types/aws-lambda/index.d.ts#L443-L467
     {},
-    handlerCallback(reply)
+    handlerCallback(reply),
   )
 
   // In this case the handlerCallback should not be called.

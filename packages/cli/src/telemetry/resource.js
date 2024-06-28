@@ -45,8 +45,8 @@ export async function getResources() {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path

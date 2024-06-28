@@ -10,8 +10,8 @@ import type {
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { colors } from './colors'
-import { getPaths } from './paths'
+import { colors } from './colors.js'
+import { getPaths } from './paths.js'
 
 // TODO: Move this into `generateTemplate` when all templates have TS support
 /*
@@ -52,18 +52,30 @@ export const transformTSToJS = (filename: string, content: string) => {
 /**
  * This returns the config present in `prettier.config.js` of a Redwood project.
  */
-export const prettierOptions = () => {
+export const getPrettierOptions = async () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
+    const { default: options } = await import(
+      `file://${path.join(getPaths().base, 'prettier.config.js')}`
+    )
+
+    if (options.tailwindConfig?.startsWith('.')) {
+      // Make this work with --cwd
+      options.tailwindConfig = path.join(
+        process.env.RWJS_CWD ?? process.cwd(),
+        options.tailwindConfig,
+      )
+    }
+
+    return options
   } catch (e) {
     return undefined
   }
 }
 
-export const prettify = (
+export const prettify = async (
   templateFilename: string,
-  renderedTemplate: string
-): string => {
+  renderedTemplate: string,
+): Promise<string> => {
   // We format .js and .css templates, we need to tell prettier which parser
   // we're using.
   // https://prettier.io/docs/en/options.html#parser
@@ -78,8 +90,10 @@ export const prettify = (
     return renderedTemplate
   }
 
+  const prettierOptions = await getPrettierOptions()
+
   return format(renderedTemplate, {
-    ...prettierOptions(),
+    ...prettierOptions,
     parser,
   })
 }
@@ -90,11 +104,12 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   target: string,
   contents: string,
   { existingFiles = 'FAIL' }: { existingFiles?: ExistingFiles } = {},
-  // TODO: Remove type cast
+  // TODO: Remove type cast by finding all places `writeFile` is used and
+  // making sure a proper task is passed in
   task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
     never,
     Renderer
-  >
+  >,
 ) => {
   const { base } = getPaths()
   task.title = `Writing \`./${path.relative(base, target)}\``
@@ -105,7 +120,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   }
 
   if (exists && existingFiles === 'SKIP') {
-    task.skip()
+    task.skip(`Skipping update of \`./${path.relative(base, target)}\``)
     return
   }
 
@@ -123,7 +138,7 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
  */
 export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
   files: Record<string, string>,
-  options: { existingFiles: ExistingFiles }
+  options: { existingFiles: ExistingFiles },
 ) => {
   const { base } = getPaths()
 
@@ -138,11 +153,11 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
           task: ListrTaskWrapper<
             never,
             ListrGetRendererClassFromValue<Renderer>
-          >
+          >,
         ) => {
           return writeFile(file, contents, options, task)
         },
       }
-    })
+    }),
   )
 }

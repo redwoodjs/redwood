@@ -20,6 +20,7 @@ services:
       - SESSION_SECRET=super_secret_session_key_change_me_in_production_please
       - CI=
       - NODE_ENV=development
+      - REDWOOD_API_HOST=0.0.0.0
 
   db:
     image: postgres:16-bookworm
