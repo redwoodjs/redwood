@@ -1,8 +1,10 @@
 import console from 'node:console'
 import path from 'node:path'
 
+import fg from 'fast-glob'
+
 import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
-import { getPaths, resolveFile } from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
 import {
   AdapterNotFoundError,
@@ -36,15 +38,12 @@ export const loadLogger = async () => {
 }
 
 export const loadJob = async (name) => {
-  try {
-    const filename = resolveFile(path.join(getPaths().api.jobs, name))
-    const { default: jobModule } = await import(filename)
-    return jobModule
-  } catch (e) {
-    if (e.code === 'ERR_MODULE_NOT_FOUND') {
-      throw new JobNotFoundError(name)
-    } else {
-      throw e
-    }
+  const files = fg.sync(`**/${name}.*`, { cwd: getPaths().api.jobs })
+  if (!files[0]) {
+    throw new JobNotFoundError(name)
   }
+  const { default: jobModule } = await import(
+    path.join(getPaths().api.jobs, files[0])
+  )
+  return jobModule
 }
