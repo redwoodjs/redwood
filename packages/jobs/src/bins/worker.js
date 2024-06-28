@@ -7,9 +7,6 @@ import process from 'node:process'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
-
-loadEnvFiles()
 import { loadAdapter, loadLogger } from '../core/loaders'
 import { Worker } from '../core/Worker'
 
