@@ -110,9 +110,6 @@ export const files = async ({ name, typescript, ...options }) => {
     templatePath: 'stories.tsx.template',
   })
 
-  console.log('cellName', cellName)
-  console.log('typeName', typeName)
-
   const mockFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
