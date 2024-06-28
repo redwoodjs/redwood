@@ -84,10 +84,12 @@ export class PrismaAdapter extends BaseAdapter {
   }
 
   success(job) {
+    this.logger.debug(`Job ${job.id} success`)
     return this.accessor.delete({ where: { id: job.id } })
   }
 
   async failure(job, error) {
+    this.logger.debug(`Job ${job.id} failure`)
     const data = {
       lockedAt: null,
       lockedBy: null,
