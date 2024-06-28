@@ -83,8 +83,8 @@ const parseArgs = (argv) => {
 const buildWorkerConfig = (numWorkers) => {
   // Builds up an array of arrays, with queue name and id:
   //   `-n default:2,email:1` => [ ['default', 0], ['default', 1], ['email', 0] ]
-  // If only given a number of workers then queue name is an empty string:
-  //   `-n 2` => [ ['', 0], ['', 1] ]
+  // If only given a number of workers then queue name is null (all queues):
+  //   `-n 2` => [ [null, 0], [null, 1] ]
   let workers = []
 
   // default to one worker for commands that don't specify
@@ -116,7 +116,7 @@ const startWorkers = ({
 }) => {
   logger.warn(`Starting ${workerConfig.length} worker(s)...`)
 
-  return workerConfig.map(([queue, id], i) => {
+  return workerConfig.map(([queue, id]) => {
     // list of args to send to the forked worker script
     const workerArgs = ['--id', id]
 
@@ -131,6 +131,7 @@ const startWorkers = ({
     }
 
     // fork the worker process
+    // TODO squiggles under __dirname, but import.meta.dirname blows up when running the process
     const worker = fork(path.join(__dirname, 'worker.js'), workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
@@ -139,7 +140,7 @@ const startWorkers = ({
     if (detach) {
       worker.unref()
     } else {
-      // children stay attached so watch for their exit
+      // children stay attached so watch for their exit before exiting parent
       worker.on('exit', (_code) => {})
     }
 
@@ -148,7 +149,7 @@ const startWorkers = ({
 }
 
 const signalSetup = ({ workers, logger }) => {
-  // if we get here then we're still monitoring workers and have to pass on signals
+  // Keep track of how many times the user has pressed ctrl-c
   let sigtermCount = 0
 
   // If the parent receives a ctrl-c, tell each worker to gracefully exit.
@@ -170,6 +171,7 @@ const signalSetup = ({ workers, logger }) => {
   })
 }
 
+// Find the process id of a worker by its title
 const findProcessId = async (proc) => {
   return new Promise(function (resolve, reject) {
     const plat = process.platform
@@ -184,7 +186,7 @@ const findProcessId = async (proc) => {
     if (cmd === '' || proc === '') {
       resolve(false)
     }
-    exec(cmd, function (err, stdout, _stderr) {
+    exec(cmd, function (err, stdout) {
       if (err) {
         reject(err)
       }

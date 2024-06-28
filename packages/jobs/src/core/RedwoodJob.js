@@ -150,9 +150,9 @@ export class RedwoodJob {
 
   // Determines when the job should run.
   //
-  // * If no options were set, defaults to running as soon as possible
-  // * If a `wait` option is present it sets the number of seconds to wait
-  // * If a `waitUntil` option is present it runs at that specific datetime
+  // - If no options were set, defaults to running as soon as possible
+  // - If a `wait` option is present it sets the number of seconds to wait
+  // - If a `waitUntil` option is present it runs at that specific datetime
   get runAt() {
     if (!this.#options?.runAt) {
       this.#options = Object.assign(this.#options || {}, {
