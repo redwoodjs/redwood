@@ -2,6 +2,7 @@
 
 import console from 'node:console'
 import process from 'node:process'
+import { setTimeout } from 'node:timers'
 
 import { AdapterRequiredError } from './errors'
 import { Executor } from './Executor'

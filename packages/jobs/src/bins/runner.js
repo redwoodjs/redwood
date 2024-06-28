@@ -6,6 +6,7 @@
 import { fork, exec } from 'node:child_process'
 import path from 'node:path'
 import process from 'node:process'
+import { setTimeout } from 'node:timers'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
