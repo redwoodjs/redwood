@@ -55,6 +55,14 @@ const baseConfig = {
     sbConfig.resolve.alias['@redwoodjs/auth$'] = require.resolve(
       '@redwoodjs/testing/dist/web/mockAuth.js',
     )
+
+    // Force loading the ESM version of ApolloProvider in Storybook
+    // I'm unsure why storybook-webpack does not work with the CJS version
+    // All other cases are fine with the CJS import.
+    sbConfig.resolve.alias['@redwoodjs/web/apollo$'] = require.resolve(
+      '@redwoodjs/web/forceEsmApollo',
+    )
+
     sbConfig.resolve.alias['~__REDWOOD__USER_ROUTES_FOR_MOCK'] =
       redwoodProjectPaths.web.routes
     sbConfig.resolve.alias['~__REDWOOD__USER_WEB_SRC'] =

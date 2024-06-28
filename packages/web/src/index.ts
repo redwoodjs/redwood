@@ -1,8 +1,8 @@
 import './global.web-auto-imports.js'
 import './config.js'
-import './assetImports.js'
 
-export { default as FatalErrorBoundary } from './components/FatalErrorBoundary.js'
+export { FatalErrorBoundary } from './components/FatalErrorBoundary.js'
+
 export {
   FetchConfigProvider,
   useFetchConfig,
@@ -18,7 +18,7 @@ export * from './components/cell/CellCacheContext.js'
 
 export { createCell } from './components/cell/createCell.js'
 
-export {
+export type {
   CellProps,
   CellFailureProps,
   CellLoadingProps,
@@ -32,7 +32,10 @@ export * from './components/RedwoodProvider.js'
 
 export * from './components/MetaTags.js'
 export * from './components/Metadata.js'
-export { Helmet as Head, Helmet } from 'react-helmet-async'
+import * as helmetPkg from 'react-helmet-async'
+
+const { Helmet } = helmetPkg
+export { Helmet as Head, Helmet }
 
 export * from './components/htmlTags.js'
 export * from './routeHooks.types.js'

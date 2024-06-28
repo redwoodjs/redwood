@@ -62,6 +62,7 @@ export const generateTypeDefs = async () => {
       ...generateTypeDefScenarios(),
       ...generateTypeDefTestMocks(),
       ...generateStubStorybookTypes(),
+      ...generateViteClientTypesDirective(),
       ...gqlApiTypeDefFiles,
       ...gqlWebTypeDefFiles,
     ],
@@ -377,6 +378,22 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
+}
+/**
+ * Typescript does not preserve triple slash directives when outputting js or d.ts files.
+ * This is a work around so that *.svg, *.png, etc. imports have types.
+ */
+export const generateViteClientTypesDirective = () => {
+  const viteClientDirective = `/// <reference types="vite/client" />`
+  const redwoodProjectPaths = getPaths()
+
+  const viteClientDirectivePath = path.join(
+    redwoodProjectPaths.generated.types.includes,
+    'web-vite-client.d.ts',
+  )
+  fs.writeFileSync(viteClientDirectivePath, viteClientDirective)
+
+  return [viteClientDirectivePath]
 }
 
 function generateStubStorybookTypes() {
