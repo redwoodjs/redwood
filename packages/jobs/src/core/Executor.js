@@ -2,13 +2,12 @@
 
 import console from 'node:console'
 
-import fg from 'fast-glob'
-
 import {
   AdapterRequiredError,
   JobRequiredError,
-  JobNotFoundError,
+  JobExportNotFoundError,
 } from './errors'
+import { loadJob } from './loaders'
 
 export class Executor {
   constructor(options) {
@@ -27,21 +26,19 @@ export class Executor {
 
   async perform() {
     this.logger.info(this.job, `Started job ${this.job.id}`)
+    const details = JSON.parse(this.job.handler)
 
     try {
-      const details = JSON.parse(this.job.handler)
-      const entries = await fg(`./**/${details.handler}.js`, { cwd: __dirname })
-      if (!entries[0]) {
-        throw new JobNotFoundError(details.handler)
-      }
-
-      const Job = await import(`./${entries[0]}`)
-      await new Job[details.handler]().perform(...details.args)
-
+      const jobModule = await loadJob(details.handler)
+      await new jobModule[details.handler]().perform(...details.args)
       return this.adapter.success(this.job)
     } catch (e) {
-      this.logger.error(e.stack)
-      return this.adapter.failure(this.job, e)
+      let error = e
+      if (e.message.match(/is not a constructor/)) {
+        error = new JobExportNotFoundError(details.handler)
+      }
+      this.logger.error(error.stack)
+      return this.adapter.failure(this.job, error)
     }
   }
 }
