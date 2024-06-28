@@ -101,6 +101,13 @@ export class JobNotFoundError extends RedwoodJobError {
   }
 }
 
+// Throw when a job file exists, but the export does not match the filename
+export class JobExportNotFoundError extends RedwoodJobError {
+  constructor(name) {
+    super(`Job file \`${name}\` does not export a class with the same name`)
+  }
+}
+
 // Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js and
 // the file does not exist
 export class JobsLibNotFoundError extends RedwoodJobError {
