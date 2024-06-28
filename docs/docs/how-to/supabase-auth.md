@@ -53,24 +53,21 @@ yarn redwood setup auth supabase
 By specifying `supabase` as the provider, Redwood automatically added the necessary Supabase config to our app. Let's open up `web/src/App.[js/tsx]` and inspect. You should see:
 
 ```jsx {1-2,12,17} title="web/src/App.[js/tsx]"
-import { AuthProvider } from '@redwoodjs/auth'
-import { createClient } from '@supabase/supabase-js'
-
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
-import './index.css'
+import { AuthProvider, useAuth } from './auth'
 
-const supabaseClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <AuthProvider client={supabaseClient} type="supabase">
-        <RedwoodApolloProvider>
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
           <Routes />
         </RedwoodApolloProvider>
       </AuthProvider>
@@ -79,6 +76,21 @@ const App = () => (
 )
 
 export default App
+```
+
+As you can see our AuthProvider is exported from our `web/src/auth.[js/tsx]`, lets take a look at what that looks like:
+
+```jsx {1-2,12,17} title="web/src/auth.[js/tsx]"
+import { createClient } from '@supabase/supabase-js'
+
+import { createAuth } from '@redwoodjs/auth-supabase-web'
+
+const supabaseClient = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_KEY || ''
+)
+
+export const { AuthProvider, useAuth } = createAuth(supabaseClient)
 ```
 
 Now it's time to add the Supabase URL, public API KEY, and JWT SECRET (`SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_JWT_SECRET`) to your `.env` file.

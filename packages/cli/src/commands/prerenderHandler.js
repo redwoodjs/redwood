@@ -146,69 +146,86 @@ export const getTasks = async (dryrun, routerPathFilter = null) => {
     prerenderRoutes.map((route) => expandRouteParameters(route)),
   )
 
-  const listrTasks = expandedRouteParameters
-    .flat()
-    .flatMap((routeToPrerender) => {
+  const listrTasks = expandedRouteParameters.flatMap((routesToPrerender) => {
+    // queryCache will be filled with the queries from all the Cells we
+    // encounter while prerendering, and the result from executing those
+    // queries.
+    // We have this cache here because we can potentially reuse result data
+    // between different pages. I.e. if the same query, with the same
+    // variables is encountered twice, we'd only have to execute it once and
+    // then just reuse the cached result the second time.
+    const queryCache = {}
+
+    // In principle you could be prerendering a large number of routes, and
+    // when this occurs not only can it break but it's also not particularly
+    // useful to enumerate all the routes in the output.
+    const shouldFold = routesToPrerender.length > 16
+
+    if (shouldFold) {
+      // If we're folding the output, we don't need to return the individual
+      // routes, just a top level message indicating the route and the progress
+      const displayIncrement = Math.max(
+        1,
+        Math.floor(routesToPrerender.length / 100),
+      )
+      const title = (i) =>
+        `Prerendering ${routesToPrerender[0].name} (${i.toLocaleString()} of ${routesToPrerender.length.toLocaleString()})`
+      return [
+        {
+          title: title(0),
+          task: async (_, task) => {
+            // Note: This is a sequential loop, not parallelized as there have been previous issues
+            // with parallel prerendering. See:https://github.com/redwoodjs/redwood/pull/7321
+            for (let i = 0; i < routesToPrerender.length; i++) {
+              const routeToPrerender = routesToPrerender[i]
+
+              // Filter out routes that don't match the supplied routePathFilter
+              if (
+                routerPathFilter &&
+                routeToPrerender.path !== routerPathFilter
+              ) {
+                continue
+              }
+
+              await prerenderRoute(
+                queryCache,
+                routeToPrerender,
+                dryrun,
+                mapRouterPathToHtml(routeToPrerender.path),
+              )
+
+              if (i % displayIncrement === 0) {
+                task.title = title(i)
+              }
+            }
+            task.title = title(routesToPrerender.length)
+          },
+        },
+      ]
+    }
+
+    // If we're not folding the output, we'll return a list of tasks for each
+    // individual case.
+    return routesToPrerender.map((routeToPrerender) => {
       // Filter out routes that don't match the supplied routePathFilter
       if (routerPathFilter && routeToPrerender.path !== routerPathFilter) {
         return []
       }
 
       const outputHtmlPath = mapRouterPathToHtml(routeToPrerender.path)
-
-      // queryCache will be filled with the queries from all the Cells we
-      // encounter while prerendering, and the result from executing those
-      // queries.
-      // We have this cache here because we can potentially reuse result data
-      // between different pages. I.e. if the same query, with the same
-      // variables is encountered twice, we'd only have to execute it once and
-      // then just reuse the cached result the second time.
-      const queryCache = {}
-
-      return [
-        {
-          title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
-          task: async () => {
-            // Check if route param templates in e.g. /path/{param1} have been replaced
-            if (/\{.*}/.test(routeToPrerender.path)) {
-              throw new PathParamError(
-                `Could not retrieve route parameters for ${routeToPrerender.path}`,
-              )
-            }
-
-            try {
-              const prerenderedHtml = await runPrerender({
-                queryCache,
-                renderPath: routeToPrerender.path,
-              })
-
-              if (!dryrun) {
-                writePrerenderedHtmlFile(outputHtmlPath, prerenderedHtml)
-              }
-            } catch (e) {
-              console.log()
-              console.log(
-                c.warning('You can use `yarn rw prerender --dry-run` to debug'),
-              )
-              console.log()
-
-              console.log(
-                `${c.info('-'.repeat(10))} Error rendering path "${
-                  routeToPrerender.path
-                }" ${c.info('-'.repeat(10))}`,
-              )
-
-              errorTelemetry(process.argv, `Error prerendering: ${e.message}`)
-
-              console.error(c.error(e.stack))
-              console.log()
-
-              throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
-            }
-          },
+      return {
+        title: `Prerendering ${routeToPrerender.path} -> ${outputHtmlPath}`,
+        task: async () => {
+          await prerenderRoute(
+            queryCache,
+            routeToPrerender,
+            dryrun,
+            outputHtmlPath,
+          )
         },
-      ]
+      }
     })
+  })
 
   return listrTasks
 }
@@ -271,6 +288,48 @@ const diagnosticCheck = () => {
     process.exit(1)
   } else {
     console.log('✔ Diagnostics checks passed \n')
+  }
+}
+
+const prerenderRoute = async (
+  queryCache,
+  routeToPrerender,
+  dryrun,
+  outputHtmlPath,
+) => {
+  // Check if route param templates in e.g. /path/{param1} have been replaced
+  if (/\{.*}/.test(routeToPrerender.path)) {
+    throw new PathParamError(
+      `Could not retrieve route parameters for ${routeToPrerender.path}`,
+    )
+  }
+
+  try {
+    const prerenderedHtml = await runPrerender({
+      queryCache,
+      renderPath: routeToPrerender.path,
+    })
+
+    if (!dryrun) {
+      writePrerenderedHtmlFile(outputHtmlPath, prerenderedHtml)
+    }
+  } catch (e) {
+    console.log()
+    console.log(c.warning('You can use `yarn rw prerender --dry-run` to debug'))
+    console.log()
+
+    console.log(
+      `${c.info('-'.repeat(10))} Error rendering path "${
+        routeToPrerender.path
+      }" ${c.info('-'.repeat(10))}`,
+    )
+
+    errorTelemetry(process.argv, `Error prerendering: ${e.message}`)
+
+    console.error(c.error(e.stack))
+    console.log()
+
+    throw new Error(`Failed to render "${routeToPrerender.filePath}"`)
   }
 }
 
