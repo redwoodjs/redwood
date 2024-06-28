@@ -3,7 +3,6 @@ import path from 'path'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
-import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
@@ -19,7 +18,6 @@ import { generatePrismaCommand } from '../lib/generatePrismaClient'
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
-  stats = false,
   prisma = true,
   prerender,
 }) => {
@@ -27,7 +25,6 @@ export const handler = async ({
     command: 'build',
     side: JSON.stringify(side),
     verbose,
-    stats,
     prisma,
     prerender,
   })
@@ -36,18 +33,6 @@ export const handler = async ({
   const rwjsConfig = getConfig()
   const useFragments = rwjsConfig.graphql?.fragments
   const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
-
-  if (stats) {
-    console.log('Building Web Stats...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.stats.js',
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base },
-    )
-    // We do not want to continue building...
-    return
-  }
 
   const prismaSchemaExists = fs.existsSync(rwjsPaths.api.dbSchema)
   const prerenderRoutes =
@@ -102,56 +87,34 @@ export const handler = async ({
       },
     },
     side.includes('web') && {
-      // Clean web/dist before building
-      // Vite handles this internally
-      title: 'Cleaning Web...',
-      task: () => {
-        return rimraf(rwjsPaths.web.dist)
-      },
-      enabled: getConfig().web.bundler === 'webpack',
-    },
-    side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler !== 'webpack') {
-          // @NOTE: we're using the vite build command here, instead of the
-          // buildWeb function directly because we want the process.cwd to be
-          // the web directory, not the root of the project.
-          // This is important for postcss/tailwind to work correctly
-          // Having a separate binary lets us contain the change of cwd to that
-          // process only. If we changed cwd here, or in the buildWeb function,
-          // it could affect other things that run in parallel while building.
-          // We don't have any parallel tasks right now, but someone might add
-          // one in the future as a performance optimization.
-          //
-          // Disable the new warning in Vite v5 about the CJS build being deprecated
-          // so that users don't have to see it when this command is called with --verbose
-          process.env.VITE_CJS_IGNORE_WARNING = 'true'
-          await execa(
-            `node ${require.resolve(
-              '@redwoodjs/vite/bins/rw-vite-build.mjs',
-            )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              // `cwd` is needed for yarn to find the rw-vite-build binary
-              // It won't change process.cwd for anything else here, in this
-              // process
-              cwd: rwjsPaths.web.base,
-            },
-          )
-        } else {
-          await execa(
-            `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-              '@redwoodjs/core/config/webpack.production.js',
-            )}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              cwd: rwjsPaths.web.base,
-            },
-          )
-        }
+        // @NOTE: we're using the vite build command here, instead of the
+        // buildWeb function directly because we want the process.cwd to be
+        // the web directory, not the root of the project.
+        // This is important for postcss/tailwind to work correctly
+        // Having a separate binary lets us contain the change of cwd to that
+        // process only. If we changed cwd here, or in the buildWeb function,
+        // it could affect other things that run in parallel while building.
+        // We don't have any parallel tasks right now, but someone might add
+        // one in the future as a performance optimization.
+        //
+        // Disable the new warning in Vite v5 about the CJS build being deprecated
+        // so that users don't have to see it when this command is called with --verbose
+        process.env.VITE_CJS_IGNORE_WARNING = 'true'
+        await execa(
+          `node ${require.resolve(
+            '@redwoodjs/vite/bins/rw-vite-build.mjs',
+          )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+          {
+            stdio: verbose ? 'inherit' : 'pipe',
+            shell: true,
+            // `cwd` is needed for yarn to find the rw-vite-build binary
+            // It won't change process.cwd for anything else here, in this
+            // process
+            cwd: rwjsPaths.web.base,
+          },
+        )
 
         // Streaming SSR does not use the index.html file.
         if (!getConfig().experimental?.streamingSsr?.enabled) {

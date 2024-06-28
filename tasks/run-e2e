@@ -49,7 +49,7 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = ({ typescript, bundler }) => {
+const createRedwoodJSApp = ({ typescript }) => {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
@@ -98,18 +98,6 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
-
-    if (bundler === 'webpack') {
-      const redwoodTOMLPath = path.join(
-        REDWOOD_PROJECT_DIRECTORY,
-        'redwood.toml',
-      )
-      const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
-      fs.writeFileSync(
-        redwoodTOMLPath,
-        redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n'),
-      )
-    }
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error('Error: Could not create Redwood Project')
@@ -220,11 +208,6 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('clean-files', { default: true, type: 'boolean' })
-  .option('bundler', {
-    default: 'vite',
-    type: 'string',
-    choices: ['vite', 'webpack'],
-  })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -253,13 +236,12 @@ let {
   copyFramework,
   createProject,
   typescript,
-  bundler,
   autoStart,
   cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && (() => createRedwoodJSApp({ typescript, bundler })),
+  createProject && (() => createRedwoodJSApp({ typescript })),
   copyFramework && runTarsync,
   // copyFramework && addFrameworkDepsToProject,
   // copyFramework && runYarnInstall,

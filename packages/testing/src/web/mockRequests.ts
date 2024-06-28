@@ -1,4 +1,4 @@
-// MSW is shared by Jest (NodeJS) and Storybook (Webpack)
+// MSW is used by Jest (NodeJS)
 import { setupWorker, graphql } from 'msw'
 import type {
   StartOptions as StartMSWWorkerOptions,

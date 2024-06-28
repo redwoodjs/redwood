@@ -103,7 +103,6 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "vite",
           "fastRefresh": true,
           "includeEnvironmentVariables": [],
           "path": "./web",

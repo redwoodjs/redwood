@@ -2,15 +2,14 @@ import path from 'path'
 
 import { beforeEach, test, expect, afterAll } from 'vitest'
 
-import { prebuildWebFile } from '@redwoodjs/babel-config'
+import { findWebFiles } from '@redwoodjs/internal/dist/files.js'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { prebuildWebFiles, cleanWebBuild } from '../build/web'
-import { findWebFiles } from '../files'
+import { prebuildWebFiles, prebuildWebFile, cleanWebBuild } from '../build.js'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main',
+  '../../../../../__fixtures__/example-todo-main',
 )
 
 const cleanPaths = (p) => {
@@ -27,20 +26,20 @@ afterAll(() => {
 
 test('web files are prebuilt (no prerender)', async () => {
   const webFiles = findWebFiles()
-  const prebuiltFiles = prebuildWebFiles(webFiles)
+  const prebuiltFiles = await prebuildWebFiles(webFiles, {
+    forJest: true,
+  })
 
   const relativePaths = prebuiltFiles
     .filter((x) => typeof x !== 'undefined')
     .map(cleanPaths)
+    .sort()
+
   // Builds non-nested functions
   expect(relativePaths).toMatchInlineSnapshot(`
     [
       ".redwood/prebuild/web/src/App.js",
       ".redwood/prebuild/web/src/Routes.js",
-      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
-      ".redwood/prebuild/web/src/graphql/gql.js",
-      ".redwood/prebuild/web/src/graphql/graphql.js",
-      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/components/AddTodo/AddTodo.js",
       ".redwood/prebuild/web/src/components/AddTodoControl/AddTodoControl.js",
       ".redwood/prebuild/web/src/components/Check/Check.js",
@@ -49,6 +48,10 @@ test('web files are prebuilt (no prerender)', async () => {
       ".redwood/prebuild/web/src/components/TableCell/TableCell.js",
       ".redwood/prebuild/web/src/components/TodoItem/TodoItem.js",
       ".redwood/prebuild/web/src/components/TodoListCell/TodoListCell.tsx",
+      ".redwood/prebuild/web/src/graphql/fragment-masking.js",
+      ".redwood/prebuild/web/src/graphql/gql.js",
+      ".redwood/prebuild/web/src/graphql/graphql.js",
+      ".redwood/prebuild/web/src/graphql/index.js",
       ".redwood/prebuild/web/src/layouts/SetLayout/SetLayout.js",
       ".redwood/prebuild/web/src/pages/BarPage/BarPage.tsx",
       ".redwood/prebuild/web/src/pages/FatalErrorPage/FatalErrorPage.js",
@@ -62,13 +65,14 @@ test('web files are prebuilt (no prerender)', async () => {
   `)
 })
 
-test('Check routes are imported with require when staticImports flag is enabled', () => {
+test('Check routes are imported with require when staticImports flag is enabled', async () => {
   const routesFile = getPaths().web.routes
 
-  const prerendered = prebuildWebFile(routesFile, {
+  const built = await prebuildWebFile(routesFile, {
     forPrerender: true,
     forJest: true,
-  })?.code
+  })
+  const prerendered = built?.code
 
   /* Check that imports have the form
    `const HomePage = {
@@ -90,12 +94,13 @@ test('Check routes are imported with require when staticImports flag is enabled'
   )
 })
 
-test('Check routes are imported with "import" when staticImports flag is NOT passed', () => {
+test('Check routes are imported with "import" when staticImports flag is NOT passed', async () => {
   const routesFile = getPaths().web.routes
 
-  const withoutStaticImports = prebuildWebFile(routesFile, {
+  const built = await prebuildWebFile(routesFile, {
     forJest: true,
-  })?.code
+  })
+  const withoutStaticImports = built?.code
 
   /* Check that imports have the form
    `const HomePage = {
@@ -108,12 +113,7 @@ test('Check routes are imported with "import" when staticImports flag is NOT pas
 
   /*
     👇 Foo page is an explicitly imported page, so it should
-    var _FooPage = _interopRequireDefault(require(\\"./pages/FooPage/FooPage\\"))
-    (inverse of the static imports one)
-    .
-    .
-    .
-    page: _FooPage[\\"default\\"],
+    import FooPage from "...";
   */
   expect(withoutStaticImports).not.toContain(`const FooPage = {`)
   expect(withoutStaticImports).toContain(

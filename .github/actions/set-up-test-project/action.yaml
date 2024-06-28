@@ -6,9 +6,6 @@ runs:
   main: 'setUpTestProject.mjs'
 
 inputs:
-  bundler:
-    description: The bundler to use (vite or webpack)
-    default: vite
   canary:
     description: Upgrade the project to canary?
     default: "false"

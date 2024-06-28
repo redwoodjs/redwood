@@ -18,14 +18,6 @@ export const builder = (yargs) => {
       description: 'Which side(s) to build',
       type: 'array',
     })
-    .option('stats', {
-      default: false,
-      description: `Use ${terminalLink(
-        'Webpack Bundle Analyzer',
-        'https://github.com/webpack-contrib/webpack-bundle-analyzer',
-      )}`,
-      type: 'boolean',
-    })
     .option('verbose', {
       alias: 'v',
       default: false,

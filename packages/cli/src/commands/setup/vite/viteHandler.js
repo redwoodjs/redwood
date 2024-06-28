@@ -4,7 +4,6 @@ import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -40,21 +39,6 @@ export const handler = async ({ force, verbose, addPackage }) => {
           return writeFile(viteConfigPath, viteConfigContent, {
             overwriteExisting: force,
           })
-        },
-      },
-      {
-        title: "Checking bundler isn't set to webpack...",
-        task: (_ctx, task) => {
-          const redwoodTomlPath = getConfigPath()
-          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-
-          if (configContent.includes('bundler = "webpack"')) {
-            throw new Error(
-              'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.',
-            )
-          } else {
-            task.skip('Vite already configured as the bundler')
-          }
         },
       },
       {

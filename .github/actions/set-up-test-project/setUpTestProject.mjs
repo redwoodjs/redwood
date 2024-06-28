@@ -20,13 +20,8 @@ const TEST_PROJECT_PATH = path.join(
 
 core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
-const bundler = core.getInput('bundler')
-
 const canary = core.getInput('canary') === 'true'
-
-
 console.log({
-  bundler,
   canary
 })
 
@@ -73,22 +68,6 @@ const execInProject = createExecWithEnvInCwd(TEST_PROJECT_PATH)
  * @returns {Promise<void>}
  */
 async function sharedTasks() {
-  console.log({ bundler })
-  console.log()
-
-  if (bundler === 'webpack') {
-    console.log(`Setting the bundler to ${bundler}`)
-    console.log()
-
-    const redwoodTOMLPath = path.join(TEST_PROJECT_PATH, 'redwood.toml')
-    const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
-    const redwoodTOMLWithWebpack = redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
-    fs.writeFileSync(redwoodTOMLPath, redwoodTOMLWithWebpack)
-
-    // There's an empty line at the end of the redwood.toml file, so no need to console.log after.
-    console.log(fs.readFileSync(redwoodTOMLPath, 'utf-8'))
-  }
-
   console.log('Generating dbAuth secret')
   const { stdout } = await execInProject(
     'yarn rw g secret --raw',

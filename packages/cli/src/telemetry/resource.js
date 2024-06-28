@@ -7,7 +7,7 @@ import fs from 'fs-extra'
 import system from 'systeminformation'
 import { v4 as uuidv4, validate as validateUUID } from 'uuid'
 
-import { getPaths, getConfig, getRawConfig } from '@redwoodjs/project-config'
+import { getPaths, getRawConfig } from '@redwoodjs/project-config'
 import { DefaultHost } from '@redwoodjs/structure/dist/hosts'
 import { RWProject } from '@redwoodjs/structure/dist/model/RWProject'
 
@@ -66,18 +66,9 @@ export async function getResources() {
     developmentEnvironment = 'gitpod'
   }
 
-  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
-  // Default to 'webpack' for new projects
-  const webBundler = getConfig().web.bundler
-
   // Returns a list of all enabled experiments
   // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
   const experiments = Object.keys(getRawConfig()['experimental'] || {})
-
-  // NOTE: Added this way to avoid the need to disturb the existing toml structure
-  if (webBundler !== 'webpack') {
-    experiments.push(webBundler)
-  }
 
   // Project complexity metric
   const project = new RWProject({
@@ -115,7 +106,7 @@ export async function getResources() {
     complexity,
     sides,
     experiments: JSON.stringify(experiments),
-    webBundler,
+    webBundler: 'vite', // Hardcoded because this is now the only supported bundler
     uid: UID,
   }
 }

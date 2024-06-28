@@ -2,8 +2,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 export const command = 'vite'
 
-export const description =
-  'Configure the web side to use Vite, instead of Webpack'
+export const description = 'Configure the web side to use Vite'
 
 export const builder = (yargs) => {
   yargs.option('force', {

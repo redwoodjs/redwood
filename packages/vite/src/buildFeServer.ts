@@ -1,6 +1,6 @@
-import { buildWeb } from '@redwoodjs/internal/dist/build/web'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
+import { buildWeb } from './build/build.js'
 import { buildRouteHooks } from './buildRouteHooks.js'
 import { buildRouteManifest } from './buildRouteManifest.js'
 import { buildRscClientAndServer } from './buildRscClientAndServer.js'
