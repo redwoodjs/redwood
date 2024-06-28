@@ -3,6 +3,9 @@ import { describe, expect, vi, test } from 'vitest'
 import * as errors from '../../core/errors'
 import { Executor } from '../Executor'
 
+// so that registerApiSideBabelHook() doesn't freak out about redwood.toml
+vi.mock('@redwoodjs/babel-config')
+
 describe('constructor', () => {
   test('saves options', () => {
     const options = { adapter: 'adapter', job: 'job' }

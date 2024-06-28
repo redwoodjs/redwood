@@ -12,7 +12,12 @@ import * as errors from '../../core/errors'
 import { Executor } from '../Executor'
 import { Worker, DEFAULT_MAX_RUNTIME, DEFAULT_WAIT_TIME } from '../Worker'
 
+// don't execute any code inside Executor, just spy on whether functions are
+// called
 vi.mock('../Executor')
+
+// so that registerApiSideBabelHook() doesn't freak out about redwood.toml
+vi.mock('@redwoodjs/babel-config')
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
@@ -24,7 +29,7 @@ describe('constructor', () => {
     expect(worker.options).toEqual(options)
   })
 
-  test('extracts adaptert from options to variable', () => {
+  test('extracts adapter from options to variable', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
@@ -129,7 +134,7 @@ describe('run', () => {
   })
 
   afterEach(() => {
-    vi.resetAllMocks()
+    // vi.resetAllMocks()
   })
 
   afterAll(() => {
@@ -152,24 +157,22 @@ describe('run', () => {
 
   test('does nothing if no job found and forever=false', async () => {
     const adapter = { find: vi.fn(() => null) }
-    const mockExecutor = vi.fn()
-    vi.mock('../Executor', () => ({ Executor: mockExecutor }))
+    vi.spyOn(Executor, 'constructor')
 
     const worker = new Worker({ adapter, waitTime: 0, forever: false })
     await worker.run()
 
-    expect(mockExecutor).not.toHaveBeenCalled()
+    expect(Executor).not.toHaveBeenCalled()
   })
 
   test('does nothing if no job found and workoff=true', async () => {
     const adapter = { find: vi.fn(() => null) }
-    const mockExecutor = vi.fn()
-    vi.mock('../Executor', () => ({ Executor: mockExecutor }))
+    vi.spyOn(Executor, 'constructor')
 
     const worker = new Worker({ adapter, waitTime: 0, workoff: true })
     await worker.run()
 
-    expect(mockExecutor).not.toHaveBeenCalled()
+    expect(Executor).not.toHaveBeenCalled()
   })
 
   test('initializes an Executor instance if the job is found', async () => {
