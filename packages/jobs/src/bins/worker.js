@@ -63,8 +63,7 @@ const setupSignals = ({ worker, logger }) => {
   // it not to pick up a new job when done with the current one
   process.on('SIGINT', () => {
     logger.warn(
-      { worker: process.title },
-      `SIGINT received at ${new Date().toISOString()}, finishing work...`,
+      `[${process.title}] SIGINT received at ${new Date().toISOString()}, finishing work...`,
     )
     worker.forever = false
   })
@@ -74,8 +73,7 @@ const setupSignals = ({ worker, logger }) => {
   // in
   process.on('SIGTERM', () => {
     logger.info(
-      { worker: process.title },
-      `SIGTERM received at ${new Date().toISOString()}, exiting now!`,
+      `[${process.title}] SIGTERM received at ${new Date().toISOString()}, exiting now!`,
     )
     process.exit(0)
   })
@@ -96,8 +94,7 @@ const main = async () => {
   }
 
   logger.info(
-    { worker: process.title },
-    `Starting work at ${new Date().toISOString()}...`,
+    `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
   const worker = new Worker({
@@ -110,7 +107,7 @@ const main = async () => {
   })
 
   worker.run().then(() => {
-    logger.info({ worker: process.title }, `Worker finished, shutting down.`)
+    logger.info(`[${process.title}] Worker finished, shutting down.`)
     process.exit(0)
   })
 
