@@ -140,7 +140,7 @@ export class PrismaAdapter extends BaseAdapter {
     // - have a runtAt in the past
     // - is either not locked, or was locked more than `maxRuntime` ago,
     //   or was already locked by this exact process and never cleaned up
-    // - and don't have a failedAt, meaning we will stop retrying
+    // - and doesn't have a failedAt, meaning we will stop retrying
     const prismaWhere = {
       AND: [
         { runAt: { lte: new Date() } },
