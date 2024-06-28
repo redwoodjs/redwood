@@ -2,7 +2,9 @@
 
 import React from 'react'
 
-import { Helmet as HelmetHead } from 'react-helmet-async'
+import * as helmetPkg from 'react-helmet-async'
+
+const { Helmet: HelmetHead } = helmetPkg
 
 // Ideally we wouldn't include this for non experiment builds
 // But.... not worth the effort to remove it from bundle atm

@@ -91,7 +91,7 @@ export const notes = [
   "You'll need to let Redwood know what fields you're using for your",
   "users' `id` and `username` fields. In this case we're using `id` and",
   '`email`, so update those in the `authFields` config in',
-  `\`${functionsPath}/auth.js\` (this is also the place to tell Redwood if`,
+  `\`${functionsPath}/auth.js\`. This is also the place to tell Redwood if`,
   'you used a different name for the `hashedPassword`, `salt`,',
   '`resetToken` or `resetTokenExpiresAt`, fields:`',
   '',

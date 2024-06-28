@@ -57,4 +57,4 @@ class FatalErrorBoundary extends React.Component<
   }
 }
 
-export default FatalErrorBoundary
+export { FatalErrorBoundary }

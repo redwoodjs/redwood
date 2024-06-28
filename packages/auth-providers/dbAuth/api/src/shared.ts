@@ -259,33 +259,53 @@ export const cookieName = (name: string | undefined) => {
 }
 
 /**
- * Returns a lambda response!
+ * Returns a builder for a lambda response
  *
- * This is used as the final call to return a response from the handler.
+ * This is used as the final call to return a response from the dbAuth handler
  *
- * Converts "Set-Cookie" headers to an array of strings.
+ * Converts "Set-Cookie" headers to an array of strings or a multiValueHeaders
+ * object
  */
-export const buildDbAuthResponse = (
-  response: {
-    body?: string
-    statusCode: number
-    headers?: Headers
-  },
-  corsHeaders: CorsHeaders,
-) => {
-  const setCookieHeaders = response.headers?.getSetCookie() || []
-
-  return {
-    ...response,
-    headers: {
-      ...Object.fromEntries(response.headers?.entries() || []),
-      ...(setCookieHeaders.length > 0
-        ? {
-            'set-cookie': setCookieHeaders,
-          }
-        : {}),
-      ...corsHeaders,
+export function getDbAuthResponseBuilder(
+  event: APIGatewayProxyEvent | Request,
+) {
+  return (
+    response: {
+      body?: string
+      statusCode: number
+      headers?: Headers
     },
+    corsHeaders: CorsHeaders,
+  ) => {
+    const headers: Record<string, string | Array<string>> = {
+      ...Object.fromEntries(response.headers?.entries() || []),
+      ...corsHeaders,
+    }
+
+    const dbAuthResponse: {
+      statusCode: number
+      headers: Record<string, string | Array<string>>
+      multiValueHeaders?: Record<string, Array<string>>
+      body?: string
+    } = {
+      ...response,
+      headers,
+    }
+
+    const setCookieHeaders = response.headers?.getSetCookie() || []
+
+    if (setCookieHeaders.length > 0) {
+      if ('multiValueHeaders' in event) {
+        dbAuthResponse.multiValueHeaders = {
+          'Set-Cookie': setCookieHeaders,
+        }
+        delete headers['set-cookie']
+      } else {
+        headers['set-cookie'] = setCookieHeaders
+      }
+    }
+
+    return dbAuthResponse
   }
 }
 
