@@ -26,10 +26,11 @@ export const loadAdapter = async () => {
 }
 
 export const loadLogger = async () => {
-  // try {
-  const { default: loggerModule } = await import(getPaths().api.logger)
-  return loggerModule.logger
-  // } catch (e) {
-  //   // import didn't work for whatever reason, fall back to console
-  // }
+  try {
+    const { default: loggerModule } = await import(getPaths().api.logger)
+    return loggerModule.logger
+  } catch (e) {
+    // import didn't work for whatever reason, fall back to console
+    return console
+  }
 }
