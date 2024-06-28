@@ -2,6 +2,9 @@ import type _React from 'react'
 
 import type { DocumentNode } from 'graphql'
 
+// So that asset imports such as *.svg, *.jpg, etc. are typed
+import 'vite/client/index.d.ts'
+
 // These are the global types exposed to a user's project
 // For "internal" global types see ambient.d.ts
 

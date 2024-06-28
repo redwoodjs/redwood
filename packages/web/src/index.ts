@@ -1,7 +1,5 @@
 import './global.web-auto-imports.js'
 import './config.js'
-// Type declarations come from Vite, because we use the standard Vite way of doing types
-import 'vite/client'
 
 export { FatalErrorBoundary } from './components/FatalErrorBoundary.js'
 
