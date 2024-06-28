@@ -157,8 +157,9 @@ export default function redwoodPluginVite(): PluginOption[] {
         }),
       },
     }),
-    // Only include
-    {
+    // Only include the Buffer polyfill for non-rsc dev, for DevFatalErrorPage
+    // Including the polyfill plugin in any form in RSC breaks
+    !rscEnabled && {
       ...nodePolyfills({
         include: ['buffer'],
         globals: {
