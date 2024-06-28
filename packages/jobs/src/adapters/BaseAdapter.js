@@ -5,12 +5,14 @@
 // be used to configure your custom adapter. If `options.logger` is included
 // you can access it via `this.logger`
 
+import console from 'node:console'
+
 import { NotImplementedError } from '../core/errors'
 
 export class BaseAdapter {
   constructor(options) {
     this.options = options
-    this.logger = options?.logger
+    this.logger = options?.logger || console
   }
 
   schedule() {
@@ -31,9 +33,5 @@ export class BaseAdapter {
 
   failure() {
     throw new NotImplementedError('failure')
-  }
-
-  #log(message, { level = 'info' }) {
-    this.logger[level](message)
   }
 }
