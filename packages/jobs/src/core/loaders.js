@@ -1,5 +1,6 @@
 import console from 'node:console'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 import fg from 'fast-glob'
 
@@ -15,10 +16,16 @@ import {
 // TODO Don't use this in production, import from dist directly
 registerApiSideBabelHook()
 
+export function makeFilePath(path) {
+  return pathToFileURL(path).href
+}
+
 // Loads the exported adapter from the app's jobs config in api/src/lib/jobs.js
 export const loadAdapter = async () => {
   if (getPaths().api.jobs) {
-    const { default: jobsModule } = await import(getPaths().api.jobsConfig)
+    const { default: jobsModule } = await import(
+      makeFilePath(getPaths().api.jobsConfig)
+    )
     if (jobsModule.adapter) {
       return jobsModule.adapter
     } else {
@@ -32,7 +39,9 @@ export const loadAdapter = async () => {
 // Loads the logger from the app's filesystem in api/src/lib/logger.js
 export const loadLogger = async () => {
   try {
-    const { default: loggerModule } = await import(getPaths().api.logger)
+    const { default: loggerModule } = await import(
+      makeFilePath(getPaths().api.logger)
+    )
     return loggerModule.logger
   } catch (e) {
     return console
@@ -46,7 +55,7 @@ export const loadJob = async (name) => {
     throw new JobNotFoundError(name)
   }
   const { default: jobModule } = await import(
-    path.join(getPaths().api.jobs, files[0])
+    makeFilePath(path.join(getPaths().api.jobs, files[0]))
   )
   return jobModule
 }
