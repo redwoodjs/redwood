@@ -13,13 +13,12 @@ registerApiSideBabelHook()
 
 export const loadAdapter = async () => {
   if (getPaths().api.jobs) {
-    // try {
     const { default: jobsModule } = await import(getPaths().api.jobs)
-    return jobsModule.adapter
-    // } catch (e) {
-    //   // api/src/lib/jobs.js doesn't exist or doesn't export `adapter`
-    //   throw new AdapterNotFoundError()
-    // }
+    if (jobsModule.adapter) {
+      return jobsModule.adapter
+    } else {
+      throw new AdapterNotFoundError()
+    }
   } else {
     throw new JobsLibNotFoundError()
   }
