@@ -132,48 +132,64 @@ export class PrismaAdapter extends BaseAdapter {
     return 1000 * attempts ** 4
   }
 
-  // TODO can this be converted to use standard Prisma queries?
   async #sqliteFind({ processName, maxRuntime, queue }) {
-    const where = `
-      (
-        (
-          ${queue ? `queue = '${queue}' AND` : ''}
-          runAt <= ${new Date().getTime()} AND (
-            lockedAt IS NULL OR
-            lockedAt < ${new Date(new Date() - maxRuntime).getTime()}
-          ) OR lockedBy = '${processName}'
-        ) AND failedAt IS NULL
-      )
-    `
+    const maxRuntimeExpire = new Date(new Date() - maxRuntime)
 
-    // Find any jobs that should run now. Look for ones that:
+    // This query is gnarly but not so bad once you know what it's doing. For a
+    // job to match it must:
     // - have a runtAt in the past
-    // - and are either not locked, or were locked more than `maxRuntime` ago
-    // - or were already locked by this exact process and never cleaned up
+    // - is either not locked, or was locked more than `maxRuntime` ago,
+    //   or was already locked by this exact process and never cleaned up
     // - and don't have a failedAt, meaning we will stop retrying
-    let outstandingJobs = await this.db.$queryRawUnsafe(`
-        SELECT id, attempts
-        FROM   ${this.tableName}
-        WHERE  ${where}
-        ORDER BY priority ASC, runAt ASC
-        LIMIT 1;`)
+    const prismaWhere = {
+      AND: [
+        { runAt: { lte: new Date() } },
+        {
+          OR: [
+            { lockedAt: null },
+            {
+              lockedAt: {
+                lt: maxRuntimeExpire,
+              },
+            },
+            { lockedBy: processName },
+          ],
+        },
+        { failedAt: null },
+      ],
+    }
 
-    if (outstandingJobs.length) {
-      const id = outstandingJobs[0].id
+    // for some reason prisma doesn't like it's own `query: { not: null }`
+    // syntax, so only add the query condition if we're filtering by queue
+    if (queue) {
+      prismaWhere.AND.unshift({ queue })
+    }
 
+    // Find the next job that should run now
+    let job = await this.accessor.findFirst({
+      select: { id: true, attempts: true },
+      where: prismaWhere,
+      orderBy: [{ priority: 'asc' }, { runAt: 'asc' }],
+      take: 1,
+    })
+
+    if (job) {
       // If one was found, try to lock it by updating the record with the
       // same WHERE clause as above (if another locked in the meantime it won't
       // find any record to update)
-      const updatedCount = await this.db.$queryRawUnsafe(`
-          UPDATE  ${this.tableName}
-          SET     lockedAt = ${new Date().getTime()},
-                  lockedBy = '${processName}',
-                  attempts = ${outstandingJobs[0].attempts + 1}
-          WHERE   ${where} AND id = ${id};`)
+      prismaWhere.AND.push({ id: job.id })
+      const { count } = await this.accessor.updateMany({
+        where: prismaWhere,
+        data: {
+          lockedAt: new Date(),
+          lockedBy: processName,
+          attempts: job.attempts + 1,
+        },
+      })
 
       // Assuming the update worked, return the job
-      if (updatedCount) {
-        return this.accessor.findFirst({ where: { id } })
+      if (count) {
+        return this.accessor.findFirst({ where: { id: job.id } })
       }
     }
 
