@@ -12,7 +12,7 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
 
-import { loadLogger } from './shared'
+import { loadLogger } from '../core/loaders'
 
 loadEnvFiles()
 

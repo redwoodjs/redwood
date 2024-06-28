@@ -10,9 +10,8 @@ import yargs from 'yargs/yargs'
 import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
 
 loadEnvFiles()
+import { loadAdapter, loadLogger } from '../core/loaders'
 import { Worker } from '../core/Worker'
-
-import { loadAdapter, loadLogger } from './shared'
 
 const TITLE_PREFIX = `rw-job-worker`
 
