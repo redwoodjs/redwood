@@ -315,7 +315,7 @@ To generate the `src/graphql/possibleTypes` file, enable fragments in `redwood.t
 
 When using fragments with test or Storybook, it is important that you define your mock data correctly.
 
-By including the `__typename` and the GraphQL Type for the mocked data object, you ensure that Apollo Client will properly handle the information if using the cache or fragments.
+By including the `__typename` and the GraphQL Type for the mocked data object, you ensure that Apollo Client will handle the information when working with the cache or fragments.
 
 For example, consider the fragment `BookInfo` used by the query `GetBookDetails`.
 
@@ -360,7 +360,7 @@ To satisfy the query as well as the fragment needs your mock data should include
 ```ts
 export const standard = {
   book: {
-    __typename: 'Book',
+    __typename: 'Book' as const,
     id: 42,
     title: 'Ulysses',
     author: 'James Joyce',
@@ -369,7 +369,10 @@ export const standard = {
   }
 }
 ```
-
-:::tip important
 If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
+
+
+:::tip note
+
+The `__typename: 'Book' as const` ensures that `'Book'` is considered to be a `type` and not a `string`.
 :::
