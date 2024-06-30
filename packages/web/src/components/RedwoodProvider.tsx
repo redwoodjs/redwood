@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Helmet, HelmetProvider } from 'react-helmet-async'
+// @NOTE: Helmet is not used in SSR & RSC
+import * as helmetPkg from 'react-helmet-async'
+const { Helmet, HelmetProvider } = helmetPkg
 
 interface RedwoodProviderProps {
   children: React.ReactNode
@@ -21,8 +23,10 @@ export const RedwoodProvider = ({
     return ''
   }
 
-  // @TODO (STREAMING): We can remove Helmet, HelmetProvider
-  // Once we've migrated to using the new PortalHead component
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    return <>{children}</>
+  }
+
   return (
     <HelmetProvider context={globalThis.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>

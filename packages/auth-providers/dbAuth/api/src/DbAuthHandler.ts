@@ -25,12 +25,12 @@ import {
 
 import * as DbAuthError from './errors'
 import {
-  buildDbAuthResponse,
   cookieName,
   decryptSession,
   encryptSession,
   extractCookie,
   extractHashingOptions,
+  getDbAuthResponseBuilder,
   getSession,
   hashPassword,
   hashToken,
@@ -303,6 +303,7 @@ type Params = AuthenticationResponseJSON &
   }
 
 type DbAuthSession<T = unknown> = Record<string, T>
+type CorsHeaders = Record<string, string>
 
 const DEFAULT_ALLOWED_USER_FIELDS = ['id', 'email']
 
@@ -326,12 +327,25 @@ export class DbAuthHandler<
   sessionExpiresDate: string
   webAuthnExpiresDate: string
   encryptedSession: string | null = null
+  createResponse: (
+    response: {
+      body?: string
+      statusCode: number
+      headers?: Headers
+    },
+    corsHeaders: CorsHeaders,
+  ) => {
+    headers: Record<string, string | string[]>
+    body?: string | undefined
+    statusCode: number
+  }
 
   public get normalizedRequest() {
     if (!this._normalizedRequest) {
       // This is a dev time error, no need to throw a specialized error
       throw new Error(
-        'dbAuthHandler has not been initialised. Either await dbAuthHandler.invoke() or call await dbAuth.init()',
+        'dbAuthHandler has not been initialized. Either await ' +
+          'dbAuthHandler.invoke() or call await dbAuth.init()',
       )
     }
     return this._normalizedRequest
@@ -426,6 +440,8 @@ export class DbAuthHandler<
 
     this.cookie = extractCookie(event) || ''
 
+    this.createResponse = getDbAuthResponseBuilder(event)
+
     this._validateOptions()
 
     this.db = this.options.db
@@ -494,14 +510,14 @@ export class DbAuthHandler<
       corsHeaders = this.corsContext.getRequestHeaders(this.normalizedRequest)
       // Return CORS headers for OPTIONS requests
       if (this.corsContext.shouldHandleCors(this.normalizedRequest)) {
-        return buildDbAuthResponse({ body: '', statusCode: 200 }, corsHeaders)
+        return this.createResponse({ body: '', statusCode: 200 }, corsHeaders)
       }
     }
 
     // if there was a problem decryption the session, just return the logout
     // response immediately
     if (this.hasInvalidSession) {
-      return buildDbAuthResponse(
+      return this.createResponse(
         this._ok(...this._logoutResponse()),
         corsHeaders,
       )
@@ -512,24 +528,24 @@ export class DbAuthHandler<
 
       // get the auth method the incoming request is trying to call
       if (!DbAuthHandler.METHODS.includes(method)) {
-        return buildDbAuthResponse(this._notFound(), corsHeaders)
+        return this.createResponse(this._notFound(), corsHeaders)
       }
 
       // make sure it's using the correct verb, GET vs POST
       if (this.httpMethod !== DbAuthHandler.VERBS[method]) {
-        return buildDbAuthResponse(this._notFound(), corsHeaders)
+        return this.createResponse(this._notFound(), corsHeaders)
       }
 
       // call whatever auth method was requested and return the body and headers
       const [body, headers, options = { statusCode: 200 }] =
         await this[method]()
 
-      return buildDbAuthResponse(this._ok(body, headers, options), corsHeaders)
+      return this.createResponse(this._ok(body, headers, options), corsHeaders)
     } catch (e: any) {
       if (e instanceof DbAuthError.WrongVerbError) {
-        return buildDbAuthResponse(this._notFound(), corsHeaders)
+        return this.createResponse(this._notFound(), corsHeaders)
       } else {
-        return buildDbAuthResponse(
+        return this.createResponse(
           this._badRequest(e.message || e),
           corsHeaders,
         )
