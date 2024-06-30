@@ -18,6 +18,18 @@ export function builder(yargs: yargs.Argv) {
       description: 'Include WebAuthn support (TouchID/FaceID)',
       type: 'boolean',
     })
+    .option('createUserModel', {
+      alias: 'u',
+      default: null,
+      description: 'Create a User database model',
+      type: 'boolean',
+    })
+    .option('generateAuthPages', {
+      alias: 'g',
+      default: null,
+      description: 'Generate auth pages (login, signup, etc.)',
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
@@ -27,7 +39,9 @@ export function builder(yargs: yargs.Argv) {
 }
 
 export interface Args {
-  webauthn: boolean
+  webauthn: boolean | null
+  createUserModel: boolean | null
+  generateAuthPages: boolean | null
   force: boolean
 }
 

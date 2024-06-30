@@ -44,7 +44,7 @@ export const standardAuthBuilder = (yargs: Argv) => {
     )
 }
 
-interface Args {
+export interface AuthHandlerArgs {
   basedir: string
   forceArg: boolean
   provider: string
@@ -52,7 +52,7 @@ interface Args {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTasks?: ListrTask<AuthGeneratorCtx>[]
+  extraTasks?: Array<ListrTask<AuthGeneratorCtx> | undefined>
   notes?: string[]
   verbose?: boolean
 }
@@ -79,7 +79,7 @@ export const standardAuthHandler = async ({
   extraTasks,
   notes,
   verbose,
-}: Args) => {
+}: AuthHandlerArgs) => {
   // @TODO detect if auth already setup. If it is, ask how to proceed:
   // How would you like to proceed?
   // 1. Replace existing auth provider with <provider>
@@ -98,7 +98,7 @@ export const standardAuthHandler = async ({
       webPackages.length && addWebPackages(webPackages),
       apiPackages.length && addApiPackages(apiPackages),
       (webPackages.length || apiPackages.length) && installPackages,
-      ...(extraTasks || []),
+      ...(extraTasks || []).filter(truthy),
       notes && {
         title: 'One more thing...',
         task: (ctx: AuthGeneratorCtx) => {
@@ -138,6 +138,7 @@ export const standardAuthHandler = async ({
       ctx: {
         setupMode: 'UNKNOWN',
         provider, // provider name passed from CLI
+        force: forceArg,
       },
     },
   )

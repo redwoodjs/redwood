@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { fragmentRegistry } from '../../apollo/fragmentRegistry.js'
 import { getOperationName } from '../../graphql.js'
 /**

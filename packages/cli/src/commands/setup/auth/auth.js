@@ -97,12 +97,25 @@ export async function builder(yargs) {
       'dbAuth',
       'Set up auth for dbAuth',
       (yargs) => {
-        return standardAuthBuilder(yargs).option('webauthn', {
-          alias: 'w',
-          default: null,
-          description: 'Include WebAuthn support (TouchID/FaceID)',
-          type: 'boolean',
-        })
+        return standardAuthBuilder(yargs)
+          .option('webauthn', {
+            alias: 'w',
+            default: null,
+            description: 'Include WebAuthn support (TouchID/FaceID)',
+            type: 'boolean',
+          })
+          .option('createUserModel', {
+            alias: 'u',
+            default: null,
+            description: 'Create a User database model',
+            type: 'boolean',
+          })
+          .option('generateAuthPages', {
+            alias: 'g',
+            default: null,
+            description: 'Generate auth pages (login, signup, etc.)',
+            type: 'boolean',
+          })
       },
       async (args) => {
         recordTelemetryAttributes({

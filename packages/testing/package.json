@@ -36,7 +36,7 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@testing-library/jest-dom": "6.4.5",
+    "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/aws-lambda": "8.10.138",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "jsdom": "24.0.0",
+    "jsdom": "24.1.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

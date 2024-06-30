@@ -37,16 +37,16 @@
     "listr2": "6.6.1",
     "lodash": "4.17.21",
     "pascalcase": "1.0.0",
-    "prettier": "3.2.5",
+    "prettier": "3.3.2",
     "prompts": "2.4.2",
-    "smol-toml": "1.2.1",
+    "smol-toml": "1.2.2",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
     "@types/lodash": "4.17.5",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.10.3",
+    "tsx": "4.15.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

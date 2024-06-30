@@ -1,7 +1,7 @@
 // These are normally auto-imported by babel
 import React from 'react'
 
-import gql from 'graphql-tag'
+import { gql } from 'graphql-tag'
 import { describe, expect, test } from 'tstyche'
 
 import type { CellProps, CellSuccessProps } from '@redwoodjs/web'

@@ -5,7 +5,7 @@ import { print } from 'graphql'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 // @MARK: have to do this, otherwise rwjs/web is loaded before shims
-import { getOperationName } from '@redwoodjs/web/dist/graphql'
+import { getOperationName } from '@redwoodjs/web/dist/graphql.js'
 
 import { GqlHandlerImportError } from '../errors'
 
