@@ -167,7 +167,7 @@ If you'd like to customize the message when a query is not permitted, you can se
   }
 ```
 
-You can also return a function that returns a GraphQLError.
+You can also define a function to returns a `GraphQLError`. This function has access to the `payload`.
 
 ```ts
   trustedDocuments: {
@@ -181,10 +181,10 @@ You can also return a function that returns a GraphQLError.
   }
 ```
 
-In addition to the `persistedQueryOnly` you can define error message for:
+In addition to the `persistedQueryOnly` custom error option, you can define error message for:
 
-  * notFound - Error to be thrown when the persisted operation is not found
-  * keyNotFound - Error to be thrown when the extraction of the persisted operation id failed
+  * `notFound` - Error to be thrown when the persisted operation is not found
+  * `keyNotFound` - Error to be thrown when the extraction of the persisted operation id failed
 
 
 #### Skipping validation of persisted operations
@@ -212,7 +212,7 @@ Even if you define `allowArbitraryOperations` the plugin will always check for t
 This can be achieved using the `allowArbitraryOperations` option.
 
 :::warning Important
-Use this option with caution! 
+Override this option with caution! 
 :::
 
 For example:
