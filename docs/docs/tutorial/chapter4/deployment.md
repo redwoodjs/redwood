@@ -53,7 +53,7 @@ Copy the URL from the output and open it in your browser:
 
 ## What just happened?
 
-Grove collected all the code for your app and sent it to a "builder" container to actually build the app. It created a database and replaced your `DATABASE_URL` connection string with an instance of SQLite running internally. It transfered the built to a "runner" container and connected to the internet at the funny URL above!
+Grove collected all the code for your app and sent it to a "builder" container to actually build the app. It created a database and replaced your `DATABASE_URL` connection string with an instance of SQLite running internally. It transfered the built RedwoodJS app to a "runner" container and connected it to the internet at the funny URL above!
 
 ## Claiming Your App
 
