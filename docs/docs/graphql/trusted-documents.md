@@ -215,10 +215,11 @@ This can be achieved using the `allowArbitraryOperations` option.
 Override this option with caution! 
 :::
 
-For example:
+For example, you can get a header from the request and allow:
+
 ```ts
-allowArbitraryOperations: request =>
-    request.headers.request.headers.get('x-allow-arbitrary-operations') === 'true'
-})
+allowArbitraryOperations: (request) =>  {
+    return request.headers.get('x-allow-arbitrary-operations') === 'true'
+} 
 ```
 
