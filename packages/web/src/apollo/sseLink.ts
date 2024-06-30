@@ -5,7 +5,7 @@ import { ApolloLink } from '@apollo/client/link/core/core.cjs'
 // @ts-expect-error Force import cjs module
 import { Observable } from '@apollo/client/utilities/utilities.cjs'
 import { print } from 'graphql'
-import type { ClientOptions, Client, Sink } from 'graphql-sse'
+import type { ClientOptions, Client, RequestParams, Sink } from 'graphql-sse'
 import { createClient } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
   url: string
@@ -60,6 +60,12 @@ const mapReferrerPolicyHeader = (
   }
 }
 
+// Check if the operation has a persisted query (aka trusted document)
+// by checking if the operation has an `extensions` property and if it has a `persistedQuery` property.
+const hasTrustedDocument = (operation: Operation) => {
+  return operation.extensions?.persistedQuery?.sha256Hash
+}
+
 /**
  * GraphQL over Server-Sent Events (SSE) spec link for Apollo Client
  */
@@ -94,16 +100,29 @@ class SSELink extends ApolloLink {
     })
   }
 
-  public request(operation: Operation): Observable<FetchResult> {
+  public request(
+    operation: Operation & { query?: any },
+  ): Observable<FetchResult> {
     return new Observable((sink: Sink) => {
-      return this.client.subscribe<FetchResult>(
-        { ...operation, query: print(operation.query) },
-        {
-          next: sink.next.bind(sink),
-          complete: sink.complete.bind(sink),
-          error: sink.error.bind(sink),
-        },
-      )
+      let request: RequestParams
+
+      // If the operation has a persisted query (aka trusted document),
+      // we don't need to send the query as a string.
+      if (hasTrustedDocument(operation)) {
+        delete operation.query
+        request = { ...operation }
+      } else {
+        request = {
+          ...operation,
+          query: print(operation.query),
+        }
+      }
+
+      return this.client.subscribe<FetchResult>(request, {
+        next: sink.next.bind(sink),
+        complete: sink.complete.bind(sink),
+        error: sink.error.bind(sink),
+      })
     })
   }
 }
