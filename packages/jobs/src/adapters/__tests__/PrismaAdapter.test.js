@@ -9,47 +9,6 @@ import {
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
-// test data
-// export const standard = defineScenario({
-//   backgroundJob: {
-//     email: {
-//       data: {
-//         id: 1,
-//         handler: JSON.stringify({ handler: 'EmailJob', args: [123] }),
-//         queue: 'email',
-//         priority: 50,
-//         runAt: '2021-04-30T15:35:19Z',
-//       },
-//     },
-
-//     multipleAttempts: {
-//       data: {
-//         id: 2,
-//         attempts: 10,
-//         handler: JSON.stringify({ handler: 'TestJob', args: [123] }),
-//         queue: 'default',
-//         priority: 50,
-//         runAt: '2021-04-30T15:35:19Z',
-//       },
-//     },
-
-//     maxAttempts: {
-//       data: {
-//         id: 3,
-//         attempts: 24,
-//         handler: JSON.stringify({ handler: 'TestJob', args: [123] }),
-//         queue: 'default',
-//         priority: 50,
-//         runAt: '2021-04-30T15:35:19Z',
-//       },
-//     },
-//   },
-// })
-
-// test('truth', () => {
-//   expect(true)
-// })
-
 let mockDb
 
 beforeEach(() => {
@@ -63,6 +22,7 @@ beforeEach(() => {
       },
     },
     backgroundJob: {
+      create: vi.fn(),
       delete: vi.fn(),
       deleteMany: vi.fn(),
       findFirst: vi.fn(),
@@ -154,14 +114,12 @@ describe('constructor', () => {
   })
 })
 
-describe.skip('schedule()', () => {
-  afterEach(async () => {
-    await db.backgroundJob.deleteMany()
-  })
-
-  test('creates a job in the DB', async () => {
+describe('schedule()', () => {
+  test('creates a job in the DB with required data', async () => {
+    const createSpy = vi
+      .spyOn(mockDb.backgroundJob, 'create')
+      .mockReturnValue({ id: 1 })
     const adapter = new PrismaAdapter({ db: mockDb })
-    const beforeJobCount = await db.backgroundJob.count()
     await adapter.schedule({
       handler: 'RedwoodJob',
       args: ['foo', 'bar'],
@@ -169,73 +127,22 @@ describe.skip('schedule()', () => {
       priority: 50,
       runAt: new Date(),
     })
-    const afterJobCount = await db.backgroundJob.count()
 
-    expect(afterJobCount).toEqual(beforeJobCount + 1)
-  })
-
-  test('returns the job record that was created', async () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
-    const job = await adapter.schedule({
-      handler: 'RedwoodJob',
-      args: ['foo', 'bar'],
-      queue: 'default',
-      priority: 50,
-      runAt: new Date(),
+    expect(createSpy).toHaveBeenCalledWith({
+      data: {
+        handler: JSON.stringify({
+          handler: 'RedwoodJob',
+          args: ['foo', 'bar'],
+        }),
+        priority: 50,
+        queue: 'default',
+        runAt: new Date(),
+      },
     })
-
-    expect(job.handler).toEqual('{"handler":"RedwoodJob","args":["foo","bar"]}')
-    expect(job.runAt).toEqual(new Date())
-    expect(job.queue).toEqual('default')
-    expect(job.priority).toEqual(50)
-  })
-
-  test('makes no attempt to de-dupe jobs', async () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
-    const job1 = await adapter.schedule({
-      handler: 'RedwoodJob',
-      args: ['foo', 'bar'],
-      queue: 'default',
-      priority: 50,
-      runAt: new Date(),
-    })
-    const job2 = await adapter.schedule({
-      handler: 'RedwoodJob',
-      args: ['foo', 'bar'],
-      queue: 'default',
-      priority: 50,
-      runAt: new Date(),
-    })
-
-    // definitely a different record in the DB
-    expect(job1.id).not.toEqual(job2.id)
-    // but all details are identical
-    expect(job1.handler).toEqual(job2.handler)
-    expect(job1.queue).toEqual(job2.queue)
-    expect(job1.priority).toEqual(job2.priority)
-  })
-
-  test('defaults some database fields', async () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
-    const job = await adapter.schedule({
-      handler: 'RedwoodJob',
-      args: ['foo', 'bar'],
-      queue: 'default',
-      priority: 50,
-      runAt: new Date(),
-    })
-
-    expect(job.attempts).toEqual(0)
-    expect(job.lockedAt).toBeNull()
-    expect(job.lockedBy).toBeNull()
-    expect(job.lastError).toBeNull()
-    expect(job.failedAt).toBeNull()
   })
 })
 
 describe('find()', () => {
-  // TODO add more tests for all the various WHERE conditions when finding a job
-
   test('returns null if no job found', async () => {
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(null)
     const adapter = new PrismaAdapter({ db: mockDb })
