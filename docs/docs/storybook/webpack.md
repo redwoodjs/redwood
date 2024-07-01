@@ -6,7 +6,9 @@ description: Older version of Storybook integration; uses Webpack
 
 These docs are for the original Storybook integration, which uses Webpack and stores its config files in the framework.
 
-If you're still using this, please consider upgrading to the our latest Storybook integration, which uses Vite. This comes with two primary advantages:
+> If you're still using this, please consider upgrading to the our latest Storybook integration, which uses Vite. This comes with two primary advantages:
+> - Storybook is now much faster: [Storybook Performance: Vite vs Webpack 4](https://storybook.js.org/blog/storybook-performance-from-webpack-to-vite/)
+> - You get full ownership over your Storybook config!
 - Storybook is now much faster: [Storybook Performance: Vite vs Webpack 4](https://storybook.js.org/blog/storybook-performance-from-webpack-to-vite/)
 - You get full ownership over your Storybook config!
 
