@@ -32,7 +32,7 @@ Once Storybook is all set up, it'll spin up on port `7910`.
 
 ## Migrating from Storybook Webpack to Storybook Vite
 
-If you don't have any of your own [Storybook configuration](https://redwoodjs.com/docs/storybook#configuring-storybook), you should be good to go. The Out of Box experience should be the same, and please [let us know](https://github.com/redwoodjs/redwood/issues/new?assignees=&labels=bug%2Fneeds-info&projects=&template=bug-report.yml&title=%5BBug%3F%5D%3A+) if you run into any issues.
+If you don't have any of your own [Storybook configuration](https://redwoodjs.com/docs/storybook#configuring-storybook), you should be good to go - no changes needed. The Out of Box experience should be the same, and please [let us know](https://github.com/redwoodjs/redwood/issues/new?assignees=&labels=bug%2Fneeds-info&projects=&template=bug-report.yml&title=%5BBug%3F%5D%3A+) if you run into any issues.
 
 If you do have custom Storybook configuration, then you'll need to manually migrate it over to the new files. For example, if you've got any global decorators, you can now just follow the official Storybook docs on that: https://storybook.js.org/docs/writing-stories/decorators#global-decorators
 
