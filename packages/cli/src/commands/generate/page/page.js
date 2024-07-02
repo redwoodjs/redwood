@@ -237,6 +237,7 @@ export const handler = async ({
             stories,
             typescript,
             ...paramVariants(path),
+            rscEnabled: getConfig().experimental?.rsc?.enabled,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
