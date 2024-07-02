@@ -5,17 +5,18 @@
 
 import React, { forwardRef } from 'react'
 
-import { navigate } from './history'
+import { NavigateOptions, navigate } from './history'
 
 export interface LinkProps {
   to: string
   onClick?: React.MouseEventHandler<HTMLAnchorElement>
+  options?: NavigateOptions
 }
 
 export const Link = forwardRef<
   HTMLAnchorElement,
   LinkProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ to, onClick, ...rest }, ref) => (
+>(({ to, onClick, options, ...rest }, ref) => (
   <a
     href={to}
     ref={ref}
@@ -36,10 +37,10 @@ export const Link = forwardRef<
       if (onClick) {
         const result = onClick(event)
         if (typeof result !== 'boolean' || result) {
-          navigate(to)
+          navigate(to, options)
         }
       } else {
-        navigate(to)
+        navigate(to, options)
       }
     }}
   />
