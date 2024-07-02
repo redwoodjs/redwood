@@ -17,7 +17,7 @@ import { loadLogger } from '../core/loaders'
 
 loadEnvFiles()
 
-process.title = 'rw-job-runner'
+process.title = 'rw-jobs'
 
 const parseArgs = (argv) => {
   const parsed = yargs(hideBin(argv))
@@ -132,7 +132,7 @@ const startWorkers = ({
 
     // fork the worker process
     // TODO squiggles under __dirname, but import.meta.dirname blows up when running the process
-    const worker = fork(path.join(__dirname, 'worker.js'), workerArgs, {
+    const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
     })
@@ -214,7 +214,7 @@ const stopWorkers = async ({ workerConfig, signal = 'SIGINT', logger }) => {
   )
 
   for (const [queue, id] of workerConfig) {
-    const workerTitle = `rw-job-worker${queue ? `.${queue}` : ''}.${id}`
+    const workerTitle = `rw-jobs-worker${queue ? `.${queue}` : ''}.${id}`
     const processId = await findProcessId(workerTitle)
 
     if (!processId) {

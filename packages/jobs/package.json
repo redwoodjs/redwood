@@ -13,7 +13,8 @@
     "dist"
   ],
   "bin": {
-    "rw-jobs": "./dist/bins/runner.js"
+    "rw-jobs": "./dist/bins/rw-jobs.js",
+    "rw-jobs-worker": "./dist/bins/rw-jobs-worker.js"
   },
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",

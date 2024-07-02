@@ -10,7 +10,7 @@ import yargs from 'yargs/yargs'
 import { loadAdapter, loadLogger } from '../core/loaders'
 import { Worker } from '../core/Worker'
 
-const TITLE_PREFIX = `rw-job-worker`
+const TITLE_PREFIX = `rw-jobs-worker`
 
 const parseArgs = (argv) => {
   return yargs(hideBin(argv))
