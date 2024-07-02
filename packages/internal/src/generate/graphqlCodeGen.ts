@@ -17,6 +17,7 @@ import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
 import type { DocumentNode } from 'graphql'
 
+import type { Config } from '@redwoodjs/project-config'
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
@@ -32,11 +33,19 @@ type TypeDefResult = {
   errors: { message: string; error: unknown }[]
 }
 
-export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
-  const config = getConfig()
+export const generateTypeDefGraphQLApi = async (
+  config?: Config,
+): Promise<TypeDefResult> => {
+  const appConfig = config || getConfig()
+  if (appConfig.typegen.graphql.includes('api')) {
+    return {
+      typeDefFiles: [],
+      errors: [],
+    }
+  }
   const errors: { message: string; error: unknown }[] = []
 
-  if (config.experimental.useSDLCodeGenForGraphQLTypes) {
+  if (appConfig.experimental.useSDLCodeGenForGraphQLTypes) {
     const paths = getPaths()
     const sdlCodegen = await import('@sdl-codegen/node')
 
@@ -114,7 +123,17 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
   }
 }
 
-export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
+export const generateTypeDefGraphQLWeb = async (
+  config?: Config,
+): Promise<TypeDefResult> => {
+  const appConfig = config || getConfig()
+  if (!appConfig.typegen.graphql.includes('web')) {
+    return {
+      typeDefFiles: [],
+      errors: [],
+    }
+  }
+
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'

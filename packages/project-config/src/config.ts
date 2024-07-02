@@ -123,6 +123,9 @@ export interface Config {
       lintOnly: boolean
     }
   }
+  typegen: {
+    graphql: Array<'web' | 'api'>
+  }
 }
 
 export interface CLIPlugin {
@@ -210,6 +213,9 @@ const DEFAULT_CONFIG: Config = {
       enabled: false,
       lintOnly: false,
     },
+  },
+  typegen: {
+    graphql: ['web', 'api'],
   },
 }
 

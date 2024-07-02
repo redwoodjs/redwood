@@ -149,6 +149,24 @@ And if you're on an experimental release line, like canary, there's new versions
 
 If you'd like to get notified (at most, once a day) when there's a new version, set `versionUpdates` to include the version tags you're interested in.
 
+## [typegen]
+
+By default Redwood generates types for both the web and api side, if you would like to disable one of these sides - you can do so by changing the `graphql` array in `[typegen]`
+
+The default settings are: 
+
+```toml title="redwood.toml"
+[typegen]
+    graphql = ['web', 'api']
+```
+
+For example if you would like to remove the types for the api side you can do so by changing the `graphql` array to:
+
+```toml title="redwood.toml"
+[typegen]
+    graphql = ['web']
+```
+
 ## Using Environment Variables in `redwood.toml`
 
 You may find yourself wanting to change keys in `redwood.toml` based on the environment you're deploying to.

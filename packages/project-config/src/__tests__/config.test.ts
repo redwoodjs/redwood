@@ -100,6 +100,12 @@ describe('getConfig', () => {
             },
           },
         },
+        "typegen": {
+          "graphql": [
+            "web",
+            "api",
+          ],
+        },
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
