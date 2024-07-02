@@ -1,19 +1,16 @@
 ---
-description: A component-driven development workflow
+description: Older version of Storybook integration; uses Webpack
 ---
 
-# Storybook
+# Storybook Webpack
 
-Storybook enables a kind of frontend-first, component-driven development workflow that we've always wanted.
-By developing your UI components in isolation, you get to focus exclusively on your UI's needs,
-saving you from getting too caught up in the details of your API too early.
+These docs are for the original Storybook integration, which uses Webpack and stores its config files in the framework.
 
-Storybook also makes debugging a lot easier.
-You don't have to start the dev server, login as a user, tab through dropdowns, and click buttons just for that one bug to show up.
-Or render a whole page and make six GraphQL calls just to change the color of a modal.
-You can set it all up as a story, tweak it there as you see fit, and even test it for good measure.
+> If you're still using this, please consider upgrading to the our latest Storybook integration, which uses Vite. This comes with two primary advantages:
+> - Storybook is now much faster: [Storybook Performance: Vite vs Webpack 4](https://storybook.js.org/blog/storybook-performance-from-webpack-to-vite/)
+> - You get full ownership over your Storybook config!
 
-## Getting Started with Storybook
+## Getting Started with Storybook Webpack
 
 You can start Storybook with `yarn rw storybook`:
 
@@ -25,7 +22,7 @@ If this is your first time running Storybook, the Redwood CLI will install it.
 From then on, you can run it straightaway.
 Once Storybook is installed, it'll spin up on port `7910`.
 
-## Configuring Storybook
+## Configuring Storybook Webpack
 
 You only have to configure Storybook if you want to extend Redwood's default configuration, which handles things like how to find stories, configuring Webpack, starting Mock Service Worker, etc.
 
