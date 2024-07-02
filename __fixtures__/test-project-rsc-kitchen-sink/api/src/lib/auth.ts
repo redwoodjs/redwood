@@ -10,6 +10,8 @@ import { db } from './db'
  * If you have multiple RW apps running on the same host, you'll need to
  * make sure they all use unique cookie names
  */
+// TODO (RSC): The cookie name should be 'session_%port%' but for some reason
+// that's not working
 export const cookieName = 'session_port'
 
 /**
