@@ -4,6 +4,7 @@ import path from 'node:path'
 import type { ExecaError } from 'execa'
 import execa from 'execa'
 
+import { isTypeScriptProject, transformTSToJS } from '@redwoodjs/cli-helpers'
 import { getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -75,27 +76,43 @@ export async function handler({
     execaOptions,
   )
 
+  const usingTS = isTypeScriptProject()
+  const mainFileName = usingTS ? 'main.ts' : 'main.js'
+
   const redwoodProjectPaths = getPaths()
   const storybookConfigPath = path.dirname(
-    `${redwoodProjectPaths.web.storybook}/main.ts`,
+    `${redwoodProjectPaths.web.storybook}/${mainFileName}`,
   )
 
-  const storybookMainFilePath = path.join(storybookConfigPath, 'main.ts')
+  const storybookMainFilePath = path.join(storybookConfigPath, mainFileName)
   const storybookPreviewBodyFilePath = path.join(
     storybookConfigPath,
     'preview-body.html',
   )
 
   // Check if the config files exists yet. If they don't, create 'em!
+  // Because this path is dependent on whether the project is TS or JS, we
+  // check for the appropriate file extension. This means that if a user
+  // is using JS and switches to TS, we won't detect it and will create a new
+  // `main.ts` file.
   if (!fs.existsSync(storybookMainFilePath)) {
-    console.log("Storybook's main.ts not found. Creating it now...")
+    const isTSProject = isTypeScriptProject()
+    console.log(`Storybook's ${mainFileName} not found. Creating it now...`)
     const mainConfigTemplatePath = path.join(
       __dirname,
-      'templates/main.ts.template',
+      'templates/main.ts.template', // The template is TS, and we'll convert it to JS if needed
     )
-    const mainConfigContent = readFile(mainConfigTemplatePath)
-    writeFile(storybookMainFilePath, mainConfigContent)
-    console.log('main.ts created!')
+    const mainConfigContentTS = readFile(mainConfigTemplatePath)
+    if (isTSProject) {
+      writeFile(storybookMainFilePath, mainConfigContentTS)
+    } else {
+      const mainConfigContentJS = await transformTSToJS(
+        storybookMainFilePath,
+        mainConfigContentTS,
+      )
+      writeFile(storybookMainFilePath, mainConfigContentJS)
+    }
+    console.log(`${mainFileName} created!`)
   }
 
   if (!fs.existsSync(storybookPreviewBodyFilePath)) {
