@@ -12,6 +12,7 @@ vi.mock('fs', async (importOriginal) => {
     default: {
       ...originalFs,
       existsSync: (...args) => {
+        console.log('existsSync', args)
         if (mockFiles[args[0]]) {
           return true
         }
@@ -375,6 +376,10 @@ describe('handler', () => {
   afterEach(() => {
     console.info.mockRestore()
     console.log.mockRestore()
+
+    mockFiles = {
+      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
+    }
   })
 
   test('file generation', async () => {
@@ -393,6 +398,7 @@ describe('handler', () => {
         '',
         'export default Routes',
       ].join('\n'),
+      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
     }
 
     const spy = vi.spyOn(fs, 'writeFileSync')
@@ -438,6 +444,7 @@ describe('handler', () => {
         '',
         'export default Routes',
       ].join('\n'),
+      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
     }
 
     const spy = vi.spyOn(fs, 'writeFileSync')
