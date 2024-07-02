@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Css, Meta } from '@redwoodjs/web/htmlTags'
-
 import type { TagDescriptor } from '@redwoodjs/web/htmlTags'
 
 interface DocumentProps {
