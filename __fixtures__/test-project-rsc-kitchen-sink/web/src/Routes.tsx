@@ -17,9 +17,9 @@ import { Router } from '@redwoodjs/vite/Router'
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
 
-const Routes = ({ location }: { location?: any }) => {
+const Routes = () => {
   return (
-    <Router location={location}>
+    <Router>
       <Set wrap={NavigationLayout} rnd={0.7}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
