@@ -8,6 +8,33 @@ vi.mock('../../../../lib', async (importOriginal) => {
   }
 })
 
+vi.mock('fs', async (importOriginal) => {
+  const originalFs = await importOriginal()
+  const mockFiles = {
+    '/redwood.toml': '[web]\n  title = "Redwood App"\n',
+  }
+
+  return {
+    default: {
+      ...originalFs,
+      existsSync: (...args) => {
+        if (mockFiles[args[0]]) {
+          return true
+        }
+
+        return originalFs.existsSync.apply(null, args)
+      },
+      readFileSync: (path) => {
+        if (mockFiles[path]) {
+          return mockFiles[path]
+        }
+
+        return originalFs.readFileSync
+      },
+    },
+  }
+})
+
 import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'

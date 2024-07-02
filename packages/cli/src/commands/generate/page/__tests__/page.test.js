@@ -1,7 +1,33 @@
 globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
-let mockFiles = {}
+let mockFiles = {
+  '/redwood.toml': '[web]\n  title = "Redwood App"\n',
+}
+
+vi.mock('fs', async (importOriginal) => {
+  const originalFs = await importOriginal()
+
+  return {
+    default: {
+      ...originalFs,
+      existsSync: (...args) => {
+        if (mockFiles[args[0]]) {
+          return true
+        }
+
+        return originalFs.existsSync.apply(null, args)
+      },
+      readFileSync: (path) => {
+        if (mockFiles[path]) {
+          return mockFiles[path]
+        }
+
+        return originalFs.readFileSync
+      },
+    },
+  }
+})
 
 vi.mock('fs-extra', async (importOriginal) => {
   const originalFsExtra = await importOriginal()
