@@ -48,5 +48,15 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
         '~__REDWOOD__USER_WEB_SRC': redwoodProjectPaths.web.src,
       },
     },
+    optimizeDeps: {
+      // Without this, on first run, Vite throws: `The file does not exist at
+      // "{project path}/web/node_modules/.cache/sb-vite/deps/DocsRenderer-NNNQARDV-DEXCJJZJ.js?v=c640a8fa"
+      // which is in the optimize deps directory.`
+      // This refers to @storybook/addon-docs, which is included as part of @storybook/addon-essentials.
+      // the docs addon then includes itself here: https://github.com/storybookjs/storybook/blob/a496ec48c708eed753a5251d55fa07947a869e62/code/addons/docs/src/preset.ts#L198C3-L198C27
+      // which I believe gets included by the builder here: https://github.com/storybookjs/storybook/blob/a496ec48c708eed753a5251d55fa07947a869e62/code/builders/builder-vite/src/optimizeDeps.ts#L117
+      // TODO: Figure out why this error is being thrown so that this can be removed.
+      exclude: ['@storybook/addon-docs'],
+    },
   })
 }
