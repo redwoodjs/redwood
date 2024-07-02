@@ -14,6 +14,7 @@ concurrency:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
+  REPLAY_API_KEY: ${{ secrets.REPLAY_API_KEY || 'rwk_mRDHS8s5EA5SrID1k2Xqu5hKJumF8LzUTSItmLw9Cto' }}
 
 jobs:
   detect-changes:
