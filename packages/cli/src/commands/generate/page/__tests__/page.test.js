@@ -89,6 +89,14 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
     getConfig: () => ({}),
     ensurePosixPath: originalProjectConfig.ensurePosixPath,
     resolveFile: originalProjectConfig.resolveFile,
+  }
+})
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
     isTypeScriptProject: () => false,
   }
 })
