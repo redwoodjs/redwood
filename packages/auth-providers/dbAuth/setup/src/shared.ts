@@ -1,6 +1,7 @@
 import fs from 'node:fs'
+import path from 'node:path'
 
-import { getDMMF } from '@prisma/internals'
+import { getDMMF, getSchema } from '@prisma/internals'
 import execa from 'execa'
 
 import { getPaths } from '@redwoodjs/cli-helpers'
@@ -12,7 +13,14 @@ export const functionsPath = getPaths().api.functions.replace(
   '',
 )
 
-export async function hasModel(name: string) {
+export const getModelNames = async () => {
+  const datamodel = await getSchema(getPaths().api.dbSchema)
+  const schema = await getDMMF({ datamodel })
+
+  return schema.datamodel.models.map((model) => model.name)
+}
+
+export const hasModel = async (name: string) => {
   if (!name) {
     return false
   }
@@ -20,30 +28,23 @@ export async function hasModel(name: string) {
   // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
   // names
   const modelName = name.replace(/[_-]/g, '').toLowerCase()
+  const modelNames = (await getModelNames()).map((name) => name.toLowerCase())
 
-  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
-
-  for (const model of schema.datamodel.models) {
-    if (model.name.toLowerCase() === modelName) {
-      return true
-    }
+  if (modelNames.includes(modelName)) {
+    return true
   }
 
   return false
 }
 
-export async function getModelNames() {
-  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+export async function addModels(models: string) {
+  const isDirectory = fs.statSync(getPaths().api.dbSchema).isDirectory()
 
-  return schema.datamodel.models.map((model) => model.name)
-}
-
-export function addModels(models: string) {
-  const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
-
-  const schemaWithUser = schema + models
-
-  fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
+  if (isDirectory) {
+    fs.writeFileSync(path.join(getPaths().api.dbSchema, 'user.prisma'), models)
+  } else {
+    fs.appendFileSync(getPaths().api.dbSchema, models)
+  }
 }
 
 export function hasAuthPages() {

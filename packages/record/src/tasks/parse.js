@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getDMMF } from '@prisma/internals'
+import { getDMMF, getSchema } from '@prisma/internals'
 import * as esbuild from 'esbuild'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -28,16 +28,29 @@ let datamodel
 
 // parse datamodel and write out cache
 export const parseDatamodel = () => {
-  getDMMF({ datamodelPath: getPaths().api.dbSchema }).then((schema) => {
+  const schema = getSchema(getPaths().api.dbSchema)
+
+  getDMMF({ datamodel: schema }).then((schema) => {
     datamodel = schema.datamodel
-    fs.writeFileSync(
-      DATAMODEL_PATH,
-      esbuild.transformSync(JSON.stringify(datamodel, null, 2), {
-        loader: 'json',
-        format: 'cjs',
-      }).code,
-    )
-    console.info(`\n  Wrote ${DATAMODEL_PATH}`)
+
+    try {
+      // Ensure the directory exists
+      const dir = path.dirname(DATAMODEL_PATH)
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true })
+      }
+
+      fs.writeFileSync(
+        DATAMODEL_PATH,
+        esbuild.transformSync(JSON.stringify(datamodel, null, 2), {
+          loader: 'json',
+          format: 'cjs',
+        }).code,
+      )
+      console.info(`\n  Wrote ${DATAMODEL_PATH}`)
+    } catch (e) {
+      console.error('Error writing datamodel to', DATAMODEL_PATH)
+    }
 
     // figure out what model classes are present
     const modelNames = fs
@@ -48,6 +61,14 @@ export const parseDatamodel = () => {
         }
       })
       .filter((val) => val)
+
+    if (modelNames.length === 0) {
+      console.warn('No models found in', MODELS_PATH)
+      console.warn(
+        'Please create a model to represent the database table you want to access.',
+      )
+      return
+    }
 
     modelNames.forEach((modelName) => {
       // which other models this model requires
