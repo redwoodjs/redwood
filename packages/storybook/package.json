@@ -55,9 +55,9 @@
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
     "@redwoodjs/testing": "workspace:*",
     "@rollup/pluginutils": "^5.0.2",
-    "@storybook/addon-essentials": "7.6.17",
-    "@storybook/builder-vite": "7.6.17",
-    "@storybook/react": "7.6.17",
+    "@storybook/addon-essentials": "7.6.20",
+    "@storybook/builder-vite": "7.6.20",
+    "@storybook/react": "7.6.20",
     "magic-string": "^0.30.0",
     "react-docgen": "^7.0.0",
     "unplugin-auto-import": "^0.17.5"
@@ -73,7 +73,7 @@
     "@redwoodjs/router": "workspace:*",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "storybook": "7.6.17"
+    "storybook": "7.6.20"
   },
   "engines": {
     "node": "=20.x"
