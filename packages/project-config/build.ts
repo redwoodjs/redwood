@@ -9,7 +9,6 @@ await build({
     bundle: true,
     entryPoints: ['./src/index.ts'],
     format: 'esm',
-    outExtension: { '.js': '.mjs' },
     packages: 'external',
   },
 })
@@ -20,7 +19,6 @@ await build({
     ...defaultBuildOptions,
     bundle: true,
     entryPoints: ['./src/index.ts'],
-    outExtension: { '.js': '.cjs' },
     outdir: 'dist/cjs',
     packages: 'external',
   },
