@@ -1,9 +1,7 @@
 globalThis.__dirname = __dirname
 
 globalThis.mockFs = false
-let mockFiles = {
-  '/redwood.toml': '[web]\n  title = "Redwood App"\n',
-}
+let mockFiles = {}
 
 vi.mock('fs', async (importOriginal) => {
   const originalFs = await importOriginal()
@@ -70,8 +68,38 @@ import path from 'path'
 import fs from 'fs-extra'
 import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
 
-// Load mocks
-import '../../../../lib/test'
+import '../../../../lib/mockTelemetry'
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const path = require('path')
+  const originalProjectConfig = await importOriginal()
+  return {
+    getPaths: () => {
+      const BASE_PATH = '/path/to/project'
+
+      return {
+        base: BASE_PATH,
+        web: {
+          generators: path.join(BASE_PATH, './web/generators'),
+          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
+          pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+      }
+    },
+    getConfig: () => ({}),
+    ensurePosixPath: originalProjectConfig.ensurePosixPath,
+    resolveFile: originalProjectConfig.resolveFile,
+    isTypeScriptProject: () => false,
+  }
+})
+
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
+  return {
+    generate: () => {
+      return { errors: [] }
+    },
+  }
+})
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
@@ -376,10 +404,6 @@ describe('handler', () => {
   afterEach(() => {
     console.info.mockRestore()
     console.log.mockRestore()
-
-    mockFiles = {
-      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
-    }
   })
 
   test('file generation', async () => {
@@ -398,7 +422,6 @@ describe('handler', () => {
         '',
         'export default Routes',
       ].join('\n'),
-      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
     }
 
     const spy = vi.spyOn(fs, 'writeFileSync')
@@ -444,7 +467,6 @@ describe('handler', () => {
         '',
         'export default Routes',
       ].join('\n'),
-      '/redwood.toml': '[web]\n  title = "Redwood App"\n',
     }
 
     const spy = vi.spyOn(fs, 'writeFileSync')
