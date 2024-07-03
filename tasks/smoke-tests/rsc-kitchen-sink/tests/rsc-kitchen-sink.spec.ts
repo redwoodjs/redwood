@@ -1,5 +1,45 @@
 import { test, expect } from '@playwright/test'
 
+import { loginAsTestUser } from '../../shared/common'
+
+const testUser = {
+  email: 'testuser@bazinga.com',
+  password: 'test123',
+  fullName: 'Test User',
+}
+
+test.beforeAll(async ({ browser }) => {
+  const page = await browser.newPage()
+
+  // TODO (RSC): Use this helper when we have toasts working
+  // await signUpTestUser({ page, ...testUser })
+  await page.goto('/signup')
+
+  await page.getByLabel('Username').fill(testUser.email)
+  await page.getByLabel('Password').fill(testUser.password)
+  await page.getByLabel('Full Name').fill(testUser.fullName)
+
+  await page.getByRole('button', { name: 'Sign Up' }).click()
+
+  // Wait for either...
+  // - signup to succeed and redirect to the home page
+  // - an error message because of duplicate user id (e.g. email)
+  await Promise.race([
+    page.waitForURL('/'),
+    page.waitForResponse(async (response) => {
+      const body = await response.body()
+      return body.includes(`Username \`${testUser.email}\` already in use`)
+    }),
+  ])
+
+  await page.close()
+
+  const pageLogin = await browser.newPage()
+  await loginAsTestUser({ page: pageLogin, ...testUser })
+
+  await pageLogin.close()
+})
+
 test('Client components should work', async ({ page }) => {
   await page.goto('/')
 
