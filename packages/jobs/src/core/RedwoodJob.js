@@ -86,14 +86,14 @@ export class RedwoodJob {
 
   // Instance method to runs the job immediately in the current process
   //   const result = RedwoodJob.performNow('foo', 'bar')
-  async performNow(...args) {
+  performNow(...args) {
     this.logger.info(
       this.payload(args),
       `[RedwoodJob] Running ${this.constructor.name} now`,
     )
 
     try {
-      return await this.perform(...args)
+      return this.perform(...args)
     } catch (e) {
       if (e instanceof PerformNotImplementedError) {
         throw e
@@ -182,13 +182,13 @@ export class RedwoodJob {
 
   // Private, schedules a job with the appropriate adapter, returns whatever
   // the adapter returns in response to a successful schedule.
-  async #schedule(args) {
+  #schedule(args) {
     if (!this.constructor.adapter) {
       throw new AdapterNotConfiguredError()
     }
 
     try {
-      return await this.constructor.adapter.schedule(this.payload(args))
+      return this.constructor.adapter.schedule(this.payload(args))
     } catch (e) {
       throw new SchedulingError(
         `[RedwoodJob] Exception when scheduling ${this.constructor.name}`,

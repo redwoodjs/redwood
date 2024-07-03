@@ -161,7 +161,7 @@ export class PrismaAdapter extends BaseAdapter {
     return this.accessor.delete({ where: { id: job.id } })
   }
 
-  async failure(job, error) {
+  failure(job, error) {
     this.logger.debug(`Job ${job.id} failure`)
     const data = {
       lockedAt: null,
@@ -178,7 +178,7 @@ export class PrismaAdapter extends BaseAdapter {
       )
     }
 
-    return await this.accessor.update({
+    return this.accessor.update({
       where: { id: job.id },
       data,
     })

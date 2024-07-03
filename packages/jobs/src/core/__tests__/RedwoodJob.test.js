@@ -279,7 +279,7 @@ describe('instance performLater()', () => {
 
     const job = new RedwoodJob()
 
-    await expect(job.performLater('foo', 'bar')).rejects.toThrow(
+    expect(() => job.performLater('foo', 'bar')).toThrow(
       errors.AdapterNotConfiguredError,
     )
   })
@@ -402,7 +402,7 @@ describe('instance performNow()', () => {
     class TestJob extends RedwoodJob {}
     const job = new TestJob()
 
-    await expect(job.performNow('foo', 'bar')).rejects.toThrow(
+    expect(() => job.performNow('foo', 'bar')).toThrow(
       errors.PerformNotImplementedError,
     )
   })
@@ -461,7 +461,7 @@ describe('instance performNow()', () => {
 
   test('catches any errors thrown during perform and throws custom error', async () => {
     class TestJob extends RedwoodJob {
-      async perform() {
+      perform() {
         throw new Error('Could not perform')
       }
     }
@@ -473,7 +473,7 @@ describe('instance performNow()', () => {
     RedwoodJob.config({ adapter: mockAdapter })
 
     try {
-      await new TestJob().performNow('foo', 'bar')
+      new TestJob().performNow('foo', 'bar')
     } catch (e) {
       expect(e).toBeInstanceOf(errors.PerformError)
       expect(e.message).toEqual('[TestJob] exception when running job')
