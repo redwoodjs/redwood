@@ -17,7 +17,6 @@ test.beforeAll(async ({ browser }) => {
 
   await page.getByLabel('Username').fill(testUser.email)
   await page.getByLabel('Password').fill(testUser.password)
-  await page.getByLabel('Full Name').fill(testUser.fullName)
 
   await page.getByRole('button', { name: 'Sign Up' }).click()
 
