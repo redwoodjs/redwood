@@ -2,6 +2,9 @@
 
 import console from 'node:console'
 
+import type { BaseAdapter } from '../adapters/BaseAdapter'
+import type { BasicLogger } from '../types'
+
 import {
   AdapterRequiredError,
   JobRequiredError,
@@ -9,12 +12,23 @@ import {
 } from './errors'
 import { loadJob } from './loaders'
 
+interface Options {
+  adapter: BaseAdapter
+  job: any
+  logger?: BasicLogger
+}
+
 export class Executor {
-  constructor(options) {
+  options: Options
+  adapter: BaseAdapter
+  job: any | null
+  logger: BasicLogger
+
+  constructor(options: Options) {
     this.options = options
-    this.adapter = options?.adapter
-    this.job = options?.job
-    this.logger = options?.logger || console
+    this.adapter = options.adapter
+    this.job = options.job
+    this.logger = options.logger || console
 
     if (!this.adapter) {
       throw new AdapterRequiredError()
@@ -32,7 +46,7 @@ export class Executor {
       const jobModule = await loadJob(details.handler)
       await new jobModule[details.handler]().perform(...details.args)
       return this.adapter.success(this.job)
-    } catch (e) {
+    } catch (e: any) {
       let error = e
       if (e.message.match(/is not a constructor/)) {
         error = new JobExportNotFoundError(details.handler)
