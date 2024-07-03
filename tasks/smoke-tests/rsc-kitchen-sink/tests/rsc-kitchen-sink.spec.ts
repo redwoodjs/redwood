@@ -11,8 +11,6 @@ const testUser = {
 test.beforeAll(async ({ browser }) => {
   const page = await browser.newPage()
 
-  // TODO (RSC): Use this helper when we have toasts working
-  // await signUpTestUser({ page, ...testUser })
   await page.goto('/signup')
 
   await page.getByLabel('Username').fill(testUser.email)
@@ -25,6 +23,8 @@ test.beforeAll(async ({ browser }) => {
   // - an error message because of duplicate user id (e.g. email)
   await Promise.race([
     page.waitForURL('/'),
+    // TODO (RSC): When we get toasts working we should check for a toast
+    // message instead of network stuff, like in signUpTestUser()
     page.waitForResponse(async (response) => {
       const body = await response.body()
       return body.includes(`Username \`${testUser.email}\` already in use`)
