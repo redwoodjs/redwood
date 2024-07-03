@@ -7,31 +7,24 @@
 
 import console from 'node:console'
 
-import { NotImplementedError } from '../core/errors'
+import type { BasicLogger, BaseJob, SchedulePayload } from '../types'
 
-export class BaseAdapter {
-  constructor(options) {
+export abstract class BaseAdapter {
+  options: any
+  logger: BasicLogger
+
+  constructor(options: { logger?: BasicLogger }) {
     this.options = options
     this.logger = options?.logger || console
   }
 
-  schedule() {
-    throw new NotImplementedError('schedule')
-  }
+  abstract schedule(payload: SchedulePayload): void
 
-  find() {
-    throw new NotImplementedError('find')
-  }
+  abstract find(): BaseJob | null
 
-  clear() {
-    throw new NotImplementedError('clear')
-  }
+  abstract clear(): void
 
-  success() {
-    throw new NotImplementedError('success')
-  }
+  abstract success(job: BaseJob): void
 
-  failure() {
-    throw new NotImplementedError('failure')
-  }
+  abstract failure(job: BaseJob, error: typeof Error): void
 }
