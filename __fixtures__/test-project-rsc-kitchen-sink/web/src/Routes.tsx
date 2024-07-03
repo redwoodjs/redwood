@@ -8,22 +8,31 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Route } from '@redwoodjs/router/dist/Route'
-import { Set } from '@redwoodjs/router/dist/Set'
-
-// @ts-expect-error - ESM issue. RW projects need to be ESM to properly pick up
-// on the types here
+import { Set, PrivateSet } from '@redwoodjs/router/dist/Set'
 import { Router } from '@redwoodjs/vite/Router'
 
+import { useAuth } from './auth'
+import AuthLayout from './layouts/AuthLayout/AuthLayout'
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
 
 const Routes = () => {
   return (
-    <Router>
+    <Router useAuth={useAuth}>
       <Set wrap={NavigationLayout} rnd={0.7}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
+
+        <Set wrap={AuthLayout}>
+          <Route path="/login" page={LoginPage} name="login" />
+          <Route path="/signup" page={SignupPage} name="signup" />
+          <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+          <Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
+          <PrivateSet unauthenticated="login">
+            <Route path="/profile" page={ProfilePage} name="profile" />
+          </PrivateSet>
+        </Set>
 
         <Set wrap={ScaffoldLayout} title="EmptyUsers" titleTo="emptyUsers" buttonLabel="New EmptyUser" buttonTo="newEmptyUser">
           <Route path="/empty-users/new" page={EmptyUserNewEmptyUserPage} name="newEmptyUser" />
