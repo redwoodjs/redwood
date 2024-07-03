@@ -16,15 +16,15 @@ import {
 // TODO Don't use this in production, import from dist directly
 registerApiSideBabelHook()
 
-export function makeFilePath(path) {
+export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
 // Loads the exported adapter from the app's jobs config in api/src/lib/jobs.js
 export const loadAdapter = async () => {
-  if (getPaths().api.jobs) {
+  if (getPaths().api.jobsConfig) {
     const { default: jobsModule } = await import(
-      makeFilePath(getPaths().api.jobsConfig)
+      makeFilePath(getPaths().api.jobsConfig as string)
     )
     if (jobsModule.adapter) {
       return jobsModule.adapter
@@ -38,18 +38,24 @@ export const loadAdapter = async () => {
 
 // Loads the logger from the app's filesystem in api/src/lib/logger.js
 export const loadLogger = async () => {
-  try {
-    const { default: loggerModule } = await import(
-      makeFilePath(getPaths().api.logger)
-    )
-    return loggerModule.logger
-  } catch (e) {
-    return console
+  if (getPaths().api.logger) {
+    try {
+      const { default: loggerModule } = await import(
+        makeFilePath(getPaths().api.logger as string)
+      )
+      return loggerModule.logger
+    } catch (e) {
+      console.warn(
+        'Tried to load logger but failed, falling back to console',
+        e,
+      )
+    }
   }
+  return console
 }
 
 // Loads a job from the app's filesystem in api/src/jobs
-export const loadJob = async (name) => {
+export const loadJob = async (name: string) => {
   const files = fg.sync(`**/${name}.*`, { cwd: getPaths().api.jobs })
   if (!files[0]) {
     throw new JobNotFoundError(name)

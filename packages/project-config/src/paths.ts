@@ -23,6 +23,9 @@ export interface NodeTargetPaths {
   types: string
   models: string
   mail: string
+  jobs: string
+  jobsConfig: string | null
+  logger: string | null
 }
 
 export interface WebPaths {
@@ -200,10 +203,7 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       dbSchema: path.join(BASE_DIR, schemaPath),
       functions: path.join(BASE_DIR, PATH_API_DIR_FUNCTIONS),
       graphql: path.join(BASE_DIR, PATH_API_DIR_GRAPHQL),
-      jobs: path.join(path.join(BASE_DIR, PATH_API_DIR_JOBS)),
-      jobsConfig: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'jobs')),
       lib: path.join(BASE_DIR, PATH_API_DIR_LIB),
-      logger: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'logger')),
       generators: path.join(BASE_DIR, PATH_API_DIR_GENERATORS),
       config: path.join(BASE_DIR, PATH_API_DIR_CONFIG),
       services: path.join(BASE_DIR, PATH_API_DIR_SERVICES),
@@ -211,10 +211,12 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       subscriptions: path.join(BASE_DIR, PATH_API_DIR_SUBSCRIPTIONS),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
       dist: path.join(BASE_DIR, 'api/dist'),
-      // TODO Add dist paths for logger and jobs
       types: path.join(BASE_DIR, 'api/types'),
       models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
       mail: path.join(BASE_DIR, PATH_API_DIR_SRC, 'mail'),
+      jobs: path.join(path.join(BASE_DIR, PATH_API_DIR_JOBS)),
+      jobsConfig: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'jobs')),
+      logger: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'logger')),
     },
 
     web: {
