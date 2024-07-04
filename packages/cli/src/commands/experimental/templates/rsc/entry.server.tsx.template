@@ -1,4 +1,4 @@
-import type { TagDescriptor } from '@redwoodjs/web/dist/components/htmlTags'
+import type { TagDescriptor } from '@redwoodjs/web/htmlTags'
 
 import App from './App'
 import { Document } from './Document'
