@@ -41,6 +41,7 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Need to reverse the sets array when finding the private set so that we
   // find the inner-most private set first. Otherwise we could end up
   // redirecting to the wrong route.
+  // TODO (RSC): Add tests for finding the correct unauthenticated prop
   const reversedSets = requestedRoute.sets.toReversed()
 
   const privateSet = reversedSets.find((set) => set.isPrivate)
@@ -52,6 +53,7 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
         'You must specify an `unauthenticated` route when using PrivateSet',
       )
     }
+
     return (
       <AuthenticatedRoute unauthenticated={unauthenticated}>
         {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
