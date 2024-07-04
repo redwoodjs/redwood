@@ -36,11 +36,14 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  // Use results from `analyzeRoutes` to determine if the user has access to
-  // the requested route
   const requestedRoute = pathRouteMap[pathname]
 
-  const privateSet = requestedRoute.sets.find((set) => set.isPrivate)
+  // Need to reverse the sets array when finding the private set so that we
+  // find the inner-most private set first. Otherwise we could end up
+  // redirecting to the wrong route.
+  const reversedSets = requestedRoute.sets.toReversed()
+
+  const privateSet = reversedSets.find((set) => set.isPrivate)
 
   if (privateSet) {
     const unauthenticated = privateSet.props.unauthenticated
