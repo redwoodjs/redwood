@@ -90,7 +90,7 @@ export class RWProject extends BaseNode {
       return await getDMMF({
         datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
       })
-    } catch (e) {
+    } catch {
       return undefined
     }
   }
@@ -107,7 +107,7 @@ export class RWProject extends BaseNode {
   @lazy() private get processPagesDir() {
     try {
       return processPagesDir(this.pathHelper.web.pages)
-    } catch (e) {
+    } catch {
       return []
     }
   }

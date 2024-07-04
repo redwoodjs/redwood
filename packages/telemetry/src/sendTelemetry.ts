@@ -276,7 +276,7 @@ const uniqueId = (rootDir: string | null) => {
         fs.mkdirSync(path.dirname(telemetryCachePath), { recursive: true })
       }
       fs.writeFileSync(telemetryCachePath, uuid)
-    } catch (error) {
+    } catch {
       console.error('\nCould not create telemetry.txt file\n')
     }
   } else {

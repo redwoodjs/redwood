@@ -106,7 +106,7 @@ export class RWRoute extends BaseNode {
             if (Array.isArray(parsedValue)) {
               return parsedValue
             }
-          } catch (e) {
+          } catch {
             // If parsing fails, return undefined
             return undefined
           }
