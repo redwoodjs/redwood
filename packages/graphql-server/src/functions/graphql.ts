@@ -124,7 +124,9 @@ export const createGraphQLHandler = ({
       }
     } catch (e: any) {
       logger.error(e)
-      onException && onException()
+      if (onException) {
+        onException()
+      }
 
       lambdaResponse = {
         body: JSON.stringify({ error: 'GraphQL execution failed' }),
@@ -159,7 +161,9 @@ export const createGraphQLHandler = ({
       try {
         return await handlerFn(event, context)
       } catch (e) {
-        onException && onException()
+        if (onException) {
+          onException()
+        }
 
         throw e
       }

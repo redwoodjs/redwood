@@ -106,7 +106,7 @@ export class RWRoute extends BaseNode {
             if (Array.isArray(parsedValue)) {
               return parsedValue
             }
-          } catch (e) {
+          } catch {
             // If parsing fails, return undefined
             return undefined
           }
@@ -147,8 +147,9 @@ export class RWRoute extends BaseNode {
     return this.prerender
   }
 
+  // TODO: this is just a placeholder / reminder
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   @lazy() get hasPreRenderInfo() {
-    // TODO: this is just a placeholder / reminder
     return false
   }
 
