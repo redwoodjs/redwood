@@ -25,17 +25,55 @@
 //   const adapter = new PrismaAdapter({ accessor: db.backgroundJob })
 //   RedwoodJob.config({ adapter })
 
+import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
-import { ModelNameError } from '../core/errors'
-
+import type {
+  BaseJob,
+  BaseAdapterOptions,
+  FindArgs,
+  SchedulePayload,
+} from './BaseAdapter'
 import { BaseAdapter } from './BaseAdapter'
 
 export const DEFAULT_MODEL_NAME = 'BackgroundJob'
 export const DEFAULT_MAX_ATTEMPTS = 24
 
+interface PrismaJob extends BaseJob {
+  id: number
+  attempts: number
+  runAt: Date
+  lockedAt: Date
+  lockedBy: string
+  lastError: string | null
+  failedAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface PrismaAdapterOptions extends BaseAdapterOptions {
+  db: PrismaClient
+  model?: string
+  accessor?: keyof PrismaClient
+  maxAttempts?: number
+}
+
+interface FailureData {
+  lockedAt: null
+  lockedBy: null
+  lastError: string
+  failedAt?: Date
+  runAt: Date | null
+}
+
 export class PrismaAdapter extends BaseAdapter {
-  constructor(options) {
+  db: PrismaClient
+  model: string
+  accessor: PrismaClient[keyof PrismaClient]
+  provider: string
+  maxAttempts: number
+
+  constructor(options: PrismaAdapterOptions) {
     super(options)
 
     // instance of PrismaClient
@@ -46,25 +84,6 @@ export class PrismaAdapter extends BaseAdapter {
 
     // the function to call on `db` to make queries: `db.backgroundJob`
     this.accessor = this.db[camelCase(this.model)]
-
-    // the raw table name in the database
-    // if @@map() is used in the schema then the name will be present in
-    //   db._runtimeDataModel
-    // otherwise it is the same as the model name
-    try {
-      this.tableName =
-        options.tableName ||
-        this.db._runtimeDataModel.models[this.model].dbName ||
-        this.model
-    } catch (e) {
-      // model name must not be right because `this.model` wasn't found in
-      // `this.db._runtimeDataModel.models`
-      if (e.name === 'TypeError' && e.message.match("reading 'dbName'")) {
-        throw new ModelNameError(this.model)
-      } else {
-        throw e
-      }
-    }
 
     // the database provider type: 'sqlite' | 'postgresql' | 'mysql'
     this.provider = options.db._activeProvider
@@ -77,8 +96,12 @@ export class PrismaAdapter extends BaseAdapter {
   // raw SQL to do it in each case—Prisma doesn't provide enough flexibility
   // in their generated code to do this in a DB-agnostic way.
   // TODO there may be more optimzed versions of the locking queries in Postgres and MySQL, this.options.db._activeProvider returns the provider name
-  async find({ processName, maxRuntime, queue }) {
-    const maxRuntimeExpire = new Date(new Date() - maxRuntime)
+  async find({
+    processName,
+    maxRuntime,
+    queue,
+  }: FindArgs): Promise<PrismaJob | null> {
+    const maxRuntimeExpire = new Date(new Date().getTime() + maxRuntime)
 
     // This query is gnarly but not so bad once you know what it's doing. For a
     // job to match it must:
@@ -121,7 +144,7 @@ export class PrismaAdapter extends BaseAdapter {
     })
 
     // Find the next job that should run now
-    let job = await this.accessor.findFirst({
+    const job = await this.accessor.findFirst({
       select: { id: true, attempts: true },
       where: whereWithQueue,
       orderBy: [{ priority: 'asc' }, { runAt: 'asc' }],
@@ -156,29 +179,29 @@ export class PrismaAdapter extends BaseAdapter {
     return null
   }
 
-  success(job) {
+  success(job: PrismaJob) {
     this.logger.debug(`Job ${job.id} success`)
-    return this.accessor.delete({ where: { id: job.id } })
+    this.accessor.delete({ where: { id: job.id } })
   }
 
-  failure(job, error) {
+  failure(job: PrismaJob, error: Error) {
     this.logger.debug(`Job ${job.id} failure`)
-    const data = {
+    const data: FailureData = {
       lockedAt: null,
       lockedBy: null,
       lastError: `${error.message}\n\n${error.stack}`,
+      runAt: null,
     }
 
     if (job.attempts >= this.maxAttempts) {
       data.failedAt = new Date()
-      data.runAt = null
     } else {
       data.runAt = new Date(
         new Date().getTime() + this.backoffMilliseconds(job.attempts),
       )
     }
 
-    return this.accessor.update({
+    this.accessor.update({
       where: { id: job.id },
       data,
     })
@@ -186,8 +209,8 @@ export class PrismaAdapter extends BaseAdapter {
 
   // Schedules a job by creating a new record in a `BackgroundJob` table
   // (or whatever the accessor is configured to point to).
-  schedule({ handler, args, runAt, queue, priority }) {
-    return this.accessor.create({
+  schedule({ handler, args, runAt, queue, priority }: SchedulePayload) {
+    this.accessor.create({
       data: {
         handler: JSON.stringify({ handler, args }),
         runAt,
@@ -198,10 +221,10 @@ export class PrismaAdapter extends BaseAdapter {
   }
 
   clear() {
-    return this.accessor.deleteMany()
+    this.accessor.deleteMany()
   }
 
-  backoffMilliseconds(attempts) {
+  backoffMilliseconds(attempts: number) {
     return 1000 * attempts ** 4
   }
 }
