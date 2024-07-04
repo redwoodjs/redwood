@@ -3,11 +3,10 @@
 
 import React, { useMemo } from 'react'
 
-import type { GeneratedRoutesMap } from '@redwoodjs/router/dist/analyzeRoutes'
 import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes'
+import { AuthenticatedRoute } from '@redwoodjs/router/dist/AuthenticatedRoute'
 import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
-import { Redirect } from '@redwoodjs/router/dist/redirect'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
 
 import { rscFetch } from './rsc/rscFetchForClientRouter'
@@ -44,47 +43,16 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   const privateSet = requestedRoute.sets.find((set) => set.isPrivate)
 
   if (privateSet) {
-    const redirectTarget = privateSet.props.unauthenticated
-
-    if (!redirectTarget || typeof redirectTarget !== 'string') {
+    const unauthenticated = privateSet.props.unauthenticated
+    if (!unauthenticated || typeof unauthenticated !== 'string') {
       throw new Error(
-        `Route ${pathname} is private and no unauthenticated redirect target was provided`,
+        'You must specify an `unauthenticated` route when using PrivateSet',
       )
     }
-
-    // We type cast like this, because AvailableRoutes is generated in the
-    // user's project
-    const generatedRoutesMap = namedRoutes as GeneratedRoutesMap
-
-    if (!generatedRoutesMap[redirectTarget]) {
-      throw new Error(`We could not find a route named ${redirectTarget}`)
-    }
-
-    const currentLocation =
-      globalThis.location.pathname +
-      encodeURIComponent(globalThis.location.search)
-
-    let unauthenticatedPath
-
-    try {
-      unauthenticatedPath = generatedRoutesMap[redirectTarget]()
-    } catch (e) {
-      if (
-        e instanceof Error &&
-        /Missing parameter .* for route/.test(e.message)
-      ) {
-        throw new Error(
-          `Redirecting to route "${redirectTarget}" would require route ` +
-            'parameters, which currently is not supported. Please choose ' +
-            'a different route',
-        )
-      }
-
-      throw new Error(`Could not redirect to the route named ${redirectTarget}`)
-    }
-
     return (
-      <Redirect to={`${unauthenticatedPath}?redirectTo=${currentLocation}`} />
+      <AuthenticatedRoute unauthenticated={unauthenticated}>
+        {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
+      </AuthenticatedRoute>
     )
   }
 
