@@ -42,6 +42,11 @@
       "import": "./dist/server/request.js",
       "types": "./dist/server/request.d.ts"
     },
+    "./middleware": {
+      "require": "./dist/cjs/server/middleware.js",
+      "import": "./dist/server/middleware.js",
+      "types": "./dist/server/middleware.d.ts"
+    },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
       "import": "./dist/components/*.js"
@@ -118,6 +123,7 @@
     "@babel/plugin-transform-runtime": "7.24.3",
     "@babel/runtime": "7.24.5",
     "@redwoodjs/framework-tools": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "14.3.1",
