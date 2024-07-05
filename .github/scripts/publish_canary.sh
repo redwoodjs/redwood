@@ -40,6 +40,13 @@ echo 'n' \
   | awk -F. '{ $NF = $NF + 1 } 1' OFS=. \
   > canary_version
 
+
+echo "+++++Canary version: $(cat canary_version)"
+echo "+++++Canary version: $(cat canary_version)"
+echo "+++++Canary version: $(cat canary_version)"
+
+echo 'n' \
+  | yarn lerna publish "${args[@]}" \
 # Update create-redwood-app templates to use canary packages
 
 sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
@@ -98,5 +105,7 @@ git config user.email "<>"
 
 git commit -am "Update create-redwood-app templates to use canary packages"
 
-args+=(--yes)
-yarn lerna publish "${args[@]}"
+
+# DONT PUBLISH!
+# args+=(--yes)
+# yarn lerna publish "${args[@]}"
