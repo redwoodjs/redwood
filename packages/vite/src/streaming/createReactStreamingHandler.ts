@@ -13,7 +13,7 @@ import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 import type { Middleware } from '@redwoodjs/web/dist/server/middleware.js'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/MiddlewareResponse.js'
+import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware.js'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
 import type { EntryServer } from '../types.js'

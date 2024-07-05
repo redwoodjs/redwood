@@ -7,9 +7,9 @@ import type {
   Middleware,
   MiddlewareClass,
   MiddlewareInvokeOptions,
+  MiddlewareRequest,
 } from '@redwoodjs/web/dist/server/middleware.js'
-import type { MiddlewareRequest } from '@redwoodjs/web/dist/server/MiddlewareRequest'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/MiddlewareResponse'
+import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware.js'
 
 import type { EntryServer } from '../types'
 import { makeFilePath, ssrLoadEntryServer } from '../utils'

@@ -47,6 +47,11 @@
       "import": "./dist/server/middleware.js",
       "types": "./dist/server/middleware.d.ts"
     },
+    "./dist/server/middleware.js": {
+      "require": "./dist/cjs/server/middleware.js",
+      "import": "./dist/server/middleware.js",
+      "types": "./dist/server/middleware.d.ts"
+    },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
       "import": "./dist/components/*.js"
