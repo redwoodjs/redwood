@@ -6,8 +6,8 @@ import {
   dbAuthSession,
 } from '@redwoodjs/auth-dbauth-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import type { Middleware, MiddlewareRequest } from '@redwoodjs/web/middleware'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
 
 import { defaultGetRoles } from './defaultGetRoles'
 
