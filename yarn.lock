@@ -7497,7 +7497,7 @@ __metadata:
     "@redwoodjs/auth-dbauth-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
-    "@redwoodjs/vite": "workspace:*"
+    "@redwoodjs/web": "workspace:*"
     "@types/aws-lambda": "npm:8.10.138"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.15.6"
@@ -7675,7 +7675,7 @@ __metadata:
     "@redwoodjs/auth-supabase-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
-    "@redwoodjs/vite": "workspace:*"
+    "@redwoodjs/web": "workspace:*"
     "@supabase/ssr": "npm:0.3.0"
     "@types/aws-lambda": "npm:8.10.138"
     ts-toolbelt: "npm:9.6.0"
@@ -8411,7 +8411,7 @@ __metadata:
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
-    "@redwoodjs/vite": "workspace:*"
+    "@redwoodjs/web": "workspace:*"
     fast-glob: "npm:3.3.2"
     lodash: "npm:4.17.21"
     react: "npm:19.0.0-beta-04b058868c-20240508"
@@ -8666,7 +8666,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/vite@workspace:*, @redwoodjs/vite@workspace:packages/vite":
+"@redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
@@ -8751,6 +8751,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.5"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/server-store": "workspace:*"
     "@rollup/plugin-babel": "npm:6.0.4"
     "@testing-library/jest-dom": "npm:6.4.6"
