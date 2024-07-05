@@ -107,6 +107,8 @@ test('Submitting the form should return a response', async ({ page }) => {
 })
 
 test('Page with Cell', async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser })
+
   await page.goto('/user-examples')
 
   const h1 = await page.locator('h1').innerHTML()
@@ -118,6 +120,8 @@ test('Page with Cell', async ({ page }) => {
 })
 
 test("'use client' cell Empty state", async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser })
+
   await page.goto('/empty-users')
 
   const h1 = await page.locator('h1').innerHTML()
@@ -132,6 +136,8 @@ test("'use client' cell Empty state", async ({ page }) => {
 })
 
 test("'use client' cell navigation", async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser })
+
   await page.goto('/empty-users')
 
   await expect(page.getByText('No emptyUsers yet.')).toBeVisible()
