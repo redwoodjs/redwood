@@ -14,7 +14,7 @@ import type {
   MiddlewareInvokeOptions,
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/vite/dist/middleware'
+} from '@redwoodjs/web/dist/server/middleware.js'
 
 import { getRoutesList } from './getRoutesList.js'
 import { OGIMAGE_DEFAULTS } from './hooks.js'
