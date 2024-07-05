@@ -166,14 +166,13 @@ And there you have it.
 
 <table>
   <tr>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/dthyresson"><img src="https://avatars2.githubusercontent.com/u/1051633?v=4" width="100px;" alt=""/><br /><sub><b>David Thyresson</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center"><a href="https://edamame.studio/"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Choudhury</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>Barrett Burnworth</b></sub></a><br /><sub>community</sub></td>
 </tr>
 <tr>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>Barrett Burnworth</b></sub></a><br /><sub>community</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh Walker</b></sub></a><br /><sub>maintainer</sub></td>
 </tr>
 </table>
@@ -211,8 +210,7 @@ And there you have it.
     <td align="center"><a href="https://github.com/ajcwebdev"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/kimadeline"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /></td>
-
-
+    <td align="center"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /></td>
 </tr>
 </table>
 <!-- markdownlint-restore -->

@@ -41,6 +41,10 @@
       "require": "./dist/cjs/components/*.js",
       "import": "./dist/components/*.js"
     },
+    "./htmlTags": {
+      "require": "./dist/cjs/components/htmlTags.js",
+      "import": "./dist/components/htmlTags.js"
+    },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
       "import": "./dist/apollo/suspense.js"

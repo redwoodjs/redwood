@@ -12,7 +12,47 @@ import fs from 'fs-extra'
 import { vol } from 'memfs'
 import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
-import '../../../../lib/test'
+import '../../../../lib/mockTelemetry'
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const path = require('path')
+  const originalProjectConfig = await importOriginal()
+  return {
+    getPaths: () => {
+      const BASE_PATH = '/path/to/project'
+
+      return {
+        base: BASE_PATH,
+        web: {
+          generators: path.join(BASE_PATH, './web/generators'),
+          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
+          pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+      }
+    },
+    getConfig: () => ({}),
+    findUp: originalProjectConfig.findUp,
+    ensurePosixPath: originalProjectConfig.ensurePosixPath,
+    resolveFile: originalProjectConfig.resolveFile,
+  }
+})
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
+  return {
+    generate: () => {
+      return { errors: [] }
+    },
+  }
+})
 
 import { getPaths } from '../../../../lib'
 import { files } from '../../../generate/page/page'
