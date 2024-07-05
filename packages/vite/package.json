@@ -40,11 +40,7 @@
       "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
-    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
-    "./middleware": {
-      "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.js"
-    }
+    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
   },
   "bin": {
     "rw-dev-fe": "./dist/devFeServer.js",
