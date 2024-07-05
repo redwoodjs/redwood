@@ -5,7 +5,8 @@
 
 import React, { forwardRef } from 'react'
 
-import { NavigateOptions, navigate } from './history'
+import { navigate } from './history'
+import type { NavigateOptions } from './history'`
 
 export interface LinkProps {
   to: string
