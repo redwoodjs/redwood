@@ -40,6 +40,11 @@ echo 'n' \
   | awk -F. '{ $NF = $NF + 1 } 1' OFS=. \
   > canary_version
 
+if [ ! -s canary_version ]; then
+  echo "The canary_version file is empty or does not exist. Exiting."
+  exit 1
+fi
+
 # Update create-redwood-app templates to use canary packages
 
 sed "s/\"@redwoodjs\/\(.*\)\": \".*\"/\"@redwoodjs\/\1\": \"$(cat canary_version)\"/" \
