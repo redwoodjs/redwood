@@ -15,8 +15,8 @@ import type * as LocationModule from '@redwoodjs/router/dist/location.js'
 import type { TagDescriptor } from '@redwoodjs/web'
 // @TODO (ESM), use exports field. Cannot import from web because of index exports
 import type * as ServerInjectModule from '@redwoodjs/web/dist/components/ServerInject'
+import type { MiddlewareResponse } from '@redwoodjs/web/dist/server/MiddlewareResponse.js'
 
-import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
 import { makeFilePath } from '../utils.js'
 
