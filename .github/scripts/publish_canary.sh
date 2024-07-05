@@ -33,6 +33,12 @@ args+=(
 #   final number that lerna will use when publishing the canary packages.
 echo 'n' \
   | yarn lerna publish "${args[@]}" 2>&1 \
+  > publish_output
+echo "Publish output:"
+echo "---------------\n"
+cat publish_output
+echo "---------------\n"
+cat publish_output \
   | grep '\-canary\.' \
   | tail -n 1 \
   | sed 's/.*=> //' \
