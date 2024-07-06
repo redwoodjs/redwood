@@ -1,7 +1,7 @@
 # ESLint Plugin
 
 Standalone RedwoodJS lint rules for ESLint.
-These rules are also available via the larger [`@redwoodjs/eslint-config`](https://github.com/redwoodjs/redwood/tree/main/packages/eslint-config).
+These rules are primarily consumed via the larger [`@redwoodjs/eslint-config`](https://github.com/redwoodjs/redwood/tree/main/packages/eslint-config).
 
 ## Usage
 
@@ -11,7 +11,7 @@ In your "flat" ESLint config file:
 import redwoodjs from "@redwoodjs/eslint-plugin";
 
 export default [
-  redwoodjs.configs.recommended,
+  redwoodjs.configs.all,
 ];
 ```
 

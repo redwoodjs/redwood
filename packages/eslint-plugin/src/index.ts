@@ -19,7 +19,7 @@ export const rules = {
 >
 
 export const configs = {
-  get recommended() {
+  get all() {
     return {
       plugins: { '@redwoodjs': plugin },
       rules: Object.fromEntries(
