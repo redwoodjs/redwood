@@ -18,17 +18,6 @@ export const rules = {
   ESLintUtils.RuleModule<string, never[], ESLintUtils.RuleListener>
 >
 
-export const configs = {
-  get all() {
-    return {
-      plugins: { '@redwoodjs': plugin },
-      rules: Object.fromEntries(
-        Object.keys(rules).map((rule) => [rule, 'error']),
-      ),
-    }
-  },
-}
-
-const plugin = { configs, meta, rules }
+const plugin = { meta, rules }
 
 export default plugin

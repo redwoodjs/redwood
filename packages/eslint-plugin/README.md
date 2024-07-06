@@ -3,18 +3,6 @@
 Standalone RedwoodJS lint rules for ESLint.
 These rules are primarily consumed via the larger [`@redwoodjs/eslint-config`](https://github.com/redwoodjs/redwood/tree/main/packages/eslint-config).
 
-## Usage
-
-In your "flat" ESLint config file:
-
-```js
-import redwoodjs from "@redwoodjs/eslint-plugin";
-
-export default [
-  redwoodjs.configs.all,
-];
-```
-
 ## Contributing
 
 This package doesn't depend on other Redwood Framework packages.
