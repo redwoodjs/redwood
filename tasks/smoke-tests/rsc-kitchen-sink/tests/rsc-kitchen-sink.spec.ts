@@ -44,7 +44,11 @@ test.beforeAll(async ({ browser }) => {
   await page.close()
 
   const pageLogin = await browser.newPage()
-  await loginAsTestUser({ page: pageLogin, ...testUser })
+  await loginAsTestUser({
+    page: pageLogin,
+    ...testUser,
+    redirectUrl: '/profile',
+  })
 
   await pageLogin.close()
 })
@@ -117,7 +121,7 @@ test('Submitting the form should return a response', async ({ page }) => {
 })
 
 test('Page with Cell', async ({ page }) => {
-  await loginAsTestUser({ page, ...testUser })
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
 
   await page.goto('/user-examples')
 
@@ -130,7 +134,7 @@ test('Page with Cell', async ({ page }) => {
 })
 
 test("'use client' cell Empty state", async ({ page }) => {
-  await loginAsTestUser({ page, ...testUser })
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
 
   await page.goto('/empty-users')
 
@@ -146,7 +150,7 @@ test("'use client' cell Empty state", async ({ page }) => {
 })
 
 test("'use client' cell navigation", async ({ page }) => {
-  await loginAsTestUser({ page, ...testUser })
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
 
   await page.goto('/empty-users')
 
@@ -206,4 +210,44 @@ test('middleware', async ({ page }) => {
   expect(bodyText).toMatch(/import { fileURLToPath } from "node:url"/)
   expect(bodyText).toMatch(/self\.mts Middleware/)
   expect(bodyText).toMatch(/\.readFileSync\(__filename/)
+})
+
+test('profile page, direct navigation', async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
+
+  await page.goto('/profile')
+
+  await expect(page.locator('h1')).toContainText('Profile')
+
+  const tableText = await page.locator('table').innerText()
+  // Depending on how many other users there are in the DB the ID might be
+  // different. On CI there are (for now) 2 users. Locally, depending on the
+  // test project the tests are run against there can be any number of users
+  expect(tableText).toMatch(/ID\s+\d+/)
+  expect(tableText).toMatch(/Is Admin\s+false/)
+})
+
+test('profile page, client side navigation', async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
+
+  await page.goto('/')
+  page.getByRole('link').filter({ hasText: 'Auth' }).nth(0).click()
+
+  page.waitForURL('/profile')
+
+  await expect(page.locator('h1')).toContainText('Profile')
+
+  const tableText = await page.locator('table').innerText()
+  expect(tableText).toMatch(/ID\s+\d+/)
+  expect(tableText).toMatch(/Is Admin\s+false/)
+})
+
+test('logout', async ({ page }) => {
+  await loginAsTestUser({ page, ...testUser, redirectUrl: '/profile' })
+
+  await page.goto('/profile')
+
+  await page.getByRole('button', { name: 'Log Out' }).click()
+
+  page.waitForURL('/')
 })
