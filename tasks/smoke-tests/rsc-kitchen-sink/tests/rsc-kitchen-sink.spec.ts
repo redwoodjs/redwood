@@ -220,7 +220,10 @@ test('profile page, direct navigation', async ({ page }) => {
   await expect(page.locator('h1')).toContainText('Profile')
 
   const tableText = await page.locator('table').innerText()
-  expect(tableText).toMatch(/ID\s+2/)
+  // Depending on how many other users there are in the DB the ID might be
+  // different. On CI there are (for now) 2 users. Locally, depending on the
+  // test project the tests are run against there can be any number of users
+  expect(tableText).toMatch(/ID\s+\d+/)
   expect(tableText).toMatch(/Is Admin\s+false/)
 })
 
@@ -235,7 +238,7 @@ test('profile page, client side navigation', async ({ page }) => {
   await expect(page.locator('h1')).toContainText('Profile')
 
   const tableText = await page.locator('table').innerText()
-  expect(tableText).toMatch(/ID\s+1/)
+  expect(tableText).toMatch(/ID\s+\d+/)
   expect(tableText).toMatch(/Is Admin\s+false/)
 })
 
