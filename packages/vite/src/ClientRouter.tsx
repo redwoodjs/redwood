@@ -8,35 +8,53 @@ import { AuthenticatedRoute } from '@redwoodjs/router/dist/AuthenticatedRoute'
 import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
 import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
+import { RouterContextProvider } from '@redwoodjs/router/dist/router-context'
 
 import { rscFetch } from './rsc/rscFetchForClientRouter'
 
-export const Router = ({ paramTypes, children }: RouterProps) => {
+export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
-      <LocationAwareRouter paramTypes={paramTypes}>
+      <LocationAwareRouter paramTypes={paramTypes} useAuth={useAuth}>
         {children}
       </LocationAwareRouter>
     </LocationProvider>
   )
 }
 
-const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
+const LocationAwareRouter = ({
+  useAuth,
+  paramTypes,
+  children,
+}: RouterProps) => {
   const { pathname, search } = useLocation()
 
-  const { namedRoutesMap, pathRouteMap } = useMemo(() => {
+  const analyzeRoutesResult = useMemo(() => {
     return analyzeRoutes(children, {
       currentPathName: pathname,
       userParamTypes: paramTypes,
     })
   }, [pathname, children, paramTypes])
 
+  const { namedRoutesMap, pathRouteMap, activeRoutePath } = analyzeRoutesResult
+
   // Assign namedRoutes so it can be imported like import {routes} from 'rwjs/router'
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  const requestedRoute = pathRouteMap[pathname]
+  // No activeRoutePath basically means 404.
+  // TODO (RSC): Add tests for this
+  // TODO (RSC): Figure out how to handle this case better
+  if (!activeRoutePath) {
+    // throw new Error(
+    //   'No route found for the current URL. Make sure you have a route ' +
+    //     'defined for the root of your React app.',
+    // )
+    return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+  }
+
+  const requestedRoute = pathRouteMap[activeRoutePath]
 
   // Need to reverse the sets array when finding the private set so that we
   // find the inner-most private set first. Otherwise we could end up
@@ -55,9 +73,16 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
     }
 
     return (
-      <AuthenticatedRoute unauthenticated={unauthenticated}>
-        {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
-      </AuthenticatedRoute>
+      <RouterContextProvider
+        useAuth={useAuth}
+        paramTypes={paramTypes}
+        routes={analyzeRoutesResult}
+        activeRouteName={requestedRoute.name}
+      >
+        <AuthenticatedRoute unauthenticated={unauthenticated}>
+          {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
+        </AuthenticatedRoute>
+      </RouterContextProvider>
     )
   }
 
