@@ -26,8 +26,18 @@ test.beforeAll(async ({ browser }) => {
     // TODO (RSC): When we get toasts working we should check for a toast
     // message instead of network stuff, like in signUpTestUser()
     page.waitForResponse(async (response) => {
+      // Status >= 300 and < 400 is a redirect
+      // We get that sometimes for things like
+      // http://localhost:8910/assets/jsx-runtime-CGe0JNFD.mjs
+      if (response.status() >= 300 && response.status() < 400) {
+        return false
+      }
+
       const body = await response.body()
-      return body.includes(`Username \`${testUser.email}\` already in use`)
+      return (
+        response.url().includes('middleware') &&
+        body.includes(`Username \`${testUser.email}\` already in use`)
+      )
     }),
   ])
 
