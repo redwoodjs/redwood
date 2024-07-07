@@ -46,13 +46,13 @@ export abstract class BaseAdapter {
     this.logger = options?.logger || console
   }
 
-  abstract schedule(payload: SchedulePayload): void
+  abstract schedule(payload: SchedulePayload): any
 
   abstract find(args: FindArgs): BaseJob | null | Promise<BaseJob | null>
 
-  abstract clear(): void
+  abstract clear(): any
 
-  abstract success(job: BaseJob): void
+  abstract success(job: BaseJob): any
 
-  abstract failure(job: BaseJob, error: Error): void
+  abstract failure(job: BaseJob, error: Error): any
 }

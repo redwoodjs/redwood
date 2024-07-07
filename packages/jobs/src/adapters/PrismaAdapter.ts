@@ -188,7 +188,7 @@ export class PrismaAdapter extends BaseAdapter {
 
   success(job: PrismaJob) {
     this.logger.debug(`Job ${job.id} success`)
-    this.accessor.delete({ where: { id: job.id } })
+    return this.accessor.delete({ where: { id: job.id } })
   }
 
   failure(job: PrismaJob, error: Error) {
@@ -208,7 +208,7 @@ export class PrismaAdapter extends BaseAdapter {
       )
     }
 
-    this.accessor.update({
+    return this.accessor.update({
       where: { id: job.id },
       data,
     })
@@ -217,7 +217,7 @@ export class PrismaAdapter extends BaseAdapter {
   // Schedules a job by creating a new record in a `BackgroundJob` table
   // (or whatever the accessor is configured to point to).
   schedule({ handler, args, runAt, queue, priority }: SchedulePayload) {
-    this.accessor.create({
+    return this.accessor.create({
       data: {
         handler: JSON.stringify({ handler, args }),
         runAt,
@@ -228,7 +228,7 @@ export class PrismaAdapter extends BaseAdapter {
   }
 
   clear() {
-    this.accessor.deleteMany()
+    return this.accessor.deleteMany()
   }
 
   backoffMilliseconds(attempts: number) {
