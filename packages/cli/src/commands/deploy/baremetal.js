@@ -672,6 +672,20 @@ export const handler = async (yargs) => {
     verbose: yargs.verbose,
   })
 
+  // Check if baremetal has been setup
+  const tomlPath = path.join(getPaths().base, 'deploy.toml')
+  const ecosystemPath = path.join(getPaths().base, 'ecosystem.config.js')
+
+  if (!fs.existsSync(tomlPath) || !fs.existsSync(ecosystemPath)) {
+    console.error(
+      c.error('Error: Baremetal deploy has not been properly setup.\n'),
+    )
+    console.error(
+      c.error('Please run `yarn rw setup deploy baremetal` before deploying'),
+    )
+    process.exit(1)
+  }
+
   const ssh = new SshExecutor(yargs.verbose)
 
   try {
