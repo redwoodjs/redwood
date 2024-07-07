@@ -678,10 +678,8 @@ export const handler = async (yargs) => {
 
   if (!fs.existsSync(tomlPath) || !fs.existsSync(ecosystemPath)) {
     console.error(
-      c.error('\nError: Baremetal deploy has not been properly setup.'),
-    )
-    console.error(
-      'Please run `yarn rw setup deploy baremetal` before deploying',
+      c.error('\nError: Baremetal deploy has not been properly setup.\n') +
+        'Please run `yarn rw setup deploy baremetal` before deploying',
     )
     process.exit(1)
   }
