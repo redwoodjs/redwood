@@ -30,6 +30,7 @@ export class Executor {
     this.job = options.job
     this.logger = options.logger || console
 
+    // validate that everything we need is available
     if (!this.adapter) {
       throw new AdapterRequiredError()
     }

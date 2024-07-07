@@ -1,4 +1,4 @@
-import { describe, expect, vi, test, beforeEach } from 'vitest'
+import { describe, expect, vi, it, beforeEach } from 'vitest'
 
 import * as errors from '../../core/errors'
 import { RedwoodJob } from '../RedwoodJob'
@@ -6,7 +6,7 @@ import { RedwoodJob } from '../RedwoodJob'
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 describe('static config', () => {
-  test('can set the adapter', () => {
+  it('can set the adapter', () => {
     const adapter = { schedule: vi.fn() }
 
     RedwoodJob.config({ adapter })
@@ -14,7 +14,7 @@ describe('static config', () => {
     expect(RedwoodJob.adapter).toEqual(adapter)
   })
 
-  test('can set the logger', () => {
+  it('can set the logger', () => {
     const logger = { info: vi.fn() }
 
     RedwoodJob.config({ logger })
@@ -22,7 +22,7 @@ describe('static config', () => {
     expect(RedwoodJob.logger).toEqual(logger)
   })
 
-  test('can explictly set the adapter to falsy values for testing', () => {
+  it('can explictly set the adapter to falsy values for testing', () => {
     RedwoodJob.config({ adapter: null })
     expect(RedwoodJob.adapter).toBeNull()
 
@@ -35,12 +35,12 @@ describe('static config', () => {
 })
 
 describe('constructor()', () => {
-  test('returns an instance of the job', () => {
+  it('returns an instance of the job', () => {
     const job = new RedwoodJob()
     expect(job).toBeInstanceOf(RedwoodJob)
   })
 
-  test('defaults some options', () => {
+  it('defaults some options', () => {
     const job = new RedwoodJob()
     expect(job.options).toEqual({
       queue: RedwoodJob.queue,
@@ -48,44 +48,44 @@ describe('constructor()', () => {
     })
   })
 
-  test('can set options for the job', () => {
+  it('can set options for the job', () => {
     const job = new RedwoodJob({ foo: 'bar' })
     expect(job.options.foo).toEqual('bar')
   })
 })
 
 describe('static set()', () => {
-  test('returns a job instance', () => {
+  it('returns a job instance', () => {
     const job = RedwoodJob.set({ wait: 300 })
 
     expect(job).toBeInstanceOf(RedwoodJob)
   })
 
-  test('sets options for the job', () => {
+  it('sets options for the job', () => {
     const job = RedwoodJob.set({ foo: 'bar' })
 
     expect(job.options.foo).toEqual('bar')
   })
 
-  test('sets the default queue', () => {
+  it('sets the default queue', () => {
     const job = RedwoodJob.set({ foo: 'bar' })
 
     expect(job.options.queue).toEqual(RedwoodJob.queue)
   })
 
-  test('sets the default priority', () => {
+  it('sets the default priority', () => {
     const job = RedwoodJob.set({ foo: 'bar' })
 
     expect(job.options.priority).toEqual(RedwoodJob.priority)
   })
 
-  test('can override the queue name set in the class', () => {
+  it('can override the queue name set in the class', () => {
     const job = RedwoodJob.set({ foo: 'bar', queue: 'priority' })
 
     expect(job.options.queue).toEqual('priority')
   })
 
-  test('can override the priority set in the class', () => {
+  it('can override the priority set in the class', () => {
     const job = RedwoodJob.set({ foo: 'bar', priority: 10 })
 
     expect(job.options.priority).toEqual(10)
@@ -93,37 +93,37 @@ describe('static set()', () => {
 })
 
 describe('instance set()', () => {
-  test('returns a job instance', () => {
+  it('returns a job instance', () => {
     const job = new RedwoodJob().set({ wait: 300 })
 
     expect(job).toBeInstanceOf(RedwoodJob)
   })
 
-  test('sets options for the job', () => {
+  it('sets options for the job', () => {
     const job = new RedwoodJob().set({ foo: 'bar' })
 
     expect(job.options.foo).toEqual('bar')
   })
 
-  test('sets the default queue', () => {
+  it('sets the default queue', () => {
     const job = new RedwoodJob().set({ foo: 'bar' })
 
     expect(job.options.queue).toEqual(RedwoodJob.queue)
   })
 
-  test('sets the default priority', () => {
+  it('sets the default priority', () => {
     const job = new RedwoodJob().set({ foo: 'bar' })
 
     expect(job.options.priority).toEqual(RedwoodJob.priority)
   })
 
-  test('can override the queue name set in the class', () => {
+  it('can override the queue name set in the class', () => {
     const job = new RedwoodJob().set({ foo: 'bar', queue: 'priority' })
 
     expect(job.options.queue).toEqual('priority')
   })
 
-  test('can override the priority set in the class', () => {
+  it('can override the priority set in the class', () => {
     const job = new RedwoodJob().set({ foo: 'bar', priority: 10 })
 
     expect(job.options.priority).toEqual(10)
@@ -131,19 +131,19 @@ describe('instance set()', () => {
 })
 
 describe('get runAt()', () => {
-  test('returns the current time if no options are set', () => {
+  it('returns the current time if no options are set', () => {
     const job = new RedwoodJob()
 
     expect(job.runAt).toEqual(new Date())
   })
 
-  test('returns a datetime `wait` seconds in the future if option set', async () => {
+  it('returns a datetime `wait` seconds in the future if option set', async () => {
     const job = RedwoodJob.set({ wait: 300 })
 
     expect(job.runAt).toEqual(new Date(Date.UTC(2024, 0, 1, 0, 5, 0)))
   })
 
-  test('returns a datetime set to `waitUntil` if option set', async () => {
+  it('returns a datetime set to `waitUntil` if option set', async () => {
     const futureDate = new Date(2030, 1, 2, 12, 34, 56)
     const job = RedwoodJob.set({
       waitUntil: futureDate,
@@ -152,7 +152,7 @@ describe('get runAt()', () => {
     expect(job.runAt).toEqual(futureDate)
   })
 
-  test('returns any datetime set directly on the instance', () => {
+  it('returns any datetime set directly on the instance', () => {
     const futureDate = new Date(2030, 1, 2, 12, 34, 56)
     const job = new RedwoodJob()
     job.runAt = futureDate
@@ -160,7 +160,7 @@ describe('get runAt()', () => {
     expect(job.runAt).toEqual(futureDate)
   })
 
-  test('sets the computed time in the `options` property', () => {
+  it('sets the computed time in the `options` property', () => {
     const job = new RedwoodJob()
     const runAt = job.runAt
 
@@ -169,7 +169,7 @@ describe('get runAt()', () => {
 })
 
 describe('set runAt()', () => {
-  test('can set the runAt time directly on the instance', () => {
+  it('allows manually setting runAt time directly on the instance', () => {
     const futureDate = new Date(2030, 1, 2, 12, 34, 56)
     const job = new RedwoodJob()
     job.runAt = futureDate
@@ -177,7 +177,7 @@ describe('set runAt()', () => {
     expect(job.runAt).toEqual(futureDate)
   })
 
-  test('sets the `options.runAt` property', () => {
+  it('sets the `options.runAt` property', () => {
     const futureDate = new Date(2030, 1, 2, 12, 34, 56)
     const job = new RedwoodJob()
     job.runAt = futureDate
@@ -187,20 +187,20 @@ describe('set runAt()', () => {
 })
 
 describe('get queue()', () => {
-  test('defaults to queue set in class', () => {
+  it('defaults to queue set in class', () => {
     const job = new RedwoodJob()
 
     expect(job.queue).toEqual(RedwoodJob.queue)
   })
 
-  test('can manually set the queue name on an instance', () => {
+  it('allows manually setting the queue name on an instance', () => {
     const job = new RedwoodJob()
     job.queue = 'priority'
 
     expect(job.queue).toEqual('priority')
   })
 
-  test('queue set manually overrides queue set as an option', () => {
+  it('prefers the queue set manually over queue set as an option', () => {
     const job = RedwoodJob.set({ queue: 'priority' })
     job.queue = 'important'
 
@@ -209,7 +209,7 @@ describe('get queue()', () => {
 })
 
 describe('set queue()', () => {
-  test('sets the queue name in `options.queue`', () => {
+  it('sets the queue name in `options.queue`', () => {
     const job = new RedwoodJob()
     job.queue = 'priority'
 
@@ -218,20 +218,20 @@ describe('set queue()', () => {
 })
 
 describe('get priority()', () => {
-  test('defaults to priority set in class', () => {
+  it('defaults to priority set in class', () => {
     const job = new RedwoodJob()
 
     expect(job.priority).toEqual(RedwoodJob.priority)
   })
 
-  test('can manually set the priority name on an instance', () => {
+  it('allows manually setting the priority name on an instance', () => {
     const job = new RedwoodJob()
     job.priority = 10
 
     expect(job.priority).toEqual(10)
   })
 
-  test('priority set manually overrides priority set as an option', () => {
+  it('prefers priority set manually over priority set as an option', () => {
     const job = RedwoodJob.set({ priority: 20 })
     job.priority = 10
 
@@ -240,7 +240,7 @@ describe('get priority()', () => {
 })
 
 describe('set priority()', () => {
-  test('sets the priority in `options.priority`', () => {
+  it('sets the priority in `options.priority`', () => {
     const job = new RedwoodJob()
     job.priority = 10
 
@@ -253,7 +253,7 @@ describe('static performLater()', () => {
     vi.clearAllMocks()
   })
 
-  test('invokes the instance performLater()', () => {
+  it('invokes the instance performLater()', () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -274,7 +274,7 @@ describe('instance performLater()', () => {
     vi.clearAllMocks()
   })
 
-  test('throws an error if no adapter is configured', async () => {
+  it('throws an error if no adapter is configured', async () => {
     RedwoodJob.config({ adapter: undefined })
 
     const job = new RedwoodJob()
@@ -284,7 +284,7 @@ describe('instance performLater()', () => {
     )
   })
 
-  test('logs that the job is being scheduled', async () => {
+  it('logs that the job is being scheduled', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -309,7 +309,7 @@ describe('instance performLater()', () => {
     )
   })
 
-  test('calls the `schedule` function on the adapter', async () => {
+  it('calls the `schedule` function on the adapter', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -330,7 +330,7 @@ describe('instance performLater()', () => {
     })
   })
 
-  test('returns whatever the adapter returns', async () => {
+  it('returns whatever the adapter returns', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -347,7 +347,7 @@ describe('instance performLater()', () => {
     expect(result).toEqual(scheduleReturn)
   })
 
-  test('catches any errors thrown during schedulding and throws custom error', async () => {
+  it('catches any errors thrown during schedulding and throws custom error', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -377,7 +377,7 @@ describe('static performNow()', () => {
     vi.clearAllMocks()
   })
 
-  test('invokes the instance performNow()', () => {
+  it('invokes the instance performNow()', () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -398,7 +398,7 @@ describe('instance performNow()', () => {
     vi.clearAllMocks()
   })
 
-  test('throws an error if perform() function is not implemented', async () => {
+  it('throws an error if perform() function is not implemented', async () => {
     class TestJob extends RedwoodJob {}
     const job = new TestJob()
 
@@ -407,7 +407,7 @@ describe('instance performNow()', () => {
     )
   })
 
-  test('logs that the job is being run', async () => {
+  it('logs that the job is being run', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -432,7 +432,7 @@ describe('instance performNow()', () => {
     )
   })
 
-  test('invokes the perform() function immediately', async () => {
+  it('invokes the perform() function immediately', async () => {
     class TestJob extends RedwoodJob {
       async perform() {
         return 'done'
@@ -446,7 +446,7 @@ describe('instance performNow()', () => {
     expect(spy).toHaveBeenCalledWith('foo', 'bar')
   })
 
-  test('returns whatever the perform() function returns', async () => {
+  it('returns whatever the perform() function returns', async () => {
     const performReturn = { status: 'done' }
     class TestJob extends RedwoodJob {
       async perform() {
@@ -459,7 +459,7 @@ describe('instance performNow()', () => {
     expect(result).toEqual(performReturn)
   })
 
-  test('catches any errors thrown during perform and throws custom error', async () => {
+  it('catches any errors thrown during perform and throws custom error', async () => {
     class TestJob extends RedwoodJob {
       perform() {
         throw new Error('Could not perform')
@@ -483,7 +483,7 @@ describe('instance performNow()', () => {
 })
 
 describe('perform()', () => {
-  test('throws an error if not implemented', () => {
+  it('throws an error if not implemented', () => {
     const job = new RedwoodJob()
 
     expect(() => job.perform()).toThrow(errors.PerformNotImplementedError)
@@ -491,7 +491,7 @@ describe('perform()', () => {
 })
 
 describe('subclasses', () => {
-  test('can set their own default queue', () => {
+  it('can set its own queue', () => {
     class MailerJob extends RedwoodJob {
       static queue = 'mailers'
     }
@@ -507,7 +507,7 @@ describe('subclasses', () => {
     expect(redwoodJob.queue).toEqual('default')
   })
 
-  test('can set their own default priority', () => {
+  it('can set its own priority', () => {
     class PriorityJob extends RedwoodJob {
       static priority = 10
     }

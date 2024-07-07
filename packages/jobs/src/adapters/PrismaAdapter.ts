@@ -28,6 +28,8 @@
 import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
+import { ModelNameError } from '../core/errors'
+
 import type {
   BaseJob,
   BaseAdapterOptions,
@@ -89,6 +91,11 @@ export class PrismaAdapter extends BaseAdapter {
     this.provider = options.db._activeProvider
 
     this.maxAttempts = options?.maxAttempts || DEFAULT_MAX_ATTEMPTS
+
+    // validate that everything we need is available
+    if (!this.accessor) {
+      throw new ModelNameError(this.model)
+    }
   }
 
   // Finds the next job to run, locking it so that no other process can pick it

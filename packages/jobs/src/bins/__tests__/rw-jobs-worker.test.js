@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { describe, expect, vi, test } from 'vitest'
+import { describe, expect, vi, it } from 'vitest'
 
 // import * as worker from '../worker'
 
@@ -8,9 +8,7 @@ import { describe, expect, vi, test } from 'vitest'
 vi.mock('@redwoodjs/babel-config')
 
 describe('worker', () => {
-  test('placeholder', () => {
-    console.info(process.env.RWJS_CWD)
-
+  it('placeholder', () => {
     expect(true).toBeTruthy()
   })
 })

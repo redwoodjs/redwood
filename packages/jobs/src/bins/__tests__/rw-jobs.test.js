@@ -1,9 +1,9 @@
-import { describe, expect, vi, test } from 'vitest'
+import { describe, expect, vi, it } from 'vitest'
 
 // import * as runner from '../runner'
 
 describe('runner', () => {
-  test.skip('placeholder', () => {
+  it.skip('placeholder', () => {
     expect(true).toBeTruthy()
   })
 })
