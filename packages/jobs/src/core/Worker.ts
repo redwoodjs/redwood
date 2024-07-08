@@ -4,14 +4,41 @@ import console from 'node:console'
 import process from 'node:process'
 import { setTimeout } from 'node:timers'
 
+import type { BaseAdapter } from '../adapters/BaseAdapter'
+import type { BasicLogger } from '../types'
+
 import { AdapterRequiredError } from './errors'
 import { Executor } from './Executor'
+
+interface WorkerOptions {
+  adapter: BaseAdapter
+  logger?: BasicLogger
+  clear?: boolean
+  processName?: string
+  queue?: string
+  maxRuntime?: number
+  waitTime?: number
+  forever?: boolean
+  workoff?: boolean
+}
 
 export const DEFAULT_WAIT_TIME = 5000 // 5 seconds
 export const DEFAULT_MAX_RUNTIME = 60 * 60 * 4 * 1000 // 4 hours
 
 export class Worker {
-  constructor(options) {
+  options: WorkerOptions
+  adapter: BaseAdapter
+  logger: BasicLogger
+  clear: boolean
+  processName: string
+  queue: string | null
+  maxRuntime: number
+  waitTime: number
+  lastCheckTime: Date
+  forever: boolean
+  workoff: boolean
+
+  constructor(options: WorkerOptions) {
     this.options = options
     this.adapter = options?.adapter
     this.logger = options?.logger || console
@@ -31,8 +58,9 @@ export class Worker {
         ? DEFAULT_MAX_RUNTIME
         : options.maxRuntime
 
-    // the amount of time to wait between checking for jobs. the time it took
-    // to run a job is subtracted from this time, so this is a maximum wait time
+    // the amount of time to wait in milliseconds between checking for jobs.
+    // the time it took to run a job is subtracted from this time, so this is a
+    // maximum wait time
     this.waitTime =
       options?.waitTime === undefined ? DEFAULT_WAIT_TIME : options.waitTime
 
@@ -99,7 +127,8 @@ export class Worker {
 
       // sleep if there were no jobs found, otherwise get back to work
       if (!job && this.forever) {
-        const millsSinceLastCheck = new Date() - this.lastCheckTime
+        const millsSinceLastCheck =
+          new Date().getTime() - this.lastCheckTime.getTime()
         if (millsSinceLastCheck < this.waitTime) {
           await this.#wait(this.waitTime - millsSinceLastCheck)
         }
@@ -107,7 +136,7 @@ export class Worker {
     } while (this.forever)
   }
 
-  #wait(ms) {
+  #wait(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 }
