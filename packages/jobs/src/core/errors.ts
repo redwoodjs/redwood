@@ -1,6 +1,6 @@
 // Parent class for any RedwoodJob-related error
 export class RedwoodJobError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message)
     this.name = this.constructor.name
   }
@@ -22,14 +22,14 @@ export class PerformNotImplementedError extends RedwoodJobError {
 
 // Thrown when a custom adapter does not implement the `schedule` method
 export class NotImplementedError extends RedwoodJobError {
-  constructor(name) {
+  constructor(name: string) {
     super(`You must implement the \`${name}\` method in your adapter`)
   }
 }
 
 // Thrown when a given model name isn't actually available in the PrismaClient
 export class ModelNameError extends RedwoodJobError {
-  constructor(name) {
+  constructor(name: string) {
     super(`Model \`${name}\` not found in PrismaClient`)
   }
 }
@@ -50,14 +50,14 @@ export class JobRequiredError extends RedwoodJobError {
 
 // Thrown when a job with the given handler is not found in the filesystem
 export class JobNotFoundError extends RedwoodJobError {
-  constructor(name) {
+  constructor(name: string) {
     super(`Job \`${name}\` not found in the filesystem`)
   }
 }
 
 // Throw when a job file exists, but the export does not match the filename
 export class JobExportNotFoundError extends RedwoodJobError {
-  constructor(name) {
+  constructor(name: string) {
     super(`Job file \`${name}\` does not export a class with the same name`)
   }
 }
@@ -89,7 +89,10 @@ export class AdapterNotFoundError extends RedwoodJobError {
 //   throw new RethrowJobError('Custom Error Message', e)
 // }
 export class RethrownJobError extends RedwoodJobError {
-  constructor(message, error) {
+  originalError: Error
+  stackBeforeRethrow: string | undefined
+
+  constructor(message: string, error: Error) {
     super(message)
 
     if (!error) {
@@ -98,13 +101,13 @@ export class RethrownJobError extends RedwoodJobError {
       )
     }
 
-    this.original_error = error
-    this.stack_before_rethrow = this.stack
+    this.originalError = error
+    this.stackBeforeRethrow = this.stack
 
     const messageLines = (this.message.match(/\n/g) || []).length + 1
     this.stack =
       this.stack
-        .split('\n')
+        ?.split('\n')
         .slice(0, messageLines + 1)
         .join('\n') +
       '\n' +
@@ -114,14 +117,14 @@ export class RethrownJobError extends RedwoodJobError {
 
 // Thrown when there is an error scheduling a job, wraps the underlying error
 export class SchedulingError extends RethrownJobError {
-  constructor(message, error) {
+  constructor(message: string, error: Error) {
     super(message, error)
   }
 }
 
 // Thrown when there is an error performing a job, wraps the underlying error
 export class PerformError extends RethrownJobError {
-  constructor(message, error) {
+  constructor(message: string, error: Error) {
     super(message, error)
   }
 }
