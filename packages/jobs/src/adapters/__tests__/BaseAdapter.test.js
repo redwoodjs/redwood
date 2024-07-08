@@ -1,6 +1,5 @@
 import { describe, expect, vi, it } from 'vitest'
 
-import * as errors from '../../core/errors'
 import { BaseAdapter } from '../BaseAdapter'
 
 describe('constructor', () => {

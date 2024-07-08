@@ -177,7 +177,7 @@ export class PrismaAdapter extends BaseAdapter {
 
       // Assuming the update worked, return the full details of the job
       if (count) {
-        return this.accessor.findFirst({ where: { id: job.id } })
+        return await this.accessor.findFirst({ where: { id: job.id } })
       }
     }
 
@@ -186,12 +186,16 @@ export class PrismaAdapter extends BaseAdapter {
     return null
   }
 
-  success(job: PrismaJob) {
+  // Prisma queries are lazily evaluated and only sent to the db when they are
+  // awaited, so do the await here to ensure they actually run. Otherwise the
+  // user must always await `performLater()` or the job won't actually be
+  // scheduled.
+  async success(job: PrismaJob) {
     this.logger.debug(`Job ${job.id} success`)
-    return this.accessor.delete({ where: { id: job.id } })
+    return await this.accessor.delete({ where: { id: job.id } })
   }
 
-  failure(job: PrismaJob, error: Error) {
+  async failure(job: PrismaJob, error: Error) {
     this.logger.debug(`Job ${job.id} failure`)
     const data: FailureData = {
       lockedAt: null,
@@ -208,7 +212,7 @@ export class PrismaAdapter extends BaseAdapter {
       )
     }
 
-    return this.accessor.update({
+    return await this.accessor.update({
       where: { id: job.id },
       data,
     })
@@ -216,8 +220,8 @@ export class PrismaAdapter extends BaseAdapter {
 
   // Schedules a job by creating a new record in a `BackgroundJob` table
   // (or whatever the accessor is configured to point to).
-  schedule({ handler, args, runAt, queue, priority }: SchedulePayload) {
-    return this.accessor.create({
+  async schedule({ handler, args, runAt, queue, priority }: SchedulePayload) {
+    return await this.accessor.create({
       data: {
         handler: JSON.stringify({ handler, args }),
         runAt,
@@ -227,8 +231,8 @@ export class PrismaAdapter extends BaseAdapter {
     })
   }
 
-  clear() {
-    return this.accessor.deleteMany()
+  async clear() {
+    return await this.accessor.deleteMany()
   }
 
   backoffMilliseconds(attempts: number) {
