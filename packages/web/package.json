@@ -37,9 +37,18 @@
       "types": "./dist/components/ServerInject.d.ts",
       "default": "./dist/components/ServerInject.js"
     },
+    "./request": {
+      "require": "./dist/cjs/server/request.js",
+      "import": "./dist/server/request.js",
+      "types": "./dist/server/request.d.ts"
+    },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
       "import": "./dist/components/*.js"
+    },
+    "./htmlTags": {
+      "require": "./dist/cjs/components/htmlTags.js",
+      "import": "./dist/components/htmlTags.js"
     },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
@@ -92,6 +101,7 @@
     "@apollo/client": "3.9.9",
     "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
+    "@redwoodjs/server-store": "workspace:*",
     "core-js": "3.37.1",
     "graphql": "16.8.1",
     "graphql-sse": "2.5.3",

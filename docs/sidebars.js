@@ -196,7 +196,20 @@ module.exports = {
         'seo-head',
         'serverless-functions',
         'services',
-        'storybook',
+        {
+          type: 'category',
+          label: 'Storybook',
+          link: {
+            type: 'generated-index',
+            title: 'Storybook',
+            slug: 'storybook/index',
+          },
+          items: [
+            { type: 'doc', label: 'About Storybook', id: 'storybook/about' },
+            { type: 'doc', label: 'Webpack', id: 'storybook/webpack' },
+            { type: 'doc', label: 'Vite', id: 'storybook/vite' },
+          ],
+        },
         'studio',
         'testing',
         'toast-notifications',
