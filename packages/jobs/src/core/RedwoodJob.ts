@@ -132,6 +132,7 @@ export class RedwoodJob {
   }
 
   // Must be implemented by the subclass
+  // TODO TOBBE here's that argument that stopped TS complaining, but you mentioned a generic? The user defines this method in their own subclass, so they can do whatever they want with arguments/types in their own job. The performNow() and performLater() functions above just forward whatever arguments they received to this function
   perform(..._args: any[]) {
     throw new PerformNotImplementedError()
   }

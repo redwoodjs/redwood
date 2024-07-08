@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 // The process that actually starts an instance of Worker to process jobs.
-
 import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
@@ -9,10 +8,11 @@ import yargs from 'yargs/yargs'
 
 import { loadAdapter, loadLogger } from '../core/loaders'
 import { Worker } from '../core/Worker'
+import type { BasicLogger } from '../types'
 
 const TITLE_PREFIX = `rw-jobs-worker`
 
-const parseArgs = (argv) => {
+const parseArgs = (argv: string[]) => {
   return yargs(hideBin(argv))
     .usage(
       'Starts a single RedwoodJob worker to process background jobs\n\nUsage: $0 [options]',
@@ -43,7 +43,7 @@ const parseArgs = (argv) => {
     .help().argv
 }
 
-const setProcessTitle = ({ id, queue }) => {
+const setProcessTitle = ({ id, queue }: { id: string; queue: string }) => {
   // set the process title
   let title = TITLE_PREFIX
   if (queue) {
@@ -54,7 +54,13 @@ const setProcessTitle = ({ id, queue }) => {
   process.title = title
 }
 
-const setupSignals = ({ worker, logger }) => {
+const setupSignals = ({
+  worker,
+  logger,
+}: {
+  worker: Worker
+  logger: BasicLogger
+}) => {
   // if the parent itself receives a ctrl-c it'll pass that to the workers.
   // workers will exit gracefully by setting `forever` to `false` which will tell
   // it not to pick up a new job when done with the current one
@@ -77,6 +83,8 @@ const setupSignals = ({ worker, logger }) => {
 }
 
 const main = async () => {
+  // TODO TOBBE For some reason the `parseArgs` type reports that it is only returning the single letter option flags as keys in this object (i, q, c, o), but it does return the alias names as well (id, queue, clear, workoff) I'd rather use the full alias names here as it's much easier to understand what the values are for.
+  // @ts-ignore
   const { id, queue, clear, workoff } = parseArgs(process.argv)
   setProcessTitle({ id, queue })
 
@@ -84,7 +92,7 @@ const main = async () => {
   let adapter
 
   try {
-    adapter = await loadAdapter(logger)
+    adapter = await loadAdapter()
   } catch (e) {
     logger.error(e)
     process.exit(1)
