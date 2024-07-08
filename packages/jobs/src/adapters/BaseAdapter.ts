@@ -30,7 +30,7 @@ export interface BaseJob {
 export interface FindArgs {
   processName: string
   maxRuntime: number
-  queue: string
+  queue: string | null
 }
 
 export interface BaseAdapterOptions {
