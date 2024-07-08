@@ -147,12 +147,6 @@ export class RWRoute extends BaseNode {
     return this.prerender
   }
 
-  // TODO: this is just a placeholder / reminder
-  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
-  @lazy() get hasPreRenderInfo() {
-    return false
-  }
-
   @lazy() get outlineLabel(): string {
     if (this.isNotFound) {
       return '404'
@@ -283,12 +277,6 @@ export class RWRoute extends BaseNode {
       yield err(
         this.path_literal_node!,
         "The 'Not Found' page cannot have a path",
-      )
-    }
-    if (this.hasPreRenderInfo && !this.hasParameters) {
-      yield err(
-        this.jsxNode!,
-        `Only routes with parameters can have associated prerender information`,
       )
     }
   }
