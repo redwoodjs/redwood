@@ -1,5 +1,20 @@
 // Base class for all jobs, providing a common interface for scheduling jobs.
 // At a minimum you must implement the `perform` method in your job subclass.
+//
+// Configuring RedwoodJob is very flexible. You can set the adapter and logger
+// once and all subclasses will use it:
+//
+//   RedwoodJob.config({ adapter, logger })
+//
+// Or set them in the individual subclasses:
+//
+//   class MyJob extends RedwoodJob {
+//     static adapter = new MyAdapter()
+//     static logger = new MyLogger()
+//   }
+
+import type { BaseAdapter } from '../adapters/BaseAdapter'
+import type { BasicLogger } from '../types'
 
 import {
   AdapterNotConfiguredError,
@@ -7,6 +22,20 @@ import {
   SchedulingError,
   PerformError,
 } from './errors'
+
+export interface JobConfigOptions {
+  adapter: BaseAdapter
+  logger?: BasicLogger
+}
+
+export interface JobSetOptions {
+  wait?: number
+  waitUntil?: Date
+  queue?: string
+  priority?: number
+  logger?: BasicLogger
+  runAt?: Date
+}
 
 export const DEFAULT_QUEUE = 'default'
 
@@ -19,48 +48,44 @@ export class RedwoodJob {
   static priority = 50
 
   // The adapter to use for scheduling jobs. Set via the static `config` method
-  static adapter
+  static adapter: BaseAdapter
 
   // Set via the static `config` method
-  static logger
+  static logger: BasicLogger
 
-  // Configure all jobs to use a specific adapter
-  static config(options) {
-    if (options) {
-      if (Object.keys(options).includes('adapter')) {
-        this.adapter = options.adapter
-      }
-      if (Object.keys(options).includes('logger')) {
-        this.logger = options.logger
-      }
+  // Configure all jobs to use a specific adapter and logger
+  static config(options: JobConfigOptions) {
+    if (Object.keys(options).includes('adapter')) {
+      this.adapter = options.adapter
     }
+    this.logger = options?.logger || console
   }
 
   // Class method to schedule a job to run later
   //   const scheduleDetails = RedwoodJob.performLater('foo', 'bar')
-  static performLater(...args) {
+  static performLater(...args: any[]) {
     return new this().performLater(...args)
   }
 
   // Class method to run the job immediately in the current process
   //   const result = RedwoodJob.performNow('foo', 'bar')
-  static performNow(...args) {
+  static performNow(...args: any[]) {
     return new this().performNow(...args)
   }
 
   // Set options on the job before enqueueing it:
   //   const job = RedwoodJob.set({ wait: 300 })
   //   job.performLater('foo', 'bar')
-  static set(options) {
-    return new this().set(options)
+  static set(options: JobSetOptions = {}) {
+    return new this(options)
   }
 
   // Private property to store options set on the job
-  #options = {}
+  #options: JobSetOptions = {}
 
   // A job can be instantiated manually, but this will also be invoked
   // automatically by .set() or .performLater()
-  constructor(options) {
+  constructor(options: JobSetOptions = {}) {
     this.set(options)
   }
 
@@ -75,7 +100,7 @@ export class RedwoodJob {
   // Instance method to schedule a job to run later
   //   const job = RedwoodJob
   //   const scheduleDetails = job.performLater('foo', 'bar')
-  performLater(...args) {
+  performLater(...args: any[]) {
     this.logger.info(
       this.payload(args),
       `[RedwoodJob] Scheduling ${this.constructor.name}`,
@@ -86,7 +111,7 @@ export class RedwoodJob {
 
   // Instance method to runs the job immediately in the current process
   //   const result = RedwoodJob.performNow('foo', 'bar')
-  performNow(...args) {
+  performNow(...args: any[]) {
     this.logger.info(
       this.payload(args),
       `[RedwoodJob] Running ${this.constructor.name} now`,
@@ -94,7 +119,7 @@ export class RedwoodJob {
 
     try {
       return this.perform(...args)
-    } catch (e) {
+    } catch (e: any) {
       if (e instanceof PerformNotImplementedError) {
         throw e
       } else {
@@ -107,28 +132,30 @@ export class RedwoodJob {
   }
 
   // Must be implemented by the subclass
-  perform() {
+  perform(..._args: any[]) {
     throw new PerformNotImplementedError()
   }
 
   // Returns data sent to the adapter for scheduling
-  payload(args) {
+  payload(args: any[]) {
     return {
       handler: this.constructor.name,
       args,
-      runAt: this.runAt,
+      runAt: this.runAt as Date,
       queue: this.queue,
       priority: this.priority,
     }
   }
 
   get logger() {
-    return this.#options?.logger || this.constructor.logger
+    return (
+      this.#options?.logger || (this.constructor as typeof RedwoodJob).logger
+    )
   }
 
   // Determines the name of the queue
   get queue() {
-    return this.#options?.queue || this.constructor.queue
+    return this.#options?.queue || (this.constructor as typeof RedwoodJob).queue
   }
 
   // Set the name of the queue directly on an instance of a job
@@ -138,7 +165,10 @@ export class RedwoodJob {
 
   // Determines the priority of the job
   get priority() {
-    return this.#options?.priority || this.constructor.priority
+    return (
+      this.#options?.priority ||
+      (this.constructor as typeof RedwoodJob).priority
+    )
   }
 
   // Set the priority of the job directly on an instance of a job
@@ -182,14 +212,16 @@ export class RedwoodJob {
 
   // Private, schedules a job with the appropriate adapter, returns whatever
   // the adapter returns in response to a successful schedule.
-  #schedule(args) {
-    if (!this.constructor.adapter) {
+  #schedule(args: any[]) {
+    if (!(this.constructor as typeof RedwoodJob).adapter) {
       throw new AdapterNotConfiguredError()
     }
 
     try {
-      return this.constructor.adapter.schedule(this.payload(args))
-    } catch (e) {
+      return (this.constructor as typeof RedwoodJob).adapter.schedule(
+        this.payload(args),
+      )
+    } catch (e: any) {
       throw new SchedulingError(
         `[RedwoodJob] Exception when scheduling ${this.constructor.name}`,
         e,
