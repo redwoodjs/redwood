@@ -240,7 +240,9 @@ export const useRedwoodLogger = (
 
       return ({ result }) => {
         result.forEach((item) => {
-          item.message && envelopLogger.error(item.message)
+          if (item.message) {
+            envelopLogger.error(item.message)
+          }
         })
       }
     },

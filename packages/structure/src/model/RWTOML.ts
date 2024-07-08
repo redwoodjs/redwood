@@ -26,6 +26,7 @@ export class RWTOML extends FileNode {
   }
   *diagnostics() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.parsedTOML
     } catch (e: any) {
       const pos = { line: e.line - 1, character: e.column - 1 }

@@ -38,7 +38,7 @@ export function* prisma_parseEnvExpressions(src: string) {
       const range = Range.create(start, end)
       const key = JSON.parse(match[1])
       yield { range, key }
-    } catch (e) {
+    } catch {
       // we don't care about malformed env() calls
       // that should be picked up by the prisma parser
     }

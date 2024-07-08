@@ -36,7 +36,7 @@ export const getInstalledRedwoodVersion = () => {
   try {
     const packageJson = require('../../package.json')
     return packageJson.version
-  } catch (e) {
+  } catch {
     console.error(colors.error('Could not find installed redwood version'))
     process.exit(1)
   }
