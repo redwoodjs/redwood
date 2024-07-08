@@ -52,7 +52,7 @@ export abstract class BaseAdapter {
   // it `any` to allow for the subclass to return whatever it wants.
   abstract schedule(payload: SchedulePayload): any
 
-  abstract find(args: FindArgs): BaseJob | null
+  abstract find(args: FindArgs): BaseJob | null | Promise<BaseJob | null>
 
   abstract clear(): any
 
