@@ -367,7 +367,7 @@ describe('instance performLater()', () => {
       expect(e.message).toEqual(
         '[RedwoodJob] Exception when scheduling TestJob',
       )
-      expect(e.original_error.message).toEqual('Could not schedule')
+      expect(e.originalError.message).toEqual('Could not schedule')
     }
   })
 })
@@ -477,7 +477,7 @@ describe('instance performNow()', () => {
     } catch (e) {
       expect(e).toBeInstanceOf(errors.PerformError)
       expect(e.message).toEqual('[TestJob] exception when running job')
-      expect(e.original_error.message).toEqual('Could not perform')
+      expect(e.originalError.message).toEqual('Could not perform')
     }
   })
 })
