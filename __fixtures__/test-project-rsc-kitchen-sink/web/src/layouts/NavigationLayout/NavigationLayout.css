@@ -23,6 +23,12 @@
       color: #333;
       padding: 5px;
       border-bottom: 2px solid transparent;
+
+      & .auth-status {
+        display: inline-block;
+        padding-left: 2px;
+        margin-top: -6px;
+      }
     }
 
     & a:hover {
