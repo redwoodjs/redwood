@@ -13,10 +13,7 @@ export const rules = {
   'process-env-computed': processEnvComputedRule,
   'service-type-annotations': serviceTypeAnnotations,
   'unsupported-route-components': unsupportedRouteComponents,
-} satisfies Record<
-  string,
-  ESLintUtils.RuleModule<string, never[], ESLintUtils.RuleListener>
->
+} satisfies Record<string, ESLintUtils.RuleModule<string>>
 
 const plugin = { meta, rules }
 
