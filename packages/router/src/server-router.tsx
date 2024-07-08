@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import { getLocation } from '@redwoodjs/server-store'
+import { getAuthState, getLocation } from '@redwoodjs/server-store'
 
 import { analyzeRoutes } from './analyzeRoutes'
 import type { Wrappers } from './analyzeRoutes'
@@ -128,8 +128,20 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   )
 }
 
-// Dummy component for server-router. We don't support Auth in server-router
-// yet, so we just render the children for now
+// TODO (RSC): We allow users to implement their own `hasRole` function in
+// `api/src/lib/auth.ts`. We should use that instead of implementing our
+// here. Should we just import it from there? Or should we allow users to
+// pass it to us instead somehow?
+function hasRole(requiredRoles: string | string[]): boolean {
+  const { roles } = getAuthState()
+
+  const requiredRolesArray = Array.isArray(requiredRoles)
+    ? requiredRoles
+    : [requiredRoles]
+
+  return requiredRolesArray.some((role) => roles.includes(role))
+}
+
 interface AuthenticatedRouteProps {
   children: React.ReactNode
   roles?: string | string[]
@@ -139,8 +151,24 @@ interface AuthenticatedRouteProps {
 
 const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
   children,
+  roles,
 }) => {
-  return <>{children}</>
+  const { isAuthenticated } = getAuthState()
+
+  const isAuthorized = isAuthenticated && (!roles || hasRole(roles))
+
+  if (isAuthorized) {
+    return <>{children}</>
+  }
+
+  // TODO (RSC): Where do we catch this error? How do we handle it?
+  if (!isAuthenticated) {
+    throw new Error('401 Unauthorized')
+  }
+
+  // User is authenticated but not authorized because they don't have the
+  // required role(s)
+  throw new Error('403 Forbidden')
 }
 
 interface WrappedPageProps {
