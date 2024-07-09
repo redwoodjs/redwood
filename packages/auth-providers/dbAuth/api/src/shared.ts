@@ -138,7 +138,7 @@ export const decryptSession = (text: string | null) => {
     const json = JSON.parse(data)
 
     return [json, csrf]
-  } catch (e) {
+  } catch {
     throw new DbAuthError.SessionDecryptionError()
   }
 }

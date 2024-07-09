@@ -7,7 +7,7 @@ export const defaultGetRoles = (decoded: Record<string, any>): string[] => {
     } else {
       return roles ? [roles] : []
     }
-  } catch (e) {
+  } catch {
     return []
   }
 }

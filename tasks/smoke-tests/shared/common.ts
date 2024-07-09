@@ -56,6 +56,7 @@ interface AuthUtilsParams {
   password?: string
   fullName?: string
   page: PlaywrightTestArgs['page']
+  redirectUrl?: string
 }
 
 export const signUpTestUser = async ({
@@ -87,6 +88,7 @@ export const loginAsTestUser = async ({
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
+  redirectUrl = '/',
 }: AuthUtilsParams) => {
   await page.goto('/login')
 
@@ -95,5 +97,5 @@ export const loginAsTestUser = async ({
 
   await page.getByRole('button', { name: 'Login' }).click()
 
-  await page.waitForURL('/')
+  await page.waitForURL(redirectUrl)
 }

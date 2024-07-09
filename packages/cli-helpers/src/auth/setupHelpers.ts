@@ -145,7 +145,9 @@ export const standardAuthHandler = async ({
 
   try {
     await tasks.run()
-    notes && console.log(`\n   ${notes.join('\n   ')}\n`)
+    if (notes) {
+      console.log(`\n   ${notes.join('\n   ')}\n`)
+    }
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)
