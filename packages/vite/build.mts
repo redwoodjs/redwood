@@ -37,7 +37,7 @@ await build({
 await esbuild.build({
   entryPoints: ['src/bundled/*'],
   outdir: 'dist/bundled',
-  format: 'esm',
+  // format: 'esm', // what format do we need???
   bundle: true,
   conditions: ['react-server'],
   platform: 'node',
