@@ -13,8 +13,7 @@ import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvide
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import type * as LocationModule from '@redwoodjs/router/dist/location.js'
 import type { TagDescriptor } from '@redwoodjs/web'
-// @TODO (ESM), use exports field. Cannot import from web because of index exports
-import type * as ServerInjectModule from '@redwoodjs/web/dist/components/ServerInject'
+import type * as ServerInjectModule from '@redwoodjs/web/serverInject'
 
 import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
@@ -109,9 +108,7 @@ export async function reactRenderToStreamResponse(
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
     ? await importModule('__rwjs__server_inject')
-    : // @ts-expect-error this is defined in packages/web/package.json exports.
-      // This package just doesn't have moduleResolution configured
-      await import('@redwoodjs/web/serverInject')
+    : await import('@redwoodjs/web/serverInject')
   const { renderToString }: RDServerType = rscEnabled
     ? await importModule('rd-server')
     : await import('react-dom/server')

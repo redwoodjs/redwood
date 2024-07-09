@@ -107,3 +107,11 @@ declare module 'react-server-dom-webpack/server' {
 }
 
 declare module 'vite-plugin-cjs-interop'
+
+declare module '@babel/traverse/lib/index.js' {
+  export * from '@babel/traverse'
+}
+
+declare module '@babel/parser/index.cjs' {
+  export * from '@babel/parser'
+}

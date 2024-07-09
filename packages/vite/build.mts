@@ -1,4 +1,8 @@
-import { build, defaultBuildOptions, defaultIgnorePatterns } from '@redwoodjs/framework-tools'
+import {
+  build,
+  defaultBuildOptions,
+  defaultIgnorePatterns,
+} from '@redwoodjs/framework-tools'
 
 import { writeFileSync } from 'node:fs'
 
@@ -16,8 +20,6 @@ await build({
   },
 })
 
-
-
 await build({
   entryPointOptions: {
     ignore: [...defaultIgnorePatterns, '**/bundled'],
@@ -30,13 +32,12 @@ await build({
   },
 })
 
-
 // We bundle some react packages with the "react-server" condition
 // so that we don't need to specify it at runtime.
 await esbuild.build({
   entryPoints: ['src/bundled/*'],
   outdir: 'dist/bundled',
-
+  format: 'esm',
   bundle: true,
   conditions: ['react-server'],
   platform: 'node',

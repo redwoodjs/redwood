@@ -10,9 +10,9 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getMergedConfig } from './lib/getMergedConfig.js'
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
-import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
+import { handleJsAsJsx } from './plugins/vite-plugin-jsx-loader.js'
+import { removeFromBundle } from './plugins/vite-plugin-remove-from-bundle.js'
+import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.

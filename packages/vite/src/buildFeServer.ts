@@ -1,4 +1,4 @@
-import { buildWeb } from '@redwoodjs/internal/dist/build/web'
+import { buildWeb } from '@redwoodjs/internal/dist/build/web.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { buildRouteHooks } from './buildRouteHooks.js'

@@ -4,17 +4,17 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { EntryServer } from '../types'
-import { makeFilePath, ssrLoadEntryServer } from '../utils'
+import type { EntryServer } from '../types.js'
+import { makeFilePath, ssrLoadEntryServer } from '../utils.js'
 
-import type { MiddlewareRequest } from './MiddlewareRequest'
-import { MiddlewareResponse } from './MiddlewareResponse'
+import type { MiddlewareRequest } from './MiddlewareRequest.js'
+import { MiddlewareResponse } from './MiddlewareResponse.js'
 import type {
   Middleware,
   MiddlewareClass,
   MiddlewareInvokeOptions,
   MiddlewareReg,
-} from './types'
+} from './types.js'
 
 type GroupedMw = Record<string, Middleware[]>
 

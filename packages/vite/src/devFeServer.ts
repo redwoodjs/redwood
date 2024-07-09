@@ -5,8 +5,8 @@ import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
-import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
-import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import type { RouteSpec } from '@redwoodjs/internal/dist/routes.js'
+import { getProjectRoutes } from '@redwoodjs/internal/dist/routes.js'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import {

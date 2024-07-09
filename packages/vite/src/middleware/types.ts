@@ -1,6 +1,6 @@
 import type { ViteDevServer } from 'vite'
 
-import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes'
+import type { RWRouteManifestItem } from '@redwoodjs/internal/dist/routes.js'
 
 import type { MiddlewareRequest } from './MiddlewareRequest.js'
 import type { MiddlewareResponse } from './MiddlewareResponse.js'

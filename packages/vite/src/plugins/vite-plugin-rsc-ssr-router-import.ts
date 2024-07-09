@@ -1,8 +1,10 @@
 import path from 'node:path'
 
-import generate from '@babel/generator'
-import { parse as babelParse } from '@babel/parser'
-import traverse from '@babel/traverse'
+import bgen from '@babel/generator'
+const { default: generate } = bgen
+import { parse as babelParse } from '@babel/parser/index.cjs'
+import btrav from '@babel/traverse'
+const { default: traverse } = btrav
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
@@ -47,7 +49,6 @@ export function rscSsrRouterImport(): Plugin {
           }
         },
       })
-
       return generate(ast).code
     },
   }

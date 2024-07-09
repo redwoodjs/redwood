@@ -5,7 +5,7 @@ import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter'
+import type { RscFetchProps } from './rscFetchForClientRouter.js'
 
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
