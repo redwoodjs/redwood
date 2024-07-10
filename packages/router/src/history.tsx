@@ -4,8 +4,8 @@ export interface NavigateOptions {
 
 export type BlockerCallback = (tx: { retry: () => void }) => void
 type Blocker = {
-  id: string;
-  callback: BlockerCallback;
+  id: string
+  callback: BlockerCallback
 }
 
 const createHistory = () => {
@@ -76,7 +76,7 @@ const createHistory = () => {
       }
     },
     block: (id: string, callback: BlockerCallback) => {
-      const existingBlockerIndex = blockers.findIndex(blocker => blocker.id === id)
+      const existingBlockerIndex = blockers.findIndex((blocker) => blocker.id === id)
       if (existingBlockerIndex !== -1) {
         blockers[existingBlockerIndex] = { id, callback }
       } else {
@@ -84,11 +84,11 @@ const createHistory = () => {
       }
     },
     unblock: (id: string) => {
-      const index = blockers.findIndex(blocker => blocker.id === id)
+      const index = blockers.findIndex((blocker) => blocker.id === id)
       if (index !== -1) {
         blockers.splice(index, 1)
       }
-    }
+    },
   }
 
   const processBlockers = (index: number, navigate: () => void) => {
