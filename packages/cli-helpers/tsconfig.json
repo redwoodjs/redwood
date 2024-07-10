@@ -5,8 +5,9 @@
     "module": "NodeNext",
     "outDir": "dist"
   },
-  "include": ["./"],
+  "include": ["."],
   "references": [
+    { "path": "../framework-tools" },
     { "path": "../telemetry" },
     { "path": "../project-config" }
   ],

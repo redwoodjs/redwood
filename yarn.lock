@@ -7856,6 +7856,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.22.20"
     "@opentelemetry/api": "npm:1.8.0"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/telemetry": "workspace:*"
     "@types/dotenv-defaults": "npm:^2.0.4"
