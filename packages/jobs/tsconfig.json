@@ -3,7 +3,11 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "allowJs": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../babel-config" },
+    { "path": "../cli-helpers" },
+    { "path": "../project-config" },
+  ]
 }

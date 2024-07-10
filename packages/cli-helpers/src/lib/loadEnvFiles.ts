@@ -1,10 +1,8 @@
-// @ts-check
-
-import path from 'path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 import { config as dotenvConfig } from 'dotenv'
 import { config as dotenvDefaultsConfig } from 'dotenv-defaults'
-import fs from 'fs-extra'
 import { hideBin, Parser } from 'yargs/helpers'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -19,7 +17,7 @@ export function loadEnvFiles() {
   loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  const { loadEnvFiles } = Parser(hideBin(process.argv), {
+  const { loadEnvFiles } = Parser.default(hideBin(process.argv), {
     array: ['load-env-files'],
     default: {
       loadEnvFiles: [],
@@ -33,21 +31,17 @@ export function loadEnvFiles() {
   process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
 
-/**
- * @param {string} cwd
- */
-export function loadDefaultEnvFiles(cwd) {
+export function loadDefaultEnvFiles(cwd: string) {
   dotenvDefaultsConfig({
     path: path.join(cwd, '.env'),
     defaults: path.join(cwd, '.env.defaults'),
+    // @ts-expect-error - the type definitions are too old. They use dotenv v8,
+    // dotenv-default uses v14
     multiline: true,
   })
 }
 
-/**
- * @param {string} cwd
- */
-export function loadNodeEnvDerivedEnvFile(cwd) {
+export function loadNodeEnvDerivedEnvFile(cwd: string) {
   if (!process.env.NODE_ENV) {
     return
   }
@@ -63,13 +57,10 @@ export function loadNodeEnvDerivedEnvFile(cwd) {
   dotenvConfig({ path: nodeEnvDerivedEnvFilePath, override: true })
 }
 
-/**
- * @param {string} cwd
- */
-export function loadUserSpecifiedEnvFiles(cwd, loadEnvFiles) {
+export function loadUserSpecifiedEnvFiles(cwd: string, loadEnvFiles: string[]) {
   for (const suffix of loadEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
-    if (!fs.pathExistsSync(envPath)) {
+    if (!fs.existsSync(envPath)) {
       throw new Error(
         `Couldn't find an .env file at '${envPath}' as specified by '--load-env-files'`,
       )

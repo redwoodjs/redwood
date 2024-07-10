@@ -3,6 +3,7 @@
   "compilerOptions": {
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
+    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist"
   },

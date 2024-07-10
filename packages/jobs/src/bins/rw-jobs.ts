@@ -5,14 +5,14 @@
 
 import type { ChildProcess } from 'node:child_process'
 import { fork, exec } from 'node:child_process'
-import path from 'node:path'
-import process from 'node:process'
+import * as path from 'node:path'
+import * as process from 'node:process'
 import { setTimeout } from 'node:timers'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli/dist/lib/loadEnvFiles'
+import { loadEnvFiles } from '@redwoodjs/cli-helpers/dist/lib/loadEnvFiles.js'
 
 import { loadLogger } from '../core/loaders'
 import type { BasicLogger } from '../types'

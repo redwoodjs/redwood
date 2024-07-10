@@ -37,7 +37,9 @@ export interface BaseAdapterOptions {
   logger?: BasicLogger
 }
 
-export abstract class BaseAdapter<TOptions extends BaseAdapterOptions> {
+export abstract class BaseAdapter<
+  TOptions extends BaseAdapterOptions = BaseAdapterOptions,
+> {
   options: TOptions
   logger: BasicLogger
 

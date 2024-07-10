@@ -68,7 +68,7 @@ interface FailureData {
   runAt: Date | null
 }
 
-export class PrismaAdapter extends BaseAdapter {
+export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   db: PrismaClient
   model: string
   accessor: PrismaClient[keyof PrismaClient]
@@ -234,6 +234,7 @@ export class PrismaAdapter extends BaseAdapter {
   }
 
   async clear() {
+    this.options.db.$disconnect()
     return await this.accessor.deleteMany()
   }
 
