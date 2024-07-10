@@ -1,6 +1,5 @@
 import path from 'path'
 
-// @ts-expect-error not sure; other packages use this and don't provide the types
 import { config } from 'dotenv-defaults'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -14,6 +13,8 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   config({
     path: path.join(getPaths().base, '.env'),
     defaults: path.join(getPaths().base, '.env.defaults'),
+    // @ts-expect-error - Old typings. @types/dotenv-defaults depends on dotenv
+    // v8. dotenv-defaults uses dotenv v14
     multiline: true,
   })
 
