@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useRef, useId } from 'react'
+import { useEffect, useCallback, useState, useId } from 'react'
 
 import { block, unblock, type BlockerCallback } from './history'
 
