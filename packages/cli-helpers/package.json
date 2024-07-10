@@ -10,8 +10,8 @@
   "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.cjs"
+    "import": "./dist/index.js",
+    "default": "./dist/cjs/index.js"
   },
   "types": "./dist/index.d.ts",
   "files": [
