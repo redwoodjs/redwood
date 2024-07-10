@@ -45,6 +45,9 @@ await esbuild.build({
   conditions: ['react-server'],
   platform: 'node',
   target: ['node20'],
+  // @TODO explain this properly
+  // https://github.com/evanw/esbuild/pull/2067
+  // https://github.com/evanw/esbuild/issues/2113
   plugins: [commonjs()],
   logLevel: 'info',
 })
