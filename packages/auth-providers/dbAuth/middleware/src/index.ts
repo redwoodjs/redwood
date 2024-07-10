@@ -6,7 +6,9 @@ import {
   dbAuthSession,
 } from '@redwoodjs/auth-dbauth-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
+// @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
 import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
+// @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
 import { defaultGetRoles } from './defaultGetRoles'

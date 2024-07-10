@@ -72,7 +72,7 @@
   "scripts": {
     "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
