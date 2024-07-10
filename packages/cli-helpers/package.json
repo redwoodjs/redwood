@@ -9,9 +9,16 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.cjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs"
+    },
+    "./loadEnvFiles": {
+      "types": "./dist/lib/loadEnvFiles.d.ts",
+      "import": "./dist/lib/loadEnvFiles.mjs",
+      "default": "./dist/lib/loadEnvFiles.cjs"
+    }
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -43,9 +50,11 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
+    "@types/dotenv-defaults": "^2.0.4",
     "@types/lodash": "4.17.5",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
+    "dotenv-defaults": "5.0.2",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"

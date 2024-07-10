@@ -7858,11 +7858,13 @@ __metadata:
     "@opentelemetry/api": "npm:1.8.0"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/telemetry": "workspace:*"
+    "@types/dotenv-defaults": "npm:^2.0.4"
     "@types/lodash": "npm:4.17.5"
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
     dotenv: "npm:16.4.5"
+    dotenv-defaults: "npm:5.0.2"
     execa: "npm:5.1.1"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
@@ -10768,6 +10770,16 @@ __metadata:
   version: 0.0.9
   resolution: "@types/doctrine@npm:0.0.9"
   checksum: 10c0/cdaca493f13c321cf0cacd1973efc0ae74569633145d9e6fc1128f32217a6968c33bea1f858275239fe90c98f3be57ec8f452b416a9ff48b8e8c1098b20fa51c
+  languageName: node
+  linkType: hard
+
+"@types/dotenv-defaults@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@types/dotenv-defaults@npm:2.0.4"
+  dependencies:
+    "@types/node": "npm:*"
+    dotenv: "npm:^8.2.0"
+  checksum: 10c0/7d7ebdd696318d5f9a510d1d0b5fa262e240a377056d6ce7ed8984fb222d472732bf27f8d16726879531706030f1aa0879e65e711dbda17ad4d0be138d9d118b
   languageName: node
   linkType: hard
 
