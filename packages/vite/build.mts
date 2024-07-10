@@ -5,9 +5,11 @@ import {
 } from '@redwoodjs/framework-tools'
 
 import { writeFileSync } from 'node:fs'
+import { commonjs } from '@hyrious/esbuild-plugin-commonjs'
 
 import * as esbuild from 'esbuild'
 
+// CJS Build
 await build({
   entryPointOptions: {
     ignore: [...defaultIgnorePatterns, '**/bundled'],
@@ -20,6 +22,7 @@ await build({
   },
 })
 
+// ESM Build
 await build({
   entryPointOptions: {
     ignore: [...defaultIgnorePatterns, '**/bundled'],
@@ -37,12 +40,12 @@ await build({
 await esbuild.build({
   entryPoints: ['src/bundled/*'],
   outdir: 'dist/bundled',
-  // format: 'esm', // what format do we need???
+  format: 'esm',
   bundle: true,
   conditions: ['react-server'],
   platform: 'node',
   target: ['node20'],
-
+  plugins: [commonjs()],
   logLevel: 'info',
 })
 

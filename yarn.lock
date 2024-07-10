@@ -4831,6 +4831,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hyrious/esbuild-plugin-commonjs@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "@hyrious/esbuild-plugin-commonjs@npm:0.2.4"
+  peerDependencies:
+    cjs-module-lexer: "*"
+    esbuild: "*"
+  peerDependenciesMeta:
+    cjs-module-lexer:
+      optional: true
+  checksum: 10c0/f8466056c28914351b04cbc3a0eb4397b83d2b6ea1b2adb5ce524ecd193b42aef9865d71ed417b4d8bf5a1ebc14ced1ea67e84b7558120abb461b3f6e09c789e
+  languageName: node
+  linkType: hard
+
 "@ioredis/commands@npm:^1.1.1":
   version: 1.2.0
   resolution: "@ioredis/commands@npm:1.2.0"
@@ -8674,6 +8687,7 @@ __metadata:
     "@babel/generator": "npm:7.24.5"
     "@babel/parser": "npm:^7.22.16"
     "@babel/traverse": "npm:^7.22.20"
+    "@hyrious/esbuild-plugin-commonjs": "npm:^0.2.4"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/cookie-jar": "workspace:*"
