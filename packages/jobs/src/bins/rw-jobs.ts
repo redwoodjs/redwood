@@ -145,6 +145,7 @@ const startWorkers = ({
     const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
+      env: process.env,
     })
 
     if (detach) {
