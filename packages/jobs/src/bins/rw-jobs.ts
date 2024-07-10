@@ -5,8 +5,8 @@
 
 import type { ChildProcess } from 'node:child_process'
 import { fork, exec } from 'node:child_process'
-import * as path from 'node:path'
-import * as process from 'node:process'
+import path from 'node:path'
+import process from 'node:process'
 import { setTimeout } from 'node:timers'
 
 import { hideBin } from 'yargs/helpers'
@@ -21,7 +21,6 @@ export type WorkerConfig = Array<[string | null, number]> // [queue, id]
 
 loadEnvFiles()
 
-// @ts-expect-error - TS will claim this is read-only
 process.title = 'rw-jobs'
 
 const parseArgs = (argv: string[]) => {
