@@ -37,11 +37,11 @@ export interface BaseAdapterOptions {
   logger?: BasicLogger
 }
 
-export abstract class BaseAdapter {
-  options: any
+export abstract class BaseAdapter<TOptions extends BaseAdapterOptions> {
+  options: TOptions
   logger: BasicLogger
 
-  constructor(options: BaseAdapterOptions) {
+  constructor(options: TOptions) {
     this.options = options
     this.logger = options?.logger || console
   }

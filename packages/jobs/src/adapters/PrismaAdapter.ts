@@ -102,7 +102,9 @@ export class PrismaAdapter extends BaseAdapter {
   // The act of locking a job is dependant on the DB server, so we'll run some
   // raw SQL to do it in each case—Prisma doesn't provide enough flexibility
   // in their generated code to do this in a DB-agnostic way.
-  // TODO there may be more optimzed versions of the locking queries in Postgres and MySQL, this.options.db._activeProvider returns the provider name
+  // TODO: there may be more optimized versions of the locking queries in
+  // Postgres and MySQL, this.options.db._activeProvider returns the provider
+  // name
   async find({
     processName,
     maxRuntime,
