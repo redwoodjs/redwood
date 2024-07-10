@@ -9,7 +9,6 @@ import path from 'node:path'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
-// @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
@@ -47,6 +46,8 @@ import { convertExpressHeaders, getFullUrl } from './utils.js'
 loadDotEnv({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),
+  // @ts-expect-error - Old typings. @types/dotenv-defaults depends on dotenv
+  // v8. dotenv-defaults uses dotenv v14
   multiline: true,
 })
 // ------------------------------------------------

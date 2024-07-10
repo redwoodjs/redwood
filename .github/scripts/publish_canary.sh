@@ -34,10 +34,6 @@ args+=(
 echo 'n' \
   | yarn lerna publish "${args[@]}" 2>&1 \
   > publish_output
-echo "Publish output:"
-echo "---------------\n"
-cat publish_output
-echo "---------------\n"
 cat publish_output \
   | grep '\-canary\.' \
   | tail -n 1 \
@@ -47,7 +43,12 @@ cat publish_output \
   > canary_version
 
 if [ ! -s canary_version ]; then
-  echo "The canary_version file is empty or does not exist. Exiting."
+  echo "The canary_version file is empty or does not exist."
+  echo "'yarn lerna publish' output was:"
+  echo "---------------\n"
+  cat publish_output
+  echo "---------------\n"
+
   exit 1
 fi
 

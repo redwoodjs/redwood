@@ -70,7 +70,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -80,7 +80,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -90,7 +90,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -100,7 +100,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },

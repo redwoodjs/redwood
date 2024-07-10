@@ -79,7 +79,7 @@ export async function getGqlHandler() {
     return async (operation: Record<string, unknown>) => {
       return await handler(buildApiEvent(operation), buildContext())
     }
-  } catch (e) {
+  } catch {
     return () => {
       throw new GqlHandlerImportError(
         `Unable to import GraphQL handler at ${gqlPath}`,
