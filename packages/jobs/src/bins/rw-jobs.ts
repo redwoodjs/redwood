@@ -21,6 +21,7 @@ export type WorkerConfig = Array<[string | null, number]> // [queue, id]
 
 loadEnvFiles()
 
+// @ts-expect-error - TS will claim this is read-only
 process.title = 'rw-jobs'
 
 const parseArgs = (argv: string[]) => {
