@@ -18,6 +18,16 @@
       "types": "./dist/lib/loadEnvFiles.d.ts",
       "import": "./dist/lib/loadEnvFiles.js",
       "default": "./dist/cjs/lib/loadEnvFiles.js"
+    },
+    "./dist/lib/loadEnvFiles.js": {
+      "types": "./dist/lib/loadEnvFiles.d.ts",
+      "import": "./dist/lib/loadEnvFiles.js",
+      "default": "./dist/cjs/lib/loadEnvFiles.js"
+    },
+    "./dist/cjs/lib/loadEnvFiles.js": {
+      "types": "./dist/lib/loadEnvFiles.d.ts",
+      "import": "./dist/lib/loadEnvFiles.js",
+      "default": "./dist/cjs/lib/loadEnvFiles.js"
     }
   },
   "types": "./dist/index.d.ts",
