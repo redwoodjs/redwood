@@ -67,7 +67,7 @@ export class JobExportNotFoundError extends RedwoodJobError {
 export class JobsLibNotFoundError extends RedwoodJobError {
   constructor() {
     super(
-      'api/src/lib/jobs.js not found. Create this file and export `adapter` for the job runner to use',
+      'api/src/lib/jobs.js not found. Run `yarn rw setup jobs` to create this file and configure background jobs',
     )
   }
 }
