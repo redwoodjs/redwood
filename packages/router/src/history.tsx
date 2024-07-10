@@ -2,17 +2,15 @@ export interface NavigateOptions {
   replace?: boolean
 }
 
+export type Listener = (ev?: PopStateEvent) => any
+export type BeforeUnloadListener = (ev: BeforeUnloadEvent) => any
 export type BlockerCallback = (tx: { retry: () => void }) => void
-type Blocker = {
-  id: string
-  callback: BlockerCallback
-}
+export type Blocker = { id: string; callback: BlockerCallback }
 
 const createHistory = () => {
-  type Listener = (ev?: PopStateEvent) => any
-
   const listeners: Record<string, Listener> = {}
   const blockers: Blocker[] = []
+  let beforeUnloadListener: BeforeUnloadListener | null = null
 
   const history = {
     listen: (listener: Listener) => {
@@ -76,17 +74,25 @@ const createHistory = () => {
       }
     },
     block: (id: string, callback: BlockerCallback) => {
-      const existingBlockerIndex = blockers.findIndex((blocker) => blocker.id === id)
+      const existingBlockerIndex = blockers.findIndex(
+        (blocker) => blocker.id === id,
+      )
       if (existingBlockerIndex !== -1) {
         blockers[existingBlockerIndex] = { id, callback }
       } else {
         blockers.push({ id, callback })
+        if (blockers.length === 1) {
+          addBeforeUnloadListener()
+        }
       }
     },
     unblock: (id: string) => {
       const index = blockers.findIndex((blocker) => blocker.id === id)
       if (index !== -1) {
         blockers.splice(index, 1)
+        if (blockers.length === 0) {
+          removeBeforeUnloadListener()
+        }
       }
     },
   }
@@ -94,18 +100,30 @@ const createHistory = () => {
   const processBlockers = (index: number, navigate: () => void) => {
     if (index < blockers.length) {
       blockers[index].callback({
-        retry: () => processBlockers(index + 1, navigate)
+        retry: () => processBlockers(index + 1, navigate),
       })
     } else {
       navigate()
     }
   }
 
-  globalThis.addEventListener('beforeunload', (event: BeforeUnloadEvent) => {
-    if (blockers.length > 0) {
-      event.preventDefault()
+  const addBeforeUnloadListener = () => {
+    if (!beforeUnloadListener) {
+      beforeUnloadListener = (event: BeforeUnloadEvent) => {
+        if (blockers.length > 0) {
+          event.preventDefault()
+        }
+      }
+      globalThis.addEventListener('beforeunload', beforeUnloadListener)
     }
-  })
+  }
+
+  const removeBeforeUnloadListener = () => {
+    if (beforeUnloadListener) {
+      globalThis.removeEventListener('beforeunload', beforeUnloadListener)
+      beforeUnloadListener = null
+    }
+  }
 
   return history
 }
