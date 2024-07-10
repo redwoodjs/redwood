@@ -52,6 +52,8 @@ loadDotEnv({
 // ------------------------------------------------
 
 export async function runFeServer() {
+  const { sendMessage } = await import('execa')
+
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
@@ -199,6 +201,7 @@ export async function runFeServer() {
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
+  sendMessage('server ready')
 }
 
 runFeServer()
