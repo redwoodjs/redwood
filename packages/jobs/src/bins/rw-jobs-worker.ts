@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // The process that actually starts an instance of Worker to process jobs.
-import * as process from 'node:process'
+import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
@@ -52,7 +52,6 @@ const setProcessTitle = ({ id, queue }: { id: string; queue: string }) => {
     title += `.${id}`
   }
 
-  // @ts-expect-error - TS will claim this is read-only
   process.title = title
 }
 
