@@ -15,8 +15,6 @@ await build({
 await build({
   buildOptions: {
     ...defaultBuildOptions,
-    bundle: true,
-    entryPoints: ['./src/index.ts'],
     outdir: 'dist/cjs',
     packages: 'external',
   },
