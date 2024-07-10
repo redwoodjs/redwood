@@ -280,7 +280,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getChildren(id))
-    } catch (e) {
+    } catch {
       return []
     }
   })

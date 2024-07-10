@@ -1,8 +1,8 @@
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import path from 'path'
 
 import { config as dotenvConfig } from 'dotenv'
 import { config as dotenvDefaultsConfig } from 'dotenv-defaults'
+import fs from 'fs-extra'
 import { hideBin, Parser } from 'yargs/helpers'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -35,8 +35,8 @@ export function loadDefaultEnvFiles(cwd: string) {
   dotenvDefaultsConfig({
     path: path.join(cwd, '.env'),
     defaults: path.join(cwd, '.env.defaults'),
-    // @ts-expect-error - the type definitions are too old. They use dotenv v8,
-    // dotenv-default uses v14
+    // @ts-expect-error - Old typings. @types/dotenv-defaults depends on dotenv
+    // v8. dotenv-defaults uses dotenv v14
     multiline: true,
   })
 }
@@ -60,7 +60,7 @@ export function loadNodeEnvDerivedEnvFile(cwd: string) {
 export function loadUserSpecifiedEnvFiles(cwd: string, loadEnvFiles: string[]) {
   for (const suffix of loadEnvFiles) {
     const envPath = path.join(cwd, `.env.${suffix}`)
-    if (!fs.existsSync(envPath)) {
+    if (!fs.pathExistsSync(envPath)) {
       throw new Error(
         `Couldn't find an .env file at '${envPath}' as specified by '--load-env-files'`,
       )

@@ -11,28 +11,6 @@ export default defineConfig({
   define: {
     RWJS_ENV: {},
   },
-  plugins: [
-    // @ts-expect-error plugin types do not seem happy with each other
-    babel({
-      babelHelpers: 'runtime',
-      extensions: ['.ts', '.tsx', '.js'],
-      include: ['src/**/*'],
-      plugins: [
-        [
-          'babel-plugin-auto-import',
-          {
-            declarations: [
-              {
-                // import { React } from 'react'
-                default: 'React',
-                path: 'react',
-              },
-            ],
-          },
-        ]
-      ]
-    })
-  ]
 })
 
 
