@@ -234,7 +234,6 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   }
 
   async clear() {
-    this.options.db.$disconnect()
     return await this.accessor.deleteMany()
   }
 
