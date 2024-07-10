@@ -1,16 +1,80 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 
+import { getDMMF } from '@prisma/internals'
 import chalk from 'chalk'
+import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
+const MODEL_SCHEMA = `
+model BackgroundJob {
+  id        Int       @id @default(autoincrement())
+  attempts  Int       @default(0)
+  handler   String
+  queue     String
+  priority  Int
+  runAt     DateTime?
+  lockedAt  DateTime?
+  lockedBy  String?
+  lastError String?
+  failedAt  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+`
+
+const getModelNames = async () => {
+  const schema = await getDMMF({ datamodelPath: getPaths().api.dbSchema })
+
+  return schema.datamodel.models.map((model) => model.name)
+}
+
+const addModel = () => {
+  const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
+
+  const schemaWithUser = schema + MODEL_SCHEMA
+
+  fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
+}
+
 const tasks = ({ force }) => {
+  let skipSchema = false
+
   return new Listr(
     [
+      {
+        title: 'Creating job model...',
+        task: async (_ctx, task) => {
+          if ((await getModelNames()).includes('BackgroundJob')) {
+            skipSchema = true
+            task.skip('Model already exists, skipping creation')
+          } else {
+            addModel()
+          }
+        },
+      },
+      {
+        title: 'Migrating database...',
+        task: async (_ctx, task) => {
+          if (skipSchema) {
+            task.skip('Model already exists, skipping migration')
+          } else {
+            execa.sync(
+              'yarn rw prisma migrate dev',
+              ['--name', 'create-background-jobs'],
+              {
+                shell: true,
+                cwd: getPaths().base,
+                stdio: 'inherit',
+              },
+            )
+          }
+        },
+      },
       {
         title: 'Creating config file in api/src/lib...',
         task: async () => {
