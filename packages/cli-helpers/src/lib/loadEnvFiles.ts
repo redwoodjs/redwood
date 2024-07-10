@@ -23,6 +23,7 @@ export function loadEnvFiles() {
       loadEnvFiles: [],
     },
   })
+
   if (loadEnvFiles.length > 0) {
     loadUserSpecifiedEnvFiles(base, loadEnvFiles)
   }
