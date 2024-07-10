@@ -18,8 +18,6 @@ jobs:
 
     outputs:
       code: ${{ steps.detect-changes.outputs.code }}
-      rsc: ${{ steps.detect-changes.outputs.rsc }}
-      ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
       - uses: actions/checkout@v4
