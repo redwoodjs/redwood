@@ -56,7 +56,6 @@
     "@types/lodash": "4.17.5",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "dotenv-defaults": "5.0.2",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
