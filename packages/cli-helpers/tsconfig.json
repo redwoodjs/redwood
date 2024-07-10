@@ -3,11 +3,11 @@
   "compilerOptions": {
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["."],
   "references": [
+    { "path": "../framework-tools" },
     { "path": "../telemetry" },
     { "path": "../project-config" }
   ],

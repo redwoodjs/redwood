@@ -43,6 +43,7 @@
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/lodash": "4.17.5",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
