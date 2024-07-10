@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api",
-  "version": "7.7.2",
+  "version": "7.7.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
