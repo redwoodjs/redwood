@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useRef } from 'react'
+import { useEffect, useCallback, useState, useRef, useId } from 'react'
 
 import { block, unblock, type BlockerCallback } from './history'
 
@@ -13,7 +13,7 @@ export function useBlocker({ when }: UseBlockerOptions) {
   const [pendingNavigation, setPendingNavigation] = useState<
     (() => void) | null
   >(null)
-  const blockerId = useRef(`BLOCKER_${Date.now()}${Math.random()}`)
+  const blockerId = useId()
 
   const blocker: BlockerCallback = useCallback(
     ({ retry }) => {
@@ -23,16 +23,18 @@ export function useBlocker({ when }: UseBlockerOptions) {
       } else {
         retry()
       }
-    }, [when])
+    },
+    [when],
+  )
 
   useEffect(() => {
     if (when) {
-      block(blockerId.current, blocker)
+      block(blockerId, blocker)
     } else {
-      unblock(blockerId.current)
+      unblock(blockerId)
     }
-    return () => unblock(blockerId.current)
-  }, [when, blocker])
+    return () => unblock(blockerId)
+  }, [when, blocker, blockerId])
 
   const confirm = useCallback(() => {
     setBlockerState('IDLE')
