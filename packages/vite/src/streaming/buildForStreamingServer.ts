@@ -24,7 +24,9 @@ export async function buildForStreamingServer({
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
-          '@redwoodjs/auth-*',
+          // Middleware packages are dual packages already
+          '@redwoodjs/auth-*-web',
+          '@redwoodjs/auth-*-api',
         ],
       }),
     ],
