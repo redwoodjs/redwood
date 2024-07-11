@@ -20,12 +20,11 @@ export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
-// Loads the exported adapter from the app's jobs config in api/src/lib/jobs.js
+// Loads the exported adapter from the app's jobs config in api/src/lib/jobs.{js,ts}
 export const loadAdapter = async () => {
-  if (getPaths().api.jobsConfig) {
-    const { default: jobsModule } = await import(
-      makeFilePath(getPaths().api.jobsConfig as string)
-    )
+  const jobsConfigPath = getPaths().api.jobsConfig
+  if (jobsConfigPath) {
+    const jobsModule = require(jobsConfigPath)
     if (jobsModule.adapter) {
       return jobsModule.adapter
     } else {
@@ -36,32 +35,32 @@ export const loadAdapter = async () => {
   }
 }
 
-// Loads the logger from the app's filesystem in api/src/lib/logger.js
+// Loads the logger from the app's filesystem in api/src/lib/logger.{js,ts}
 export const loadLogger = async () => {
-  if (getPaths().api.logger) {
+  const loggerPath = getPaths().api.logger
+  if (loggerPath) {
     try {
-      const { default: loggerModule } = await import(
-        makeFilePath(getPaths().api.logger as string)
-      )
+      const loggerModule = require(loggerPath)
       return loggerModule.logger
     } catch (e) {
       console.warn(
-        'Tried to load logger but failed, falling back to console',
+        'Tried to load logger but failed, falling back to console\n',
         e,
       )
     }
   }
+
   return console
 }
 
 // Loads a job from the app's filesystem in api/src/jobs
 export const loadJob = async (name: string) => {
-  const files = fg.sync(`**/${name}.*`, { cwd: getPaths().api.jobs })
+  // Specifying {js,ts} extensions, so we don't accidentally try to load .json
+  // files or similar
+  const files = fg.sync(`**/${name}.{js,ts}`, { cwd: getPaths().api.jobs })
   if (!files[0]) {
     throw new JobNotFoundError(name)
   }
-  const { default: jobModule } = await import(
-    makeFilePath(path.join(getPaths().api.jobs, files[0]))
-  )
+  const jobModule = require(path.join(getPaths().api.jobs, files[0]))
   return jobModule
 }
