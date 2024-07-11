@@ -112,7 +112,7 @@ export async function handler({
     if (counters.error) {
       process.exitCode = 1
     }
-  } catch (e) {
+  } catch {
     process.exitCode = 1
     await db.$disconnect()
 

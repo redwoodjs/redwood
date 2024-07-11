@@ -89,7 +89,7 @@ export class RWProject extends BaseNode {
       const datamodel = await getSchema(this.pathHelper.api.dbSchema)
       // consider case where dmmf doesn't exist (or fails to parse)
       return await getDMMF({ datamodel })
-    } catch (e) {
+    } catch (_e) {
       return undefined
     }
   }
@@ -106,7 +106,7 @@ export class RWProject extends BaseNode {
   @lazy() private get processPagesDir() {
     try {
       return processPagesDir(this.pathHelper.web.pages)
-    } catch (e) {
+    } catch {
       return []
     }
   }

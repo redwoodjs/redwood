@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { basename, resolve } from 'path'
 
 import { describe, it, expect } from 'vitest'
@@ -95,19 +96,6 @@ describe('Cells', () => {
     expect(x?.map((e) => e.diagnostic.message)).toContain(
       'We recommend that you name your query operation',
     )
-  })
-})
-
-describe.skip('env vars', () => {
-  it('Warns if env vars are not ok', async () => {
-    const projectRoot = getFixtureDir('example-todo-main-with-errors')
-    const project = new RWProject({ projectRoot, host: new DefaultHost() })
-    project.envHelper.process_env_expressions.length
-    const env = project.envHelper
-    env.env
-    env.env_defaults
-    project.redwoodTOML.web_includeEnvironmentVariables
-    env.process_env_expressions
   })
 })
 

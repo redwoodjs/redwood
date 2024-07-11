@@ -123,7 +123,7 @@ export const getPrettierConfig = async () => {
       `file://${path.join(getPaths().base, 'prettier.config.js')}`
     )
     return prettierConfig
-  } catch (e) {
+  } catch {
     return undefined
   }
 }

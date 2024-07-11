@@ -11,7 +11,7 @@ export function convertToDataUrl(assetPath: string) {
     const base64AssetContents = fs.readFileSync(assetPath as string, 'base64')
     const mimeType = mime.lookup(assetPath as string)
     return `data:${mimeType};base64,${base64AssetContents}`
-  } catch (e) {
+  } catch {
     console.warn(`Could not read file ${assetPath} for conversion to data uri`)
     return ''
   }

@@ -313,7 +313,7 @@ export const getAppRouteHook = (forProd = false) => {
       // Stat sync throws if file doesn't exist
       fs.statSync(distAppRouteHook).isFile()
       return distAppRouteHook
-    } catch (e) {
+    } catch {
       return null
     }
   }
