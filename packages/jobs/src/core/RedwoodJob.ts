@@ -39,7 +39,7 @@ export interface JobSetOptions {
 
 export const DEFAULT_QUEUE = 'default'
 
-export class RedwoodJob {
+export abstract class RedwoodJob {
   // The default queue for all jobs
   static queue = DEFAULT_QUEUE
 
@@ -63,20 +63,23 @@ export class RedwoodJob {
 
   // Class method to schedule a job to run later
   //   const scheduleDetails = RedwoodJob.performLater('foo', 'bar')
-  static performLater(...args: any[]) {
+  static performLater<T extends RedwoodJob>(this: new () => T, ...args: any[]) {
     return new this().performLater(...args)
   }
 
   // Class method to run the job immediately in the current process
   //   const result = RedwoodJob.performNow('foo', 'bar')
-  static performNow(...args: any[]) {
+  static performNow<T extends RedwoodJob>(this: new () => T, ...args: any[]) {
     return new this().performNow(...args)
   }
 
   // Set options on the job before enqueueing it:
   //   const job = RedwoodJob.set({ wait: 300 })
   //   job.performLater('foo', 'bar')
-  static set(options: JobSetOptions = {}) {
+  static set<T extends RedwoodJob>(
+    this: new (options: JobSetOptions) => T,
+    options: JobSetOptions = {},
+  ) {
     return new this(options)
   }
 
@@ -133,9 +136,11 @@ export class RedwoodJob {
 
   // Must be implemented by the subclass
   // TODO TOBBE here's that argument that stopped TS complaining, but you mentioned a generic? The user defines this method in their own subclass, so they can do whatever they want with arguments/types in their own job. The performNow() and performLater() functions above just forward whatever arguments they received to this function
-  perform(..._args: any[]) {
-    throw new PerformNotImplementedError()
-  }
+  // TODO Rob: What's the correct return type here? Do you expect the perform() method to return something?
+  abstract perform(..._args: any[]): any
+  // {
+  //   throw new PerformNotImplementedError()
+  // }
 
   // Returns data sent to the adapter for scheduling
   payload(args: any[]) {
