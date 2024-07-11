@@ -1,17 +1,14 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
-import {
-  cookieName as cookieNameCreator,
-  dbAuthSession,
-} from '@redwoodjs/auth-dbauth-api'
+import dbAuthApi from '@redwoodjs/auth-dbauth-api'
+// Have to import this way, not sure why.
+const { dbAuthSession, cookieName: cookieNameCreator } = dbAuthApi
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-// @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
 import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
-// @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
 import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
 
-import { defaultGetRoles } from './defaultGetRoles'
+import { defaultGetRoles } from './defaultGetRoles.js'
 
 export interface DbAuthMiddlewareOptions {
   cookieName?: string
