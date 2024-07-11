@@ -135,12 +135,7 @@ export abstract class RedwoodJob {
   }
 
   // Must be implemented by the subclass
-  // TODO TOBBE here's that argument that stopped TS complaining, but you mentioned a generic? The user defines this method in their own subclass, so they can do whatever they want with arguments/types in their own job. The performNow() and performLater() functions above just forward whatever arguments they received to this function
-  // TODO Rob: What's the correct return type here? Do you expect the perform() method to return something?
   abstract perform(..._args: any[]): any
-  // {
-  //   throw new PerformNotImplementedError()
-  // }
 
   // Returns data sent to the adapter for scheduling
   payload(args: any[]) {
