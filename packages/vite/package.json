@@ -9,6 +9,7 @@
     "directory": "packages/vite"
   },
   "license": "MIT",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -34,6 +35,7 @@
     "./Router": {
       "types": "./dist/ClientRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
+      "require": "./dist/cjs/ClientRouter.js",
       "import": "./dist/ClientRouter.js"
     },
     "./SsrRouter": {
