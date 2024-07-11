@@ -1,5 +1,5 @@
 
-import swapApolloProvider from '../vite-plugin-swap-apollo-provider.js'
+import {swapApolloProvider} from '../vite-plugin-swap-apollo-provider.js'
 import { describe, it, expect } from 'vitest'
 
 describe('excludeModule', () => {

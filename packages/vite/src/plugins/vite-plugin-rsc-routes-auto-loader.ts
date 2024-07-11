@@ -1,10 +1,14 @@
 import path from 'path'
 
 import bgen from '@babel/generator'
-const { default: generate } = bgen
+// @TODO I have to do this to get transforms to work in the actual project
+// But vitest fails, because Vitest doesn't have "default"
+const generate = bgen.default ? bgen.default : bgen
 import { parse as babelParse } from '@babel/parser/index.cjs'
+// @TODO I have to do this to get transforms to work in the actual project
+// But vitest fails, because Vitest doesn't have "default"
 import btrav from '@babel/traverse'
-const { default: traverse } = btrav
+const traverse = btrav.default ? btrav.default : btrav
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
