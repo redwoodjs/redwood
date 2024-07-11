@@ -88,7 +88,10 @@ export async function reactRenderToStreamResponse(
 
   if (!isProd) {
     // For development, we need to inject the react-refresh runtime
-    jsBundles.push(path.join(__dirname, '../../inject', 'reactRefresh.js'))
+    // Avoid using __dirname because this module is now ESM
+    jsBundles.push(
+      new URL('../../inject/reactRefresh.js', import.meta.url).pathname,
+    )
   }
 
   const assetMap = JSON.stringify({
