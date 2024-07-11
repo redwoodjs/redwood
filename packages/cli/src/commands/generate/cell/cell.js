@@ -33,7 +33,7 @@ export const files = async ({ name, typescript, ...options }) => {
     mockIdValues = [42, 43, 44],
     model = null
   let templateNameSuffix = ''
-
+  let typeName = cellName
   // Create a unique operation name.
 
   const shouldGenerateList =
@@ -45,6 +45,7 @@ export const files = async ({ name, typescript, ...options }) => {
     model = await getSchema(pascalcase(singularize(cellName)))
     idName = getIdName(model)
     idType = getIdType(model)
+    typeName = model.name
     mockIdValues =
       idType === 'String'
         ? mockIdValues.map((value) => `'${value}'`)
@@ -115,10 +116,11 @@ export const files = async ({ name, typescript, ...options }) => {
     extension: typescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: `mock${templateNameSuffix}.js.template`,
+    templatePath: `mock${templateNameSuffix}.ts.template`,
     templateVars: {
       idName,
       mockIdValues,
+      typeName,
     },
   })
 

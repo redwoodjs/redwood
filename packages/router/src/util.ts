@@ -371,7 +371,7 @@ export function flattenSearchParams(queryString: string) {
 export function inIframe() {
   try {
     return global?.self !== global?.top
-  } catch (e) {
+  } catch {
     return true
   }
 }

@@ -11,7 +11,8 @@
     { "path": "../internal" },
     { "path": "../project-config" },
     { "path": "../adapters/fastify/web" },
-    { "path": "../web-server" }
+    { "path": "../web-server" },
+    { "path": "../realtime" }
   ],
   "exclude": [
     "dist",
