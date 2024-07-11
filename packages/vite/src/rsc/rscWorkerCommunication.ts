@@ -1,12 +1,13 @@
 import path from 'node:path'
 import type { Readable } from 'node:stream'
 import { PassThrough } from 'node:stream'
+import { fileURLToPath } from 'node:url'
 import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
 import type { RscFetchProps } from './rscFetchForClientRouter.js'
-const __filename = new URL(import.meta.url).pathname
+const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
   execArgv: [
