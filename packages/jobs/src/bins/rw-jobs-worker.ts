@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 // The process that actually starts an instance of Worker to process jobs.
+// Can be run independently with `yarn rw-jobs-worker` but by default is forked
+// by `yarn rw-jobs` and either monitored, or detached to run independently.
+
 import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
@@ -27,6 +30,7 @@ const parseArgs = (argv: string[]) => {
       alias: 'q',
       type: 'string',
       description: 'The named queue to work on',
+      default: null,
     })
     .option('workoff', {
       alias: 'o',
@@ -43,7 +47,13 @@ const parseArgs = (argv: string[]) => {
     .help().argv
 }
 
-const setProcessTitle = ({ id, queue }: { id: string; queue: string }) => {
+const setProcessTitle = ({
+  id,
+  queue,
+}: {
+  id: number
+  queue: string | null
+}) => {
   // set the process title
   let title = TITLE_PREFIX
   if (queue) {
@@ -85,9 +95,6 @@ const setupSignals = ({
 
 const main = async () => {
   const { id, queue, clear, workoff } = await parseArgs(process.argv)
-  // TODO Rob: I'll let you decide how you want to handle the type errors here
-  // @ts-expect-error - id is a number, and queue can be undefined
-  //                    setProcessTitle wants two strings
   setProcessTitle({ id, queue })
 
   const logger = await loadLogger()
