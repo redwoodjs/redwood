@@ -1,14 +1,8 @@
 import path from 'path'
 
 import bgen from '@babel/generator'
-// @TODO I have to do this to get transforms to work in the actual project
-// But vitest fails, because Vitest doesn't have "default"
-const generate = bgen.default ? bgen.default : bgen
 import { parse as babelParse } from '@babel/parser/index.cjs'
-// @TODO I have to do this to get transforms to work in the actual project
-// But vitest fails, because Vitest doesn't have "default"
 import btrav from '@babel/traverse'
-const traverse = btrav.default ? btrav.default : btrav
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
@@ -20,6 +14,13 @@ import {
   importStatementPath,
   processPagesDir,
 } from '@redwoodjs/project-config'
+
+// @TODO How do we not do this? have to do this because
+// a) Babel packages are CJS
+// b) Vite-test doesn't wrap in a default export but (right side of ||)
+// c) Actually running the code in Vite, it does wrap in a default export
+const generate = bgen.default || bgen
+const traverse = btrav.default || btrav
 
 const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   // If the path is already relative
