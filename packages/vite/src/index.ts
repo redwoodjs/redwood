@@ -4,6 +4,7 @@ import path from 'path'
 import react from '@vitejs/plugin-react'
 import type { PluginOption } from 'vite'
 import { normalizePath } from 'vite'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -155,5 +156,16 @@ export default function redwoodPluginVite(): PluginOption[] {
         }),
       },
     }),
+    // Only include the Buffer polyfill for non-rsc dev, for DevFatalErrorPage
+    // Including the polyfill plugin in any form in RSC breaks
+    !rscEnabled && {
+      ...nodePolyfills({
+        include: ['buffer'],
+        globals: {
+          Buffer: true,
+        },
+      }),
+      apply: 'serve',
+    },
   ]
 }

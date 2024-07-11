@@ -102,13 +102,16 @@ export async function reactRenderToStreamResponse(
   const { createElement }: React = rscEnabled
     ? await importModule('__rwjs__react')
     : await import('react')
+
   const {
     createInjector,
     ServerHtmlProvider,
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
     ? await importModule('__rwjs__server_inject')
-    : await import('@redwoodjs/web/dist/components/ServerInject.js')
+    : // @ts-expect-error this is defined in packages/web/package.json exports.
+      // This package just doesn't have moduleResolution configured
+      await import('@redwoodjs/web/serverInject')
   const { renderToString }: RDServerType = rscEnabled
     ? await importModule('rd-server')
     : await import('react-dom/server')
@@ -322,7 +325,8 @@ export async function importModule(
   } else if (mod === '__rwjs__server_auth_provider') {
     return await import(ServerAuthProviderPath)
   } else if (mod === '__rwjs__server_inject') {
-    return (await import(ServerInjectPath)).default
+    // Don't need default because rwjs/web is now ESM
+    return await import(ServerInjectPath)
   }
 
   throw new Error('Unknown module ' + mod)

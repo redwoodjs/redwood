@@ -1,7 +1,7 @@
 // These are normally auto-imported by babel
 import React from 'react'
 
-import gql from 'graphql-tag'
+import { gql } from 'graphql-tag'
 import { describe, expect, test } from 'tstyche'
 
 import type { CellProps, CellSuccessProps } from '@redwoodjs/web'
@@ -91,6 +91,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ word }: { word: string }) => {
@@ -118,6 +119,7 @@ describe('CellProps mapper type', () => {
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ fetchPolicy }: { fetchPolicy: string }) => {
@@ -143,6 +145,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has no arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {
@@ -169,6 +172,7 @@ describe('CellProps mapper type', () => {
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {

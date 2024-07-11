@@ -3,10 +3,6 @@
 // making it fine for embedding inside this project.
 
 // Stacktracey requires buffer, which Vite does not polyfill by default
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || require('buffer').Buffer
-}
-
 import React, { useState } from 'react'
 
 import type { GraphQLError } from 'graphql'

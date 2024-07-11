@@ -12,8 +12,7 @@ describe('Redwood Project Outline', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const outline = getOutline(project)
-    const outlineJSON = await outlineToJSON(outline)
-    outlineJSON //?
+    await outlineToJSON(outline)
   })
 })
 function getFixtureDir(

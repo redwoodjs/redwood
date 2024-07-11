@@ -323,9 +323,12 @@ export const handler = async ({ force, install }) => {
         skip: () => !usingVSCode() && "Looks like you're not using VS Code",
         task: () => {
           // Adds support for Redwood specific className props to tailwind intellisense
-          //   "tailwindCSS": {
-          //     "classAttributes": ["class", "className", "activeClassName", "errorClassName"]
-          //   }
+          //   "tailwindCSS.classAttributes": [
+          //     "class",
+          //     "className",
+          //     "activeClassName",
+          //     "errorClassName"
+          //   ]
           // The default value for this setting is:
           //   ["class", "className", "ngClass", "class:list"]
 
@@ -334,16 +337,16 @@ export const handler = async ({ force, install }) => {
             '.vscode/settings.json',
           )
 
-          const newTwSettingsJson = {
-            classAttributes: [
-              'class',
-              'className',
-              'activeClassName',
-              'errorClassName',
-            ],
-          }
+          const classAttributes = [
+            'class',
+            'className',
+            'activeClassName',
+            'errorClassName',
+          ]
 
-          let newSettingsJson = { tailwindCSS: { ...newTwSettingsJson } }
+          let newSettingsJson = {
+            ['tailwindCSS.classAttributes']: classAttributes,
+          }
 
           if (fs.existsSync(VS_CODE_SETTINGS_PATH)) {
             const originalSettingsFile = fs.readFileSync(
@@ -353,30 +356,16 @@ export const handler = async ({ force, install }) => {
             const originalSettingsJson = JSON.parse(
               originalSettingsFile || '{}',
             )
-            const originalTwSettingsJson = originalSettingsJson['tailwindCSS']
+            const originalTwClassAttributesJson =
+              originalSettingsJson['tailwindCSS.classAttributes'] || []
 
-            if (originalTwSettingsJson) {
-              const mergedClassAttributes = Array.from(
-                new Set([
-                  ...newTwSettingsJson.classAttributes,
-                  ...(originalTwSettingsJson.classAttributes || []),
-                ]),
-              )
+            const mergedClassAttributes = Array.from(
+              new Set([...classAttributes, ...originalTwClassAttributesJson]),
+            )
 
-              newSettingsJson = {
-                ...originalSettingsJson,
-                tailwindCSS: {
-                  ...originalTwSettingsJson,
-                  classAttributes: mergedClassAttributes,
-                },
-              }
-            } else {
-              newSettingsJson = {
-                ...originalSettingsJson,
-                tailwindCSS: {
-                  ...newTwSettingsJson,
-                },
-              }
+            newSettingsJson = {
+              ...originalSettingsJson,
+              ['tailwindCSS.classAttributes']: mergedClassAttributes,
             }
           }
 

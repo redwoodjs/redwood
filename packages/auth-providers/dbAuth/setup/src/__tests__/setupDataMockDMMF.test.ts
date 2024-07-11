@@ -60,7 +60,9 @@ jest.mock('@redwoodjs/cli-helpers', () => {
         }
       }
 
-      args.notes && console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      if (args.notes) {
+        console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      }
     },
   }
 })
