@@ -15,7 +15,7 @@ interface WorkerOptions {
   logger?: BasicLogger
   clear?: boolean
   processName?: string
-  queue?: string
+  queue?: string | null
   maxRuntime?: number
   waitTime?: number
   forever?: boolean
