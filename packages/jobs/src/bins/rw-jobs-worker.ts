@@ -17,25 +17,25 @@ const parseArgs = (argv: string[]) => {
     .usage(
       'Starts a single RedwoodJob worker to process background jobs\n\nUsage: $0 [options]',
     )
-    .option('i', {
-      alias: 'id',
+    .option('id', {
+      alias: 'i',
       type: 'number',
       description: 'The worker ID',
       default: 0,
     })
-    .option('q', {
-      alias: 'queue',
+    .option('queue', {
+      alias: 'q',
       type: 'string',
       description: 'The named queue to work on',
     })
-    .option('o', {
-      alias: 'workoff',
+    .option('workoff', {
+      alias: 'o',
       type: 'boolean',
       default: false,
       description: 'Work off all jobs in the queue and exit',
     })
-    .option('c', {
-      alias: 'clear',
+    .option('clear', {
+      alias: 'c',
       type: 'boolean',
       default: false,
       description: 'Remove all jobs in the queue and exit',
@@ -84,9 +84,10 @@ const setupSignals = ({
 }
 
 const main = async () => {
-  // TODO TOBBE For some reason the `parseArgs` type reports that it is only returning the single letter option flags as keys in this object (i, q, c, o), but it does return the alias names as well (id, queue, clear, workoff) I'd rather use the full alias names here as it's much easier to understand what the values are for.
-  // @ts-ignore
-  const { id, queue, clear, workoff } = parseArgs(process.argv)
+  const { id, queue, clear, workoff } = await parseArgs(process.argv)
+  // TODO Rob: I'll let you decide how you want to handle the type errors here
+  // @ts-expect-error - id is a number, and queue can be undefined
+  //                    setProcessTitle wants two strings
   setProcessTitle({ id, queue })
 
   const logger = await loadLogger()
