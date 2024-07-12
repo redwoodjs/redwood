@@ -74,8 +74,8 @@
     "@redwoodjs/web": "workspace:*",
     "@swc/core": "1.5.27",
     "@vitejs/plugin-react": "4.2.1",
-    "@whatwg-node/fetch": "0.9.17",
-    "@whatwg-node/server": "0.9.34",
+    "@whatwg-node/fetch": "0.9.18",
+    "@whatwg-node/server": "0.9.36",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
@@ -90,7 +90,7 @@
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
     "vite": "5.3.1",
     "vite-plugin-cjs-interop": "2.1.1",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-polyfills": "0.22.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {

@@ -8690,8 +8690,8 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.2.1"
-    "@whatwg-node/fetch": "npm:0.9.17"
-    "@whatwg-node/server": "npm:0.9.34"
+    "@whatwg-node/fetch": "npm:0.9.18"
+    "@whatwg-node/server": "npm:0.9.36"
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
@@ -8710,7 +8710,7 @@ __metadata:
     typescript: "npm:5.4.5"
     vite: "npm:5.3.1"
     vite-plugin-cjs-interop: "npm:2.1.1"
-    vite-plugin-node-polyfills: "npm:^0.22.0"
+    vite-plugin-node-polyfills: "npm:0.22.0"
     vitest: "npm:1.6.0"
     yargs-parser: "npm:21.1.1"
   bin:
@@ -8761,6 +8761,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
+    "@whatwg-node/fetch": "npm:0.9.18"
     core-js: "npm:3.37.1"
     graphql: "npm:16.8.1"
     graphql-sse: "npm:2.5.3"
@@ -12014,6 +12015,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@whatwg-node/fetch@npm:0.9.18":
+  version: 0.9.18
+  resolution: "@whatwg-node/fetch@npm:0.9.18"
+  dependencies:
+    "@whatwg-node/node-fetch": "npm:^0.5.7"
+    urlpattern-polyfill: "npm:^10.0.0"
+  checksum: 10c0/53fbbdb9c8b99d5ac550c80c4523e0e574c311fca55854c81e26949a4269638a36688cc485220f65845c9c5f10251f474b4982d594f063859af7b44316775a64
+  languageName: node
+  linkType: hard
+
 "@whatwg-node/fetch@npm:^0.8.0, @whatwg-node/fetch@npm:^0.8.1, @whatwg-node/fetch@npm:^0.8.2":
   version: 0.8.8
   resolution: "@whatwg-node/fetch@npm:0.8.8"
@@ -12053,7 +12064,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.9.34, @whatwg-node/server@npm:^0.9.33":
+"@whatwg-node/server@npm:0.9.36":
+  version: 0.9.36
+  resolution: "@whatwg-node/server@npm:0.9.36"
+  dependencies:
+    "@whatwg-node/fetch": "npm:^0.9.17"
+    tslib: "npm:^2.3.1"
+  checksum: 10c0/62d50ac4a1f41fddee4ff370f9b565a9a384c897c079595faba7ee1a62d8b30f4b6497c37b0d1d07d806cad38117fef8b77bf144ecd1d0cb6578ded47328ee49
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/server@npm:^0.9.33":
   version: 0.9.34
   resolution: "@whatwg-node/server@npm:0.9.34"
   dependencies:
@@ -31585,7 +31606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-node-polyfills@npm:^0.22.0":
+"vite-plugin-node-polyfills@npm:0.22.0":
   version: 0.22.0
   resolution: "vite-plugin-node-polyfills@npm:0.22.0"
   dependencies:
