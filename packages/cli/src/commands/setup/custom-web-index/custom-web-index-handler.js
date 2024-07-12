@@ -48,7 +48,7 @@ export const handler = async ({ force }) => {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...\n
-          ${c.green(
+          ${c.tip(
             'Quick link to the docs on configuring a custom entry point for your RW app',
           )}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-web-index')}

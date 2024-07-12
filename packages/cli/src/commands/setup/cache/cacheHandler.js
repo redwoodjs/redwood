@@ -56,7 +56,7 @@ export const handler = async ({ client, force }) => {
       title: 'One more thing...',
       task: (_ctx, task) => {
         task.title = `One more thing...\n
-          ${c.green('Check out the Service Cache docs for config and usage:')}
+          ${c.tip('Check out the Service Cache docs for config and usage:')}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/services#caching')}
         `
       },

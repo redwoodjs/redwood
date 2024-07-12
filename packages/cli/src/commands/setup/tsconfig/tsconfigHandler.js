@@ -50,7 +50,7 @@ export const handler = async ({ force }) => {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...\n
-          ${c.green('Quick link to the docs on configuring TypeScript')}
+          ${c.tip('Quick link to the docs on configuring TypeScript')}
           ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/typescript')}
         `
         },
