@@ -1,6 +1,5 @@
 import path from 'path'
 
-import chalk from 'chalk'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
@@ -57,7 +56,7 @@ export const handler = async ({ client, force }) => {
       task: (_ctx, task) => {
         task.title = `One more thing...\n
           ${c.tip('Check out the Service Cache docs for config and usage:')}
-          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/services#caching')}
+          ${c.link('https://redwoodjs.com/docs/services#caching')}
         `
       },
     },

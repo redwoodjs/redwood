@@ -1,6 +1,5 @@
 import path from 'path'
 
-import chalk from 'chalk'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
@@ -51,7 +50,7 @@ export const handler = async ({ force }) => {
           ${c.tip(
             'Quick link to the docs on configuring a custom entry point for your RW app',
           )}
-          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/custom-web-index')}
+          ${c.link('https://redwoodjs.com/docs/custom-web-index')}
         `
         },
       },

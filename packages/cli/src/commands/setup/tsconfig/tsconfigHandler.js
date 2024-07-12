@@ -1,6 +1,5 @@
 import path from 'path'
 
-import chalk from 'chalk'
 import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -51,7 +50,7 @@ export const handler = async ({ force }) => {
         task: (_ctx, task) => {
           task.title = `One more thing...\n
           ${c.tip('Quick link to the docs on configuring TypeScript')}
-          ${chalk.hex('#e8e8e8')('https://redwoodjs.com/docs/typescript')}
+          ${c.link('https://redwoodjs.com/docs/typescript')}
         `
         },
       },

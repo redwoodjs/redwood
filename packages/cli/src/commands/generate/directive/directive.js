@@ -1,7 +1,6 @@
 import path from 'path'
 
 import camelcase from 'camelcase'
-import chalk from 'chalk'
 import execa from 'execa'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
