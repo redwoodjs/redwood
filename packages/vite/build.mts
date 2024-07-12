@@ -16,7 +16,6 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special build tsconfig in this package
     outdir: 'dist/cjs',
     packages: 'external',
   },
@@ -29,7 +28,6 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special build tsconfig in this package
     format: 'esm',
     packages: 'external',
   },
@@ -45,9 +43,11 @@ await esbuild.build({
   conditions: ['react-server'],
   platform: 'node',
   target: ['node20'],
-  // @TODO explain this properly
-  // https://github.com/evanw/esbuild/pull/2067
+  // ⭐ Without this plugin, we get "Error: Dynamic require of "util" is not supported"
+  // when trying to run the built files. This plugin will
+  //  "just rewrite that file to replace "require(node-module)" to a toplevel static import statement." (see issue)
   // https://github.com/evanw/esbuild/issues/2113
+  // https://github.com/evanw/esbuild/pull/2067
   plugins: [commonjs()],
   logLevel: 'info',
 })
