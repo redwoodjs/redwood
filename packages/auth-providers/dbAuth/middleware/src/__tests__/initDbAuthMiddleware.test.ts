@@ -67,8 +67,9 @@ describe('dbAuthMiddleware', () => {
     expect(res).toEqual({ passthrough: true })
   })
 
-  it('When it has a cookie header, decrypts and sets server auth context', async () => {
-    const cookieHeader = 'session=this_is_the_only_correct_session'
+  it('decrypts and sets server auth context when it has a cookie header with session and auth-provider cookies', async () => {
+    const cookieHeader =
+      'session=this_is_the_only_correct_session;auth-provider=dbAuth'
 
     const options: DbAuthMiddlewareOptions = {
       getCurrentUser: vi.fn(async () => {
@@ -91,7 +92,7 @@ describe('dbAuthMiddleware', () => {
     const res = await middleware(mwReq, MiddlewareResponse.next())
 
     expect(mwReq.serverAuthState.get()).toEqual({
-      cookieHeader: 'session=this_is_the_only_correct_session',
+      cookieHeader,
       currentUser: {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
@@ -120,7 +121,8 @@ describe('dbAuthMiddleware', () => {
   })
 
   it('Will use the cookie name option correctly', async () => {
-    const cookieHeader = 'bazinga_8911=this_is_the_only_correct_session'
+    const cookieHeader =
+      'bazinga_8911=this_is_the_only_correct_session;auth-provider=dbAuth'
 
     const options: DbAuthMiddlewareOptions = {
       getCurrentUser: vi.fn(async () => {
@@ -143,7 +145,7 @@ describe('dbAuthMiddleware', () => {
     const res = await middleware(mwReq, MiddlewareResponse.next())
 
     expect(mwReq.serverAuthState.get()).toEqual({
-      cookieHeader: 'bazinga_8911=this_is_the_only_correct_session',
+      cookieHeader,
       currentUser: {
         email: 'user-1@example.com',
         id: 'mocked-current-user-1',
@@ -382,6 +384,7 @@ describe('dbAuthMiddleware', () => {
       const res = await middleware(req, MiddlewareResponse.next())
       expect(res?.body).toEqual(resetToken)
     })
+
     it('handles a getToken request', async () => {
       const cookieHeader =
         'session=ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
@@ -504,7 +507,7 @@ describe('dbAuthMiddleware', () => {
     //   })
   })
 
-  describe('handle exception cases', async () => {
+  describe('exception case handling', async () => {
     const unauthenticatedServerAuthState = {
       ...middlewareDefaultAuthProviderState,
       cookieHeader: null,
@@ -599,6 +602,182 @@ describe('dbAuthMiddleware', () => {
         // Expired cookies, will be removed by browser
         'session_8911=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
         'auth-provider=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      ])
+    })
+
+    it('handles a GET request with some cookies, but no auth related cookies', async () => {
+      const request = new Request(
+        'http://localhost:8911/functions/bad-cookie',
+        {
+          method: 'GET',
+          headers: {
+            Cookie: 'not-auth=some-value;other-cookie=foobar',
+          },
+        },
+      )
+
+      const mwReq = new MWRequest(request)
+
+      const options: DbAuthMiddlewareOptions = {
+        cookieName: 'session_8911',
+        getCurrentUser: async () => {
+          return {}
+        },
+        dbAuthHandler: async () => {
+          return {
+            body: JSON.stringify({}),
+            headers: {},
+            statusCode: 200,
+          }
+        },
+      }
+      const [middleware] = initDbAuthMiddleware(options)
+
+      const res = await middleware(mwReq, MiddlewareResponse.next())
+      expect(res).toBeDefined()
+
+      const serverAuthState = mwReq.serverAuthState.get()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader: 'not-auth=some-value;other-cookie=foobar',
+      })
+
+      expect(res?.toResponse().headers.getSetCookie()).toEqual([
+        // Not setting any cookies to expire
+      ])
+    })
+
+    it('handles a GET request with auth-provider cookie, but no session cookie', async () => {
+      const request = new Request(
+        'http://localhost:8911/functions/bad-cookie',
+        {
+          method: 'GET',
+          headers: {
+            Cookie: 'not-auth=some-value;auth-provider=dbAuth',
+          },
+        },
+      )
+
+      const mwReq = new MWRequest(request)
+
+      const options: DbAuthMiddlewareOptions = {
+        cookieName: 'session_8911',
+        getCurrentUser: async () => {
+          return {}
+        },
+        dbAuthHandler: async () => {
+          return {
+            body: JSON.stringify({}),
+            headers: {},
+            statusCode: 200,
+          }
+        },
+      }
+      const [middleware] = initDbAuthMiddleware(options)
+
+      const res = await middleware(mwReq, MiddlewareResponse.next())
+      expect(res).toBeDefined()
+
+      const serverAuthState = mwReq.serverAuthState.get()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader: 'not-auth=some-value;auth-provider=dbAuth',
+      })
+
+      expect(res?.toResponse().headers.getSetCookie()).toEqual([
+        // Expired cookies, will be removed by browser
+        'session_8911=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+        'auth-provider=; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
+      ])
+    })
+
+    it('handles a GET request with valid session cookie, but no auth-provider cookie', async () => {
+      const request = new Request(
+        'http://localhost:8911/functions/bad-cookie',
+        {
+          method: 'GET',
+          headers: {
+            Cookie: 'session_8911=this_is_the_only_correct_session',
+          },
+        },
+      )
+
+      const mwReq = new MWRequest(request)
+
+      const options: DbAuthMiddlewareOptions = {
+        cookieName: 'session_8911',
+        getCurrentUser: async () => {
+          return {}
+        },
+        dbAuthHandler: async () => {
+          return {
+            body: JSON.stringify({}),
+            headers: {},
+            statusCode: 200,
+          }
+        },
+      }
+      const [middleware] = initDbAuthMiddleware(options)
+
+      const res = await middleware(mwReq, MiddlewareResponse.next())
+      expect(res).toBeDefined()
+
+      const serverAuthState = mwReq.serverAuthState.get()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader: 'session_8911=this_is_the_only_correct_session',
+      })
+
+      // Because we don't have the dbAuth auth-provider cookie set the code
+      // should not expire the session cookie, because it could belong to
+      // someone else (i.e. not dbAuth)
+      expect(res?.toResponse().headers.getSetCookie()).toEqual([
+        // Don't set any cookies to expire
+      ])
+    })
+
+    it('handles a GET request with invalid session cookie and no auth-provider cookie', async () => {
+      const request = new Request(
+        'http://localhost:8911/functions/bad-cookie',
+        {
+          method: 'GET',
+          headers: {
+            Cookie: 'session_8911=invalid',
+          },
+        },
+      )
+
+      const mwReq = new MWRequest(request)
+
+      const options: DbAuthMiddlewareOptions = {
+        cookieName: 'session_8911',
+        getCurrentUser: async () => {
+          return {}
+        },
+        dbAuthHandler: async () => {
+          return {
+            body: JSON.stringify({}),
+            headers: {},
+            statusCode: 200,
+          }
+        },
+      }
+      const [middleware] = initDbAuthMiddleware(options)
+
+      const res = await middleware(mwReq, MiddlewareResponse.next())
+      expect(res).toBeDefined()
+
+      const serverAuthState = mwReq.serverAuthState.get()
+      expect(serverAuthState).toEqual({
+        ...unauthenticatedServerAuthState,
+        cookieHeader: 'session_8911=invalid',
+      })
+
+      // Because we don't have the dbAuth auth-provider cookie set the code
+      // should not expire the session cookie, because it could belong to
+      // someone else (i.e. not dbAuth)
+      expect(res?.toResponse().headers.getSetCookie()).toEqual([
+        // Don't set any cookies to expire
       ])
     })
 
