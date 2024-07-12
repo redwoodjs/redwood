@@ -41,39 +41,32 @@ const addModel = () => {
   fs.writeFileSync(getPaths().api.dbSchema, schemaWithUser)
 }
 
-const tasks = ({ force }) => {
-  let skipSchema = false
+const tasks = async ({ force }) => {
+  const modelExists = (await getModelNames()).includes('BackgroundJob')
 
   return new Listr(
     [
       {
         title: 'Creating job model...',
-        task: async (_ctx, task) => {
-          if ((await getModelNames()).includes('BackgroundJob')) {
-            skipSchema = true
-            task.skip('Model already exists, skipping creation')
-          } else {
-            addModel()
-          }
+        task: () => {
+          addModel()
         },
+        enabled: () => !modelExists,
       },
       {
         title: 'Migrating database...',
-        task: async (_ctx, task) => {
-          if (skipSchema) {
-            task.skip('Model already exists, skipping migration')
-          } else {
-            execa.sync(
-              'yarn rw prisma migrate dev',
-              ['--name', 'create-background-jobs'],
-              {
-                shell: true,
-                cwd: getPaths().base,
-                stdio: 'inherit',
-              },
-            )
-          }
+        task: () => {
+          execa.sync(
+            'yarn rw prisma migrate dev',
+            ['--name', 'create-background-jobs'],
+            {
+              shell: true,
+              cwd: getPaths().base,
+              stdio: 'inherit',
+            },
+          )
         },
+        enabled: () => !modelExists,
       },
       {
         title: 'Creating config file in api/src/lib...',
@@ -119,11 +112,15 @@ const tasks = ({ force }) => {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...
-          ${c.green('Background jobs configured!\n')}
-          ${'Generate jobs with:'} ${c.warning('yarn rw g job <name>')}
-          ${'Execute jobs with:'}  ${c.warning('yarn rw jobs work\n')}
-          ${'Check out the docs for more info:'}
-          ${chalk.hex('#e8e8e8')('https://docs.redwoodjs.com/docs/background-jobs')}
+
+          ${c.success('\nBackground jobs configured!\n')}
+
+          Generate jobs with: ${c.warning('yarn rw g job <name>')}
+          Execute jobs with:  ${c.warning('yarn rw jobs work\n')}
+
+          Check out the docs for more info:
+          ${c.link('https://docs.redwoodjs.com/docs/background-jobs')}\n
+
         `
         },
       },
@@ -133,7 +130,7 @@ const tasks = ({ force }) => {
 }
 
 export const handler = async ({ force }) => {
-  const t = tasks({ force })
+  const t = await tasks({ force })
 
   try {
     await t.run()
