@@ -204,7 +204,7 @@ export abstract class RedwoodJob {
     this.myOptions = Object.assign(this.myOptions || {}, { runAt: value })
   }
 
-  // Make private this.#options available as a getter only
+  // Make private this.myOptions available as a getter only
   get options() {
     return this.myOptions
   }
