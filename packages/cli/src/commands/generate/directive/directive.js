@@ -116,18 +116,18 @@ export const handler = async (args) => {
 
   let notes = ''
   const POST_RUN_INSTRUCTIONS = `
-   ${c.warning('After modifying your directive, you can add it to your SDLs e.g.:')}
+   ${c.note('After modifying your directive, you can add it to your SDLs e.g.:')}
 
     ${c.info('// example todo.sdl.js')}
     ${c.info('# Option A: Add it to a field')}
     type Todo {
       id: Int!
-      body: String! ${c.green(`@${args.name}`)}
+      body: String! ${c.tip(`@${args.name}`)}
     }
 
     ${c.info('# Option B: Add it to query/mutation')}
     type Query {
-      todos: [Todo] ${c.green(`@${args.name}`)}
+      todos: [Todo] ${c.tip(`@${args.name}`)}
     }
 `
 
