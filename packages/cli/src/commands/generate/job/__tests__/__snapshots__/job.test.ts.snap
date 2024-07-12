@@ -1,0 +1,39 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Single word default files > creates a single word function file > Scenario snapshot 1`] = `
+"import type { ScenarioData } from '@redwoodjs/testing/api'
+
+export const standard = defineScenario({
+  // Define the "fixture" to write into your test database here
+  // See guide: https://redwoodjs.com/docs/testing#scenarios
+})
+
+export type StandardScenario = ScenarioData<unknown>
+"
+`;
+
+exports[`Single word default files > creates a single word function file > Test snapshot 1`] = `
+"import { SampleJob } from './SampleJob'
+
+describe('Sample', () => {
+  it('should not throw any errors', async () => {
+    const job = new SampleJob()
+
+    await expect(job.perform()).resolves.not.toThrow()
+  })
+})
+"
+`;
+
+exports[`Single word default files > creates a single word function file 1`] = `
+"import { RedwoodJob } from '@redwoodjs/jobs'
+
+export class SampleJob extends RedwoodJob {
+  async perform() {
+    // job implementation here
+  }
+}
+"
+`;
+
+exports[`multi-word files > creates a multi word function file 1`] = `undefined`;
