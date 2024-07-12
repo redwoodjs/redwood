@@ -144,7 +144,7 @@ export const handler = async ({ force }: Args) => {
       title: 'One more thing...',
       task: (ctx) => {
         notes.push(
-          colors.green(
+          colors.important(
             'You will need to add `SENTRY_DSN` to `includeEnvironmentVariables` in redwood.toml.',
           ),
         )
