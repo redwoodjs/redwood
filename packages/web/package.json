@@ -112,7 +112,7 @@
     "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "@whatwg-node/fetch": "0.9.18",
+    "@whatwg-node/fetch": "0.9.17",
     "core-js": "3.37.1",
     "graphql": "16.8.1",
     "graphql-sse": "2.5.3",
