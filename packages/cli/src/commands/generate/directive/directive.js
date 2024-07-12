@@ -114,9 +114,10 @@ export const handler = async (args) => {
     rollback: args.rollback,
   })
 
-  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-    'After modifying your directive, you can add it to your SDLs e.g.:',
-  )}
+  let notes = ''
+  const POST_RUN_INSTRUCTIONS = `
+   ${c.warning('After modifying your directive, you can add it to your SDLs e.g.:')}
+
     ${c.info('// example todo.sdl.js')}
     ${c.info('# Option A: Add it to a field')}
     type Todo {
@@ -187,8 +188,11 @@ export const handler = async (args) => {
       },
       {
         title: 'Next steps...',
-        task: (_ctx, task) => {
-          task.title = POST_RUN_INSTRUCTIONS
+        task: () => {
+          // Can't do this, since it strips formatting
+          // task.title = POST_RUN_INSTRUCTIONS
+          // Instead we just console.log the instructions at the end
+          notes = POST_RUN_INSTRUCTIONS
         },
       },
     ].filter(Boolean),
@@ -200,6 +204,9 @@ export const handler = async (args) => {
       prepareForRollback(tasks)
     }
     await tasks.run()
+    if (notes) {
+      console.log(notes)
+    }
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)
