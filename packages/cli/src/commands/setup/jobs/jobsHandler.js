@@ -119,7 +119,7 @@ const tasks = async ({ force }) => {
           Execute jobs with:  ${c.warning('yarn rw jobs work\n')}
 
           Check out the docs for more info:
-          ${c.link('https://docs.redwoodjs.com/docs/background-jobs')}\n
+          ${c.link('https://docs.redwoodjs.com/docs/background-jobs')}
 
         `
         },
