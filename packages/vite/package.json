@@ -18,7 +18,7 @@
         "default": "./dist/index.js"
       },
       "require": {
-        "types": "./dist/cjs/index.d.ts",
+        "types": "./dist/index.d.ts",
         "default": "./dist/cjs/index.js"
       }
     },
@@ -68,8 +68,7 @@
   },
   "files": [
     "dist",
-    "inject",
-    "cjsWrapper.js"
+    "inject"
   ],
   "scripts": {
     "build": "tsx build.mts && yarn build:types",
