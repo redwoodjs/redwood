@@ -41,7 +41,8 @@
       "import": "./dist/server/middleware.js",
       "default": "./dist/cjs/server/middleware.js"
     },
-    "./dist/server/middleware.js": {
+    "./dist/server/middleware": {
+      "require": "./dist/cjs/server/middleware.js",
       "types": "./dist/server/middleware.d.ts",
       "import": "./dist/server/middleware.js",
       "default": "./dist/cjs/server/middleware.js"
