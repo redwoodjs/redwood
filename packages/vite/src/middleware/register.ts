@@ -3,13 +3,13 @@ import type Router from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
+import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware'
 import type {
   Middleware,
   MiddlewareClass,
   MiddlewareInvokeOptions,
   MiddlewareRequest,
-} from '@redwoodjs/web/dist/server/middleware.js'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware.js'
+} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
 
 import type { EntryServer } from '../types'
 import { makeFilePath, ssrLoadEntryServer } from '../utils'

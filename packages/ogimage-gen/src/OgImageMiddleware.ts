@@ -14,7 +14,7 @@ import type {
   MiddlewareInvokeOptions,
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/web/dist/server/middleware.js'
+} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
 
 import { getRoutesList } from './getRoutesList.js'
 import { OGIMAGE_DEFAULTS } from './hooks.js'

@@ -10,7 +10,7 @@ import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
 import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
-import type { Middleware } from '@redwoodjs/web/dist/server/middleware.js'
+import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import {
   decodeReply,

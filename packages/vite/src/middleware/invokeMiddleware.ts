@@ -4,11 +4,11 @@ import {
   MiddlewareResponse,
   MiddlewareRequest,
   MiddlewareShortCircuit,
-} from '@redwoodjs/web/dist/server/middleware.js'
+} from '@redwoodjs/web/dist/server/middleware'
 import type {
   Middleware,
   MiddlewareInvokeOptions,
-} from '@redwoodjs/web/dist/server/middleware.js'
+} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
 
 /**
  * Invokes the middleware function, and guarantees a MiddlewareResponse object

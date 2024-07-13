@@ -20,7 +20,7 @@ import {
   createPerRequestMap,
   createServerStorage,
 } from '@redwoodjs/server-store'
-import type { Middleware } from '@redwoodjs/web/dist/server/middleware.js'
+import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
