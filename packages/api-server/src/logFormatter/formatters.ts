@@ -125,7 +125,8 @@ export const formatMessage = (logData: any) => {
     pretty = chalk.white(msg)
   }
   if (level === 'warn') {
-    pretty = chalk.magenta(msg)
+    const orange = '#ffa500'
+    pretty = chalk.hex(orange)(msg)
   }
   if (level === 'debug') {
     pretty = chalk.yellow(msg)
