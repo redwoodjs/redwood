@@ -22,25 +22,30 @@
   },
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      }
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./serverInject": {
-      "require": "./dist/cjs/components/ServerInject.js",
-      "import": "./dist/components/ServerInject.js",
       "types": "./dist/components/ServerInject.d.ts",
-      "default": "./dist/components/ServerInject.js"
+      "import": "./dist/components/ServerInject.js",
+      "default": "./dist/cjs/components/ServerInject.js"
     },
     "./request": {
-      "require": "./dist/cjs/server/request.js",
+      "types": "./dist/server/request.d.ts",
       "import": "./dist/server/request.js",
-      "types": "./dist/server/request.d.ts"
+      "default": "./dist/cjs/server/request.js"
+    },
+    "./middleware": {
+      "types": "./dist/server/middleware.d.ts",
+      "import": "./dist/server/middleware.js",
+      "default": "./dist/cjs/server/middleware.js"
+    },
+    "./dist/server/middleware": {
+      "require": "./dist/cjs/server/middleware.js",
+      "types": "./dist/server/middleware.d.ts",
+      "import": "./dist/server/middleware.js",
+      "default": "./dist/cjs/server/middleware.js"
     },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
@@ -66,14 +71,13 @@
       "default": "./dist/entry/index.js"
     },
     "./toast": {
-      "require": "./dist/cjs/toast/index.js",
+      "types": "./dist/toast/index.d.ts",
       "import": "./dist/toast/index.js",
-      "types": "./dist/toast/index.d.ts"
+      "default": "./dist/cjs/toast/index.js"
     },
     "./apollo": {
-      "require": "./dist/cjs/apollo/index.js",
-      "import": "./dist/apollo/index.js",
       "types": "./dist/apollo/index.d.ts",
+      "import": "./dist/apollo/index.js",
       "default": "./dist/cjs/apollo/index.js"
     },
     "./forceEsmApollo": {
@@ -102,6 +106,7 @@
     "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
+    "@whatwg-node/fetch": "0.9.17",
     "core-js": "3.37.1",
     "graphql": "16.8.1",
     "graphql-sse": "2.5.3",
@@ -118,6 +123,7 @@
     "@babel/plugin-transform-runtime": "7.24.3",
     "@babel/runtime": "7.24.5",
     "@redwoodjs/framework-tools": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "14.3.1",
