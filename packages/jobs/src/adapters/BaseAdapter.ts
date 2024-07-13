@@ -56,6 +56,7 @@ export abstract class BaseAdapter<
 
   abstract find(args: FindArgs): BaseJob | null | Promise<BaseJob | null>
 
+  // TODO accept an optional `queue` arg to clear only jobs in that queue
   abstract clear(): any
 
   abstract success(job: BaseJob): any

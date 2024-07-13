@@ -43,6 +43,7 @@ export class Executor {
     this.logger.info(this.job, `Started job ${this.job.id}`)
     const details = JSON.parse(this.job.handler)
 
+    // TODO try to use the adapter defined by the job itself, otherwise fallback to this.adapter
     try {
       const jobModule = await loadJob(details.handler)
       await new jobModule[details.handler]().perform(...details.args)
