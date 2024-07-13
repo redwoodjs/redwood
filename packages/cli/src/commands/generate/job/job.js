@@ -1,4 +1,5 @@
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import * as changeCase from 'change-case'
 import { Listr } from 'listr2'
@@ -151,6 +152,9 @@ export const handler = async ({ name, force, ...rest }) => {
 
   validateName(name)
 
+  const jobName = normalizeName(name)
+  const newJobExport = `${changeCase.camelCase(jobName)}Job: new ${jobName}Job()`
+
   const tasks = new Listr(
     [
       {
@@ -163,7 +167,27 @@ export const handler = async ({ name, force, ...rest }) => {
       },
       {
         title: 'Adding to api/src/lib/jobs export...',
-        task: async () => {},
+        task: async () => {
+          const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
+          const newFile = file
+            .replace(
+              /export const jobs = \{/,
+              `export const jobs = {\n  ${newJobExport},`,
+            )
+            .replace(
+              /(import \{ db \} from 'src\/lib\/db')/,
+              `import ${jobName}Job from 'src/jobs/${jobName}Job'\n$1`,
+            )
+          fs.writeFileSync(getPaths().api.jobsConfig, newFile)
+        },
+        skip: () => {
+          const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
+          if (!file || !file.match(/export const jobs = \{/)) {
+            return '`jobs` export not found, skipping'
+          } else if (file.match(newJobExport)) {
+            return `${jobName}Job already exported, skipping`
+          }
+        },
       },
     ],
     { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
