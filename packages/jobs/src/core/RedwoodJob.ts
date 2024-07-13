@@ -39,15 +39,17 @@ export interface JobSetOptions {
 
 export const DEFAULT_QUEUE = 'default'
 
+export const DEFAULT_PRIORITY = 50
+
 export abstract class RedwoodJob {
   // The default queue for all jobs
   static queue = DEFAULT_QUEUE
 
   // The default priority for all jobs
-  // Assumes a range of 1 - 100, 1 being highest priority
-  static priority = 50
+  // Lower numbers are higher priority (1 is higher priority than 100)
+  static priority = DEFAULT_PRIORITY
 
-  // The adapter to use for scheduling jobs. Set via the static `config` method
+  // The adapter to use for scheduling jobs
   static adapter: BaseAdapter
 
   // Set via the static `config` method
