@@ -13,11 +13,6 @@
     "testing-library.d.ts"
   ],
   "references": [
-    {
-      "path": "../auth/tsconfig.build.json"
-    },
-    {
-      "path": "../internal"
-    }
+    { "path": "../internal" }
   ]
 }
