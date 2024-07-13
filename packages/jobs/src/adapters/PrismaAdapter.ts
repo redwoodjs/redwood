@@ -56,7 +56,6 @@ interface PrismaJob extends BaseJob {
 interface PrismaAdapterOptions extends BaseAdapterOptions {
   db: PrismaClient
   model?: string
-  accessor?: keyof PrismaClient
   maxAttempts?: number
 }
 
