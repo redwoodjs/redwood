@@ -44,7 +44,7 @@ writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 // [1]: https://github.com/arethetypeswrong/arethetypeswrong.github.io/issues/21#issuecomment-1494618930
 // [2]: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
 
-await $`mv package.json package.json.bak`
+await $`cp package.json package.json.bak`
 
 const packageJson: PackageJson = JSON.parse(
   readFileSync('./package.json', 'utf-8'),
@@ -52,6 +52,6 @@ const packageJson: PackageJson = JSON.parse(
 packageJson.type = 'commonjs'
 writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
 
-await $`yarn build:types-tsc`
+await $`yarn build:types-cjs`
 
 await $`mv package.json.bak package.json`
