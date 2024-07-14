@@ -6,7 +6,9 @@ interface Problem {
   resolutionKind?: string
 }
 
-await $({ nothrow: true })`yarn attw -P -f json > .attw.json`
+await $({
+  nothrow: true,
+})`yarn attw -P --exclude-entrypoints webpackEntry forceEsmApollo -f json > .attw.json`
 const output = await $`cat .attw.json`
 await $`rm .attw.json`
 
@@ -19,13 +21,10 @@ if (!json.analysis.problems || json.analysis.problems.length === 0) {
 
 if (
   json.analysis.problems.every(
-    (problem: Problem) =>
-      problem.resolutionKind === 'node10' ||
-      problem.entrypoint === './webpackEntry' ||
-      problem.entrypoint === './forceEsmApollo',
+    (problem: Problem) => problem.resolutionKind === 'node10',
   )
 ) {
-  console.log("Only found problems we don't care about")
+  console.log("Only found node10 problems, which we don't care about")
   process.exit(0)
 }
 
