@@ -240,7 +240,6 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
               definition.operation === 'subscription'
             )
           },
-          // @ts-expect-error  Due to CJS imports
           new SSELink({
             url: uri,
             auth: { authProviderType, tokenFn: getToken },
