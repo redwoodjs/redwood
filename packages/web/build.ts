@@ -21,7 +21,7 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special build tsconfig in this package
+    tsconfig: 'tsconfig.build.json',
     outdir: 'dist/cjs',
     packages: 'external',
   },
@@ -36,7 +36,7 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
-    // ⭐ No special build tsconfig in this package
+    tsconfig: 'tsconfig.build.json',
     format: 'esm',
     packages: 'external',
   },
