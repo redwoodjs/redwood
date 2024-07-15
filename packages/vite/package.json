@@ -66,8 +66,8 @@
   },
   "dependencies": {
     "@babel/generator": "7.24.5",
-    "@babel/parser": "^7.22.16",
-    "@babel/traverse": "^7.22.20",
+    "@babel/parser": "7.22.16",
+    "@babel/traverse": "7.22.20",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/cookie-jar": "workspace:*",
@@ -97,7 +97,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@hyrious/esbuild-plugin-commonjs": "^0.2.4",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.4",
     "@types/busboy": "^1",
     "@types/cookie": "^0",
     "@types/express": "4",
