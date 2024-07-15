@@ -7,7 +7,7 @@
   },
   "include": ["./src/**/*", "ambient.d.ts"],
   "references": [
-    { "path": "../web" },
+    { "path": "../web/tsconfig.build.json" },
     { "path": "../router" },
     { "path": "../internal" },
     { "path": "../project-config" },
