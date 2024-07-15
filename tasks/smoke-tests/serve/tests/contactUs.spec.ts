@@ -19,6 +19,9 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   const redwoodBlogLink = page.getByRole('link', { name: 'Redwood Blog' })
   await redwoodBlogLink.click()
 
+  // Check if we're still on the contact page
+  await expect(page).toHaveURL('/contact')
+
   // Check if the blocker buttons are displayed
   await expect(page.getByRole('button', { name: 'Confirm' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Abort' })).toBeVisible()
@@ -33,10 +36,10 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   // Try to navigate away by clicking the "Redwood Blog" link again
   await redwoodBlogLink.click()
 
-  // Confirm the navigation
+  // Confirm the navigation this time
   await page.getByRole('button', { name: 'Confirm' }).click()
 
-  // Check if we've navigated to the home page
+  // Check if we've navigated to the link route
   await expect(page).toHaveURL('/')
 }
 
