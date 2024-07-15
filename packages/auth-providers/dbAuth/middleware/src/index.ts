@@ -2,7 +2,7 @@ import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
 import dbAuthApi from '@redwoodjs/auth-dbauth-api'
-// Have to import this way, not sure why.
+// ^^ above package is still CJS, and named exports aren't supported in import statements
 const { dbAuthSession, cookieName: cookieNameCreator } = dbAuthApi
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
 import { MiddlewareResponse } from '@redwoodjs/web/middleware'
