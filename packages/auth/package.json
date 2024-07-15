@@ -78,7 +78,7 @@
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth.tgz",
     "build:types": "tsc --build --verbose tsconfig.build.json",
-    "build:types-cjs": "tsc --build --verbose tsconfig.build-cjs.json",
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "concurrently \"npm:test:publint\" \"npm:test:vitest\" npm:test:attw",
@@ -100,6 +100,7 @@
     "msw": "1.3.3",
     "publint": "0.2.8",
     "tsx": "4.15.6",
+    "type-fest": "3.13.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
