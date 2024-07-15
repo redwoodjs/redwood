@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@redwoodjs/auth-supabase-api": "workspace:*",
+    "@redwoodjs/web": "workspace:*",
     "@supabase/ssr": "0.3.0"
   },
   "devDependencies": {
@@ -39,7 +40,6 @@
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@redwoodjs/vite": "workspace:*",
     "@types/aws-lambda": "8.10.138",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.15.6",

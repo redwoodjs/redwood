@@ -1,15 +1,18 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "isolatedModules": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "outDir": "dist"
   },
-  "include": ["."],
-  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
+  "include": [
+    "./src/**/*",
+    "ambient.d.ts",
+    "testing-library.d.ts"
+  ],
   "references": [
-    { "path": "../framework-tools" },
     { "path": "../internal" }
   ]
 }

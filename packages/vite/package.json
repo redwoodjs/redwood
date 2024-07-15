@@ -40,11 +40,7 @@
       "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
-    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
-    "./middleware": {
-      "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.js"
-    }
+    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
   },
   "bin": {
     "rw-dev-fe": "./dist/devFeServer.js",
@@ -79,7 +75,7 @@
     "@swc/core": "1.5.27",
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.17",
-    "@whatwg-node/server": "0.9.34",
+    "@whatwg-node/server": "0.9.36",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
@@ -94,7 +90,7 @@
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
     "vite": "5.3.1",
     "vite-plugin-cjs-interop": "2.1.1",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-polyfills": "0.22.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {

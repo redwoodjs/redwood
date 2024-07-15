@@ -5,7 +5,7 @@ import type {
   Middleware,
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
 
 import { clearAuthState } from './util'
 
