@@ -8500,9 +8500,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.3"
     "@redwoodjs/framework-tools": "workspace:*"
+    concurrently: "npm:8.2.2"
     deepmerge: "npm:4.3.1"
     fast-glob: "npm:3.3.2"
+    publint: "npm:0.2.8"
     rimraf: "npm:5.0.7"
     smol-toml: "npm:1.2.2"
     string-env-interpolation: "npm:1.0.1"
