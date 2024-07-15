@@ -52,13 +52,16 @@ await esbuild.build({
   logLevel: 'info',
 })
 
-// Place a package.json file with `type: commonjs` in the dist folder so that
+// Place a package.json file with `type: commonjs` in the dist/cjs folder so that
 // all .js files are treated as CommonJS files.
 writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 
-// Place a package.json file with `type: module` in the dist/esm folder so that
+// Place a package.json file with `type: module` in the dist folder so that
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 
 // Add CommonJS types by creating .cts files
-writeFileSync('dist/cjs/index.d.cts', 'export type * from "../index.d.ts"')
+writeFileSync('dist/cjs/index.d.ts', 'export type * from "../index.d.ts"')
+writeFileSync('dist/cjs/client.d.ts', 'export type * from "../client.d.ts"')
+writeFileSync('dist/cjs/clientSsr.d.ts', 'export type * from "../clientSsr.d.ts"')
+writeFileSync('dist/cjs/ClientRouter.d.ts', 'export type * from "../ClientRouter.d.ts"')

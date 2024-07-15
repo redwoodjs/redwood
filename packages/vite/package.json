@@ -17,38 +17,31 @@
         "default": "./dist/index.js"
       },
       "require": {
-        "types": "./dist/cjs/index.d.cts",
+        "types": "./dist/cjs/index.d.ts",
         "default": "./dist/cjs/index.js"
       }
     },
     "./client": {
-      "types": "./dist/client.d.ts",
       "require": "./dist/cjs/client.js",
       "import": "./dist/client.js"
     },
     "./clientSsr": {
-      "types": "./dist/clientSsr.d.ts",
       "require": "./dist/cjs/clientSsr.js",
-      "default": "./dist/clientSsr.js"
+      "import": "./dist/clientSsr.js"
     },
     "./Router": {
-      "types": "./dist/ClientRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
       "require": "./dist/cjs/ClientRouter.js",
       "import": "./dist/ClientRouter.js"
     },
     "./SsrRouter": {
-      "types": "./dist/SsrRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
       "import": "./dist/SsrRouter.js"
     },
     "./buildFeServer": {
-      "types": "./dist/buildFeServer.d.ts",
-      "require": "./dist/cjs/buildFeServer.js",
       "import": "./dist/buildFeServer.js"
     },
     "./react-node-loader": {
-      "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
     "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
