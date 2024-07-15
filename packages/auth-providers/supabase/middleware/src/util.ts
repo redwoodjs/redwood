@@ -7,8 +7,7 @@ import { throwSupabaseSettingsError } from '@redwoodjs/auth-supabase-api'
 import type {
   MiddlewareRequest,
   MiddlewareResponse,
-  // @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware'
 /**
  * Creates Supabase Server Client used to get the session cookie (only)
  * from a given collection of auth cookies

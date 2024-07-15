@@ -13,9 +13,9 @@ import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvide
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import type * as LocationModule from '@redwoodjs/router/dist/location.js'
 import type { TagDescriptor } from '@redwoodjs/web'
+import type { MiddlewareResponse } from '@redwoodjs/web/middleware'
 import type * as ServerInjectModule from '@redwoodjs/web/serverInject'
 
-import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
 import { makeFilePath } from '../utils.js'
 

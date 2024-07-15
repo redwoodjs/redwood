@@ -13,11 +13,11 @@ import {
   createPerRequestMap,
   createServerStorage,
 } from '@redwoodjs/server-store'
+import type { Middleware } from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
-import type { Middleware } from './middleware/types.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'

@@ -6,7 +6,7 @@ import {
   MiddlewareRequest as MWRequest,
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware'
 
 import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState'
 import type { DbAuthMiddlewareOptions } from '../index'

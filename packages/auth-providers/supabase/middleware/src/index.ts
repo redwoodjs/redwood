@@ -5,10 +5,9 @@ import type {
   Middleware,
   MiddlewareRequest,
   MiddlewareResponse,
-  // @ts-expect-error next-line. @TODO FIX THIS WITH CJS TYPES
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware'
 
-import { clearAuthState } from './util'
+import { clearAuthState } from './util.js'
 
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser

@@ -1,9 +1,10 @@
+import { writeFileSync } from 'node:fs'
+
 import {
   build,
   defaultBuildOptions,
   defaultIgnorePatterns,
 } from '@redwoodjs/framework-tools'
-import { writeFileSync } from 'node:fs'
 
 // CJS build
 /**
@@ -16,7 +17,7 @@ import { writeFileSync } from 'node:fs'
  */
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**', 'src/entry/**'],
+    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**'], //, 'src/entry/**'],
   },
   buildOptions: {
     ...defaultBuildOptions,
@@ -41,10 +42,15 @@ await build({
   },
 })
 
-// Place a package.json file with `type: commonjs` in the dist folder so that
-// all .js files are treated as CommonJS files.
+// Place a package.json file with `type: commonjs` in the dist/cjs folder so
+// that all .js files are treated as CommonJS files.
 writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 
-// Place a package.json file with `type: module` in the dist/esm folder so that
+// Place a package.json file with `type: module` in the dist folder so that
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
+
+// tsc doesn't generate any types here, because the source file is a javascript
+// file. But it's really simple. It doesn't have any exports. So we can just
+// write the type definitions ourselves
+writeFileSync('dist/entry/index.d.ts', 'export {}\n')
