@@ -8,7 +8,7 @@ import {
 import type {
   Middleware,
   MiddlewareInvokeOptions,
-} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
+} from '@redwoodjs/web/middleware'
 
 /**
  * Invokes the middleware function, and guarantees a MiddlewareResponse object

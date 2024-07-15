@@ -5,11 +5,8 @@ import dbAuthApi from '@redwoodjs/auth-dbauth-api'
 // Have to import this way, not sure why.
 const { dbAuthSession, cookieName: cookieNameCreator } = dbAuthApi
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware'
-import type {
-  Middleware,
-  MiddlewareRequest,
-} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
+import type { Middleware, MiddlewareRequest } from '@redwoodjs/web/middleware'
 
 import { defaultGetRoles } from './defaultGetRoles.js'
 

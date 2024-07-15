@@ -12,8 +12,8 @@ import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware'
-import type { Middleware } from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
+import type { Middleware } from '@redwoodjs/web/middleware'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
 import type { EntryServer } from '../types.js'

@@ -59,3 +59,6 @@ writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 // Place a package.json file with `type: module` in the dist/esm folder so that
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
+
+// Add CommonJS types by creating .cts files
+writeFileSync('dist/cjs/index.d.cts', 'export type * from "../index.d.ts"')
