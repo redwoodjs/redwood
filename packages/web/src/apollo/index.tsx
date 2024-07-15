@@ -15,13 +15,9 @@ import {
   InMemoryCache,
   split,
 } from '@apollo/client'
-// @ts-expect-error Force import cjs module
 import { setLogVerbosity as apolloSetLogVerbosity } from '@apollo/client/core/core.cjs'
-// @ts-expect-error Force import cjs module
 import { setContext } from '@apollo/client/link/context/context.cjs'
-// @ts-expect-error Force import cjs module
 import { HttpLink } from '@apollo/client/link/http/http.cjs'
-// @ts-expect-error Force import cjs module
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
 import {
   useQuery,
@@ -30,9 +26,7 @@ import {
   useBackgroundQuery,
   useReadQuery,
   useSuspenseQuery,
-  // @ts-expect-error Force import cjs module
 } from '@apollo/client/react/hooks/hooks.cjs'
-// @ts-expect-error Force import cjs module
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer.js'
