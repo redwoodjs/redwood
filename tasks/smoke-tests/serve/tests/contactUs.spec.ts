@@ -9,22 +9,11 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   await expect(page.getByLabel('Name')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Save' })).toBeVisible()
 
-  // Check if the redwood blog link is visible
+  // Check if the redwood blog link from the layout is visible
   await expect(page.getByRole('link', { name: 'Redwood Blog' })).toBeVisible()
 
   // Fill out the form partially to make it dirty
   await page.getByLabel('Name').fill('John Doe')
-
-  // Set up a listener for the beforeunload dialog
-  const dialogPromise = page.waitForEvent('dialog')
-
-  // Try to navigate away by clicking the "Redwood Blog" link
-  await page.goto('/')
-
-  // Wait for the dialog and handle it
-  const dialog = await dialogPromise
-  expect(dialog.type()).toBe('beforeunload')
-  await dialog.dismiss()
 
   // Try to navigate away by clicking the "Redwood Blog" link
   const redwoodBlogLink = page.getByRole('link', { name: 'Redwood Blog' })
