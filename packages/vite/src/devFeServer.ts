@@ -88,9 +88,7 @@ async function createServer() {
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
-          // Middleware packages are dual packages already
-          '@redwoodjs/auth-*-web',
-          '@redwoodjs/auth-*-api',
+          '@redwoodjs/auth-*',
         ],
       }),
       rscEnabled && rscRoutesAutoLoader(),

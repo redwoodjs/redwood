@@ -68,9 +68,7 @@ export async function rscBuildForSsr({
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
           '@redwoodjs/router/*',
-          // Middleware packages are dual packages already
-          '@redwoodjs/auth-*-web',
-          '@redwoodjs/auth-*-api',
+          '@redwoodjs/auth-*',
         ],
       }),
       rscRoutesAutoLoader(),

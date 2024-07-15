@@ -23,24 +23,22 @@ beforeAll(() => {
   vi.mock('@redwoodjs/auth-dbauth-api', async (importOriginal) => {
     const original = (await importOriginal()) as any
     return {
-      default: {
-        ...original,
-        dbAuthSession: vi.fn().mockImplementation((req, cookieName) => {
-          if (
-            req.headers
-              .get('Cookie')
-              .includes(`${cookieName}=this_is_the_only_correct_session`)
-          ) {
-            return {
-              currentUser: {
-                email: 'user-1@example.com',
-                id: 'mocked-current-user-1',
-              },
-              mockedSession: 'this_is_the_only_correct_session',
-            }
+      ...original,
+      dbAuthSession: vi.fn().mockImplementation((req, cookieName) => {
+        if (
+          req.headers
+            .get('Cookie')
+            .includes(`${cookieName}=this_is_the_only_correct_session`)
+        ) {
+          return {
+            currentUser: {
+              email: 'user-1@example.com',
+              id: 'mocked-current-user-1',
+            },
+            mockedSession: 'this_is_the_only_correct_session',
           }
-        }),
-      },
+        }
+      }),
     }
   })
 })
