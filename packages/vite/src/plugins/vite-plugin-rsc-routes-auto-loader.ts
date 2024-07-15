@@ -1,8 +1,10 @@
 import path from 'path'
 
-import bgen from '@babel/generator'
+import babelGenerator from '@babel/generator'
+const generate = babelGenerator.default
 import { parse as babelParse } from '@babel/parser/index.cjs'
-import btrav from '@babel/traverse'
+import babelTraverse from '@babel/traverse'
+const traverse = babelTraverse.default
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
@@ -14,13 +16,6 @@ import {
   importStatementPath,
   processPagesDir,
 } from '@redwoodjs/project-config'
-
-// @TODO How do we not do this? have to do this because
-// a) Babel packages are CJS
-// b) Vite-test doesn't wrap in a default export but (right side of ||)
-// c) Actually running the code in Vite, it does wrap in a default export
-const generate = bgen.default || bgen
-const traverse = btrav.default || btrav
 
 const getPathRelativeToSrc = (maybeAbsolutePath: string) => {
   // If the path is already relative
