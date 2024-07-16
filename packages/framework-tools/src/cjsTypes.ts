@@ -23,7 +23,14 @@ export const generateCjsTypes = async () => {
   packageJson.type = 'commonjs'
   writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
 
-  await $`yarn build:types-cjs`
+  try {
+    await $`yarn build:types-cjs`
+  } catch (e) {
+    console.error('Could not build CJS types')
+    console.error(e)
 
-  await $`mv package.json.bak package.json`
+    process.exit(1)
+  } finally {
+    await $`mv package.json.bak package.json`
+  }
 }
