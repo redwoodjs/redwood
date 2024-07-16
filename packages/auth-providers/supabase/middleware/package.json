@@ -30,10 +30,11 @@
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
     "build:types": "tsc --build --verbose",
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "test:attw": "yarn attw -P",
     "test:publint": "yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run",
+    "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -48,6 +49,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@types/aws-lambda": "8.10.138",
+    "concurrently": "8.2.2",
     "publint": "0.2.8",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.15.6",

@@ -2,6 +2,8 @@ import {
   build,
   defaultBuildOptions,
 } from '@redwoodjs/framework-tools'
+
+import { generateCjsTypes} from '@redwoodjs/framework-tools/cjsTypes'
 import { writeFileSync } from 'node:fs'
 
 // CJS build
@@ -30,4 +32,4 @@ writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 
-writeFileSync('dist/cjs/index.d.ts', 'export type * from "../index.d.ts"')
+generateCjsTypes()
