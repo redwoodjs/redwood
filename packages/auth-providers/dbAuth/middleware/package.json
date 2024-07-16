@@ -30,9 +30,11 @@
     "build:pack": "yarn pack -o redwoodjs-auth-dbauth-middleware.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "vitest run",
+    "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
     "test:attw": "yarn attw -P",
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "test:publint": "yarn publint",
+    "test:vitest": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -40,14 +42,15 @@
     "@redwoodjs/web": "workspace:*"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@types/aws-lambda": "8.10.138",
+    "concurrently": "8.2.2",
+    "publint": "0.2.8",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.15.6",
-    "@arethetypeswrong/cli": "0.15.3",
-    "publint": "0.2.8",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

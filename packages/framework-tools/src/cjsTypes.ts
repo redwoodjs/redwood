@@ -32,11 +32,10 @@ export const generateCjsTypes = async () => {
 
   try {
     await $`yarn build:types-cjs`
-  } catch (e) {
-    console.error('Could not build CJS types')
-    console.error(e)
-
-    process.exit(1)
+  } catch (e: any) {
+    console.error('---- Error building CJS types ----')
+    process.exitCode = e.exitCode
+    throw new Error(e)
   } finally {
     await $`mv package.json.bak package.json`
   }
