@@ -1,6 +1,7 @@
 {
   "name": "@redwoodjs/auth-supabase-middleware",
   "version": "7.0.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
