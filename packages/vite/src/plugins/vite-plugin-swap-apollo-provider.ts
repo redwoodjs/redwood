@@ -9,7 +9,7 @@ import type { PluginOption } from 'vite'
  * import { RedwoodApolloProvider } from "@redwoodjs/web/dist/apollo/suspense"
  *
  */
-export default function swapApolloProvider(): PluginOption {
+export function swapApolloProvider(): PluginOption {
   return {
     name: 'redwood-swap-apollo-provider',
     async transform(code: string, id: string) {

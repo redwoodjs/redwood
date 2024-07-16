@@ -15,12 +15,12 @@ import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 import {
   decodeReply,
   decodeReplyFromBusboy,
-} from '../bundled/react-server-dom-webpack.server'
+} from '../bundled/react-server-dom-webpack.server.js'
 import { hasStatusCode } from '../lib/StatusError.js'
-import { invoke } from '../middleware/invokeMiddleware'
-import { getFullUrlForFlightRequest } from '../utils'
+import { invoke } from '../middleware/invokeMiddleware.js'
+import { getFullUrlForFlightRequest } from '../utils.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter'
+import type { RscFetchProps } from './rscFetchForClientRouter.js'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
