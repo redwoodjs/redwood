@@ -9,7 +9,7 @@ type ModulesToExclude = Array<{ id: RegExp }>
  * Only applies on build, not on dev.
  *
  */
-export default function removeFromBundle(
+export function removeFromBundle(
   modulesToExclude: ModulesToExclude,
 ): PluginOption {
   const isMissingIdToExclude = modulesToExclude.some(
