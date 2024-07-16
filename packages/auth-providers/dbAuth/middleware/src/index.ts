@@ -6,7 +6,7 @@ import {
   dbAuthSession,
 } from '@redwoodjs/auth-dbauth-api'
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import { MiddlewareResponse } from '@redwoodjs/web/dist/server/middleware'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
 import type {
   Middleware,
   MiddlewareRequest,
