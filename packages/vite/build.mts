@@ -63,6 +63,7 @@ writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 // Add CommonJS types by creating common JS types. Using a .d.ts file, because .d.cts files don't auto resolve
 // Notice I haven't specified thee types in package.json for these - it's following the naming conversion TSC wants.
 writeFileSync('dist/cjs/index.d.ts', 'export type * from "../index.d.ts"')
+writeFileSync('dist/cjs/buildFeServer.d.ts', 'export type * from "../buildFeServer.d.ts"')
 writeFileSync('dist/cjs/client.d.ts', 'export type * from "../client.d.ts"')
 writeFileSync('dist/cjs/clientSsr.d.ts', 'export type * from "../clientSsr.d.ts"')
 writeFileSync('dist/cjs/ClientRouter.d.ts', 'export type * from "../ClientRouter.d.ts"')
