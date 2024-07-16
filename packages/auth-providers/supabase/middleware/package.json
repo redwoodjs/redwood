@@ -27,6 +27,8 @@
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
     "build:types": "tsc --build --verbose",
+    "test:attw": "yarn attw -P",
+    "test:publint": "yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
@@ -37,11 +39,13 @@
     "@supabase/ssr": "0.3.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@types/aws-lambda": "8.10.138",
+    "publint": "0.2.8",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
