@@ -61,6 +61,8 @@
     "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
+    "test:attw": "tsx ./attw.ts",
+    "test:publint": "yarn publint",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
@@ -97,6 +99,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
     "@hyrious/esbuild-plugin-commonjs": "0.2.4",
     "@types/busboy": "^1",
     "@types/cookie": "^0",
@@ -104,6 +107,7 @@
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "glob": "10.3.15",
+    "publint": "0.2.8",
     "rollup": "4.18.0",
     "tsx": "4.15.6",
     "typescript": "5.4.5",

@@ -133,7 +133,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
     "test:vitest": "vitest run",
-    "test:attw": "tsx ./attw.ts",
+    "test:attw": "yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs",
     "test:publint": "yarn publint",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
