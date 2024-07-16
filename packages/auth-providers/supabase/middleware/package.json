@@ -10,11 +10,14 @@
   "license": "MIT",
   "exports": {
     ".": {
-      "default": "./dist/index.js"
-    },
-    "./plugin": {
-      "import": "./dist/vite-plugin-auth-supabase-middleware.js",
-      "default": "./cjsWrappers/plugin.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     }
   },
   "main": "./dist/index.js",
