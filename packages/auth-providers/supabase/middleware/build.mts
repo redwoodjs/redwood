@@ -32,4 +32,4 @@ writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
 // all .js files are treated as ES Module files.
 writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 
-generateCjsTypes()
+await generateCjsTypes()
