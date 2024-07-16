@@ -3,6 +3,13 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import type { PackageJson } from 'type-fest'
 import { $ } from 'zx'
 
+/**
+ * This function will temporarily add "type": "commonjs" to the package.json file,
+ * then run `yarn build:types-cjs` to generate the CJS type definitions.
+ *
+ * This does not work in all packages, because more complex packages have certain dependencies
+ * that won't allow types to be generated in this way.
+ */
 export const generateCjsTypes = async () => {
   //  we need to also produce CJS type definitions
   //
