@@ -6,9 +6,16 @@ interface Problem {
   resolutionKind?: string
 }
 
+/***
+ * Excluded entry points:
+ * - ./bins/rw-vite-build.mjs: this is only used in the build handler
+ * - SsrRouter, Router
+ * - ./react-node-loader
+ */
+
 await $({
   nothrow: true,
-})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs -f json > .attw.json`
+})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs ./SsrRouter ./Router ./react-node-loader ./clientSsr -f json > .attw.json`
 const output = await $`cat .attw.json`
 await $`rm .attw.json`
 

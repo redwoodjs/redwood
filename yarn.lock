@@ -8755,6 +8755,7 @@ __metadata:
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
+    concurrently: "npm:8.2.2"
     cookie: "npm:0.6.0"
     core-js: "npm:3.37.1"
     dotenv-defaults: "npm:5.0.2"
