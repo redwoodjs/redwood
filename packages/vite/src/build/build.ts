@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import * as babel from '@babel/core'
-import { removeSync } from 'fs-extra'
+import fse from 'fs-extra'
 import { transformWithEsbuild } from 'vite'
 
 import type { Flags } from '@redwoodjs/babel-config'
@@ -11,8 +11,8 @@ import { getPaths } from '@redwoodjs/project-config'
 
 export const cleanWebBuild = () => {
   const rwjsPaths = getPaths()
-  removeSync(rwjsPaths.web.dist)
-  removeSync(path.join(rwjsPaths.generated.prebuild, 'web'))
+  fse.removeSync(rwjsPaths.web.dist)
+  fse.removeSync(path.join(rwjsPaths.generated.prebuild, 'web'))
 }
 
 export async function prebuildWebFile(srcPath: string, flags: Flags = {}) {
