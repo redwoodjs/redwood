@@ -321,7 +321,7 @@ export async function importModule(
   } else if (mod === '__rwjs__react') {
     return (await import(reactPath)).default
   } else if (mod === '__rwjs__location') {
-    return (await import(locationPath)).default
+    return await import(locationPath)
   } else if (mod === '__rwjs__server_auth_provider') {
     return await import(ServerAuthProviderPath)
   } else if (mod === '__rwjs__server_inject') {
