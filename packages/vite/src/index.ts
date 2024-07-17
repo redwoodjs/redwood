@@ -138,11 +138,14 @@ export default function redwoodPluginVite(): PluginOption[] {
     streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
-    removeFromBundle([
-      {
-        id: /@redwoodjs\/router\/dist\/splash-page/,
-      },
-    ]),
+    removeFromBundle(
+      [
+        {
+          id: /@redwoodjs\/router\/dist\/splash-page/,
+        },
+      ],
+      ['SplashPage'],
+    ),
     !realtimeEnabled &&
       removeFromBundle([
         {
