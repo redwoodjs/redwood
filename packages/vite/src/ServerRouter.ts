@@ -1,1 +1,1 @@
-export { Router } from '@redwoodjs/router/dist/server-router.js'
+export { Router } from '@redwoodjs/router/serverRouter'

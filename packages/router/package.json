@@ -14,6 +14,58 @@
     "dist",
     "skip-nav.css"
   ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./Route": {
+      "import": "./dist/Route.js",
+      "require": "./dist/cjs/Route.js"
+    },
+    "./Set": {
+      "import": "./dist/Set.js",
+      "require": "./dist/cjs/Set.js"
+    },
+    "./location": {
+      "import": "./dist/location.js",
+      "require": "./dist/cjs/location.js"
+    },
+    "./analyzeRoutes": {
+      "import": "./dist/analyzeRoutes.js",
+      "require": "./dist/cjs/analyzeRoutes.js"
+    },
+    "./router": {
+      "import": "./dist/router.js",
+      "require": "./dist/cjs/router.js"
+    },
+    "./namedRoutes": {
+      "import": "./dist/namedRoutes.js",
+      "require": "./dist/cjs/namedRoutes.js"
+    },
+    "./util": {
+      "import": "./dist/util.js",
+      "require": "./dist/cjs/util.js"
+    },
+    "./AuthenticatedRoute": {
+      "import": "./dist/AuthenticatedRoute.js",
+      "require": "./dist/cjs/AuthenticatedRoute.js"
+    },
+    "./context": {
+      "import": "./dist/router-context.js",
+      "require": "./dist/cjs/router-context.js"
+    },
+    "./serverRouter": {
+      "import": "./dist/server-router.js",
+      "require": "./dist/cjs/server-router.js"
+    }
+  },
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
@@ -34,17 +86,18 @@
     "core-js": "3.37.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
     "@testing-library/jest-dom": "6.4.6",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
+    "concurrently": "8.2.2",
+    "publint": "0.2.8",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.0.0",
     "tsx": "4.15.6",
-    "concurrently": "8.2.2",
-    "publint": "0.2.8",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

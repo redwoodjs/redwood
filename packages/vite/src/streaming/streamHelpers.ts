@@ -11,7 +11,7 @@ import type { default as RDServerModule } from 'react-dom/server.edge'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import type * as LocationModule from '@redwoodjs/router/dist/location.js'
+import type * as LocationModule from '@redwoodjs/router/location'
 import type { TagDescriptor } from '@redwoodjs/web'
 import type { MiddlewareResponse } from '@redwoodjs/web/middleware'
 import type * as ServerInjectModule from '@redwoodjs/web/serverInject'
@@ -145,7 +145,7 @@ export async function reactRenderToStreamResponse(
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
   const { LocationProvider }: LocationType = rscEnabled
     ? await importModule('__rwjs__location')
-    : await import('@redwoodjs/router/dist/location.js')
+    : await import('@redwoodjs/router/location')
 
   const renderRoot = (url: URL) => {
     return createElement(
