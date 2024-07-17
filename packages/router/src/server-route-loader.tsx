@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 
-import type { Spec } from './page'
+import type { Spec } from './page.js'
 
 interface Props {
   path: string
