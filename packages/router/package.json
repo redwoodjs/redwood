@@ -33,6 +33,14 @@
       "import": "./dist/Set.js",
       "require": "./dist/cjs/Set.js"
     },
+    "./Link": {
+      "import": "./dist/link.js",
+      "require": "./dist/cjs/link.js"
+    },
+    "./NavLink": {
+      "import": "./dist/navLink.js",
+      "require": "./dist/cjs/navLink.js"
+    },
     "./location": {
       "import": "./dist/location.js",
       "require": "./dist/cjs/location.js"
