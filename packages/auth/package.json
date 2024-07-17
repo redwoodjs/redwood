@@ -81,10 +81,9 @@
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "concurrently \"npm:test:publint\" \"npm:test:vitest\" npm:test:attw",
-    "test:publint": "yarn publint",
-    "test:vitest": "vitest run",
-    "test:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn publint",
+    "test": "vitest run",
+    "check:attw": "tsx ./attw.ts",
     "test:watch": "vitest watch"
   },
   "dependencies": {
