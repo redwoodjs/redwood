@@ -177,9 +177,6 @@ const DEFAULT_CONFIG: Config = {
       autoInstall: true,
       plugins: [
         {
-          package: '@redwoodjs/cli-storybook',
-        },
-        {
           package: '@redwoodjs/cli-storybook-vite',
         },
         {
