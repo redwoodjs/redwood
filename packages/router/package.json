@@ -1,6 +1,7 @@
 {
   "name": "@redwoodjs/router",
   "version": "7.0.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -14,11 +15,13 @@
     "skip-nav.css"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
     "build:types": "tsc --build --verbose",
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:types": "tstyche",
@@ -39,6 +42,9 @@
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.0.0",
+    "tsx": "4.15.6",
+    "concurrently": "8.2.2",
+    "publint": "0.2.8",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
