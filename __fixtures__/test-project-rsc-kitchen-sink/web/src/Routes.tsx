@@ -7,8 +7,8 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Route } from '@redwoodjs/router/dist/Route'
-import { Set, PrivateSet } from '@redwoodjs/router/dist/Set'
+import { Route } from '@redwoodjs/router/Route'
+import { Set, PrivateSet } from '@redwoodjs/router/Set'
 import { Router } from '@redwoodjs/vite/Router'
 
 import { useAuth } from './auth'

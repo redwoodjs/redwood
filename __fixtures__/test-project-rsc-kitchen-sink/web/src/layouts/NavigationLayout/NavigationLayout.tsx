@@ -1,6 +1,6 @@
-import { Link } from '@redwoodjs/router/dist/link'
-import { namedRoutes as routes } from '@redwoodjs/router/dist/namedRoutes'
-import { NavLink } from '@redwoodjs/router/dist/navLink'
+import { Link } from '@redwoodjs/router/Link'
+import { namedRoutes as routes } from '@redwoodjs/router/namedRoutes'
+import { NavLink } from '@redwoodjs/router/NavLink'
 import { getAuthState, getLocation } from '@redwoodjs/server-store'
 
 import ReadFileServerCell from 'src/components/ReadFileServerCell'
