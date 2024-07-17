@@ -10,8 +10,14 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/buildDefaults.d.ts",
-    "default": "./dist/buildDefaults.js"
+    ".": {
+      "types": "./dist/buildDefaults.d.ts",
+      "default": "./dist/buildDefaults.js"
+    },
+    "./cjsTypes": {
+      "types": "./dist/cjsTypes.d.ts",
+      "default": "./dist/cjsTypes.js"
+    }
   },
   "types": "./dist/buildDefaults.d.ts",
   "files": [

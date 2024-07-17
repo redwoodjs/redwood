@@ -7,7 +7,7 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { ensurePosixPath } from '@redwoodjs/project-config'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
 
 import OgImageMiddleware from './OgImageMiddleware'
 

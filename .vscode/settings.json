@@ -22,6 +22,7 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "peacock.color": "#b85833",
   "cSpell.words": [
+    "attw",
     "autoplay",
     "baremetal",
     "bazinga",
@@ -38,6 +39,7 @@
     "pino",
     "Pistorius",
     "prerendering",
+    "publint",
     "redwoodjs",
     "rsdw",
     "RWJS",

@@ -1,6 +1,7 @@
 {
   "name": "@redwoodjs/vite",
   "version": "7.0.0",
+  "type": "module",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
@@ -11,44 +12,40 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./cjsWrapper.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./dist/client.js"
+      "require": "./dist/cjs/client.js",
+      "import": "./dist/client.js"
     },
     "./clientSsr": {
-      "types": "./dist/clientSsr.d.ts",
-      "default": "./dist/clientSsr.js"
+      "require": "./dist/cjs/clientSsr.js",
+      "import": "./dist/clientSsr.js"
     },
     "./Router": {
-      "types": "./dist/ClientRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
-      "default": "./dist/ClientRouter.js"
+      "require": "./dist/cjs/ClientRouter.js",
+      "import": "./dist/ClientRouter.js"
     },
     "./SsrRouter": {
-      "types": "./dist/SsrRouter.d.ts",
       "react-server": "./dist/ServerRouter.js",
-      "default": "./dist/SsrRouter.js"
+      "import": "./dist/SsrRouter.js"
     },
     "./buildFeServer": {
-      "types": "./dist/buildFeServer.d.ts",
-      "default": "./dist/buildFeServer.js"
+      "require": "./dist/cjs/buildFeServer.js",
+      "import": "./dist/buildFeServer.js"
     },
     "./react-node-loader": {
-      "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
-    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
-    "./middleware": {
-      "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.js"
-    },
-    "./build": {
-      "types": "./dist/build/build.d.ts",
-      "default": "./dist/build/build.js"
-    }
+    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
   },
   "bin": {
     "rw-dev-fe": "./dist/devFeServer.js",
@@ -59,14 +56,15 @@
   },
   "files": [
     "dist",
-    "inject",
-    "cjsWrapper.js"
+    "inject"
   ],
   "scripts": {
     "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
+    "check:attw": "tsx ./attw.ts",
     "test": "vitest run",
+    "check:package": "concurrently npm:check:attw yarn publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -83,7 +81,7 @@
     "@swc/core": "1.5.27",
     "@vitejs/plugin-react": "4.2.1",
     "@whatwg-node/fetch": "0.9.17",
-    "@whatwg-node/server": "0.9.34",
+    "@whatwg-node/server": "0.9.36",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
@@ -98,16 +96,20 @@
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
     "vite": "5.3.1",
     "vite-plugin-cjs-interop": "2.1.1",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-polyfills": "0.22.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.4",
     "@types/busboy": "^1",
     "@types/cookie": "^0",
     "@types/express": "4",
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
+    "concurrently": "8.2.2",
     "glob": "10.3.15",
+    "publint": "0.2.8",
     "rollup": "4.18.0",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
