@@ -72,6 +72,10 @@
     "./serverRouter": {
       "import": "./dist/server-router.js",
       "require": "./dist/cjs/server-router.js"
+    },
+    "./dist/dummyComponent": {
+      "import": "./dist/dummyComponent.js",
+      "require": "./dist/cjs/dummyComponent.js"
     }
   },
   "scripts": {
