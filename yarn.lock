@@ -7544,12 +7544,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.3"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/auth-dbauth-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@types/aws-lambda": "npm:8.10.138"
+    concurrently: "npm:8.2.2"
+    publint: "npm:0.2.8"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
