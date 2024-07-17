@@ -30,10 +30,9 @@
     "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
-    "test:vitest": "vitest run",
-    "test:attw": "yarn attw -P",
-    "test:publint": "yarn publint",
+    "check:package": "concurrently npm:check:attw yarn publint",
+    "test": "vitest run",
+    "check:attw": "yarn attw -P",
     "test:watch": "vitest watch"
   },
   "dependencies": {

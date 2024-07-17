@@ -31,11 +31,10 @@
     "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
-    "test:attw": "yarn attw -P",
-    "test:publint": "yarn publint",
-    "test:vitest": "vitest run",
+    "check:attw": "yarn attw -P",
+    "test": "vitest run",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
+    "check:package": "concurrently npm:check:attw yarn publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {

@@ -62,10 +62,9 @@
     "build": "tsx build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
-    "test:attw": "tsx ./attw.ts",
-    "test:publint": "yarn publint",
-    "test:vitest": "vitest run",
-    "test": "concurrently npm:test:vitest npm:test:attw npm:test:publint",
+    "check:attw": "tsx ./attw.ts",
+    "test": "vitest run",
+    "check:package": "concurrently npm:check:attw yarn publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {
