@@ -37,6 +37,11 @@ export interface BaseAdapterOptions {
   logger?: BasicLogger
 }
 
+export interface FailureOptions {
+  maxAttempts: number
+  deleteFailedJobs: boolean
+}
+
 export abstract class BaseAdapter<
   TOptions extends BaseAdapterOptions = BaseAdapterOptions,
 > {
@@ -61,5 +66,5 @@ export abstract class BaseAdapter<
 
   abstract success(job: BaseJob): any
 
-  abstract failure(job: BaseJob, error: Error): any
+  abstract failure(job: BaseJob, error: Error, options: FailureOptions): any
 }

@@ -35,6 +35,7 @@ import type {
   BaseAdapterOptions,
   FindArgs,
   SchedulePayload,
+  FailureOptions,
 } from './BaseAdapter'
 import { BaseAdapter } from './BaseAdapter'
 
@@ -56,7 +57,6 @@ interface PrismaJob extends BaseJob {
 interface PrismaAdapterOptions extends BaseAdapterOptions {
   db: PrismaClient
   model?: string
-  maxAttempts?: number
 }
 
 interface FailureData {
@@ -72,7 +72,6 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   model: string
   accessor: PrismaClient[keyof PrismaClient]
   provider: string
-  maxAttempts: number
 
   constructor(options: PrismaAdapterOptions) {
     super(options)
@@ -88,8 +87,6 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
 
     // the database provider type: 'sqlite' | 'postgresql' | 'mysql'
     this.provider = options.db._activeProvider
-
-    this.maxAttempts = options?.maxAttempts || DEFAULT_MAX_ATTEMPTS
 
     // validate that everything we need is available
     if (!this.accessor) {
@@ -196,8 +193,13 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     return await this.accessor.delete({ where: { id: job.id } })
   }
 
-  async failure(job: PrismaJob, error: Error) {
+  async failure(job: PrismaJob, error: Error, options: FailureOptions) {
     this.logger.debug(`Job ${job.id} failure`)
+
+    if (job.attempts >= options.maxAttempts && options.deleteFailedJobs) {
+      return await this.accessor.delete({ where: { id: job.id } })
+    }
+
     const data: FailureData = {
       lockedAt: null,
       lockedBy: null,
@@ -205,7 +207,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       runAt: null,
     }
 
-    if (job.attempts >= this.maxAttempts) {
+    if (job.attempts >= options.maxAttempts) {
       data.failedAt = new Date()
     } else {
       data.runAt = new Date(
