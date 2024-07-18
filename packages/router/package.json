@@ -45,10 +45,6 @@
       "import": "./dist/location.js",
       "require": "./dist/cjs/location.js"
     },
-    "./analyzeRoutes": {
-      "import": "./dist/analyzeRoutes.js",
-      "require": "./dist/cjs/analyzeRoutes.js"
-    },
     "./namedRoutes": {
       "import": "./dist/namedRoutes.js",
       "require": "./dist/cjs/namedRoutes.js"
@@ -56,14 +52,6 @@
     "./util": {
       "import": "./dist/util.js",
       "require": "./dist/cjs/util.js"
-    },
-    "./AuthenticatedRoute": {
-      "import": "./dist/AuthenticatedRoute.js",
-      "require": "./dist/cjs/AuthenticatedRoute.js"
-    },
-    "./context": {
-      "import": "./dist/router-context.js",
-      "require": "./dist/cjs/router-context.js"
     },
     "./serverRouter": {
       "import": "./dist/server-router.js",
