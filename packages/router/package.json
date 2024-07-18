@@ -49,10 +49,6 @@
       "import": "./dist/analyzeRoutes.js",
       "require": "./dist/cjs/analyzeRoutes.js"
     },
-    "./router": {
-      "import": "./dist/router.js",
-      "require": "./dist/cjs/router.js"
-    },
     "./namedRoutes": {
       "import": "./dist/namedRoutes.js",
       "require": "./dist/cjs/namedRoutes.js"
