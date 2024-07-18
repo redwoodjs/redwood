@@ -51,7 +51,11 @@ const tasks = async ({ force }) => {
         task: () => {
           addModel()
         },
-        enabled: () => !modelExists,
+        skip: () => {
+          if (modelExists) {
+            return 'BackgroundJob model exists, skipping'
+          }
+        },
       },
       {
         title: 'Creating config file in api/src/lib...',
