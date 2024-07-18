@@ -54,21 +54,6 @@ const tasks = async ({ force }) => {
         enabled: () => !modelExists,
       },
       {
-        title: 'Migrating database...',
-        task: () => {
-          execa.sync(
-            'yarn rw prisma migrate dev',
-            ['--name', 'create-background-jobs'],
-            {
-              shell: true,
-              cwd: getPaths().base,
-              stdio: 'inherit',
-            },
-          )
-        },
-        enabled: () => !modelExists,
-      },
-      {
         title: 'Creating config file in api/src/lib...',
         task: async () => {
           const isTs = isTypeScriptProject()
@@ -114,6 +99,9 @@ const tasks = async ({ force }) => {
           task.title = `One more thing...
 
           ${c.success('\nBackground jobs configured!\n')}
+
+          ${!modelExists ? 'Migrate your database to add the new `BackgroundJob` model:\n' : ''}
+          ${!modelExists ? c.warning('\n\u00A0\u00A0yarn rw prisma migrate dev\n') : ''}
 
           Generate jobs with: ${c.warning('yarn rw g job <name>')}
           Execute jobs with:  ${c.warning('yarn rw jobs work\n')}
