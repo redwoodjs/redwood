@@ -84,7 +84,7 @@
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "check:attw": "yarn attw -P",
+    "check:attw": "tsx ./attw.ts",
     "check:package": "concurrently npm:check:attw yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
