@@ -9,6 +9,7 @@ import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
+import type { RscFetchProps } from '@redwoodjs/router/RscRouter'
 import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
 import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
@@ -20,7 +21,6 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import { invoke } from '../middleware/invokeMiddleware.js'
 import { getFullUrlForFlightRequest } from '../utils.js'
 
-import type { RscFetchProps } from '../../../router/src/rsc/rscFetchForClientRouter.jsx'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
