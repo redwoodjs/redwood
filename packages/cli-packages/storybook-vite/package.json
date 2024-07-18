@@ -19,7 +19,7 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "yarn test:unit",
-    "test:unit": "NODE_OPTIONS=--experimental-vm-modules yarn jest src"
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@redwoodjs/babel-config": "workspace:*",
@@ -31,6 +31,7 @@
     "storybook": "7.6.17",
     "storybook-framework-redwoodjs-vite": "workspace:*",
     "terminal-link": "2.1.1",
+    "vitest": "1.6.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {

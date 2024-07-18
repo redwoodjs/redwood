@@ -1,20 +1,23 @@
 import fs from 'fs'
 
 import { vol } from 'memfs'
+import { vi, describe, it, expect } from 'vitest'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { handler } from '../commands/storybookHandler'
 
-jest.mock('fs', () => require('memfs').fs)
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
-jest.mock('execa', () => {
+vi.mock('execa', () => {
   return {
-    command: jest.fn(() => {
-      return {
-        stdout: 42,
-      }
-    }),
+    default: {
+      command: vi.fn(() => {
+        return {
+          stdout: 42,
+        }
+      }),
+    },
   }
 })
 

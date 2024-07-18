@@ -7895,6 +7895,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
+    vitest: "npm:1.6.0"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft

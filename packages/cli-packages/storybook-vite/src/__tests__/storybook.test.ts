@@ -1,16 +1,14 @@
 import terminalLink from 'terminal-link'
-import type yargs from 'yargs'
+import { vi, describe, it, expect } from 'vitest'
+import type { Argv } from 'yargs'
 
 import * as storybookCommand from '../commands/storybook'
 import { handler as storybookViteHandler } from '../commands/storybookHandler.js'
+import type { StorybookYargsOptions } from '../types.js'
 
-jest.mock(
-  '../commands/storybookHandler.js',
-  () => ({
-    handler: jest.fn(),
-  }),
-  { virtual: true },
-)
+vi.mock('../commands/storybookHandler.js', () => ({
+  handler: vi.fn(),
+}))
 
 describe('storybook', () => {
   it('exports command, aliases, description, defaultOptions, builder, and handler', () => {
@@ -49,9 +47,9 @@ describe('storybook', () => {
     // The typecasting here is to make TS happy when calling `builder(yargs)`
     // further down. We know that only `epilogue` will be called.
     const yargs = {
-      option: jest.fn().mockReturnThis(),
-      epilogue: jest.fn().mockReturnThis(),
-    } as unknown as yargs.Argv
+      option: vi.fn().mockReturnThis(),
+      epilogue: vi.fn().mockReturnThis(),
+    } as unknown as Argv<StorybookYargsOptions>
     storybookCommand.builder(yargs)
     // The epilogue is a string that contains a link to the docs. The string
     // contains special control characters when rendered in a terminal that
