@@ -58,8 +58,8 @@
       "import": "./dist/rsc/rscCss.js"
     },
     "./serverRouter": {
-      "import": "./dist/server-router.js",
-      "require": "./dist/cjs/server-router.js"
+      "import": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/ServerRouter.js"
     },
     "./RscRouter": {
       "react-server": "./dist/rsc/ServerRouter.js",
@@ -68,6 +68,7 @@
     },
     "./SsrRouter": {
       "react-server": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/SsrRouter.js",
       "import": "./dist/rsc/SsrRouter.js"
     },
     "./dist/*": {
