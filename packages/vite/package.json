@@ -46,8 +46,8 @@
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
     "./build": {
-      "types": "./dist/build/build.d.ts",
-      "default": "./dist/build/build.js"
+      "import": "./dist/build/build.js",
+      "default": "./dist/cjs/build/build.js"
     },
     "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
   },

@@ -67,3 +67,4 @@ writeFileSync('dist/cjs/buildFeServer.d.ts', 'export type * from "../buildFeServ
 writeFileSync('dist/cjs/client.d.ts', 'export type * from "../client.d.ts"')
 writeFileSync('dist/cjs/clientSsr.d.ts', 'export type * from "../clientSsr.d.ts"')
 writeFileSync('dist/cjs/ClientRouter.d.ts', 'export type * from "../ClientRouter.d.ts"')
+writeFileSync('dist/cjs/build/build.d.ts', 'export type * from "../../build/build.d.ts"')
