@@ -53,6 +53,10 @@
       "import": "./dist/util.js",
       "require": "./dist/cjs/util.js"
     },
+    "./rscCss": {
+      "require": "./dist/cjs/rsc/rscCss.js",
+      "import": "./dist/rsc/rscCss.js"
+    },
     "./serverRouter": {
       "import": "./dist/server-router.js",
       "require": "./dist/cjs/server-router.js"
