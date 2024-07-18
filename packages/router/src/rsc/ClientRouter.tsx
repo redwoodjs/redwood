@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
 
-import { analyzeRoutes } from '@redwoodjs/router/analyzeRoutes'
-import { AuthenticatedRoute } from '@redwoodjs/router/AuthenticatedRoute'
-import { RouterContextProvider } from '@redwoodjs/router/context'
-import { LocationProvider, useLocation } from '@redwoodjs/router/location'
-import { namedRoutes } from '@redwoodjs/router/namedRoutes'
-import type { RouterProps } from '@redwoodjs/router/router'
+import { analyzeRoutes } from '../analyzeRoutes.js'
+import { AuthenticatedRoute } from '../AuthenticatedRoute.js'
+import { LocationProvider, useLocation } from '../location.js'
+import { namedRoutes } from '../namedRoutes.js'
+import { RouterContextProvider } from '../router-context.js'
+import type { RouterProps } from '../router.js'
 
 import { rscFetch } from './rscFetchForClientRouter.js'
 
