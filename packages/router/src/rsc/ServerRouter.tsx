@@ -3,15 +3,16 @@ import React from 'react'
 
 import { getAuthState, getLocation } from '@redwoodjs/server-store'
 
-import { analyzeRoutes } from './analyzeRoutes.js'
-import type { Wrappers } from './analyzeRoutes.js'
-import { namedRoutes } from './namedRoutes.js'
-import { normalizePage } from './page.js'
-import type { RouterContextProviderProps } from './router-context.js'
-import { ActiveRouteLoader } from './server-route-loader.js'
-import { SplashPage } from './splash-page.js'
-import type { TrailingSlashesTypes } from './util.js'
-import { matchPath, parseSearch, replaceParams, validatePath } from './util.js'
+import { analyzeRoutes } from '../analyzeRoutes.js'
+import type { Wrappers } from '../analyzeRoutes.js'
+import { namedRoutes } from '../namedRoutes.js'
+import { normalizePage } from '../page.js'
+import type { RouterContextProviderProps } from '../router-context.js'
+import { SplashPage } from '../splash-page.js'
+import type { TrailingSlashesTypes } from '../util.js'
+import { matchPath, parseSearch, replaceParams, validatePath } from '../util.js'
+
+import { ServerRouteLoader } from './ServerRouteLoader.js'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
@@ -62,7 +63,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   if (!activeRoutePath) {
     if (NotFoundPage) {
       return (
-        <ActiveRouteLoader
+        <ServerRouteLoader
           spec={normalizePage(NotFoundPage)}
           path={location.pathname}
         />
@@ -115,7 +116,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
         <WrappedPage
           sets={sets}
           routeLoaderElement={
-            <ActiveRouteLoader
+            <ServerRouteLoader
               path={path}
               spec={normalizePage(page)}
               params={allParams}

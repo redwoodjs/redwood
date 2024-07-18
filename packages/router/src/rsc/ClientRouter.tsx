@@ -1,6 +1,3 @@
-// TODO (RSC): This should live in @redwoodjs/router but we can't do node
-// condition based exports/imports there, so I'm putting it here for now.
-
 import React, { useMemo } from 'react'
 
 import { analyzeRoutes } from '@redwoodjs/router/analyzeRoutes'
@@ -10,12 +7,14 @@ import { LocationProvider, useLocation } from '@redwoodjs/router/location'
 import { namedRoutes } from '@redwoodjs/router/namedRoutes'
 import type { RouterProps } from '@redwoodjs/router/router'
 
-import { rscFetch } from './rsc/rscFetchForClientRouter.js'
+import { rscFetch } from './rscFetchForClientRouter.js'
 
 export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
+      {/* @MARK @TODO: Theres a way around this, I just don't know what yet... */}
+      {/* @ts-expect-error: TS Thinks async components don't work */}
       <LocationAwareRouter paramTypes={paramTypes} useAuth={useAuth}>
         {children}
       </LocationAwareRouter>
@@ -80,6 +79,8 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
+          {/* @MARK @TODO: Theres a way around this, I just don't know what yet... */}
+          {/* @ts-expect-error: TS Thinks async components don't work */}
           {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
         </AuthenticatedRoute>
       </RouterContextProvider>
@@ -88,3 +89,5 @@ const LocationAwareRouter = ({
 
   return rscFetch('__rwjs__Routes', { location: { pathname, search } })
 }
+
+export type { RscFetchProps } from './rscFetchForClientRouter.js'

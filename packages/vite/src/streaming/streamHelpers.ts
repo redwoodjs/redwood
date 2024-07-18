@@ -293,7 +293,6 @@ function applyStreamTransforms(
 // initialized properly
 export async function importModule(
   mod:
-    | '__rwjs__rsdw-client'
     | 'rd-server'
     | '__rwjs__react'
     | '__rwjs__location'
@@ -301,9 +300,6 @@ export async function importModule(
     | '__rwjs__server_inject',
 ) {
   const distSsr = getPaths().web.distSsr
-  const rsdwClientPath = makeFilePath(
-    path.join(distSsr, '__rwjs__rsdw-client.mjs'),
-  )
   const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
   const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
   const locationPath = makeFilePath(path.join(distSsr, '__rwjs__location.mjs'))
@@ -314,9 +310,7 @@ export async function importModule(
     path.join(distSsr, '__rwjs__server_inject.mjs'),
   )
 
-  if (mod === '__rwjs__rsdw-client') {
-    return (await import(rsdwClientPath)).default
-  } else if (mod === 'rd-server') {
+  if (mod === 'rd-server') {
     return (await import(rdServerPath)).default
   } else if (mod === '__rwjs__react') {
     return (await import(reactPath)).default

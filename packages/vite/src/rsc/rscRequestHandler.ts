@@ -20,7 +20,7 @@ import { hasStatusCode } from '../lib/StatusError.js'
 import { invoke } from '../middleware/invokeMiddleware.js'
 import { getFullUrlForFlightRequest } from '../utils.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter.js'
+import type { RscFetchProps } from '../../../router/src/rsc/rscFetchForClientRouter.jsx'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 
-import type { Spec } from './page.js'
+import type { Spec } from '../page.js'
 
 interface Props {
   path: string
@@ -10,7 +10,7 @@ interface Props {
   children?: React.ReactNode
 }
 
-export const ActiveRouteLoader = ({ spec, params }: Props) => {
+export const ServerRouteLoader = ({ spec, params }: Props) => {
   const LazyRouteComponent = spec.LazyComponent
 
   // Delete params ref & key so that they are not spread on to the component

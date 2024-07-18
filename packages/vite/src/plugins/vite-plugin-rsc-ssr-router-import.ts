@@ -13,8 +13,8 @@ import { normalizePath } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 /**
- * Transform `import { Router } from '@redwoodjs/vite/Router'` to
- * `import { Router } from '@redwoodjs/vite/SsrRouter'`
+ * Transform `import { Router } from '@redwoodjs/router/RscRouter'` to
+ * `import { Router } from '@redwoodjs/router/SsrRouter'`
  */
 export function rscSsrRouterImport(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
@@ -45,8 +45,8 @@ export function rscSsrRouterImport(): Plugin {
       traverse(ast, {
         ImportDeclaration(path) {
           const source = path.node.source.value
-          if (source === '@redwoodjs/vite/Router') {
-            path.node.source = t.stringLiteral('@redwoodjs/vite/SsrRouter')
+          if (source === '@redwoodjs/router/RscRouter') {
+            path.node.source = t.stringLiteral('@redwoodjs/router/SsrRouter')
           }
         },
       })

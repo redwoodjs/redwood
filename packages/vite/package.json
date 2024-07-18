@@ -25,19 +25,6 @@
       "require": "./dist/cjs/client.js",
       "import": "./dist/client.js"
     },
-    "./clientSsr": {
-      "require": "./dist/cjs/clientSsr.js",
-      "import": "./dist/clientSsr.js"
-    },
-    "./Router": {
-      "react-server": "./dist/ServerRouter.js",
-      "require": "./dist/cjs/ClientRouter.js",
-      "import": "./dist/ClientRouter.js"
-    },
-    "./SsrRouter": {
-      "react-server": "./dist/ServerRouter.js",
-      "import": "./dist/SsrRouter.js"
-    },
     "./buildFeServer": {
       "require": "./dist/cjs/buildFeServer.js",
       "import": "./dist/buildFeServer.js"

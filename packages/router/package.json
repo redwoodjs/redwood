@@ -73,6 +73,15 @@
       "import": "./dist/server-router.js",
       "require": "./dist/cjs/server-router.js"
     },
+    "./RscRouter": {
+      "react-server": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/ClientRouter.js",
+      "import": "./dist/rsc/ClientRouter.js"
+    },
+    "./SsrRouter": {
+      "react-server": "./dist/rsc/ServerRouter.js",
+      "import": "./dist/rsc/SsrRouter.js"
+    },
     "./dist/*": {
       "require": "./dist/cjs/*.js",
       "import": "./dist/*.js"
@@ -94,6 +103,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
     "@redwoodjs/auth": "workspace:*",
+    "@redwoodjs/vite": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "core-js": "3.37.1"
   },
