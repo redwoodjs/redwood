@@ -10,9 +10,7 @@
 import { Route } from '@redwoodjs/router/Route'
 import { Set } from '@redwoodjs/router/Set'
 
-// @ts-expect-error - ESM issue. RW projects need to be ESM to properly pick up
-// on the types here
-import { Router } from '@redwoodjs/vite/Router'
+import { Router } from '@redwoodjs/router/RscRouter'
 
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'

@@ -9,7 +9,7 @@
 
 import { Route } from '@redwoodjs/router/Route'
 import { Set, PrivateSet } from '@redwoodjs/router/Set'
-import { Router } from '@redwoodjs/vite/Router'
+import { Router } from '@redwoodjs/router/RscRouter'
 
 import { useAuth } from './auth'
 import AuthLayout from './layouts/AuthLayout/AuthLayout'
