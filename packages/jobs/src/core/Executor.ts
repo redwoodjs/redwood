@@ -14,36 +14,42 @@ import { loadJob } from './loaders'
 
 interface Options {
   adapter: BaseAdapter
-  job: any
   logger?: BasicLogger
+  job: any
+  maxAttempts: number
+  deleteFailedJobs: boolean
 }
 
 export class Executor {
   options: Options
   adapter: BaseAdapter
-  job: any | null
   logger: BasicLogger
+  job: any | null
+  maxAttempts: number
+  deleteFailedJobs: boolean
 
   constructor(options: Options) {
     this.options = options
-    this.adapter = options.adapter
-    this.job = options.job
-    this.logger = options.logger || console
 
     // validate that everything we need is available
-    if (!this.adapter) {
+    if (!options.adapter) {
       throw new AdapterRequiredError()
     }
-    if (!this.job) {
+    if (!options.job) {
       throw new JobRequiredError()
     }
+
+    this.adapter = options.adapter
+    this.logger = options.logger || console
+    this.job = options.job
+    this.maxAttempts = options.maxAttempts
+    this.deleteFailedJobs = options.deleteFailedJobs
   }
 
   async perform() {
     this.logger.info(this.job, `Started job ${this.job.id}`)
     const details = JSON.parse(this.job.handler)
 
-    // TODO try to use the adapter defined by the job itself, otherwise fallback to this.adapter
     try {
       const jobModule = await loadJob(details.handler)
       await new jobModule[details.handler]().perform(...details.args)
@@ -54,7 +60,10 @@ export class Executor {
         error = new JobExportNotFoundError(details.handler)
       }
       this.logger.error(error.stack)
-      return this.adapter.failure(this.job, error)
+      return this.adapter.failure(this.job, error, {
+        maxAttempts: this.maxAttempts,
+        deleteFailedJobs: this.deleteFailedJobs,
+      })
     }
   }
 }
