@@ -4,12 +4,15 @@
 
 import React, { useMemo } from 'react'
 
-import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes'
-import { LocationProvider, useLocation } from '@redwoodjs/router/dist/location'
-import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes'
-import type { RouterProps } from '@redwoodjs/router/dist/router'
+import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes.js'
+import {
+  LocationProvider,
+  useLocation,
+} from '@redwoodjs/router/dist/location.js'
+import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes.js'
+import type { RouterProps } from '@redwoodjs/router/dist/router.js'
 
-import { renderRoutesFromDist } from './clientSsr'
+import { renderRoutesFromDist } from './clientSsr.js'
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (

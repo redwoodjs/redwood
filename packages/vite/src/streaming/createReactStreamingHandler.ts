@@ -12,10 +12,10 @@ import type { RouteSpec, RWRouteManifestItem } from '@redwoodjs/internal'
 import { getAppRouteHook, getConfig, getPaths } from '@redwoodjs/project-config'
 import { matchPath } from '@redwoodjs/router/dist/util.js'
 import type { TagDescriptor } from '@redwoodjs/web'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
+import type { Middleware } from '@redwoodjs/web/middleware'
 
 import { invoke } from '../middleware/invokeMiddleware.js'
-import { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
-import type { Middleware } from '../middleware/types.js'
 import type { EntryServer } from '../types.js'
 import { makeFilePath, ssrLoadEntryServer } from '../utils.js'
 

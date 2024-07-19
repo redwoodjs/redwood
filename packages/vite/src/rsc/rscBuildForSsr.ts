@@ -63,12 +63,13 @@ export async function rscBuildForSsr({
     plugins: [
       cjsInterop({
         dependencies: [
-          // Skip ESM modules: rwjs/auth, rwjs/web
+          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
           '@redwoodjs/router/*',
-          '@redwoodjs/auth-*',
+          '@redwoodjs/auth-*-api',
+          '@redwoodjs/auth-*-web',
         ],
       }),
       rscRoutesAutoLoader(),

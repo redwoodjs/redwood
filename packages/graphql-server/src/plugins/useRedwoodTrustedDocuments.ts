@@ -1,14 +1,28 @@
 import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations'
-import type { CustomPersistedQueryErrors } from '@graphql-yoga/plugin-persisted-operations'
+import type { UsePersistedOperationsOptions } from '@graphql-yoga/plugin-persisted-operations'
 import type { Plugin } from 'graphql-yoga'
 
 import type { RedwoodGraphQLContext } from '../types'
 
-export type RedwoodTrustedDocumentOptions = {
-  store: Record<string, string>
+export type RedwoodTrustedDocumentOptions = Omit<
+  UsePersistedOperationsOptions,
+  'getPersistedOperation'
+> & {
+  /**
+   * Whether to disable the plugin
+   * @default false
+   */
   disabled?: boolean
-  customErrors?: CustomPersistedQueryErrors
-}
+
+  /**
+   * The store to get the persisted operation hash from
+   * Required when the plugin is not disabled
+   */
+  store?: Readonly<Record<string, string>>
+} & (
+    | { disabled: true; store?: Readonly<Record<string, string>> }
+    | { disabled?: false; store: Readonly<Record<string, string>> }
+  )
 
 const REDWOOD__AUTH_GET_CURRENT_USER_QUERY =
   '{"query":"query __REDWOOD__AUTH_GET_CURRENT_USER { redwood { currentUser } }"}'
@@ -44,14 +58,28 @@ export const useRedwoodTrustedDocuments = (
   options: RedwoodTrustedDocumentOptions,
 ): Plugin<RedwoodGraphQLContext> => {
   return usePersistedOperations({
+    ...options,
     customErrors: {
       persistedQueryOnly: 'Use Trusted Only!',
       ...options.customErrors,
     },
     getPersistedOperation(sha256Hash: string) {
-      return options.store[sha256Hash]
+      return options.store ? options.store[sha256Hash] : null
     },
     allowArbitraryOperations: async (request) => {
+      if (options.allowArbitraryOperations !== undefined) {
+        if (typeof options.allowArbitraryOperations === 'boolean') {
+          if (options.allowArbitraryOperations) {
+            return true
+          }
+        }
+        if (typeof options.allowArbitraryOperations === 'function') {
+          const result = await options.allowArbitraryOperations(request)
+          if (result === true) {
+            return true
+          }
+        }
+      }
       return allowRedwoodAuthCurrentUserQuery(request)
     },
   })

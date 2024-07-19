@@ -45,7 +45,9 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
           return resolve(user)
         })
         netlifyIdentity.on('close', () => {
-          !autoClosedModal && resolve(null)
+          if (!autoClosedModal) {
+            resolve(null)
+          }
         })
         netlifyIdentity.on('error', reject)
       })

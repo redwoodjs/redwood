@@ -1,9 +1,13 @@
 import { describe, expect, it, vitest } from 'vitest'
 
-import { MiddlewareRequest } from './MiddlewareRequest'
-import { MiddlewareResponse } from './MiddlewareResponse'
+import type { Middleware, MiddlewareClass } from '@redwoodjs/web/middleware'
+import {
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '@redwoodjs/web/middleware'
+
 import { addMiddlewareHandlers, chain, groupByRoutePatterns } from './register'
-import type { Middleware, MiddlewareClass, MiddlewareReg } from './types'
+import type { MiddlewareReg } from './types'
 
 const fakeMiddleware: Middleware = vitest.fn()
 

@@ -24,13 +24,6 @@ const PLUGIN_CACHE_FILENAME = 'commandCache.json'
  * incorrect.
  */
 export const PLUGIN_CACHE_DEFAULT = {
-  '@redwoodjs/cli-storybook': {
-    storybook: {
-      aliases: ['sb'],
-      description:
-        'Launch Storybook: a tool for building UI components and pages in isolation',
-    },
-  },
   '@redwoodjs/cli-storybook-vite': {
     'storybook-vite': {
       aliases: ['storybook-vite', 'sbv'],

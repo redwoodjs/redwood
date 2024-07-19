@@ -85,7 +85,6 @@ describe('Position_fromOffset', () => {
       expectedCharacter: number,
     ) {
       const pos = Position_fromOffset(offset, text)
-      pos //?
       expect(pos).toEqual({ line: expectedLine, character: expectedCharacter })
     }
   })

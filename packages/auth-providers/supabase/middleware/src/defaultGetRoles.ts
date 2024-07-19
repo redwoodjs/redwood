@@ -46,7 +46,7 @@ export const defaultGetRoles = (decoded: PartialSupabaseDecoded): string[] => {
     } else {
       return roles ? [roles] : []
     }
-  } catch (e) {
+  } catch {
     return []
   }
 }

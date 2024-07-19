@@ -8,7 +8,7 @@ import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import {
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware'
 
 import initSupabaseAuthMiddleware from '../index'
 import type { SupabaseAuthMiddlewareOptions } from '../index'
