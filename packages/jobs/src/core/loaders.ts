@@ -1,4 +1,3 @@
-import console from 'node:console'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
@@ -8,7 +7,7 @@ import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import {
-  AdapterNotFoundError,
+  WorkerConfigNotFoundError,
   JobsLibNotFoundError,
   JobNotFoundError,
 } from './errors'
@@ -20,37 +19,20 @@ export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
 
-// Loads the exported adapter from the app's jobs config in api/src/lib/jobs.{js,ts}
-export const loadAdapter = async () => {
+// Loads the named export from the app's jobs config in api/src/lib/jobs.{js,ts}
+// to configure the worker, defaults to `workerConfig`
+export const loadWorkerConfig = async (name = 'workerConfig') => {
   const jobsConfigPath = getPaths().api.jobsConfig
   if (jobsConfigPath) {
     const jobsModule = require(jobsConfigPath)
-    if (jobsModule.adapter) {
-      return jobsModule.adapter
+    if (jobsModule[name]) {
+      return jobsModule[name]
     } else {
-      throw new AdapterNotFoundError()
+      throw new WorkerConfigNotFoundError(name)
     }
   } else {
     throw new JobsLibNotFoundError()
   }
-}
-
-// Loads the logger from the app's filesystem in api/src/lib/logger.{js,ts}
-export const loadLogger = async () => {
-  const loggerPath = getPaths().api.logger
-  if (loggerPath) {
-    try {
-      const loggerModule = require(loggerPath)
-      return loggerModule.logger
-    } catch (e) {
-      console.warn(
-        'Tried to load logger but failed, falling back to console\n',
-        e,
-      )
-    }
-  }
-
-  return console
 }
 
 // Loads a job from the app's filesystem in api/src/jobs
