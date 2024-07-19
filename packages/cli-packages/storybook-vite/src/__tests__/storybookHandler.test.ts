@@ -17,6 +17,9 @@ vi.mock('@redwoodjs/project-config', () => {
           base: '/redwood-app/web',
           storybook: '/redwood-app/web/src/storybook',
         },
+        api: {
+          base: '/redwood-app/api',
+        },
         generated: {
           types: {
             includes: '/redwood-app/web/src/generated',
@@ -59,11 +62,12 @@ describe('storybookHandler', () => {
     // Note: The `undefined` here is because the contents to the writeFileSync
     // are undefined during tests because we are also mocking the readFileSync
     // function and this means the templates are undefined.
+    // Instead, we test the contents of the templates in a separate test (storybookConfigFixtures.test.ts).
     const storybookConfigPath = getPaths().web.storybook
     expect(fs.writeFileSync).toHaveBeenCalledTimes(2)
     expect(fs.writeFileSync).toHaveBeenNthCalledWith(
       1,
-      `${storybookConfigPath}/main.ts`,
+      `${storybookConfigPath}/main.js`, // because we aren't scaffolding tsconfig files, it'll think it's a JS project, and write out the JS version of the file
       undefined,
     )
     expect(fs.writeFileSync).toHaveBeenNthCalledWith(
@@ -71,7 +75,5 @@ describe('storybookHandler', () => {
       `${storybookConfigPath}/preview-body.html`,
       undefined,
     )
-
-    // TODO add tests to verify content...
   })
 })
