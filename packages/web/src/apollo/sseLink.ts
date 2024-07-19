@@ -102,7 +102,7 @@ class SSELink extends ApolloLink {
   public request(
     operation: Operation & { query?: any },
   ): Observable<FetchResult> {
-    return new Observable((sink: Sink) => {
+    return new Observable<FetchResult>((sink: Sink) => {
       let request: RequestParams
 
       // If the operation has a persisted query (aka trusted document),
