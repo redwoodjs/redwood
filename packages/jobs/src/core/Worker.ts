@@ -55,21 +55,21 @@ export class Worker {
   constructor(options: WorkerOptions) {
     this.options = options
 
-    if (!options.adapter) {
+    if (!options?.adapter) {
       throw new AdapterRequiredError()
     }
 
-    this.adapter = options?.adapter
-    this.logger = options?.logger || console
+    this.adapter = options.adapter
+    this.logger = options.logger || console
 
     // if true, will clear the queue of all jobs and then exit
-    this.clear = options?.clear || false
+    this.clear = options.clear || false
 
     // used to set the `lockedBy` field in the database
-    this.processName = options?.processName || DEFAULTS.processName
+    this.processName = options.processName || DEFAULTS.processName
 
     // if not given a queue name then will work on jobs in any queue
-    this.queue = options?.queue || DEFAULTS.queue
+    this.queue = options.queue || DEFAULTS.queue
 
     // the maximum number of times to retry a failed job
     this.maxAttempts = options.maxAttempts || DEFAULTS.maxAttempts
@@ -78,13 +78,19 @@ export class Worker {
     this.maxRuntime = options.maxRuntime || DEFAULTS.maxRuntime
 
     // whether to keep failed jobs in the database after reaching maxAttempts
+    // `undefined` check needed here so we can explicitly set to `false`
     this.deleteFailedJobs =
-      options.deleteFailedJobs || DEFAULTS.deleteFailedJobs
+      options.deleteFailedJobs === undefined
+        ? DEFAULTS.deleteFailedJobs
+        : options.deleteFailedJobs
 
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
-    // maximum wait time
-    this.sleepDelay = (options.sleepDelay || DEFAULTS.sleepDelay) * 1000
+    // maximum wait time. Do an `undefined` check here so we can set to 0
+    this.sleepDelay =
+      (options.sleepDelay === undefined
+        ? DEFAULTS.sleepDelay
+        : options.sleepDelay) * 1000
 
     // Set to `false` if the work loop should only run one time, regardless
     // of how many outstanding jobs there are to be worked on. The worker

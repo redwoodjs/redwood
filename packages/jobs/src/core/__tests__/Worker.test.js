@@ -10,7 +10,7 @@ import {
 
 import * as errors from '../../core/errors'
 import { Executor } from '../Executor'
-import { Worker, DEFAULT_MAX_RUNTIME, DEFAULT_WAIT_TIME } from '../Worker'
+import { Worker, DEFAULTS } from '../Worker'
 
 // don't execute any code inside Executor, just spy on whether functions are
 // called
@@ -18,6 +18,15 @@ vi.mock('../Executor')
 
 // so that registerApiSideBabelHook() doesn't freak out about redwood.toml
 vi.mock('@redwoodjs/babel-config')
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
@@ -64,39 +73,67 @@ describe('constructor', () => {
     expect(worker.processName).not.toBeUndefined()
   })
 
-  it('extracts maxRuntime from options to variable', () => {
-    const options = { adapter: 'adapter', maxRuntime: 1000 }
+  it('extracts maxAttempts from options to variable', () => {
+    const options = { adapter: 'adapter', maxAttempts: 10 }
     const worker = new Worker(options)
 
-    expect(worker.maxRuntime).toEqual(1000)
+    expect(worker.maxAttempts).toEqual(10)
+  })
+
+  it('sets default maxAttempts if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.maxAttempts).toEqual(DEFAULTS.maxAttempts)
+  })
+
+  it('extracts maxRuntime from options to variable', () => {
+    const options = { adapter: 'adapter', maxRuntime: 10 }
+    const worker = new Worker(options)
+
+    expect(worker.maxRuntime).toEqual(10)
   })
 
   it('sets default maxRuntime if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
-    expect(worker.maxRuntime).toEqual(DEFAULT_MAX_RUNTIME)
+    expect(worker.maxRuntime).toEqual(DEFAULTS.maxRuntime)
   })
 
-  it('extracts waitTime from options to variable', () => {
-    const options = { adapter: 'adapter', waitTime: 1000 }
+  it('extracts deleteFailedJobs from options to variable', () => {
+    const options = { adapter: 'adapter', deleteFailedJobs: 10 }
     const worker = new Worker(options)
 
-    expect(worker.waitTime).toEqual(1000)
+    expect(worker.deleteFailedJobs).toEqual(10)
   })
 
-  it('sets default waitTime if not provided', () => {
+  it('sets default deleteFailedJobs if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
-    expect(worker.waitTime).toEqual(DEFAULT_WAIT_TIME)
+    expect(worker.deleteFailedJobs).toEqual(DEFAULTS.deleteFailedJobs)
   })
 
-  it('can set waitTime to 0', () => {
-    const options = { adapter: 'adapter', waitTime: 0 }
+  it('extracts sleepDelay from options to variable', () => {
+    const options = { adapter: 'adapter', sleepDelay: 5 }
     const worker = new Worker(options)
 
-    expect(worker.waitTime).toEqual(0)
+    expect(worker.sleepDelay).toEqual(5000)
+  })
+
+  it('sets default sleepDelay if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.sleepDelay).toEqual(DEFAULTS.sleepDelay * 1000)
+  })
+
+  it('can set sleepDelay to 0', () => {
+    const options = { adapter: 'adapter', sleepDelay: 0 }
+    const worker = new Worker(options)
+
+    expect(worker.sleepDelay).toEqual(0)
   })
 
   it('sets lastCheckTime to the current time', () => {
@@ -177,7 +214,13 @@ describe('run', () => {
 
   it('initializes an Executor instance if the job is found', async () => {
     const adapter = { find: vi.fn(() => ({ id: 1 })) }
-    const worker = new Worker({ adapter, waitTime: 0, forever: false })
+    const worker = new Worker({
+      adapter,
+      waitTime: 0,
+      forever: false,
+      maxAttempts: 10,
+      deleteFailedJobs: true,
+    })
 
     await worker.run()
 
@@ -185,6 +228,8 @@ describe('run', () => {
       adapter,
       job: { id: 1 },
       logger: worker.logger,
+      maxAttempts: 10,
+      deleteFailedJobs: true,
     })
   })
 

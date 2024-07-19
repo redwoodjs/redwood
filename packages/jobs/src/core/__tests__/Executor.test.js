@@ -6,6 +6,15 @@ import { Executor } from '../Executor'
 // so that registerApiSideBabelHook() doesn't freak out about redwood.toml
 vi.mock('@redwoodjs/babel-config')
 
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
 describe('constructor', () => {
   it('saves options', () => {
     const options = { adapter: 'adapter', job: 'job' }

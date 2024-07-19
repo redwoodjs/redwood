@@ -50,6 +50,7 @@ export class Executor {
     this.logger.info(this.job, `Started job ${this.job.id}`)
     const details = JSON.parse(this.job.handler)
 
+    // TODO break these lines down into individual try/catch blocks?
     try {
       const jobModule = await loadJob(details.handler)
       await new jobModule[details.handler]().perform(...details.args)
