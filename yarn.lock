@@ -4762,15 +4762,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/redis-event-target@npm:3.0.0":
-  version: 3.0.0
-  resolution: "@graphql-yoga/redis-event-target@npm:3.0.0"
+"@graphql-yoga/redis-event-target@npm:3.0.1":
+  version: 3.0.1
+  resolution: "@graphql-yoga/redis-event-target@npm:3.0.1"
   dependencies:
     "@graphql-yoga/typed-event-target": "npm:^3.0.0"
     "@whatwg-node/events": "npm:^0.1.0"
   peerDependencies:
     ioredis: ^5.0.6
-  checksum: 10c0/16035ed1c10b7f8a582edaa99a3d1fb740ea81e73203a176f9e5115144165a3b8661cdb00d7e7a3572100af65daac0ff3f6d565c897a9244d0e0e7d9d1f9fcdd
+  checksum: 10c0/501db555950800eac29257ab413c2e73fbf3524d4b5b30c69a4de7c74071e2a756ed0a6405c3b7614ba931972bc8e89bec491593d327f558a5ec6ea82f88ed87
   languageName: node
   linkType: hard
 
@@ -8449,7 +8449,7 @@ __metadata:
     "@graphql-tools/utils": "npm:10.2.0"
     "@graphql-yoga/plugin-defer-stream": "npm:3.3.1"
     "@graphql-yoga/plugin-graphql-sse": "npm:3.3.1"
-    "@graphql-yoga/redis-event-target": "npm:3.0.0"
+    "@graphql-yoga/redis-event-target": "npm:3.0.1"
     "@graphql-yoga/subscription": "npm:5.0.1"
     "@n1ru4l/graphql-live-query": "npm:0.10.0"
     "@n1ru4l/in-memory-live-query-store": "npm:0.10.0"
