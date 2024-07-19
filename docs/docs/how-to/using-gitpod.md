@@ -38,14 +38,12 @@ Once everything is up and running, you can click on the Ports tab
 You can click on the address or the globe icon to open that particular port in a new tab.
 
 - Port 5432 is the database. So, if you click on that port, you'll probably see a "Port 5432 Not Found" error, but it is working!
-
 ![GitPod on Port 5432](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-5432.png)
 
 - Port 8910 is your frontend
 ![Port 8910 frontend](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-8910.png)
 
-- Port 8911 is your backend and will show you a list of all available functions. If you add /graphql to the end of the URL, you should see the GraphQL Playground
-
+- Port 8911 is your backend and will show you a list of all available functions. If you add `/graphql` to the end of the URL, you should see the GraphQL Playground
 ![Port 8911 GraphQL Playground](https://github.com/redwoodjs/starter/raw/main/images/gitpod-graphql.png)
 
 ## How to Use GitPod
