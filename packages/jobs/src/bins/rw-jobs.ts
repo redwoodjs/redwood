@@ -14,7 +14,7 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/dist/lib/loadEnvFiles.js'
 
-import { loadLogger } from '../core/loaders'
+import { loadWorkerConfig } from '../core/loaders'
 import type { BasicLogger } from '../types'
 
 export type WorkerConfig = Array<[string | null, number]> // [queue, id]
@@ -266,7 +266,7 @@ const clearQueue = ({ logger }: { logger: BasicLogger }) => {
 const main = async () => {
   const { workerDef, command } = parseArgs(process.argv)
   const workerConfig = buildWorkerConfig(workerDef)
-  const logger = await loadLogger()
+  const { logger } = await loadWorkerConfig()
 
   logger.warn(`Starting RedwoodJob Runner at ${new Date().toISOString()}...`)
 
