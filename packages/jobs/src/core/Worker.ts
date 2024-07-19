@@ -84,7 +84,7 @@ export class Worker {
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
     // maximum wait time
-    this.sleepDelay = options.sleepDelay || DEFAULTS.sleepDelay
+    this.sleepDelay = (options.sleepDelay || DEFAULTS.sleepDelay) * 1000
 
     // Set to `false` if the work loop should only run one time, regardless
     // of how many outstanding jobs there are to be worked on. The worker
