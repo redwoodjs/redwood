@@ -1,3 +1,5 @@
+import console from 'node:console'
+
 import {
   describe,
   expect,
@@ -35,7 +37,7 @@ describe('constructor', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
-    expect(worker.options).toEqual(options)
+    expect(worker.options.adapter).toEqual(options.adapter)
   })
 
   it('extracts adapter from options to variable', () => {
@@ -45,18 +47,18 @@ describe('constructor', () => {
     expect(worker.adapter).toEqual('adapter')
   })
 
-  it('extracts queue from options to variable', () => {
-    const options = { adapter: 'adapter', queue: 'queue' }
+  it('extracts logger from options to variable', () => {
+    const options = { adapter: 'adapter', logger: { foo: 'bar' } }
     const worker = new Worker(options)
 
-    expect(worker.queue).toEqual('queue')
+    expect(worker.logger).toEqual({ foo: 'bar' })
   })
 
-  it('queue will be null if no queue specified', () => {
+  it('defaults logger if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
-    expect(worker.queue).toBeNull()
+    expect(worker.logger).toEqual(console)
   })
 
   it('extracts processName from options to variable', () => {
@@ -73,6 +75,34 @@ describe('constructor', () => {
     expect(worker.processName).not.toBeUndefined()
   })
 
+  it('extracts queue from options to variable', () => {
+    const options = { adapter: 'adapter', queue: 'queue' }
+    const worker = new Worker(options)
+
+    expect(worker.queue).toEqual('queue')
+  })
+
+  it('defaults queue if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.queue).toBeNull()
+  })
+
+  it('extracts clear from options to variable', () => {
+    const options = { adapter: 'adapter', clear: true }
+    const worker = new Worker(options)
+
+    expect(worker.clear).toEqual(true)
+  })
+
+  it('defaults clear if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.clear).toEqual(false)
+  })
+
   it('extracts maxAttempts from options to variable', () => {
     const options = { adapter: 'adapter', maxAttempts: 10 }
     const worker = new Worker(options)
@@ -80,7 +110,7 @@ describe('constructor', () => {
     expect(worker.maxAttempts).toEqual(10)
   })
 
-  it('sets default maxAttempts if not provided', () => {
+  it('defaults maxAttempts if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
@@ -94,7 +124,7 @@ describe('constructor', () => {
     expect(worker.maxRuntime).toEqual(10)
   })
 
-  it('sets default maxRuntime if not provided', () => {
+  it('defaults maxRuntime if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
@@ -108,7 +138,7 @@ describe('constructor', () => {
     expect(worker.deleteFailedJobs).toEqual(10)
   })
 
-  it('sets default deleteFailedJobs if not provided', () => {
+  it('defaults deleteFailedJobs if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
@@ -122,7 +152,7 @@ describe('constructor', () => {
     expect(worker.sleepDelay).toEqual(5000)
   })
 
-  it('sets default sleepDelay if not provided', () => {
+  it('defaults sleepDelay if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 
@@ -134,6 +164,34 @@ describe('constructor', () => {
     const worker = new Worker(options)
 
     expect(worker.sleepDelay).toEqual(0)
+  })
+
+  it('extracts forever from options to variable', () => {
+    const options = { adapter: 'adapter', forever: false }
+    const worker = new Worker(options)
+
+    expect(worker.forever).toEqual(false)
+  })
+
+  it('defaults forever if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.forever).toEqual(true)
+  })
+
+  it('extracts workoff from options to variable', () => {
+    const options = { adapter: 'adapter', workoff: true }
+    const worker = new Worker(options)
+
+    expect(worker.workoff).toEqual(true)
+  })
+
+  it('defaults workoff if not provided', () => {
+    const options = { adapter: 'adapter' }
+    const worker = new Worker(options)
+
+    expect(worker.workoff).toEqual(false)
   })
 
   it('sets lastCheckTime to the current time', () => {
@@ -150,7 +208,7 @@ describe('constructor', () => {
     expect(worker.forever).toEqual(false)
   })
 
-  it('sets forever to `true` by default', () => {
+  it('defaults forever if not provided', () => {
     const options = { adapter: 'adapter' }
     const worker = new Worker(options)
 

@@ -13,10 +13,10 @@ import { Executor } from './Executor'
 interface WorkerOptions {
   adapter: BaseAdapter
   logger?: BasicLogger
-  maxAttempts: number
-  maxRuntime: number
-  deleteFailedJobs: boolean
-  sleepDelay: number
+  maxAttempts?: number
+  maxRuntime?: number
+  deleteFailedJobs?: boolean
+  sleepDelay?: number
   clear?: boolean
   processName?: string
   queue?: string | null
@@ -25,10 +25,25 @@ interface WorkerOptions {
   workoff?: boolean
 }
 
+interface WorkerOptionsWithDefaults extends WorkerOptions {
+  logger: BasicLogger
+  maxAttempts: number
+  maxRuntime: number
+  deleteFailedJobs: boolean
+  sleepDelay: number
+  clear: boolean
+  processName: string
+  queue: string | null
+  waitTime: number
+  forever: boolean
+  workoff: boolean
+}
+
 export const DEFAULTS = {
   logger: console,
   processName: process.title,
   queue: null,
+  clear: false,
   maxAttempts: 24,
   maxRuntime: 14_400, // 4 hours in seconds
   sleepDelay: 5, // 5 seconds
@@ -38,7 +53,7 @@ export const DEFAULTS = {
 }
 
 export class Worker {
-  options: WorkerOptions
+  options: WorkerOptionsWithDefaults
   adapter: BaseAdapter
   logger: BasicLogger
   clear: boolean
@@ -53,58 +68,50 @@ export class Worker {
   workoff: boolean
 
   constructor(options: WorkerOptions) {
-    this.options = options
+    this.options = { ...DEFAULTS, ...options } as WorkerOptionsWithDefaults
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()
     }
 
-    this.adapter = options.adapter
-    this.logger = options.logger || console
+    this.adapter = this.options.adapter
+    this.logger = this.options.logger
 
     // if true, will clear the queue of all jobs and then exit
-    this.clear = options.clear || false
+    this.clear = this.options.clear
 
     // used to set the `lockedBy` field in the database
-    this.processName = options.processName || DEFAULTS.processName
+    this.processName = this.options.processName
 
     // if not given a queue name then will work on jobs in any queue
-    this.queue = options.queue || DEFAULTS.queue
+    this.queue = this.options.queue
 
     // the maximum number of times to retry a failed job
-    this.maxAttempts = options.maxAttempts || DEFAULTS.maxAttempts
+    this.maxAttempts = this.options.maxAttempts
 
     // the maximum amount of time to let a job run
-    this.maxRuntime = options.maxRuntime || DEFAULTS.maxRuntime
+    this.maxRuntime = this.options.maxRuntime
 
     // whether to keep failed jobs in the database after reaching maxAttempts
     // `undefined` check needed here so we can explicitly set to `false`
-    this.deleteFailedJobs =
-      options.deleteFailedJobs === undefined
-        ? DEFAULTS.deleteFailedJobs
-        : options.deleteFailedJobs
+    this.deleteFailedJobs = this.options.deleteFailedJobs
 
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
     // maximum wait time. Do an `undefined` check here so we can set to 0
-    this.sleepDelay =
-      (options.sleepDelay === undefined
-        ? DEFAULTS.sleepDelay
-        : options.sleepDelay) * 1000
+    this.sleepDelay = this.options.sleepDelay * 1000
 
     // Set to `false` if the work loop should only run one time, regardless
     // of how many outstanding jobs there are to be worked on. The worker
     // process will set this to `false` as soon as the user hits ctrl-c so
     // any current job will complete before exiting.
-    this.forever =
-      options?.forever === undefined ? DEFAULTS.forever : options.forever
+    this.forever = this.options.forever
 
     // Set to `true` if the work loop should run through all *available* jobs
     // and then quit. Serves a slightly different purpose than `forever` which
     // makes the runner exit immediately after the next loop, where as `workoff`
     // doesn't exit the loop until there are no more jobs to work on.
-    this.workoff =
-      options?.workoff === undefined ? DEFAULTS.workoff : options.workoff
+    this.workoff = this.options.workoff
 
     // keep track of the last time we checked for jobs
     this.lastCheckTime = new Date()
