@@ -1,13 +1,18 @@
 import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
 import * as errors from '../../core/errors'
-import {
-  PrismaAdapter,
-  DEFAULT_MODEL_NAME,
-  DEFAULT_MAX_ATTEMPTS,
-} from '../PrismaAdapter'
+import { PrismaAdapter, DEFAULTS } from '../PrismaAdapter'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
 
 let mockDb
 
@@ -40,7 +45,7 @@ describe('constructor', () => {
   it('defaults this.model name', () => {
     const adapter = new PrismaAdapter({ db: mockDb })
 
-    expect(adapter.model).toEqual(DEFAULT_MODEL_NAME)
+    expect(adapter.model).toEqual(DEFAULTS.model)
   })
 
   it('can manually set this.model', () => {
@@ -75,18 +80,6 @@ describe('constructor', () => {
     const adapter = new PrismaAdapter({ db: mockDb })
 
     expect(adapter.provider).toEqual('sqlite')
-  })
-
-  it('defaults this.maxAttempts', () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
-
-    expect(adapter.maxAttempts).toEqual(DEFAULT_MAX_ATTEMPTS)
-  })
-
-  it('allows manually setting this.maxAttempts', () => {
-    const adapter = new PrismaAdapter({ db: mockDb, maxAttempts: 10 })
-
-    expect(adapter.maxAttempts).toEqual(10)
   })
 })
 
@@ -267,10 +260,29 @@ describe('failure()', () => {
     )
   })
 
+  it('nullifies runtAt if max attempts reached', async () => {
+    const spy = vi.spyOn(mockDb.backgroundJob, 'update')
+    const adapter = new PrismaAdapter({ db: mockDb })
+    await adapter.failure({ id: 1, attempts: 10 }, new Error('test error'), {
+      maxAttempts: 10,
+    })
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          runAt: null,
+        }),
+      }),
+    )
+  })
+
   it('marks the job as failed if max attempts reached', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb })
-    await adapter.failure({ id: 1, attempts: 24 }, new Error('test error'))
+    await adapter.failure({ id: 1, attempts: 10 }, new Error('test error'), {
+      maxAttempts: 10,
+      deleteFailedJobs: false,
+    })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -281,18 +293,15 @@ describe('failure()', () => {
     )
   })
 
-  it('nullifies runtAt if max attempts reached', async () => {
-    const spy = vi.spyOn(mockDb.backgroundJob, 'update')
+  it('deletes the job if max attempts reached and deleteFailedJobs set to true', async () => {
+    const spy = vi.spyOn(mockDb.backgroundJob, 'delete')
     const adapter = new PrismaAdapter({ db: mockDb })
-    await adapter.failure({ id: 1, attempts: 24 }, new Error('test error'))
+    await adapter.failure({ id: 1, attempts: 10 }, new Error('test error'), {
+      maxAttempts: 10,
+      deleteFailedJobs: true,
+    })
 
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          runAt: null,
-        }),
-      }),
-    )
+    expect(spy).toHaveBeenCalledWith({ where: { id: 1 } })
   })
 })
 

@@ -39,8 +39,12 @@ import type {
 } from './BaseAdapter'
 import { BaseAdapter } from './BaseAdapter'
 
-export const DEFAULT_MODEL_NAME = 'BackgroundJob'
-export const DEFAULT_MAX_ATTEMPTS = 24
+export const DEFAULTS = {
+  model: 'BackgroundJob',
+  maxAttempts: 24,
+  maxRuntime: 14_400,
+  deleteFailedJobs: false,
+}
 
 interface PrismaJob extends BaseJob {
   id: number
@@ -80,7 +84,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     this.db = options.db
 
     // name of the model as defined in schema.prisma
-    this.model = options.model || DEFAULT_MODEL_NAME
+    this.model = options.model || DEFAULTS.model
 
     // the function to call on `db` to make queries: `db.backgroundJob`
     this.accessor = this.db[camelCase(this.model)]
@@ -106,7 +110,9 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     maxRuntime,
     queue,
   }: FindArgs): Promise<PrismaJob | null> {
-    const maxRuntimeExpire = new Date(new Date().getTime() + maxRuntime)
+    const maxRuntimeExpire = new Date(
+      new Date().getTime() + (maxRuntime || DEFAULTS.maxRuntime * 1000),
+    )
 
     // This query is gnarly but not so bad once you know what it's doing. For a
     // job to match it must:
@@ -193,10 +199,20 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     return await this.accessor.delete({ where: { id: job.id } })
   }
 
-  async failure(job: PrismaJob, error: Error, options: FailureOptions) {
+  async failure(job: PrismaJob, error: Error, options?: FailureOptions) {
     this.logger.debug(`Job ${job.id} failure`)
 
-    if (job.attempts >= options.maxAttempts && options.deleteFailedJobs) {
+    // since booleans don't play nicely with || we'll explicitly check for
+    // `undefined` before falling back to the default
+    const shouldDeleteFailed =
+      options?.deleteFailedJobs === undefined
+        ? DEFAULTS.deleteFailedJobs
+        : options.deleteFailedJobs
+
+    if (
+      job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts) &&
+      shouldDeleteFailed
+    ) {
       return await this.accessor.delete({ where: { id: job.id } })
     }
 
@@ -207,7 +223,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       runAt: null,
     }
 
-    if (job.attempts >= options.maxAttempts) {
+    if (job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts)) {
       data.failedAt = new Date()
     } else {
       data.runAt = new Date(

@@ -38,8 +38,8 @@ export interface BaseAdapterOptions {
 }
 
 export interface FailureOptions {
-  maxAttempts: number
-  deleteFailedJobs: boolean
+  maxAttempts?: number
+  deleteFailedJobs?: boolean
 }
 
 export abstract class BaseAdapter<
