@@ -1,12 +1,12 @@
-# Using Gitpod
+# Using GitPod
 
-## What is Gitpod?
-Gitpod is a cloud development environment with all the necessary tools and dependencies, allowing you to focus on building your RedwoodJS application without worrying about the setup. Get started quickly and efficiently by launching RedwoodJS inside Gitpod!
+## What is GitPod?
+GitPod is a cloud development environment with all the necessary tools and dependencies, allowing you to focus on building your RedwoodJS application without worrying about the setup. Get started quickly and efficiently by launching RedwoodJS inside GitPod!
 
 ## Getting Started
-Click on the Open in Gitpod button:
+Click on the Open in GitPod button:
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/starter)
+[![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/starter)
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/guz67aa_1Wk?si=p1uc2EK6o8HJGBax" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
@@ -48,11 +48,11 @@ You can click on the address or the globe icon to open that particular port in a
 
 ![Port 8911 GraphQL Playground](https://github.com/redwoodjs/starter/raw/main/images/gitpod-graphql.png)
 
-## How to Use Gitpod
+## How to Use GitPod
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5pNHaqJWKL4?si=OmkQvmPL_Cc3djLg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-If you have an existing project, you can still use Gitpod.
+If you have an existing project, you can still use GitPod:
 
-1. Take any repository within GitHub and append `gitpod.io/#` to the URL. This will quickly launch a Gitpod workspace.
+1. Take any repository within GitHub and append `gitpod.io/#` to the URL. This will quickly launch a GitPod workspace.
 2. Within the Terminal, run `yarn install` to install all the dependencies
