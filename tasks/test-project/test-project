@@ -195,6 +195,7 @@ const globalTasks = () =>
             getExecaOptions(OUTPUT_PROJECT_PATH),
           )
         },
+        enabled: () => link,
       },
       {
         title: 'Converting to Javascript',
