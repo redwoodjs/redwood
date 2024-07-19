@@ -46,7 +46,7 @@
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
-    "@graphql-tools/documents": "1.0.0",
+    "@graphql-tools/documents": "1.0.1",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
