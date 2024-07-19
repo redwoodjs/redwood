@@ -34,4 +34,4 @@ Each lambda function in `./api/dist/functions` is parsed by zip-it-and-ship-it r
 
 ## Web
 
-The web side of Redwood is packaged by Webpack into the `./web/dist` folder.
+The web side of Redwood is built by Vite into the `./web/dist` folder.

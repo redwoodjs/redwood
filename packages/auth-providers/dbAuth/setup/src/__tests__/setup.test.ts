@@ -57,7 +57,9 @@ jest.mock('@redwoodjs/cli-helpers', () => {
     // jest.requireActual(@redwoodjs/cli-helpers) here, but I couldn't because
     // jest doesn't support ESM
     standardAuthHandler: async (args: AuthHandlerArgs) => {
-      args.notes && console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      if (args.notes) {
+        console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      }
     },
   }
 })

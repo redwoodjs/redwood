@@ -5,8 +5,8 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { RscFetchProps } from './rsc/rscFetchForClientRouter'
-import type { EntryServer } from './types'
+import type { RscFetchProps } from './rsc/rscFetchForClientRouter.js'
+import type { EntryServer } from './types.js'
 
 export function stripQueryStringAndHashFromPath(url: string) {
   return url.split('?')[0].split('#')[0]

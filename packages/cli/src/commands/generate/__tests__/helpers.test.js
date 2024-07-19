@@ -89,7 +89,10 @@ test('templateForComponentFile creates a proper output path for files', async ()
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -108,7 +111,10 @@ test('templateForComponentFile creates a proper output path for files with all c
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -127,7 +133,10 @@ test('templateForComponentFile creates a proper output path for files for starti
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -146,7 +155,10 @@ test('templateForComponentFile creates a proper output path for files with upper
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -162,7 +174,10 @@ test('templateForComponentFile can create a path in /web', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -177,7 +192,10 @@ test('templateForComponentFile can create a path in /api', async () => {
     apiPathSection: 'services',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -192,7 +210,10 @@ test('templateForComponentFile can override generated component name', async () 
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -208,7 +229,10 @@ test('templateForComponentFile can override file extension', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -238,7 +262,10 @@ test('templateForComponentFile creates a template', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'fooBar')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'fooBar')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[1]).toEqual(PAGE_TEMPLATE_OUTPUT)

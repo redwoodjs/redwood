@@ -67,7 +67,7 @@ export const getPrettierOptions = async () => {
     }
 
     return options
-  } catch (e) {
+  } catch {
     return undefined
   }
 }
