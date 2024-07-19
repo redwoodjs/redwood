@@ -1,0 +1,37 @@
+{
+  "name": "@redwoodjs/cookie-jar",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/cookie-jar"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    "types": "./dist/CookieJar.d.ts",
+    "default": "./dist/CookieJar.js"
+  },
+  "types": "./dist/CookieJar.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-cookie-jar.tgz",
+    "build:types": "tsc --build --verbose"
+  },
+  "dependencies": {
+    "cookie": "0.6.0",
+    "esbuild": "0.21.3",
+    "fast-glob": "3.3.2",
+    "fs-extra": "11.2.0"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/fs-extra": "11.0.4",
+    "tsx": "4.15.6",
+    "typescript": "5.4.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

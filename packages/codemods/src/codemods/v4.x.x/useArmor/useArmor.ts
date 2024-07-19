@@ -30,19 +30,19 @@ export default function transform(file: FileInfo, api: API) {
 
           depthLimitOptionsProp.replaceWith([
             j.identifier(
-              `armorConfig: { maxDepth: { n: ${depthLimitOptionValue || 11} } }`
+              `armorConfig: { maxDepth: { n: ${depthLimitOptionValue || 11} } }`,
             ),
           ])
 
           console.info(
             `useArmor configured to use existing maxDepth of ${
               depthLimitOptionValue || 11
-            }.`
+            }.`,
           )
         }
       } else {
         console.info(
-          `No mods needed to createGraphQLHandler config in ${file.path}. Skipping...`
+          `No mods needed to createGraphQLHandler config in ${file.path}. Skipping...`,
         )
       }
     })

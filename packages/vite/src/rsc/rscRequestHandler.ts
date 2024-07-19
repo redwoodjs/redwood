@@ -1,21 +1,87 @@
+import * as DefaultFetchAPI from '@whatwg-node/fetch'
+import { normalizeNodeRequest } from '@whatwg-node/server'
 import busboy from 'busboy'
-import type { Request, Response } from 'express'
-import RSDWServer from 'react-server-dom-webpack/server.node.unbundled'
+import type {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express'
+import type Router from 'find-my-way'
+import type { HTTPMethod } from 'find-my-way'
+import type { ViteDevServer } from 'vite'
 
-import { hasStatusCode } from '../lib/StatusError'
+import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
+import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
-import { renderRsc } from './rscWorkerCommunication'
+import {
+  decodeReply,
+  decodeReplyFromBusboy,
+} from '../bundled/react-server-dom-webpack.server.js'
+import { hasStatusCode } from '../lib/StatusError.js'
+import { invoke } from '../middleware/invokeMiddleware.js'
+import { getFullUrlForFlightRequest } from '../utils.js'
 
-const { decodeReply, decodeReplyFromBusboy } = RSDWServer
+import type { RscFetchProps } from './rscFetchForClientRouter.js'
+import { sendRscFlightToStudio } from './rscStudioHandlers.js'
+import { renderRsc } from './rscWorkerCommunication.js'
 
-export function createRscRequestHandler() {
+interface CreateRscRequestHandlerOptions {
+  getMiddlewareRouter: () => Promise<Router.Instance<any>>
+  viteDevServer?: ViteDevServer
+}
+
+export function createRscRequestHandler(
+  options: CreateRscRequestHandlerOptions,
+) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
-  return async (req: Request, res: Response, next: () => void) => {
+
+  // above this line is for ALL users ☝️, not a per request basis
+  // -------------
+  return async (
+    req: ExpressRequest,
+    res: ExpressResponse,
+    next: () => void,
+  ) => {
     const basePath = '/rw-rsc/'
+
     console.log('basePath', basePath)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
     console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
+
+    const mwRouter = await options.getMiddlewareRouter()
+
+    if (mwRouter) {
+      // @MARK: Temporarily create Fetch Request here.
+      // Ideally we'll have converted this whole handler to be Fetch Req and Response
+      const webReq = normalizeNodeRequest(req, DefaultFetchAPI.Request)
+      const matchedMw = mwRouter.find(webReq.method as HTTPMethod, webReq.url)
+
+      const [mwResponse] = await invoke(
+        webReq,
+        matchedMw?.handler as Middleware | undefined,
+        {
+          params: matchedMw?.params,
+          viteDevServer: options.viteDevServer,
+        },
+      )
+
+      const webRes = mwResponse.toResponse()
+
+      // @MARK: Grab the headers from MWResponse and set them on the Express Response
+      // @TODO This is a temporary solution until we can convert this entire handler to use Fetch API
+      // This WILL not handle multiple Set-Cookie headers correctly. Proper Fetch-Response support will resolve this.
+      webRes.headers.forEach((value, key) => {
+        res.setHeader(key, value)
+      })
+
+      if (mwResponse.isRedirect() || mwResponse.body) {
+        // We also don't know what the Router will do if this RSC handler fails at any point
+        // Whatever that behavior is, this should match.
+        throw new Error(
+          'Not Implemented: What should happen if this RSC handler fails? And which part - Client side router?',
+        )
+      }
+    }
 
     // https://www.rfc-editor.org/rfc/rfc6648
     // "SHOULD NOT prefix their parameter names with "X-" or similar constructs."
@@ -25,24 +91,23 @@ export function createRscRequestHandler() {
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
-    let props = {}
+    // "location":{"pathname":"/about","search":""}
+    // These values come from packages/vite/src/ClientRouter.tsx
+    const props: RscFetchProps = JSON.parse(
+      url.searchParams.get('props') || '{}',
+    )
     let rsfId: string | undefined
     let args: unknown[] = []
 
-    console.log('url.pathname', url.pathname)
-
     if (url.pathname.startsWith(basePath)) {
-      const index = url.pathname.lastIndexOf('/')
-      const params = new URLSearchParams(url.pathname.slice(index + 1))
-      rscId = url.pathname.slice(basePath.length, index)
-      rsfId = params.get('action_id') || undefined
+      rscId = url.pathname.split('/').pop()
+      rsfId = url.searchParams.get('action_id') || undefined
 
       console.log('rscId', rscId)
       console.log('rsfId', rsfId)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
-        props = JSON.parse(params.get('props') || '{}')
       } else {
         rscId = undefined
       }
@@ -54,7 +119,8 @@ export function createRscRequestHandler() {
         if (req.headers['content-type']?.startsWith('multipart/form-data')) {
           console.log('RSA: multipart/form-data')
           const bb = busboy({ headers: req.headers })
-          const reply = decodeReplyFromBusboy(bb)
+          // TODO (RSC): The generic here could be typed better
+          const reply = decodeReplyFromBusboy<unknown[]>(bb)
 
           req.pipe(bb)
           args = await reply
@@ -123,9 +189,39 @@ export function createRscRequestHandler() {
       }
 
       try {
-        const pipeable = await renderRsc({ rscId, props, rsfId, args })
+        // We construct the URL for the flight request from props
+        // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
+        // becomes http://localhost:8910/about?foo=bar
+        // In the component, getting location would otherwise be at the rw-rsc URL
+        const fullUrl = getFullUrlForFlightRequest(req, props)
+
+        const pipeable = await renderRsc({
+          rscId,
+          props,
+          rsfId,
+          args,
+          // Pass the serverState from server to the worker
+          // Inside the worker, we'll use this to re-initalize the server state (because workers are stateless)
+          serverState: {
+            headersInit: Object.fromEntries(getRequestHeaders().entries()),
+            serverAuthState: getAuthState(),
+            fullUrl,
+          },
+        })
+
+        await sendRscFlightToStudio({
+          rscId,
+          props,
+          rsfId,
+          args,
+          basePath,
+          req,
+          handleError,
+        })
+
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
+
         pipeable.pipe(res)
       } catch (e) {
         handleError(e)

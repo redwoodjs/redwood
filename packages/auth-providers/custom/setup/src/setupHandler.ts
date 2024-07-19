@@ -9,7 +9,7 @@ import {
 import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export async function handler({ force: forceArg }: Args) {

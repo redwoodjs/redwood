@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@redwoodjs/api": "8.0.0-canary.861",
+    "@redwoodjs/graphql-server": "8.0.0-canary.861"
+  }
+}

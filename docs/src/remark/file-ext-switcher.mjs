@@ -5,7 +5,7 @@ const plugin = () => {
 
   return (tree, _file) => {
     visit(tree, (node, _index, parent) => {
-      if (node.type === 'inlineCode' && /\w\.\{js,tsx?}$/.test(node.value)) {
+      if (node.type === 'inlineCode' && /\w\.\{jsx?,tsx?}$/.test(node.value)) {
         needImport = true
         const pathValue = `${node.value}`
 

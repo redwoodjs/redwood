@@ -38,7 +38,7 @@ const buildRedwoodFramework = () => {
         cwd: REDWOODJS_FRAMEWORK_PATH,
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -49,7 +49,7 @@ const buildRedwoodFramework = () => {
   }
 }
 
-const createRedwoodJSApp = ({ typescript, bundler }) => {
+const createRedwoodJSApp = ({ typescript }) => {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
@@ -58,14 +58,15 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
         '--no-yarn-install',
         `--typescript ${typescript}`,
         '--no-telemetry',
-        '--no-git',
+        '--git',
+        '-m "first"',
       ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         env: { REDWOOD_CI: '1' },
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
 
     // Add package resolutions
@@ -84,7 +85,7 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
 
     const getVersionFromRwPackage = (dep, pkg) => {
       return fs.readJSONSync(
-        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json'),
       ).dependencies[dep]
     }
 
@@ -97,18 +98,6 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
-
-    if (bundler === 'webpack') {
-      const redwoodTOMLPath = path.join(
-        REDWOOD_PROJECT_DIRECTORY,
-        'redwood.toml'
-      )
-      const redwoodTOML = fs.readFileSync(redwoodTOMLPath, 'utf-8')
-      fs.writeFileSync(
-        redwoodTOMLPath,
-        redwoodTOML.replace('[web]\n', '[web]\n  bundler = "webpack"\n')
-      )
-    }
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error('Error: Could not create Redwood Project')
@@ -118,9 +107,9 @@ const createRedwoodJSApp = ({ typescript, bundler }) => {
   }
 }
 
-const addFrameworkDepsToProject = () => {
+const runTarsync = () => {
   try {
-    execa.sync('yarn project:deps', {
+    execa.sync('yarn project:tarsync -v', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -132,44 +121,8 @@ const addFrameworkDepsToProject = () => {
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'Error: Could not add Redwood Framework dependencies to project'
+        'Error: Could not tarsync framework dependencies/code to project',
       )
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
-const copyFrameworkPackages = () => {
-  try {
-    execa.sync('yarn project:copy', {
-      cwd: REDWOODJS_FRAMEWORK_PATH,
-      shell: true,
-      stdio: 'inherit',
-      env: {
-        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
-        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
-      },
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Error: We could not copy Redwood Framework packages')
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
-const runYarnInstall = () => {
-  try {
-    execa.sync('yarn install', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Error: Could not run `yarn install`')
       console.error(e)
     }
     process.exit(1)
@@ -213,7 +166,7 @@ const runCypress = () => {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -240,7 +193,7 @@ const initGit = () => {
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'There was an error with the `git init` or `git commit` step:'
+        'There was an error with the `git init` or `git commit` step:',
       )
       console.error(e)
     }
@@ -255,11 +208,6 @@ const args = yargs(hideBin(process.argv))
   .option('typescript', { default: false, type: 'boolean', alias: 'ts' })
   .option('auto-start', { default: true, type: 'boolean', alias: 'start' })
   .option('clean-files', { default: true, type: 'boolean' })
-  .option('bundler', {
-    default: 'vite',
-    type: 'string',
-    choices: ['vite', 'webpack'],
-  })
   .scriptName('run-e2e')
   .example('run-e2e')
   .example('run-e2e /tmp/redwood-app --ts')
@@ -273,7 +221,7 @@ let REDWOOD_PROJECT_DIRECTORY =
     os.tmpdir(),
     'redwood-e2e',
     // ":" is problematic with paths
-    new Date().toISOString().split(':').join('-')
+    new Date().toISOString().split(':').join('-'),
   )
 
 console.log()
@@ -288,16 +236,16 @@ let {
   copyFramework,
   createProject,
   typescript,
-  bundler,
   autoStart,
   cleanFiles,
 } = args
 const tasks = [
   buildFramework && buildRedwoodFramework,
-  createProject && (() => createRedwoodJSApp({ typescript, bundler })),
-  copyFramework && addFrameworkDepsToProject,
-  copyFramework && runYarnInstall,
-  copyFramework && copyFrameworkPackages,
+  createProject && (() => createRedwoodJSApp({ typescript })),
+  copyFramework && runTarsync,
+  // copyFramework && addFrameworkDepsToProject,
+  // copyFramework && runYarnInstall,
+  // copyFramework && copyFrameworkPackages,
   autoStart && runDevServerInBackground,
   autoStart && initGit,
   autoStart && runCypress,
@@ -317,7 +265,7 @@ process.on('exit', () => {
     console.log('Clean up complete')
   } else {
     console.log(
-      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`
+      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`,
     )
   }
 })

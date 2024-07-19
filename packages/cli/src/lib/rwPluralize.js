@@ -103,7 +103,7 @@ export function isSingular(word) {
  */
 export function addSingularPlural(singular, plural) {
   const existingPlural = Object.keys(mappings.toSingular).find(
-    (key) => mappings.toSingular[key] === singular
+    (key) => mappings.toSingular[key] === singular,
   )
   delete mappings.toSingular[existingPlural]
   delete mappings.toPlural[existingPlural]

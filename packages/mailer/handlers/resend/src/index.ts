@@ -23,7 +23,7 @@ export class ResendMailHandler extends AbstractMailHandler {
   async send(
     content: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
-    handlerOptions?: ResendMailHandlerOptions
+    handlerOptions?: ResendMailHandlerOptions,
   ): Promise<MailResult> {
     // I was not having success at passing attachment contents as strings directly
     // to the Resend client, so I'm going to transform them to Buffers if they are

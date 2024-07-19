@@ -105,7 +105,6 @@ module.exports = {
         'contributing-walkthrough',
         'cors',
         'create-redwood-app',
-        'custom-web-index',
         'data-migrations',
         {
           type: 'category',
@@ -139,6 +138,7 @@ module.exports = {
             { type: 'doc', label: 'Vercel', id: 'deploy/vercel' },
           ],
         },
+        'database-seeds',
         'directives',
         'docker',
         'environment-variables',
@@ -153,6 +153,7 @@ module.exports = {
           },
           items: [
             { type: 'doc', label: 'About', id: 'graphql' },
+            { type: 'doc', label: 'Caching', id: 'graphql/caching' },
             { type: 'doc', label: 'Fragments', id: 'graphql/fragments' },
             {
               type: 'doc',
@@ -174,6 +175,16 @@ module.exports = {
         'local-postgres-setup',
         'logger',
         'mailer',
+        {
+          type: 'category',
+          label: 'Monitoring',
+          link: {
+            type: 'generated-index',
+            title: 'Monitoring',
+            slug: 'monitoring/index',
+          },
+          items: [{ type: 'doc', label: 'Sentry', id: 'monitoring/sentry' }],
+        },
         'prerender',
         'project-configuration-dev-test-build',
         'redwoodrecord',
@@ -184,7 +195,21 @@ module.exports = {
         'seo-head',
         'serverless-functions',
         'services',
-        'storybook',
+        {
+          type: 'category',
+          label: 'Storybook',
+          link: {
+            type: 'generated-index',
+            title: 'Storybook',
+            slug: 'storybook/index',
+          },
+          items: [
+            { type: 'doc', label: 'About Storybook', id: 'storybook/about' },
+            { type: 'doc', label: 'Webpack', id: 'storybook/webpack' },
+            { type: 'doc', label: 'Vite', id: 'storybook/vite' },
+          ],
+        },
+        'studio',
         'testing',
         'toast-notifications',
         {

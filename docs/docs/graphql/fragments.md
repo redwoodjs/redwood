@@ -83,6 +83,12 @@ With `registerFragment`, you can register a fragment with the registry and get b
 
 which can then be used to work with the registered fragment.
 
+### Setup
+
+`yarn rw setup graphql fragments`
+
+See more in [cli commands - setup graphql fragments](../cli-commands.md#setup-graphql-fragments).
+
 ### registerFragment
 
 To register a fragment, you can simply register it with `registerFragment`.
@@ -151,7 +157,6 @@ import { fragment } from '@redwoodjs/web/apollo'
 
 Access typename of fragment you registered.
 
-
 ```ts
 import { typename } from '@redwoodjs/web/apollo'
 ```
@@ -166,13 +171,12 @@ fragment BookInfo on Book {
   author
   publicationYear
 }
+```
 
 the `typename` is `Book`.
 
 
-## useCache!!!
-
-## getCacheKey
+### getCacheKey
 
 A helper function to create the cache key for the data associated with the fragment in Apollo cache.
 
@@ -194,13 +198,17 @@ fragment BookInfo on Book {
 
 the `getCacheKey` is a function where `getCacheKey(42)` would return `Book:42`.
 
+:::tip
+We describe how [cache keys and identifiers](./caching.md#identify) are used in more depth in the our [Apollo client cache](./caching.md#client-caching) documentation.
+:::
+
 ### useRegisteredFragment
 
 ```ts
 import { registerFragment } from '@redwoodjs/web/apollo'
 
 const { useRegisteredFragment } = registerFragment(
-...
+  // ...
 )
 ```
 
@@ -211,7 +219,7 @@ The useFragment hook represents a lightweight live binding into the Apollo Clien
 
 This means that once the Apollo Client Cache has loaded the data needed for the fragment, one can simply render the data for the fragment component with its id reference.
 
-Also, anywhere the fragment component is rendered will be updated with teh latest data if any of `useQuery` with uses the fragment received new data.
+Also, anywhere the fragment component is rendered will be updated with the latest data if any of `useQuery` with uses the fragment received new data.
 
 ```ts
 import type { Book } from 'types/graphql'
@@ -246,9 +254,9 @@ export default Book
 ```
 
 :::note
-In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
+In order to use [fragments](#what-are-fragments) with [unions](./../graphql#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
 
-Please see how to [generate possible types from fragments and union types](#generate-possible-types).
+Please see how to [generate possible types from fragments and union types](#possible-types-for-unions).
 :::
 
 
@@ -281,22 +289,90 @@ To make this easier to maintain, RedwoodJS GraphQL CodeGen automatically generat
 
 
 ```ts
+// web/src/App.tsx
+
 import possibleTypes from 'src/graphql/possibleTypes'
 
-...
-/// web/src/App.tsx
-<RedwoodApolloProvider
-  graphQLClientConfig={{
-    cacheConfig: {
-      ...possibleTypes,
-    },
-  }}
->
+// ...
+
+const graphQLClientConfig = {
+  cacheConfig: {
+    ...possibleTypes,
+  },
+}
+
+<RedwoodApolloProvider graphQLClientConfig={graphQLClientConfig}>
 ```
 
-To generate the `src/graphql/possibleTypes`, configure the `redwood.toml`:
+To generate the `src/graphql/possibleTypes` file, enable fragments in `redwood.toml`:
 
-```toml title=redwood.roml
+```toml title=redwood.toml
 [graphql]
-  fragments=true
+  fragments = true
 ```
+
+## Testing, Storybook and Mock Data
+
+When using fragments with test or Storybook, it is important that you define your mock data correctly.
+
+By including the `__typename` and the GraphQL Type for the mocked data object, you ensure that Apollo Client will handle the information when working with the cache or fragments.
+
+For example, consider the fragment `BookInfo` used by the query `GetBookDetails`.
+
+```ts
+import type { Book } from 'types/graphql'
+
+import { registerFragment } from '@redwoodjs/web/apollo'
+
+const { useRegisteredFragment } = registerFragment(
+  gql`
+    fragment BookInfo on Book {
+      id
+      title
+      author
+      publicationYear
+    }
+  `
+)
+```
+
+```ts
+import type { GetBookDetails } from 'types/graphql'
+
+import { useQuery } from '@redwoodjs/web'
+
+import BookInfo from 'src/components/BookInfo'
+
+const GET_BOOK_DETAILS = gql`
+  query GetBookDetails($bookId: ID!) {
+    book(id: $bookId) {
+      ...BookInfo
+      description
+      # Include other fields specific to this query
+    }
+  }
+```
+
+### Mock Data
+
+To satisfy the query as well as the fragment needs your mock data should include the `Book` typename:
+
+```ts
+export const standard = {
+  book: {
+    __typename: 'Book' as const,
+    id: 42,
+    title: 'Ulysses',
+    author: 'James Joyce',
+    publicationYear: 1922,
+    description: 'The experiences of three Dubliners over the course of a single day, 16 June 1904.'
+  }
+}
+```
+If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
+
+
+:::tip note
+
+The `__typename: 'Book' as const` ensures that `'Book'` is considered to be a `type` and not a `string`.
+:::

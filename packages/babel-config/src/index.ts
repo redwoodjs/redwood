@@ -9,7 +9,6 @@ export {
   getApiSideBabelPlugins,
   getApiSideBabelPresets,
   getApiSideDefaultBabelConfig,
-  prebuildApiFile,
   registerApiSideBabelHook,
   transformWithBabel,
 } from './api'
@@ -20,7 +19,6 @@ export {
   getWebSideBabelPresets,
   getWebSideDefaultBabelConfig,
   getWebSideOverrides,
-  prebuildWebFile,
   registerWebSideBabelHook,
 } from './web'
 

@@ -76,7 +76,7 @@ export const verifyEvent = (
     payload?: string
     secret?: string
     options?: VerifyOptions | undefined
-  }
+  },
 ): boolean | WebhookVerificationError => {
   let body = ''
 
@@ -136,7 +136,7 @@ export const verifySignature = (
     secret: string
     signature: string
     options?: VerifyOptions | undefined
-  }
+  },
 ): boolean | WebhookVerificationError => {
   const { verify } = createVerifier(type, options)
 
@@ -165,7 +165,7 @@ export const signPayload = (
     payload: string
     secret: string
     options?: VerifyOptions | undefined
-  }
+  },
 ): string => {
   const { sign } = createVerifier(type, options)
 

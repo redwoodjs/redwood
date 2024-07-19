@@ -9,11 +9,11 @@ type ModulesToExclude = Array<{ id: RegExp }>
  * Only applies on build, not on dev.
  *
  */
-export default function removeFromBundle(
-  modulesToExclude: ModulesToExclude
+export function removeFromBundle(
+  modulesToExclude: ModulesToExclude,
 ): PluginOption {
   const isMissingIdToExclude = modulesToExclude.some(
-    (module) => module.id === undefined
+    (module) => module.id === undefined,
   )
 
   if (isMissingIdToExclude) {
@@ -29,9 +29,8 @@ export default function removeFromBundle(
   }
 }
 
-// Currently configured for CJS only.
 const EMPTY_MODULE = {
-  code: `module.exports = {}`,
+  code: `export default {};`,
 }
 
 export function excludeOnMatch(modulesToExclude: ModulesToExclude, id: string) {

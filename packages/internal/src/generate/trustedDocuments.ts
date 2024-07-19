@@ -8,17 +8,17 @@ import { getPaths } from '@redwoodjs/project-config'
 import type { GeneratedFile } from './types'
 
 // Copy the persisted-documents.json to api side as a trustedDocumentsStore
-export const trustedDocumentsStore = (generatedFiles: any) => {
+export const trustedDocumentsStore = async (generatedFiles: any) => {
   let trustedDocumentsStoreFile = ''
 
   const output = generatedFiles.filter((f: GeneratedFile) =>
-    f.filename.endsWith('persisted-documents.json')
+    f.filename.endsWith('persisted-documents.json'),
   )
 
   const storeFile = output[0]
 
   if (storeFile && storeFile.content) {
-    const content = format(`export const store = ${storeFile.content}`, {
+    const content = await format(`export const store = ${storeFile.content}`, {
       trailingComma: 'es5',
       bracketSpacing: true,
       tabWidth: 2,
@@ -30,7 +30,7 @@ export const trustedDocumentsStore = (generatedFiles: any) => {
 
     trustedDocumentsStoreFile = path.join(
       getPaths().api.lib,
-      'trustedDocumentsStore.ts'
+      'trustedDocumentsStore.ts',
     )
 
     fs.mkdirSync(path.dirname(trustedDocumentsStoreFile), { recursive: true })
@@ -42,20 +42,26 @@ export const trustedDocumentsStore = (generatedFiles: any) => {
 
 // Add the gql function to the generated graphql.ts file
 // that is used by trusted documents
-export const replaceGqlTagWithTrustedDocumentGraphql = (
-  generatedFiles: any
+export const replaceGqlTagWithTrustedDocumentGraphql = async (
+  generatedFiles: any,
 ) => {
   const gqlFileOutput = generatedFiles.filter((f: GeneratedFile) =>
-    f.filename.endsWith('gql.ts')
+    f.filename.endsWith('gql.ts'),
   )
 
   const gqlFile = gqlFileOutput[0]
 
   if (gqlFile && gqlFile.content) {
-    gqlFile.content +=
-      'export function gql(source: string) { return graphql(source); }'
+    gqlFile.content += `\n
+      export function gql(source: string | TemplateStringsArray) {
+        if (typeof source === 'string') {
+          return graphql(source)
+        }
 
-    const content = format(gqlFile.content, {
+        return graphql(source.join('\\n'))
+      }`
+
+    const content = await format(gqlFile.content, {
       trailingComma: 'es5',
       bracketSpacing: true,
       tabWidth: 2,

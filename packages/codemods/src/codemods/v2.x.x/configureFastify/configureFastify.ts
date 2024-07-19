@@ -13,9 +13,9 @@ export default function transform(file: FileInfo, api: API) {
           j.assignmentExpression(
             '=',
             j.identifier('module.exports'),
-            j.identifier('{ config }')
-          )
-        )
+            j.identifier('{ config }'),
+          ),
+        ),
       )
     }
   })

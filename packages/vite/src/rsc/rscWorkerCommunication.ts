@@ -1,26 +1,38 @@
 import path from 'node:path'
-import { PassThrough } from 'node:stream'
 import type { Readable } from 'node:stream'
+import { PassThrough } from 'node:stream'
+import { fileURLToPath } from 'node:url'
 import { Worker } from 'node:worker_threads'
 
-const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
+import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
+
+import type { RscFetchProps } from './rscFetchForClientRouter.js'
+
+const workerPath = path.join(
+  // __dirname. Use fileURLToPath for windows compatibility
+  path.dirname(fileURLToPath(import.meta.url)),
+  'rscWorker.js',
+)
+
+const worker = new Worker(workerPath, {
   execArgv: [
     '--conditions',
     'react-server',
-    '--experimental-loader',
-    '@redwoodjs/vite/node-loader',
     '--experimental-loader',
     '@redwoodjs/vite/react-node-loader',
   ],
 })
 
-export type RenderInput<
-  Props extends Record<string, unknown> = Record<string, unknown>
-> = {
+export type RenderInput = {
   rscId?: string | undefined
-  props?: Props | undefined
+  props: RscFetchProps | Record<string, unknown>
   rsfId?: string | undefined
   args?: unknown[] | undefined
+  serverState: {
+    headersInit: Record<string, string>
+    fullUrl: string
+    serverAuthState: ServerAuthState
+  }
 }
 
 type CustomModules = {
@@ -32,7 +44,6 @@ export type MessageReq =
   | {
       id: number
       type: 'setClientEntries'
-      value: 'load' | Record<string, string>
     }
   | {
       id: number
@@ -86,9 +97,9 @@ export function shutdown() {
 
 let nextId = 1
 
-export function setClientEntries(
-  value: 'load' | Record<string, string>
-): Promise<void> {
+/** Set the client entries in the worker (for the server build) */
+export function setClientEntries(): Promise<void> {
+  // Just making this function async instead of callback based
   return new Promise((resolve, reject) => {
     const id = nextId++
 
@@ -102,7 +113,7 @@ export function setClientEntries(
       }
     })
 
-    const message: MessageReq = { id, type: 'setClientEntries', value }
+    const message: MessageReq = { id, type: 'setClientEntries' }
     worker.postMessage(message)
   })
 }
@@ -124,7 +135,7 @@ export function renderRsc(input: RenderInput): Readable {
       passthrough.destroy(
         message.err instanceof Error
           ? message.err
-          : new Error(String(message.err))
+          : new Error(String(message.err)),
       )
       messageCallbacks.delete(id)
     }

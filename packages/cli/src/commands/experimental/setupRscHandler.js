@@ -1,13 +1,13 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { prettify } from '@redwoodjs/cli-helpers'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../lib'
+import { getPaths, transformTSToJS, writeFile } from '../../lib'
 import c from '../../lib/colors'
 import { isTypeScriptProject } from '../../lib/project'
 
@@ -18,6 +18,7 @@ export const handler = async ({ force, verbose }) => {
   const rwPaths = getPaths()
   const redwoodTomlPath = getConfigPath()
   const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
+  const ext = path.extname(rwPaths.web.entryClient || '')
 
   const tasks = new Listr(
     [
@@ -30,13 +31,13 @@ export const handler = async ({ force, verbose }) => {
 
           if (!getConfig().experimental?.streamingSsr?.enabled) {
             throw new Error(
-              'The Streaming SSR experimental feature must be enabled before you can enable RSCs'
+              'The Streaming SSR experimental feature must be enabled before you can enable RSCs',
             )
           }
 
           if (!isTypeScriptProject()) {
             throw new Error(
-              'RSCs are only supported in TypeScript projects at this time'
+              'RSCs are only supported in TypeScript projects at this time',
             )
           }
         },
@@ -50,7 +51,7 @@ export const handler = async ({ force, verbose }) => {
               configContent.concat('\n[experimental.rsc]\n  enabled = true\n'),
               {
                 overwriteExisting: true, // redwood.toml always exists
-              }
+              },
             )
           } else {
             if (force) {
@@ -61,15 +62,15 @@ export const handler = async ({ force, verbose }) => {
                 configContent.replace(
                   // Enable if it's currently disabled
                   '\n[experimental.rsc]\n  enabled = false\n',
-                  '\n[experimental.rsc]\n  enabled = true\n'
+                  '\n[experimental.rsc]\n  enabled = true\n',
                 ),
                 {
                   overwriteExisting: true, // redwood.toml always exists
-                }
+                },
               )
             } else {
               task.skip(
-                'The [experimental.rsc] config block already exists in your `redwood.toml` file.'
+                'The [experimental.rsc] config block already exists in your `redwood.toml` file.',
               )
             }
           }
@@ -77,16 +78,74 @@ export const handler = async ({ force, verbose }) => {
         options: { persistentOutput: true },
       },
       {
-        title: 'Adding entries.ts...',
+        title: `Overwriting entry.client${ext}...`,
         task: async () => {
-          const entriesTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'entries.ts.template'),
-            'utf-8'
+          const entryClientTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.client.tsx.template',
+            ),
+            'utf-8',
           )
+          const entryClientContent = isTypeScriptProject()
+            ? entryClientTemplate
+            : await transformTSToJS(
+                rwPaths.web.entryClient,
+                entryClientTemplate,
+              )
 
-          // Can't use rwPaths.web.entries because it's not created yet
-          writeFile(path.join(rwPaths.web.src, 'entries.ts'), entriesTemplate, {
-            overwriteExisting: force,
+          writeFile(rwPaths.web.entryClient, entryClientContent, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: `Overwriting entry.server${ext}...`,
+        task: async () => {
+          const entryServerTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'entry.server.tsx.template',
+            ),
+            'utf-8',
+          )
+          // Can't use rwPaths.web.entryServer because it might not be not created yet
+          const entryServerPath = path.join(
+            rwPaths.web.src,
+            `entry.server${ext}`,
+          )
+          const entryServerContent = isTypeScriptProject()
+            ? entryServerTemplate
+            : await transformTSToJS(entryServerPath, entryServerTemplate)
+
+          writeFile(entryServerPath, entryServerContent, {
+            overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: `Overwriting Document${ext}...`,
+        task: async () => {
+          const documentTemplate = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'rsc',
+              'Document.tsx.template',
+            ),
+            'utf-8',
+          )
+          const documentPath = path.join(rwPaths.web.src, `Document${ext}`)
+          const documentContent = isTypeScriptProject()
+            ? documentTemplate
+            : await transformTSToJS(documentPath, documentTemplate)
+
+          writeFile(documentPath, documentContent, {
+            overwriteExisting: true,
           })
         },
       },
@@ -98,14 +157,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'rsc',
-              'HomePage.tsx.template'
+              'HomePage.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const homePagePath = path.join(
             rwPaths.web.pages,
             'HomePage',
-            'HomePage.tsx'
+            'HomePage.tsx',
           )
 
           writeFile(homePagePath, homePageTemplate, {
@@ -117,14 +176,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'rsc',
-              'AboutPage.tsx.template'
+              'AboutPage.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const aboutPagePath = path.join(
             rwPaths.web.pages,
             'AboutPage',
-            'AboutPage.tsx'
+            'AboutPage.tsx',
           )
 
           writeFile(aboutPagePath, aboutPageTemplate, {
@@ -137,12 +196,12 @@ export const handler = async ({ force, verbose }) => {
         task: async () => {
           const counterTemplate = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'rsc', 'Counter.tsx.template'),
-            'utf-8'
+            'utf-8',
           )
           const counterPath = path.join(
             rwPaths.web.components,
             'Counter',
-            'Counter.tsx'
+            'Counter.tsx',
           )
 
           writeFile(counterPath, counterTemplate, {
@@ -158,14 +217,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'rsc',
-              'AboutCounter.tsx.template'
+              'AboutCounter.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const counterPath = path.join(
             rwPaths.web.components,
             'Counter',
-            'AboutCounter.tsx'
+            'AboutCounter.tsx',
           )
 
           writeFile(counterPath, counterTemplate, {
@@ -202,7 +261,7 @@ export const handler = async ({ force, verbose }) => {
           files.forEach((file) => {
             const template = fs.readFileSync(
               path.resolve(__dirname, 'templates', 'rsc', file.template),
-              'utf-8'
+              'utf-8',
             )
             const filePath = path.join(rwPaths.web.src, ...file.path)
 
@@ -220,14 +279,14 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'rsc',
-              'NavigationLayout.tsx.template'
+              'NavigationLayout.tsx.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const layoutPath = path.join(
             rwPaths.web.layouts,
             'NavigationLayout',
-            'NavigationLayout.tsx'
+            'NavigationLayout.tsx',
           )
 
           writeFile(layoutPath, layoutTemplate, { overwriteExisting: force })
@@ -237,42 +296,17 @@ export const handler = async ({ force, verbose }) => {
               __dirname,
               'templates',
               'rsc',
-              'NavigationLayout.css.template'
+              'NavigationLayout.css.template',
             ),
-            'utf-8'
+            'utf-8',
           )
           const cssPath = path.join(
             rwPaths.web.layouts,
             'NavigationLayout',
-            'NavigationLayout.css'
+            'NavigationLayout.css',
           )
 
           writeFile(cssPath, cssTemplate, { overwriteExisting: force })
-        },
-      },
-      {
-        title: 'Updating index.html...',
-        task: async () => {
-          let indexHtml = fs.readFileSync(rwPaths.web.html, 'utf-8')
-
-          if (
-            /\n\s*<script type="module" src="entry.client.tsx"><\/script>/.test(
-              indexHtml
-            )
-          ) {
-            // index.html is already updated
-            return
-          }
-
-          indexHtml = indexHtml.replace(
-            'href="/favicon.png" />',
-            'href="/favicon.png" />\n' +
-              '  <script type="module" src="entry.client.tsx"></script>'
-          )
-
-          writeFile(rwPaths.web.html, indexHtml, {
-            overwriteExisting: true,
-          })
         },
       },
       {
@@ -280,27 +314,11 @@ export const handler = async ({ force, verbose }) => {
         task: async () => {
           const template = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'rsc', 'index.css.template'),
-            'utf-8'
+            'utf-8',
           )
           const filePath = path.join(rwPaths.web.src, 'index.css')
 
           writeFile(filePath, template, {
-            overwriteExisting: true,
-          })
-        },
-      },
-      {
-        title: 'Overwrite App.tsx...',
-        task: async () => {
-          const appTemplate = fs.readFileSync(
-            path.resolve(__dirname, 'templates', 'rsc', 'App.tsx.template'),
-            'utf-8'
-          )
-
-          const appPath =
-            rwPaths.web.app ?? path.join(rwPaths.web.src, 'App.tsx')
-
-          writeFile(appPath, appTemplate, {
             overwriteExisting: true,
           })
         },
@@ -319,21 +337,19 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(
             tsconfigPath,
-            prettify('tsconfig.json', JSON.stringify(tsconfig, null, 2)),
+            await prettify('tsconfig.json', JSON.stringify(tsconfig, null, 2)),
             {
               overwriteExisting: true,
-            }
+            },
           )
         },
       },
-      // TODO (RSC): Remove this once we have a better way to handle routes.
-      // This is a total hack right now
       {
         title: 'Overwriting routes...',
         task: async () => {
           const routesTemplate = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'rsc', 'Routes.tsx.template'),
-            'utf-8'
+            'utf-8',
           )
 
           writeFile(rwPaths.web.routes, routesTemplate, {
@@ -350,7 +366,7 @@ export const handler = async ({ force, verbose }) => {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

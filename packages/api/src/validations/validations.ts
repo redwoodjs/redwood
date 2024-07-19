@@ -246,7 +246,7 @@ const VALIDATORS = {
   absence: (
     value: unknown,
     name: string,
-    options: boolean | AbsenceValidatorOptions
+    options: boolean | AbsenceValidatorOptions,
   ) => {
     const absenceOptions = { allowEmptyString: false }
     Object.assign(absenceOptions, options)
@@ -268,7 +268,7 @@ const VALIDATORS = {
   acceptance: (
     value: unknown,
     name: string,
-    options: boolean | AcceptanceValidatorOptions
+    options: boolean | AcceptanceValidatorOptions,
   ) => {
     let acceptedValues: Array<unknown>
 
@@ -293,7 +293,7 @@ const VALIDATORS = {
   email: (
     value: unknown,
     name: string,
-    options: boolean | EmailValidatorOptions
+    options: boolean | EmailValidatorOptions,
   ) => {
     const pattern = /^[^@\s]+@[^.\s]+\.[^\s]+$/
 
@@ -309,7 +309,7 @@ const VALIDATORS = {
   exclusion: (
     value: unknown,
     name: string,
-    options: Array<unknown> | ExclusionValidatorOptions
+    options: Array<unknown> | ExclusionValidatorOptions,
   ) => {
     const [exclusionList, val] = prepareExclusionInclusion(value, options)
 
@@ -325,14 +325,14 @@ const VALIDATORS = {
   format: (
     value: unknown,
     name: string,
-    options: RegExp | FormatValidatorOptions
+    options: RegExp | FormatValidatorOptions,
   ) => {
     const pattern = options instanceof RegExp ? options : options.pattern
 
     if (pattern == null) {
       throw new ValidationErrors.FormatValidationError(
         name,
-        'No pattern for format validation'
+        'No pattern for format validation',
       )
     }
 
@@ -348,7 +348,7 @@ const VALIDATORS = {
   inclusion: (
     value: unknown,
     name: string,
-    options: Array<unknown> | InclusionValidatorOptions
+    options: Array<unknown> | InclusionValidatorOptions,
   ) => {
     const [inclusionList, val] = prepareExclusionInclusion(value, options)
 
@@ -410,7 +410,7 @@ const VALIDATORS = {
   numericality: (
     value: unknown,
     name: string,
-    options: boolean | NumericalityValidatorOptions
+    options: boolean | NumericalityValidatorOptions,
   ) => {
     if (typeof value !== 'number') {
       validationError('typeNumericality', name, options)
@@ -492,7 +492,7 @@ const VALIDATORS = {
   presence: (
     value: unknown,
     name: string,
-    options: boolean | PresenceValidatorOptions
+    options: boolean | PresenceValidatorOptions,
   ) => {
     const presenceOptions = {
       allowNull: false,
@@ -537,10 +537,10 @@ const validationError = (
   type: string,
   name: string,
   options: any,
-  substitutions = {}
+  substitutions = {},
 ) => {
   const errorClassName = `${pascalcase(
-    type
+    type,
   )}ValidationError` as keyof typeof ValidationErrors
   const ErrorClass = ValidationErrors[errorClassName]
   const errorMessage =
@@ -557,14 +557,14 @@ const prepareExclusionInclusion = (
   options:
     | Array<unknown>
     | InclusionValidatorOptions
-    | ExclusionValidatorOptions
+    | ExclusionValidatorOptions,
 ): [Array<unknown>, unknown] => {
   const inputList = (Array.isArray(options) && options) || options.in || []
 
   // default case sensitivity to true
   const caseSensitive = Array.isArray(options)
     ? true
-    : options.caseSensitive ?? true
+    : (options.caseSensitive ?? true)
 
   return caseSensitive
     ? [inputList, value]
@@ -581,17 +581,17 @@ const prepareExclusionInclusion = (
 export function validate(
   value: unknown,
   labelOrRecipe: ValidationWithMessagesRecipe,
-  recipe?: never
+  recipe?: never,
 ): void
 export function validate(
   value: unknown,
   labelOrRecipe: string,
-  recipe: ValidationRecipe
+  recipe: ValidationRecipe,
 ): void
 export function validate(
   value: unknown,
   labelOrRecipe: string | ValidationWithMessagesRecipe,
-  recipe?: ValidationRecipe
+  recipe?: ValidationRecipe,
 ): void {
   let label, validationRecipe
 
@@ -684,13 +684,13 @@ export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
   optionsOrCallback: (tx: PrismaClient) => Promise<any>,
-  callback: never
+  callback: never,
 ): Promise<any>
 export async function validateUniqueness(
   model: string,
   fields: Record<string, unknown>,
   optionsOrCallback: UniquenessValidatorOptions,
-  callback?: (tx: PrismaClient) => Promise<any>
+  callback?: (tx: PrismaClient) => Promise<any>,
 ): Promise<any>
 export async function validateUniqueness(
   model: string,
@@ -698,7 +698,7 @@ export async function validateUniqueness(
   optionsOrCallback:
     | UniquenessValidatorOptions
     | ((tx: PrismaClient) => Promise<any>),
-  callback?: (tx: PrismaClient) => Promise<any>
+  callback?: (tx: PrismaClient) => Promise<any>,
 ): Promise<any> {
   const { $self, $scope, ...rest } = fields
   let options: UniquenessValidatorOptions = {}

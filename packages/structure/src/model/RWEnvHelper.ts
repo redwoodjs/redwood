@@ -79,7 +79,7 @@ export class RWEnvHelper extends BaseNode {
   private env_default_merged_filtered(include: string[]): EnvVarMap {
     return pickBy(
       this.env_default_merged,
-      (_v, k) => k.startsWith('REDWOOD_ENV_') || include?.includes(k)
+      (_v, k) => k.startsWith('REDWOOD_ENV_') || include?.includes(k),
     )
   }
 
@@ -88,7 +88,7 @@ export class RWEnvHelper extends BaseNode {
     if (!existsSync(file)) {
       return undefined
     }
-    return dotenv.parse(readFileSync(file))
+    return dotenv.parse(readFileSync(file, 'utf-8'))
   }
 
   @lazy() get env_available_to_api() {
@@ -101,7 +101,7 @@ export class RWEnvHelper extends BaseNode {
 
   @lazy() get env_available_to_web() {
     return this.env_default_merged_filtered(
-      this.parent.redwoodTOML.web_includeEnvironmentVariables ?? []
+      this.parent.redwoodTOML.web_includeEnvironmentVariables ?? [],
     )
   }
 
@@ -113,16 +113,16 @@ export class RWEnvHelper extends BaseNode {
     // TODO: make this async (this is globbing around quite a bit)
     const { pathHelper } = this.parent
     const api = process_env_findAll(pathHelper.api.base).map(
-      (x) => new ProcessDotEnvExpression(this, 'api', x.key, x.node)
+      (x) => new ProcessDotEnvExpression(this, 'api', x.key, x.node),
     )
     const web = process_env_findAll(pathHelper.web.base).map(
-      (x) => new ProcessDotEnvExpression(this, 'web', x.key, x.node)
+      (x) => new ProcessDotEnvExpression(this, 'web', x.key, x.node),
     )
     const prisma = Array.from(
-      prisma_parseEnvExpressionsInFile(pathHelper.api.dbSchema)
+      prisma_parseEnvExpressionsInFile(pathHelper.api.dbSchema),
     )
     const pp = prisma.map(
-      (x) => new ProcessDotEnvExpression(this, 'prisma', x.key, x.location)
+      (x) => new ProcessDotEnvExpression(this, 'prisma', x.key, x.location),
     )
     return [...api, ...web, ...pp]
   }
@@ -136,7 +136,7 @@ class ProcessDotEnvExpression extends BaseNode {
     public parent: RWEnvHelper,
     public kind: 'api' | 'web' | 'prisma',
     public key: string,
-    public node: tsm.Node | Location
+    public node: tsm.Node | Location,
   ) {
     super()
   }

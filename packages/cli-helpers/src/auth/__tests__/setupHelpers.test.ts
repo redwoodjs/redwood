@@ -1,14 +1,22 @@
 globalThis.__dirname = __dirname
 
 // mock Telemetry for CLI commands so they don't try to spawn a process
-jest.mock('@redwoodjs/telemetry', () => {
+vi.mock('@redwoodjs/telemetry', () => {
   return {
-    errorTelemetry: () => jest.fn(),
-    timedTelemetry: () => jest.fn(),
+    errorTelemetry: () => vi.fn(),
+    timedTelemetry: () => vi.fn(),
   }
 })
 
-jest.mock('../../lib/paths', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
+  return {
+    ...originalProjectConfig,
+    getConfig: () => ({}),
+  }
+})
+
+vi.mock('../../lib/paths', () => {
   const path = require('path')
   const __dirname = path.resolve()
 
@@ -18,7 +26,7 @@ jest.mock('../../lib/paths', () => {
         src: path.join(__dirname, '../create-redwood-app/template/api/src'),
         functions: path.join(
           __dirname,
-          '../create-redwood-app/template/api/src/functions'
+          '../create-redwood-app/template/api/src/functions',
         ),
         lib: path.join(__dirname, '../create-redwood-app/template/api/src/lib'),
       },
@@ -28,42 +36,47 @@ jest.mock('../../lib/paths', () => {
   }
 })
 
-jest.mock('../../lib/project', () => ({
+vi.mock('../../lib/project', () => ({
   isTypeScriptProject: () => true,
 }))
 
-jest.mock('execa', () => {})
-jest.mock('listr2')
-jest.mock('prompts', () => jest.fn(() => ({ answer: true })))
+vi.mock('execa')
+vi.mock('listr2')
+vi.mock('prompts', () => ({
+  default: vi.fn(() => ({ answer: true })),
+}))
 
 import fs from 'fs'
 import path from 'path'
 
 import { Listr } from 'listr2'
 import prompts from 'prompts'
+import { vi, describe, afterEach, it, expect } from 'vitest'
+import type { Mock, MockedFunction } from 'vitest'
 
-// import * as auth from '../auth'
-import { standardAuthHandler } from '../setupHelpers'
+import type * as ProjectConfig from '@redwoodjs/project-config'
+
+import { standardAuthHandler } from '../setupHelpers.js'
 
 describe('Auth generator tests', () => {
-  const processExitSpy = jest
+  const processExitSpy = vi
     .spyOn<NodeJS.Process, any>(process, 'exit')
     .mockImplementation((_code: any) => {})
 
-  const mockListrRun = jest.fn()
+  const mockListrRun = vi.fn()
 
-  ;(Listr as jest.MockedFunction<jest.Mock>).mockImplementation(() => {
+  ;(Listr as MockedFunction<Mock>).mockImplementation(() => {
     return {
       run: mockListrRun,
     }
   })
 
-  const fsSpy = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {})
+  const fsSpy = vi.spyOn(fs, 'writeFileSync').mockImplementation(() => {})
 
   afterEach(() => {
     processExitSpy.mockReset()
     fsSpy.mockReset()
-    ;(prompts as unknown as jest.Mock).mockClear()
+    ;(prompts as unknown as Mock).mockClear()
     mockListrRun.mockClear()
   })
 

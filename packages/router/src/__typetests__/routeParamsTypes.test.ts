@@ -130,19 +130,19 @@ describe('RouteParams<>', () => {
 
 describe('ParamType<>', () => {
   test('Float', () => {
-    expect<ParamType<'Float'>>().type.toBeAssignable(1.02)
+    expect<ParamType<'Float'>>().type.toBeAssignableWith(1.02)
   })
 
   test('Boolean', () => {
-    expect<ParamType<'Boolean'>>().type.toBeAssignable(true)
-    expect<ParamType<'Boolean'>>().type.toBeAssignable(false)
+    expect<ParamType<'Boolean'>>().type.toBeAssignableWith(true)
+    expect<ParamType<'Boolean'>>().type.toBeAssignableWith(false)
   })
 
   test('Int', () => {
-    expect<ParamType<'Int'>>().type.toBeAssignable(51)
+    expect<ParamType<'Int'>>().type.toBeAssignableWith(51)
   })
 
   test('String', () => {
-    expect<ParamType<'String'>>().type.toBeAssignable('bazinga')
+    expect<ParamType<'String'>>().type.toBeAssignableWith('bazinga')
   })
 })

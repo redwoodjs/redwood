@@ -26,8 +26,8 @@ export const deployBuilder = (yargs) => {
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#deploy',
+      )}`,
     )
 }
 
@@ -47,7 +47,7 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
 
   const joinedCommands = commandSet.join(' && ')
 
-  console.log(c.green(`\nRunning:\n`) + `${joinedCommands} \n`)
+  console.log(c.note(`\nRunning:\n`) + `${joinedCommands} \n`)
 
   return execa(joinedCommands, {
     shell: true,

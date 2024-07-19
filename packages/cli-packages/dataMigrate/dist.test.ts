@@ -22,7 +22,7 @@ describe('dist', () => {
     it('starts with shebang', () => {
       const binFileContent = fs.readFileSync(
         path.join(distPath, 'bin.js'),
-        'utf-8'
+        'utf-8',
       )
       binFileContent.startsWith('#!/usr/bin/env node')
     })

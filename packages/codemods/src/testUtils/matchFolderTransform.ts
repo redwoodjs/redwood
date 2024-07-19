@@ -2,6 +2,7 @@ import path from 'path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
+import { expect } from 'vitest'
 
 import runTransform from '../lib/runTransform'
 
@@ -19,8 +20,8 @@ type Options = {
 
 type MatchFolderTransformFunction = (
   transformFunctionOrName: (() => any) | string,
-  fixtureName: string,
-  options?: Options
+  fixtureName?: string,
+  options?: Options,
 ) => Promise<void>
 
 export const matchFolderTransform: MatchFolderTransformFunction = async (
@@ -30,7 +31,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     removeWhitespace = false,
     targetPathsGlob = '**/*',
     useJsCodeshift = false,
-  } = {}
+  } = {},
 ) => {
   const tempDir = createProjectMock()
 
@@ -47,7 +48,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   const fixtureFolder = path.join(
     testPath,
     '../../__testfixtures__',
-    fixtureName
+    fixtureName || '',
   )
 
   const fixtureInputDir = path.join(fixtureFolder, 'input')
@@ -68,12 +69,12 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   if (useJsCodeshift) {
     if (typeof transformFunctionOrName !== 'string') {
       throw new Error(
-        'When running matchFolderTransform with useJsCodeshift, transformFunction must be a string (file name of jscodeshift transform)'
+        'When running matchFolderTransform with useJsCodeshift, transformFunction must be a string (file name of jscodeshift transform)',
       )
     }
     const transformName = transformFunctionOrName
     const transformPath = require.resolve(
-      path.join(testPath, '../../', transformName)
+      path.join(testPath, '../../', `${transformName}.ts`),
     )
 
     const targetPaths = fg.sync(targetPathsGlob, {
@@ -92,7 +93,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
   } else {
     if (typeof transformFunctionOrName !== 'function') {
       throw new Error(
-        'transformFunction must be a function, if useJsCodeshift set to false'
+        'transformFunction must be a function, if useJsCodeshift set to false',
       )
     }
     const transformFunction = transformFunctionOrName

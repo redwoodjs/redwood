@@ -40,7 +40,7 @@ export default (Base) =>
     // the state of error objects. Essentially the opposite of `isValid`.
     get hasError() {
       return !Object.entries(this._errors).every(
-        ([_name, errors]) => !errors.length
+        ([_name, errors]) => !errors.length,
       )
     }
 

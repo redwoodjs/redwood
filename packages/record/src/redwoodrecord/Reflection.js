@@ -48,7 +48,7 @@ export default class Reflection {
         // get other side of relationship to determine foreign key name
         const otherSchema = this.#schemaForModel(field.type)
         const belongsTo = otherSchema.fields.find(
-          (field) => field.type === this.model.name
+          (field) => field.type === this.model.name,
         )
 
         this.#hasMany[field.name] = {

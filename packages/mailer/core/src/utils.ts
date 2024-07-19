@@ -26,7 +26,7 @@ export function convertAddresses(addresses: MailAddress[]): string[] {
 }
 
 export function extractDefaults(
-  defaults: NonNullable<ConstructorParameters<typeof Mailer>[0]['defaults']>
+  defaults: NonNullable<ConstructorParameters<typeof Mailer>[0]['defaults']>,
 ): MailerDefaults {
   const extractedDefaults: MailerDefaults = {
     attachments: defaults.attachments ?? [],
@@ -40,12 +40,12 @@ export function extractDefaults(
   // Convert addresses now to avoid doing it repeatedly later
   if (defaults.bcc !== undefined) {
     extractedDefaults.bcc = convertAddresses(
-      Array.isArray(defaults.bcc) ? defaults.bcc : [defaults.bcc]
+      Array.isArray(defaults.bcc) ? defaults.bcc : [defaults.bcc],
     )
   }
   if (defaults.cc !== undefined) {
     extractedDefaults.cc = convertAddresses(
-      Array.isArray(defaults.cc) ? defaults.cc : [defaults.cc]
+      Array.isArray(defaults.cc) ? defaults.cc : [defaults.cc],
     )
   }
   if (defaults.replyTo !== undefined) {
@@ -62,7 +62,7 @@ export function constructCompleteSendOptions(
   sendOptions:
     | MailSendWithoutRenderingOptions<any, any>
     | MailSendOptions<any, any, any, any>,
-  defaults: MailerDefaults
+  defaults: MailerDefaults,
 ): MailSendOptionsComplete {
   const sendOptionsComplete: Omit<MailSendOptionsComplete, 'from' | 'subject'> =
     {
@@ -86,7 +86,7 @@ export function constructCompleteSendOptions(
 
   if (sendOptions.to !== undefined) {
     sendOptionsComplete.to = convertAddresses(
-      Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to]
+      Array.isArray(sendOptions.to) ? sendOptions.to : [sendOptions.to],
     )
   }
   if (sendOptionsComplete.to.length === 0) {
@@ -95,7 +95,7 @@ export function constructCompleteSendOptions(
 
   if (sendOptions.cc !== undefined) {
     sendOptionsComplete.cc = convertAddresses(
-      Array.isArray(sendOptions.cc) ? sendOptions.cc : [sendOptions.cc]
+      Array.isArray(sendOptions.cc) ? sendOptions.cc : [sendOptions.cc],
     )
   } else {
     sendOptionsComplete.cc = defaults.cc
@@ -103,7 +103,7 @@ export function constructCompleteSendOptions(
 
   if (sendOptions.bcc !== undefined) {
     sendOptionsComplete.bcc = convertAddresses(
-      Array.isArray(sendOptions.bcc) ? sendOptions.bcc : [sendOptions.bcc]
+      Array.isArray(sendOptions.bcc) ? sendOptions.bcc : [sendOptions.bcc],
     )
   } else {
     sendOptionsComplete.bcc = defaults.bcc

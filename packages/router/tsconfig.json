@@ -1,15 +1,12 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
-    "paths": {
-      "src/*": ["./src/*"]
-    }
   },
   "include": ["src", "./ambient.d.ts"],
   "references": [
-    { "path": "../auth" },
+    { "path": "../auth/tsconfig.build.json" },
+    { "path": "../server-store" },
   ]
 }

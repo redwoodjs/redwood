@@ -97,7 +97,7 @@ const firebaseAuth: Partial<typeof FirebaseAuthNamespace> = {
   signInWithEmailAndPassword: async (
     _auth: Auth,
     email: string,
-    _password: string
+    _password: string,
   ) => {
     if (email.startsWith('admin')) {
       loggedInUser = adminUser
@@ -147,12 +147,12 @@ beforeEach(() => {
 function getFirebaseAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     firebaseMockClient as FirebaseClient,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

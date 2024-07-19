@@ -12,14 +12,14 @@ const transform = (filename: string) => {
   return babel.transform(code, {
     filename,
     presets: ['@babel/preset-react'],
-    plugins: [babelRoutesAutoLoader],
+    plugins: [[babelRoutesAutoLoader]],
   })
 }
 
 describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   const FAILURE_FIXTURE_PATH = path.resolve(
     __dirname,
-    './__fixtures__/route-auto-loader/failure'
+    './__fixtures__/route-auto-loader/failure',
   )
 
   beforeAll(() => {
@@ -33,8 +33,9 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   test('Fails with appropriate message', () => {
     expect(() => {
       transform(getPaths().web.routes)
-    }).toThrowError(
-      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the follow page directories: 'HomePage"
+    }).toThrow(
+      "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' " +
+        "in the following page directories: 'HomePage'",
     )
   })
 })
@@ -42,7 +43,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
 describe('page auto loader correctly imports pages', () => {
   const FIXTURE_PATH = path.resolve(
     __dirname,
-    '../../../../../__fixtures__/example-todo-main/'
+    '../../../../../__fixtures__/example-todo-main/',
   )
 
   let result: babel.BabelFileResult | null
@@ -59,12 +60,20 @@ describe('page auto loader correctly imports pages', () => {
   test('Pages get both a LazyComponent and a prerenderLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  prerenderLoader: name => ({
+    default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
+  }),
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 `)
   })
 
   test('Already imported pages are left alone.', () => {
     expect(result?.code).toContain(`import FooPage from 'src/pages/FooPage'`)
+  })
+
+  test('RSC specific code should not be added', () => {
+    expect(result?.code).not.toContain(
+      'import { renderFromRscServer } from "@redwoodjs/vite/client"',
+    )
   })
 })

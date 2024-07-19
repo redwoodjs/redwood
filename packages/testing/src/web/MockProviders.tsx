@@ -12,12 +12,18 @@ import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import { MockParamsProvider } from './MockParamsProvider'
 
-// Import the user's Router from `./web/src/Router.{tsx,jsx}`,
-// we pass the `children` from the user's Router to `./MockRouter.Router`
+// Import the user's Routes from `./web/src/Routes.{tsx,jsx}`,
+// we pass the `children` from the user's Routes to `./MockRouter.Router`
 // so that we can populate the `routes object` in Storybook and tests.
-const {
-  default: UserRouterWithRoutes,
-} = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
+let UserRoutes: React.FC
+
+// we need to do this to avoid "Could not resolve "~__REDWOOD__USER_ROUTES_FOR_MOCK"" errors
+try {
+  const userRoutesModule = require('~__REDWOOD__USER_ROUTES_FOR_MOCK')
+  UserRoutes = userRoutesModule.default
+} catch {
+  UserRoutes = () => <></>
+}
 
 // TODO(pc): see if there are props we want to allow to be passed into our mock provider (e.g. AuthProviderProps)
 export const MockProviders: React.FunctionComponent<{
@@ -26,7 +32,7 @@ export const MockProviders: React.FunctionComponent<{
   return (
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
       <RedwoodApolloProvider useAuth={useAuth}>
-        <UserRouterWithRoutes />
+        <UserRoutes />
         <LocationProvider>
           <MockParamsProvider>{children}</MockParamsProvider>
         </LocationProvider>

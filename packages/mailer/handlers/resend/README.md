@@ -9,7 +9,7 @@ We assume you have the basic boilerplate for the redwood mailer present. We also
 We should install this handler package as a production dependency of the API side. We can do this with the following command:
 
 ```bash
-yarn rw workspace api add @redwoodjs/mailer-handler-resend
+yarn workspace api add @redwoodjs/mailer-handler-resend
 ```
 
 After this you should be able to import this handler into your `api/src/lib/mailer.ts` file and create an instance of this handler with your API key.

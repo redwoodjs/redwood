@@ -8,7 +8,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig, getRawConfig } from '@redwoodjs/project-config'
+import { getRawConfig } from '@redwoodjs/project-config'
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
@@ -90,8 +90,8 @@ const getInfo = async (presets: Args = {}) => {
         npmPackages: '@redwoodjs/*',
         IDEs: ['VSCode'],
       },
-      { json: true }
-    )
+      { json: true },
+    ),
   )
 
   // get shell name instead of path
@@ -105,20 +105,9 @@ const getInfo = async (presets: Args = {}) => {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
-  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
-  // Default to 'webpack' for new projects
-  const webBundler = presets.command?.startsWith('create redwood-app')
-    ? 'webpack'
-    : getConfig().web.bundler
-
   // Returns a list of all enabled experiments
   // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
   const experiments = Object.keys(getRawConfig()['experimental'] || {})
-
-  // NOTE: Added this way to avoid the need to disturb the existing toml structure
-  if (webBundler !== 'webpack') {
-    experiments.push(webBundler)
-  }
 
   return {
     os: info.System?.OS?.split(' ')[0],
@@ -131,14 +120,14 @@ const getInfo = async (presets: Args = {}) => {
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
-    webBundler,
+    webBundler: 'vite', // Hardcoded as this is now the only supported bundler
     experiments,
   }
 }
 
 // removes potentially sensitive information from an array of argv strings
 export const sanitizeArgv = (
-  argv: [string, string, keyof SensitiveArgPositions, ...string[]]
+  argv: [string, string, keyof SensitiveArgPositions, ...string[]],
 ) => {
   const name = argv[2]
   const sensitiveCommand = SENSITIVE_ARG_POSITIONS[name]
@@ -259,7 +248,7 @@ const uniqueId = (rootDir: string | null) => {
   const telemetryCachePath = path.join(
     rootDir || '/tmp',
     '.redwood',
-    'telemetry.txt'
+    'telemetry.txt',
   )
   const now = Date.now()
   const expires = now - 24 * 60 * 60 * 1000 // one day
@@ -276,7 +265,7 @@ const uniqueId = (rootDir: string | null) => {
         fs.mkdirSync(path.dirname(telemetryCachePath), { recursive: true })
       }
       fs.writeFileSync(telemetryCachePath, uuid)
-    } catch (error) {
+    } catch {
       console.error('\nCould not create telemetry.txt file\n')
     }
   } else {

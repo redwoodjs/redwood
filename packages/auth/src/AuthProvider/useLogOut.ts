@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import type { AuthProviderState } from './AuthProviderState'
+import type { AuthProviderState } from './AuthProviderState.js'
 
 export const useLogOut = <
   TUser,
@@ -17,7 +17,7 @@ export const useLogOut = <
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -36,7 +36,7 @@ export const useLogOut = <
   >,
   setAuthProviderState: React.Dispatch<
     React.SetStateAction<AuthProviderState<TUser>>
-  >
+  >,
 ) => {
   return useCallback(
     async (options?: TLogOutOptions) => {
@@ -53,6 +53,6 @@ export const useLogOut = <
 
       return logoutOutput
     },
-    [authImplementation, setAuthProviderState]
+    [authImplementation, setAuthProviderState],
   )
 }

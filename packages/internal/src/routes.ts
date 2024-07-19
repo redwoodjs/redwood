@@ -4,10 +4,8 @@ import chalk from 'chalk'
 
 import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
 import { getRouteRegexAndParams } from '@redwoodjs/router'
-
-// Circular dependency when trying to use the standard import
-const { getProject } = require('@redwoodjs/structure/dist/index')
-const { RWRoute } = require('@redwoodjs/structure/dist/model/RWRoute')
+import { getProject } from '@redwoodjs/structure/dist/index.js'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 export interface RouteInformation {
   name?: string
@@ -20,12 +18,11 @@ export interface RouteInformation {
  */
 export function getDuplicateRoutes() {
   const duplicateRoutes: RouteInformation[] = []
-  const allRoutes: (typeof RWRoute)[] = getProject(getPaths().base).router
-    .routes
+  const allRoutes: RWRoute[] = getProject(getPaths().base).router.routes
   const uniqueNames = new Set(
     allRoutes
       .filter((route) => route.name !== undefined)
-      .map((route) => route.name)
+      .map((route) => route.name),
   )
   uniqueNames.forEach((name) => {
     const routesWithName = allRoutes.filter((route) => {
@@ -39,7 +36,7 @@ export function getDuplicateRoutes() {
             page: route.page_identifier_str,
             path: route.path,
           }
-        })
+        }),
       )
     }
   })
@@ -56,7 +53,7 @@ export function warningForDuplicateRoutes() {
   let message = ''
   if (duplicatedRoutes.length > 0) {
     message += chalk.keyword('orange')(
-      `Warning: ${duplicatedRoutes.length} duplicate routes have been detected, only the route(s) closest to the top of the file will be used.\n`
+      `Warning: ${duplicatedRoutes.length} duplicate routes have been detected, only the route(s) closest to the top of the file will be used.\n`,
     )
     duplicatedRoutes.forEach((route) => {
       message += ` ${chalk.keyword('orange')('->')} Name: "${
@@ -74,8 +71,12 @@ export interface RWRouteManifestItem {
   routeHooks: string | null
   bundle: string | null
   hasParams: boolean
+  relativeFilePath: string
   redirect: { to: string; permanent: boolean } | null
-  renderMode: 'html' | 'stream'
+  isPrivate: boolean
+  unauthenticated: string | null
+  roles: string | string[] | null
+  pageIdentifier: string | null
   // Probably want isNotFound here, so we can attach a separate 404 handler
 }
 
@@ -83,13 +84,16 @@ export interface RouteSpec extends RWRouteManifestItem {
   id: string
   isNotFound: boolean
   filePath: string | undefined
-  relativeFilePath: string | undefined
+  isPrivate: boolean
+  unauthenticated: string | null
+  relativeFilePath: string
 }
 
 export const getProjectRoutes = (): RouteSpec[] => {
   const rwProject = getProject(getPaths().base)
   const routes = rwProject.getRouter().routes
 
+  // @ts-expect-error "Bundle" is not found but is in the Spec type?
   return routes.map((route: any) => {
     const { matchRegexString, routeParams } = route.isNotFound
       ? { matchRegexString: null, routeParams: null }
@@ -113,6 +117,10 @@ export const getProjectRoutes = (): RouteSpec[] => {
       redirect: route.redirect
         ? { to: route.redirect, permanent: false }
         : null,
+      isPrivate: route.isPrivate,
+      unauthenticated: route.unauthenticated,
+      roles: route.roles,
+      pageIdentifier: route.page_identifier_str,
     }
   })
 }

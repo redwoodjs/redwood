@@ -170,7 +170,7 @@ export const hasDefaultExport = (ast: types.Node): boolean => {
 }
 
 export const getDefaultExportLocation = (
-  ast: types.Node
+  ast: types.Node,
 ): { line: number; column: number } | null => {
   // Get the default export
   let defaultExport: types.ExportDefaultDeclaration | undefined

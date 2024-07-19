@@ -11,7 +11,7 @@ export abstract class AbstractMailHandler {
     renderedContent: MailRenderedContent,
     sendOptions: MailSendOptionsComplete,
     handlerOptions?: Record<string | number | symbol, unknown>,
-    utilities?: MailUtilities
+    utilities?: MailUtilities,
   ): Promise<MailResult> | MailResult
 
   // Provide access to handler specific properties

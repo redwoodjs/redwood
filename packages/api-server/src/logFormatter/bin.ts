@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 import split from 'split2'
 
 import { LogFormatter } from './index'

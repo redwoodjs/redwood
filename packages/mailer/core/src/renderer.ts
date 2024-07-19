@@ -9,7 +9,7 @@ export abstract class AbstractMailRenderer {
   abstract render(
     template: unknown,
     options: MailRendererOptions<unknown>,
-    utilities?: MailUtilities
+    utilities?: MailUtilities,
   ): MailRenderedContent
 
   // Provide access to handler specific properties

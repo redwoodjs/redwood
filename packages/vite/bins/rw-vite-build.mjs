@@ -3,8 +3,8 @@ import fs from 'node:fs'
 
 import yargsParser from 'yargs-parser'
 
-import { buildWeb } from '@redwoodjs/internal/dist/build/web.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { buildWeb } from '@redwoodjs/vite/build'
 import { buildFeServer } from '@redwoodjs/vite/buildFeServer'
 
 const rwPaths = getPaths()
@@ -16,7 +16,7 @@ const { webDir, verbose } = yargsParser(process.argv.slice(2), {
 
 if (!webDir) {
   console.error(
-    'Please pass the full path to the web side using the --webDir argument'
+    'Please pass the full path to the web side using the --webDir argument',
   )
   process.exit(1)
 }
@@ -42,7 +42,9 @@ const buildWebSide = async (webDir) => {
     throw new Error('Could not locate your web/vite.config.{js,ts} file')
   }
 
-  process.env.NODE_ENV = 'production'
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'production'
+  }
 
   if (getConfig().experimental?.streamingSsr?.enabled) {
     // Webdir checks handled in the rwjs/vite package in new build system

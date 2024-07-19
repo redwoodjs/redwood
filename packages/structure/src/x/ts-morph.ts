@@ -1,12 +1,12 @@
 import * as crypto from 'crypto'
 
 import { memoize } from 'lodash'
-import LRU from 'lru-cache'
+import { LRUCache } from 'lru-cache'
 import * as tsm from 'ts-morph'
 
 export function createTSMSourceFile(
   filePath: string,
-  src: string
+  src: string,
 ): tsm.SourceFile
 export function createTSMSourceFile(src: string): tsm.SourceFile
 /**
@@ -32,7 +32,9 @@ export function createTSMSourceFile(a1: string, a2?: string): tsm.SourceFile {
   }).createSourceFile(filePath, src)
 }
 
-const getCache = memoize(() => new LRU<string, tsm.SourceFile>({ max: 200 }))
+const getCache = memoize(
+  () => new LRUCache<string, tsm.SourceFile>({ max: 200 }),
+)
 
 /**
  * warning: do NOT modify this file. treat it as immutable
@@ -41,7 +43,7 @@ const getCache = memoize(() => new LRU<string, tsm.SourceFile>({ max: 200 }))
  */
 export function createTSMSourceFile_cached(
   filePath: string,
-  text: string
+  text: string,
 ): tsm.SourceFile {
   const key = filePath + '\n' + text
   const cache = getCache()

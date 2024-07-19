@@ -1,8 +1,8 @@
 import type * as PresetClassic from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 
-import autoImportTabs from './src/remark/auto-import-tabs'
-import fileExtSwitcher from './src/remark/file-ext-switcher'
+import autoImportTabs from './src/remark/auto-import-tabs.mjs'
+import fileExtSwitcher from './src/remark/file-ext-switcher.mjs'
 
 const config: Config = {
   customFields: {
@@ -19,7 +19,7 @@ const config: Config = {
   tagline:
     'Built on React, GraphQL, and Prisma, Redwood works with the components and development workflow you love, but with simple conventions and helpers to make your experience even better.',
   // ?
-  url: 'https://redwoodjs.com',
+  url: 'https://docs.redwoodjs.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -34,14 +34,14 @@ const config: Config = {
       indexName: 'learn-redwood',
       contextualSearch: true,
       searchParameters: {},
-      externalUrlRegex: 'https://learn-redwood.netlify.app',
+      // externalUrlRegex: 'https://learn-redwood.netlify.app',
     },
     navbar: {
       title: 'RedwoodJS',
       logo: {
         alt: 'RedwoodJS pinecone logo',
         src: 'https://d33wubrfki0l68.cloudfront.net/72b0d56596a981835c18946d6c4f8a968b08e694/82254/images/logo.svg',
-        href: 'https://redwoodjs.com/',
+        href: 'https://docs.redwoodjs.com/',
         target: '_self',
       },
       items: [
@@ -133,9 +133,9 @@ const config: Config = {
   // ?
   scripts: [
     {
-      src: 'https://plausible.io/js/plausible.js',
+      src: 'https://plausible.io/js/script.outbound-links.tagged-events.js',
       defer: true,
-      'data-domain': 'redwoodjs.com',
+      'data-domain': 'docs.redwoodjs.com',
     },
   ],
   stylesheets: [

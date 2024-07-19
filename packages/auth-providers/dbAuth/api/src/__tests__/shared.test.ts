@@ -2,6 +2,7 @@ import crypto from 'node:crypto'
 import path from 'node:path'
 
 import type { APIGatewayProxyEvent } from 'aws-lambda'
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 
 import * as error from '../errors'
 import {
@@ -19,7 +20,7 @@ import {
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../../../__fixtures__/example-todo-main'
+  '../../../../../../__fixtures__/example-todo-main',
 )
 const SESSION_SECRET = '540d03ebb00b441f8f7442cbc39958ad'
 
@@ -28,7 +29,7 @@ const encrypt = (data) => {
   const cipher = crypto.createCipheriv(
     'aes-256-cbc',
     SESSION_SECRET.substring(0, 32),
-    iv
+    iv,
   )
   let encryptedSession = cipher.update(data, 'utf-8', 'base64')
   encryptedSession += cipher.final('base64')
@@ -63,7 +64,7 @@ describe('getSession()', () => {
 
   it('returns the value of the session cookie', () => {
     expect(getSession('session_8911=qwerty', 'session_%port%')).toEqual(
-      'qwerty'
+      'qwerty',
     )
   })
 
@@ -95,15 +96,15 @@ describe('cookieName()', () => {
 describe('isLegacySession()', () => {
   it('returns `true` if the session cookie appears to be encrypted with CryptoJS', () => {
     expect(
-      isLegacySession('U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=')
+      isLegacySession('U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg='),
     ).toEqual(true)
   })
 
   it('returns `false` if the session cookie appears to be encrypted with node:crypto', () => {
     expect(
       isLegacySession(
-        'ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w=='
-      )
+        'ko6iXKV11DSjb6kFJ4iwcf1FEqa5wPpbL1sdtKiV51Y=|cQaYkOPG/r3ILxWiFiz90w==',
+      ),
     ).toEqual(false)
   })
 })
@@ -124,7 +125,7 @@ describe('decryptSession()', () => {
 
   it('throws an error if decryption errors out', () => {
     expect(() => decryptSession('session=qwerty')).toThrow(
-      error.SessionDecryptionError
+      error.SessionDecryptionError,
     )
   })
 
@@ -140,7 +141,7 @@ describe('decryptSession()', () => {
     process.env.SESSION_SECRET =
       'QKxN2vFSHAf94XYynK8LUALfDuDSdFowG6evfkFX8uszh4YZqhTiqEdshrhWbwbw'
     const [json] = decryptSession(
-      'U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg='
+      'U2FsdGVkX1+s7seQJnVgGgInxuXm13l8VvzA3Mg2fYg=',
     )
 
     expect(json).toEqual({ id: 7 })
@@ -173,7 +174,7 @@ describe('webAuthnSession', () => {
 
   it('returns the webAuthn cookie data', () => {
     const output = webAuthnSession(
-      dummyEvent('session=abcd1234;webAuthn=zyxw9876')
+      dummyEvent('session=abcd1234;webAuthn=zyxw9876'),
     )
 
     expect(output).toEqual('zyxw9876')
@@ -187,7 +188,7 @@ describe('hashPassword', () => {
     })
 
     expect(hash).toEqual(
-      '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213|16384|8|1'
+      '230847bea5154b6c7d281d09593ad1be26fa03a93c04a73bcc2b608c073a8213|16384|8|1',
     )
     expect(salt).toEqual('ba8b7807c6de6d6a892ef27f4073c603')
   })
@@ -229,11 +230,11 @@ describe('legacyHashPassword', () => {
   it('hashes a password with CryptoJS given a salt and returns both', () => {
     const [hash, salt] = legacyHashPassword(
       'password',
-      '2ef27f4073c603ba8b7807c6de6d6a89'
+      '2ef27f4073c603ba8b7807c6de6d6a89',
     )
 
     expect(hash).toEqual(
-      '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
+      '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
     )
     expect(salt).toEqual('2ef27f4073c603ba8b7807c6de6d6a89')
   })
@@ -265,7 +266,7 @@ describe('session cookie extraction', () => {
 
   it('extracts from the event', () => {
     const cookie = encryptToCookie(
-      JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+      JSON.stringify({ id: 9999999999 }) + ';' + 'token',
     )
 
     event = {
@@ -303,7 +304,7 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toBeUndefined()
     })
 
-    it('extracts GraphiQL cookie from the header extensions', () => {
+    it('extracts GraphiQL cookie from the body extensions', () => {
       const dbUserId = 42
 
       const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
@@ -320,31 +321,46 @@ describe('session cookie extraction', () => {
       expect(extractCookie(event)).toEqual(cookie)
     })
 
-    it('overwrites cookie with event header GraphiQL when in dev', () => {
+    it('extracts GraphiQL cookie from the rw-studio header (Fetch request)', () => {
+      const dbUserId = 42
+
+      const impersonatedCookie = encryptToCookie(
+        JSON.stringify({ id: dbUserId }),
+      )
+
+      const req = new Request('http://localhost:8910/_rw_mw', {
+        method: 'POST',
+        headers: {
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': impersonatedCookie,
+          authorization: 'Bearer ' + dbUserId,
+        },
+      })
+
+      expect(extractCookie(req)).toEqual(impersonatedCookie)
+    })
+
+    it('impersonation cookie takes precendence', () => {
       const sessionCookie = encryptToCookie(
-        JSON.stringify({ id: 9999999999 }) + ';' + 'token'
+        JSON.stringify({ id: 9999999999 }) + ';' + 'token',
+      )
+
+      const dbUserId = 42
+
+      const impersonatedCookie = encryptToCookie(
+        JSON.stringify({ id: dbUserId }),
       )
 
       event = {
         headers: {
-          cookie: sessionCookie,
+          cookie: sessionCookie, // This user doesn't exist
+          'auth-provider': 'dbAuth',
+          'rw-studio-impersonation-cookie': impersonatedCookie,
+          authorization: 'Bearer ' + dbUserId,
         },
       }
 
-      const dbUserId = 42
-
-      const cookie = encryptToCookie(JSON.stringify({ id: dbUserId }))
-      event.body = JSON.stringify({
-        extensions: {
-          headers: {
-            'auth-provider': 'dbAuth',
-            cookie,
-            authorization: 'Bearer ' + dbUserId,
-          },
-        },
-      })
-
-      expect(extractCookie(event)).toEqual(cookie)
+      expect(extractCookie(event)).toEqual(impersonatedCookie)
     })
   })
 })
@@ -354,26 +370,26 @@ describe('extractHashingOptions()', () => {
     expect(extractHashingOptions('')).toEqual({})
     expect(
       extractHashingOptions(
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba'
-      )
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba',
+      ),
     ).toEqual({})
     expect(
       extractHashingOptions(
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1'
-      )
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1',
+      ),
     ).toEqual({})
     expect(
       extractHashingOptions(
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1|2'
-      )
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|1|2',
+      ),
     ).toEqual({})
   })
 
   it('returns an object with scrypt options', () => {
     expect(
       extractHashingOptions(
-        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|16384|8|1'
-      )
+        '0c2b24e20ee76a887eac1415cc2c175ff961e7a0f057cead74789c43399dd5ba|16384|8|1',
+      ),
     ).toEqual({
       cost: 16384,
       blockSize: 8,

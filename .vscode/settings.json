@@ -13,12 +13,38 @@
   "search.exclude": {
     "**/dist": true,
     "**/node_modules": true,
-    "**/__fixtures__": true,
+    "/packages/**/__fixtures__": true,
     ".yarn-packages-cache": true
   },
   "[markdown][html][mjml]": {
     "files.trimTrailingWhitespace": false
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "peacock.color": "#b85833"
+  "peacock.color": "#b85833",
+  "cSpell.words": [
+    "attw",
+    "autoplay",
+    "baremetal",
+    "bazinga",
+    "corepack",
+    "envinfo",
+    "execa",
+    "Fastify",
+    "Flightcontrol",
+    "graphiql",
+    "memfs",
+    "mojombo",
+    "OGIMAGE",
+    "opentelemetry",
+    "pino",
+    "Pistorius",
+    "prerendering",
+    "publint",
+    "redwoodjs",
+    "rsdw",
+    "RWJS",
+    "superjson",
+    "tailwindcss",
+    "waku"
+  ]
 }

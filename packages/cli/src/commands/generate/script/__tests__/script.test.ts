@@ -4,11 +4,10 @@ import '../../../../lib/test'
 
 import path from 'path'
 
+import { test, expect } from 'vitest'
 import yargs from 'yargs'
 
 import * as script from '../script'
-
-beforeAll(() => {})
 
 test('creates a JavaScript function to execute', () => {
   const output = script.files({
@@ -17,7 +16,7 @@ test('creates a JavaScript function to execute', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/scripts/scriptyMcScript.js'
+    '/path/to/project/scripts/scriptyMcScript.js',
   )
 
   expect(Object.keys(output)).toContainEqual(expectedOutputPath)
@@ -31,7 +30,7 @@ test('creates a TypeScript function to execute', () => {
   })
 
   const expectedOutputPath = path.normalize(
-    '/path/to/project/scripts/typescriptyTypescript.ts'
+    '/path/to/project/scripts/typescriptyTypescript.ts',
   )
 
   const tsconfigPath = path.normalize('/path/to/project/scripts/tsconfig.json')
@@ -46,7 +45,7 @@ test('creates a TypeScript function to execute', () => {
 })
 
 test('keeps Script in name', () => {
-  const { name } = yargs
+  const { name } = yargs()
     .command('script <name>', false, script.builder)
     .parse('script BazingaScript')
 

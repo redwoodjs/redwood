@@ -19,7 +19,7 @@ export class Mailer<
   TRenderers extends MailRenderers,
   TDefaultRenderer extends keyof TRenderers,
   TTestHandler extends keyof THandlers,
-  TDevelopmentHandler extends keyof THandlers
+  TDevelopmentHandler extends keyof THandlers,
 > {
   protected logger: Logger | typeof console
 
@@ -41,7 +41,7 @@ export class Mailer<
       TDefaultRenderer,
       TTestHandler,
       TDevelopmentHandler
-    >
+    >,
   ) {
     // Logger
     this.logger = this.config.logger
@@ -52,8 +52,8 @@ export class Mailer<
     this.mode = this.isTest()
       ? 'test'
       : this.isDevelopment()
-      ? 'development'
-      : 'production'
+        ? 'development'
+        : 'production'
 
     // Config
     this.handlers = this.config.handling.handlers
@@ -70,21 +70,21 @@ export class Mailer<
         this.fallbackTestHandler =
           new (require('@redwoodjs/mailer-handler-in-memory').InMemoryMailHandler)()
         this.logger.warn(
-          "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode"
+          "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode",
         )
-      } catch (_error) {
+      } catch {
         this.logger.warn(
-          "No test handler specified and could not load the '@redwoodjs/mailer-handler-in-memory' handler automatically, this will prevent mail from being processed in test mode"
+          "No test handler specified and could not load the '@redwoodjs/mailer-handler-in-memory' handler automatically, this will prevent mail from being processed in test mode",
         )
       }
     } else if (testHandlerKey === null) {
       this.logger.warn(
-        'The test handler is null, this will prevent mail from being processed in test mode'
+        'The test handler is null, this will prevent mail from being processed in test mode',
       )
     } else {
       if (this.handlers[testHandlerKey] === undefined) {
         throw new Error(
-          `The specified test handler '${testHandlerKey.toString()}' is not defined`
+          `The specified test handler '${testHandlerKey.toString()}' is not defined`,
         )
       }
     }
@@ -95,21 +95,21 @@ export class Mailer<
         this.fallbackDevelopmentHandler =
           new (require('@redwoodjs/mailer-handler-studio').StudioMailHandler)()
         this.logger.warn(
-          "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode"
+          "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode",
         )
-      } catch (_error) {
+      } catch {
         this.logger.warn(
-          "No development handler specified and could not load the '@redwoodjs/mailer-handler-studio' handler automatically, this will prevent mail from being processed in development mode"
+          "No development handler specified and could not load the '@redwoodjs/mailer-handler-studio' handler automatically, this will prevent mail from being processed in development mode",
         )
       }
     } else if (developmentHandlerKey === null) {
       this.logger.warn(
-        'The development handler is null, this will prevent mail from being processed in development mode'
+        'The development handler is null, this will prevent mail from being processed in development mode',
       )
     } else {
       if (this.handlers[developmentHandlerKey] === undefined) {
         throw new Error(
-          `The specified development handler '${developmentHandlerKey.toString()}' is not defined`
+          `The specified development handler '${developmentHandlerKey.toString()}' is not defined`,
         )
       }
     }
@@ -120,7 +120,7 @@ export class Mailer<
       throw new Error('No default handler configured')
     } else if (this.handlers[defaultHandlerKey] === undefined) {
       throw new Error(
-        `The specified default handler '${defaultHandlerKey.toString()}' is not defined`
+        `The specified default handler '${defaultHandlerKey.toString()}' is not defined`,
       )
     }
     const defaultRendererKey = this.config.rendering.default
@@ -128,7 +128,7 @@ export class Mailer<
       throw new Error('No default renderer configured')
     } else if (this.renderers[defaultRendererKey] === undefined) {
       throw new Error(
-        `The specified default renderer '${defaultRendererKey.toString()}' is not defined`
+        `The specified default renderer '${defaultRendererKey.toString()}' is not defined`,
       )
     }
 
@@ -148,18 +148,18 @@ export class Mailer<
     }
     this.logger.debug(
       {},
-      `Mailer initialized in ${this.mode} mode${defaultsNotice}`
+      `Mailer initialized in ${this.mode} mode${defaultsNotice}`,
     )
   }
 
   async send<
     THandler extends keyof THandlers = TDefaultHandler,
-    TRenderer extends keyof TRenderers = TDefaultRenderer
+    TRenderer extends keyof TRenderers = TDefaultRenderer,
   >(
     template: Parameters<TRenderers[TRenderer]['render']>[0],
     sendOptions: MailSendOptions<THandlers, THandler, TRenderers, TRenderer>,
     handlerOptions?: Parameters<THandlers[THandler]['send']>[2],
-    rendererOptions?: Parameters<TRenderers[TRenderer]['render']>[1]
+    rendererOptions?: Parameters<TRenderers[TRenderer]['render']>[1],
   ): Promise<MailResult> {
     const handlerKeyForProduction =
       sendOptions.handler ?? this.config.handling.default
@@ -186,13 +186,13 @@ export class Mailer<
 
     const completedSendOptions = constructCompleteSendOptions(
       sendOptions,
-      this.defaults
+      this.defaults,
     )
 
     const rendererKey = sendOptions.renderer ?? this.getDefaultRendererKey()
     if (rendererKey === undefined) {
       throw new Error(
-        'No renderer specified and no default renderer configured'
+        'No renderer specified and no default renderer configured',
       )
     }
     const renderer = this.renderers[rendererKey]
@@ -212,7 +212,7 @@ export class Mailer<
         mode: this.mode,
         renderer: rendererKey,
         rendererOptions: defaultedRendererOptions,
-      }
+      },
     )
 
     const defaultedHandlerOptions =
@@ -243,18 +243,18 @@ export class Mailer<
         handlerOptions: defaultedHandlerOptions,
         renderer: rendererKey,
         rendererOptions: defaultedRendererOptions,
-      }
+      },
     )
 
     return result
   }
 
   async sendWithoutRendering<
-    THandler extends keyof THandlers = TDefaultHandler
+    THandler extends keyof THandlers = TDefaultHandler,
   >(
     content: Parameters<THandlers[THandler]['send']>[0],
     sendOptions: MailSendWithoutRenderingOptions<THandlers, THandler>,
-    handlerOptions?: Parameters<THandlers[THandler]['send']>[2]
+    handlerOptions?: Parameters<THandlers[THandler]['send']>[2],
   ): Promise<MailResult> {
     const handlerKeyForProduction =
       sendOptions.handler ?? this.config.handling.default
@@ -281,7 +281,7 @@ export class Mailer<
 
     const completedSendOptions = constructCompleteSendOptions(
       sendOptions,
-      this.defaults
+      this.defaults,
     )
 
     const defaultedHandlerOptions =
@@ -310,7 +310,7 @@ export class Mailer<
         mode: this.mode,
         handler: handlerKeyForProduction,
         handlerOptions: defaultedHandlerOptions,
-      }
+      },
     )
 
     return result

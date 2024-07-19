@@ -53,24 +53,21 @@ yarn redwood setup auth supabase
 By specifying `supabase` as the provider, Redwood automatically added the necessary Supabase config to our app. Let's open up `web/src/App.[js/tsx]` and inspect. You should see:
 
 ```jsx {1-2,12,17} title="web/src/App.[js/tsx]"
-import { AuthProvider } from '@redwoodjs/auth'
-import { createClient } from '@supabase/supabase-js'
-
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
 
 import FatalErrorPage from 'src/pages/FatalErrorPage'
 import Routes from 'src/Routes'
 
-import './index.css'
+import { AuthProvider, useAuth } from './auth'
 
-const supabaseClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
+import './index.css'
 
 const App = () => (
   <FatalErrorBoundary page={FatalErrorPage}>
     <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
-      <AuthProvider client={supabaseClient} type="supabase">
-        <RedwoodApolloProvider>
+      <AuthProvider>
+        <RedwoodApolloProvider useAuth={useAuth}>
           <Routes />
         </RedwoodApolloProvider>
       </AuthProvider>
@@ -79,6 +76,21 @@ const App = () => (
 )
 
 export default App
+```
+
+As you can see our AuthProvider is exported from our `web/src/auth.[js/tsx]`, lets take a look at what that looks like:
+
+```jsx {1-2,12,17} title="web/src/auth.[js/tsx]"
+import { createClient } from '@supabase/supabase-js'
+
+import { createAuth } from '@redwoodjs/auth-supabase-web'
+
+const supabaseClient = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_KEY || ''
+)
+
+export const { AuthProvider, useAuth } = createAuth(supabaseClient)
 ```
 
 Now it's time to add the Supabase URL, public API KEY, and JWT SECRET (`SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_JWT_SECRET`) to your `.env` file.
@@ -172,7 +184,7 @@ Let's import `useAuth` and destructure `client` from it in our component:
 
 ```jsx {2,5} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { client } = useAuth()
@@ -199,7 +211,7 @@ And now we'll attempt to create a new user in the `onSubmit` function with [`cli
 
 ```jsx {8-16} title="web/src/pages/SignupPage/SignupPage.[js/tsx]"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { client } = useAuth()
@@ -236,7 +248,7 @@ Let's display errors to the user if there are any. To do this, we'll set up `Rea
 
 ```jsx {6,9,16,18,26} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SignupPage = () => {
   const { client } = useAuth()
@@ -289,7 +301,7 @@ Let's import `routes` and `navigate` from [Redwood Router](../router.md#navigate
 
 ```jsx {3,16} title="web/src/pages/SignupPage/SignupPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { routes, navigate } from '@redwoodjs/router'
 
 const SignupPage = () => {
@@ -362,11 +374,11 @@ const SigninPage = () => {
 export default SigninPage
 ```
 
-Then we'll need to import `useAuth` from `@redwoodjs/auth` and destructure `logIn` so that we can use it in our `onSubmit` function:
+Then we'll need to import `useAuth` from `src/auth` and destructure `logIn` so that we can use it in our `onSubmit` function:
 
 ```jsx {2,5} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SigninPage = () => {
   const { logIn } = useAuth()
@@ -397,7 +409,7 @@ Now we'll add `logIn` to our `onSubmit` function. This time we'll be passing an 
 
 ```jsx {10-15} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SigninPage = () => {
   const { logIn } = useAuth()
@@ -435,7 +447,7 @@ In our `SigninPage`, import `navigate` and `routes` from [`@redwoodjs/router`](.
 
 ```jsx {10-16} title="web/src/pages/SigninPage/SigninPage.js"
 import { Form, TextField, PasswordField, Submit } from '@redwoodjs/forms'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate, routes } from '@redwoodjs/router'
 
 const SigninPage = () => {
@@ -495,10 +507,10 @@ const SignoutBtn = () => {
 export default SignoutBtn
 ```
 
-Now let's import `useAuth` from `@redwoodjs/auth`. We'll destructure its `logOut` method and invoke it in `onClick`:
+Now let's import `useAuth` from `src/auth`. We'll destructure its `logOut` method and invoke it in `onClick`:
 
 ```jsx {1,4,7} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const SignoutBtn = () => {
   const { logOut } = useAuth()
@@ -515,7 +527,7 @@ export default SignoutBtn
 This works as is, but because the user may be in a restricted part of your app when they sign out, we should make sure to navigate them away from this page:
 
 ```jsx {2,8-9} title="web/src/components/SignoutBtn/SignoutBtn.[js/tsx]"
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import { navigate, routes } from '@redwoodjs/router'
 
 const SignoutBtn = () => {
@@ -552,7 +564,7 @@ We'll also import [`useAuth`](../authentication.md#api) since we'll need to subs
 
 ```jsx title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const Navigation = () => {
   return <nav></nav>
@@ -565,7 +577,7 @@ Let's destructure `isAuthenticated` from the `useAuth` hook and use it in some c
 
 ```jsx {5,8-12} title="web/src/components/Navigation/Navigation.js"
 import { Link, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 
 const Navigation = () => {
   const { isAuthenticated } = useAuth()
@@ -589,7 +601,7 @@ Now let's import our sign out button and add it, as well as sign in and sign up 
 
 ```jsx {3,9-16} title="web/src/components/Navigation/Navigation.[js/tsx]"
 import { Link, routes } from '@redwoodjs/router'
-import { useAuth } from '@redwoodjs/auth'
+import { useAuth } from 'src/auth'
 import SignoutBtn from 'src/components/SignoutBtn/SignoutBtn'
 
 const Navigation = () => {

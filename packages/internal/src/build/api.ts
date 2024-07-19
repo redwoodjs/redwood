@@ -1,85 +1,97 @@
-import fs from 'fs'
-import path from 'path'
-
-import * as esbuild from 'esbuild'
-import { removeSync } from 'fs-extra'
+import type { BuildContext, BuildOptions, PluginBuild } from 'esbuild'
+import { build, context } from 'esbuild'
+import fs from 'fs-extra'
 
 import {
   getApiSideBabelPlugins,
-  prebuildApiFile,
+  transformWithBabel,
 } from '@redwoodjs/babel-config'
-import { getPaths, getConfig } from '@redwoodjs/project-config'
+import {
+  getConfig,
+  getPaths,
+  projectSideIsEsm,
+} from '@redwoodjs/project-config'
 
 import { findApiFiles } from '../files'
 
-export const buildApi = () => {
-  // TODO: Be smarter about caching and invalidating files,
-  // but right now we just delete everything.
-  cleanApiBuild()
+let BUILD_CTX: BuildContext | null = null
 
-  const srcFiles = findApiFiles()
+export const buildApi = async () => {
+  // Reset the build context for rebuilding
+  // No need to wait for promise to resolve
+  BUILD_CTX?.dispose()
+  BUILD_CTX = null
 
-  const prebuiltFiles = prebuildApiFiles(srcFiles).filter(
-    (path): path is string => path !== undefined
-  )
-
-  return transpileApi(prebuiltFiles)
+  return transpileApi(findApiFiles())
 }
 
-export const cleanApiBuild = () => {
-  const rwjsPaths = getPaths()
-  removeSync(rwjsPaths.api.dist)
-  removeSync(path.join(rwjsPaths.generated.prebuild, 'api'))
+export const rebuildApi = async () => {
+  const apiFiles = findApiFiles()
+
+  if (!BUILD_CTX) {
+    BUILD_CTX = await context(getEsbuildOptions(apiFiles))
+  }
+
+  return BUILD_CTX.rebuild()
 }
 
-/**
- * Remove RedwoodJS "magic" from a user's code leaving JavaScript behind.
- */
-export const prebuildApiFiles = (srcFiles: string[]) => {
+export const cleanApiBuild = async () => {
   const rwjsPaths = getPaths()
-  const rwjsConfig = getConfig()
-  const plugins = getApiSideBabelPlugins({
-    openTelemetry:
-      rwjsConfig.experimental.opentelemetry.enabled &&
-      rwjsConfig.experimental.opentelemetry.wrapApi,
-  })
-
-  return srcFiles.map((srcPath) => {
-    const relativePathFromSrc = path.relative(rwjsPaths.base, srcPath)
-    const dstPath = path
-      .join(rwjsPaths.generated.prebuild, relativePathFromSrc)
-      .replace(/\.(ts)$/, '.js')
-
-    const result = prebuildApiFile(srcPath, dstPath, plugins)
-    if (!result?.code) {
-      // TODO: Figure out a better way to return these programatically.
-      console.warn('Error:', srcPath, 'could not prebuilt.')
-
-      return undefined
-    }
-
-    fs.mkdirSync(path.dirname(dstPath), { recursive: true })
-    fs.writeFileSync(dstPath, result.code)
-
-    return dstPath
-  })
+  return fs.remove(rwjsPaths.api.dist)
 }
 
-export const transpileApi = (files: string[], options = {}) => {
-  const rwjsPaths = getPaths()
+const runRwBabelTransformsPlugin = {
+  name: 'rw-esbuild-babel-transform',
+  setup(build: PluginBuild) {
+    const rwjsConfig = getConfig()
 
-  return esbuild.buildSync({
+    build.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
+      // @TODO Implement LRU cache? Unsure how much of a performance benefit its going to be
+      // Generate a CRC of file contents, then save it to LRU cache with a limit
+      // without LRU cache, the memory usage can become unbound
+      const transformedCode = await transformWithBabel(
+        args.path,
+        getApiSideBabelPlugins({
+          openTelemetry:
+            rwjsConfig.experimental.opentelemetry.enabled &&
+            rwjsConfig.experimental.opentelemetry.wrapApi,
+          projectIsEsm: projectSideIsEsm('api'),
+        }),
+      )
+
+      if (transformedCode?.code) {
+        return {
+          contents: transformedCode.code,
+          loader: 'js',
+        }
+      }
+
+      throw new Error(`Could not transform file: ${args.path}`)
+    })
+  },
+}
+
+export const transpileApi = async (files: string[]) => {
+  return build(getEsbuildOptions(files))
+}
+
+function getEsbuildOptions(files: string[]): BuildOptions {
+  const rwjsPaths = getPaths()
+  const format = projectSideIsEsm('api') ? 'esm' : 'cjs'
+
+  return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
     platform: 'node',
     target: 'node20',
-    format: 'cjs',
+    format,
+    allowOverwrite: true,
     bundle: false,
+    plugins: [runRwBabelTransformsPlugin],
     outdir: rwjsPaths.api.dist,
     // setting this to 'true' will generate an external sourcemap x.js.map
     // AND set the sourceMappingURL comment
     // (setting it to 'external' will ONLY generate the file, but won't add the comment)
     sourcemap: true,
-    ...options,
-  })
+  }
 }

@@ -1,3 +1,5 @@
+import type yargs from 'yargs'
+
 import * as installCommand from '../commands/install'
 import { handler as dataMigrateInstallHandler } from '../commands/installHandler.js'
 
@@ -6,7 +8,7 @@ jest.mock(
   () => ({
     handler: jest.fn(),
   }),
-  { virtual: true }
+  { virtual: true },
 )
 
 describe('install', () => {
@@ -19,17 +21,29 @@ describe('install', () => {
   it("`command` and `description` haven't unintentionally changed", () => {
     expect(installCommand.command).toMatchInlineSnapshot(`"install"`)
     expect(installCommand.description).toMatchInlineSnapshot(
-      `"Add the RW_DataMigration model to your schema"`
+      `"Add the RW_DataMigration model to your schema"`,
     )
   })
 
   it('`builder` has an epilogue', () => {
-    const yargs = { epilogue: jest.fn() }
-    // @ts-expect-error this is a test file; epilogue is the only thing `builder` calls right now
+    // The typecasting here is to make TS happy when calling `builder(yargs)`
+    // further down. We know that only `epilogue` will be called.
+    const yargs = { epilogue: jest.fn() } as unknown as yargs.Argv
+
     installCommand.builder(yargs)
-    expect(yargs.epilogue).toBeCalledWith(
-      // eslint-disable-next-line no-irregular-whitespace
-      'Also see the Redwood CLI Reference (​https://redwoodjs.com/docs/cli-commands#datamigrate-install​)'
+
+    // The epilogue is a string that contains a link to the docs. The string
+    // contains special control characters when rendered in a terminal that
+    // supports clickable links. We use regular expressions and wildcards here
+    // to avoid having to match control characters that might not even always
+    // be there
+    expect(yargs.epilogue).toHaveBeenCalledWith(
+      expect.stringMatching(/Also see the .*Redwood CLI Reference.*/),
+    )
+    expect(yargs.epilogue).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /https:\/\/redwoodjs\.com\/docs\/cli-commands#datamigrate-install/,
+      ),
     )
   })
 

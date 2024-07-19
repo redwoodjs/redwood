@@ -82,7 +82,6 @@ Don't forget to commit and PR changes.
 
 ## Roadmap
 - [ ] Create a script to handle Step 1 (check and add new contributors for each repo)
-- [ ] Add the script to the end of the `yarn release` script to update with releases
 
 ## Contributing
 Help with this project is welcome and needed! No specific experience required. You'll want to be familiar with:

@@ -5,7 +5,6 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "baseUrl": "./",
     "skipLibCheck": false,
     "rootDirs": [
       "./src",
@@ -37,12 +36,14 @@
       "../node_modules/@testing-library"
     ],
     "types": [
-      "jest-dom",
+      "jest",
+      "jest-dom"
     ],
     "jsx": "preserve"
   },
   "include": [
     "src",
+    "config",
     "../.redwood/types/includes/all-*",
     "../.redwood/types/includes/web-*",
     "../types",

@@ -20,7 +20,7 @@ export async function handler({
   if (importDbClientFromDist) {
     if (!fs.existsSync(distPath)) {
       console.warn(
-        `Can't find api dist at ${distPath}. You may need to build first: yarn rw build api`
+        `Can't find api dist at ${distPath}. You may need to build first: yarn rw build api`,
       )
       process.exitCode = 1
       return
@@ -32,8 +32,8 @@ export async function handler({
       console.error(
         `Can't find db.js at ${distLibDbPath}. Redwood expects the db.js file to be in the ${path.join(
           distPath,
-          'lib'
-        )} directory`
+          'lib',
+        )} directory`,
       )
       process.exitCode = 1
       return
@@ -50,7 +50,7 @@ export async function handler({
   const pendingDataMigrations = await getPendingDataMigrations(db)
 
   if (!pendingDataMigrations.length) {
-    console.info(c.green(`\n${NO_PENDING_MIGRATIONS_MESSAGE}\n`))
+    console.info(c.success(`\n${NO_PENDING_MIGRATIONS_MESSAGE}\n`))
     process.exitCode = 0
     return
   }
@@ -78,7 +78,7 @@ export async function handler({
         try {
           const { startedAt, finishedAt } = await runDataMigration(
             db,
-            dataMigration.path
+            dataMigration.path,
           )
           counters.run++
           await recordDataMigration(db, {
@@ -90,7 +90,7 @@ export async function handler({
         } catch (e) {
           counters.error++
           console.error(
-            c.error(`Error in data migration: ${(e as Error).message}`)
+            c.error(`Error in data migration: ${(e as Error).message}`),
           )
         }
       },
@@ -112,7 +112,7 @@ export async function handler({
     if (counters.error) {
       process.exitCode = 1
     }
-  } catch (e) {
+  } catch {
     process.exitCode = 1
     await db.$disconnect()
 
@@ -137,8 +137,8 @@ async function getPendingDataMigrations(db: PrismaClient) {
     // There may be a `.keep` file in the data migrations directory.
     .filter((dataMigrationFileName) =>
       ['js', '.ts'].some((extension) =>
-        dataMigrationFileName.endsWith(extension)
-      )
+        dataMigrationFileName.endsWith(extension),
+      ),
     )
     .map((dataMigrationFileName) => {
       const [version] = dataMigrationFileName.split('-')
@@ -152,10 +152,10 @@ async function getPendingDataMigrations(db: PrismaClient) {
   const ranDataMigrations: DataMigration[] = await db.rW_DataMigration.findMany(
     {
       orderBy: { version: 'asc' },
-    }
+    },
   )
   const ranDataMigrationVersions = ranDataMigrations.map((dataMigration) =>
-    dataMigration.version.toString()
+    dataMigration.version.toString(),
   )
 
   const pendingDataMigrations = dataMigrations
@@ -172,7 +172,7 @@ async function getPendingDataMigrations(db: PrismaClient) {
  */
 function sortDataMigrationsByVersion(
   dataMigrationA: { version: string },
-  dataMigrationB: { version: string }
+  dataMigrationB: { version: string },
 ) {
   const aVersion = parseInt(dataMigrationA.version)
   const bVersion = parseInt(dataMigrationB.version)
@@ -204,7 +204,7 @@ export const NO_PENDING_MIGRATIONS_MESSAGE =
  */
 async function recordDataMigration(
   db: PrismaClient,
-  { version, name, startedAt, finishedAt }: DataMigration
+  { version, name, startedAt, finishedAt }: DataMigration,
 ) {
   await db.rW_DataMigration.create({
     data: { version, name, startedAt, finishedAt },
@@ -221,19 +221,19 @@ function reportDataMigrations(counters: {
 }) {
   if (counters.run) {
     console.info(
-      c.green(`${counters.run} data migration(s) completed successfully.`)
+      c.success(`${counters.run} data migration(s) completed successfully.`),
     )
   }
   if (counters.error) {
     console.error(
-      c.error(`${counters.error} data migration(s) exited with errors.`)
+      c.error(`${counters.error} data migration(s) exited with errors.`),
     )
   }
   if (counters.skipped) {
     console.warn(
       c.warning(
-        `${counters.skipped} data migration(s) skipped due to previous error.`
-      )
+        `${counters.skipped} data migration(s) skipped due to previous error.`,
+      ),
     )
   }
 }

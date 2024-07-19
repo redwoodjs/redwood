@@ -1,59 +1,67 @@
+import React from 'react'
+
 import type {
   ApolloClientOptions,
   setLogVerbosity,
   ApolloCache,
+  InMemoryCacheConfig,
+  HttpOptions,
+  DocumentNode,
 } from '@apollo/client'
-import * as apolloClient from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { fetch as crossFetch } from '@whatwg-node/fetch'
-import { print } from 'graphql/language/printer'
-// Note: Importing directly from `apollo/client` doesn't work properly in Storybook.
-const {
+import {
   ApolloProvider,
   ApolloClient,
   ApolloLink,
-  HttpLink,
   InMemoryCache,
+  split,
+} from '@apollo/client'
+import { setLogVerbosity as apolloSetLogVerbosity } from '@apollo/client/core/core.cjs'
+import { setContext } from '@apollo/client/link/context/context.cjs'
+import { HttpLink } from '@apollo/client/link/http/http.cjs'
+import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
+import {
   useQuery,
   useMutation,
   useSubscription,
   useBackgroundQuery,
   useReadQuery,
   useSuspenseQuery,
-  setLogVerbosity: apolloSetLogVerbosity,
-} = apolloClient
+} from '@apollo/client/react/hooks/hooks.cjs'
+import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
+import { fetch as crossFetch } from '@whatwg-node/fetch'
+import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
-import './typeOverride'
+import './typeOverride.js'
 
 import {
   FetchConfigProvider,
   useFetchConfig,
-} from '../components/FetchConfigProvider'
-import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider'
+} from '../components/FetchConfigProvider.js'
+import { GraphQLHooksProvider } from '../components/GraphQLHooksProvider.js'
 
 import {
   fragmentRegistry,
   registerFragment,
   registerFragments,
-} from './fragmentRegistry'
-import { SSELink } from './sseLink'
-import { useCache } from './useCache'
+} from './fragmentRegistry.js'
+import * as SSELinkExports from './sseLink.js'
+import { useCache } from './useCache.js'
+// Not sure why we need to import it this way for legacy builds to work
+const { SSELink } = SSELinkExports
 
 export type {
   CacheKey,
   FragmentIdentifier,
   RegisterFragmentResult,
-} from './fragmentRegistry'
+} from './fragmentRegistry.js'
 
 export { useCache }
 
 export { fragmentRegistry, registerFragment, registerFragments }
 
-export type ApolloClientCacheConfig = apolloClient.InMemoryCacheConfig
+export type ApolloClientCacheConfig = InMemoryCacheConfig
 
 export type RedwoodApolloLinkName =
   | 'withToken'
@@ -63,7 +71,7 @@ export type RedwoodApolloLinkName =
 
 export type RedwoodApolloLink<
   Name extends RedwoodApolloLinkName,
-  Link extends apolloClient.ApolloLink = apolloClient.ApolloLink
+  Link extends ApolloLink = ApolloLink,
 > = {
   name: Name
   link: Link
@@ -73,12 +81,10 @@ export type RedwoodApolloLinks = [
   RedwoodApolloLink<'withToken'>,
   RedwoodApolloLink<'authMiddleware'>,
   RedwoodApolloLink<'updateDataApolloLink'>,
-  RedwoodApolloLink<'httpLink', apolloClient.ApolloLink | apolloClient.HttpLink>
+  RedwoodApolloLink<'httpLink', ApolloLink | HttpLink>,
 ]
 
-export type RedwoodApolloLinkFactory = (
-  links: RedwoodApolloLinks
-) => apolloClient.ApolloLink
+export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink
 
 export type GraphQLClientConfigProp = Omit<
   ApolloClientOptions<unknown>,
@@ -102,7 +108,7 @@ export type GraphQLClientConfigProp = Omit<
    * }}>
    * ```
    */
-  httpLinkConfig?: apolloClient.HttpOptions
+  httpLinkConfig?: HttpOptions
   /**
    * Extend or overwrite `RedwoodApolloProvider`'s Apollo Link.
    *
@@ -126,7 +132,7 @@ export type GraphQLClientConfigProp = Omit<
    * - your function should return a single link (e.g., using `ApolloLink.from`; see https://www.apollographql.com/docs/react/api/link/introduction/#additive-composition)
    * - the `HttpLink` should come last (https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link)
    */
-  link?: apolloClient.ApolloLink | RedwoodApolloLinkFactory
+  link?: ApolloLink | RedwoodApolloLinkFactory
 }
 
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
@@ -225,7 +231,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   // is subscription it needs to use the SSELink (server sent events link).
   const httpOrSSELink =
     typeof SSELink !== 'undefined'
-      ? apolloClient.split(
+      ? split(
           ({ query }) => {
             const definition = getMainDefinition(query)
 
@@ -240,7 +246,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
             httpLinkConfig,
             headers,
           }),
-          httpLink
+          httpLink,
         )
       : httpLink
 
@@ -253,14 +259,14 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
    *
    * See https://www.apollographql.com/docs/react/api/link/persisted-queries/
    */
-  interface DocumentNodeWithMeta extends apolloClient.DocumentNode {
+  interface DocumentNodeWithMeta extends DocumentNode {
     __meta__?: {
       hash: string
     }
   }
 
   // Check if the query made includes the hash, and if so then make the request with the persisted query link
-  const terminatingLink = apolloClient.split(
+  const terminatingLink = split(
     ({ query }) => {
       const documentQuery = query as DocumentNodeWithMeta
       return documentQuery?.['__meta__']?.['hash'] !== undefined
@@ -268,7 +274,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
     }).concat(httpOrSSELink),
-    httpOrSSELink
+    httpOrSSELink,
   )
 
   // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.
@@ -342,7 +348,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps> {
 
 export const RedwoodApolloProvider: React.FunctionComponent<{
   graphQLClientConfig?: GraphQLClientConfigProp
-  fragments?: apolloClient.DocumentNode[]
+  fragments?: DocumentNode[]
   useAuth?: UseAuth
   logLevel?: ReturnType<typeof setLogVerbosity>
   children: React.ReactNode
@@ -364,6 +370,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
 
   const cache = new InMemoryCache({
     fragments: fragmentRegistry,
+    possibleTypes: cacheConfig?.possibleTypes,
     ...cacheConfig,
   }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
 

@@ -1,20 +1,32 @@
-import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
+${useClientDirective}import type {
+  Edit${singularPascalName}By${pascalIdName},
+  Update${singularPascalName}Input,
+  Update${singularPascalName}MutationVariables
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import ${singularPascalName}Form from '${importComponentNameForm}'
 
-export const QUERY = gql`
+export const QUERY: TypedDocumentNode<Edit${singularPascalName}By${pascalIdName}> = gql`
   query Edit${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
     ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>
     }
   }
 `
-const UPDATE_${singularConstantName}_MUTATION = gql`
+
+const UPDATE_${singularConstantName}_MUTATION: TypedDocumentNode<
+  Edit${singularPascalName}ById,
+  Update${singularPascalName}MutationVariables
+> = gql`
   mutation Update${singularPascalName}Mutation($${idName}: ${idType}!, $input: Update${singularPascalName}Input!) {
     update${singularPascalName}(${idName}: $${idName}, input: $input) {<% columns.forEach(column => { %>
       <%= column.name %><% }) %>

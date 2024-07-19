@@ -1,11 +1,9 @@
-import type { GetGroceries, GetProduce } from 'types/graphql'
+import type { GetGroceries, GetProduce } from "types/graphql";
+import { Metadata, useQuery } from '@redwoodjs/web';
 
-import { MetaTags } from '@redwoodjs/web'
-import { useQuery } from '@redwoodjs/web'
-
-import Fruit from 'src/components/Fruit'
-import Produce from 'src/components/Produce'
-import Vegetable from 'src/components/Vegetable'
+import FruitInfo from "src/components/FruitInfo";
+import ProduceInfo from "src/components/ProduceInfo";
+import VegetableInfo from "src/components/VegetableInfo";
 
 const GET_GROCERIES = gql`
   query GetGroceries {
@@ -14,17 +12,17 @@ const GET_GROCERIES = gql`
       ...Vegetable_info
     }
   }
-`
+`;
 
 const GET_PRODUCE = gql`
   query GetProduce {
-    produce {
+    produces {
       ...Produce_info
     }
   }
-`
+`;
 
-const FruitsPage = () => {
+const GroceriesPage = () => {
   const { data: groceryData, loading: groceryLoading } =
     useQuery<GetGroceries>(GET_GROCERIES)
   const { data: produceData, loading: produceLoading } =
@@ -32,26 +30,26 @@ const FruitsPage = () => {
 
   return (
     <div className="m-12">
-      <MetaTags title="Groceries" description="Groceries page" />
+      <Metadata title="Groceries" description="Groceries page" og />
 
       <div className="grid auto-cols-auto gap-4 grid-cols-4">
         {!groceryLoading &&
           groceryData.groceries.map((fruit) => (
-            <Fruit key={fruit.id} id={fruit.id} />
+            <FruitInfo key={fruit.id} id={fruit.id} />
           ))}
 
         {!groceryLoading &&
           groceryData.groceries.map((vegetable) => (
-            <Vegetable key={vegetable.id} id={vegetable.id} />
+            <VegetableInfo key={vegetable.id} id={vegetable.id} />
           ))}
 
         {!produceLoading &&
-          produceData.produce.map((produce) => ( 
-            <Produce key={produce.id} id={produce.id} />
+          produceData.produces?.map((produce) => (
+            <ProduceInfo key={produce.id} id={produce.id} />
           ))}
       </div>
     </div>
   )
 }
 
-export default FruitsPage
+export default GroceriesPage

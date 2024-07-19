@@ -7,14 +7,15 @@
 // 'src/pages/HomePage/HomePage.js'         -> HomePage
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
-import { Router, Route, Set } from '@redwoodjs/router'
-import { serve } from '@redwoodjs/vite/client'
+import { Route } from '@redwoodjs/router/dist/Route'
+import { Set } from '@redwoodjs/router/dist/Set'
+
+// @ts-expect-error - ESM issue. RW projects need to be ESM to properly pick up
+// on the types here
+import { Router } from '@redwoodjs/vite/Router'
 
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
-
-const AboutPage = serve('AboutPage')
-const HomePage = serve('HomePage')
 
 const Routes = () => {
   return (

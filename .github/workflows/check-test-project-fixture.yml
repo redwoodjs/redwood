@@ -11,23 +11,71 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  detect-changes:
+    if: github.repository == 'redwoodjs/redwood'
+    name: 🔍 Detect changes
+    runs-on: ubuntu-latest
+
+    outputs:
+      code: ${{ steps.detect-changes.outputs.code }}
+      rsc: ${{ steps.detect-changes.outputs.rsc }}
+      ssr: ${{ steps.detect-changes.outputs.ssr }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          set-up-yarn-cache: false
+          yarn-install-directory: ./.github/actions/detect-changes
+          build: false
+
+      - name: 🔍 Detect changes
+        id: detect-changes
+        uses: ./.github/actions/detect-changes
+
   check-test-project-fixture:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'true'
     name: Check test project fixture
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Set up job
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        uses: ./.github/actions/set-up-job
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Rebuild test-project fixture
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: yarn rebuild-test-project-fixture
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
 
-      - run: yarn install
-        working-directory: ./.github/actions/check_test_project_fixture
+      - name: Check for changed files
+        if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
+        run: |
+          if [ $(git status --porcelain | wc -l) -gt 0 ]; then
+            echo 'Updating the test project fixture caused files to change'
+            echo 'Please run `yarn rebuild-test-project-fixture` locally and commit any changes'
+            echo
+            echo 'Deleted files:'
+            git status --porcelain | grep '^ D ' | awk '{print "        " $2}'
+            echo
+            echo 'Modified files:'
+            git status --porcelain | grep '^ M ' | awk '{print "        " $2}'
+            echo
+            echo 'Untracked files:'
+            git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
+            echo
+            exit 1;
+          fi
 
-      - name: Check test project fixture
-        uses: ./.github/actions/check_test_project_fixture
-        with:
-          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
+  check-test-project-fixture-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'false'
+    name: Check test project fixture
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Skipped"

@@ -1,8 +1,8 @@
 import * as React from 'react'
 import type { ReactNode } from 'react'
 
-import '@testing-library/jest-dom/jest-globals'
 import { act, render } from '@testing-library/react'
+import { beforeEach, beforeAll, afterAll, test, expect, vi } from 'vitest'
 
 import { navigate, Route, Router } from '../'
 import { Private, Set } from '../Set'
@@ -30,7 +30,7 @@ let err: typeof console.error
 beforeAll(() => {
   // Hide thrown exceptions. We're expecting them, and they clutter the output
   err = console.error
-  console.error = jest.fn()
+  console.error = vi.fn()
 })
 
 afterAll(() => {
@@ -113,15 +113,15 @@ test('Sets nested in `<Set private>` should not error out if no authenticated pr
 
   // But still throws if you try to navigate to a private route without an unauthenticated prop
   expect(() => act(() => navigate('/four'))).toThrowError(
-    'You must specify an `unauthenticated` route'
+    'You must specify an `unauthenticated` route',
   )
 })
 
 test('Nested sets should not cause a re-mount of parent wrap components', async () => {
-  const layoutOneMount = jest.fn()
-  const layoutOneUnmount = jest.fn()
-  const layoutTwoMount = jest.fn()
-  const layoutTwoUnmount = jest.fn()
+  const layoutOneMount = vi.fn()
+  const layoutOneUnmount = vi.fn()
+  const layoutTwoMount = vi.fn()
+  const layoutTwoUnmount = vi.fn()
 
   const Layout1 = ({ children }: LayoutProps) => {
     React.useEffect(() => {

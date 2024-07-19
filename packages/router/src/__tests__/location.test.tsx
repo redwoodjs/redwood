@@ -1,5 +1,7 @@
+import React from 'react'
+
 import { render } from '@testing-library/react'
-import '@testing-library/jest-dom/jest-globals'
+import { describe, it, expect } from 'vitest'
 
 import { LocationProvider, useLocation } from '../location'
 
@@ -26,13 +28,13 @@ describe('useLocation', () => {
     const { getByText, getByTestId } = render(
       <LocationProvider location={mockLocation}>
         <TestComponent />
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(
       getByText(
-        '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}'
-      )
+        '{"pathname":"/dunder-mifflin","search":"?facts=bears","hash":"#woof"}',
+      ),
     ).toBeInTheDocument()
     expect(getByTestId('pathname')).toHaveValue('/dunder-mifflin')
     expect(getByTestId('search')).toHaveValue('?facts=bears')

@@ -15,7 +15,7 @@ import { logger } from 'src/lib/logger'
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
  * @param { APIGatewayEvent } event - an object which contains information from the invoker.
- * @param { Context } context - contains information about the invocation,
+ * @param { Context } _context - contains information about the invocation,
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent, _context: Context) => {

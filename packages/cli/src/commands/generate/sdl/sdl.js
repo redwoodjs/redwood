@@ -38,7 +38,7 @@ const missingIdConsoleMessage = () => {
   const line3 = "you'll need to update your schema definition to include"
   const line4 = 'an `@id` column. Read more here: '
   const line5 = chalk.underline.blue(
-    'https://redwoodjs.com/docs/schema-relations'
+    'https://redwoodjs.com/docs/schema-relations',
   )
 
   console.error(
@@ -46,7 +46,7 @@ const missingIdConsoleMessage = () => {
       padding: 1,
       margin: { top: 1, bottom: 3, right: 1, left: 2 },
       borderStyle: 'single',
-    })
+    }),
   )
 }
 
@@ -69,13 +69,14 @@ const modelFieldToSDL = ({
       field.kind === 'object' ? idType(types[field.type]) : field.type
   }
 
-  const dictionary = {
+  const prismaTypeToGraphqlType = {
     Json: 'JSON',
     Decimal: 'Float',
+    Bytes: 'Byte',
   }
 
   const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
-    dictionary[field.type] || field.type
+    prismaTypeToGraphqlType[field.type] || field.type
   }${field.isList ? ']' : ''}${
     (field.isRequired && required) | field.isList ? '!' : ''
   }`
@@ -153,7 +154,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
         .map(async (field) => {
           const model = await getSchema(field.type)
           return model
-        })
+        }),
     )
   ).reduce((acc, cur) => ({ ...acc, [cur.name]: cur }), {})
 
@@ -165,7 +166,7 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
         .map(async (field) => {
           const enumDef = await getEnum(field.type)
           return enumDef
-        })
+        }),
     )
   ).reduce((acc, curr) => acc.concat(curr), [])
 
@@ -211,7 +212,7 @@ export const files = async ({
     templatePath: 'sdl.ts.template',
   })
 
-  let template = generateTemplate(templatePath, {
+  let template = await generateTemplate(templatePath, {
     docs,
     modelName,
     modelDescription,
@@ -228,11 +229,11 @@ export const files = async ({
   const extension = typescript ? 'ts' : 'js'
   let outputPath = path.join(
     getPaths().api.graphql,
-    `${camelcase(pluralize(name))}.sdl.${extension}`
+    `${camelcase(pluralize(name))}.sdl.${extension}`,
   )
 
   if (typescript) {
-    template = transformTSToJS(outputPath, template)
+    template = await transformTSToJS(outputPath, template)
   }
 
   return {
@@ -283,8 +284,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-sdl'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-sdl',
+      )}`,
     )
 
   // Merge default options in
@@ -344,7 +345,11 @@ export const handler = async ({
           },
         },
       ].filter(Boolean),
-      { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+      {
+        rendererOptions: { collapseSubtasks: false },
+        exitOnError: true,
+        silentRendererCondition: process.env.NODE_ENV === 'test',
+      },
     )
 
     if (rollback && !force) {

@@ -1,5 +1,7 @@
 import { resolve } from 'path'
 
+import { describe, it } from 'vitest'
+
 import { DefaultHost } from '../../hosts'
 import { RWProject } from '../../model'
 import { getOutline } from '../outline'
@@ -10,12 +12,11 @@ describe('Redwood Project Outline', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const outline = getOutline(project)
-    const outlineJSON = await outlineToJSON(outline)
-    outlineJSON //?
+    await outlineToJSON(outline)
   })
 })
 function getFixtureDir(
-  name: 'example-todo-main-with-errors' | 'example-todo-main'
+  name: 'example-todo-main-with-errors' | 'example-todo-main',
 ) {
   return resolve(__dirname, `../../../../../__fixtures__/${name}`)
 }

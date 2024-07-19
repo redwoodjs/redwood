@@ -255,3 +255,45 @@ RWJS_CWD=/path/to/rw-project node "./packages/codemods/dist/codemods.js" {your-c
 > # Assuming in packages/codemods/
 > watch -p "./src/**/*" -c "yarn build"
 > ```
+
+4. Debugging
+
+If you have a node and want to see/confirm what you're working with you can
+pass it to jscodeshift and then call `.toSource()` on it.
+
+** Example **
+
+```
+const j = api.jscodeshift
+const root = j(file.source)
+
+const graphQLClientConfig = j.jsxAttribute(
+  j.jsxIdentifier('graphQLClientConfig'),
+  j.jsxExpressionContainer(j.objectExpression([]))
+)
+
+console.log('graphQLClientConfig prop', j(graphQLClientConfig).toSource())
+// Will log:
+// graphQLClientConfig={{}}
+```
+
+If you have a collection of nodes you first need to get just one of the
+collection items, and then get the node out of that.
+
+** Example **
+
+```
+const j = api.jscodeshift
+const root = j(file.source)
+
+const redwoodApolloProvider = root.findJSXElements('RedwoodApolloProvider')
+
+console.log(
+  '<RedwoodApolloProvider>',
+  j(redwoodApolloProvider.get(0).node).toSource()
+)
+// Will log:
+// <RedwoodApolloProvider useAuth={useAuth}>
+//   <Routes />
+// </RedwoodApolloProvider>
+```

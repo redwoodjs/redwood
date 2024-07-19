@@ -80,7 +80,7 @@ jest.mock('../../makeMergedSchema', () => {
             },
             redwoodGraphQLErrorUser: () => {
               throw new RedwoodGraphQLError(
-                'You are forbidden by a RedwoodGraphQLError'
+                'You are forbidden by a RedwoodGraphQLError',
               )
             },
             invalidUser: () => {
@@ -88,7 +88,7 @@ jest.mock('../../makeMergedSchema', () => {
             },
             unexpectedUser: () => {
               throw new Error(
-                'Connection to database failed at 192.168.1 port 5678'
+                'Connection to database failed at 192.168.1 port 5678',
               )
             },
             getUser: (id) => {
@@ -280,7 +280,7 @@ describe('useRedwoodError', () => {
         expect(response.statusCode).toBe(200)
         expect(data).toBeNull()
         expect(errors[0].message).toContain(
-          'Emailmissingatexample.com must be formatted'
+          'Emailmissingatexample.com must be formatted',
         )
       })
     })
@@ -311,7 +311,7 @@ describe('useRedwoodError', () => {
         expect(response.statusCode).toBe(200)
         expect(data).toBeNull()
         expect(errors[0].message).toContain(
-          'You are forbidden by a RedwoodGraphQLError'
+          'You are forbidden by a RedwoodGraphQLError',
         )
       })
     })
@@ -342,7 +342,7 @@ describe('useRedwoodError', () => {
         expect(response.statusCode).toBe(200)
         expect(data).toBeNull()
         expect(errors[0].message).toContain(
-          'You are forbidden by a GraphQLError'
+          'You are forbidden by a GraphQLError',
         )
       })
     })

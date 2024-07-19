@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web"
+    ]
+  },
+  "devDependencies": {
+    "@redwoodjs/core": "7.0.0",
+    "@redwoodjs/project-config": "7.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
+  },
+  "engines": {
+    "node": "=20.x"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  },
+  "packageManager": "yarn@4.1.1"
+}

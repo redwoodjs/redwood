@@ -1,3 +1,3 @@
 module.exports = {
-  testPathIgnorePatterns: ['fixtures'],
+  testPathIgnorePatterns: ['fixtures', 'dist/*'],
 }

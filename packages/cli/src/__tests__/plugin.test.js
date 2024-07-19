@@ -1,5 +1,14 @@
-import fs from 'fs'
-
+import { vol } from 'memfs'
+import {
+  vi,
+  describe,
+  beforeEach,
+  test,
+  expect,
+  beforeAll,
+  afterEach,
+  afterAll,
+} from 'vitest'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
@@ -8,17 +17,19 @@ import { getConfig, getPaths } from '@redwoodjs/project-config'
 import * as pluginLib from '../lib/plugin'
 import { loadPlugins } from '../plugin'
 
-jest.mock('fs')
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('fs-extra')
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
-    getPaths: jest.fn(),
-    getConfig: jest.fn(),
+    ...originalProjectConfig,
+    getPaths: vi.fn(),
+    getConfig: vi.fn(),
   }
 })
-jest.mock('../lib/packages', () => {
+vi.mock('../lib/packages', () => {
   return {
-    installModule: jest.fn(),
-    isModuleInstalled: jest.fn().mockReturnValue(true),
+    installModule: vi.fn(),
+    isModuleInstalled: vi.fn().mockReturnValue(true),
   }
 })
 
@@ -43,7 +54,7 @@ describe('command information caching', () => {
   })
 
   test('returns the correct cache when no local cache exists', () => {
-    const cache = pluginLib.loadCommadCache()
+    const cache = pluginLib.loadCommandCache()
     expect(cache).toEqual({
       ...pluginLib.PLUGIN_CACHE_DEFAULT,
       _builtin: pluginLib.PLUGIN_CACHE_BUILTIN,
@@ -52,7 +63,7 @@ describe('command information caching', () => {
 
   test('returns the correct cache when a local cache exists', () => {
     const anExistingDefaultCacheEntryKey = Object.keys(
-      pluginLib.PLUGIN_CACHE_DEFAULT
+      pluginLib.PLUGIN_CACHE_DEFAULT,
     )[0]
     const anExistingDefaultCacheEntry = {
       [anExistingDefaultCacheEntryKey]: {
@@ -69,14 +80,14 @@ describe('command information caching', () => {
         },
       },
     }
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         ...exampleCacheEntry,
         ...anExistingDefaultCacheEntry,
       }),
     })
 
-    const cache = pluginLib.loadCommadCache()
+    const cache = pluginLib.loadCommandCache()
     expect(cache).toEqual({
       ...pluginLib.PLUGIN_CACHE_DEFAULT,
       ...exampleCacheEntry,
@@ -87,7 +98,7 @@ describe('command information caching', () => {
 
 describe('plugin loading', () => {
   beforeAll(() => {
-    jest.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   beforeEach(() => {
@@ -97,14 +108,14 @@ describe('plugin loading', () => {
       },
     })
 
-    jest.spyOn(pluginLib, 'loadCommadCache')
-    jest.spyOn(pluginLib, 'loadPluginPackage')
-    jest.spyOn(pluginLib, 'checkPluginListAndWarn')
-    jest.spyOn(pluginLib, 'saveCommandCache')
+    vi.spyOn(pluginLib, 'loadCommandCache')
+    vi.spyOn(pluginLib, 'loadPluginPackage')
+    vi.spyOn(pluginLib, 'checkPluginListAndWarn')
+    vi.spyOn(pluginLib, 'saveCommandCache')
   })
 
   afterEach(() => {
-    pluginLib.loadCommadCache.mockRestore()
+    pluginLib.loadCommandCache.mockRestore()
     pluginLib.checkPluginListAndWarn.mockRestore()
     pluginLib.loadPluginPackage.mockRestore()
     pluginLib.saveCommandCache.mockRestore()
@@ -123,7 +134,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(0)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(0)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(0)
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledTimes(0)
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(0)
@@ -147,7 +158,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(0)
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledTimes(0)
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(0)
@@ -180,7 +191,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -193,9 +204,9 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -215,7 +226,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have loaded the package when it was not in the cache
@@ -223,17 +234,17 @@ describe('plugin loading', () => {
       expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
         '@redwoodjs/cli-some-package-not-in-cache',
         undefined,
-        true
+        true,
       )
 
       // Should have saved the cache with the new package
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -253,7 +264,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test.each([['--help'], ['-h'], ['']])(
@@ -280,7 +291,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -293,9 +304,9 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -315,7 +326,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have loaded the package when it was not in the cache
@@ -323,17 +334,17 @@ describe('plugin loading', () => {
       expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
         '@redwoodjs/cli-some-package-not-in-cache',
         undefined,
-        true
+        true,
       )
 
       // Should have saved the cache with the new package
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -353,7 +364,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test.each([['--help'], ['-h'], ['']])(
@@ -380,7 +391,7 @@ describe('plugin loading', () => {
           },
         },
       })
-      jest.mock(
+      vi.mock(
         '@redwoodjs/cli-some-package-not-in-cache',
         () => {
           return {
@@ -393,9 +404,9 @@ describe('plugin loading', () => {
             ],
           }
         },
-        { virtual: true }
+        { virtual: true },
       )
-      fs.__setMockFiles({
+      vol.fromJSON({
         ['commandCache.json']: JSON.stringify({
           '@redwoodjs/cli-some-package': {
             'some-command': {
@@ -415,7 +426,7 @@ describe('plugin loading', () => {
       const yargsInstance = getMockYargsInstance()
       await loadPlugins(yargsInstance)
 
-      expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+      expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
       expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
       // Should have NOT loaded the package when it was not in the cache
@@ -426,10 +437,10 @@ describe('plugin loading', () => {
       expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
       const knownPlugins =
         getConfig.mock.results[0].value.experimental.cli.plugins.map(
-          (plugin) => plugin.package
+          (plugin) => plugin.package,
         )
       const saveCommandCacheArg = Object.entries(
-        pluginLib.saveCommandCache.mock.calls[0][0]
+        pluginLib.saveCommandCache.mock.calls[0][0],
       ).filter(([key]) => knownPlugins.includes(key))
       expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -443,7 +454,7 @@ describe('plugin loading', () => {
 
       getConfig.mockRestore()
       process.argv = originalArgv
-    }
+    },
   )
 
   test('correct loading for unknown namespace (no command)', async () => {
@@ -468,7 +479,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -481,9 +492,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -503,7 +514,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package when it was not in the cache
@@ -511,17 +522,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -564,7 +575,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -577,9 +588,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -599,7 +610,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package when it was not in the cache
@@ -607,17 +618,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -661,7 +672,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -674,9 +685,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -715,7 +726,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -723,17 +734,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -766,7 +777,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -779,9 +790,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package',
       () => {
         return {
@@ -794,9 +805,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({}),
     })
 
@@ -837,7 +848,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - all in the namespace
@@ -845,22 +856,22 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -894,7 +905,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -907,9 +918,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -963,7 +974,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package that we couldn't rule out from the cache
@@ -971,17 +982,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@redwoodjs/cli-some-package-not-in-cache',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1030,7 +1041,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    jest.mock(
+    vi.mock(
       '@redwoodjs/cli-some-package-not-in-cache',
       () => {
         return {
@@ -1043,9 +1054,9 @@ describe('plugin loading', () => {
           ],
         }
       },
-      { virtual: true }
+      { virtual: true },
     )
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -1084,7 +1095,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -1092,17 +1103,17 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1138,7 +1149,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({}),
     })
 
@@ -1179,7 +1190,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package - only the one we need
@@ -1187,22 +1198,22 @@ describe('plugin loading', () => {
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package',
       undefined,
-      true
+      true,
     )
     expect(pluginLib.loadPluginPackage).toHaveBeenCalledWith(
       '@bluewoodjs/cli-some-package-second-example',
       undefined,
-      true
+      true,
     )
 
     // Should have saved the cache with the new package
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 
@@ -1236,7 +1247,7 @@ describe('plugin loading', () => {
         },
       },
     })
-    fs.__setMockFiles({
+    vol.fromJSON({
       ['commandCache.json']: JSON.stringify({
         '@redwoodjs/cli-some-package': {
           'some-command': {
@@ -1275,7 +1286,7 @@ describe('plugin loading', () => {
     const yargsInstance = getMockYargsInstance()
     await loadPlugins(yargsInstance)
 
-    expect(pluginLib.loadCommadCache).toHaveBeenCalledTimes(1)
+    expect(pluginLib.loadCommandCache).toHaveBeenCalledTimes(1)
     expect(pluginLib.checkPluginListAndWarn).toHaveBeenCalledTimes(1)
 
     // Should have loaded the package that we couldn't rule out from the cache
@@ -1285,10 +1296,10 @@ describe('plugin loading', () => {
     expect(pluginLib.saveCommandCache).toHaveBeenCalledTimes(1)
     const knownPlugins =
       getConfig.mock.results[0].value.experimental.cli.plugins.map(
-        (plugin) => plugin.package
+        (plugin) => plugin.package,
       )
     const saveCommandCacheArg = Object.entries(
-      pluginLib.saveCommandCache.mock.calls[0][0]
+      pluginLib.saveCommandCache.mock.calls[0][0],
     ).filter(([key]) => knownPlugins.includes(key))
     expect(saveCommandCacheArg).toMatchSnapshot()
 

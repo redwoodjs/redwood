@@ -1,6 +1,5 @@
-#!/usr/bin/env node
-
-import path from 'path'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { trace, SpanStatusCode } from '@opentelemetry/api'
 import checkNodeVersionCb from 'check-node-version'
@@ -14,23 +13,31 @@ import yargs from 'yargs/yargs'
 
 import { RedwoodTUI, ReactiveTUIContent, RedwoodStyling } from '@redwoodjs/tui'
 
-import { name, version } from '../package'
+import { name, version } from '../package.json'
 
 import {
   UID,
   startTelemetry,
   shutdownTelemetry,
   recordErrorViaTelemetry,
-} from './telemetry'
+} from './telemetry.js'
 
 const INITIAL_COMMIT_MESSAGE = 'Initial commit'
 
-// Telemetry
-const { telemetry } = Parser(hideBin(process.argv))
+// Telemetry can be disabled in two ways:
+// - by passing `--telemetry false`  or `--no-telemetry`
+// - by setting the `REDWOOD_DISABLE_TELEMETRY` env var to `1`
+const { telemetry } = Parser(hideBin(process.argv), {
+  boolean: ['telemetry'],
+  default: {
+    telemetry:
+      process.env.REDWOOD_DISABLE_TELEMETRY === undefined ||
+      process.env.REDWOOD_DISABLE_TELEMETRY === '',
+  },
+})
 
 const tui = new RedwoodTUI()
 
-// Credit to esbuild: https://github.com/rtsao/esbuild/blob/c35a4cebf037237559213abc684504658966f9d6/lib/install.ts#L190-L199
 function isYarnBerryOrNewer() {
   const { npm_config_user_agent: npmConfigUserAgent } = process.env
 
@@ -53,7 +60,7 @@ const USE_GITPOD_TEXT = [
     {
       fallback: () =>
         'Launch Redwood using GitPod https://gitpod.io/#https://github.com/redwoodjs/starter',
-    }
+    },
   )}`,
 ]
 
@@ -67,7 +74,7 @@ async function executeCompatibilityCheck(templateDir) {
   })
   tui.startReactive(tuiContent)
 
-  const [checksPassed, checksData] = await checkNodeAndYarnVersion(templateDir)
+  const [checksPassed, checksData] = await checkNodeVersion(templateDir)
 
   if (checksPassed) {
     tuiContent.update({
@@ -84,12 +91,7 @@ async function executeCompatibilityCheck(templateDir) {
   if (!checksPassed) {
     const foundNodeVersionIsLessThanRequired = semver.lt(
       checksData.node.version.version,
-      semver.minVersion(checksData.node.wanted.raw)
-    )
-
-    const foundYarnVersionIsLessThanRequired = semver.lt(
-      checksData.yarn.version.version,
-      semver.minVersion(checksData.yarn.wanted.raw)
+      semver.minVersion(checksData.node.wanted.raw),
     )
 
     if (foundNodeVersionIsLessThanRequired) {
@@ -107,7 +109,7 @@ async function executeCompatibilityCheck(templateDir) {
             {
               fallback: () =>
                 'How to - Using nvm https://redwoodjs.com/docs/how-to/using-nvm',
-            }
+            },
           )}`,
           `  See: ${terminalLink(
             'Tutorial - Prerequisites',
@@ -115,46 +117,11 @@ async function executeCompatibilityCheck(templateDir) {
             {
               fallback: () =>
                 'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-            }
+            },
           )}`,
           '',
           ...USE_GITPOD_TEXT,
-        ].join('\n')
-      )
-
-      recordErrorViaTelemetry('Compatibility checks failed')
-      await shutdownTelemetry()
-      process.exit(1)
-    }
-
-    if (foundYarnVersionIsLessThanRequired) {
-      tui.stopReactive(true)
-      tui.displayError(
-        'Compatibility checks failed',
-        [
-          `  You need to upgrade the version of yarn you're using.`,
-          `  You're using ${checksData.yarn.version.version} and we currently support node ${checksData.yarn.wanted.range}.`,
-          '',
-          `  Please use tools like corepack to change to a compatible version.`,
-          `  See: ${terminalLink(
-            'How to - Using Yarn',
-            'https://redwoodjs.com/docs/how-to/using-yarn',
-            {
-              fallback: () =>
-                'How to - Using Yarn https://redwoodjs.com/docs/how-to/using-yarn',
-            }
-          )}`,
-          `  See: ${terminalLink(
-            'Tutorial - Prerequisites',
-            'https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-            {
-              fallback: () =>
-                'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-            }
-          )}`,
-          '',
-          ...USE_GITPOD_TEXT,
-        ].join('\n')
+        ].join('\n'),
       )
 
       recordErrorViaTelemetry('Compatibility checks failed')
@@ -178,7 +145,7 @@ async function executeCompatibilityCheck(templateDir) {
           {
             fallback: () =>
               'How to - Use nvm https://redwoodjs.com/docs/how-to/using-nvm',
-          }
+          },
         )}`,
         `  See: ${terminalLink(
           'Tutorial - Prerequisites',
@@ -186,11 +153,11 @@ async function executeCompatibilityCheck(templateDir) {
           {
             fallback: () =>
               'Tutorial - Prerequisites https://redwoodjs.com/docs/tutorial/chapter1/prerequisites',
-          }
+          },
         )}`,
         '',
         ...USE_GITPOD_TEXT,
-      ].join('\n')
+      ].join('\n'),
     )
 
     // Try catch for handling if the user cancels the prompt.
@@ -205,7 +172,7 @@ async function executeCompatibilityCheck(templateDir) {
       if (response['override-engine-error'] === 'Quit install') {
         recordErrorViaTelemetry('User quit after engine check error')
         await shutdownTelemetry()
-        process.exit(1)
+        process.exit(0)
       }
     } catch (error) {
       recordErrorViaTelemetry('User cancelled install at engine check error')
@@ -220,9 +187,9 @@ async function executeCompatibilityCheck(templateDir) {
  * This type has to be updated if the engines field in the create redwood app template package.json is updated.
  * @returns [boolean, Record<'node' | 'yarn', any>]
  */
-function checkNodeAndYarnVersion(templateDir) {
+function checkNodeVersion(templateDir) {
   return new Promise((resolve) => {
-    const { engines } = require(path.join(templateDir, 'package.json'))
+    const { engines } = fs.readJSONSync(path.join(templateDir, 'package.json'))
 
     checkNodeVersionCb(engines, (_error, result) => {
       return resolve([result.isSatisfied, result.versions])
@@ -251,9 +218,9 @@ async function createProjectFiles(appDir, { templateDir, overwrite }) {
   fs.copySync(templateDir, newAppDir, { overwrite })
 
   // .gitignore is renamed here to force file inclusion during publishing
-  fs.rename(
+  fs.renameSync(
     path.join(newAppDir, 'gitignore.template'),
-    path.join(newAppDir, '.gitignore')
+    path.join(newAppDir, '.gitignore'),
   )
 
   // Write the uid
@@ -282,7 +249,10 @@ async function installNodeModules(newAppDir) {
   })
   tui.startReactive(tuiContent)
 
-  const yarnInstallSubprocess = execa('yarn install', {
+  const oldCwd = process.cwd()
+  process.chdir(newAppDir)
+
+  const yarnInstallSubprocess = execa(`yarn install`, {
     shell: true,
     cwd: newAppDir,
   })
@@ -295,16 +265,19 @@ async function installNodeModules(newAppDir) {
       "Couldn't install node modules",
       [
         `We couldn't install node modules via ${RedwoodStyling.info(
-          "'yarn install'"
+          "'yarn install'",
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
+    process.chdir(oldCwd)
     process.exit(1)
   }
+
+  process.chdir(oldCwd)
 
   tuiContent.update({
     header: '',
@@ -339,11 +312,11 @@ async function generateTypes(newAppDir) {
       "Couldn't generate types",
       [
         `We could not generate types using ${RedwoodStyling.info(
-          "'yarn rw-gen'"
+          "'yarn rw-gen'",
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
@@ -374,7 +347,7 @@ async function initializeGit(newAppDir, commitMessage) {
     {
       shell: true,
       cwd: newAppDir,
-    }
+    },
   )
 
   try {
@@ -385,11 +358,11 @@ async function initializeGit(newAppDir, commitMessage) {
       "Couldn't initialize a git repo",
       [
         `We could not initialize a git repo using ${RedwoodStyling.info(
-          `git init && git add . && git commit -m "${commitMessage}"`
+          `git init && git add . && git commit -m "${commitMessage}"`,
         )}. Please see below for the full error message.`,
         '',
         error,
-      ].join('\n')
+      ].join('\n'),
     )
     recordErrorViaTelemetry(error)
     await shutdownTelemetry()
@@ -398,7 +371,7 @@ async function initializeGit(newAppDir, commitMessage) {
 
   tuiContent.update({
     content: `${RedwoodStyling.green(
-      '✔'
+      '✔',
     )} Initialized a git repo with commit message "${commitMessage}"`,
     spinner: {
       enabled: false,
@@ -411,8 +384,8 @@ async function handleTargetDirPreference(targetDir) {
   if (targetDir) {
     tui.drawText(
       `${RedwoodStyling.green(
-        '✔'
-      )} Creating your Redwood app in ${targetDir} based on command line argument`
+        '✔',
+      )} Creating your Redwood app in ${targetDir} based on command line argument`,
     )
 
     return targetDir
@@ -431,7 +404,7 @@ async function handleTargetDirPreference(targetDir) {
       tui.stopReactive(true)
       tui.displayError(
         'The `~username` syntax is not supported here',
-        'Please use the full path or specify the target directory on the command line.'
+        'Please use the full path or specify the target directory on the command line.',
       )
 
       recordErrorViaTelemetry('Target dir prompt path syntax not supported')
@@ -453,7 +426,7 @@ async function handleTypescriptPreference(typescriptFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} Using ${
         typescriptFlag ? 'TypeScript' : 'JavaScript'
-      } based on command line flag`
+      } based on command line flag`,
     )
     return typescriptFlag
   }
@@ -481,7 +454,7 @@ async function handleGitPreference(gitInitFlag) {
     tui.drawText(
       `${RedwoodStyling.green('✔')} ${
         gitInitFlag ? 'Will' : 'Will not'
-      } initialize a git repo based on command line flag`
+      } initialize a git repo based on command line flag`,
     )
     return gitInitFlag
   }
@@ -506,7 +479,7 @@ async function handleGitPreference(gitInitFlag) {
 
 async function doesDirectoryAlreadyExist(
   appDir,
-  { overwrite, suppressWarning }
+  { overwrite, suppressWarning },
 ) {
   let newAppDir = appDir
 
@@ -520,7 +493,7 @@ async function doesDirectoryAlreadyExist(
         tui.stopReactive(true)
         tui.displayWarning(
           'Project directory already contains files',
-          [`'${styledAppDir}' already exists and is not empty`].join('\n')
+          [`'${styledAppDir}' already exists and is not empty`].join('\n'),
         )
       }
 
@@ -555,7 +528,7 @@ async function doesDirectoryAlreadyExist(
             tui.stopReactive(true)
             tui.displayError(
               'The `~username` syntax is not supported here',
-              'Please use the full path or specify the target directory on the command line.'
+              'Please use the full path or specify the target directory on the command line.',
             )
 
             // Calling doesDirectoryAlreadyExist again with the same old
@@ -575,7 +548,7 @@ async function doesDirectoryAlreadyExist(
         else if (response.projectDirectoryAlreadyExists === 'Quit install') {
           // quit and throw an error
           recordErrorViaTelemetry(
-            'User quit after directory already exists error'
+            'User quit after directory already exists error',
           )
           await shutdownTelemetry()
           process.exit(1)
@@ -583,7 +556,7 @@ async function doesDirectoryAlreadyExist(
         // overwrite the existing files
       } catch (_error) {
         recordErrorViaTelemetry(
-          `User cancelled install after directory already exists error`
+          `User cancelled install after directory already exists error`,
         )
         await shutdownTelemetry()
         process.exit(1)
@@ -605,7 +578,7 @@ async function handleNewDirectoryNamePreference() {
     return response.targetDirectoryInput
   } catch (_error) {
     recordErrorViaTelemetry(
-      'User cancelled install at specify a different directory prompt'
+      'User cancelled install at specify a different directory prompt',
     )
     await shutdownTelemetry()
     process.exit(1)
@@ -643,6 +616,11 @@ async function handleCommitMessagePreference(commitMessageFlag) {
 async function handleYarnInstallPreference(yarnInstallFlag) {
   // Handle case where flag is set
   if (yarnInstallFlag !== null) {
+    tui.drawText(
+      `${RedwoodStyling.green('✔')} ${
+        yarnInstallFlag ? 'Will' : 'Will not'
+      } run yarn install based on command line flag`,
+    )
     return yarnInstallFlag
   }
 
@@ -671,31 +649,39 @@ async function handleYarnInstallPreference(yarnInstallFlag) {
  *  - TODO - Add a list of what this function does
  */
 async function createRedwoodApp() {
-  // Introductory message
-  tui.drawText(
-    [
-      `${RedwoodStyling.redwood('-'.repeat(66))}`,
-      `${' '.repeat(16)}🌲⚡️ ${RedwoodStyling.header(
-        'Welcome to RedwoodJS!'
-      )} ⚡️🌲`,
-      `${RedwoodStyling.redwood('-'.repeat(66))}`,
-    ].join('\n')
-  )
-
   const cli = yargs(hideBin(process.argv))
     .scriptName(name)
-    .usage('Usage: $0 <project directory> [option]')
-    .example('$0 newapp')
-    .option('typescript', {
-      alias: 'ts',
+    .usage('Usage: $0 <project directory>')
+    .example('$0 my-redwood-app')
+    .version(version)
+    .option('yes', {
+      alias: 'y',
       default: null,
       type: 'boolean',
-      describe: 'Generate a TypeScript project.',
+      describe: 'Skip prompts and use defaults',
     })
     .option('overwrite', {
       default: false,
       type: 'boolean',
       describe: "Create even if target directory isn't empty",
+    })
+    .option('typescript', {
+      alias: 'ts',
+      default: null,
+      type: 'boolean',
+      describe: 'Generate a TypeScript project',
+    })
+    .option('git-init', {
+      alias: 'git',
+      default: null,
+      type: 'boolean',
+      describe: 'Initialize a git repository',
+    })
+    .option('commit-message', {
+      alias: 'm',
+      default: null,
+      type: 'string',
+      describe: 'Commit message for the initial commit',
     })
     .option('telemetry', {
       default: true,
@@ -703,30 +689,11 @@ async function createRedwoodApp() {
       describe:
         'Enables sending telemetry events for this create command and all Redwood CLI commands https://telemetry.redwoodjs.com',
     })
-    .option('git-init', {
-      alias: 'git',
-      default: null,
-      type: 'boolean',
-      describe: 'Initialize a git repository.',
-    })
-    .option('commit-message', {
-      alias: 'm',
-      default: null,
-      type: 'string',
-      describe: 'Commit message for the initial commit.',
-    })
-    .option('yes', {
-      alias: 'y',
-      default: null,
-      type: 'boolean',
-      describe: 'Skip prompts and use defaults.',
-    })
-    .version(version)
 
   const _isYarnBerryOrNewer = isYarnBerryOrNewer()
 
-  // Only permit the yarn install flag on yarn 1.
-  if (!_isYarnBerryOrNewer) {
+  // Only add the yarn-install flag if the yarn version is >= 2
+  if (_isYarnBerryOrNewer) {
     cli.option('yarn-install', {
       default: null,
       type: 'boolean',
@@ -736,14 +703,24 @@ async function createRedwoodApp() {
 
   const parsedFlags = cli.parse()
 
+  tui.drawText(
+    [
+      `${RedwoodStyling.redwood('-'.repeat(66))}`,
+      `${' '.repeat(16)}🌲⚡️ ${RedwoodStyling.header(
+        'Welcome to RedwoodJS!',
+      )} ⚡️🌲`,
+      `${RedwoodStyling.redwood('-'.repeat(66))}`,
+    ].join('\n'),
+  )
+
   // Extract the args as provided by the user in the command line
   // TODO: Make all flags have the 'flag' suffix
   const args = parsedFlags._
   const yarnInstallFlag =
-    parsedFlags['yarn-install'] ?? !_isYarnBerryOrNewer ? parsedFlags.yes : null
+    parsedFlags['yarn-install'] ??
+    (_isYarnBerryOrNewer ? parsedFlags.yes : null)
   const typescriptFlag = parsedFlags.typescript ?? parsedFlags.yes
   const overwrite = parsedFlags.overwrite
-  // telemetry, // Extracted above to check if telemetry is disabled before we even reach this point
   const gitInitFlag = parsedFlags['git-init'] ?? parsedFlags.yes
   const commitMessageFlag =
     parsedFlags['commit-message'] ??
@@ -756,7 +733,7 @@ async function createRedwoodApp() {
   // Get the directory for installation from the args
   let targetDir = String(args).replace(/,/g, '-')
 
-  const templatesDir = path.resolve(__dirname, '../templates')
+  const templatesDir = fileURLToPath(new URL('../templates', import.meta.url))
 
   // Engine check
   await executeCompatibilityCheck(path.join(templatesDir, 'ts'))
@@ -781,7 +758,7 @@ async function createRedwoodApp() {
 
   let yarnInstall = false
 
-  if (!_isYarnBerryOrNewer) {
+  if (_isYarnBerryOrNewer) {
     yarnInstall = await handleYarnInstallPreference(yarnInstallFlag)
   }
 
@@ -799,7 +776,7 @@ async function createRedwoodApp() {
       .getActiveSpan()
       ?.setAttribute('yarn-install-time', Date.now() - yarnInstallStart)
   } else {
-    if (!_isYarnBerryOrNewer) {
+    if (_isYarnBerryOrNewer) {
       tui.drawText(`${RedwoodStyling.info('ℹ')} Skipped yarn install step`)
     }
   }
@@ -821,7 +798,7 @@ async function createRedwoodApp() {
       RedwoodStyling.success('Thanks for trying out Redwood!'),
       '',
       ` ⚡️ ${RedwoodStyling.redwood(
-        'Get up and running fast with this Quick Start guide'
+        'Get up and running fast with this Quick Start guide',
       )}: https://redwoodjs.com/quick-start`,
       '',
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
@@ -829,48 +806,45 @@ async function createRedwoodApp() {
       ...[
         `${RedwoodStyling.redwood(
           ` > ${RedwoodStyling.green(
-            `cd ${path.relative(process.cwd(), newAppDir)}`
-          )}`
+            `cd ${path.relative(process.cwd(), newAppDir)}`,
+          )}`,
         )}`,
         !yarnInstall &&
           `${RedwoodStyling.redwood(
-            ` > ${RedwoodStyling.green(`yarn install`)}`
+            ` > ${RedwoodStyling.green(`yarn install`)}`,
           )}`,
         `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(`yarn rw dev`)}`
+          ` > ${RedwoodStyling.green(`yarn rw dev`)}`,
         )}`,
       ].filter(Boolean),
       '',
-    ].join('\n')
+    ].join('\n'),
   )
 }
 
-;(async () => {
-  // Conditionally start telemetry
-  if (telemetry !== 'false' && !process.env.REDWOOD_DISABLE_TELEMETRY) {
-    try {
-      await startTelemetry()
-    } catch (error) {
-      console.error('Telemetry startup error')
-      console.error(error)
-    }
-  }
-
-  // Execute create redwood app within a span
-  const tracer = trace.getTracer('redwoodjs')
-  await tracer.startActiveSpan('create-redwood-app', async (span) => {
-    await createRedwoodApp()
-
-    // Span housekeeping
-    span?.setStatus({ code: SpanStatusCode.OK })
-    span?.end()
-  })
-
-  // Shutdown telemetry, ensures data is sent before the process exits
+if (telemetry) {
   try {
-    await shutdownTelemetry()
+    await startTelemetry()
   } catch (error) {
-    console.error('Telemetry shutdown error')
+    console.error('Telemetry startup error')
     console.error(error)
   }
-})()
+}
+
+// Execute create redwood app within a span
+const tracer = trace.getTracer('redwoodjs')
+await tracer.startActiveSpan('create-redwood-app', async (span) => {
+  await createRedwoodApp()
+
+  // Span housekeeping
+  span?.setStatus({ code: SpanStatusCode.OK })
+  span?.end()
+})
+
+// Shutdown telemetry, ensures data is sent before the process exits
+try {
+  await shutdownTelemetry()
+} catch (error) {
+  console.error('Telemetry shutdown error')
+  console.error(error)
+}

@@ -16,9 +16,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(netlifyIdentity)
 
@@ -45,7 +45,9 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
           return resolve(user)
         })
         netlifyIdentity.on('close', () => {
-          !autoClosedModal && resolve(null)
+          if (!autoClosedModal) {
+            resolve(null)
+          }
         })
         netlifyIdentity.on('error', reject)
       })

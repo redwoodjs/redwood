@@ -6,7 +6,7 @@ import { normalizePath } from 'vite'
  */
 export const componentsModules = (
   components: string[],
-  vite: ViteDevServer
+  vite: ViteDevServer,
 ) => {
   const matchedModules: Set<ModuleNode> = new Set()
   components.forEach((component) => {
@@ -21,7 +21,7 @@ export const componentsModules = (
 export const collectCssPaths = (
   mods: Set<ModuleNode>,
   cssLinks = new Set<string>(),
-  checkedComponents = new Set()
+  checkedComponents = new Set(),
 ) => {
   for (const mod of mods) {
     if (

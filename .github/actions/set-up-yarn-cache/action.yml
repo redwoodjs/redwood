@@ -1,37 +1,37 @@
+# See https://github.com/yarnpkg/berry/discussions/2621#discussioncomment-505872.
+
 name: Set up yarn cache
-description: |
-  Sets up caching for yarn install steps.
+description: >
+  Sets up caching for `yarn install` steps.
   Caches yarn's cache directory, install state, and node_modules.
+  Caching the cache directory avoids yarn's fetch step and caching node_modules avoids yarn's link step.
 
 runs:
   using: composite
 
   steps:
-    # We try to cache and restore yarn's cache directory and install state to speed up the yarn install step.
-    # Caching yarn's cache directory avoids its fetch step.
-    - name: 📁 Get yarn cache directory
+    - name: 📁 Get yarn's cache directory
       id: get-yarn-cache-directory
       run: echo "CACHE_DIRECTORY=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       shell: bash
 
-    # If the primary key doesn't match, the cache will probably be stale or incomplete,
-    # but still worth restoring for the yarn install step.
-    - name: ♻️ Restore yarn cache
-      uses: actions/cache@v3
+    - name: ♻️ Restore yarn's cache
+      uses: actions/cache@v4
       with:
         path: ${{ steps.get-yarn-cache-directory.outputs.CACHE_DIRECTORY }}
-        key: yarn-cache-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
-        restore-keys: yarn-cache-${{ runner.os }}
+        key: yarn-cache-${{ runner.os }}
+        save-always: true
 
-    # We avoid restore-keys for these steps because it's important to just start from scratch for new PRs.
-    - name: ♻️ Restore yarn install state
-      uses: actions/cache@v3
+    - name: ♻️ Restore yarn's install state
+      uses: actions/cache@v4
       with:
         path: .yarn/install-state.gz
-        key: yarn-install-state-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        key: yarn-install-state-${{ runner.os }}-${{ hashFiles('package.json', 'yarn.lock', '.yarnrc.yml') }}
+        save-always: true
 
     - name: ♻️ Restore node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
-        path: '**/node_modules'
-        key: yarn-node-modules-${{ runner.os }}-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+        path: node_modules
+        key: yarn-node-modules-${{ runner.os }}-${{ hashFiles('package.json', 'yarn.lock', '.yarnrc.yml') }}
+        save-always: true

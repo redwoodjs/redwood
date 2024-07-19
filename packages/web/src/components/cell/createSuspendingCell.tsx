@@ -1,22 +1,22 @@
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 
-import type { QueryReference } from '@apollo/client'
-import { useApolloClient } from '@apollo/client'
+import type { OperationVariables, QueryReference } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react/hooks/hooks.cjs'
 
-import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider'
+import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider.js'
 
 /**
  * This is part of how we let users swap out their GraphQL client while staying compatible with Cells.
  */
-import type { FallbackProps } from './CellErrorBoundary'
-import { CellErrorBoundary } from './CellErrorBoundary'
+import type { FallbackProps } from './CellErrorBoundary.js'
+import { CellErrorBoundary } from './CellErrorBoundary.js'
 import type {
   CreateCellProps,
   DataObject,
   SuspendingSuccessProps,
   SuspenseCellQueryResult,
-} from './cellTypes'
-import { isDataEmpty } from './isCellEmpty'
+} from './cellTypes.js'
+import { isDataEmpty } from './isCellEmpty.js'
 
 type AnyObj = Record<string, unknown>
 /**
@@ -26,9 +26,9 @@ type AnyObj = Record<string, unknown>
  */
 export function createSuspendingCell<
   CellProps extends AnyObj,
-  CellVariables extends AnyObj
+  CellVariables extends AnyObj,
 >(
-  createCellProps: CreateCellProps<AnyObj, CellVariables> // 👈 AnyObj, because using CellProps causes a TS error
+  createCellProps: CreateCellProps<AnyObj, CellVariables>, // 👈 AnyObj, because using CellProps causes a TS error
 ): React.FC<CellProps> {
   const {
     QUERY,
@@ -112,9 +112,9 @@ export function createSuspendingCell<
 
       const queryResultWithErrorReset = {
         ...suspenseQueryResult,
-        refetch: () => {
+        refetch: (variables: Partial<OperationVariables> | undefined) => {
           resetErrorBoundary()
-          return suspenseQueryResult.refetch?.()
+          return suspenseQueryResult.refetch?.(variables)
         },
       }
 
@@ -129,7 +129,7 @@ export function createSuspendingCell<
 
     const wrapInSuspenseIfLoadingPresent = (
       suspendingSuccessElement: React.ReactNode,
-      LoadingComponent: typeof Loading
+      LoadingComponent: typeof Loading,
     ) => {
       if (!LoadingComponent) {
         return suspendingSuccessElement
@@ -154,7 +154,7 @@ export function createSuspendingCell<
             queryRef={queryRef as QueryReference<DataObject>}
             suspenseQueryResult={suspenseQueryResult}
           />,
-          Loading
+          Loading,
         )}
       </CellErrorBoundary>
     )

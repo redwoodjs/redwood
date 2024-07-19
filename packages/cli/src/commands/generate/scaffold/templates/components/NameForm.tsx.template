@@ -1,3 +1,6 @@
+import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
 import {
   Form,
   FormError,
@@ -6,10 +9,6 @@ import {
   ${fieldsToImport.join(',\n  ')},
   Submit,
 } from '@redwoodjs/forms'
-
-import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
-import type { RWGqlError } from '@redwoodjs/forms'
-
 
 <% if (fieldsToImport.includes('DatetimeLocalField')) { %>
 const formatDatetime = (value) => {
@@ -69,7 +68,7 @@ const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
               ${idName}="${singularCamelName}-${column.name}-none"
               name="${column.name}"
               defaultValue=""
-              ${column.defaultProp}={!props.spot?.spotType}
+              ${column.defaultProp}={!props.${singularCamelName}?.${column.name}}
               className="rw-input"
               errorClassName="rw-input rw-input-error"
             />

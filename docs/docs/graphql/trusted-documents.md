@@ -4,7 +4,7 @@ RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/g
 
 Use trusted documents if your GraphQL API is only for your own app (which is the case for most GraphQL APIs) for a massively decreased attack-surface, increased performance, and decreased bandwidth usage.
 
-At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you can then send "document id" or "hash" instead of the whole document; only accept requests with a known document id.
+At app build time, Redwood will extract the GraphQL documents (queries, etc) and make them available to the server. At run time, you must then send "document id" or "hash" instead of the whole document as the server will only accept requests with a known document id.
 
 This prevents malicious attackers from executing arbitrary GraphQL thus helping with unwanted resolver traversal or information leaking.
 
@@ -84,14 +84,19 @@ See how the `76308e971322b1ece4cdff75185bb61d7139e343` hash ids match?
 
 Now, when the client requests to make a query for `76308e971322b1ece4cdff75185bb61d7139e343`, the GraphQL server knows to execute the corresponding query associated with that hash.
 
-This means that because queries are pre-generated and the hash ids ***must match**, there is no way for any un-trusted or ad-hock queries to get executed by the GraphQL server.
+This means that because queries are pre-generated and the hash ids **must match**, there is no way for any un-trusted or ad-hoc queries to get executed by the GraphQL server.
 
-Thus preventing unwanted queries or GraphQl traversal attacks,
+Thus preventing unwanted queries or GraphQL traversal attacks,
 
 * Configure RedwoodJS to use Trusted Documents via `redwood.toml`
 * Configure the GraphQL Server
 
 ## Configure Trusted Documents
+
+Below are instructions to manually configure Trusted Documents in your RedwoodJS project.
+
+Alternatively, you can use the `yarn redwood setup graphql trusted-documents` [CLI setup command](../cli-commands.md#setup-graphql-trusted-docs).
+
 
 ### Configure redwood.toml
 
@@ -112,6 +117,8 @@ Setting `trustedDocuments` to true will
 As part of GraphQL type and codegen, the `trustedDocumentsStore` is created in `api/src/lib`.
 
 This is the same information that is created in `web/src/graphql/persisted-documents.json` but wrapped in a `store` that can be easily imported and passed to the GraphQL Handler.
+
+#### Store
 
 To enable trusted documents, configure `trustedDocuments` with the store.
 
@@ -135,9 +142,23 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-If you'd like to customize the message when a query is not permitted, you can set the `persistedQueryOnly` configuration setting in `customErrors`:
+#### Disable
+
+You can disable the trustedDocuments `useRedwoodTrustedDocuments` plugin. The `store` is then optional.
 
 ```
+  trustedDocuments: {
+    disabled: true,
+  }
+```
+
+#### Custom Errors
+
+The `persistedQueryOnly` error message defaults to `'Use Trusted Only!'`.
+
+If you'd like to customize the message when a query is not permitted, you can set the `persistedQueryOnly` configuration setting in `customErrors`:
+
+```ts
   trustedDocuments: {
     store,
     customErrors: {
@@ -145,3 +166,60 @@ If you'd like to customize the message when a query is not permitted, you can se
     },
   }
 ```
+
+You can also define a function to returns a `GraphQLError`. This function has access to the `payload`.
+
+```ts
+  trustedDocuments: {
+    store,
+    customErrors: {
+      persistedQueryOnly: (payload) => {
+        console.log('payload', payload)
+        return new GraphQLError('Sorry!')
+      },
+    },
+  }
+```
+
+In addition to the `persistedQueryOnly` custom error option, you can define error message for:
+
+  * `notFound` - Error to be thrown when the persisted operation is not found
+  * `keyNotFound` - Error to be thrown when the extraction of the persisted operation id failed
+
+
+#### Skipping validation of persisted operations
+
+If you validate your persisted operations while building your store, we recommend to skip the validation on the server. So this will reduce the work done by the server and the latency of the requests.
+
+```
+  trustedDocuments: {
+    store,
+    skipDocumentValidation: true,
+  }
+```
+
+
+#### Allowing arbitrary GraphQL operations
+
+Sometimes it is handy to allow non-persisted operations aside from the persisted ones. E.g. you want to allow developers to execute arbitrary GraphQL operations on your production server.
+
+:::note Info
+To support authentication, the `redwood.currentUser` query is always allowed.
+
+Even if you define `allowArbitraryOperations` the plugin will always check for this request, so you don't need to add this check to any custom logic.
+:::
+
+This can be achieved using the `allowArbitraryOperations` option.
+
+:::warning Important
+Override this option with caution! 
+:::
+
+For example, you can get a header from the request and allow:
+
+```ts
+allowArbitraryOperations: (request) =>  {
+    return request.headers.get('x-allow-arbitrary-operations') === 'true'
+} 
+```
+

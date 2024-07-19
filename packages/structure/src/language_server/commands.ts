@@ -56,7 +56,7 @@ export class CommandsManager {
       cmd.processed.startsWith('storybook --open')
     ) {
       vscodeWindowMethods.showInformationMessage(
-        'not implemented yet: $ redwood ' + cmd.processed
+        'not implemented yet: $ redwood ' + cmd.processed,
       )
       return
     }

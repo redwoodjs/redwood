@@ -1,35 +1,44 @@
-import fs from 'fs'
-import path from 'path'
+import { vi, test, expect } from 'vitest'
 
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 
 import * as nftPacker from '../packing/nft'
 
-const FIXTURE_PATH = path.resolve(
-  __dirname,
-  '../../../../../../__fixtures__/example-todo-main'
-)
-
-let functionDistFiles
-
-beforeAll(() => {
-  process.env.RWJS_CWD = FIXTURE_PATH
-
-  // Actually build the fixture, if we need it
-  if (!fs.existsSync(path.join(FIXTURE_PATH, 'api/dist/functions'))) {
-    buildApi()
+vi.mock('@vercel/nft', () => {
+  return {
+    nodeFileTrace: vi.fn(),
   }
-
-  functionDistFiles = findApiDistFunctions()
 })
 
-afterAll(() => {
-  delete process.env.RWJS_CWD
+vi.mock('@redwoodjs/internal/dist/files', () => {
+  return {
+    findApiDistFunctions: () => {
+      return [
+        '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/api/dist/functions/graphql.js',
+        '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/api/dist/functions/healthz/healthz.js',
+        '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/api/dist/functions/invalid/x.js',
+        '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/api/dist/functions/nested/nested.js',
+        '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/api/dist/functions/x/index.js',
+      ]
+    },
+  }
+})
+
+vi.mock('@redwoodjs/project-config', () => {
+  return {
+    getPaths: () => {
+      return {
+        base: '/Users/carmack/dev/redwood/__fixtures__/example-todo-main/',
+      }
+    },
+    ensurePosixPath: (path) => {
+      return path.replace(/\\/g, '/')
+    },
+  }
 })
 
 test('Check packager detects all functions', () => {
-  const packageFileMock = jest
+  const packageFileMock = vi
     .spyOn(nftPacker, 'packageSingleFunction')
     .mockResolvedValue(true)
 
@@ -39,33 +48,33 @@ test('Check packager detects all functions', () => {
 })
 
 test('Creates entry file for nested functions correctly', () => {
-  const nestedFunction = functionDistFiles.find((fPath) =>
-    fPath.includes('nested')
+  const nestedFunction = findApiDistFunctions().find((fPath) =>
+    fPath.includes('nested'),
   )
 
   const [outputPath, content] = nftPacker.generateEntryFile(
     nestedFunction,
-    'nested'
+    'nested',
   )
 
   expect(outputPath).toBe('./api/dist/zipball/nested/nested.js')
   expect(content).toMatchInlineSnapshot(
-    `"module.exports = require('./api/dist/functions/nested/nested.js')"`
+    `"module.exports = require('./api/dist/functions/nested/nested.js')"`,
   )
 })
 
 test('Creates entry file for top level functions correctly', () => {
-  const graphqlFunction = functionDistFiles.find((fPath) =>
-    fPath.includes('graphql')
+  const graphqlFunction = findApiDistFunctions().find((fPath) =>
+    fPath.includes('graphql'),
   )
 
   const [outputPath, content] = nftPacker.generateEntryFile(
     graphqlFunction,
-    'graphql'
+    'graphql',
   )
 
   expect(outputPath).toBe('./api/dist/zipball/graphql/graphql.js')
   expect(content).toMatchInlineSnapshot(
-    `"module.exports = require('./api/dist/functions/graphql.js')"`
+    `"module.exports = require('./api/dist/functions/graphql.js')"`,
   )
 })

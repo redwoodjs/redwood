@@ -21,7 +21,7 @@ import {
   validateName,
 } from '../helpers'
 
-export const files = ({ name, typescript = false, type, tests }) => {
+export const files = async ({ name, typescript = false, type, tests }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
   }
@@ -34,7 +34,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
 
   const outputFilename = `${camelName}.${typescript ? 'ts' : 'js'}`
 
-  const directiveFile = templateForComponentFile({
+  const directiveFile = await templateForComponentFile({
     name,
     extension: typescript ? '.ts' : '.js',
     generator: 'directive',
@@ -50,7 +50,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
       typescript ? 'ts' : 'js'
     }`
 
-    const testFile = templateForComponentFile({
+    const testFile = await templateForComponentFile({
       name,
       extension: typescript ? '.test.ts' : '.test.js',
       generator: 'directive',
@@ -58,7 +58,7 @@ export const files = ({ name, typescript = false, type, tests }) => {
       outputPath: path.join(
         getPaths().api.directives,
         camelName,
-        testOutputFilename
+        testOutputFilename,
       ),
       templateVars: { camelName },
     })
@@ -70,14 +70,18 @@ export const files = ({ name, typescript = false, type, tests }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const positionalsObj = {
@@ -110,19 +114,20 @@ export const handler = async (args) => {
     rollback: args.rollback,
   })
 
-  const POST_RUN_INSTRUCTIONS = `Next steps...\n\n   ${c.warning(
-    'After modifying your directive, you can add it to your SDLs e.g.:'
-  )}
+  let notes = ''
+  const POST_RUN_INSTRUCTIONS = `
+   ${c.note('After modifying your directive, you can add it to your SDLs e.g.:')}
+
     ${c.info('// example todo.sdl.js')}
     ${c.info('# Option A: Add it to a field')}
     type Todo {
       id: Int!
-      body: String! ${c.green(`@${args.name}`)}
+      body: String! ${c.tip(`@${args.name}`)}
     }
 
     ${c.info('# Option B: Add it to query/mutation')}
     type Query {
-      todos: [Todo] ${c.green(`@${args.name}`)}
+      todos: [Todo] ${c.tip(`@${args.name}`)}
     }
 `
 
@@ -158,8 +163,9 @@ export const handler = async (args) => {
     [
       {
         title: 'Generating directive file ...',
-        task: () => {
-          return writeFilesTask(files({ ...args, type: directiveType }), {
+        task: async () => {
+          const f = await files({ ...args, type: directiveType })
+          return writeFilesTask(f, {
             overwriteExisting: args.force,
           })
         },
@@ -182,12 +188,15 @@ export const handler = async (args) => {
       },
       {
         title: 'Next steps...',
-        task: (_ctx, task) => {
-          task.title = POST_RUN_INSTRUCTIONS
+        task: () => {
+          // Can't do this, since it strips formatting
+          // task.title = POST_RUN_INSTRUCTIONS
+          // Instead we just console.log the instructions at the end
+          notes = POST_RUN_INSTRUCTIONS
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {
@@ -195,6 +204,9 @@ export const handler = async (args) => {
       prepareForRollback(tasks)
     }
     await tasks.run()
+    if (notes) {
+      console.log(notes)
+    }
   } catch (e) {
     console.log(c.error(e.message))
     process.exit(1)

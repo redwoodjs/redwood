@@ -13,7 +13,10 @@ import type { RWProject } from './RWProject'
 import { RWSDLField } from './RWSDLField'
 
 export class RWSDL extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
   /**
@@ -74,7 +77,7 @@ export class RWSDL extends FileNode {
       yield err(
         this.uri,
         "Each SDL file must export a variable named 'schema' with a GraphQL schema string",
-        RWError.SCHEMA_NOT_DEFINED
+        RWError.SCHEMA_NOT_DEFINED,
       )
     }
   }

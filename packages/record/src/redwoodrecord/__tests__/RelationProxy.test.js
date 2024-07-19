@@ -1,8 +1,10 @@
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest'
+
 import datamodel from '../__fixtures__/datamodel.js'
 import RedwoodRecord from '../RedwoodRecord'
 import RelationProxy from '../RelationProxy'
 
-const db = { user: jest.fn() }
+const db = { user: vi.fn() }
 
 class Post extends RedwoodRecord {}
 class User extends RedwoodRecord {}
@@ -17,7 +19,7 @@ Comment.schema = datamodel
 Category.db = db
 Category.schema = datamodel
 
-globalThis.console.warn = jest.fn()
+globalThis.console.warn = vi.fn()
 
 beforeEach(() => {
   db.user.mockClear()
@@ -28,7 +30,7 @@ beforeEach(() => {
 
 afterEach(() => {
   globalThis.console.warn.mockClear()
-  jest.restoreAllMocks()
+  vi.restoreAllMocks()
 })
 
 describe('belongsTo', () => {
@@ -50,9 +52,9 @@ describe('belongsTo', () => {
   })
 
   it('created method returns a belongsTo a record', async () => {
-    jest
-      .spyOn(User, 'findBy')
-      .mockImplementation(() => User.build({ id: 1, name: 'Rob' }))
+    vi.spyOn(User, 'findBy').mockImplementation(() =>
+      User.build({ id: 1, name: 'Rob' }),
+    )
     const record = new Post()
     record.userId = 1
 
@@ -95,10 +97,10 @@ describe('hasMany', () => {
   })
 
   it('create hasMany record linked by foreign key', async () => {
-    jest.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
-    jest
-      .spyOn(Post, 'create')
-      .mockImplementation(() => User.build({ id: 1, userId: 1 }))
+    vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
+    vi.spyOn(Post, 'create').mockImplementation(() =>
+      User.build({ id: 1, userId: 1 }),
+    )
 
     const user = await User.find(1)
     const newPost = await user.posts.create({
@@ -110,14 +112,14 @@ describe('hasMany', () => {
         userId: 1,
         title: 'My second post',
       },
-      {}
+      {},
     )
     expect(newPost.userId).toEqual(user.id)
   })
 
   it('fetches related records with find()', async () => {
-    jest.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
-    jest.spyOn(Post, 'findBy').mockImplementation(() => Post.build({ id: 2 }))
+    vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
+    vi.spyOn(Post, 'findBy').mockImplementation(() => Post.build({ id: 2 }))
 
     const record = await User.find(1)
     const post = await record.posts.find(2)
@@ -127,10 +129,10 @@ describe('hasMany', () => {
   })
 
   it('fetches related records with findBy()', async () => {
-    jest.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
-    jest
-      .spyOn(Post, 'findBy')
-      .mockImplementation(() => Post.build({ id: 2, title: 'New' }))
+    vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
+    vi.spyOn(Post, 'findBy').mockImplementation(() =>
+      Post.build({ id: 2, title: 'New' }),
+    )
 
     const record = await User.find(1)
     const post = await record.posts.findBy({ title: 'New' })
@@ -140,8 +142,8 @@ describe('hasMany', () => {
   })
 
   it('fetches related records with where()', async () => {
-    jest.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
-    jest.spyOn(Post, 'where').mockImplementation(() => [Post.build({ id: 2 })])
+    vi.spyOn(User, 'find').mockImplementation(() => User.build({ id: 1 }))
+    vi.spyOn(Post, 'where').mockImplementation(() => [Post.build({ id: 2 })])
 
     const record = await User.find(1)
     const posts = await record.posts.where()
@@ -169,10 +171,10 @@ describe('implicit many-to-many', () => {
   })
 
   it('create connects manyToMany record', async () => {
-    jest.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
-    jest
-      .spyOn(Category, 'create')
-      .mockImplementation(() => Category.build({ id: 2, name: 'Sample' }))
+    vi.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
+    vi.spyOn(Category, 'create').mockImplementation(() =>
+      Category.build({ id: 2, name: 'Sample' }),
+    )
 
     const post = await Post.find(1)
     const newCategory = await post.categories.create({ name: 'Sample' })
@@ -184,17 +186,17 @@ describe('implicit many-to-many', () => {
           connect: [{ id: 1 }],
         },
       },
-      {}
+      {},
     )
 
     expect(newCategory.id).toEqual(2)
   })
 
   it('fetches related records with find()', async () => {
-    jest.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
-    jest
-      .spyOn(Category, 'findBy')
-      .mockImplementation(() => Category.build({ id: 2, name: 'Cat' }))
+    vi.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
+    vi.spyOn(Category, 'findBy').mockImplementation(() =>
+      Category.build({ id: 2, name: 'Cat' }),
+    )
 
     const record = await Post.find(1)
     const category = await record.categories.find(2)
@@ -206,16 +208,16 @@ describe('implicit many-to-many', () => {
           some: { id: 1 },
         },
       },
-      {}
+      {},
     )
     expect(category.id).toEqual(2)
   })
 
   it('fetches related records with where()', async () => {
-    jest.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
-    jest
-      .spyOn(Category, 'where')
-      .mockImplementation(() => [Category.build({ id: 2, name: 'Cat' })])
+    vi.spyOn(Post, 'find').mockImplementation(() => Post.build({ id: 1 }))
+    vi.spyOn(Category, 'where').mockImplementation(() => [
+      Category.build({ id: 2, name: 'Cat' }),
+    ])
 
     const record = await Post.find(1)
     const categories = await record.categories.where()
@@ -226,7 +228,7 @@ describe('implicit many-to-many', () => {
           some: { id: 1 },
         },
       },
-      {}
+      {},
     )
     expect(categories.length).toEqual(1)
     expect(categories[0].id).toEqual(2)

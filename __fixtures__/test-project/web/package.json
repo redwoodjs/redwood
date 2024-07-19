@@ -11,22 +11,22 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "6.0.7",
-    "@redwoodjs/forms": "6.0.7",
-    "@redwoodjs/router": "6.0.7",
-    "@redwoodjs/web": "6.0.7",
+    "@redwoodjs/auth-dbauth-web": "7.0.0",
+    "@redwoodjs/forms": "7.0.0",
+    "@redwoodjs/router": "7.0.0",
+    "@redwoodjs/web": "7.0.0",
     "humanize-string": "2.1.0",
-    "react": "0.0.0-experimental-e5205658f-20230913",
-    "react-dom": "0.0.0-experimental-e5205658f-20230913"
+    "react": "19.0.0-beta-04b058868c-20240508",
+    "react-dom": "19.0.0-beta-04b058868c-20240508"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "6.0.7",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "postcss-loader": "^7.3.3",
-    "prettier-plugin-tailwindcss": "0.4.1",
-    "tailwindcss": "^3.3.6"
+    "@redwoodjs/vite": "7.0.0",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.12",
+    "tailwindcss": "^3.4.4"
   }
 }

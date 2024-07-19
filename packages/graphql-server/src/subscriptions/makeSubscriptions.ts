@@ -17,7 +17,7 @@ export type RedwoodSubscription = {
 }
 
 export const makeSubscriptions = (
-  SubscriptionGlobs: SubscriptionGlobImports
+  SubscriptionGlobs: SubscriptionGlobImports,
 ): RedwoodSubscription[] => {
   return Object.entries(SubscriptionGlobs).flatMap(
     ([importedGlobName, exports]) => {
@@ -35,6 +35,6 @@ export const makeSubscriptions = (
       } as RedwoodSubscription
 
       return [subscription]
-    }
+    },
   )
 }

@@ -1,7 +1,7 @@
 // These are normally auto-imported by babel
 import React from 'react'
 
-import gql from 'graphql-tag'
+import { gql } from 'graphql-tag'
 import { describe, expect, test } from 'tstyche'
 
 import type { CellProps, CellSuccessProps } from '@redwoodjs/web'
@@ -68,7 +68,7 @@ describe('CellProps mapper type', () => {
         ExampleQueryVariables
       >
 
-      expect<CellInputs>().type.toBeAssignable({
+      expect<CellInputs>().type.toBeAssignableWith({
         customProp: 55,
         category: 'Dinner',
         saved: true,
@@ -83,7 +83,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expect<CellWithoutVariablesInputs>().type.toBeAssignable({
+      expect<CellWithoutVariablesInputs>().type.toBeAssignableWith({
         customProp: 55,
       })
     })
@@ -91,6 +91,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ word }: { word: string }) => {
@@ -111,13 +112,14 @@ describe('CellProps mapper type', () => {
       >
 
       // Note that the gql variables are no longer required here
-      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignableWith({
         word: 'abracadabra',
         customProp: 99,
       })
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ fetchPolicy }: { fetchPolicy: string }) => {
@@ -134,7 +136,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignableWith({
         fetchPolicy: 'cache-only',
         customProp: 55,
       })
@@ -143,6 +145,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has no arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {
@@ -163,12 +166,13 @@ describe('CellProps mapper type', () => {
       >
 
       // Note that the gql variables are no longer required here
-      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignableWith({
         customProp: 99,
       })
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {
@@ -185,7 +189,7 @@ describe('CellProps mapper type', () => {
         EmptyVariables
       >
 
-      expect<CellWithBeforeQueryInputs>().type.toBeAssignable({
+      expect<CellWithBeforeQueryInputs>().type.toBeAssignableWith({
         customProp: 55,
       })
     })

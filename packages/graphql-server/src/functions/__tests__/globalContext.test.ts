@@ -1,5 +1,5 @@
-import { context as globalContext, setContext } from '../../globalContext'
-import { getAsyncStoreInstance } from '../../globalContextStore'
+import { context as globalContext, setContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 
 describe('Global context with context isolation', () => {
   it('Should work when assigning directly into context', async () => {

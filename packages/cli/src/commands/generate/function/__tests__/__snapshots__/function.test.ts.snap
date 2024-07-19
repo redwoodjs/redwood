@@ -1,6 +1,47 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Single word default files creates a single word function file 1`] = `
+exports[`Single word default files > creates a single word function file > Scenario snapshot 1`] = `
+"export const standard = defineScenario({
+  // Define the "fixture" to write into your test database here
+  // See guide: https://redwoodjs.com/docs/testing#scenarios
+})
+"
+`;
+
+exports[`Single word default files > creates a single word function file > Test snapshot 1`] = `
+"import { mockHttpEvent, mockContext } from '@redwoodjs/testing/api'
+
+import { handler } from './foo'
+
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-functions
+
+describe('foo function', () => {
+  it('Should respond with 200', async () => {
+    const httpEvent = mockHttpEvent({
+      queryStringParameters: {
+        id: '42', // Add parameters here
+      },
+    })
+
+    const response = await handler(httpEvent, mockContext())
+    const { data } = JSON.parse(response.body)
+
+    expect(response.statusCode).toBe(200)
+    expect(data).toBe('foo function')
+  })
+
+  // You can also use scenarios to test your api functions
+  // See guide here: https://redwoodjs.com/docs/testing#scenarios
+  //
+  // scenario('Scenario test', async () => {
+  //
+  // })
+})
+"
+`;
+
+exports[`Single word default files > creates a single word function file 1`] = `
 "import { logger } from 'src/lib/logger'
 
 /**
@@ -16,7 +57,7 @@ exports[`Single word default files creates a single word function file 1`] = `
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
  * @param { APIGatewayEvent } event - an object which contains information from the invoker.
- * @param { Context } context - contains information about the invocation,
+ * @param { Context } _context - contains information about the invocation,
  * function, and execution environment.
  */
 export const handler = async (event, _context) => {
@@ -32,47 +73,6 @@ export const handler = async (event, _context) => {
     }),
   }
 }
-"
-`;
-
-exports[`Single word default files creates a single word function file: Scenario snapshot 1`] = `
-"export const standard = defineScenario({
-  // Define the "fixture" to write into your test database here
-  // See guide: https://redwoodjs.com/docs/testing#scenarios
-})
-"
-`;
-
-exports[`Single word default files creates a single word function file: Test snapshot 1`] = `
-"import { mockHttpEvent } from '@redwoodjs/testing/api'
-
-import { handler } from './foo'
-
-//   Improve this test with help from the Redwood Testing Doc:
-//    https://redwoodjs.com/docs/testing#testing-functions
-
-describe('foo function', () => {
-  it('Should respond with 200', async () => {
-    const httpEvent = mockHttpEvent({
-      queryStringParameters: {
-        id: '42', // Add parameters here
-      },
-    })
-
-    const response = await handler(httpEvent, null)
-    const { data } = JSON.parse(response.body)
-
-    expect(response.statusCode).toBe(200)
-    expect(data).toBe('foo function')
-  })
-
-  // You can also use scenarios to test your api functions
-  // See guide here: https://redwoodjs.com/docs/testing#scenarios
-  //
-  // scenario('Scenario test', async () => {
-  //
-  // })
-})
 "
 `;
 
@@ -92,7 +92,7 @@ exports[`creates a .js file if --javascript=true 1`] = `
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
  * @param { APIGatewayEvent } event - an object which contains information from the invoker.
- * @param { Context } context - contains information about the invocation,
+ * @param { Context } _context - contains information about the invocation,
  * function, and execution environment.
  */
 export const handler = async (event, _context) => {
@@ -129,7 +129,7 @@ import { logger } from 'src/lib/logger'
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
  * @param { APIGatewayEvent } event - an object which contains information from the invoker.
- * @param { Context } context - contains information about the invocation,
+ * @param { Context } _context - contains information about the invocation,
  * function, and execution environment.
  */
 export const handler = async (event: APIGatewayEvent, _context: Context) => {
@@ -164,7 +164,7 @@ exports[`creates a multi word function file 1`] = `
  * @typedef { import('aws-lambda').APIGatewayEvent } APIGatewayEvent
  * @typedef { import('aws-lambda').Context } Context
  * @param { APIGatewayEvent } event - an object which contains information from the invoker.
- * @param { Context } context - contains information about the invocation,
+ * @param { Context } _context - contains information about the invocation,
  * function, and execution environment.
  */
 export const handler = async (event, _context) => {

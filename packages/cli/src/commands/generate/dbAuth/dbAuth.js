@@ -1,8 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
 import { camelCase } from 'camel-case'
 import Enquirer from 'enquirer'
+import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 import { titleCase } from 'title-case'
@@ -29,40 +30,52 @@ const ROUTES = [
   `<Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />`,
 ]
 
-const POST_INSTALL =
-  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-  `   You'll need to tell your pages where to redirect after a user has logged in,\n` +
-  `   signed up, or reset their password. Look in LoginPage, SignupPage,\n` +
-  `   ForgotPasswordPage and ResetPasswordPage for these lines: \n\n` +
-  `     if (isAuthenticated) {\n` +
-  `       navigate(routes.home())\n` +
-  `     }\n\n` +
-  `   and change the route to where you want them to go if the user is already\n` +
-  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
-  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
-  `   those forms.\n\n` +
-  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
-  `   app setup by running:\n\n` +
-  `     yarn rw setup auth dbAuth\n\n` +
-  `   Happy authenticating!\n`
+function getPostInstallMessage(isDbAuthSetup) {
+  return [
+    `   ${c.warning("Pages created! But you're not done yet:")}\n`,
+    "   You'll need to tell your pages where to redirect after a user has logged in,",
+    '   signed up, or reset their password. Look in LoginPage, SignupPage,',
+    '   ForgotPasswordPage and ResetPasswordPage for these lines: \n',
+    '     if (isAuthenticated) {',
+    '       navigate(routes.home())',
+    '     }\n',
+    '   and change the route to where you want them to go if the user is already',
+    '   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage',
+    '   and ResetPasswordPage to change where the user redirects to after submitting',
+    '   those forms.\n',
+    !isDbAuthSetup &&
+      "   Oh, and if you haven't already, add the necessary dbAuth functions and\n" +
+        '   app setup by running:\n\n' +
+        '     yarn rw setup auth dbAuth\n',
+    '   Happy authenticating!',
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
 
-const WEBAUTHN_POST_INSTALL =
-  `   ${c.warning("Pages created! But you're not done yet:")}\n\n` +
-  "   You'll need to tell your pages where to redirect after a user has logged in,\n" +
-  '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`\n' +
-  `   constant and change the route if it's something other than home().\n` +
-  `   In SignupPage, ForgotPasswordPage and ResetPasswordPage look for these lines:\n\n` +
-  `     if (isAuthenticated) {\n` +
-  `       navigate(routes.home())\n` +
-  `     }\n\n` +
-  `   and change the route to where you want them to go if the user is already\n` +
-  `   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage\n` +
-  `   and ResetPasswordPage to change where the user redirects to after submitting\n` +
-  `   those forms.\n\n` +
-  `   Oh, and if you haven't already, add the necessary dbAuth functions and\n` +
-  `   app setup by running:\n\n` +
-  `     yarn rw setup auth dbAuth\n\n` +
-  `   Happy authenticating!\n`
+function getPostInstallWebauthnMessage(isDbAuthSetup) {
+  return [
+    `   ${c.warning("Pages created! But you're not done yet:")}\n`,
+    "   You'll need to tell your pages where to redirect after a user has logged in,",
+    '   signed up, or reset their password. In LoginPage, look for the `REDIRECT`',
+    "   constant and change the route if it's something other than home().",
+    '   In SignupPage, ForgotPasswordPage and ResetPasswordPage look for these lines:\n',
+    '     if (isAuthenticated) {',
+    '       navigate(routes.home())',
+    '     }\n',
+    '   and change the route to where you want them to go if the user is already',
+    '   logged in. Also take a look in the onSubmit() functions in ForgotPasswordPage',
+    '   and ResetPasswordPage to change where the user redirects to after submitting',
+    '   those forms.\n',
+    !isDbAuthSetup &&
+      "   Oh, and if you haven't already, add the necessary dbAuth functions and\n" +
+        '   app setup by running:\n\n' +
+        '     yarn rw setup auth dbAuth\n',
+    '   Happy authenticating!',
+  ]
+    .filter(Boolean)
+    .join('\n')
+}
 
 export const command = 'dbAuth'
 export const description =
@@ -113,8 +126,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup'
-      )}`
+        'https://redwoodjs.com/docs/authentication#self-hosted-auth-installation-and-setup',
+      )}`,
     )
 
   // Merge generator defaults in
@@ -123,7 +136,7 @@ export const builder = (yargs) => {
   })
 }
 
-export const files = ({
+export const files = async ({
   _tests,
   typescript,
   skipForgot,
@@ -150,7 +163,7 @@ export const files = ({
 
   if (!skipForgot) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ForgotPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -158,13 +171,13 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'forgotPassword.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipLogin) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Login',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -174,13 +187,13 @@ export const files = ({
           ? 'login.webAuthn.tsx.template'
           : 'login.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipReset) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'ResetPassword',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -188,13 +201,13 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'resetPassword.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
   if (!skipSignup) {
     files.push(
-      templateForComponentFile({
+      await templateForComponentFile({
         name: 'Signup',
         suffix: 'Page',
         extension: typescript ? '.tsx' : '.jsx',
@@ -202,7 +215,7 @@ export const files = ({
         generator: 'dbAuth',
         templatePath: 'signup.tsx.template',
         templateVars,
-      })
+      }),
     )
   }
 
@@ -214,29 +227,31 @@ export const files = ({
   // add scaffold CSS file if it doesn't exist already
   const scaffoldOutputPath = path.join(getPaths().web.src, 'scaffold.css')
   if (!fs.existsSync(scaffoldOutputPath)) {
-    const scaffoldTemplate = generateTemplate(
+    const scaffoldTemplate = await generateTemplate(
       path.join(
         __dirname,
-        '../scaffold/templates/assets/scaffold.css.template'
+        '../scaffold/templates/assets/scaffold.css.template',
       ),
-      { name: 'scaffold' }
+      { name: 'scaffold' },
     )
 
     files.push([scaffoldOutputPath, scaffoldTemplate])
   }
 
-  return files.reduce((acc, [outputPath, content]) => {
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     let template = content
 
     if (outputPath.match(/\.[jt]sx?/) && !typescript) {
-      template = transformTSToJS(outputPath, content)
+      template = await transformTSToJS(outputPath, content)
     }
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const tasks = ({
@@ -267,7 +282,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (usernameLabel) {
                   subtask.skip(
-                    `Argument username-label is set, using: "${usernameLabel}"`
+                    `Argument username-label is set, using: "${usernameLabel}"`,
                   )
                   return
                 }
@@ -285,7 +300,7 @@ const tasks = ({
               task: async (subctx, subtask) => {
                 if (passwordLabel) {
                   subtask.skip(
-                    `Argument password-label passed, using: "${passwordLabel}"`
+                    `Argument password-label passed, using: "${passwordLabel}"`,
                   )
                   return
                 }
@@ -305,44 +320,71 @@ const tasks = ({
         title: 'Querying WebAuthn addition...',
         task: async (ctx, task) => {
           if (webauthn != null) {
+            // We enter here if the user passed the `--webauthn` flag. The flag
+            // always takes precedence.
+
+            ctx.webauthn = webauthn
+
             task.skip(
-              `Querying WebAuthn addition: argument webauthn passed, WebAuthn ${
-                webauthn ? '' : 'not'
-              } included`
+              `Querying WebAuthn addition: argument webauthn passed, WebAuthn${
+                webauthn ? '' : ' not'
+              } included`,
             )
             return
           }
+
+          if (isDbAuthSetup()) {
+            if (isWebAuthnEnabled()) {
+              ctx.webauthn = webauthn = true
+
+              task.skip(
+                'Querying WebAuthn addition: WebAuthn setup detected - ' +
+                  'support will be included in pages',
+              )
+            } else {
+              ctx.webauthn = webauthn = false
+
+              task.skip(
+                'Querying WebAuthn addition: No WebAuthn setup detected - ' +
+                  'support will not be included in pages',
+              )
+            }
+
+            return
+          }
+
           const response = await task.prompt({
             type: 'confirm',
             name: 'answer',
             message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
             default: false,
           })
-          webauthn = response
-          task.title = `Querying WebAuthn addition: WebAuthn addition ${
-            webauthn ? '' : 'not'
+
+          ctx.webauthn = webauthn = response
+
+          task.title = `Querying WebAuthn addition: WebAuthn addition${
+            webauthn ? '' : ' not'
           } included`
         },
       },
       {
         title: 'Creating pages...',
         task: async () => {
-          return writeFilesTask(
-            files({
-              tests,
-              typescript,
-              skipForgot,
-              skipLogin,
-              skipReset,
-              skipSignup,
-              webauthn,
-              usernameLabel,
-              passwordLabel,
-            }),
-            {
-              overwriteExisting: force,
-            }
-          )
+          const filesObj = await files({
+            tests,
+            typescript,
+            skipForgot,
+            skipLogin,
+            skipReset,
+            skipSignup,
+            webauthn,
+            usernameLabel,
+            passwordLabel,
+          })
+
+          return writeFilesTask(filesObj, {
+            overwriteExisting: force,
+          })
         },
       },
       {
@@ -354,6 +396,12 @@ const tasks = ({
       {
         title: 'Adding scaffold import...',
         task: () => addScaffoldImport(),
+      },
+      {
+        title: 'Generate types...',
+        task: () => {
+          execa.commandSync('yarn rw g types')
+        },
       },
       {
         title: 'One more thing...',
@@ -369,7 +417,7 @@ const tasks = ({
       rendererOptions: { collapseSubtasks: false },
       injectWrapper: { enquirer: enquirer || new Enquirer() },
       exitOnError: true,
-    }
+    },
   )
 }
 
@@ -391,9 +439,44 @@ export const handler = async (yargs) => {
       prepareForRollback(t)
     }
     await t.run()
+
     console.log('')
-    console.log(yargs.webauthn ? WEBAUTHN_POST_INSTALL : POST_INSTALL)
+    console.log(
+      yargs.webauthn || t.ctx.webauthn
+        ? getPostInstallWebauthnMessage(isDbAuthSetup())
+        : getPostInstallMessage(isDbAuthSetup()),
+    )
   } catch (e) {
     console.log(c.error(e.message))
   }
+}
+
+function isDbAuthSetup() {
+  const extensions = ['ts', 'js', 'tsx', 'jsx']
+  const webAuthExtension = extensions.find((ext) =>
+    fs.existsSync(path.join(getPaths().web.src, 'auth.' + ext)),
+  )
+
+  // If no `auth.ext` file was found auth is not set up
+  if (webAuthExtension) {
+    const webAuthPath = path.join(
+      getPaths().web.src,
+      'auth.' + webAuthExtension,
+    )
+
+    return /^import (.*) from ['"]@redwoodjs\/auth-dbauth-web['"]/m.test(
+      fs.readFileSync(webAuthPath),
+    )
+  }
+
+  return false
+}
+
+function isWebAuthnEnabled() {
+  const webPackageJson = fs.readFileSync(
+    path.join(getPaths().web.base, 'package.json'),
+    'utf-8',
+  )
+
+  return webPackageJson.includes('"@simplewebauthn/browser": ')
 }

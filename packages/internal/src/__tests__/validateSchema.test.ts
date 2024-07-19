@@ -1,10 +1,12 @@
 import path from 'path'
 
+import { beforeAll, afterAll, test, expect } from 'vitest'
+
 import { loadAndValidateSdls } from '../validateSchema'
 
 const FIXTURE_PATH = path.resolve(
   __dirname,
-  '../../../../__fixtures__/example-todo-main'
+  '../../../../__fixtures__/example-todo-main',
 )
 
 beforeAll(() => {

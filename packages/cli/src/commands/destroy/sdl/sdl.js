@@ -29,12 +29,12 @@ export const tasks = ({ model }) =>
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const handler = async ({ model }) => {
   recordTelemetryAttributes({
-    command: 'destory sdl',
+    command: 'destroy sdl',
   })
   try {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })

@@ -1,8 +1,8 @@
 import * as apolloClient from '@apollo/client'
 import type { UseFragmentResult } from '@apollo/client'
-import type { FragmentRegistryAPI } from '@apollo/client/cache'
-import { createFragmentRegistry } from '@apollo/client/cache'
-import { getFragmentDefinitions } from '@apollo/client/utilities'
+import { createFragmentRegistry } from '@apollo/client/cache/cache.cjs'
+import type { FragmentRegistryAPI } from '@apollo/client/cache/index.js'
+import { getFragmentDefinitions } from '@apollo/client/utilities/utilities.cjs'
 import type { DocumentNode } from 'graphql'
 
 export type FragmentIdentifier = string | number
@@ -17,7 +17,7 @@ export type RegisterFragmentResult = {
   typename: string
   getCacheKey: (id: FragmentIdentifier) => CacheKey
   useRegisteredFragment: <TData = any>(
-    id: FragmentIdentifier
+    id: FragmentIdentifier,
   ) => UseFragmentResult<TData>
 }
 
@@ -46,7 +46,7 @@ const getTypenameFromFragment = (fragment: DocumentNode): string => {
  */
 const useRegisteredFragmentHook = <TData = any>(
   fragment: DocumentNode,
-  id: string | number
+  id: string | number,
 ): UseFragmentResult<TData> => {
   const from = { __typename: getTypenameFromFragment(fragment), id }
 
@@ -88,7 +88,7 @@ export const registerFragments = (fragments: DocumentNode[]) => {
  * @see https://www.apollographql.com/docs/react/data/fragments/#registering-named-fragments-using-createfragmentregistry
  */
 export const registerFragment = (
-  fragment: DocumentNode
+  fragment: DocumentNode,
 ): RegisterFragmentResult => {
   fragmentRegistry.register(fragment)
 
@@ -99,7 +99,7 @@ export const registerFragment = (
   }
 
   const useRegisteredFragment = <TData = any>(
-    id: FragmentIdentifier
+    id: FragmentIdentifier,
   ): UseFragmentResult<TData> => {
     return useRegisteredFragmentHook<TData>(fragment, id)
   }

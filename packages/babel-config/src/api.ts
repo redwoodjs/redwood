@@ -1,25 +1,31 @@
-import fs from 'fs'
+import { existsSync } from 'fs'
+import fs from 'fs/promises'
 import path from 'path'
 
-import { transform } from '@babel/core'
-import type { PluginItem, TransformOptions } from '@babel/core'
+import type { PluginOptions, PluginTarget, TransformOptions } from '@babel/core'
+import { transformAsync } from '@babel/core'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, projectSideIsEsm } from '@redwoodjs/project-config'
 
 import type { RegisterHookOptions } from './common'
 import {
-  registerBabel,
   CORE_JS_VERSION,
   RUNTIME_CORE_JS_VERSION,
   getCommonPlugins,
-  parseTypeScriptConfigFiles,
   getPathsFromTypeScriptConfig,
+  parseTypeScriptConfigFiles,
+  registerBabel,
 } from './common'
+import pluginRedwoodContextWrapping from './plugins/babel-plugin-redwood-context-wrapping'
+import pluginRedwoodDirectoryNamedImport from './plugins/babel-plugin-redwood-directory-named-import'
+import pluginRedwoodGraphqlOptionsExtract from './plugins/babel-plugin-redwood-graphql-options-extract'
+import pluginRedwoodImportDir from './plugins/babel-plugin-redwood-import-dir'
+import pluginRedwoodOTelWrapping from './plugins/babel-plugin-redwood-otel-wrapping'
 
 export const TARGETS_NODE = '20.10'
 
 export const getApiSideBabelPresets = (
-  { presetEnv } = { presetEnv: false }
+  { presetEnv } = { presetEnv: false },
 ) => {
   return [
     [
@@ -65,17 +71,21 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
   version: RUNTIME_CORE_JS_VERSION,
 }
 
-export const getApiSideBabelPlugins = (
-  { openTelemetry } = {
-    openTelemetry: false,
-  }
-) => {
-  // Plugin shape: [ ["Target", "Options", "name"] ],
-  // a custom "name" is supplied so that user's do not accidentally overwrite
-  // Redwood's own plugins when they specify their own.
+// Plugin shape: [ ["Target", "Options", "name"] ],
+// a custom "name" can be supplied so that user's do not accidentally overwrite
+// Redwood's own plugins when they specify their own.
+export type PluginList = Array<PluginShape>
+type PluginShape =
+  | [PluginTarget, PluginOptions, undefined | string]
+  | [PluginTarget, PluginOptions]
+
+export const getApiSideBabelPlugins = ({
+  openTelemetry = false,
+  projectIsEsm = false,
+} = {}) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
-  const plugins: TransformOptions['plugins'] = [
+  const plugins: Array<PluginShape | boolean> = [
     ...getCommonPlugins(),
     // Needed to support `/** @jsxImportSource custom-jsx-library */`
     // comments in JSX files
@@ -87,7 +97,7 @@ export const getApiSideBabelPlugins = (
         alias: {
           src: './src',
           // adds the paths from [ts|js]config.json to the module resolver
-          ...getPathsFromTypeScriptConfig(tsConfig.api),
+          ...getPathsFromTypeScriptConfig(tsConfig.api, getPaths().api.base),
         },
         root: [getPaths().api.base],
         cwd: 'packagejson',
@@ -96,7 +106,7 @@ export const getApiSideBabelPlugins = (
       'rwjs-api-module-resolver',
     ],
     [
-      require('./plugins/babel-plugin-redwood-directory-named-import').default,
+      pluginRedwoodDirectoryNamedImport,
       undefined,
       'rwjs-babel-directory-named-modules',
     ],
@@ -110,9 +120,9 @@ export const getApiSideBabelPlugins = (
             path: 'graphql-tag',
           },
           {
-            // import { context } from '@redwoodjs/graphql-server'
+            // import { context } from '@redwoodjs/context'
             members: ['context'],
-            path: '@redwoodjs/graphql-server',
+            path: '@redwoodjs/context',
           },
         ],
       },
@@ -121,33 +131,62 @@ export const getApiSideBabelPlugins = (
     // FIXME: `graphql-tag` is not working: https://github.com/redwoodjs/redwood/pull/3193
     ['babel-plugin-graphql-tag', undefined, 'rwjs-babel-graphql-tag'],
     [
-      require('./plugins/babel-plugin-redwood-import-dir').default,
-      undefined,
+      pluginRedwoodImportDir,
+      {
+        projectIsEsm,
+      },
       'rwjs-babel-glob-import-dir',
     ],
     openTelemetry && [
-      require('./plugins/babel-plugin-redwood-otel-wrapping').default,
+      pluginRedwoodOTelWrapping,
       undefined,
       'rwjs-babel-otel-wrapping',
     ],
-  ].filter(Boolean) as PluginItem[]
+  ]
 
-  return plugins
+  return plugins.filter(Boolean) as PluginList // ts doesn't play nice with filter(Boolean)
 }
 
 export const getApiSideBabelConfigPath = () => {
   const p = path.join(getPaths().api.base, 'babel.config.js')
-  if (fs.existsSync(p)) {
+  if (existsSync(p)) {
     return p
   } else {
-    return undefined
+    return
   }
 }
 
-export const getApiSideDefaultBabelConfig = () => {
+export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
+  const overrides = [
+    // Extract graphql options from the graphql function
+    // NOTE: this must come before the context wrapping
+    {
+      // match */api/src/functions/graphql.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/])graphql\.(?:js|ts)$/,
+      plugins: [pluginRedwoodGraphqlOptionsExtract],
+    },
+    // Apply context wrapping to all functions
+    {
+      // match */api/src/functions/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])functions(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [
+        [
+          pluginRedwoodContextWrapping,
+          {
+            projectIsEsm,
+          },
+        ],
+      ],
+    },
+  ].filter(Boolean)
+  return overrides as TransformOptions[]
+}
+
+export const getApiSideDefaultBabelConfig = ({ projectIsEsm = false } = {}) => {
   return {
     presets: getApiSideBabelPresets(),
-    plugins: getApiSideBabelPlugins(),
+    plugins: getApiSideBabelPlugins({ projectIsEsm }),
+    overrides: getApiSideBabelOverrides({ projectIsEsm }),
     extends: getApiSideBabelConfigPath(),
     babelrc: false,
     ignore: ['node_modules'],
@@ -159,7 +198,9 @@ export const registerApiSideBabelHook = ({
   plugins = [],
   ...rest
 }: RegisterHookOptions = {}) => {
-  const defaultOptions = getApiSideDefaultBabelConfig()
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectSideIsEsm('api'),
+  })
 
   registerBabel({
     ...defaultOptions,
@@ -173,44 +214,16 @@ export const registerApiSideBabelHook = ({
   })
 }
 
-export const prebuildApiFile = (
+export const transformWithBabel = async (
   srcPath: string,
-  // we need to know dstPath as well
-  // so we can generate an inline, relative sourcemap
-  dstPath: string,
-  plugins: TransformOptions['plugins']
+  plugins: TransformOptions['plugins'],
 ) => {
-  const code = fs.readFileSync(srcPath, 'utf-8')
-  const defaultOptions = getApiSideDefaultBabelConfig()
-
-  const result = transform(code, {
-    ...defaultOptions,
-    cwd: getPaths().api.base,
-    filename: srcPath,
-    // we set the sourceFile (for the sourcemap) as a correct, relative path
-    // this is why this function (prebuildFile) must know about the dstPath
-    sourceFileName: path.relative(path.dirname(dstPath), srcPath),
-    // we need inline sourcemaps at this level
-    // because this file will eventually be fed to esbuild
-    // when esbuild finds an inline sourcemap, it tries to "combine" it
-    // so the final sourcemap (the one that esbuild generates) combines both mappings
-    sourceMaps: 'inline',
-    plugins,
+  const code = await fs.readFile(srcPath, 'utf-8')
+  const defaultOptions = getApiSideDefaultBabelConfig({
+    projectIsEsm: projectSideIsEsm('api'),
   })
-  return result
-}
 
-// TODO (STREAMING) I changed the prebuildApiFile function in https://github.com/redwoodjs/redwood/pull/7672/files
-// but we had to revert. For this branch temporarily, I'm going to add a new function
-// This is used in building routeHooks
-export const transformWithBabel = (
-  srcPath: string,
-  plugins: TransformOptions['plugins']
-) => {
-  const code = fs.readFileSync(srcPath, 'utf-8')
-  const defaultOptions = getApiSideDefaultBabelConfig()
-
-  const result = transform(code, {
+  const result = transformAsync(code, {
     ...defaultOptions,
     cwd: getPaths().api.base,
     filename: srcPath,
@@ -221,5 +234,6 @@ export const transformWithBabel = (
     sourceMaps: 'inline',
     plugins,
   })
+
   return result
 }

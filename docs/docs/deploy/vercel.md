@@ -39,6 +39,16 @@ This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
 
 Follow the steps in the [Prisma and Database](./introduction#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
 
+:::info
+
+If you're using Vercel Postgres, you may want to limit certain Prisma operations when you deploy. For example, if you're on the Hobby plan, there are some storage and write limits that you can mitigate by turning the Prisma and data migration steps off during deploy and only enabling them on a case-by-case basis when needed:
+
+```
+yarn rw deploy vercel --prisma=false --data-migrate=false
+```
+
+:::
+
 ### Vercel Initial Setup and Configuration
 Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
 
@@ -74,17 +84,54 @@ From the Vercel Dashboard you can access the full settings and information for y
 
 From now on, each time you push code to your git repo, Vercel will automatically trigger a deploy of the new code. You can also manually redeploy if you select "Deployments", then the specific deployment from the list, and finally the "Redeploy" option from the vertical dots menu next to "Visit".
 
-## vercel.json configuration
+## Configuration
 
-By default, API requests in Vercel have a timeout limit of 15 seconds. To extend this duration, you can modify the vercel.json file by inserting the code snippet provided below. Please be aware that the ability to increase the timeout limit is exclusive to Pro plan subscribers. Additionally, it is important to note that the timeout can be increased up to a maximum of 300 seconds, which is equivalent to 5 minutes.
+You can use `vercel.json` to configure and override the default behavior of Vercel from within your project. For [`functions`](#functions), you should configure in code directly and not in `vercel.json`.
 
-```
-{
-  "functions": {
-    "api/src/functions/graphql.*": {
-      "maxDuration": 120,
-      "runtime": "@vercel/redwood@2.0.5"
-    }
+### Project
+
+The [`vercel.json` configuration file](https://vercel.com/docs/projects/project-configuration#configuring-projects-with-vercel.json) lets you configure, and override the default behavior of Vercel from within your project such as rewrites or headers.
+
+### Functions
+
+By default, API requests in Vercel have a timeout limit of 15 seconds, but can be configured to be up to 90 seconds. Pro and other plans allow for longer [duration](https://vercel.com/docs/functions/runtimes#max-duration) and larger [memory-size limits](https://vercel.com/docs/functions/runtimes#memory-size-limits).
+
+To change the `maxDuration` or `memory` per function, export a `config` with the settings you want applied in your function. For example:
+
+```ts
+import type { APIGatewayEvent, Context } from 'aws-lambda'
+
+import { logger } from 'src/lib/logger'
+
+export const config = {
+  maxDuration: 30,
+  memory: 512,
+}
+
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
+  logger.info(`${event.httpMethod} ${event.path}: vercel function`)
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: 'vercel function',
+    }),
   }
 }
+
 ```
+
+:::tip important
+Since Redwood has it's own handling of the api directory, the Vercel flavored api directory is disabled. Therefore you don't use the "functions" config in `vercel.json` with Redwood.
+
+Also, be sure to use Node version 20.x or greater or set the `runtime` in the function config:
+```ts
+export const config = {
+  runtime: 'nodejs20.x',
+}
+```
+
+:::

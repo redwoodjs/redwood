@@ -82,15 +82,15 @@ describe('webAuthn', () => {
     expect(mockOpen).toBeCalledWith(
       'GET',
       `${globalThis.RWJS_API_URL}/auth?method=webAuthnAuthOptions`,
-      false
+      false,
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
       `${globalThis.RWJS_API_URL}/auth`,
-      false
+      false,
     )
     expect(mockSend).toBeCalledWith(
-      expect.stringMatching(/"method":"webAuthnAuthenticate"/)
+      expect.stringMatching(/"method":"webAuthnAuthenticate"/),
     )
     expect(mockOpen).toHaveBeenCalledTimes(2)
   })
@@ -103,15 +103,15 @@ describe('webAuthn', () => {
     expect(mockOpen).toBeCalledWith(
       'GET',
       '/.redwood/functions/webauthn?method=webAuthnAuthOptions',
-      false
+      false,
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
       '/.redwood/functions/webauthn',
-      false
+      false,
     )
     expect(mockSend).toBeCalledWith(
-      expect.stringMatching(/"method":"webAuthnAuthenticate"/)
+      expect.stringMatching(/"method":"webAuthnAuthenticate"/),
     )
     expect(mockOpen).toHaveBeenCalledTimes(2)
   })
@@ -123,15 +123,15 @@ describe('webAuthn', () => {
     expect(mockOpen).toBeCalledWith(
       'GET',
       `${globalThis.RWJS_API_URL}/auth?method=webAuthnRegOptions`,
-      false
+      false,
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
       `${globalThis.RWJS_API_URL}/auth`,
-      false
+      false,
     )
     expect(mockSend).toBeCalledWith(
-      expect.stringMatching(/"method":"webAuthnRegister"/)
+      expect.stringMatching(/"method":"webAuthnRegister"/),
     )
     expect(mockOpen).toHaveBeenCalledTimes(2)
   })
@@ -144,15 +144,15 @@ describe('webAuthn', () => {
     expect(mockOpen).toBeCalledWith(
       'GET',
       '/.redwood/functions/webauthn?method=webAuthnRegOptions',
-      false
+      false,
     )
     expect(mockOpen).toBeCalledWith(
       'POST',
       '/.redwood/functions/webauthn',
-      false
+      false,
     )
     expect(mockSend).toBeCalledWith(
-      expect.stringMatching(/"method":"webAuthnRegister"/)
+      expect.stringMatching(/"method":"webAuthnRegister"/),
     )
     expect(mockOpen).toHaveBeenCalledTimes(2)
   })

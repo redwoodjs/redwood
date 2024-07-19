@@ -29,8 +29,8 @@ type CellPropsVariables<Cell, GQLVariables> = Cell extends {
     ? Record<string, unknown>
     : Parameters<Cell['beforeQuery']>[0]
   : GQLVariables extends Record<string, never>
-  ? unknown
-  : GQLVariables
+    ? unknown
+    : GQLVariables
 /**
  * Cell component props which is the combination of query variables and Success props.
  */
@@ -39,7 +39,7 @@ export type CellProps<
   CellSuccess extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
   GQLResult,
   CellType,
-  GQLVariables
+  GQLVariables,
 > = A.Compute<
   Omit<
     ComponentProps<CellSuccess>,
@@ -81,9 +81,8 @@ type KeyCount<T extends object> = L.Length<U.ListOf<O.SelectKeys<T, any>>>
 // NOTE: This only holds true for Cells as Redwood generates them. If the user
 // removes the <Empty> component, or provides their own isEmpty implementation
 // there's no way for us to know what the data will look like.
-type ConditionallyGuaranteed<T extends object> = KeyCount<T> extends 1
-  ? Guaranteed<T>
-  : T
+type ConditionallyGuaranteed<T extends object> =
+  KeyCount<T> extends 1 ? Guaranteed<T> : T
 
 /**
  * @params TData = Type of data based on your graphql query. This can be imported from 'types/graphql'
@@ -105,7 +104,7 @@ export type CellSuccessData<TData = any> = ConditionallyGuaranteed<
 
 export type CellSuccessProps<
   TData = any,
-  TVariables extends OperationVariables = any
+  TVariables extends OperationVariables = any,
 > = {
   queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
   updating?: boolean
@@ -166,7 +165,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
     response: DataObject,
     options: {
       isDataEmpty: (data: DataObject) => boolean
-    }
+    },
   ) => boolean
   /**
    * If the query's in flight and there's no stale data, render this.
@@ -199,7 +198,7 @@ export type SuspendingSuccessProps = React.PropsWithChildren<
 }
 
 export type NonSuspenseCellQueryResult<
-  TVariables extends OperationVariables = any
+  TVariables extends OperationVariables = any,
 > = Partial<
   Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
 >
@@ -208,30 +207,10 @@ export type NonSuspenseCellQueryResult<
 // This is just the extra things returned from useXQuery hooks
 export interface SuspenseCellQueryResult<
   _TData = any,
-  _TVariables extends OperationVariables = any
+  _TVariables extends OperationVariables = any,
 > extends UseBackgroundQueryResult {
   client: ApolloClient<any>
   // fetchMore & refetch  come from UseBackgroundQueryResult
-
-  // not supplied in Error and Failure
-  // because it's implicit in these components, but the one edgecase is showing a different loader when refetching
   networkStatus?: NetworkStatus
-  called: boolean // can we assume if we have a queryRef its called?
-
-  // Stuff not here compared to useQuery:
-  // observable: ObservableQuery<TData, TVariables> // Lenz: internal implementation detail, should not be required anymore
-  // previousData?: TData,  // emulating suspense, not required in the new Suspense model
-
-  // ObservableQueryFields 👇
-  //  subscribeToMore ~ returned from useSuspenseQuery but not useReadQuery. Apollo team **may** expose from useReadQuery.
-  //  updateQuery <~ May not be necessary in the Suspense model
-  //  refetch ~ <~ refetch signature is different in useQuery vs useSuspenseQuery. Apollo team need an internal discussion.
-  //  reobserve <~ avoid
-  //  variables <~ variables passed to the query, useful if you updated the variables using updateQuery or refetch. Apollo team need an internal discussion.
-
-  // Polling: Apollo team are not ready to expose Polling yet. Unlikely to be shipped in the next few months.
-  // But possible to re-implement this in a different way using setInternal or client.startPolling
-  //  startPolling
-  //  stopPolling
-  // ~~~
+  called: boolean // set if queryRef present
 }

@@ -94,12 +94,12 @@ export default BlogLayout
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       <p>
         This site was created to demonstrate my mastery of Redwood: Look on my
@@ -118,12 +118,12 @@ export default AboutPage
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       <p>
         This site was created to demonstrate my mastery of Redwood: Look on my
@@ -144,12 +144,12 @@ export default AboutPage
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       Home
     </>
   )
@@ -162,12 +162,12 @@ export default HomePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       Home
     </>
   )
@@ -347,12 +347,12 @@ And then we can remove the extra "Return to Home" link (and Link/routes import) 
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.jsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       <p>
         This site was created to demonstrate my mastery of Redwood: Look on my
@@ -369,12 +369,12 @@ export default AboutPage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/AboutPage/AboutPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
     <>
-      <MetaTags title="About" description="About page" />
+      <Metadata title="About" description="About page" />
 
       <p>
         This site was created to demonstrate my mastery of Redwood: Look on my

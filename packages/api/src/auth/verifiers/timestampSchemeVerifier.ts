@@ -139,7 +139,7 @@ const verifySignature = ({
  *
  */
 const timestampSchemeVerifier = (
-  options?: VerifyOptions
+  options?: VerifyOptions,
 ): TimestampSchemeVerifier => {
   return {
     sign: ({ payload, secret }) => {

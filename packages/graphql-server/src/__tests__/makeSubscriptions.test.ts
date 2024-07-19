@@ -27,7 +27,7 @@ describe('Should map subscription globs to defined structure correctly', () => {
           async *subscribe(_, { from, interval }) {
             for (let i = from; i >= 0; i--) {
               await new Promise((resolve) =>
-                setTimeout(resolve, interval ?? 1000)
+                setTimeout(resolve, interval ?? 1000),
               )
               yield { countdown: i }
             }

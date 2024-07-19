@@ -17,7 +17,7 @@ export const plugin: PluginFunction<
 > = (
   schema: GraphQLSchema,
   _documents: Types.DocumentFile[],
-  config: TypeScriptResolversPluginConfig
+  config: TypeScriptResolversPluginConfig,
 ) => {
   // This is the key change compared to the standard typescript-resolver
   // plugin implementation - we use our own Visitor here.
@@ -71,14 +71,14 @@ export const plugin: PluginFunction<
   const visitorResultStart = splitContent.indexOf(
     visitorResult.definitions
       .filter((d: unknown) => typeof d === 'string')[0]
-      .split('\n')[0]
+      .split('\n')[0],
   )
 
   const splitRootResolver = visitor.getRootResolver().split('\n')
   const visitorResultEnd = splitContent.findIndex(
     (line: string, index: number) =>
       line === splitRootResolver[0] &&
-      splitContent[index + 1] === splitRootResolver[1]
+      splitContent[index + 1] === splitRootResolver[1],
   )
 
   // Building up `content` with the original visitor content replaced by our

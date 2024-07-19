@@ -8,7 +8,7 @@ Search Engine Optimization is a dark art that some folks dedicate their entire l
 
 ## Adding a Title
 
-You certainly want to change the title of your Redwood app from the default of "Redwood App." You can start by adding or modifing `title` inside of `/redwood.toml`
+You certainly want to change the title of your Redwood app from the default of "Redwood App." You can start by adding or modifying `title` inside of `/redwood.toml`
 
 ```diff title=redwood.toml
 [web]
@@ -19,13 +19,13 @@ You certainly want to change the title of your Redwood app from the default of "
 ```
 
 This title (the app title) is used by default for all your pages if you don't define another one.
-It will also be use for the title template.
+It will also be used for the title template.
 
 ### Title Template
 
 Now that you have the app title set, you probably want some consistence with the page title, that's what the title template is for.
 
-Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every pages
+Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every page.
 
 ```diff title=web/src/App.(tsx|jsx)
 -  <RedwoodProvider>
@@ -48,7 +48,7 @@ You can use whatever formatting you'd like in here. Some examples:
 
 So you want to change the title of your page, or add elements to the `<head>` of the page? We've got you!
 
-Let's say you want to change the title of your About page, Redwood provides a built in `<Head>` component, which you can use like this:
+Let's say you want to change the title of your About page, Redwood provides a built-in `<Head>` component, which you can use like this:
 
 ```diff title=web/src/pages/AboutPage/AboutPage.(tsx|jsx)
 +import { Head } from '@redwoodjs/web'
@@ -62,11 +62,11 @@ const AboutPage = () => {
 +     </Head>
 ```
 
-You can include any valid `<head>` tag in here that you like. However, Redwood also provides we also have a utility component [&lt;Metadata&gt;](#setting-meta-tags-and-opengraph-directives-with-metadata).
+You can include any valid `<head>` tag in here that you like. However, Redwood also provides a utility component [&lt;Metadata&gt;](#setting-meta-tags-and-opengraph-directives-with-metadata).
 
 :::caution `<MetaTags>` Deprecation
 
-Prior to Redwood 7.0 this component was called `<MetaTags>` and had several special hard-coded props like `ogContentUrl`, which didn't properly map to the OpenGraph spec. We'll still render `<MetaTags>` for the foreseeable future, but it is deprecated and should migrate to `<Metadata>` if you have an existing app.
+Prior to Redwood 6.6.0 this component was called `<MetaTags>` and had several special hard-coded props like `ogContentUrl`, which didn't properly map to the OpenGraph spec. We'll still render `<MetaTags>` for the foreseeable future, but it's deprecated and you should migrate to `<Metadata>` if you have an existing app.
 
 :::
 
@@ -78,20 +78,20 @@ For example, if you set title in your Layout, and a title in your Page, it'll re
 
 :::info Bots & `<meta>` Tags
 
-For these headers to appear to bots and scrapers e.g. for twitter to show your title, you have to make sure your page is prerendered. If your content is static you can use Redwood's built in [Prerender](prerender.md). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
+For these headers to appear to bots and scrapers e.g. for twitter to show your title, you have to make sure your page is prerendered. If your content is static you can use Redwood's built-in [Prerender](prerender.md). For dynamic tags, check the [Dynamic head tags](#dynamic-tags)
 
 :::
 
 ## Setting `<meta>` Tags and OpenGraph Directives with `<Metadata>`
 
-Often we want to set more than just the title and description of the page—most commonly [OpenGraph](https://ogp.me/) headers.
+Often we want to set more than just the title and description of the page – most commonly [OpenGraph](https://ogp.me/) headers.
 
-Redwood provides a convenience component `<Metadata>` to help you create most of these `<meta>` tags for you swith a more concise syntax. But, you can also pass children and define any custom content that you want.
+Redwood provides a convenience component `<Metadata>` to help you create most of these `<meta>` tags for you with a more concise syntax. But, you can also pass children and define any custom content that you want.
 
 Here's an example setting some common meta, including a page title, description, `og:image` and an `http-equiv`:
 
 ```jsx
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 const AboutPage = () => {
   return (
@@ -129,7 +129,7 @@ This code would be transformed into this HTML and injected into the `<head>` tag
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 ```
 
-Setting an `og:image` is how sites like Facebook and Slack can show a preview of a URL when pasted into a post (also known an "unfurling"):
+Setting an `og:image` is how sites like Facebook and Slack can show a preview of a URL when pasted into a post (also known as "unfurling"):
 
 ![Typical URL unfurl](/img/facebook_unfurl.png)
 
@@ -227,7 +227,7 @@ If you define _any_ `og` prop, we will copy any `title` and `description` to an 
 <meta property="og:title" content="My Website" />
 ```
 
-You can override this behavior by explictly setting `og:title` or `og:description` to `null`:
+You can override this behavior by explicitly setting `og:title` or `og:description` to `null`:
 
 ```jsx
 <Metadata title="My Website" og={{ title: null }}/>
@@ -272,7 +272,7 @@ If you define a `charSet` prop we will create a `<meta>` tag with the `charset` 
 <meta charset="utf-8" />
 ```
 
-We simplifed some of the examples above by excluding the generated `<title>` and `og:type` tags, so here's the real output if you included `title` and `og` props:
+We simplified some of the examples above by excluding the generated `<title>` and `og:type` tags, so here's the real output if you included `title` and `og` props:
 
 ```jsx
 <Metadata title="My Website" og />

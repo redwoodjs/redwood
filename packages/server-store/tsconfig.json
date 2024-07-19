@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../auth/tsconfig.build.json" },
+    { "path": "../cookie-jar" },
+    { "path": "../framework-tools" }
+  ]
+}

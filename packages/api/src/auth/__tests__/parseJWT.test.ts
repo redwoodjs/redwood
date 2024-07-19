@@ -1,3 +1,5 @@
+import { describe, test, expect } from 'vitest'
+
 import { parseJWT } from '../parseJWT'
 
 const JWT_CLAIMS: Record<string, unknown> = {

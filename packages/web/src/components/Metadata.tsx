@@ -1,10 +1,14 @@
+'use client'
+
 import React from 'react'
 
-import { Head as HelmetHead } from '../index'
+import * as helmetPkg from 'react-helmet-async'
+
+const { Helmet: HelmetHead } = helmetPkg
 
 // Ideally we wouldn't include this for non experiment builds
 // But.... not worth the effort to remove it from bundle atm
-import PortalHead from './PortalHead'
+import PortalHead from './PortalHead.js'
 
 type ValueOrCollection<T> = T | ValueOrCollection<T>[] | Record<string, T>
 type ParentValue = ValueOrCollection<string>
@@ -14,7 +18,7 @@ const EXCLUDE_PROPS = ['charSet']
 const propToMetaTag = (
   parentKey: string,
   parentValue: ParentValue,
-  options: { attr: 'name' | 'property' }
+  options: { attr: 'name' | 'property' },
 ): JSX.Element | JSX.Element[] => {
   if (Array.isArray(parentValue)) {
     // array of attributes
@@ -39,7 +43,7 @@ const propToMetaTag = (
 }
 
 /**
- * Add commonly used <meta> tags for unfurling/seo purposes
+ * Add commonly used `<meta>` tags for unfurling/seo purposes
  * using the open graph protocol https://ogp.me/
  * @example
  * <Metadata title="About Page" og={{ image: "/static/about-og.png" }} />
@@ -58,7 +62,7 @@ export const Metadata = (props: Record<string, any>) => {
       ([key, value]) =>
         !EXCLUDE_PROPS.includes(key) &&
         value !== null &&
-        (key !== 'og' || value !== true)
+        (key !== 'og' || value !== true),
     )
     .flatMap(([key, value]) => {
       return propToMetaTag(key, value, { attr: 'name' })
@@ -92,7 +96,7 @@ export const Metadata = (props: Record<string, any>) => {
       metaProps.og.description !== null
     ) {
       tags.push(
-        <meta property="og:description" content={metaProps.description} />
+        <meta property="og:description" content={metaProps.description} />,
       )
     }
 
