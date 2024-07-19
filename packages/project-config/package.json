@@ -45,7 +45,7 @@
     "@arethetypeswrong/cli": "0.15.3",
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
-    "publint": "0.2.8",
+    "publint": "0.2.9",
     "rimraf": "5.0.7",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
