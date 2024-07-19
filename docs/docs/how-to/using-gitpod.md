@@ -29,7 +29,7 @@ What's going on behind the scenes:
   - [VS Code GraphQL](https://github.com/redwoodjs/starter/blob/main)
 - It runs our **Create Redwood App** which will install the latest stable version of Redwood. We're setting this project to use TypeScript, however, you can [change it to JavaScript](https://github.com/redwoodjs/starter/blob/main) if you prefer.
 - It runs `yarn install`, adding all the dependencies for the project
-Changes the database to a postgres database
+- Changes the database over to Postgres
 
 Once everything is up and running, you can click on the Ports tab
 
