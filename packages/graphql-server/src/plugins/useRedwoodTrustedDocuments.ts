@@ -67,10 +67,17 @@ export const useRedwoodTrustedDocuments = (
       return options.store ? options.store[sha256Hash] : null
     },
     allowArbitraryOperations: async (request) => {
-      if (typeof options.allowArbitraryOperations === 'function') {
-        const result = await options.allowArbitraryOperations(request)
-        if (result === true) {
-          return true
+      if (options.allowArbitraryOperations !== undefined) {
+        if (typeof options.allowArbitraryOperations === 'boolean') {
+          if (options.allowArbitraryOperations) {
+            return true
+          }
+        }
+        if (typeof options.allowArbitraryOperations === 'function') {
+          const result = await options.allowArbitraryOperations(request)
+          if (result === true) {
+            return true
+          }
         }
       }
       return allowRedwoodAuthCurrentUserQuery(request)
