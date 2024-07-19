@@ -48,7 +48,7 @@
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@types/aws-lambda": "8.10.138",
+    "@types/aws-lambda": "8.10.141",
     "concurrently": "8.2.2",
     "publint": "0.2.9",
     "ts-toolbelt": "9.6.0",

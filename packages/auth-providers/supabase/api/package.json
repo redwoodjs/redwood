@@ -32,7 +32,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@types/aws-lambda": "8.10.138",
+    "@types/aws-lambda": "8.10.141",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
