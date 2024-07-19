@@ -3,6 +3,15 @@ import { describe, expect, vi, it, beforeEach } from 'vitest'
 import * as errors from '../../core/errors'
 import { RedwoodJob } from '../RedwoodJob'
 
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 describe('static config', () => {
