@@ -13,17 +13,29 @@ import { Executor } from './Executor'
 interface WorkerOptions {
   adapter: BaseAdapter
   logger?: BasicLogger
+  maxAttempts: number
+  maxRuntime: number
+  deleteFailedJobs: boolean
+  sleepDelay: number
   clear?: boolean
   processName?: string
   queue?: string | null
-  maxRuntime?: number
   waitTime?: number
   forever?: boolean
   workoff?: boolean
 }
 
-export const DEFAULT_WAIT_TIME = 5000 // 5 seconds
-export const DEFAULT_MAX_RUNTIME = 60 * 60 * 4 * 1000 // 4 hours
+export const DEFAULTS = {
+  logger: console,
+  processName: process.title,
+  queue: null,
+  maxAttempts: 24,
+  maxRuntime: 14_400, // 4 hours in seconds
+  sleepDelay: 5, // 5 seconds
+  deleteFailedJobs: false,
+  forever: true,
+  workoff: false,
+}
 
 export class Worker {
   options: WorkerOptions
@@ -32,14 +44,21 @@ export class Worker {
   clear: boolean
   processName: string
   queue: string | null
+  maxAttempts: number
   maxRuntime: number
-  waitTime: number
+  deleteFailedJobs: boolean
+  sleepDelay: number
   lastCheckTime: Date
   forever: boolean
   workoff: boolean
 
   constructor(options: WorkerOptions) {
     this.options = options
+
+    if (!options.adapter) {
+      throw new AdapterRequiredError()
+    }
+
     this.adapter = options?.adapter
     this.logger = options?.logger || console
 
@@ -47,41 +66,42 @@ export class Worker {
     this.clear = options?.clear || false
 
     // used to set the `lockedBy` field in the database
-    this.processName = options?.processName || process.title
+    this.processName = options?.processName || DEFAULTS.processName
 
     // if not given a queue name then will work on jobs in any queue
-    this.queue = options?.queue || null
+    this.queue = options?.queue || DEFAULTS.queue
+
+    // the maximum number of times to retry a failed job
+    this.maxAttempts = options.maxAttempts || DEFAULTS.maxAttempts
 
     // the maximum amount of time to let a job run
-    this.maxRuntime =
-      options?.maxRuntime === undefined
-        ? DEFAULT_MAX_RUNTIME
-        : options.maxRuntime
+    this.maxRuntime = options.maxRuntime || DEFAULTS.maxRuntime
+
+    // whether to keep failed jobs in the database after reaching maxAttempts
+    this.deleteFailedJobs =
+      options.deleteFailedJobs || DEFAULTS.deleteFailedJobs
 
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
     // maximum wait time
-    this.waitTime =
-      options?.waitTime === undefined ? DEFAULT_WAIT_TIME : options.waitTime
-
-    // keep track of the last time we checked for jobs
-    this.lastCheckTime = new Date()
+    this.sleepDelay = options.sleepDelay || DEFAULTS.sleepDelay
 
     // Set to `false` if the work loop should only run one time, regardless
     // of how many outstanding jobs there are to be worked on. The worker
     // process will set this to `false` as soon as the user hits ctrl-c so
     // any current job will complete before exiting.
-    this.forever = options?.forever === undefined ? true : options.forever
+    this.forever =
+      options?.forever === undefined ? DEFAULTS.forever : options.forever
 
     // Set to `true` if the work loop should run through all *available* jobs
     // and then quit. Serves a slightly different purpose than `forever` which
     // makes the runner exit immediately after the next loop, where as `workoff`
     // doesn't exit the loop until there are no more jobs to work on.
-    this.workoff = options?.workoff === undefined ? false : options.workoff
+    this.workoff =
+      options?.workoff === undefined ? DEFAULTS.workoff : options.workoff
 
-    if (!this.adapter) {
-      throw new AdapterRequiredError()
-    }
+    // keep track of the last time we checked for jobs
+    this.lastCheckTime = new Date()
   }
 
   // Workers run forever unless:
@@ -117,8 +137,10 @@ export class Worker {
         // TODO add timeout handling if runs for more than `this.maxRuntime`
         await new Executor({
           adapter: this.adapter,
-          job,
           logger: this.logger,
+          job,
+          maxAttempts: this.maxAttempts,
+          deleteFailedJobs: this.deleteFailedJobs,
         }).perform()
       } else if (this.workoff) {
         // If there are no jobs and we're in workoff mode, we're done
@@ -129,8 +151,8 @@ export class Worker {
       if (!job && this.forever) {
         const millsSinceLastCheck =
           new Date().getTime() - this.lastCheckTime.getTime()
-        if (millsSinceLastCheck < this.waitTime) {
-          await this.#wait(this.waitTime - millsSinceLastCheck)
+        if (millsSinceLastCheck < this.sleepDelay) {
+          await this.#wait(this.sleepDelay - millsSinceLastCheck)
         }
       }
     } while (this.forever)
