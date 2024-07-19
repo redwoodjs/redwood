@@ -53,27 +53,39 @@ const configureTeardown = async () => {
   originalTeardownOrder = deepCopy(teardownOrder)
 }
 
-let quoteStyle
-// determine what kind of quotes are needed around table names in raw SQL
-const getQuoteStyle = async () => {
+let quoteStyle, supportMultiSchema
+// Determine what kind of quotes are needed around table names in raw SQL
+// Also check if the database supports Prisma's multiSchema preview feature
+const getProjectDBInfo = async () => {
+  if (quoteStyle !== undefined && supportMultiSchema !== undefined) {
+    return { quoteStyle, supportMultiSchema }
+  }
+
   const { getConfig: getPrismaConfig } = require('@prisma/internals')
   const fs = require('fs')
 
-  if (!quoteStyle) {
-    const config = await getPrismaConfig({
-      datamodel: fs.readFileSync(dbSchemaPath).toString(),
-    })
+  const config = await getPrismaConfig({
+    datamodel: fs.readFileSync(dbSchemaPath).toString(),
+  })
 
-    switch (config.datasources?.[0]?.provider) {
-      case 'mysql':
-        quoteStyle = '`'
-        break
-      default:
-        quoteStyle = '"'
-    }
+  switch (config.datasources?.[0]?.provider) {
+    case 'mysql':
+      quoteStyle = '`'
+      supportMultiSchema = false
+      break
+    case 'postgres':
+    case 'postgresql':
+    case 'sqlserver':
+    case 'cockroachdb':
+      quoteStyle = '"'
+      supportMultiSchema = true
+      break
+    default:
+      quoteStyle = '"'
+      supportMultiSchema = false
   }
 
-  return quoteStyle
+  return { quoteStyle, supportMultiSchema }
 }
 
 const getProjectDb = () => {
@@ -154,16 +166,60 @@ const buildDescribeScenario =
     })
   }
 
+/**
+ * Function to read the schema file and extract model schema names
+ * prisma's getDMMF function doesn't return schema with table name
+ */
+const extractModelSchemas = (schemaFilePath) => {
+  const fs = require('fs')
+  const schemaContent = fs.readFileSync(schemaFilePath, { encoding: 'utf8' })
+  const modelSchemaMap = {}
+
+  // Regular expression to match model blocks and their names
+  const modelBlockRegex = /model\s+(\w+)\s+\{[^}]+\}/g
+  // Regular expression to extract the @@schema directive
+  const schemaDirectiveRegex = /@@schema\("([^"]+)"\)/
+
+  let match
+  while ((match = modelBlockRegex.exec(schemaContent)) !== null) {
+    const modelName = match[1]
+    const modelBlock = match[0]
+    const schemaMatch = modelBlock.match(schemaDirectiveRegex)
+    const schemaName = schemaMatch ? schemaMatch[1] : 'public' // Assuming 'public' for default schema
+
+    modelSchemaMap[modelName] = schemaName
+  }
+
+  return modelSchemaMap
+}
+
+function getQualifiedName(
+  modelName,
+  schemaMap,
+  quoteStyle,
+  supportMultiSchema,
+) {
+  return supportMultiSchema
+    ? `${quoteStyle}${schemaMap[modelName]}${quoteStyle}.${quoteStyle}${modelName}${quoteStyle}`
+    : `${quoteStyle}${modelName}${quoteStyle}`
+}
+
 const teardown = async () => {
   const fs = require('fs')
 
-  const quoteStyle = await getQuoteStyle()
+  const { quoteStyle, supportMultiSchema } = await getProjectDBInfo()
+  const schemaMap = supportMultiSchema ? extractModelSchemas(dbSchemaPath) : {}
 
   for (const modelName of teardownOrder) {
     try {
-      await getProjectDb().$executeRawUnsafe(
-        `DELETE FROM ${quoteStyle}${modelName}${quoteStyle}`,
+      // For database support MultiSchema, add schema prefixing
+      const qualifiedName = getQualifiedName(
+        modelName,
+        schemaMap,
+        quoteStyle,
+        supportMultiSchema,
       )
+      await getProjectDb().$executeRawUnsafe(`DELETE FROM ${qualifiedName}`)
     } catch (e) {
       const match = e.message.match(/Code: `(\d+)`/)
       if (match && FOREIGN_KEY_ERRORS.includes(parseInt(match[1]))) {
