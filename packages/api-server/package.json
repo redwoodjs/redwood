@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.138",
+    "@types/aws-lambda": "8.10.141",
     "@types/lodash": "4.17.5",
     "@types/qs": "6.9.15",
     "@types/split2": "4.2.3",
