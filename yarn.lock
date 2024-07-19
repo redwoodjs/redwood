@@ -4753,14 +4753,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/plugin-persisted-operations@npm:3.3.1":
-  version: 3.3.1
-  resolution: "@graphql-yoga/plugin-persisted-operations@npm:3.3.1"
+"@graphql-yoga/plugin-persisted-operations@npm:3.5.0":
+  version: 3.5.0
+  resolution: "@graphql-yoga/plugin-persisted-operations@npm:3.5.0"
   peerDependencies:
     "@graphql-tools/utils": ^10.0.0
     graphql: ^15.2.0 || ^16.0.0
-    graphql-yoga: ^5.3.1
-  checksum: 10c0/70fa17d2eb48e194d2b3e7ebef56cf2b03327266fdd44a8812216f48a9bac6f5dd96f9f2abc9617bb4bd6e6c9e1d371350e6560bbbd6a8a96279dd114183976e
+    graphql-yoga: ^5.5.0
+  checksum: 10c0/09abfcf6fc8f8abd2c9d168d5e8d74ad5755c1b116a34e98a2f5b9c4d8343b5e28a7ac057b21c0f12cb5437f81567a92b3a98086d5354eaf43e9ebfdb621087f
   languageName: node
   linkType: hard
 
@@ -8205,7 +8205,7 @@ __metadata:
     "@graphql-tools/merge": "npm:9.0.4"
     "@graphql-tools/schema": "npm:10.0.3"
     "@graphql-tools/utils": "npm:10.2.0"
-    "@graphql-yoga/plugin-persisted-operations": "npm:3.3.1"
+    "@graphql-yoga/plugin-persisted-operations": "npm:3.5.0"
     "@opentelemetry/api": "npm:1.8.0"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/context": "workspace:*"
