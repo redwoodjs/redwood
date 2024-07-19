@@ -59,7 +59,7 @@
     "url-loader": "4.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.5"
+    "@types/lodash": "4.17.7"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
