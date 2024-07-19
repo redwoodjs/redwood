@@ -35,8 +35,8 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/cli": "7.24.5",
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/cli": "7.24.8",
+    "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
@@ -59,7 +59,7 @@
     "url-loader": "4.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.5"
+    "@types/lodash": "4.17.7"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

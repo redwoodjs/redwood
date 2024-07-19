@@ -58,7 +58,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/dotenv-defaults": "^2.0.4",
-    "@types/lodash": "4.17.5",
+    "@types/lodash": "4.17.7",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
     "tsx": "4.15.6",
