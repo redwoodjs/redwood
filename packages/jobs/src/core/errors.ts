@@ -1,3 +1,7 @@
+import { isTypeScriptProject } from '@redwoodjs/cli-helpers'
+
+const JOBS_CONFIG_FILENAME = isTypeScriptProject() ? 'jobs.ts' : 'jobs.js'
+
 // Parent class for any RedwoodJob-related error
 export class RedwoodJobError extends Error {
   constructor(message: string) {
@@ -67,7 +71,7 @@ export class JobExportNotFoundError extends RedwoodJobError {
 export class JobsLibNotFoundError extends RedwoodJobError {
   constructor() {
     super(
-      'api/src/lib/jobs.js not found. Run `yarn rw setup jobs` to create this file and configure background jobs',
+      `api/src/lib/${JOBS_CONFIG_FILENAME} not found. Run \`yarn rw setup jobs\` to create this file and configure background jobs`,
     )
   }
 }
@@ -75,7 +79,14 @@ export class JobsLibNotFoundError extends RedwoodJobError {
 // Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js
 export class AdapterNotFoundError extends RedwoodJobError {
   constructor() {
-    super('api/src/lib/jobs.js does not export `adapter`')
+    super(`api/src/lib/${JOBS_CONFIG_FILENAME} does not export \`adapter\``)
+  }
+}
+
+// Thrown when the runner tries to import `workerConfig` from api/src/lib/jobs.js
+export class WorkerConfigNotFoundError extends RedwoodJobError {
+  constructor(name: string) {
+    super(`api/src/lib/#{JOBS_CONFIG_FILENAME} does not export \`${name}\``)
   }
 }
 
