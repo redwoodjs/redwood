@@ -4774,15 +4774,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/subscription@npm:5.0.0, @graphql-yoga/subscription@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@graphql-yoga/subscription@npm:5.0.0"
+"@graphql-yoga/subscription@npm:5.0.1, @graphql-yoga/subscription@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "@graphql-yoga/subscription@npm:5.0.1"
   dependencies:
     "@graphql-yoga/typed-event-target": "npm:^3.0.0"
     "@repeaterjs/repeater": "npm:^3.0.4"
     "@whatwg-node/events": "npm:^0.1.0"
     tslib: "npm:^2.5.2"
-  checksum: 10c0/05e2f5cb23ea2b3cfe3737cf13fb98ebb3ded8a6a8239a170a6bd65b443109595e1bf2bbef94e3b18438b63dae18761bce4225eb437420bae651131457ede8b5
+  checksum: 10c0/fccbdb1497edc085437d83127dbe6fde399b30e0277d5d6cdfc4aad16d733b00fe8b65e3d0eda3ba50250123545e59a7e684b9de5f9050721933ff1bf9950a58
   languageName: node
   linkType: hard
 
@@ -8450,7 +8450,7 @@ __metadata:
     "@graphql-yoga/plugin-defer-stream": "npm:3.3.1"
     "@graphql-yoga/plugin-graphql-sse": "npm:3.3.1"
     "@graphql-yoga/redis-event-target": "npm:3.0.0"
-    "@graphql-yoga/subscription": "npm:5.0.0"
+    "@graphql-yoga/subscription": "npm:5.0.1"
     "@n1ru4l/graphql-live-query": "npm:0.10.0"
     "@n1ru4l/in-memory-live-query-store": "npm:0.10.0"
     "@redwoodjs/framework-tools": "workspace:*"
