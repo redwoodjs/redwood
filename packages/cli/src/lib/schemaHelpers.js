@@ -3,7 +3,6 @@ import {
   getDMMF,
   getSchema as getSchemaPrisma,
 } from '@prisma/internals'
-// import fs from 'fs-extra'
 
 import { ensureUniquePlural } from './pluralHelpers'
 import { singularize, isPlural } from './rwPluralize'
@@ -130,7 +129,6 @@ export const getSchemaDefinitions = () => {
  * Returns the config info defined in `schema.prisma` (provider, datasource, etc.)
  */
 export const getSchemaConfig = () => {
-  console.log('getSchemaConfig', getPaths().api.dbSchema)
   return getConfig({
     datamodel: getDataModel(),
   })
