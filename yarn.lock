@@ -7953,7 +7953,7 @@ __metadata:
     prettier: "npm:3.3.2"
     prisma: "npm:5.15.1"
     prompts: "npm:2.4.2"
-    rimraf: "npm:5.0.7"
+    rimraf: "npm:5.0.9"
     semver: "npm:7.6.3"
     smol-toml: "npm:1.2.2"
     string-env-interpolation: "npm:1.0.1"
@@ -8059,7 +8059,7 @@ __metadata:
     null-loader: "npm:4.0.1"
     react-refresh: "npm:0.14.0"
     resolve-url-loader: "npm:5.0.0"
-    rimraf: "npm:5.0.7"
+    rimraf: "npm:5.0.9"
     style-loader: "npm:3.3.4"
     typescript: "npm:5.4.5"
     url-loader: "npm:4.1.1"
@@ -8267,7 +8267,7 @@ __metadata:
     graphql-tag: "npm:2.12.6"
     kill-port: "npm:1.6.1"
     prettier: "npm:3.3.2"
-    rimraf: "npm:5.0.7"
+    rimraf: "npm:5.0.9"
     source-map: "npm:0.7.4"
     string-env-interpolation: "npm:1.0.1"
     systeminformation: "npm:5.22.11"
@@ -8428,7 +8428,7 @@ __metadata:
     deepmerge: "npm:4.3.1"
     fast-glob: "npm:3.3.2"
     publint: "npm:0.2.9"
-    rimraf: "npm:5.0.7"
+    rimraf: "npm:5.0.9"
     smol-toml: "npm:1.2.2"
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.15.6"
@@ -26921,14 +26921,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:5.0.7":
-  version: 5.0.7
-  resolution: "rimraf@npm:5.0.7"
+"rimraf@npm:5.0.9":
+  version: 5.0.9
+  resolution: "rimraf@npm:5.0.9"
   dependencies:
     glob: "npm:^10.3.7"
   bin:
     rimraf: dist/esm/bin.mjs
-  checksum: 10c0/bd6dbfaa98ae34ce1e54d1e06045d2d63e8859d9a1979bb4a4628b652b459a2d17b17dc20ee072b034bd2d09bd691e801d24c4d9cfe94e16fdbcc8470a1d4807
+  checksum: 10c0/87374682492b9e64de9c6fcbf2c8f209c7a2cd0e9749b3732eef8a62c6f859a9ed996d46f662d9ad5dd38c2c469f8e88de56b6c509026070ee3f06369cac1bc8
   languageName: node
   linkType: hard
 
@@ -27126,7 +27126,7 @@ __metadata:
     nx: "npm:19.0.4"
     ora: "npm:7.0.1"
     prompts: "npm:2.4.2"
-    rimraf: "npm:5.0.7"
+    rimraf: "npm:5.0.9"
     tstyche: "npm:2.0.0"
     tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
