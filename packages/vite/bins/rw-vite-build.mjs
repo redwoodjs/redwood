@@ -3,8 +3,8 @@ import fs from 'node:fs'
 
 import yargsParser from 'yargs-parser'
 
-import { buildWeb } from '@redwoodjs/internal/dist/build/web.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { buildWeb } from '@redwoodjs/vite/build'
 import { buildFeServer } from '@redwoodjs/vite/buildFeServer'
 
 const rwPaths = getPaths()
@@ -16,7 +16,7 @@ const { webDir, verbose } = yargsParser(process.argv.slice(2), {
 
 if (!webDir) {
   console.error(
-    'Please pass the full path to the web side using the --webDir argument'
+    'Please pass the full path to the web side using the --webDir argument',
   )
   process.exit(1)
 }

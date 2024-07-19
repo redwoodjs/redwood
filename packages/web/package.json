@@ -17,8 +17,7 @@
     "rw": "./dist/cjs/bins/redwood.js",
     "rwfw": "./dist/cjs/bins/rwfw.js",
     "storybook": "./dist/cjs/bins/storybook.js",
-    "tsc": "./dist/cjs/bins/tsc.js",
-    "webpack": "./dist/cjs/bins/webpack.js"
+    "tsc": "./dist/cjs/bins/tsc.js"
   },
   "exports": {
     ".": {
