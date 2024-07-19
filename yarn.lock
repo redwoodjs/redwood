@@ -7215,7 +7215,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
     "@types/aws-lambda": "npm:8.10.141"
-    "@types/lodash": "npm:4.17.5"
+    "@types/lodash": "npm:4.17.7"
     "@types/qs": "npm:6.9.15"
     "@types/split2": "npm:4.2.3"
     "@types/yargs": "npm:17.0.32"
@@ -7862,7 +7862,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/telemetry": "workspace:*"
     "@types/dotenv-defaults": "npm:^2.0.4"
-    "@types/lodash": "npm:4.17.5"
+    "@types/lodash": "npm:4.17.7"
     "@types/pascalcase": "npm:1.0.3"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
@@ -8050,7 +8050,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/testing": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
-    "@types/lodash": "npm:4.17.5"
+    "@types/lodash": "npm:4.17.7"
     babel-loader: "npm:^9.1.3"
     core-js: "npm:3.37.1"
     css-loader: "npm:6.11.0"
@@ -8213,7 +8213,7 @@ __metadata:
     "@redwoodjs/realtime": "workspace:*"
     "@types/aws-lambda": "npm:8.10.141"
     "@types/jsonwebtoken": "npm:9.0.6"
-    "@types/lodash": "npm:4.17.5"
+    "@types/lodash": "npm:4.17.7"
     "@types/uuid": "npm:9.0.8"
     "@whatwg-node/fetch": "npm:0.9.17"
     core-js: "npm:3.37.1"
@@ -8537,7 +8537,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.2"
-    "@types/lodash": "npm:4.17.5"
+    "@types/lodash": "npm:4.17.7"
     "@types/node": "npm:20.12.12"
     "@types/vscode": "npm:1.90.0"
     camelcase: "npm:6.3.0"
@@ -10868,10 +10868,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.17.5, @types/lodash@npm:^4.14.167":
-  version: 4.17.5
-  resolution: "@types/lodash@npm:4.17.5"
-  checksum: 10c0/55924803ed853e72261512bd3eaf2c5b16558c3817feb0a3125ef757afe46e54b86f33d1960e40b7606c0ddab91a96f47966bf5e6006b7abfd8994c13b04b19b
+"@types/lodash@npm:4.17.7, @types/lodash@npm:^4.14.167":
+  version: 4.17.7
+  resolution: "@types/lodash@npm:4.17.7"
+  checksum: 10c0/40c965b5ffdcf7ff5c9105307ee08b782da228c01b5c0529122c554c64f6b7168fc8f11dc79aa7bae4e67e17efafaba685dc3a47e294dbf52a65ed2b67100561
   languageName: node
   linkType: hard
 
