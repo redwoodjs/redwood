@@ -47,7 +47,7 @@ export const deployHandler = async ({ build, prisma, dm: dataMigrate }) => {
 
   const joinedCommands = commandSet.join(' && ')
 
-  console.log(c.green(`\nRunning:\n`) + `${joinedCommands} \n`)
+  console.log(c.note(`\nRunning:\n`) + `${joinedCommands} \n`)
 
   return execa(joinedCommands, {
     shell: true,

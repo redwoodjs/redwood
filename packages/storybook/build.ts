@@ -4,5 +4,6 @@ await build({
   buildOptions: {
     ...defaultBuildOptions,
     format: 'esm',
+    packages: 'external',
   },
 })

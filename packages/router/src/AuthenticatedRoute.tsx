@@ -29,7 +29,6 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
     return !(isAuthenticated && (!roles || hasRole(roles)))
   }, [isAuthenticated, roles, hasRole])
 
-  // Make sure `wrappers` is always an array with at least one wrapper component
   if (unauthorized()) {
     if (authLoading) {
       return whileLoadingAuth?.() || null

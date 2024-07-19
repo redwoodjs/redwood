@@ -21,20 +21,19 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "default": "./dist/index.js"
     },
     "./preset": {
       "types": "./dist/preset.d.ts",
-      "require": "./dist/preset.js"
+      "default": "./dist/preset.js"
     },
-    "./dist/mocks/MockRouter": "./dist/mocks/MockRouter.js",
+    "./dist/mocks/MockRouter": {
+      "default": "./dist/mocks/MockRouter.js"
+    },
     "./dist/preview.js": "./dist/preview.js",
     "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",

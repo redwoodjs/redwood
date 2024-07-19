@@ -18,7 +18,7 @@ export function checkNodeVersion() {
   checks.message = [
     `Your Node.js version is ${c.warning(
       pVersion,
-    )}, but Redwood requires ${c.green(`>=${LOWER_BOUND}`)}.`,
+    )}, but Redwood requires ${c.important(`>=${LOWER_BOUND}`)}.`,
     'Upgrade your Node.js version using `nvm` or a similar tool. See https://redwoodjs.com/docs/how-to/using-nvm.',
   ].join('\n')
 

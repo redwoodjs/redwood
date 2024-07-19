@@ -12,16 +12,8 @@ const { rimraf } = require('rimraf')
 const { hideBin } = require('yargs/helpers')
 const yargs = require('yargs/yargs')
 
-const {
-  addFrameworkDepsToProject,
-  copyFrameworkPackages,
-} = require('./frameworkLinking')
 const { webTasks, apiTasks, streamingTasks } = require('./tasks')
-const {
-  getExecaOptions,
-  updatePkgJsonScripts,
-  confirmNoFixtureNoLink,
-} = require('./util')
+const { getExecaOptions, confirmNoFixtureNoLink } = require('./util')
 
 const args = yargs(hideBin(process.argv))
   .usage('Usage: $0 <project directory> [option]')
@@ -87,8 +79,8 @@ if (rebuildFixture) {
     chalk.red.bold(
       `
       --rebuildFixture is deprecated. Please run \`yarn rebuild-test-project-fixture\` instead.
-      `
-    )
+      `,
+    ),
   )
 }
 
@@ -101,8 +93,8 @@ if (args._.length > 1) {
       Multiple <project directory> arguments
       Specify ONE project directory outside the framework directory (no spaces allowed)
       EXAMPLE: 'yarn build:test-project ../test-project'
-      `
-    )
+      `,
+    ),
   )
   process.exit(1)
 } else if (args._.length < 1) {
@@ -112,8 +104,8 @@ if (args._.length > 1) {
       Missing <project directory> argument
       Specify a project directory outside the framework directory
       EXAMPLE: 'yarn build:test-project ../test-project'
-      `
-    )
+      `,
+    ),
   )
   process.exit(1)
 }
@@ -135,8 +127,8 @@ if (
       Project Directory CANNOT be a subdirectory of '${RW_FRAMEWORKPATH}'
       Specify a project directory outside the framework directory
       EXAMPLE: 'yarn build:test-project ../test-project'
-      `
-    )
+      `,
+    ),
   )
   process.exit(1)
 }
@@ -152,7 +144,7 @@ const createProject = async () => {
   return execa(
     cmd,
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
-    getExecaOptions(RW_FRAMEWORKPATH)
+    getExecaOptions(RW_FRAMEWORKPATH),
   )
 }
 
@@ -163,7 +155,7 @@ const copyProject = async () => {
 
   const FIXTURE_TESTPROJ_PATH = path.join(
     RW_FRAMEWORKPATH,
-    '__fixtures__/test-project'
+    '__fixtures__/test-project',
   )
 
   // copying existing Fixture to new Project
@@ -189,41 +181,20 @@ const globalTasks = () =>
         },
       },
       {
-        title: '[link] Building Redwood framework',
-        task: async () => {
-          try {
-            await execa(
-              'yarn build:clean && yarn build',
-              [],
-              getExecaOptions(RW_FRAMEWORKPATH)
-            )
-          } catch (e) {
-            console.log('Failed to build framework...')
-            console.log()
-            console.log(
-              'Please check your branch is building with yarn build:clean && yarn build'
-            )
-            throw new Error('Failed to build framework')
-          }
-        },
-        enabled: () => link,
-      },
-      {
-        title: '[link] Adding framework dependencies to project',
-        task: () =>
-          addFrameworkDepsToProject(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
-        enabled: () => link,
-      },
-      {
         title: 'Installing node_modules',
         task: async () => {
           return execa('yarn install', getExecaOptions(OUTPUT_PROJECT_PATH))
         },
       },
       {
-        title: '[link] Copying framework packages to project',
-        task: () =>
-          copyFrameworkPackages(RW_FRAMEWORKPATH, OUTPUT_PROJECT_PATH),
+        title: 'Tarsync the framework to the project',
+        task: () => {
+          return execa(
+            'yarn rwfw project:tarsync',
+            [],
+            getExecaOptions(OUTPUT_PROJECT_PATH),
+          )
+        },
         enabled: () => link,
       },
       {
@@ -232,22 +203,10 @@ const globalTasks = () =>
           return execa(
             'yarn rw ts-to-js',
             [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+            getExecaOptions(OUTPUT_PROJECT_PATH),
           )
         },
         enabled: () => javascript,
-      },
-      {
-        title: '[link] Add rwfw project:copy postinstall',
-        task: () => {
-          updatePkgJsonScripts({
-            projectPath: OUTPUT_PROJECT_PATH,
-            scripts: {
-              postinstall: 'yarn rwfw project:copy',
-            },
-          })
-        },
-        enabled: () => link,
       },
       {
         title: 'Upgrading to latest canary version',
@@ -255,7 +214,7 @@ const globalTasks = () =>
           return execa(
             'yarn rw upgrade -t canary',
             [],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+            getExecaOptions(OUTPUT_PROJECT_PATH),
           )
         },
         enabled: () => (canary && !link) || streamingSsr,
@@ -294,12 +253,12 @@ const globalTasks = () =>
             {
               ...getExecaOptions(OUTPUT_PROJECT_PATH),
               stdio: 'pipe',
-            }
+            },
           )
 
           fs.appendFileSync(
             path.join(OUTPUT_PROJECT_PATH, '.env'),
-            `SESSION_SECRET=${dbAuthSecret}`
+            `SESSION_SECRET=${dbAuthSecret}`,
           )
         },
       },
@@ -309,7 +268,7 @@ const globalTasks = () =>
           return execa(
             'yarn rw prisma migrate reset',
             ['--force'],
-            getExecaOptions(OUTPUT_PROJECT_PATH)
+            getExecaOptions(OUTPUT_PROJECT_PATH),
           )
         },
       },
@@ -355,7 +314,7 @@ const globalTasks = () =>
       // @ts-expect-error Allowed
       renderer: verbose && 'verbose',
       renderOptions: { collapseSubtasks: false },
-    }
+    },
   )
 
 async function runCommand() {

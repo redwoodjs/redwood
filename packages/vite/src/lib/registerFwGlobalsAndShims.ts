@@ -22,7 +22,6 @@ function registerFwGlobals() {
   const rwPaths = getPaths()
 
   globalThis.RWJS_ENV = {
-    // @NOTE we're avoiding process.env here, unlike webpack
     RWJS_API_GRAPHQL_URL:
       rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
     RWJS_API_URL: rwConfig.web.apiUrl,

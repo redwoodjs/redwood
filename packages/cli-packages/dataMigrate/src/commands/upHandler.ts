@@ -50,7 +50,7 @@ export async function handler({
   const pendingDataMigrations = await getPendingDataMigrations(db)
 
   if (!pendingDataMigrations.length) {
-    console.info(c.green(`\n${NO_PENDING_MIGRATIONS_MESSAGE}\n`))
+    console.info(c.success(`\n${NO_PENDING_MIGRATIONS_MESSAGE}\n`))
     process.exitCode = 0
     return
   }
@@ -112,7 +112,7 @@ export async function handler({
     if (counters.error) {
       process.exitCode = 1
     }
-  } catch (e) {
+  } catch {
     process.exitCode = 1
     await db.$disconnect()
 
@@ -221,7 +221,7 @@ function reportDataMigrations(counters: {
 }) {
   if (counters.run) {
     console.info(
-      c.green(`${counters.run} data migration(s) completed successfully.`),
+      c.success(`${counters.run} data migration(s) completed successfully.`),
     )
   }
   if (counters.error) {

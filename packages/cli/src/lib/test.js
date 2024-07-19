@@ -72,6 +72,15 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   }
 })
 
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
 vi.mock('./project', () => ({
   isTypeScriptProject: () => false,
   sides: () => ['web', 'api'],

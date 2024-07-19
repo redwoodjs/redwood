@@ -577,7 +577,7 @@ export class DbAuthHandler<
       user = await this.dbAccessor.findUnique({
         where: { [this.options.authFields.username]: username },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -607,7 +607,7 @@ export class DbAuthHandler<
             [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
           },
         })
-      } catch (e) {
+      } catch {
         throw new DbAuthError.GenericError()
       }
 
@@ -738,7 +738,7 @@ export class DbAuthHandler<
           [this.options.authFields.hashedPassword]: hashedPassword,
         },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -1319,7 +1319,7 @@ export class DbAuthHandler<
           [this.options.authFields.resetTokenExpiresAt]: null,
         },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
   }
@@ -1354,7 +1354,7 @@ export class DbAuthHandler<
       user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -1503,7 +1503,7 @@ export class DbAuthHandler<
       // try getting it from the body in JSON: { method: [methodName] }
       try {
         methodName = this.normalizedRequest.jsonBody.method
-      } catch (e) {
+      } catch {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
     }
