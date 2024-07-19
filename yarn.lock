@@ -7954,7 +7954,7 @@ __metadata:
     prisma: "npm:5.15.1"
     prompts: "npm:2.4.2"
     rimraf: "npm:5.0.7"
-    semver: "npm:7.6.2"
+    semver: "npm:7.6.3"
     smol-toml: "npm:1.2.2"
     string-env-interpolation: "npm:1.0.1"
     systeminformation: "npm:5.22.11"
@@ -14711,7 +14711,7 @@ __metadata:
     execa: "npm:5.1.1"
     fs-extra: "npm:11.2.0"
     klaw-sync: "npm:6.0.0"
-    semver: "npm:7.6.2"
+    semver: "npm:7.6.3"
     systeminformation: "npm:5.22.11"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.15.6"
@@ -27374,12 +27374,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.6.2, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.1":
-  version: 7.6.2
-  resolution: "semver@npm:7.6.2"
+"semver@npm:7.6.3, semver@npm:^7.0.0, semver@npm:^7.1.1, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8, semver@npm:^7.5.2, semver@npm:^7.5.3, semver@npm:^7.5.4, semver@npm:^7.6.0, semver@npm:^7.6.1":
+  version: 7.6.3
+  resolution: "semver@npm:7.6.3"
   bin:
     semver: bin/semver.js
-  checksum: 10c0/97d3441e97ace8be4b1976433d1c32658f6afaff09f143e52c593bae7eef33de19e3e369c88bd985ce1042c6f441c80c6803078d1de2a9988080b66684cbb30c
+  checksum: 10c0/88f33e148b210c153873cb08cfe1e281d518aaa9a666d4d148add6560db5cd3c582f3a08ccb91f38d5f379ead256da9931234ed122057f40bb5766e65e58adaf
   languageName: node
   linkType: hard
 

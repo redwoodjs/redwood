@@ -73,7 +73,7 @@
     "prisma": "5.15.1",
     "prompts": "2.4.2",
     "rimraf": "5.0.7",
-    "semver": "7.6.2",
+    "semver": "7.6.3",
     "smol-toml": "1.2.2",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.22.11",
