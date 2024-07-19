@@ -7783,7 +7783,7 @@ __metadata:
     publint: "npm:0.2.9"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     tsx: "npm:4.15.6"
-    type-fest: "npm:3.13.0"
+    type-fest: "npm:3.13.1"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
   languageName: unknown
@@ -29325,6 +29325,13 @@ __metadata:
   version: 3.13.0
   resolution: "type-fest@npm:3.13.0"
   checksum: 10c0/8d3f7ab432685a661b22484d64b4b1083a85c3db3eb01fee25cf4aa558b07bf2d6a42bbd072a4941da43072688f982ebb8b10b9f4444b3cb260d960f4ccf5c5c
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:3.13.1":
+  version: 3.13.1
+  resolution: "type-fest@npm:3.13.1"
+  checksum: 10c0/547d22186f73a8c04590b70dcf63baff390078c75ea8acd366bbd510fd0646e348bd1970e47ecf795b7cff0b41d26e9c475c1fedd6ef5c45c82075fbf916b629
   languageName: node
   linkType: hard
 
