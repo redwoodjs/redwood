@@ -34,7 +34,7 @@
     "check:attw": "yarn attw -P",
     "test": "vitest run",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn publint",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {

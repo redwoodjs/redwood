@@ -130,7 +130,7 @@
     "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn publint",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test": "vitest run",
     "check:attw": "tsx ./attw.ts",
     "test:types": "tstyche",
