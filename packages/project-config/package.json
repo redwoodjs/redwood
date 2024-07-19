@@ -30,7 +30,9 @@
     "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test": "vitest run",
+    "check:attw": "yarn attw -P",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -40,8 +42,11 @@
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
     "@redwoodjs/framework-tools": "workspace:*",
-    "rimraf": "5.0.7",
+    "concurrently": "8.2.2",
+    "publint": "0.2.9",
+    "rimraf": "5.0.9",
     "tsx": "4.15.6",
     "typescript": "5.4.5",
     "vitest": "1.6.0"

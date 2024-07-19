@@ -1,12 +1,14 @@
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { setServerAuthState } from '@redwoodjs/server-store'
-
-import { MiddlewareRequest } from './MiddlewareRequest.js'
 import {
   MiddlewareResponse,
+  MiddlewareRequest,
   MiddlewareShortCircuit,
-} from './MiddlewareResponse.js'
-import type { Middleware, MiddlewareInvokeOptions } from './types.js'
+} from '@redwoodjs/web/dist/server/middleware'
+import type {
+  Middleware,
+  MiddlewareInvokeOptions,
+} from '@redwoodjs/web/middleware'
 
 /**
  * Invokes the middleware function, and guarantees a MiddlewareResponse object

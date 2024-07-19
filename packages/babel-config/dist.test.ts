@@ -31,7 +31,6 @@ describe('dist', () => {
         "getWebSideDefaultBabelConfig": [Function],
         "getWebSideOverrides": [Function],
         "parseTypeScriptConfigFiles": [Function],
-        "prebuildWebFile": [Function],
         "registerApiSideBabelHook": [Function],
         "registerBabel": [Function],
         "registerWebSideBabelHook": [Function],

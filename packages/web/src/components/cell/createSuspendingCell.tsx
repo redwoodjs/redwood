@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react'
 
 import type { OperationVariables, QueryReference } from '@apollo/client'
-// @ts-expect-error Force import cjs module
 import { useApolloClient } from '@apollo/client/react/hooks/hooks.cjs'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider.js'
