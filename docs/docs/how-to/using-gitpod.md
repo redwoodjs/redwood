@@ -33,7 +33,7 @@ What's going on behind the scenes:
 
 Once everything is up and running, you can click on the Ports tab
 
-[![GitPod Ports Tab](https://github.com/redwoodjs/starter/blob/main/images/gitpod-ports.png)]
+![GitPod Ports Tab](https://github.com/redwoodjs/starter/raw/main/images/gitpod-ports.png)
 
 You can click on the address or the globe icon to open that particular port in a new tab.
 
