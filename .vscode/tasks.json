@@ -1,0 +1,11 @@
+{
+	"tasks": [
+		{
+			"detail": "Build the project",
+			"label": "build",
+			"script": "build",
+			"type": "npm"
+		}
+	],
+	"version": "2.0.0"
+}

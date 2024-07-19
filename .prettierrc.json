@@ -1,0 +1,10 @@
+{
+	"$schema": "http://json.schemastore.org/prettierrc",
+	"overrides": [{ "files": ".nvmrc", "options": { "parser": "yaml" } }],
+	"plugins": [
+		"prettier-plugin-curly",
+		"prettier-plugin-sh",
+		"prettier-plugin-packagejson"
+	],
+	"useTabs": true
+}

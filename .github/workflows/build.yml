@@ -1,0 +1,16 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare
+      - run: pnpm build
+      - run: node ./lib/index.js
+
+name: Build
+
+on:
+  pull_request: ~
+  push:
+    branches:
+      - main
