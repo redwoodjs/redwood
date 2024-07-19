@@ -1,5 +1,5 @@
 ---
-description: Older version of Storybook integration; uses Vite
+description: Newer version of Storybook integration; uses Vite
 ---
 
 # Storybook Vite
@@ -25,8 +25,6 @@ Additionally, if it's your first time running `storybook-vite`, the Redwood CLI 
   - This is the primary [Storybook configuration file](https://storybook.js.org/docs/configure). Note that it references the brand new framework package, [`storybook-framework-redwoodjs-vite`](https://www.npmjs.com/package/storybook-framework-redwoodjs-vite).
 - `web/.storybook/preview-body.html`
   - This is required to change the `id` of the root div to `redwood-app`, which is what the entry file used by Vite requires.
-- `web/src/auto-imports.d.ts`
-  - Created by [`unplugin-auto-import`](https://github.com/unplugin/unplugin-auto-import), which is used by the Framework Package [here](https://github.com/redwoodjs/redwood/blob/main/packages/storybook/src/plugins/auto-imports.ts).
 
 Once Storybook is all set up, it'll spin up on port `7910`.
 
