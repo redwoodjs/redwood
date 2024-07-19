@@ -3,13 +3,17 @@
 // The process that actually starts an instance of Worker to process jobs.
 // Can be run independently with `yarn rw-jobs-worker` but by default is forked
 // by `yarn rw-jobs` and either monitored, or detached to run independently.
-
+//
+// If you want to get fancy and have different workers running with different
+// configurations, you need to invoke this script manually and pass the --config
+// option with the name of the named export from api/src/lib/jobs.js
+import console from 'node:console'
 import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadAdapter, loadLogger } from '../core/loaders'
+import { loadWorkerConfig } from '../core/loaders'
 import { Worker } from '../core/Worker'
 import type { BasicLogger } from '../types'
 
@@ -38,8 +42,14 @@ const parseArgs = (argv: string[]) => {
       default: false,
       description: 'Work off all jobs in the queue and exit',
     })
-    .option('clear', {
+    .option('config', {
       alias: 'c',
+      type: 'string',
+      default: 'workerConfig',
+      description: 'Name of the exported variable containing the worker config',
+    })
+    .option('clear', {
+      alias: 'd',
       type: 'boolean',
       default: false,
       description: 'Remove all jobs in the queue and exit',
@@ -94,27 +104,27 @@ const setupSignals = ({
 }
 
 const main = async () => {
-  const { id, queue, clear, workoff } = await parseArgs(process.argv)
+  const { id, queue, config, clear, workoff } = await parseArgs(process.argv)
   setProcessTitle({ id, queue })
 
-  const logger = await loadLogger()
-  let adapter
+  let workerConfig
 
   try {
-    adapter = await loadAdapter()
+    workerConfig = await loadWorkerConfig(config)
   } catch (e) {
-    logger.error(e)
+    console.error(e)
     process.exit(1)
   }
+
+  const logger = workerConfig.logger || console
 
   logger.info(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
   const worker = new Worker({
-    adapter,
+    ...workerConfig,
     processName: process.title,
-    logger,
     queue,
     workoff,
     clear,
