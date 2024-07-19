@@ -20,14 +20,12 @@ import {
   createPerRequestMap,
   createServerStorage,
 } from '@redwoodjs/server-store'
+import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
-import type { Middleware } from './middleware/types.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
-import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
-import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
@@ -61,6 +59,8 @@ export async function runFeServer() {
   registerFwGlobalsAndShims()
 
   if (rscEnabled) {
+    const { setClientEntries } = await import('./rsc/rscWorkerCommunication.js')
+
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries()
@@ -166,13 +166,18 @@ export async function runFeServer() {
     }),
   )
 
-  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use(
-    '/rw-rsc',
-    createRscRequestHandler({
-      getMiddlewareRouter: async () => middlewareRouter,
-    }),
-  )
+  if (rscEnabled) {
+    const { createRscRequestHandler } = await import(
+      './rsc/rscRequestHandler.js'
+    )
+    // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+    app.use(
+      '/rw-rsc',
+      createRscRequestHandler({
+        getMiddlewareRouter: async () => middlewareRouter,
+      }),
+    )
+  }
 
   // Static asset handling MUST be defined before our catch all routing handler below
   // otherwise it will catch all requests for static assets and return a 404.

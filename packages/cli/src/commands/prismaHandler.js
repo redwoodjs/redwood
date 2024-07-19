@@ -63,7 +63,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   }
 
   console.log()
-  console.log(c.green('Running Prisma CLI...'))
+  console.log(c.note('Running Prisma CLI...'))
   console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 

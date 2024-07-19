@@ -8,7 +8,7 @@ declare global {
   var __REDWOOD__APP_TITLE: string
   var __REDWOOD__APOLLO_STATE: NormalizedCacheObject
 
-  // Provided by Vite.config, or Webpack in the user's project
+  // Provided by Vite.config
   var RWJS_ENV: {
     RWJS_API_GRAPHQL_URL: string
     /** URL or absolute path to serverless functions */

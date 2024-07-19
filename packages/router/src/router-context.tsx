@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth' with { 'resolution-mode': 'import' }
 import { useNoAuth } from '@redwoodjs/auth'
 
 import type { analyzeRoutes } from './analyzeRoutes'

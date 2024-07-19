@@ -43,8 +43,6 @@
     "@types/babel-core": "6.25.10",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.12",
-    "@types/webpack": "5.28.5",
-    "@types/webpack-env": "1.18.5",
     "babel-jest": "^29.7.0",
     "core-js": "3.37.1",
     "fast-glob": "3.3.2",

@@ -107,3 +107,7 @@ declare module 'react-server-dom-webpack/server' {
 }
 
 declare module 'vite-plugin-cjs-interop'
+
+declare module '@babel/parser/index.cjs' {
+  export * from '@babel/parser'
+}
