@@ -18,7 +18,7 @@ GitPod will then begin to build your workspace. This may take several minutes.
 
 What's going on behind the scenes:
 
-- GitPod is setting the workspace set up
+- GitPod is setting up the workspace
 - It installs our recommended VS Code plugins:
   - [ESLint](https://github.com/redwoodjs/starter/blob/main)
   - [Git Lens](https://github.com/redwoodjs/starter/blob/main)
@@ -31,7 +31,7 @@ What's going on behind the scenes:
 - It runs `yarn install`, adding all the dependencies for the project
 - Changes the database over to Postgres
 
-Once everything is up and running, you can click on the Ports tab
+Once everything is up and running, you can click on the Ports tab:
 
 ![GitPod Ports Tab](https://github.com/redwoodjs/starter/raw/main/images/gitpod-ports.png)
 
