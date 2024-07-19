@@ -1,8 +1,6 @@
 import type { HttpOptions } from '@apollo/client'
 import type { Operation, FetchResult } from '@apollo/client/core'
-// @ts-expect-error Force import cjs module
 import { ApolloLink } from '@apollo/client/link/core/core.cjs'
-// @ts-expect-error Force import cjs module
 import { Observable } from '@apollo/client/utilities/utilities.cjs'
 import { print } from 'graphql'
 import type { ClientOptions, Client, RequestParams, Sink } from 'graphql-sse'
@@ -99,6 +97,7 @@ class SSELink extends ApolloLink {
       referrerPolicy: mapReferrerPolicyHeader(referrerPolicy),
     })
   }
+
 
   public request(
     operation: Operation & { query?: any },

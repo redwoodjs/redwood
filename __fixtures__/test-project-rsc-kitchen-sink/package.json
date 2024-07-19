@@ -7,8 +7,8 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "7.0.0-canary.1011",
-    "@redwoodjs/project-config": "7.0.0-canary.1011"
+    "@redwoodjs/core": "8.0.0-canary.861",
+    "@redwoodjs/project-config": "8.0.0-canary.861"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",

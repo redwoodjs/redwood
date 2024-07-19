@@ -101,12 +101,11 @@ function createNonSuspendingCell<
           // so using `any` here
           queryResult = { variables } as any
         } else {
-          queryCache[cacheKey] ||
-            (queryCache[cacheKey] = {
-              query: transformedQuery,
-              variables: options.variables,
-              hasProcessed: false,
-            })
+          queryCache[cacheKey] ||= {
+            query: transformedQuery,
+            variables: options.variables,
+            hasProcessed: false,
+          }
         }
       }
     }

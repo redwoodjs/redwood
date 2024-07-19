@@ -23,7 +23,7 @@ export function process_env_findInFile(filePath: string, text: string) {
   }
   try {
     return process_env_findInFile2(createTSMSourceFile_cached(filePath, text))
-  } catch (e) {
+  } catch {
     return []
   }
 }

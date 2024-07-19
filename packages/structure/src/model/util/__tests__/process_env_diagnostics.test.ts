@@ -40,8 +40,7 @@ describe('process_env_findInFile', () => {
     const pp = getFixtureDir('example-todo-main-with-errors')
     //const webRoot = join(pp, 'web')
     const apiRoot = join(pp, 'api')
-    const r = process_env_findAll(apiRoot)
-    r //?
+    process_env_findAll(apiRoot)
   })
 })
 

@@ -51,7 +51,7 @@ That said, there are some references you should consider reading at some point i
 Especially if you want to become an advanced user.
 For example, [Services](services.md) are fundamental to Redwood.
 It's worth getting to know them inside and out.
-And if you're not writing [tests](testing.md) and [stories](storybook.md), you're not using Redwood to its full potential.
+And if you're not writing [tests](testing.md) and [stories](storybook/about.md), you're not using Redwood to its full potential.
 
 > **We realize that the content doesn't always match the organization**
 >
