@@ -30,7 +30,7 @@
     "build:pack": "yarn pack -o redwoodjs-auth-dbauth-middleware.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn publint",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "check:attw": "yarn attw -P",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "test": "vitest run",

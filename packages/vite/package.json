@@ -68,7 +68,7 @@
     "build:types": "tsc --build --verbose ./tsconfig.json",
     "check:attw": "tsx ./attw.ts",
     "test": "vitest run",
-    "check:package": "concurrently npm:check:attw yarn publint",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test:watch": "vitest watch"
   },
   "dependencies": {
