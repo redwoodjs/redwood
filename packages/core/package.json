@@ -35,8 +35,8 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/cli": "7.24.5",
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/cli": "7.24.8",
+    "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",

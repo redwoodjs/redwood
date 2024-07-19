@@ -23,13 +23,13 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/auth": "workspace:*",
     "core-js": "3.37.1"
   },
   "devDependencies": {
     "@azure/msal-browser": "2.39.0",
-    "@babel/cli": "7.24.5",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@types/netlify-identity-widget": "1.9.6",
     "@types/react": "^18.2.55",
