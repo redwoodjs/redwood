@@ -61,7 +61,7 @@
     "@types/lodash": "4.17.7",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.15.6",
+    "tsx": "4.16.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },

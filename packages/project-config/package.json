@@ -47,7 +47,7 @@
     "concurrently": "8.2.2",
     "publint": "0.2.9",
     "rimraf": "5.0.9",
-    "tsx": "4.15.6",
+    "tsx": "4.16.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
   },
