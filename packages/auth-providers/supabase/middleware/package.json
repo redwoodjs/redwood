@@ -40,7 +40,7 @@
   "dependencies": {
     "@redwoodjs/auth-supabase-api": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@supabase/ssr": "0.3.0"
+    "@supabase/ssr": "0.4.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.3",
