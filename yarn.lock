@@ -7238,7 +7238,7 @@ __metadata:
     dotenv-defaults: "npm:5.0.2"
     fast-glob: "npm:3.3.2"
     fast-json-parse: "npm:1.0.3"
-    fastify: "npm:4.27.0"
+    fastify: "npm:4.28.1"
     fastify-raw-body: "npm:4.3.0"
     lodash: "npm:4.17.21"
     pino-abstract-transport: "npm:1.2.0"
@@ -8153,7 +8153,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     fast-glob: "npm:3.3.2"
-    fastify: "npm:4.27.0"
+    fastify: "npm:4.28.1"
     tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -8718,7 +8718,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     chalk: "npm:4.1.2"
     dotenv-defaults: "npm:5.0.2"
-    fastify: "npm:4.27.0"
+    fastify: "npm:4.28.1"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
@@ -17276,9 +17276,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastify@npm:4.27.0":
-  version: 4.27.0
-  resolution: "fastify@npm:4.27.0"
+"fastify@npm:4.28.1":
+  version: 4.28.1
+  resolution: "fastify@npm:4.28.1"
   dependencies:
     "@fastify/ajv-compiler": "npm:^3.5.0"
     "@fastify/error": "npm:^3.4.0"
@@ -17296,7 +17296,7 @@ __metadata:
     secure-json-parse: "npm:^2.7.0"
     semver: "npm:^7.5.4"
     toad-cache: "npm:^3.3.0"
-  checksum: 10c0/879e9d3f6b9521bea29255c79ca1ddf3dd4c017937a25e7348d7686625c7dd56f21af18e6db2ecdd41d07e5c73a779ab0bb1f5d6b081909bf3e8caadaf669160
+  checksum: 10c0/9c212e9a72c42a27ebc9b0bc7fda8f94ff208250158093374942b0e156a3f55fa848c926921f99bdf7f38f6f8103ac28ecc72cc507f33893cd121ce4f3eda069
   languageName: node
   linkType: hard
 
