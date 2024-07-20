@@ -42,7 +42,7 @@
     "@types/aws-lambda": "8.10.141",
     "@types/babel-core": "6.25.10",
     "@types/jest": "29.5.12",
-    "@types/node": "20.12.12",
+    "@types/node": "20.14.11",
     "babel-jest": "^29.7.0",
     "core-js": "3.37.1",
     "fast-glob": "3.3.2",

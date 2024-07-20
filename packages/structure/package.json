@@ -55,7 +55,7 @@
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
     "@types/lodash": "4.17.7",
-    "@types/node": "20.12.12",
+    "@types/node": "20.14.11",
     "@types/vscode": "1.91.0",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
