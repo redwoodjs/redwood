@@ -7672,7 +7672,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@types/aws-lambda": "npm:8.10.141"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.37.1"
@@ -7693,7 +7693,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@types/aws-lambda": "npm:8.10.141"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.9"
@@ -7726,7 +7726,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/auth": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@supabase/supabase-js": "npm:2.44.4"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
@@ -8923,7 +8923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.19.0":
+"@rollup/rollup-linux-x64-gnu@npm:4.19.0, @rollup/rollup-linux-x64-gnu@npm:^4.9.5":
   version: 4.19.0
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.19.0"
   conditions: os=linux & cpu=x64 & libc=glibc
@@ -9875,15 +9875,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/ssr@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@supabase/ssr@npm:0.3.0"
+"@supabase/ssr@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@supabase/ssr@npm:0.4.0"
   dependencies:
-    cookie: "npm:^0.5.0"
-    ramda: "npm:^0.29.0"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.9.5"
+    cookie: "npm:^0.6.0"
   peerDependencies:
-    "@supabase/supabase-js": ^2.33.1
-  checksum: 10c0/c2e1df6b98b3cbb57c663771ea26b9afe2cf9037fde33d142d7552b740dcafe3110b5be8d15fc0c6612b8803176606fbab867235d745ee47d63d038511768dc6
+    "@supabase/supabase-js": ^2.43.4
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10c0/378f92e271eeed700dfc509f7f6398b4e0984a4845de91467b5ac211f50c690548fd32eb72f80b9600963084a947b4573a370b3419df15ca6fdf87df8252de09
   languageName: node
   linkType: hard
 
@@ -14481,7 +14484,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.6.0":
+"cookie@npm:0.6.0, cookie@npm:^0.6.0":
   version: 0.6.0
   resolution: "cookie@npm:0.6.0"
   checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
@@ -25572,13 +25575,6 @@ __metadata:
   version: 0.29.0
   resolution: "ramda@npm:0.29.0"
   checksum: 10c0/b00eaaf1c62b06a99affa1d583e256bd65ad27ab9d0ef512f55d7d93b842e7cd244a4a09179f61fdd8548362e409323867a2b0477cbd0626b5644eb6ac7c53da
-  languageName: node
-  linkType: hard
-
-"ramda@npm:^0.29.0":
-  version: 0.29.1
-  resolution: "ramda@npm:0.29.1"
-  checksum: 10c0/5de53a07400959c1a704c366ec52b1b8cd9a444dc1f9cdf17d607e0b9eeaa38cbaea309d43e59dbd7f36731ba977a64d40092555c0e7c2d4a41e8e922239c0ba
   languageName: node
   linkType: hard
 
