@@ -143,7 +143,7 @@
     "@redwoodjs/server-store": "workspace:*",
     "@whatwg-node/fetch": "0.9.17",
     "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "2.0.5",

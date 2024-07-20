@@ -7833,7 +7833,7 @@ __metadata:
     babel-plugin-tester: "npm:11.0.4"
     core-js: "npm:3.37.1"
     fast-glob: "npm:3.3.2"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -8013,7 +8013,7 @@ __metadata:
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     jscodeshift: "npm:0.15.0"
     pascalcase: "npm:1.0.0"
     prettier: "npm:3.3.3"
@@ -8175,7 +8175,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     core-js: "npm:3.37.1"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     nodemon: "npm:3.1.4"
     pascalcase: "npm:1.0.0"
     react: "npm:19.0.0-beta-04b058868c-20240508"
@@ -8231,7 +8231,7 @@ __metadata:
     "@types/uuid": "npm:9.0.8"
     "@whatwg-node/fetch": "npm:0.9.17"
     core-js: "npm:3.37.1"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
     graphql-tag: "npm:2.12.6"
     graphql-yoga: "npm:5.3.1"
@@ -8279,7 +8279,7 @@ __metadata:
     esbuild: "npm:0.21.3"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     graphql-tag: "npm:2.12.6"
     kill-port: "npm:1.6.1"
     prettier: "npm:3.3.3"
@@ -8424,7 +8424,7 @@ __metadata:
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0-rc.12"
     core-js: "npm:3.37.1"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     mime-types: "npm:2.1.35"
     typescript: "npm:5.4.5"
     vitest: "npm:1.6.0"
@@ -8470,7 +8470,7 @@ __metadata:
     "@n1ru4l/graphql-live-query": "npm:0.10.0"
     "@n1ru4l/in-memory-live-query-store": "npm:0.10.0"
     "@redwoodjs/framework-tools": "workspace:*"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     ioredis: "npm:^5.3.2"
     nodemon: "npm:3.1.4"
     tsx: "npm:4.16.2"
@@ -8561,7 +8561,7 @@ __metadata:
     enquirer: "npm:2.4.1"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     lazy-get-decorator: "npm:2.2.1"
     line-column: "npm:1.0.2"
     lodash: "npm:4.17.21"
@@ -8752,7 +8752,7 @@ __metadata:
     "@whatwg-node/fetch": "npm:0.9.17"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     graphql-sse: "npm:2.5.3"
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.4"
@@ -18508,10 +18508,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.8.1, graphql@npm:^16.0.0, graphql@npm:^16.8.1":
-  version: 16.8.1
-  resolution: "graphql@npm:16.8.1"
-  checksum: 10c0/129c318156b466f440914de80dbf7bc67d17f776f2a088a40cb0da611d19a97c224b1c6d2b13cbcbc6e5776e45ed7468b8432f9c3536724e079b44f1a3d57a8a
+"graphql@npm:16.9.0, graphql@npm:^16.0.0, graphql@npm:^16.8.1":
+  version: 16.9.0
+  resolution: "graphql@npm:16.9.0"
+  checksum: 10c0/a8850f077ff767377237d1f8b1da2ec70aeb7623cdf1dfc9e1c7ae93accc0c8149c85abe68923be9871a2934b1bce5a2496f846d4d56e1cfb03eaaa7ddba9b6a
   languageName: node
   linkType: hard
 
