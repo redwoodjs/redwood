@@ -5145,12 +5145,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joshwooding/vite-plugin-react-docgen-typescript@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@joshwooding/vite-plugin-react-docgen-typescript@npm:0.3.1"
+"@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.0"
   dependencies:
-    glob: "npm:^7.2.0"
-    glob-promise: "npm:^4.2.0"
+    glob: "npm:^10.0.0"
     magic-string: "npm:^0.27.0"
     react-docgen-typescript: "npm:^2.2.2"
   peerDependencies:
@@ -5159,7 +5158,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/a9c7a03d7d1daf5bd64949255516ba64c88d5600366c8c74dcdb6f37c2a6099daaec02860b7587d2220e61afa47a0b2de17ef70d723c2db02f24e0890edfd9f3
+  checksum: 10c0/c457d3962e43804b990dd3e945111b9872a04760edaf0135f56edde9c5ce11f2ec9044907d79c1e33fcbca46a5a91a5e129bbd19818e41504d8941de3226754f
   languageName: node
   linkType: hard
 
@@ -7282,7 +7281,7 @@ __metadata:
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     cookie: "npm:0.6.0"
     core-js: "npm:3.37.1"
     humanize-string: "npm:2.1.0"
@@ -7672,7 +7671,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@types/aws-lambda": "npm:8.10.141"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.37.1"
@@ -7693,7 +7692,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@types/aws-lambda": "npm:8.10.141"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.9"
@@ -7726,7 +7725,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/auth": "workspace:*"
-    "@supabase/ssr": "npm:0.3.0"
+    "@supabase/ssr": "npm:0.4.0"
     "@supabase/supabase-js": "npm:2.44.4"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.37.1"
@@ -8013,7 +8012,7 @@ __metadata:
     "@types/jscodeshift": "npm:0.11.6"
     "@types/yargs": "npm:17.0.32"
     "@vscode/ripgrep": "npm:1.15.9"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     cheerio: "npm:1.0.0-rc.12"
     core-js: "npm:3.37.1"
     deepmerge: "npm:4.3.1"
@@ -8236,7 +8235,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.17.7"
     "@types/uuid": "npm:9.0.8"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
@@ -8426,7 +8425,7 @@ __metadata:
     "@redwoodjs/structure": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@types/mime-types": "npm:2.1.4"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0-rc.12"
@@ -8595,7 +8594,7 @@ __metadata:
     "@types/envinfo": "npm:7.8.4"
     "@types/uuid": "npm:9.0.8"
     "@types/yargs": "npm:17.0.32"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.13.0"
     systeminformation: "npm:5.22.11"
@@ -8681,7 +8680,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.3.1"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     "@whatwg-node/server": "npm:0.9.36"
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
@@ -8756,7 +8755,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
@@ -8923,7 +8922,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.19.0":
+"@rollup/rollup-linux-x64-gnu@npm:4.19.0, @rollup/rollup-linux-x64-gnu@npm:^4.9.5":
   version: 4.19.0
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.19.0"
   conditions: os=linux & cpu=x64 & libc=glibc
@@ -9875,15 +9874,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/ssr@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@supabase/ssr@npm:0.3.0"
+"@supabase/ssr@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@supabase/ssr@npm:0.4.0"
   dependencies:
-    cookie: "npm:^0.5.0"
-    ramda: "npm:^0.29.0"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.9.5"
+    cookie: "npm:^0.6.0"
   peerDependencies:
-    "@supabase/supabase-js": ^2.33.1
-  checksum: 10c0/c2e1df6b98b3cbb57c663771ea26b9afe2cf9037fde33d142d7552b740dcafe3110b5be8d15fc0c6612b8803176606fbab867235d745ee47d63d038511768dc6
+    "@supabase/supabase-js": ^2.43.4
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
+  checksum: 10c0/378f92e271eeed700dfc509f7f6398b4e0984a4845de91467b5ac211f50c690548fd32eb72f80b9600963084a947b4573a370b3419df15ca6fdf87df8252de09
   languageName: node
   linkType: hard
 
@@ -10688,16 +10690,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:^7.1.3":
-  version: 7.2.0
-  resolution: "@types/glob@npm:7.2.0"
-  dependencies:
-    "@types/minimatch": "npm:*"
-    "@types/node": "npm:*"
-  checksum: 10c0/a8eb5d5cb5c48fc58c7ca3ff1e1ddf771ee07ca5043da6e4871e6757b4472e2e73b4cfef2644c38983174a4bc728c73f8da02845c28a1212f98cabd293ecae98
-  languageName: node
-  linkType: hard
-
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.6
   resolution: "@types/graceful-fs@npm:4.1.6"
@@ -10910,13 +10902,6 @@ __metadata:
   version: 1.3.2
   resolution: "@types/mime@npm:1.3.2"
   checksum: 10c0/61d144e5170c6cdf6de334ec0ee4bb499b1a0fb0233834a9e8cec6d289b0e3042bedf35cbc1c995d71a247635770dae3f13a9ddae69098bb54b933429bc08d35
-  languageName: node
-  linkType: hard
-
-"@types/minimatch@npm:*":
-  version: 5.1.2
-  resolution: "@types/minimatch@npm:5.1.2"
-  checksum: 10c0/83cf1c11748891b714e129de0585af4c55dd4c2cafb1f1d5233d79246e5e1e19d1b5ad9e8db449667b3ffa2b6c80125c429dbee1054e9efb45758dbc4e118562
   languageName: node
   linkType: hard
 
@@ -11558,13 +11543,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.17, @whatwg-node/fetch@npm:^0.9.17":
-  version: 0.9.17
-  resolution: "@whatwg-node/fetch@npm:0.9.17"
+"@whatwg-node/fetch@npm:0.9.18, @whatwg-node/fetch@npm:^0.9.17":
+  version: 0.9.18
+  resolution: "@whatwg-node/fetch@npm:0.9.18"
   dependencies:
     "@whatwg-node/node-fetch": "npm:^0.5.7"
     urlpattern-polyfill: "npm:^10.0.0"
-  checksum: 10c0/6638f1d456d17c9eab55f6278aa8045157ceb43a27acc65def1b7a2a3b80ef1b79f4c203e523865c9bcf1236ef64e1378ab0627e91932c97e9f1f3a129b17195
+  checksum: 10c0/53fbbdb9c8b99d5ac550c80c4523e0e574c311fca55854c81e26949a4269638a36688cc485220f65845c9c5f10251f474b4982d594f063859af7b44316775a64
   languageName: node
   linkType: hard
 
@@ -14486,7 +14471,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:0.6.0":
+"cookie@npm:0.6.0, cookie@npm:^0.6.0":
   version: 0.6.0
   resolution: "cookie@npm:0.6.0"
   checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
@@ -18189,17 +18174,6 @@ __metadata:
   dependencies:
     is-glob: "npm:^4.0.1"
   checksum: 10c0/cab87638e2112bee3f839ef5f6e0765057163d39c66be8ec1602f3823da4692297ad4e972de876ea17c44d652978638d2fd583c6713d0eb6591706825020c9ee
-  languageName: node
-  linkType: hard
-
-"glob-promise@npm:^4.2.0":
-  version: 4.2.2
-  resolution: "glob-promise@npm:4.2.2"
-  dependencies:
-    "@types/glob": "npm:^7.1.3"
-  peerDependencies:
-    glob: ^7.1.6
-  checksum: 10c0/3eb01bed2901539365df6a4d27800afb8788840647d01f9bf3500b3de756597f2ff4b8c823971ace34db228c83159beca459dc42a70968d4e9c8200ed2cc96bd
   languageName: node
   linkType: hard
 
@@ -25569,13 +25543,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ramda@npm:^0.29.0":
-  version: 0.29.1
-  resolution: "ramda@npm:0.29.1"
-  checksum: 10c0/5de53a07400959c1a704c366ec52b1b8cd9a444dc1f9cdf17d607e0b9eeaa38cbaea309d43e59dbd7f36731ba977a64d40092555c0e7c2d4a41e8e922239c0ba
-  languageName: node
-  linkType: hard
-
 "randombytes@npm:^2.0.0, randombytes@npm:^2.0.1, randombytes@npm:^2.0.5":
   version: 2.1.0
   resolution: "randombytes@npm:2.1.0"
@@ -27735,7 +27702,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
-    "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.3.1"
+    "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.4.0"
     "@redwoodjs/testing": "workspace:*"
     "@rollup/pluginutils": "npm:5.1.0"
     "@storybook/addon-essentials": "npm:7.6.17"
