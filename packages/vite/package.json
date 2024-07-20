@@ -114,7 +114,7 @@
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "concurrently": "8.2.2",
-    "glob": "10.3.15",
+    "glob": "11.0.0",
     "publint": "0.2.9",
     "rollup": "4.19.0",
     "tsx": "4.16.2",
