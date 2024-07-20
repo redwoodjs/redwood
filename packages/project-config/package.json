@@ -46,7 +46,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
     "publint": "0.2.9",
-    "rimraf": "5.0.9",
+    "rimraf": "6.0.1",
     "tsx": "4.16.2",
     "typescript": "5.4.5",
     "vitest": "1.6.0"
