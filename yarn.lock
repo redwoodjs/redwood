@@ -7281,7 +7281,7 @@ __metadata:
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
     "@types/split2": "npm:4.2.3"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     cookie: "npm:0.6.0"
     core-js: "npm:3.37.1"
     humanize-string: "npm:2.1.0"
@@ -8012,7 +8012,7 @@ __metadata:
     "@types/jscodeshift": "npm:0.11.6"
     "@types/yargs": "npm:17.0.32"
     "@vscode/ripgrep": "npm:1.15.9"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     cheerio: "npm:1.0.0-rc.12"
     core-js: "npm:3.37.1"
     deepmerge: "npm:4.3.1"
@@ -8235,7 +8235,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.17.7"
     "@types/uuid": "npm:9.0.8"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
@@ -8425,7 +8425,7 @@ __metadata:
     "@redwoodjs/structure": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@types/mime-types": "npm:2.1.4"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0-rc.12"
@@ -8594,7 +8594,7 @@ __metadata:
     "@types/envinfo": "npm:7.8.4"
     "@types/uuid": "npm:9.0.8"
     "@types/yargs": "npm:17.0.32"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.13.0"
     systeminformation: "npm:5.22.11"
@@ -8680,7 +8680,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/yargs-parser": "npm:21.0.3"
     "@vitejs/plugin-react": "npm:4.3.1"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     "@whatwg-node/server": "npm:0.9.36"
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
@@ -8755,7 +8755,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    "@whatwg-node/fetch": "npm:0.9.17"
+    "@whatwg-node/fetch": "npm:0.9.18"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
@@ -11534,13 +11534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/fetch@npm:0.9.17, @whatwg-node/fetch@npm:^0.9.17":
-  version: 0.9.17
-  resolution: "@whatwg-node/fetch@npm:0.9.17"
+"@whatwg-node/fetch@npm:0.9.18, @whatwg-node/fetch@npm:^0.9.17":
+  version: 0.9.18
+  resolution: "@whatwg-node/fetch@npm:0.9.18"
   dependencies:
     "@whatwg-node/node-fetch": "npm:^0.5.7"
     urlpattern-polyfill: "npm:^10.0.0"
-  checksum: 10c0/6638f1d456d17c9eab55f6278aa8045157ceb43a27acc65def1b7a2a3b80ef1b79f4c203e523865c9bcf1236ef64e1378ab0627e91932c97e9f1f3a129b17195
+  checksum: 10c0/53fbbdb9c8b99d5ac550c80c4523e0e574c311fca55854c81e26949a4269638a36688cc485220f65845c9c5f10251f474b4982d594f063859af7b44316775a64
   languageName: node
   linkType: hard
 
