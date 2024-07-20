@@ -34,7 +34,7 @@
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "mime-types": "2.1.35"
   },
   "devDependencies": {

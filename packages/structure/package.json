@@ -36,7 +36,7 @@
     "enquirer": "2.4.1",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "lazy-get-decorator": "2.2.1",
     "line-column": "1.0.2",
     "lodash": "4.17.21",
