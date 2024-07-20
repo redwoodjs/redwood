@@ -4752,7 +4752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-yoga/subscription@npm:5.0.1, @graphql-yoga/subscription@npm:^5.0.0":
+"@graphql-yoga/subscription@npm:5.0.1, @graphql-yoga/subscription@npm:^5.0.1":
   version: 5.0.1
   resolution: "@graphql-yoga/subscription@npm:5.0.1"
   dependencies:
@@ -8234,7 +8234,7 @@ __metadata:
     graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
     graphql-tag: "npm:2.12.6"
-    graphql-yoga: "npm:5.3.1"
+    graphql-yoga: "npm:5.6.1"
     jest: "npm:29.7.0"
     jsonwebtoken: "npm:9.0.2"
     lodash: "npm:4.17.21"
@@ -11591,7 +11591,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@whatwg-node/server@npm:0.9.36, @whatwg-node/server@npm:^0.9.33":
+"@whatwg-node/server@npm:0.9.36, @whatwg-node/server@npm:^0.9.36":
   version: 0.9.36
   resolution: "@whatwg-node/server@npm:0.9.36"
   dependencies:
@@ -18465,24 +18465,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:5.3.1":
-  version: 5.3.1
-  resolution: "graphql-yoga@npm:5.3.1"
+"graphql-yoga@npm:5.6.1":
+  version: 5.6.1
+  resolution: "graphql-yoga@npm:5.6.1"
   dependencies:
     "@envelop/core": "npm:^5.0.0"
     "@graphql-tools/executor": "npm:^1.2.5"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@graphql-tools/utils": "npm:^10.1.0"
     "@graphql-yoga/logger": "npm:^2.0.0"
-    "@graphql-yoga/subscription": "npm:^5.0.0"
+    "@graphql-yoga/subscription": "npm:^5.0.1"
     "@whatwg-node/fetch": "npm:^0.9.17"
-    "@whatwg-node/server": "npm:^0.9.33"
+    "@whatwg-node/server": "npm:^0.9.36"
     dset: "npm:^3.1.1"
     lru-cache: "npm:^10.0.0"
     tslib: "npm:^2.5.2"
   peerDependencies:
     graphql: ^15.2.0 || ^16.0.0
-  checksum: 10c0/f7bf27d48ee63e93037b1ff6db924e30b4cd9d612c520d151aa6e566a4fb9724777c7b9fa60d74e464092d04e870d99c1e3c647888224acba0733fa6c39be719
+  checksum: 10c0/68119d4406d9117c3483afe9aa3044e9e65c9f2fa4d3d9c57e9088e1efca5d16dac805166c198e855a1b5fea9c9791c96fee8c5adf5e7cfe0546f6f37f003a92
   languageName: node
   linkType: hard
 
