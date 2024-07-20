@@ -48,7 +48,7 @@
     "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
     "@redwoodjs/testing": "workspace:*",
     "@rollup/pluginutils": "5.1.0",
     "@storybook/addon-essentials": "7.6.17",
