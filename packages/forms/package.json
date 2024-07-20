@@ -43,7 +43,7 @@
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "vitest": "2.0.3"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508"
