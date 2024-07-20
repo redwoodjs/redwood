@@ -50,13 +50,13 @@
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "^5.0.2",
+    "@rollup/pluginutils": "5.1.0",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "^0.30.0",
-    "react-docgen": "^7.0.0",
-    "unplugin-auto-import": "^0.17.5"
+    "magic-string": "0.30.10",
+    "react-docgen": "7.0.3",
+    "unplugin-auto-import": "0.18.0"
   },
   "devDependencies": {
     "@types/node": "20.14.11",
