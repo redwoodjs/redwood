@@ -40,5 +40,5 @@
     "@docusaurus/tsconfig": "3.4.0",
     "typescript": "5.4.5"
   },
-  "packageManager": "yarn@4.3.0"
+  "packageManager": "yarn@4.3.1"
 }
