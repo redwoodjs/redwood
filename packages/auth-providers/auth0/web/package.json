@@ -34,7 +34,7 @@
     "@types/react": "^18.2.55",
     "react": "19.0.0-beta-04b058868c-20240508",
     "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "vitest": "2.0.3"
   },
   "peerDependencies": {
     "@auth0/auth0-spa-js": "2.1.3"
