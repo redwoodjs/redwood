@@ -18,13 +18,7 @@
 ## Usage
 
 ```shell
-npm i create-rw-rsc-app
-```
-
-```ts
-import { greet } from "create-rw-rsc-app";
-
-greet("Hello, world! 💖");
+npx create-rw-rsc-app
 ```
 
 ## Contributors
