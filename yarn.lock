@@ -8083,7 +8083,6 @@ __metadata:
     react-refresh: "npm:0.14.0"
     resolve-url-loader: "npm:5.0.0"
     rimraf: "npm:6.0.1"
-    style-loader: "npm:3.3.4"
     typescript: "npm:5.4.5"
     url-loader: "npm:4.1.1"
   bin:
@@ -27998,15 +27997,6 @@ __metadata:
   version: 3.0.0
   resolution: "stubs@npm:3.0.0"
   checksum: 10c0/841a4ab8c76795d34aefe129185763b55fbf2e4693208215627caea4dd62e1299423dcd96f708d3128e3dfa0e669bae2cb912e6e906d7d81eaf6493196570923
-  languageName: node
-  linkType: hard
-
-"style-loader@npm:3.3.4":
-  version: 3.3.4
-  resolution: "style-loader@npm:3.3.4"
-  peerDependencies:
-    webpack: ^5.0.0
-  checksum: 10c0/8f8027fc5c6e91400cbb60066e7db3315810f8eaa0d19b2a254936eb0bec399ba8a7043b1789da9d05ab7c3ba50faf9267765ae0bf3571e48aa34ecdc774be37
   languageName: node
   linkType: hard
 
