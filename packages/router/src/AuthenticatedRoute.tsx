@@ -6,7 +6,7 @@ import { Redirect } from './redirect.js'
 import { useRouterState } from './router-context.js'
 
 interface AuthenticatedRouteProps {
-  children: React.ReactNode
+  children: React.ReactNode | Thenable<React.ReactNode>
   roles?: string | string[]
   unauthenticated: keyof GeneratedRoutesMap
   whileLoadingAuth?: () => React.ReactElement | null

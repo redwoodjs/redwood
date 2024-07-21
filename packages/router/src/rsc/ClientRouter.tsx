@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import React, { useMemo } from 'react'
 
 import { analyzeRoutes } from '../analyzeRoutes.js'
@@ -13,8 +14,6 @@ export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
     // Wrap it in the provider so that useLocation can be used
     <LocationProvider>
-      {/* @MARK @TODO: Theres a way around this, I just don't know what yet... */}
-      {/* @ts-expect-error: TS Thinks async components don't work */}
       <LocationAwareRouter paramTypes={paramTypes} useAuth={useAuth}>
         {children}
       </LocationAwareRouter>
@@ -50,7 +49,9 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+    return rscFetch('__rwjs__Routes', {
+      location: { pathname, search },
+    }) as unknown as ReactNode
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -79,15 +80,16 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          {/* @MARK @TODO: Theres a way around this, I just don't know what yet... */}
-          {/* @ts-expect-error: TS Thinks async components don't work */}
           {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
   }
 
-  return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+  // Our types dont fully handle async components
+  return rscFetch('__rwjs__Routes', {
+    location: { pathname, search },
+  }) as unknown as ReactNode
 }
 
 export type { RscFetchProps } from './rscFetchForClientRouter.js'
