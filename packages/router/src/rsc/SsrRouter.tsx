@@ -31,6 +31,6 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  // TS doesn't like that we're returning a promise, but in RSC it's ok!
+  // @TODO(RSC): TS doesn't like that we're returning a promise, but in RSC it's ok!
   return renderRoutesFromDist(pathname) as unknown as React.ReactNode
 }
