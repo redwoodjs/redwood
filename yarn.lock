@@ -8522,7 +8522,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.19"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
-    publint: "npm:0.2.8"
+    publint: "npm:0.2.9"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:2.1.0"
@@ -25293,19 +25293,6 @@ __metadata:
     randombytes: "npm:^2.0.1"
     safe-buffer: "npm:^5.1.2"
   checksum: 10c0/6c2cc19fbb554449e47f2175065d6b32f828f9b3badbee4c76585ac28ae8641aafb9bb107afc430c33c5edd6b05dbe318df4f7d6d7712b1093407b11c4280700
-  languageName: node
-  linkType: hard
-
-"publint@npm:0.2.8":
-  version: 0.2.8
-  resolution: "publint@npm:0.2.8"
-  dependencies:
-    npm-packlist: "npm:^5.1.3"
-    picocolors: "npm:^1.0.1"
-    sade: "npm:^1.8.1"
-  bin:
-    publint: lib/cli.js
-  checksum: 10c0/da4157b3039004d42b8f7df048236bbbf598919d8ddb2c9387b5c4ddaf1564d81e7ab3370ed039f00b784a0c6915d0dbb523fcd1817aa3738f77aac0b955153a
   languageName: node
   linkType: hard
 
