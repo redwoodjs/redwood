@@ -154,9 +154,6 @@ export async function runFeServer() {
     rwConfig.web.apiUrl,
     createProxyMiddleware({
       changeOrigin: false,
-      pathRewrite: {
-        [`^${rwConfig.web.apiUrl}`]: '', // remove base path
-      },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
