@@ -85,7 +85,14 @@ export default tseslint.config(
       //     type: "natural",
       //   },
       // ],
-
+      'node/shebang': [
+        'error',
+        {
+          convertPath: {
+            'src/**/*.ts': ['src/(.+?)\\.js', 'dist/$1.js'],
+          },
+        },
+      ],
       // Stylistic concerns that don't interfere with Prettier
       'no-useless-rename': 'error',
       'object-shorthand': 'error',

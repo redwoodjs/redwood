@@ -1,10 +1,12 @@
+#!/usr/bin/env node
+
 import { initConfig } from './config.js'
 import { downloadTemplate } from './download.js'
 import { ExitCodeError } from './error.js'
 import { initialCommit } from './git.js'
-import { printDone, printWelcome } from './messages.js'
 import { install } from './install.js'
 import { setInstallationDir } from './installationDir.js'
+import { printDone, printWelcome } from './messages.js'
 import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
 import { unzip } from './zip.js'
 
