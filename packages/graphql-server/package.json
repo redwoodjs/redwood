@@ -42,7 +42,7 @@
     "graphql-tag": "2.12.6",
     "graphql-yoga": "5.6.1",
     "lodash": "4.17.21",
-    "uuid": "9.0.1"
+    "uuid": "10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
@@ -54,7 +54,7 @@
     "@types/aws-lambda": "8.10.141",
     "@types/jsonwebtoken": "9.0.6",
     "@types/lodash": "4.17.7",
-    "@types/uuid": "9.0.8",
+    "@types/uuid": "10.0.0",
     "@whatwg-node/fetch": "0.9.18",
     "jest": "29.7.0",
     "jsonwebtoken": "9.0.2",

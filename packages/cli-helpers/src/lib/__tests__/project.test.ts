@@ -54,15 +54,10 @@ describe('addEnvVar', () => {
 
   describe('addEnvVar adds environment variables as part of a setup task', () => {
     beforeEach(() => {
-      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
-        return true
-      })
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
-      // @ts-expect-error We're only returning a string rather than the expected Buffer | string
-      // which is determined by the options parameter passed to the real fs.readFileSync
-      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
-        return envFileContent
-      })
+      // @ts-expect-error https://github.com/vitest-dev/vitest/issues/6182
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => envFileContent)
 
       vi.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
         expect(envPath).toContain('.env')
@@ -130,12 +125,9 @@ describe('addEnvVar', () => {
 describe('updateTomlConfig', () => {
   describe('updateTomlConfig configures a new CLI plugin', () => {
     beforeEach(() => {
-      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
-        return true
-      })
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
-      // @ts-expect-error We're only returning a string rather than the expected Buffer | string
-      // which is determined by the options parameter passed to the real fs.readFileSync
+      // @ts-expect-error https://github.com/vitest-dev/vitest/issues/6182
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)
       })

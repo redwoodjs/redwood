@@ -28,7 +28,7 @@
     "base64url": "3.0.1",
     "core-js": "3.37.1",
     "md5": "2.3.0",
-    "uuid": "9.0.1"
+    "uuid": "10.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
@@ -36,7 +36,7 @@
     "@redwoodjs/api": "workspace:*",
     "@simplewebauthn/server": "7.4.0",
     "@types/md5": "2.3.5",
-    "@types/uuid": "9.0.8",
+    "@types/uuid": "10.0.0",
     "typescript": "5.5.3",
     "vitest": "2.0.3"
   },
