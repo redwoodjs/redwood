@@ -1,22 +1,22 @@
-import { execa } from "execa";
+import { execa } from 'execa'
 
-import type { Config } from "./config.js";
+import type { Config } from './config.js'
 
 export async function initialCommit(config: Config) {
   if (config.verbose) {
-    console.log("Running `git init .`");
+    console.log('Running `git init .`')
   }
-  await execa({ cwd: config.installationDir })`git init .`;
+  await execa({ cwd: config.installationDir })`git init .`
 
   if (config.verbose) {
-    console.log("Running `git add .`");
+    console.log('Running `git add .`')
   }
-  await execa({ cwd: config.installationDir })`git add .`;
+  await execa({ cwd: config.installationDir })`git add .`
 
   if (config.verbose) {
-    console.log("Running `git commit`");
+    console.log('Running `git commit`')
   }
   await execa({
     cwd: config.installationDir,
-  })`git commit -m ${"Initial commit"}`;
+  })`git commit -m ${'Initial commit'}`
 }

@@ -1,5 +1,5 @@
 {
-	"extends": "markdownlint/style/prettier",
-	"first-line-h1": false,
-	"no-inline-html": false
+  "extends": "markdownlint/style/prettier",
+  "first-line-h1": false,
+  "no-inline-html": false
 }

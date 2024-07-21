@@ -1,8 +1,8 @@
 export class ExitCodeError extends Error {
-  exitCode: number;
+  exitCode: number
 
   constructor(exitCode: number, message: string) {
-    super(message);
-    this.exitCode = exitCode;
+    super(message)
+    this.exitCode = exitCode
   }
 }
