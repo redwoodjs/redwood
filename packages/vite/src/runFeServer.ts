@@ -26,8 +26,6 @@ import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
 import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
-import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
-import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
@@ -61,6 +59,8 @@ export async function runFeServer() {
   registerFwGlobalsAndShims()
 
   if (rscEnabled) {
+    const { setClientEntries } = await import('./rsc/rscWorkerCommunication.js')
+
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries()
@@ -150,29 +150,28 @@ export async function runFeServer() {
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
-  // Also be careful of differences between v2 and v3 of the server
   app.use(
     rwConfig.web.apiUrl,
-    // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
-    // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
       changeOrigin: false,
-      pathRewrite: {
-        [`^${rwConfig.web.apiUrl}`]: '', // remove base path
-      },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
     }),
   )
 
-  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use(
-    '/rw-rsc',
-    createRscRequestHandler({
-      getMiddlewareRouter: async () => middlewareRouter,
-    }),
-  )
+  if (rscEnabled) {
+    const { createRscRequestHandler } = await import(
+      './rsc/rscRequestHandler.js'
+    )
+    // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+    app.use(
+      '/rw-rsc',
+      createRscRequestHandler({
+        getMiddlewareRouter: async () => middlewareRouter,
+      }),
+    )
+  }
 
   // Static asset handling MUST be defined before our catch all routing handler below
   // otherwise it will catch all requests for static assets and return a 404.

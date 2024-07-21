@@ -5,21 +5,20 @@ import type { ViteDevServer } from 'vite'
 import { createServer as createViteServer } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
-import type { RouteSpec } from '@redwoodjs/internal/dist/routes'
-import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import type { RouteSpec } from '@redwoodjs/internal/dist/routes.js'
+import { getProjectRoutes } from '@redwoodjs/internal/dist/routes.js'
 import type { Paths } from '@redwoodjs/project-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import {
   createPerRequestMap,
   createServerStorage,
 } from '@redwoodjs/server-store'
-import type { Middleware } from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
+import type { Middleware } from '@redwoodjs/web/middleware'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
-import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import {
@@ -40,6 +39,23 @@ async function createServer() {
   const rwPaths = getPaths()
 
   const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
+
+  // Per request store is only used in server components
+  const serverStorage = createServerStorage()
+
+  app.use('*', (req, _res, next) => {
+    const fullUrl = getFullUrl(req)
+
+    const perReqStore = createPerRequestMap({
+      // Convert express headers to fetch header
+      headers: convertExpressHeaders(req.headersDistinct),
+      fullUrl,
+    })
+
+    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
+    // But note that the serverStorage is RE-initialised for the RSC worker
+    serverStorage.run(perReqStore, next)
+  })
 
   // ~~~ Dev time validations ~~~~
   // TODO (STREAMING) When Streaming is released Vite will be the only bundler,
@@ -68,11 +84,12 @@ async function createServer() {
     plugins: [
       cjsInterop({
         dependencies: [
-          // Skip ESM modules: rwjs/auth, rwjs/web
+          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
           '@redwoodjs/router',
-          '@redwoodjs/auth-*',
+          '@redwoodjs/auth-*-api',
+          '@redwoodjs/auth-*-web',
         ],
       }),
       rscEnabled && rscRoutesAutoLoader(),
@@ -82,8 +99,6 @@ async function createServer() {
     clearScreen: false,
     appType: 'custom',
   })
-
-  const serverStorage = createServerStorage()
 
   // create a handler that will invoke middleware with or without a route
   // The DEV one will create a new middleware router on each request
@@ -112,28 +127,19 @@ async function createServer() {
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
-  app.use('*', (req, _res, next) => {
-    const fullUrl = getFullUrl(req)
-
-    const perReqStore = createPerRequestMap({
-      // Convert express headers to fetch header
-      headers: convertExpressHeaders(req.headersDistinct),
-      fullUrl,
-    })
-
-    // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
-    // But note that the serverStorage is RE-initialised for the RSC worker
-    serverStorage.run(perReqStore, next)
-  })
-
-  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use(
-    '/rw-rsc',
-    createRscRequestHandler({
-      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
-      viteDevServer: vite,
-    }),
-  )
+  if (rscEnabled) {
+    const { createRscRequestHandler } = await import(
+      './rsc/rscRequestHandler.js'
+    )
+    // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+    app.use(
+      '/rw-rsc',
+      createRscRequestHandler({
+        getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+        viteDevServer: vite,
+      }),
+    )
+  }
 
   const routes = getProjectRoutes()
 

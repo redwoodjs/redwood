@@ -1,4 +1,4 @@
-import { makeFilePath } from '../utils'
+import { makeFilePath } from '../utils.js'
 
 type SSRModuleMap = null | {
   [clientId: string]: {

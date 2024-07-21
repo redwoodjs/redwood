@@ -19,7 +19,7 @@ await build({
 await build({
   buildOptions: {
     ...defaultBuildOptions,
-    tsconfig: 'tsconfig.build-cjs.json',
+    tsconfig: 'tsconfig.build.json',
     outdir: 'dist/cjs',
     packages: 'external',
   },
@@ -52,6 +52,16 @@ const packageJson: PackageJson = JSON.parse(
 packageJson.type = 'commonjs'
 writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
 
-await $`yarn build:types-cjs`
+try {
+  await $`yarn build:types-cjs`
+} catch (e) {
+  console.error('Could not build CJS types')
+  console.error(e)
+
+  // Restore the original package.json
+  await $`mv package.json.bak package.json`
+
+  process.exit(1)
+}
 
 await $`mv package.json.bak package.json`

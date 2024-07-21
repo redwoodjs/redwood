@@ -50,20 +50,20 @@
     "listr2": "6.6.1",
     "lodash": "4.17.21",
     "pascalcase": "1.0.0",
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "prompts": "2.4.2",
-    "smol-toml": "1.2.2",
+    "smol-toml": "1.3.0",
     "terminal-link": "2.1.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/dotenv-defaults": "^2.0.4",
-    "@types/lodash": "4.17.5",
+    "@types/lodash": "4.17.7",
     "@types/pascalcase": "1.0.3",
     "@types/yargs": "17.0.32",
-    "tsx": "4.15.6",
+    "tsx": "4.16.2",
     "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
