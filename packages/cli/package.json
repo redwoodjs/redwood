@@ -79,7 +79,7 @@
     "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {

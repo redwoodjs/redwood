@@ -7494,12 +7494,12 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@simplewebauthn/server": "npm:7.4.0"
     "@types/md5": "npm:2.3.5"
-    "@types/uuid": "npm:9.0.8"
+    "@types/uuid": "npm:10.0.0"
     base64url: "npm:3.0.1"
     core-js: "npm:3.37.1"
     md5: "npm:2.3.0"
     typescript: "npm:5.4.5"
-    uuid: "npm:9.0.1"
+    uuid: "npm:10.0.0"
     vitest: "npm:2.0.3"
   languageName: unknown
   linkType: soft
@@ -7987,7 +7987,7 @@ __metadata:
     title-case: "npm:3.0.3"
     tsx: "npm:4.16.2"
     typescript: "npm:5.4.5"
-    uuid: "npm:9.0.1"
+    uuid: "npm:10.0.0"
     vitest: "npm:2.0.3"
     yargs: "npm:17.7.2"
   bin:
@@ -8235,7 +8235,7 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.141"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.17.7"
-    "@types/uuid": "npm:9.0.8"
+    "@types/uuid": "npm:10.0.0"
     "@whatwg-node/fetch": "npm:0.9.18"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
@@ -8247,7 +8247,7 @@ __metadata:
     lodash: "npm:4.17.21"
     tsx: "npm:4.16.2"
     typescript: "npm:5.4.5"
-    uuid: "npm:9.0.1"
+    uuid: "npm:10.0.0"
   languageName: unknown
   linkType: soft
 
@@ -8593,7 +8593,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
     "@types/envinfo": "npm:7.8.4"
-    "@types/uuid": "npm:9.0.8"
+    "@types/uuid": "npm:10.0.0"
     "@types/yargs": "npm:17.0.32"
     "@whatwg-node/fetch": "npm:0.9.18"
     ci-info: "npm:4.0.0"
@@ -8601,7 +8601,7 @@ __metadata:
     systeminformation: "npm:5.22.11"
     tsx: "npm:4.16.2"
     typescript: "npm:5.4.5"
-    uuid: "npm:9.0.1"
+    uuid: "npm:10.0.0"
     vitest: "npm:2.0.3"
     yargs: "npm:17.7.2"
   languageName: unknown
@@ -11240,7 +11240,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.8, @types/uuid@npm:^9.0.1":
+"@types/uuid@npm:10.0.0":
+  version: 10.0.0
+  resolution: "@types/uuid@npm:10.0.0"
+  checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
+  languageName: node
+  linkType: hard
+
+"@types/uuid@npm:^9.0.1":
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
   checksum: 10c0/b411b93054cb1d4361919579ef3508a1f12bf15b5fdd97337d3d351bece6c921b52b6daeef89b62340fd73fd60da407878432a1af777f40648cbe53a01723489
@@ -14656,7 +14663,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.16.2"
     untildify: "npm:4.0.0"
-    uuid: "npm:9.0.1"
+    uuid: "npm:10.0.0"
     vitest: "npm:2.0.3"
     yargs: "npm:17.7.2"
   bin:
@@ -29452,16 +29459,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.1, uuid@npm:^9.0.0, uuid@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^10.0.0":
+"uuid@npm:10.0.0, uuid@npm:^10.0.0":
   version: 10.0.0
   resolution: "uuid@npm:10.0.0"
   bin:
@@ -29485,6 +29483,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0, uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
   languageName: node
   linkType: hard
 
