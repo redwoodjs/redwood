@@ -13,10 +13,10 @@
     "email": "tobbe@tlundberg.com"
   },
   "type": "module",
-  "main": "./lib/index.js",
-  "bin": "./lib/index.js",
+  "main": "./dist/index.js",
+  "bin": "./dist/index.js",
   "files": [
-    "lib/",
+    "dist/",
     "package.json",
     "LICENSE.md",
     "README.md"
