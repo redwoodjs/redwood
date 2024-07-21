@@ -8526,7 +8526,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:2.1.0"
-    tsx: "npm:4.15.6"
+    tsx: "npm:4.16.2"
     typescript: "npm:5.4.5"
     vitest: "npm:2.0.3"
   peerDependencies:
@@ -16290,7 +16290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.21.3, esbuild@npm:~0.21.4, esbuild@npm:~0.21.5":
+"esbuild@npm:^0.21.3, esbuild@npm:~0.21.5":
   version: 0.21.5
   resolution: "esbuild@npm:0.21.5"
   dependencies:
@@ -28745,22 +28745,6 @@ __metadata:
   bin:
     tstyche: ./build/bin.js
   checksum: 10c0/7b706d2af6af09f8bbd5bcd70b0826febdf416a43e5fe42af36e3b0d7d8e0f6b0d2e30d27c1c5cc18f5262f0f7bbf19f75225366fa894a11ace95bfa9622acc5
-  languageName: node
-  linkType: hard
-
-"tsx@npm:4.15.6":
-  version: 4.15.6
-  resolution: "tsx@npm:4.15.6"
-  dependencies:
-    esbuild: "npm:~0.21.4"
-    fsevents: "npm:~2.3.3"
-    get-tsconfig: "npm:^4.7.5"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    tsx: dist/cli.mjs
-  checksum: 10c0/c44e489d35b8b4795d68164572eb9e322a707290aa0786c2aac0f5c7782a884dfec38d557d74471b981a8314b2c7f6612078451d0429db028a23cb54a37e83a0
   languageName: node
   linkType: hard
 
