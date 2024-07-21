@@ -8,6 +8,7 @@ import { install } from './install.js'
 import { setInstallationDir } from './installationDir.js'
 import { printDone, printWelcome } from './messages.js'
 import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
+import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
 import { unzip } from './zip.js'
 
 printWelcome()
@@ -20,6 +21,7 @@ try {
   await setInstallationDir(config)
   const templateZipPath = await downloadTemplate(config)
   await unzip(config, templateZipPath)
+  await upgradeToLatestCanary(config)
   await install(config)
   await initialCommit(config)
 
