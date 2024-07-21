@@ -14,6 +14,7 @@
   },
   "type": "module",
   "main": "./lib/index.js",
+  "bin": "./lib/index.js",
   "files": [
     "lib/",
     "package.json",
