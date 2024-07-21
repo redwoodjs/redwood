@@ -155,7 +155,6 @@ export default function redwoodPluginVite(): PluginOption[] {
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
-          forVite: true,
           forRsc: rscEnabled,
         }),
       },

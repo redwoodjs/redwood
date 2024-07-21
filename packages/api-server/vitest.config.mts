@@ -6,5 +6,6 @@ export default defineConfig({
       ...configDefaults.exclude,
       '**/fixtures',
     ],
+    pool: 'threads'
   },
 })

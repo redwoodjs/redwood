@@ -27,14 +27,14 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.24.8",
     "@opentelemetry/api": "1.8.0",
     "@opentelemetry/core": "1.22.0",
     "@opentelemetry/exporter-trace-otlp-http": "0.49.1",
     "@opentelemetry/resources": "1.22.0",
     "@opentelemetry/sdk-trace-node": "1.22.0",
     "@opentelemetry/semantic-conventions": "1.22.0",
-    "@prisma/internals": "5.15.1",
+    "@prisma/internals": "5.17.0",
     "@redwoodjs/api-server": "workspace:*",
     "@redwoodjs/cli-helpers": "workspace:*",
     "@redwoodjs/fastify-web": "workspace:*",
@@ -69,12 +69,12 @@
     "pascalcase": "1.0.0",
     "pluralize": "8.0.0",
     "portfinder": "1.0.32",
-    "prettier": "3.3.2",
-    "prisma": "5.15.1",
+    "prettier": "3.3.3",
+    "prisma": "5.17.0",
     "prompts": "2.4.2",
-    "rimraf": "5.0.7",
-    "semver": "7.6.2",
-    "smol-toml": "1.2.2",
+    "rimraf": "6.0.1",
+    "semver": "7.6.3",
+    "smol-toml": "1.3.0",
     "string-env-interpolation": "1.0.1",
     "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
@@ -83,13 +83,13 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
     "memfs": "4.9.3",
-    "tsx": "4.15.6",
+    "tsx": "4.16.2",
     "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -42,7 +42,7 @@ vi.mock('/C:/proj/web/dist/ssr/entry-server.mjs', () => {
     registerMiddleware: distRegisterMwMock,
   }
 })
-vi.mock('/C:/proj/web/dist/ssr/entry-server.mjs', () => {
+vi.mock('C:/proj/web/dist/ssr/entry-server.mjs', () => {
   return {
     registerMiddleware: distRegisterMwMock,
   }

@@ -58,6 +58,8 @@ describe('addEnvVar', () => {
         return true
       })
 
+      // @ts-expect-error We're only returning a string rather than the expected Buffer | string
+      // which is determined by the options parameter passed to the real fs.readFileSync
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return envFileContent
       })
@@ -132,6 +134,8 @@ describe('updateTomlConfig', () => {
         return true
       })
 
+      // @ts-expect-error We're only returning a string rather than the expected Buffer | string
+      // which is determined by the options parameter passed to the real fs.readFileSync
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)
       })

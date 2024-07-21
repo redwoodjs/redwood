@@ -23,17 +23,17 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
-    "@prisma/client": "5.15.1",
+    "@babel/runtime-corejs3": "7.24.8",
+    "@prisma/client": "5.17.0",
     "@redwoodjs/project-config": "workspace:*",
     "core-js": "3.37.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
-    "@prisma/internals": "5.15.1",
-    "esbuild": "0.21.3",
-    "vitest": "1.6.0"
+    "@prisma/internals": "5.17.0",
+    "esbuild": "0.23.0",
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
