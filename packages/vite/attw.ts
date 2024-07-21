@@ -6,17 +6,14 @@ interface Problem {
   resolutionKind?: string
 }
 
-/***
- * Excluded entry points:
- * - ./bins/rw-vite-build.mjs: this is only used in the build handler
- * - SsrRouter, Router: this should be moved out of the Vite package anyway, and is only used in ESM
- * - ./react-node-loader: used to run the Worker
- * -
- */
+// Excluded entry points:
+// - ./bins/rw-vite-build.mjs: this is only used in the build handler
+// - ./SsrRouter: this should be moved out of the Vite package anyway, and is only used in ESM
+// - ./react-node-loader: used to run the Worker
 
 await $({
   nothrow: true,
-})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs ./SsrRouter ./Router ./react-node-loader -f json > .attw.json`
+})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs ./SsrRouter ./react-node-loader -f json > .attw.json`
 const output = await $`cat .attw.json`
 await $`rm .attw.json`
 
