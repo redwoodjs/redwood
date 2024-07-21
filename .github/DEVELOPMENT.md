@@ -3,8 +3,8 @@
 After [forking the repo from GitHub](https://help.github.com/articles/fork-a-repo) and [installing pnpm](https://pnpm.io/installation):
 
 ```shell
-git clone https://github.com/ < your-name-here > /create-rw-rsc-app
-cd create-rw-rsc-app
+git clone https://github.com/ < your-name-here > /create-redwood-rsc-app
+cd create-redwood-rsc-app
 pnpm install
 ```
 

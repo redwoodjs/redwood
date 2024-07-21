@@ -103,7 +103,10 @@ export default tseslint.config(
     extends: [tseslint.configs.disableTypeChecked],
     files: ['**/*.md/*.ts'],
     rules: {
-      'n/no-missing-import': ['error', { allowModules: ['create-rw-rsc-app'] }],
+      'n/no-missing-import': [
+        'error',
+        { allowModules: ['create-redwood-rsc-app'] },
+      ],
     },
   },
   {

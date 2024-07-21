@@ -1,13 +1,14 @@
 {
-  "name": "create-rw-rsc-app",
+  "name": "@tobbe.dev/create-redwood-rsc-app",
   "version": "0.0.1",
   "description": "Quickstart for a RedwoodJS React Server Components App",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tobbe/create-rw-rsc-app"
+    "url": "https://github.com/Tobbe/create-redwood-rsc-app"
   },
   "license": "MIT",
   "author": {
+    "name": "Tobbe Lundberg",
     "email": "tobbe@tlundberg.com"
   },
   "type": "module",

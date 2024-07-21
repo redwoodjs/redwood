@@ -14,8 +14,8 @@ jobs:
 
             The release is available on:
 
-            * [GitHub releases](https://github.com/Tobbe/create-rw-rsc-app/releases/tag/{release_tag})
-            * [npm package (@latest dist-tag)](https://www.npmjs.com/package/create-rw-rsc-app/v/${{ env.npm_version }})
+            * [GitHub releases](https://github.com/Tobbe/create-redwood-rsc-app/releases/tag/{release_tag})
+            * [npm package (@latest dist-tag)](https://www.npmjs.com/package/create-redwood-rsc-app/v/${{ env.npm_version }})
 
             Cheers! 📦🚀
 
