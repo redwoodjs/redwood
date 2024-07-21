@@ -14,7 +14,7 @@ interface Location extends URL {}
 interface LocationProviderProps {
   location?: Location
   trailingSlashes?: TrailingSlashesTypes
-  children?: React.ReactNode | Thenable<React.ReactNode>
+  children?: React.ReactNode
 }
 
 interface LocationProviderState {
