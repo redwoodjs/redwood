@@ -8511,6 +8511,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.3"
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
@@ -8525,6 +8526,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:2.1.0"
+    tsx: "npm:4.15.6"
     typescript: "npm:5.4.5"
     vitest: "npm:2.0.3"
   peerDependencies:
@@ -16288,7 +16290,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.21.3, esbuild@npm:~0.21.5":
+"esbuild@npm:^0.21.3, esbuild@npm:~0.21.4, esbuild@npm:~0.21.5":
   version: 0.21.5
   resolution: "esbuild@npm:0.21.5"
   dependencies:
@@ -25294,6 +25296,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"publint@npm:0.2.8":
+  version: 0.2.8
+  resolution: "publint@npm:0.2.8"
+  dependencies:
+    npm-packlist: "npm:^5.1.3"
+    picocolors: "npm:^1.0.1"
+    sade: "npm:^1.8.1"
+  bin:
+    publint: lib/cli.js
+  checksum: 10c0/da4157b3039004d42b8f7df048236bbbf598919d8ddb2c9387b5c4ddaf1564d81e7ab3370ed039f00b784a0c6915d0dbb523fcd1817aa3738f77aac0b955153a
+  languageName: node
+  linkType: hard
+
 "publint@npm:0.2.9":
   version: 0.2.9
   resolution: "publint@npm:0.2.9"
@@ -28730,6 +28745,22 @@ __metadata:
   bin:
     tstyche: ./build/bin.js
   checksum: 10c0/7b706d2af6af09f8bbd5bcd70b0826febdf416a43e5fe42af36e3b0d7d8e0f6b0d2e30d27c1c5cc18f5262f0f7bbf19f75225366fa894a11ace95bfa9622acc5
+  languageName: node
+  linkType: hard
+
+"tsx@npm:4.15.6":
+  version: 4.15.6
+  resolution: "tsx@npm:4.15.6"
+  dependencies:
+    esbuild: "npm:~0.21.4"
+    fsevents: "npm:~2.3.3"
+    get-tsconfig: "npm:^4.7.5"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    tsx: dist/cli.mjs
+  checksum: 10c0/c44e489d35b8b4795d68164572eb9e322a707290aa0786c2aac0f5c7782a884dfec38d557d74471b981a8314b2c7f6612078451d0429db028a23cb54a37e83a0
   languageName: node
   linkType: hard
 
