@@ -50,9 +50,9 @@ export const makeDirectivesForPlugin = (
 export const getDirectiveName = (schema: DocumentNode) => {
   const definition = schema.definitions.find(
     (definition) => definition.kind === 'DirectiveDefinition',
-  ) as ExecutableDefinitionNode
+  ) as ExecutableDefinitionNode | undefined
 
-  return definition.name?.value
+  return definition?.name?.value
 }
 
 export const createValidatorDirective = (
