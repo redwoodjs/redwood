@@ -150,11 +150,8 @@ export async function runFeServer() {
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
-  // Also be careful of differences between v2 and v3 of the server
   app.use(
     rwConfig.web.apiUrl,
-    // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
-    // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
       changeOrigin: false,
       pathRewrite: {
