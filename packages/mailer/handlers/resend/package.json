@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "workspace:*",
-    "resend": "1.1.0"
+    "resend": "3.4.0"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
