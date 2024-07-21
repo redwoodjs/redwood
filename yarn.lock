@@ -8578,7 +8578,7 @@ __metadata:
     lru-cache: "npm:11.0.0"
     proxyquire: "npm:2.1.3"
     smol-toml: "npm:1.3.0"
-    ts-morph: "npm:15.1.0"
+    ts-morph: "npm:22.0.0"
     typescript: "npm:5.4.5"
     vitest: "npm:2.0.3"
     vscode-languageserver: "npm:6.1.1"
@@ -10265,18 +10265,6 @@ __metadata:
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
   checksum: 10c0/073bfa548026b1ebaf1659eb8961e526be22fa77139b10d60e712f46d2f0f05f4e6c8bec62a087d41088ee9e29faa7f54838568e475ab2f776171003c3920858
-  languageName: node
-  linkType: hard
-
-"@ts-morph/common@npm:~0.16.0":
-  version: 0.16.0
-  resolution: "@ts-morph/common@npm:0.16.0"
-  dependencies:
-    fast-glob: "npm:^3.2.11"
-    minimatch: "npm:^5.1.0"
-    mkdirp: "npm:^1.0.4"
-    path-browserify: "npm:^1.0.1"
-  checksum: 10c0/a9f306dd5c0c022b805400a1e54f18ec3fd1d80cc62e41f5f6964755d4b2538c10584b2fd040f9184121269dfebbe20ac7ffeb9965e74c3d6cb5b8891e29e5cb
   languageName: node
   linkType: hard
 
@@ -13995,13 +13983,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"code-block-writer@npm:^11.0.0":
-  version: 11.0.3
-  resolution: "code-block-writer@npm:11.0.3"
-  checksum: 10c0/12fe4c02152a2b607e8913b39dcc31dcb5240f7c8933a3335d4e42a5418af409bf7ed454c80d6d8c12f9c59bb685dd88f9467874b46be62236dfbed446d03fd6
-  languageName: node
-  linkType: hard
-
 "code-block-writer@npm:^13.0.1":
   version: 13.0.1
   resolution: "code-block-writer@npm:13.0.1"
@@ -17071,7 +17052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:3.3.2, fast-glob@npm:^3.2.11, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.2":
+"fast-glob@npm:3.3.2, fast-glob@npm:^3.2.9, fast-glob@npm:^3.3.2":
   version: 3.3.2
   resolution: "fast-glob@npm:3.3.2"
   dependencies:
@@ -22963,7 +22944,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:^1.0.3, mkdirp@npm:^1.0.4":
+"mkdirp@npm:^1.0.3":
   version: 1.0.4
   resolution: "mkdirp@npm:1.0.4"
   bin:
@@ -28468,17 +28449,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:15.1.0":
-  version: 15.1.0
-  resolution: "ts-morph@npm:15.1.0"
-  dependencies:
-    "@ts-morph/common": "npm:~0.16.0"
-    code-block-writer: "npm:^11.0.0"
-  checksum: 10c0/ef72fe65e5837afb49f11a67f98922687c92653a3391a258448d36b2d2a16d82487a8de93c0e61f7f79151539f2b6e46fa1ef8cb17f1e1bc9317f3d6819c0655
-  languageName: node
-  linkType: hard
-
-"ts-morph@npm:^22.0.0":
+"ts-morph@npm:22.0.0, ts-morph@npm:^22.0.0":
   version: 22.0.0
   resolution: "ts-morph@npm:22.0.0"
   dependencies:
