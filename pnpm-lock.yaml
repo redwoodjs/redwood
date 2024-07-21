@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@clack/prompts':
-        specifier: ^0.7.0
-        version: 0.7.0
       chalk:
         specifier: 5.3.0
         version: 5.3.0
@@ -20,9 +17,6 @@ importers:
       execa:
         specifier: 9.3.0
         version: 9.3.0
-      listr2:
-        specifier: 8.2.3
-        version: 8.2.3
       node-fetch:
         specifier: 3.3.2
         version: 3.3.2
@@ -32,15 +26,9 @@ importers:
       untildify:
         specifier: 5.0.0
         version: 5.0.0
-      unzipit:
-        specifier: 1.4.3
-        version: 1.4.3
       which:
         specifier: 4.0.0
         version: 4.0.0
-      yauzl:
-        specifier: 3.1.3
-        version: 3.1.3
       yauzl-promise:
         specifier: 4.0.0
         version: 4.0.0
@@ -63,9 +51,6 @@ importers:
       '@types/which':
         specifier: 3.0.4
         version: 3.0.4
-      '@types/yauzl':
-        specifier: 2.10.3
-        version: 2.10.3
       '@types/yauzl-promise':
         specifier: 4.0.1
         version: 4.0.1
@@ -225,14 +210,6 @@ packages:
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
-
-  '@clack/core@0.3.4':
-    resolution: {integrity: sha512-H4hxZDXgHtWTwV3RAVenqcC4VbJZNegbBjlPvzOzCouXtS2y3sDvlO3IsbrPNWuLWPPlYVYPghQdSF64683Ldw==}
-
-  '@clack/prompts@0.7.0':
-    resolution: {integrity: sha512-0MhX9/B4iL6Re04jPrttDm+BsP8y6mS7byuv0BvXgdXhbV5PdlsHt55dvNsuBCPZ7xq1oTAOOuotR9NFbQyMSA==}
-    bundledDependencies:
-      - is-unicode-supported
 
   '@cspell/cspell-bundled-dicts@8.11.0':
     resolution: {integrity: sha512-SYAW1oT9jjnbwju5P6luTnKogEe8DGUVmUO0O02LxYNmgE2eJt8pKZcy3RtR9V7Q5WW8PWsXXq0Xvoseji0olg==}
@@ -1136,9 +1113,6 @@ packages:
   '@types/yauzl-promise@4.0.1':
     resolution: {integrity: sha512-qYEC3rJwqiJpdQ9b+bPNeuSY0c3JUM8vIuDy08qfuVN7xHm3ZDsHn2kGphUIB0ruEXrPGNXZ64nMUcu4fDjViQ==}
 
-  '@types/yauzl@2.10.3':
-    resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
-
   '@typescript-eslint/eslint-plugin@7.16.1':
     resolution: {integrity: sha512-SxdPak/5bO0EnGktV05+Hq8oatjAYVY3Zh2bye9pGZy6+jwyR3LG3YKkV4YatlsgqXP28BTeVm9pqwJM96vf2A==}
     engines: {node: ^18.18.0 || >=20.0.0}
@@ -1354,9 +1328,6 @@ packages:
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
-
-  buffer-crc32@0.2.13:
-    resolution: {integrity: sha512-VO9Ht/+p3SN7SKWqcrgEzjGbRSJYTx+Q1pTQC0wrWqHx0vpJraQ6GtHx8tvcg1rlK1byhU5gccxgOgj7B0TDkQ==}
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
@@ -3018,9 +2989,6 @@ packages:
     resolution: {integrity: sha512-vE7JKRyES09KiunauX7nd2Q9/L7lhok4smP9RZTDeD4MVs72Dp2qNFVz39Nz5a0FVEW0BJR6C0DYrq6unoziZA==}
     engines: {node: '>= 14.16'}
 
-  pend@1.2.0:
-    resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
-
   picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
 
@@ -3301,9 +3269,6 @@ packages:
   simple-invariant@2.0.1:
     resolution: {integrity: sha512-1sbhsxqI+I2tqlmjbz99GXNmZtr6tKIyEgGGnJw/MKGblalqk/XoOYYFJlBzTKZCxx8kLaD3FD5s9BEEjx5Pyg==}
     engines: {node: '>=10'}
-
-  sisteransi@1.0.5:
-    resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
@@ -3664,10 +3629,6 @@ packages:
     resolution: {integrity: sha512-bOgQLUnd2G5rhzaTvh1VCI9Fo6bC5cLTpH17T5aFfamyXFYDbbdzN6IXdeoc3jBS7T9hNTmJtYUzJCJ2Xlc9gA==}
     engines: {node: '>=16'}
 
-  unzipit@1.4.3:
-    resolution: {integrity: sha512-gsq2PdJIWWGhx5kcdWStvNWit9FVdTewm4SEG7gFskWs+XCVaULt9+BwuoBtJiRE8eo3L1IPAOrbByNLtLtIlg==}
-    engines: {node: '>=12'}
-
   update-notifier@7.1.0:
     resolution: {integrity: sha512-8SV3rIqVY6EFC1WxH6L0j55s0MO79MFBS1pivmInRJg3pCEDgWHBj1Q6XByTtCLOZIFA0f6zoG9ZWf2Ks9lvTA==}
     engines: {node: '>=18'}
@@ -3681,9 +3642,6 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  uzip-module@1.0.3:
-    resolution: {integrity: sha512-AMqwWZaknLM77G+VPYNZLEruMGWGzyigPK3/Whg99B3S6vGHuqsyl5ZrOv1UUF3paGK1U6PM0cnayioaryg/fA==}
 
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
@@ -3849,10 +3807,6 @@ packages:
     resolution: {integrity: sha512-/HCXpyHXJQQHvFq9noqrjfa/WpQC2XYs3vI7tBiAi4QiIU1knvYhZGaO1QPjwIVMdqflxbmwgMXtYeaRiAE0CA==}
     engines: {node: '>=16'}
 
-  yauzl@3.1.3:
-    resolution: {integrity: sha512-JCCdmlJJWv7L0q/KylOekyRaUrdEoUxWkWVcgorosTROCFWiS9p2NNPE9Yb91ak7b1N5SxAZEliWpspbZccivw==}
-    engines: {node: '>=12'}
-
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
@@ -3961,17 +3915,6 @@ snapshots:
       to-fast-properties: 2.0.0
 
   '@bcoe/v8-coverage@0.2.3': {}
-
-  '@clack/core@0.3.4':
-    dependencies:
-      picocolors: 1.0.1
-      sisteransi: 1.0.5
-
-  '@clack/prompts@0.7.0':
-    dependencies:
-      '@clack/core': 0.3.4
-      picocolors: 1.0.1
-      sisteransi: 1.0.5
 
   '@cspell/cspell-bundled-dicts@8.11.0':
     dependencies:
@@ -4684,10 +4627,6 @@ snapshots:
     dependencies:
       '@types/node': 20.14.11
 
-  '@types/yauzl@2.10.3':
-    dependencies:
-      '@types/node': 20.14.11
-
   '@typescript-eslint/eslint-plugin@7.16.1(@typescript-eslint/parser@7.16.1(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0)(typescript@5.5.3)':
     dependencies:
       '@eslint-community/regexpp': 4.11.0
@@ -4948,8 +4887,6 @@ snapshots:
   braces@3.0.3:
     dependencies:
       fill-range: 7.1.1
-
-  buffer-crc32@0.2.13: {}
 
   buffer-from@1.1.2: {}
 
@@ -6778,8 +6715,6 @@ snapshots:
 
   pathval@2.0.0: {}
 
-  pend@1.2.0: {}
-
   picocolors@1.0.1: {}
 
   picomatch@2.3.1: {}
@@ -7073,8 +7008,6 @@ snapshots:
   signal-exit@4.1.0: {}
 
   simple-invariant@2.0.1: {}
-
-  sisteransi@1.0.5: {}
 
   slash@3.0.0: {}
 
@@ -7398,10 +7331,6 @@ snapshots:
 
   untildify@5.0.0: {}
 
-  unzipit@1.4.3:
-    dependencies:
-      uzip-module: 1.0.3
-
   update-notifier@7.1.0:
     dependencies:
       boxen: 7.1.1
@@ -7424,8 +7353,6 @@ snapshots:
   url-join@5.0.0: {}
 
   util-deprecate@1.0.2: {}
-
-  uzip-module@1.0.3: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
@@ -7589,11 +7516,6 @@ snapshots:
       '@node-rs/crc32': 1.10.3
       is-it-type: 5.1.2
       simple-invariant: 2.0.1
-
-  yauzl@3.1.3:
-    dependencies:
-      buffer-crc32: 0.2.13
-      pend: 1.2.0
 
   yocto-queue@0.1.0: {}
 
