@@ -1,6 +1,6 @@
 {
   "name": "@tobbe.dev/create-redwood-rsc-app",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "private": false,
   "description": "Quickstart for a RedwoodJS React Server Components App",
   "repository": {
