@@ -18,7 +18,7 @@
 ## Usage
 
 ```shell
-npx create-redwood-rsc-app
+npx -y create-redwood-rsc-app <rw-app-installation-directory>
 ```
 
 ## Contributors
