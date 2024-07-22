@@ -42,7 +42,7 @@
     "@babel/core": "^7.22.20",
     "@types/mime-types": "2.1.4",
     "babel-plugin-tester": "11.0.4",
-    "typescript": "5.4.5",
+    "typescript": "5.5.3",
     "vitest": "2.0.3"
   },
   "peerDependencies": {

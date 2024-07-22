@@ -2,11 +2,11 @@
 
 import React, { forwardRef } from 'react'
 
-import { Link } from './link'
-import type { LinkProps } from './link'
-import { useMatch } from './useMatch'
-import { flattenSearchParams } from './util'
-import type { FlattenSearchParams } from './util'
+import { Link } from './link.js'
+import type { LinkProps } from './link.js'
+import { useMatch } from './useMatch.js'
+import { flattenSearchParams } from './util.js'
+import type { FlattenSearchParams } from './util.js'
 
 interface NavLinkProps extends LinkProps {
   activeClassName: string

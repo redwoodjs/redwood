@@ -38,7 +38,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.4.0",
     "@docusaurus/tsconfig": "3.4.0",
-    "typescript": "5.4.5"
+    "typescript": "5.5.3"
   },
   "packageManager": "yarn@4.3.1"
 }

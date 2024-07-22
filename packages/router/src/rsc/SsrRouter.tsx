@@ -1,16 +1,9 @@
-// TODO (RSC): This should live in @redwoodjs/router I think. But we should
-// figure out what to do with ClientRouter first, and then we can think about
-// this file.
-
 import React, { useMemo } from 'react'
 
-import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes.js'
-import {
-  LocationProvider,
-  useLocation,
-} from '@redwoodjs/router/dist/location.js'
-import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes.js'
-import type { RouterProps } from '@redwoodjs/router/dist/router.js'
+import { analyzeRoutes } from '../analyzeRoutes.js'
+import { LocationProvider, useLocation } from '../location.js'
+import { namedRoutes } from '../namedRoutes.js'
+import type { RouterProps } from '../router.js'
 
 import { renderRoutesFromDist } from './clientSsr.js'
 
@@ -38,5 +31,6 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  return renderRoutesFromDist(pathname)
+  // @TODO(RSC): TS doesn't like that we're returning a promise, but in RSC it's ok!
+  return renderRoutesFromDist(pathname) as unknown as React.ReactNode
 }

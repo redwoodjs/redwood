@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "workspace:*",
-    "resend": "1.1.0"
+    "resend": "3.4.0"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "tsx": "4.16.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

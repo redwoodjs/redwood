@@ -1,19 +1,14 @@
-// TODO (RSC): This should live in @redwoodjs/router but we can't do node
-// condition based exports/imports there, so I'm putting it here for now.
-
+import type { ReactNode } from 'react'
 import React, { useMemo } from 'react'
 
-import { analyzeRoutes } from '@redwoodjs/router/dist/analyzeRoutes.js'
-import { AuthenticatedRoute } from '@redwoodjs/router/dist/AuthenticatedRoute.js'
-import {
-  LocationProvider,
-  useLocation,
-} from '@redwoodjs/router/dist/location.js'
-import { namedRoutes } from '@redwoodjs/router/dist/namedRoutes.js'
-import { RouterContextProvider } from '@redwoodjs/router/dist/router-context.js'
-import type { RouterProps } from '@redwoodjs/router/dist/router.js'
+import { analyzeRoutes } from '../analyzeRoutes.js'
+import { AuthenticatedRoute } from '../AuthenticatedRoute.js'
+import { LocationProvider, useLocation } from '../location.js'
+import { namedRoutes } from '../namedRoutes.js'
+import { RouterContextProvider } from '../router-context.js'
+import type { RouterProps } from '../router.js'
 
-import { rscFetch } from './rsc/rscFetchForClientRouter.js'
+import { rscFetch } from './rscFetchForClientRouter.js'
 
 export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
@@ -54,7 +49,9 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+    return rscFetch('__rwjs__Routes', {
+      location: { pathname, search },
+    }) as unknown as ReactNode
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -89,5 +86,10 @@ const LocationAwareRouter = ({
     )
   }
 
-  return rscFetch('__rwjs__Routes', { location: { pathname, search } })
+  // @TODO(RSC): Our types dont fully handle async components
+  return rscFetch('__rwjs__Routes', {
+    location: { pathname, search },
+  }) as unknown as ReactNode
 }
+
+export type { RscFetchProps } from './rscFetchForClientRouter.js'

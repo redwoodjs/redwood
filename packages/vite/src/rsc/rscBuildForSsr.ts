@@ -63,11 +63,9 @@ export async function rscBuildForSsr({
     plugins: [
       cjsInterop({
         dependencies: [
-          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware
+          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware, rwjs/router
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
-          '@redwoodjs/router',
-          '@redwoodjs/router/*',
           '@redwoodjs/auth-*-api',
           '@redwoodjs/auth-*-web',
         ],
@@ -96,7 +94,7 @@ export async function rscBuildForSsr({
           ...clientEntryFiles,
           // These import redirections are so that we don't bundle multiple versions of react
           __rwjs__react: 'react',
-          __rwjs__location: '@redwoodjs/router/dist/location',
+          __rwjs__location: '@redwoodjs/router/location',
           __rwjs__server_auth_provider: '@redwoodjs/auth/ServerAuthProvider',
           __rwjs__server_inject: '@redwoodjs/web/serverInject',
           '__rwjs__rsdw-client': 'react-server-dom-webpack/client.edge',
