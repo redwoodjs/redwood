@@ -8552,6 +8552,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.3"
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
@@ -8560,10 +8561,13 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.4.6"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
+    concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
+    publint: "npm:0.2.9"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     tstyche: "npm:2.1.0"
+    tsx: "npm:4.16.2"
     typescript: "npm:5.5.3"
     vitest: "npm:2.0.3"
   peerDependencies:

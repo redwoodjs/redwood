@@ -6,7 +6,7 @@ import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter.js'
+import type { RscFetchProps } from '../../../router/src/rsc/rscFetchForClientRouter.jsx'
 
 const workerPath = path.join(
   // __dirname. Use fileURLToPath for windows compatibility

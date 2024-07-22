@@ -1,15 +1,20 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Children } from 'react'
 
-import type { PageType } from './page'
+import type { PageType } from './page.js'
 import {
   isNotFoundRoute,
   isRedirectRoute,
   isStandardRoute,
   isValidRoute,
-} from './route-validators'
-import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
-import { matchPath, replaceParams, validatePath, type ParamType } from './util'
+} from './route-validators.js'
+import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set.js'
+import {
+  matchPath,
+  replaceParams,
+  validatePath,
+  type ParamType,
+} from './util.js'
 
 type WhileLoadingPage = () => ReactElement | null
 

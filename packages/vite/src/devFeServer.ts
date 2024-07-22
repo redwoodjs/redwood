@@ -84,10 +84,9 @@ async function createServer() {
     plugins: [
       cjsInterop({
         dependencies: [
-          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware
+          // Skip ESM modules: rwjs/auth, rwjs/web, rwjs/auth-*-middleware, rwjs/router
           '@redwoodjs/forms',
           '@redwoodjs/prerender/*',
-          '@redwoodjs/router',
           '@redwoodjs/auth-*-api',
           '@redwoodjs/auth-*-web',
         ],
