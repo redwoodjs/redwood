@@ -42,7 +42,7 @@
     "nodemon": "3.1.4",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "typescript": "5.4.5",
+    "typescript": "5.5.3",
     "vitest": "2.0.3"
   },
   "peerDependencies": {

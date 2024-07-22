@@ -5,7 +5,7 @@
 
 import React, { forwardRef } from 'react'
 
-import { navigate } from './history'
+import { navigate } from './history.js'
 
 export interface LinkProps {
   to: string

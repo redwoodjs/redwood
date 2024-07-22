@@ -449,6 +449,7 @@ async function runCommand() {
       await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/step.txt`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.nx`)
 
       // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
       // that we added in "Adding framework dependencies to project"

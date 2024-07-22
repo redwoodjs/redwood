@@ -5,9 +5,9 @@ import type { default as RSDWServerModule } from 'react-server-dom-webpack/serve
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
-import { moduleMap } from './streaming/ssrModuleMap.js'
-import { importModule } from './streaming/streamHelpers.js'
+import { getRscStylesheetLinkGenerator } from './rscCss.js'
+import { moduleMap } from './ssrModuleMap.js'
+import { importRsdwClient, importReact } from './utils.js'
 import { makeFilePath } from './utils.js'
 
 type RSDWClientType = typeof RSDWClientModule
@@ -114,7 +114,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
     },
   )
 
-  const { createElement }: React = await importModule('__rwjs__react')
+  const { createElement } = await importReact()
 
   // We need to do this weird import dance because we need to import a version
   // of react-server-dom-webpack/server.edge that has been built with the
@@ -133,7 +133,6 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // emulating the reply (stream) you'd get from a fetch call.
   const stream = renderToReadableStream(
     // createElement(layout, undefined, createElement(page, props)),
-    // @ts-expect-error - WIP
     createElement(Routes, {
       // TODO (RSC): Include a more complete location object here. At least
       // search params as well
@@ -149,9 +148,7 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType = await importModule(
-    '__rwjs__rsdw-client',
-  )
+  const { createFromReadableStream }: RSDWClientType = await importRsdwClient()
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser

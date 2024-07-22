@@ -16,6 +16,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getRscStylesheetLinkGenerator } from '@redwoodjs/router/rscCss'
 import {
   createPerRequestMap,
   createServerStorage,
@@ -25,7 +26,6 @@ import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
-import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
