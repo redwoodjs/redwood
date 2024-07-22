@@ -8,9 +8,13 @@ export async function shouldRelaunch(config: Config) {
     console.log('shouldRelaunch process.argv', process.argv)
   }
 
-  if (!process.argv.join(' ').includes('npx')) {
+  if (
+    !/[\/\\]_npx[\/\\]/.test(process.argv[1]) &&
+    // --npx is a hack for bypassing the check when running in dev if needed
+    !process.argv.includes('--npx')
+  ) {
     if (config.verbose) {
-      console.log('npx not found in process.argv. Returning false')
+      console.log('/_npx/ not found in process.argv. Returning false')
     }
 
     // Not running via npx (so probably running in dev mode, or running tests)
