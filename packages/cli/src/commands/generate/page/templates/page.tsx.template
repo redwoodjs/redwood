@@ -1,5 +1,5 @@
 <% if (rscEnabled) { %>
-import { Link } from '@redwoodjs/router/dist/link'
+import { Link } from '@redwoodjs/router/Link'
 import { namedRoutes as routes } from '@redwoodjs/router/namedRoutes'
 import { Metadata } from '@redwoodjs/web/Metadata'
 <% } else { %>
