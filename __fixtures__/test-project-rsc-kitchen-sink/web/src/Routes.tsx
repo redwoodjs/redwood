@@ -8,8 +8,8 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Route } from '@redwoodjs/router/Route'
-import { Set, PrivateSet } from '@redwoodjs/router/Set'
 import { Router } from '@redwoodjs/router/RscRouter'
+import { Set, PrivateSet } from '@redwoodjs/router/Set'
 
 import { useAuth } from './auth'
 import AuthLayout from './layouts/AuthLayout/AuthLayout'
