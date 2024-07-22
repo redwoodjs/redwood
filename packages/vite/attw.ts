@@ -8,7 +8,6 @@ interface Problem {
 
 // Excluded entry points:
 // - ./bins/rw-vite-build.mjs: this is only used in the build handler
-// - ./SsrRouter: this should be moved out of the Vite package anyway, and is only used in ESM
 // - ./react-node-loader: used to run the Worker
 
 await $({
