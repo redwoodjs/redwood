@@ -82,7 +82,7 @@
     "express": "4.19.2",
     "find-my-way": "8.2.0",
     "fs-extra": "11.2.0",
-    "http-proxy-middleware": "2.0.6",
+    "http-proxy-middleware": "3.0.0",
     "isbot": "5.1.13",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
@@ -105,7 +105,7 @@
     "publint": "0.2.9",
     "rollup": "4.19.0",
     "tsx": "4.16.2",
-    "typescript": "5.4.5",
+    "typescript": "5.5.3",
     "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

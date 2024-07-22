@@ -1305,7 +1305,7 @@ Right now we won't even be able to test our validation on the server because we'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```diff title="web/src/pages/ContactPage/ContactPage.js"
+```diff title="web/src/pages/ContactPage/ContactPage.jsx"
  <TextField
    name="email"
    validation={{
