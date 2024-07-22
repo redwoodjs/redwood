@@ -78,6 +78,10 @@
       "require": "./dist/cjs/components/htmlTags.js",
       "import": "./dist/components/htmlTags.js"
     },
+    "./Metadata": {
+      "require": "./dist/cjs/components/Metadata.js",
+      "import": "./dist/components/Metadata.js"
+    },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
       "import": "./dist/apollo/suspense.js"
