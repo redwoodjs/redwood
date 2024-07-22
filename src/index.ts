@@ -6,26 +6,31 @@ import { handleError } from './error.js'
 import { initialCommit } from './git.js'
 import { install } from './install.js'
 import { setInstallationDir } from './installationDir.js'
+import { relaunchOnLatest, shouldRelaunch } from './latest.js'
 import { printDone, printWelcome } from './messages.js'
 import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
 import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
 import { unzip } from './zip.js'
 
-printWelcome()
-
 const config = initConfig()
 
-try {
-  await checkNodeVersion(config)
-  checkYarnInstallation(config)
-  await setInstallationDir(config)
-  const templateZipPath = await downloadTemplate(config)
-  await unzip(config, templateZipPath)
-  await upgradeToLatestCanary(config)
-  await install(config)
-  await initialCommit(config)
+if (await shouldRelaunch(config)) {
+  await relaunchOnLatest(config)
+} else {
+  printWelcome()
 
-  printDone(config)
-} catch (e) {
-  handleError(e)
+  try {
+    await checkNodeVersion(config)
+    checkYarnInstallation(config)
+    await setInstallationDir(config)
+    const templateZipPath = await downloadTemplate(config)
+    await unzip(config, templateZipPath)
+    await upgradeToLatestCanary(config)
+    await install(config)
+    await initialCommit(config)
+
+    printDone(config)
+  } catch (e) {
+    handleError(e)
+  }
 }
