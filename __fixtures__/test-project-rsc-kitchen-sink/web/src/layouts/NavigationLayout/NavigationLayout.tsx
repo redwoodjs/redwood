@@ -54,6 +54,12 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
               <AuthStatus initialIsAuthenticated={isAuthenticated} />
             </NavLink>
           </li>
+
+          <li>
+            <NavLink to={routes.request()} activeClassName="active">
+              Request details
+            </NavLink>
+          </li>
         </ul>
       </nav>
       {!isAuthRoute && (
