@@ -157,7 +157,11 @@ function insertChunkLoadingScript(
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
-  const route = prerenderRoutes.find((route: any) => {
+  const route = prerenderRoutes.find((route) => {
+    if (!route.routePath) {
+      return false
+    }
+
     return matchPath(route.routePath, renderPath).match
   })
 
