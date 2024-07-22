@@ -66,10 +66,16 @@ export async function relaunchOnLatest(config: Config) {
     console.log('relaunchOnLatest process.argv', process.argv)
   }
 
+  const args = [...process.argv.slice(2), '--no-check-latest']
+
+  if (config.verbose) {
+    console.log('cmd', `npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`)
+  }
+
   await execa({
     stdio: 'inherit',
     env: {
       npm_config_yes: 'true',
     },
-  })`npx @tobbe.dev/create-redwood-rsc-app@latest ${[...process.argv.slice(2), '--no-check-latest']}`
+  })`npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`
 }
