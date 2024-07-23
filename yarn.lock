@@ -7803,7 +7803,7 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:0.15.3"
     "@redwoodjs/framework-tools": "workspace:*"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
@@ -8180,7 +8180,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@testing-library/dom": "npm:9.3.4"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/pascalcase": "npm:1.0.3"
@@ -8523,7 +8523,7 @@ __metadata:
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/server-store": "workspace:*"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     concurrently: "npm:8.2.2"
@@ -8631,7 +8631,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/aws-lambda": "npm:8.10.141"
@@ -8762,7 +8762,7 @@ __metadata:
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/server-store": "workspace:*"
     "@rollup/plugin-babel": "npm:6.0.4"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
@@ -10213,9 +10213,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:6.4.7":
-  version: 6.4.7
-  resolution: "@testing-library/jest-dom@npm:6.4.7"
+"@testing-library/jest-dom@npm:6.4.8":
+  version: 6.4.8
+  resolution: "@testing-library/jest-dom@npm:6.4.8"
   dependencies:
     "@adobe/css-tools": "npm:^4.4.0"
     "@babel/runtime": "npm:^7.9.2"
@@ -10225,24 +10225,7 @@ __metadata:
     dom-accessibility-api: "npm:^0.6.3"
     lodash: "npm:^4.17.21"
     redent: "npm:^3.0.0"
-  peerDependencies:
-    "@jest/globals": ">= 28"
-    "@types/bun": "*"
-    "@types/jest": ">= 28"
-    jest: ">= 28"
-    vitest: ">= 0.32"
-  peerDependenciesMeta:
-    "@jest/globals":
-      optional: true
-    "@types/bun":
-      optional: true
-    "@types/jest":
-      optional: true
-    jest:
-      optional: true
-    vitest:
-      optional: true
-  checksum: 10c0/e5b225d047c30291c5806a958c2ea67919c67756549c5b25424bacf3c766f1d535d1fe6ebd342da47e7297def13d829ffd515dd84d504ca86a822300ddcff91f
+  checksum: 10c0/8eececcac1ec7728c038b9d9eabfc8b8dcf4dc1e997c959450bff16d946e3344275862b84bfe0e1d1beb3817368e782464816aca47ab5c94f0ebf66db71df55d
   languageName: node
   linkType: hard
 
@@ -26503,7 +26486,7 @@ __metadata:
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.5.4"
     "@playwright/test": "npm:1.45.3"
-    "@testing-library/jest-dom": "npm:6.4.7"
+    "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
     "@types/babel__generator": "npm:7.6.8"
