@@ -6,7 +6,7 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../router" },
+    { "path": "../router/tsconfig.build.json" },
     { "path": "../babel-config" },
     { "path": "../project-config" },
     { "path": "../web/tsconfig.build.json" },
