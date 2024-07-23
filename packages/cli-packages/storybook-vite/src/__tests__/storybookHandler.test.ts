@@ -1,15 +1,18 @@
 import fs from 'fs'
 
 import { vi, describe, it, expect } from 'vitest'
+import type { Mock } from 'vitest'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
 import { handler } from '../commands/storybookHandler'
 
 vi.mock('fs')
 
-vi.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const actual: any = await importOriginal()
   return {
+    ...actual,
     getPaths: vi.fn(() => {
       return {
         base: '/redwood-app',
@@ -65,15 +68,18 @@ describe('storybookHandler', () => {
     // Instead, we test the contents of the templates in a separate test (storybookConfigFixtures.test.ts).
     const storybookConfigPath = getPaths().web.storybook
     expect(fs.writeFileSync).toHaveBeenCalledTimes(2)
-    expect(fs.writeFileSync).toHaveBeenNthCalledWith(
-      1,
-      `${storybookConfigPath}/main.js`, // because we aren't scaffolding tsconfig files, it'll think it's a JS project, and write out the JS version of the file
-      undefined,
+
+    // need to pull out the args from the mock calls
+    // so that we can convert the paths to posix
+    // so that the test passes on windows
+    const firstCallArgs = (fs.writeFileSync as Mock).mock.calls[0]
+    const secondCallArgs = (fs.writeFileSync as Mock).mock.calls[1]
+
+    expect(ensurePosixPath(firstCallArgs[0])).toEqual(
+      `${storybookConfigPath}/main.js`,
     )
-    expect(fs.writeFileSync).toHaveBeenNthCalledWith(
-      2,
+    expect(ensurePosixPath(secondCallArgs[0])).toEqual(
       `${storybookConfigPath}/preview-body.html`,
-      undefined,
     )
   })
 })
