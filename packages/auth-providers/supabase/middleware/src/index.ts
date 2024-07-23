@@ -5,9 +5,9 @@ import type {
   Middleware,
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/web/middleware' with { 'resolution-mode': 'import' }
+} from '@redwoodjs/web/middleware'
 
-import { clearAuthState } from './util'
+import { clearAuthState } from './util.js'
 
 export interface SupabaseAuthMiddlewareOptions {
   getCurrentUser: GetCurrentUser

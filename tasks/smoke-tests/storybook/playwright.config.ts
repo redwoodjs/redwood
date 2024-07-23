@@ -12,7 +12,7 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests
   webServer: {
-    command: 'yarn redwood storybook --ci --no-open',
+    command: 'yarn redwood storybook-vite --ci --no-open',
     cwd: process.env.REDWOOD_TEST_PROJECT_PATH,
     url: 'http://localhost:7910',
     reuseExistingServer: !process.env.CI,

@@ -1,6 +1,6 @@
 import type { ViteDevServer } from 'vite'
 
-import { parseSearch } from '@redwoodjs/router/dist/util.js'
+import { parseSearch } from '@redwoodjs/router/util'
 import type {
   MetaHook,
   RouteHookEvent,
