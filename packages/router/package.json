@@ -100,7 +100,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@redwoodjs/framework-tools": "workspace:*",
-    "@testing-library/jest-dom": "6.4.7",
+    "@testing-library/jest-dom": "6.4.8",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",

@@ -33,7 +33,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@testing-library/dom": "9.3.4",
-    "@testing-library/jest-dom": "6.4.7",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/pascalcase": "1.0.3",
