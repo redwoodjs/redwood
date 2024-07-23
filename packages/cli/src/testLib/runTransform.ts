@@ -12,7 +12,6 @@ const defaultJscodeshiftOpts = {
   dry: false,
   print: false,
   babel: true,
-  extensions: 'js',
   ignorePattern: '**/node_modules/**',
   ignoreConfig: [],
   runInBand: false,

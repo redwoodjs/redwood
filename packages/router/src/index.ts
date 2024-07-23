@@ -25,6 +25,7 @@ export * from './route-focus.js'
 export * from './useRouteName.js'
 export * from './useRoutePaths.js'
 export * from './useMatch.js'
+export * from './useBlocker.js'
 
 export { parseSearch, getRouteRegexAndParams, matchPath } from './util.js'
 
