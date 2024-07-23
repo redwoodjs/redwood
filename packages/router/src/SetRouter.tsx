@@ -14,7 +14,7 @@ interface SetRouterProps {
   children: React.ReactNode
 }
 
-const rscCache = new Map<string, Promise<React.ReactElement>>()
+const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
 function rscFetch(rscId: string, props: Record<string, unknown>) {
   const serializedProps = JSON.stringify(props)
@@ -50,7 +50,7 @@ function rscFetch(rscId: string, props: Record<string, unknown>) {
 export const SetRouter = ({ children }: SetRouterProps) => {
   const [color, setColor] = React.useState('purple')
   const [pathname, setPathname] = React.useState('')
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
   const loc = useLocation()
 
   // useEffect to "hide" from SSR
@@ -102,12 +102,9 @@ export const SetRouter = ({ children }: SetRouterProps) => {
       </Suspense> */}
       <Suspense fallback={<div>Loading...</div>}>
         {pathname
-          ? rscFetch('__rwjs__Routes', {
-              location: {
-                pathname: pathname,
-                search: 'skip-set',
-              },
-            })
+          ? (rscFetch('__rwjs__Routes', {
+              location: { pathname, search: 'skip-set' },
+            }) as unknown as React.ReactNode)
           : children}
       </Suspense>
       {/* <Suspense fallback={children}>
