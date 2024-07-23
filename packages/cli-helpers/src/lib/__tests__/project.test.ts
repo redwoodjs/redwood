@@ -56,7 +56,6 @@ describe('addEnvVar', () => {
     beforeEach(() => {
       vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
-      // @ts-expect-error https://github.com/vitest-dev/vitest/issues/6182
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => envFileContent)
 
       vi.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
@@ -127,7 +126,6 @@ describe('updateTomlConfig', () => {
     beforeEach(() => {
       vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
-      // @ts-expect-error https://github.com/vitest-dev/vitest/issues/6182
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)
       })
