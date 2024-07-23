@@ -1,6 +1,7 @@
 import { useEffect, useCallback, useState, useId } from 'react'
 
-import { block, unblock, type BlockerCallback } from './history.js'
+import { block, unblock } from './history.js'
+import type { BlockerCallback } from './history.js'
 
 type BlockerState = 'IDLE' | 'BLOCKED'
 
