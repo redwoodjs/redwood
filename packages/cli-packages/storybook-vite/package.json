@@ -22,7 +22,6 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
-    "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/cli-helpers": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",

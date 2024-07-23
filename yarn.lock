@@ -7914,7 +7914,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-storybook-vite@workspace:packages/cli-packages/storybook-vite"
   dependencies:
-    "@redwoodjs/babel-config": "workspace:*"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
