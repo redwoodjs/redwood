@@ -174,3 +174,20 @@ describe('blocking', () => {
     })
   })
 })
+
+describe('navigate options', () => {
+  describe('replace', () => {
+    it('should let us navigate without adding to history length', () => {
+      const initialHistoryLength = globalThis.history.length
+
+      navigate('/test-1')
+      expect(globalThis.history.length).toEqual(initialHistoryLength + 1)
+      navigate('/test-2')
+      expect(globalThis.history.length).toEqual(initialHistoryLength + 2)
+      navigate('/test-3', { replace: true })
+      expect(globalThis.history.length).toEqual(initialHistoryLength + 2)
+      navigate('/test-4', { replace: true })
+      expect(globalThis.history.length).toEqual(initialHistoryLength + 2)
+    })
+  })
+})
