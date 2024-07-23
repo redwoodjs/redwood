@@ -25,6 +25,7 @@ const Routes = () => {
         <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
 
         <Set wrap={AuthLayout}>
+          <Route path="/request" page={RequestPage} name="request" />
           <Route path="/login" page={LoginPage} name="login" />
           <Route path="/signup" page={SignupPage} name="signup" />
           <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
