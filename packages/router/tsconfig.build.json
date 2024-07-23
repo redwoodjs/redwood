@@ -6,13 +6,10 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext"
   },
-  "include": [
-    "src",
-    "./ambient.d.ts",
-    "./rsdw.modules.d.ts"
-  ],
+  "include": ["src", "./ambient.d.ts", "./rsdw.modules.d.ts"],
   "references": [
     { "path": "../auth/tsconfig.build.json" },
+    { "path": "../framework-tools" },
     { "path": "../server-store" }
   ]
 }
