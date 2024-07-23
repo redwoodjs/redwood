@@ -284,48 +284,46 @@ describe('<NavLink />', () => {
 
 describe('<Link />', () => {
   describe('options', () => {
-    describe('replace', () => {
-      it('should let us replace history when clicking on a link', async () => {
-        const HomePage = () => (
-          <>
-            <h1>Home Page</h1>
-            <Link to="/about">About-link</Link>
-          </>
-        )
-        const AboutPage = () => (
-          <>
-            <h1>About Page</h1>
-            <Link to="/contact" options={{ replace: true }}>
-              Contact-link
-            </Link>
-          </>
-        )
-        const ContactPage = () => <h1>Contact Page</h1>
+    it('should let us replace history when clicking on a link', async () => {
+      const HomePage = () => (
+        <>
+          <h1>Home Page</h1>
+          <Link to="/about">About-link</Link>
+        </>
+      )
+      const AboutPage = () => (
+        <>
+          <h1>About Page</h1>
+          <Link to="/contact" options={{ replace: true }}>
+            Contact-link
+          </Link>
+        </>
+      )
+      const ContactPage = () => <h1>Contact Page</h1>
 
-        const TestRouter = () => (
-          <Router>
-            <Route path="/" page={HomePage} name="home" />
-            <Route path="/about" page={AboutPage} name="about" />
-            <Route path="/contact" page={ContactPage} name="about" />
-          </Router>
-        )
+      const TestRouter = () => (
+        <Router>
+          <Route path="/" page={HomePage} name="home" />
+          <Route path="/about" page={AboutPage} name="about" />
+          <Route path="/contact" page={ContactPage} name="about" />
+        </Router>
+      )
 
-        const screen = render(<TestRouter />)
+      const screen = render(<TestRouter />)
 
-        // starts on home page
-        await waitFor(() => screen.getByText('Home Page'))
+      // starts on home page
+      await waitFor(() => screen.getByText('Home Page'))
 
-        fireEvent.click(screen.getByText('About-link'))
-        await waitFor(() => screen.getByText('About Page'))
+      fireEvent.click(screen.getByText('About-link'))
+      await waitFor(() => screen.getByText('About Page'))
 
-        fireEvent.click(screen.getByText('Contact-link'))
-        await waitFor(() => screen.getByText('Contact Page'))
+      fireEvent.click(screen.getByText('Contact-link'))
+      await waitFor(() => screen.getByText('Contact Page'))
 
-        // Going back here skips the About page because the link on the About
-        // page had the replace option
-        act(() => back())
-        await waitFor(() => screen.getByText('Home Page'))
-      })
+      // Going back here skips the About page because the link on the About
+      // page had the replace option
+      act(() => back())
+      await waitFor(() => screen.getByText('Home Page'))
     })
   })
 })
