@@ -3,7 +3,7 @@ import React from 'react'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
-import { back, navigate, Route, Router } from '../index'
+import { back, Route, Router } from '../index'
 import { Link } from '../link'
 import { LocationProvider } from '../location'
 import { NavLink } from '../navLink'
