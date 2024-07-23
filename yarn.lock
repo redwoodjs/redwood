@@ -22370,7 +22370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.0":
+"minimatch@npm:^10.0.0, minimatch@npm:^10.0.1":
   version: 10.0.1
   resolution: "minimatch@npm:10.0.1"
   dependencies:
@@ -27433,7 +27433,7 @@ __metadata:
     react-docgen: "npm:7.0.3"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    unplugin-auto-import: "npm:0.18.0"
+    unplugin-auto-import: "npm:0.18.1"
     vite: "npm:5.3.4"
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
@@ -28925,7 +28925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unimport@npm:^3.7.2":
+"unimport@npm:^3.9.0":
   version: 3.9.0
   resolution: "unimport@npm:3.9.0"
   dependencies:
@@ -29047,17 +29047,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:0.18.0":
-  version: 0.18.0
-  resolution: "unplugin-auto-import@npm:0.18.0"
+"unplugin-auto-import@npm:0.18.1":
+  version: 0.18.1
+  resolution: "unplugin-auto-import@npm:0.18.1"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.0"
     fast-glob: "npm:^3.3.2"
     local-pkg: "npm:^0.5.0"
     magic-string: "npm:^0.30.10"
-    minimatch: "npm:^9.0.4"
-    unimport: "npm:^3.7.2"
+    minimatch: "npm:^10.0.1"
+    unimport: "npm:^3.9.0"
     unplugin: "npm:^1.11.0"
   peerDependencies:
     "@nuxt/kit": ^3.2.2
@@ -29067,7 +29067,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/9521d2cf820b468c6392a20468558faee4d744a51d577ca3ec4fada336f6590e04e6c3221161a00b244d8cee1c02c73d3ea196fb85d934e1a7be65c25fa71cfd
+  checksum: 10c0/5fb8d72eee5438e34bcd829225c88335c1a53e900ae132454f1f21e1596d0cb3eca11b84bbcbe1fda6b5c0d49b17eb85aa0bab5242811010a436b62d48a46e32
   languageName: node
   linkType: hard
 
