@@ -285,7 +285,7 @@ describe('<NavLink />', () => {
 describe('<Link />', () => {
   describe('options', () => {
     describe('replace', () => {
-      it('should let us navigate without adding to history length', async () => {
+      it('should let us replace history when clicking on a link', async () => {
         const HomePage = () => (
           <>
             <h1>Home Page</h1>
