@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.8",
-    "@prisma/internals": "5.15.1",
+    "@prisma/internals": "5.17.0",
     "@redwoodjs/project-config": "workspace:*",
     "@types/line-column": "1.0.2",
     "camelcase": "6.3.0",
@@ -36,15 +36,15 @@
     "enquirer": "2.4.1",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "lazy-get-decorator": "2.2.1",
     "line-column": "1.0.2",
     "lodash": "4.17.21",
     "lodash-decorators": "6.0.1",
-    "lru-cache": "10.2.2",
+    "lru-cache": "11.0.0",
     "proxyquire": "2.1.3",
-    "smol-toml": "1.2.2",
-    "ts-morph": "15.1.0",
+    "smol-toml": "1.3.0",
+    "ts-morph": "23.0.0",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-textdocument": "1.0.11",
     "vscode-languageserver-types": "3.17.5",
@@ -55,10 +55,10 @@
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
     "@types/lodash": "4.17.7",
-    "@types/node": "20.12.12",
-    "@types/vscode": "1.90.0",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "@types/node": "20.14.11",
+    "@types/vscode": "1.91.0",
+    "typescript": "5.5.3",
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

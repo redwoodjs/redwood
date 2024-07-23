@@ -25,19 +25,6 @@
       "require": "./dist/cjs/client.js",
       "import": "./dist/client.js"
     },
-    "./clientSsr": {
-      "require": "./dist/cjs/clientSsr.js",
-      "import": "./dist/clientSsr.js"
-    },
-    "./Router": {
-      "react-server": "./dist/ServerRouter.js",
-      "require": "./dist/cjs/ClientRouter.js",
-      "import": "./dist/ClientRouter.js"
-    },
-    "./SsrRouter": {
-      "react-server": "./dist/ServerRouter.js",
-      "import": "./dist/SsrRouter.js"
-    },
     "./buildFeServer": {
       "require": "./dist/cjs/buildFeServer.js",
       "import": "./dist/buildFeServer.js"
@@ -82,9 +69,9 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.5.27",
-    "@vitejs/plugin-react": "4.2.1",
-    "@whatwg-node/fetch": "0.9.17",
+    "@swc/core": "1.7.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "@whatwg-node/fetch": "0.9.18",
     "@whatwg-node/server": "0.9.36",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
@@ -95,7 +82,7 @@
     "express": "4.19.2",
     "find-my-way": "8.2.0",
     "fs-extra": "11.2.0",
-    "http-proxy-middleware": "2.0.6",
+    "http-proxy-middleware": "3.0.0",
     "isbot": "5.1.13",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
@@ -114,12 +101,12 @@
     "@types/react": "^18.2.55",
     "@types/yargs-parser": "21.0.3",
     "concurrently": "8.2.2",
-    "glob": "10.3.15",
+    "glob": "11.0.0",
     "publint": "0.2.9",
-    "rollup": "4.18.1",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "rollup": "4.19.0",
+    "tsx": "4.16.2",
+    "typescript": "5.5.3",
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -49,6 +49,12 @@ yarn redwood --help
 ```
 For all the details, see the [CLI reference](cli-commands.md).
 
+### GitPod
+
+The fastest way to start a new Redwood project is to use GitPod ([additional documentation for working with GitPod](./how-to/using-gitpod)).
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/starter)
+
 ## Prisma and the database
 
 Redwood wouldn't be a full-stack framework without a database. It all starts with the schema. Open the `schema.prisma` file in `api/db` and replace the `UserExample` model with the following `Post` model:

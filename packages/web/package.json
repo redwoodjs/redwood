@@ -141,9 +141,9 @@
     "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "@whatwg-node/fetch": "0.9.17",
+    "@whatwg-node/fetch": "0.9.18",
     "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "2.0.5",
@@ -170,10 +170,10 @@
     "publint": "0.2.9",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.0.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tstyche": "2.1.0",
+    "tsx": "4.16.2",
+    "typescript": "5.5.3",
+    "vitest": "2.0.3"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",

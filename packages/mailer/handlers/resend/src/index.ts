@@ -1,5 +1,4 @@
 import { Resend } from 'resend'
-import type { Tag } from 'resend/build/src/interfaces'
 
 import type {
   MailSendOptionsComplete,
@@ -9,7 +8,13 @@ import type {
 import { AbstractMailHandler } from '@redwoodjs/mailer-core'
 
 export type ResendMailHandlerOptions = {
-  tags?: Tag[]
+  // Note: Resend SDK no longer exports the type Tag but it's simple enough to copy
+  // out here. It just makes us a little more susceptible to getting out of sync if
+  // the Resend SDK changes.
+  tags?: {
+    name: string
+    value: string
+  }[]
 }
 
 export class ResendMailHandler extends AbstractMailHandler {
@@ -67,7 +72,7 @@ export class ResendMailHandler extends AbstractMailHandler {
     })
 
     return {
-      messageID: result.id,
+      messageID: result.data?.id,
       handlerInformation: result,
     }
   }

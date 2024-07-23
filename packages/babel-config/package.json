@@ -41,17 +41,17 @@
     "babel-plugin-module-resolver": "5.0.2",
     "core-js": "3.37.1",
     "fast-glob": "3.3.2",
-    "graphql": "16.8.1",
-    "typescript": "5.4.5"
+    "graphql": "16.9.0",
+    "typescript": "5.5.3"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel-plugin-tester": "9.0.10",
     "@types/babel__core": "7.20.5",
-    "@types/node": "20.12.12",
+    "@types/node": "20.14.11",
     "babel-plugin-tester": "11.0.4",
-    "tsx": "4.15.6",
-    "vitest": "1.6.0"
+    "tsx": "4.16.2",
+    "vitest": "2.0.3"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

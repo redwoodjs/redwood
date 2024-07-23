@@ -11,42 +11,7 @@ import { isValidRoute } from '@redwoodjs/router/dist/route-validators'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
 import { flattenAll, replaceParams } from '@redwoodjs/router/dist/util'
 
-// the compiler didn't like the `import * from '...'` syntax so we have to import each thing individually
-export {
-  navigate,
-  back,
-  NavLink,
-  Link,
-  useLocation,
-  LocationProvider,
-  Redirect,
-  usePageLoadingContext,
-  PageLoadingContextProvider,
-  useParams,
-  ParamsProvider,
-  ParamsContext,
-  Route,
-  WrapperType,
-  Set,
-  Private,
-  PrivateSet,
-  isSetNode,
-  isPrivateSetNode,
-  isPrivateNode,
-  RouteAnnouncement,
-  RouteAnnouncementProps,
-  RouteFocus,
-  RouteFocusProps,
-  useRouteName,
-  useRoutePaths,
-  useRoutePath,
-  useMatch,
-  parseSearch,
-  getRouteRegexAndParams,
-  matchPath,
-  SkipNavLink,
-  SkipNavContent,
-} from '@redwoodjs/router/dist/index'
+export * from '@redwoodjs/router/dist/index'
 
 export const routes: { [routeName: string]: () => string } = {}
 

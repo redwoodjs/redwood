@@ -48,20 +48,20 @@
     "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "^5.0.2",
+    "@rollup/pluginutils": "5.1.0",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "^0.30.0",
-    "react-docgen": "^7.0.0",
-    "unplugin-auto-import": "^0.17.5"
+    "magic-string": "0.30.10",
+    "react-docgen": "7.0.3",
+    "unplugin-auto-import": "0.18.0"
   },
   "devDependencies": {
-    "@types/node": "20.12.12",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
+    "@types/node": "20.14.11",
+    "tsx": "4.16.2",
+    "typescript": "5.5.3",
     "vite": "5.3.4"
   },
   "peerDependencies": {

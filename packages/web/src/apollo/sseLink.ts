@@ -98,7 +98,6 @@ class SSELink extends ApolloLink {
     })
   }
 
-
   public request(
     operation: Operation & { query?: any },
   ): Observable<FetchResult> {

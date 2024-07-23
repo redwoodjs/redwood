@@ -44,10 +44,10 @@
     "semver": "7.6.3",
     "systeminformation": "5.22.11",
     "terminal-link": "2.1.1",
-    "tsx": "4.15.6",
+    "tsx": "4.16.2",
     "untildify": "4.0.0",
-    "uuid": "9.0.1",
-    "vitest": "1.6.0",
+    "uuid": "10.0.0",
+    "vitest": "2.0.3",
     "yargs": "17.7.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

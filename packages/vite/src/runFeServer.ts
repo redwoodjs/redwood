@@ -16,6 +16,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getRscStylesheetLinkGenerator } from '@redwoodjs/router/rscCss'
 import {
   createPerRequestMap,
   createServerStorage,
@@ -25,7 +26,6 @@ import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
-import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
@@ -150,16 +150,10 @@ export async function runFeServer() {
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
-  // Also be careful of differences between v2 and v3 of the server
   app.use(
     rwConfig.web.apiUrl,
-    // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
-    // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
       changeOrigin: false,
-      pathRewrite: {
-        [`^${rwConfig.web.apiUrl}`]: '', // remove base path
-      },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,

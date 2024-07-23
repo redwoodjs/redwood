@@ -197,13 +197,13 @@ describe('version compatibility detection', () => {
       } as any
     })
 
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
-      return JSON.stringify({
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '^6.0.0',
         },
-      })
-    })
+      }),
+    )
   })
 
   test('throws for some fetch related error', async () => {
@@ -326,13 +326,13 @@ describe('version compatibility detection', () => {
       },
     )
 
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
-      return JSON.stringify({
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '5.2.0',
         },
-      })
-    })
+      }),
+    )
 
     expect(await getCompatibilityData('@scope/package-name', 'latest')).toEqual(
       {
@@ -349,13 +349,13 @@ describe('version compatibility detection', () => {
   })
 
   test('throws if no compatible version could be found', async () => {
-    vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
-      return JSON.stringify({
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(
+      JSON.stringify({
         devDependencies: {
           '@redwoodjs/core': '7.0.0',
         },
-      })
-    })
+      }),
+    )
 
     expect(
       getCompatibilityData('@scope/package-name', 'latest'),
