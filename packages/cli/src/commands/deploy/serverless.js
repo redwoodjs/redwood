@@ -161,7 +161,7 @@ export const handler = async (yargs) => {
       const SETUP_MARKER = chalk.bgBlue(chalk.black('First Setup '))
       console.log()
 
-      console.log(SETUP_MARKER, c.green('Starting first setup wizard...'))
+      console.log(SETUP_MARKER, c.success('Starting first setup wizard...'))
 
       const { stdout: slsInfo } = await execa(
         `yarn serverless info --verbose --stage=${yargs.stage}`,
@@ -174,7 +174,7 @@ export const handler = async (yargs) => {
       const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
 
       console.log()
-      console.log(SETUP_MARKER, `Found ${c.green(deployedApiUrl)}`)
+      console.log(SETUP_MARKER, `Found ${c.success(deployedApiUrl)}`)
       console.log()
 
       const { addDotEnv } = await prompts({
@@ -234,7 +234,7 @@ export const handler = async (yargs) => {
         const message = [
           c.bold('Successful first deploy!'),
           '',
-          `View your deployed site at: ${c.green(deployedWebUrl)}`,
+          `View your deployed site at: ${c.success(deployedWebUrl)}`,
           '',
           'You can use serverless.com CI/CD by connecting/creating an app',
           'To do this run `yarn serverless` on each of the sides, and connect your account',

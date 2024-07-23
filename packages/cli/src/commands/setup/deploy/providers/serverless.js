@@ -29,7 +29,7 @@ export const notes = [
   'https://redwoodjs.com/docs/deploy/serverless',
   '',
   '',
-  c.green("You're almost ready to deploy using the Serverless framework!"),
+  c.success("You're almost ready to deploy using the Serverless framework!"),
   '',
   '• See https://redwoodjs.com/docs/deploy#serverless-deploy for more info. If you ',
   '  want to give it a shot, open your `.env` file and add your AWS credentials,',
