@@ -35,10 +35,9 @@ import {
   Set,
   useParams,
 } from '..'
-import { useLocation } from '../location'
-import type Page from '../page'
-import type { Spec } from '../page'
-import { usePageLoadingContext } from '../PageLoadingContext'
+import { useLocation } from '../location.js'
+import type Page, { Spec } from '../page.js'
+import { usePageLoadingContext } from '../PageLoadingContext.js'
 
 // Running into intermittent test timeout behavior in
 // https://github.com/redwoodjs/redwood/pull/4992

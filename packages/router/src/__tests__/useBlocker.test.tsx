@@ -1,8 +1,8 @@
 import { renderHook, act } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 
-import { gHistory, navigate } from '../history'
-import { useBlocker } from '../useBlocker'
+import { gHistory, navigate } from '../history.js'
+import { useBlocker } from '../useBlocker.js'
 
 describe('useBlocker', () => {
   it('should initialize with IDLE state', () => {

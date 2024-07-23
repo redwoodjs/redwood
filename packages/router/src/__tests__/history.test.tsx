@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
 
-import { gHistory, navigate, back, block, unblock } from '../history'
+import { gHistory, navigate, back, block, unblock } from '../history.js'
 
 describe('navigate', () => {
   describe('does not increase history length', () => {
