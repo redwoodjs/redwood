@@ -1,3 +1,5 @@
+import console from 'node:console'
+
 import { describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../core/errors'
@@ -20,7 +22,7 @@ describe('constructor', () => {
     const options = { adapter: 'adapter', job: 'job' }
     const exector = new Executor(options)
 
-    expect(exector.options).toEqual(options)
+    expect(exector.options).toEqual(expect.objectContaining(options))
   })
 
   it('extracts adapter from options to variable', () => {
@@ -35,6 +37,20 @@ describe('constructor', () => {
     const exector = new Executor(options)
 
     expect(exector.job).toEqual('job')
+  })
+
+  it('extracts logger from options to variable', () => {
+    const options = { adapter: 'adapter', job: 'job', logger: { foo: 'bar' } }
+    const exector = new Executor(options)
+
+    expect(exector.logger).toEqual({ foo: 'bar' })
+  })
+
+  it('defaults logger if not provided', () => {
+    const options = { adapter: 'adapter', job: 'job' }
+    const exector = new Executor(options)
+
+    expect(exector.logger).toEqual(console)
   })
 
   it('throws AdapterRequiredError if adapter is not provided', () => {

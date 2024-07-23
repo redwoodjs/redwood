@@ -11,8 +11,9 @@ import {
   JobExportNotFoundError,
 } from './errors'
 import { loadJob } from './loaders'
+import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from './Worker'
 
-interface Options {
+interface ExecutorOptions {
   adapter: BaseAdapter
   logger?: BasicLogger
   job: any
@@ -20,30 +21,40 @@ interface Options {
   deleteFailedJobs: boolean
 }
 
+interface ExecutorOptionsWithDefaults extends ExecutorOptions {
+  logger: BasicLogger
+}
+
+export const DEFAULTS = {
+  logger: console,
+  maxAttempts: DEFAULT_MAX_ATTEMPTS,
+  deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
+}
+
 export class Executor {
-  options: Options
+  options: ExecutorOptionsWithDefaults
   adapter: BaseAdapter
   logger: BasicLogger
   job: any | null
   maxAttempts: number
   deleteFailedJobs: boolean
 
-  constructor(options: Options) {
-    this.options = options
+  constructor(options: ExecutorOptions) {
+    this.options = { ...DEFAULTS, ...options } as ExecutorOptionsWithDefaults
 
     // validate that everything we need is available
-    if (!options.adapter) {
+    if (!this.options.adapter) {
       throw new AdapterRequiredError()
     }
-    if (!options.job) {
+    if (!this.options.job) {
       throw new JobRequiredError()
     }
 
-    this.adapter = options.adapter
-    this.logger = options.logger || console
-    this.job = options.job
-    this.maxAttempts = options.maxAttempts
-    this.deleteFailedJobs = options.deleteFailedJobs
+    this.adapter = this.options.adapter
+    this.logger = this.options.logger
+    this.job = this.options.job
+    this.maxAttempts = this.options.maxAttempts
+    this.deleteFailedJobs = this.options.deleteFailedJobs
   }
 
   async perform() {

@@ -39,15 +39,18 @@ interface WorkerOptionsWithDefaults extends WorkerOptions {
   workoff: boolean
 }
 
+export const DEFAULT_MAX_ATTEMPTS = 24
+export const DEFAULT_DELETE_FAILED_JOBS = false
+
 export const DEFAULTS = {
   logger: console,
   processName: process.title,
   queue: null,
   clear: false,
-  maxAttempts: 24,
+  maxAttempts: DEFAULT_MAX_ATTEMPTS,
   maxRuntime: 14_400, // 4 hours in seconds
   sleepDelay: 5, // 5 seconds
-  deleteFailedJobs: false,
+  deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
   forever: true,
   workoff: false,
 }
