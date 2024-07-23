@@ -1,7 +1,7 @@
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
-import { RscCache } from './RscCache'
+import { RscCache } from './RscCache.js'
 
 const BASE_PATH = '/rw-rsc/'
 

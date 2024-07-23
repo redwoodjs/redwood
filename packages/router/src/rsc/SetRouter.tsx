@@ -4,9 +4,7 @@ import React, { useRef, Suspense, useEffect } from 'react'
 
 import { createFromFetch } from 'react-server-dom-webpack/client'
 
-import { useLocation } from '@redwoodjs/router'
-
-// import { useLocation } from '@redwoodjs/router/dist/location'
+import { useLocation } from '@redwoodjs/router/location'
 
 const BASE_PATH = '/rw-rsc/'
 
