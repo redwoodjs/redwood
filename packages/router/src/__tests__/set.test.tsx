@@ -4,10 +4,10 @@ import type { ReactNode } from 'react'
 import { act, render, waitFor } from '@testing-library/react'
 import { beforeEach, test, describe, vi, expect } from 'vitest'
 
-import { navigate } from '../history'
-import { Route } from '../Route'
-import { Router } from '../router'
-import { Set } from '../Set'
+import { navigate } from '../history.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
+import { Set } from '../Set.js'
 
 // SETUP
 interface LayoutProps {

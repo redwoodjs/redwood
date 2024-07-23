@@ -42,7 +42,7 @@
     "core-js": "3.37.1",
     "fast-glob": "3.3.2",
     "graphql": "16.9.0",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
@@ -51,7 +51,7 @@
     "@types/node": "20.14.11",
     "babel-plugin-tester": "11.0.4",
     "tsx": "4.16.2",
-    "vitest": "2.0.3"
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

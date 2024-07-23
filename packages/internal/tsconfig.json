@@ -2,13 +2,13 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src/**/*", "./ambient.d.ts"],
   "references": [
     { "path": "../babel-config" },
     { "path": "../graphql-server" }, // ODD, but we do this so we dont have to have internal as a runtime dependency
     { "path": "../project-config" },
-    { "path": "../router" },
+    { "path": "../router/tsconfig.build.json" }
   ]
 }

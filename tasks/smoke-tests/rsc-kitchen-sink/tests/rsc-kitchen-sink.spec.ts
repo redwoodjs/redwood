@@ -251,3 +251,35 @@ test('logout', async ({ page }) => {
 
   page.waitForURL('/')
 })
+
+test('Retrieving request details in a', async ({ page }) => {
+  await page.context().addCookies([
+    {
+      name: 'smoke-test-cookie',
+      value: 'this-cookie-is-set-by-smoke-tests',
+      path: '/',
+      domain: 'localhost:8910',
+      expires: Math.floor(Date.now() / 1000) + 300, // 5 minutes from now in seconds
+      secure: true,
+      httpOnly: true,
+      sameSite: 'Strict',
+    },
+  ])
+
+  await page.goto('/request')
+
+  await expect(page.locator('h1')).toContainText('Request Details')
+
+  const userAgentLine = await page
+    .getByTestId('user-agent-header')
+    .textContent()
+
+  // User-Agent Header: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.6533.17 Safari/537.36
+  // We don't care about the value specifically, just that it exists
+  expect(userAgentLine).toMatch(/User-Agent Header:.*Chrome\/.*/)
+  expect(userAgentLine).not.toContain('NO USER AGENT!')
+
+  await expect(
+    await page.getByTestId('smoke-test-cookie').textContent(),
+  ).toEqual('Smoke Test Cookie: this-cookie-is-set-by-smoke-tests')
+})

@@ -33,7 +33,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@testing-library/dom": "9.3.4",
-    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/pascalcase": "1.0.3",
@@ -42,8 +42,8 @@
     "nodemon": "3.1.4",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508"

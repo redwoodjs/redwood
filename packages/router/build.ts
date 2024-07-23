@@ -1,15 +1,13 @@
-import {
-  build,
-  defaultBuildOptions,
-} from '@redwoodjs/framework-tools'
-
-import { generateCjsTypes} from '@redwoodjs/framework-tools/cjsTypes'
 import { writeFileSync } from 'node:fs'
+
+import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
+import { generateCjsTypes } from '@redwoodjs/framework-tools/cjsTypes'
 
 // CJS build
 await build({
   buildOptions: {
     ...defaultBuildOptions,
+    tsconfig: 'tsconfig.build.json',
     outdir: 'dist/cjs',
     packages: 'external',
   },
@@ -19,6 +17,7 @@ await build({
 await build({
   buildOptions: {
     ...defaultBuildOptions,
+    tsconfig: 'tsconfig.build.json',
     format: 'esm',
     packages: 'external',
   },

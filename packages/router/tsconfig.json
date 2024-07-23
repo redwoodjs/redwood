@@ -1,22 +1,22 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
+    "isolatedModules": true,
+    "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "outDir": "dist",
+    "typeRoots": [
+      "../../node_modules/@types",
+      "./node_modules/@types",
+      "../../node_modules/@testing-library"
+    ],
+    "types": ["jest", "jest-dom"]
   },
-  "include": [
-    "src",
-    "./ambient.d.ts",
-    "./rsdw.modules.d.ts"
-  ],
+  "include": ["."],
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
   "references": [
-    {
-      "path": "../auth/tsconfig.build.json"
-    },
-    {
-      "path": "../server-store"
-    },
+    { "path": "../auth/tsconfig.build.json" },
+    { "path": "../framework-tools" },
+    { "path": "../server-store" }
   ]
 }

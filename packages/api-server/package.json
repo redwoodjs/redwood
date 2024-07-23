@@ -57,8 +57,8 @@
     "@types/yargs": "17.0.32",
     "pino-abstract-transport": "1.2.0",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "@redwoodjs/graphql-server": "workspace:*"

@@ -1,27 +1,15 @@
 import React from 'react'
 
-import { render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
-import { LocationProvider } from '../location'
-import { NavLink } from '../navLink'
+import { back, Route, Router } from '../index.js'
+import { Link } from '../link.js'
+import { LocationProvider } from '../location.js'
+import { NavLink } from '../navLink.js'
 
 function createDummyLocation(pathname: string, search = '') {
-  return {
-    pathname,
-    hash: '',
-    host: '',
-    hostname: '',
-    href: '',
-    ancestorOrigins: null,
-    assign: () => null,
-    reload: () => null,
-    replace: () => null,
-    origin: '',
-    port: '',
-    protocol: '',
-    search,
-  }
+  return new URL(pathname + search, 'http://localhost/')
 }
 
 describe('<NavLink />', () => {
@@ -116,6 +104,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
@@ -158,6 +147,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=book`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ category: 'book' }, 'page']}
         >
           Dunder Mifflin
@@ -179,6 +169,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3, category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
@@ -200,6 +191,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3 }, { category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
@@ -269,6 +261,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
@@ -277,5 +270,51 @@ describe('<NavLink />', () => {
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
+  })
+})
+
+describe('<Link />', () => {
+  describe('options', () => {
+    it('should let us replace history when clicking on a link', async () => {
+      const HomePage = () => (
+        <>
+          <h1>Home Page</h1>
+          <Link to="/about">About-link</Link>
+        </>
+      )
+      const AboutPage = () => (
+        <>
+          <h1>About Page</h1>
+          <Link to="/contact" options={{ replace: true }}>
+            Contact-link
+          </Link>
+        </>
+      )
+      const ContactPage = () => <h1>Contact Page</h1>
+
+      const TestRouter = () => (
+        <Router>
+          <Route path="/" page={HomePage} name="home" />
+          <Route path="/about" page={AboutPage} name="about" />
+          <Route path="/contact" page={ContactPage} name="about" />
+        </Router>
+      )
+
+      const screen = render(<TestRouter />)
+
+      // starts on home page
+      await waitFor(() => screen.getByText('Home Page'))
+
+      fireEvent.click(screen.getByText('About-link'))
+      await waitFor(() => screen.getByText('About Page'))
+
+      fireEvent.click(screen.getByText('Contact-link'))
+      await waitFor(() => screen.getByText('Contact Page'))
+
+      // Going back here skips the About page because the link on the About
+      // page had the replace option
+      act(() => back())
+      await waitFor(() => screen.getByText('Home Page'))
+    })
   })
 })

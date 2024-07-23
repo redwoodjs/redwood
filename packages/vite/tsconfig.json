@@ -22,7 +22,7 @@
       "path": "../project-config"
     },
     {
-      "path": "../router"
+      "path": "../router/tsconfig.build.json"
     },
     {
       "path": "../server-store"

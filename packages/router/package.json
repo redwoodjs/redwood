@@ -77,9 +77,9 @@
     }
   },
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "check:attw": "tsx ./attw.ts",
@@ -99,7 +99,8 @@
     "@arethetypeswrong/cli": "0.15.3",
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "6.4.6",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@testing-library/jest-dom": "6.4.8",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
@@ -108,8 +109,8 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.1.0",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",

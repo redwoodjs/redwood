@@ -78,6 +78,10 @@
       "require": "./dist/cjs/components/htmlTags.js",
       "import": "./dist/components/htmlTags.js"
     },
+    "./Metadata": {
+      "require": "./dist/cjs/components/Metadata.js",
+      "import": "./dist/components/Metadata.js"
+    },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
       "import": "./dist/apollo/suspense.js"
@@ -161,7 +165,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
-    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
@@ -172,8 +176,8 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.1.0",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",
