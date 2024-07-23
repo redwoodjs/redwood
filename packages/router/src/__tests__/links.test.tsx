@@ -3,27 +3,13 @@ import React from 'react'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
-import { back, Route, Router } from '../index'
-import { Link } from '../link'
-import { LocationProvider } from '../location'
-import { NavLink } from '../navLink'
+import { back, Route, Router } from '../index.js'
+import { Link } from '../link.js'
+import { LocationProvider } from '../location.js'
+import { NavLink } from '../navLink.js'
 
 function createDummyLocation(pathname: string, search = '') {
-  return {
-    pathname,
-    hash: '',
-    host: '',
-    hostname: '',
-    href: '',
-    ancestorOrigins: null,
-    assign: () => null,
-    reload: () => null,
-    replace: () => null,
-    origin: '',
-    port: '',
-    protocol: '',
-    search,
-  }
+  return new URL(pathname + search, 'http://localhost/')
 }
 
 describe('<NavLink />', () => {
