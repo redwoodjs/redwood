@@ -104,6 +104,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
@@ -146,6 +147,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=book`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ category: 'book' }, 'page']}
         >
           Dunder Mifflin
@@ -167,6 +169,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3, category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
@@ -188,6 +191,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3 }, { category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
@@ -257,6 +261,7 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
