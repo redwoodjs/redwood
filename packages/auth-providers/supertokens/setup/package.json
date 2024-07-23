@@ -33,7 +33,7 @@
     "@types/yargs": "17.0.32",
     "memfs": "4.9.3",
     "typescript": "5.5.4",
-    "vitest": "2.0.3"
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

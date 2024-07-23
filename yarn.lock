@@ -7260,7 +7260,7 @@ __metadata:
     split2: "npm:4.2.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
   peerDependencies:
     "@redwoodjs/graphql-server": "workspace:*"
@@ -7300,7 +7300,7 @@ __metadata:
     title-case: "npm:3.0.3"
     ts-toolbelt: "npm:9.6.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     memjs: 1.3.2
     redis: 4.6.15
@@ -7330,7 +7330,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7345,7 +7345,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7362,7 +7362,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     "@auth0/auth0-spa-js": 2.1.3
   languageName: unknown
@@ -7382,7 +7382,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7397,7 +7397,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7415,7 +7415,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     "@azure/msal-browser": 2.39.0
   languageName: unknown
@@ -7433,7 +7433,7 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.141"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7465,7 +7465,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     "@clerk/clerk-react": 4.32.2
   languageName: unknown
@@ -7482,7 +7482,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7503,7 +7503,7 @@ __metadata:
     md5: "npm:2.3.0"
     typescript: "npm:5.5.4"
     uuid: "npm:10.0.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7523,7 +7523,7 @@ __metadata:
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7579,7 +7579,7 @@ __metadata:
     core-js: "npm:3.37.1"
     firebase-admin: "npm:12.2.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7594,7 +7594,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7631,7 +7631,7 @@ __metadata:
     core-js: "npm:3.37.1"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7646,7 +7646,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7663,7 +7663,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     netlify-identity-widget: 1.9.2
   languageName: unknown
@@ -7683,7 +7683,7 @@ __metadata:
     core-js: "npm:3.37.1"
     jsonwebtoken: "npm:9.0.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7705,7 +7705,7 @@ __metadata:
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7737,7 +7737,7 @@ __metadata:
     core-js: "npm:3.37.1"
     react: "npm:19.0.0-beta-04b058868c-20240508"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     "@supabase/supabase-js": 2.44.4
   languageName: unknown
@@ -7756,7 +7756,7 @@ __metadata:
     jsonwebtoken: "npm:9.0.2"
     jwks-rsa: "npm:3.1.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     supertokens-node: 15.2.3
   languageName: unknown
@@ -7774,7 +7774,7 @@ __metadata:
     core-js: "npm:3.37.1"
     memfs: "npm:4.9.3"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7791,7 +7791,7 @@ __metadata:
     react: "npm:19.0.0-beta-04b058868c-20240508"
     supertokens-auth-react: "npm:0.39.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     supertokens-auth-react: 0.39.1
   languageName: unknown
@@ -7813,7 +7813,7 @@ __metadata:
     tsx: "npm:4.16.2"
     type-fest: "npm:4.23.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7848,7 +7848,7 @@ __metadata:
     graphql: "npm:16.9.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7906,7 +7906,7 @@ __metadata:
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -7993,7 +7993,7 @@ __metadata:
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     uuid: "npm:10.0.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
   bin:
     redwood: ./dist/index.js
@@ -8034,7 +8034,7 @@ __metadata:
     tasuku: "npm:2.0.1"
     tempy: "npm:1.0.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
   bin:
     codemods: ./dist/codemods.js
@@ -8151,7 +8151,7 @@ __metadata:
     eslint: "npm:8.57.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8168,7 +8168,7 @@ __metadata:
     fastify: "npm:4.28.1"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8194,7 +8194,7 @@ __metadata:
     react-dom: "npm:19.0.0-beta-04b058868c-20240508"
     react-hook-form: "npm:7.52.1"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     react: 19.0.0-beta-04b058868c-20240508
   languageName: unknown
@@ -8303,7 +8303,7 @@ __metadata:
     ts-node: "npm:10.9.2"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   bin:
     rw-gen: ./dist/generate/generate.js
     rw-gen-watch: ./dist/generate/watch.js
@@ -8318,7 +8318,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8415,7 +8415,7 @@ __metadata:
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     vite: "npm:5.3.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8439,7 +8439,7 @@ __metadata:
     graphql: "npm:16.9.0"
     mime-types: "npm:2.1.35"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     react: 19.0.0-beta-04b058868c-20240508
     react-dom: 19.0.0-beta-04b058868c-20240508
@@ -8461,7 +8461,7 @@ __metadata:
     string-env-interpolation: "npm:1.0.1"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8487,7 +8487,7 @@ __metadata:
     nodemon: "npm:3.1.4"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     ioredis: ^5.3.2
   peerDependenciesMeta:
@@ -8508,7 +8508,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     core-js: "npm:3.37.1"
     esbuild: "npm:0.23.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
@@ -8534,7 +8534,7 @@ __metadata:
     tstyche: "npm:2.1.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     react: 19.0.0-beta-04b058868c-20240508
     react-dom: 19.0.0-beta-04b058868c-20240508
@@ -8588,7 +8588,7 @@ __metadata:
     smol-toml: "npm:1.3.0"
     ts-morph: "npm:23.0.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     vscode-languageserver: "npm:6.1.1"
     vscode-languageserver-textdocument: "npm:1.0.11"
     vscode-languageserver-types: "npm:3.17.5"
@@ -8612,7 +8612,7 @@ __metadata:
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     uuid: "npm:10.0.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
   languageName: unknown
   linkType: soft
@@ -8648,7 +8648,7 @@ __metadata:
     msw: "npm:1.3.3"
     ts-toolbelt: "npm:9.6.0"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     whatwg-fetch: "npm:3.6.20"
   languageName: unknown
   linkType: soft
@@ -8715,7 +8715,7 @@ __metadata:
     vite: "npm:5.3.4"
     vite-plugin-cjs-interop: "npm:2.1.1"
     vite-plugin-node-polyfills: "npm:0.22.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs-parser: "npm:21.1.1"
   bin:
     rw-dev-fe: ./dist/devFeServer.js
@@ -8783,7 +8783,7 @@ __metadata:
     tstyche: "npm:2.1.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
   peerDependencies:
     react: 19.0.0-beta-04b058868c-20240508
     react-dom: 19.0.0-beta-04b058868c-20240508
@@ -11472,66 +11472,66 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/expect@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/expect@npm:2.0.3"
+"@vitest/expect@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/expect@npm:2.0.4"
   dependencies:
-    "@vitest/spy": "npm:2.0.3"
-    "@vitest/utils": "npm:2.0.3"
+    "@vitest/spy": "npm:2.0.4"
+    "@vitest/utils": "npm:2.0.4"
     chai: "npm:^5.1.1"
     tinyrainbow: "npm:^1.2.0"
-  checksum: 10c0/bc8dead850a8aeb84a0d5d8620e1437752cbfe10908c2d5ec9f80fc6d9c387d70c964abfd2d6caf76da2882022c0dd05b0fa09b7c2a44d65abdde2b6c73517fe
+  checksum: 10c0/18acdd6b1f5001830722fab7d41b0bd754e37572dded74d1549c5e8f40e58d9e4bbbb6a8ce6be1200b04653237329ba1aeeb3330c2a41f1024450016464d491e
   languageName: node
   linkType: hard
 
-"@vitest/pretty-format@npm:2.0.3, @vitest/pretty-format@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/pretty-format@npm:2.0.3"
+"@vitest/pretty-format@npm:2.0.4, @vitest/pretty-format@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/pretty-format@npm:2.0.4"
   dependencies:
     tinyrainbow: "npm:^1.2.0"
-  checksum: 10c0/217fd176fa4d1e64e04bc6a187d146381e99921f46007f98f7132d0e31e2c14b9c6d050a150331b3368ee8004bbeab5b1b7d477522a4e4d71ad822d046debc16
+  checksum: 10c0/c2ac3ca302b93ad53ea2977209ee4eb31a313c18690034a09f8ec5528d7e82715c233c4927ecf8b364203c5e5475231d9b737b3fb7680eea71882e1eae11e473
   languageName: node
   linkType: hard
 
-"@vitest/runner@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/runner@npm:2.0.3"
+"@vitest/runner@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/runner@npm:2.0.4"
   dependencies:
-    "@vitest/utils": "npm:2.0.3"
+    "@vitest/utils": "npm:2.0.4"
     pathe: "npm:^1.1.2"
-  checksum: 10c0/efbf646457c29268f0d370985d8cbfcfc7d181693dfc2e061dd05ce911f43592957f2c866cde1b5b2e3078ae5d74b94dc28453e1c70b80e8467440223431e863
+  checksum: 10c0/b550372ce5e2c6a3f08dbd584ea669723fc0d789ebaa4224b703f12e908813fb76b963ea9ac2265aa751cab0309f637dc1fa7ce3fb3e67e08e52e241d33237ee
   languageName: node
   linkType: hard
 
-"@vitest/snapshot@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/snapshot@npm:2.0.3"
+"@vitest/snapshot@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/snapshot@npm:2.0.4"
   dependencies:
-    "@vitest/pretty-format": "npm:2.0.3"
+    "@vitest/pretty-format": "npm:2.0.4"
     magic-string: "npm:^0.30.10"
     pathe: "npm:^1.1.2"
-  checksum: 10c0/dc7e2e8f60d40c308c487effe2cd94c42bffa795c2d8c740c30b880b451637763891609a052afe29f0c9872e71141d439cb03118595e4a461fe6b4877ae99878
+  checksum: 10c0/67608c5b1e2f8b02ebc95286cd644c31ea29344c81d67151375b6eebf088a0eea242756eefb509aac626b8f7f091044fdcbc80d137d811ead1117a4a524e2d74
   languageName: node
   linkType: hard
 
-"@vitest/spy@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/spy@npm:2.0.3"
+"@vitest/spy@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/spy@npm:2.0.4"
   dependencies:
     tinyspy: "npm:^3.0.0"
-  checksum: 10c0/4780aeed692c52756d70735b633ad58f201b2b8729b9e46c4cf968b8e4174e2c2cddd099de669019771bcd8e1ca32d0b9fa42d962e431fdf473b62393b9d2a0a
+  checksum: 10c0/ef0d0c5e36bb6dfa3ef7561368b39c92cd89bb52d112ec13345dfc99981796a9af98bafd35ce6952322a6a7534eaad144485fe7764628d94d77edeba5fa773b6
   languageName: node
   linkType: hard
 
-"@vitest/utils@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@vitest/utils@npm:2.0.3"
+"@vitest/utils@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@vitest/utils@npm:2.0.4"
   dependencies:
-    "@vitest/pretty-format": "npm:2.0.3"
+    "@vitest/pretty-format": "npm:2.0.4"
     estree-walker: "npm:^3.0.3"
     loupe: "npm:^3.1.1"
     tinyrainbow: "npm:^1.2.0"
-  checksum: 10c0/41b64c07814e7d576ebe7d11d277eb104a2aafb986497855a59f641b45fa53a30a2bfea525cd913e91b695f444a7a48b1f1e5909c27d5a989b0aea68f2242bd9
+  checksum: 10c0/48e0bad3aa463d147b125e355b6bc6c5b4a5eab600132ebafac8379800273b2f47df17dbf76fe179b1500cc6b5866ead2d375a39a9114a03f705eb8850b93afa
   languageName: node
   linkType: hard
 
@@ -14637,7 +14637,7 @@ __metadata:
     tsx: "npm:4.16.2"
     untildify: "npm:4.0.0"
     uuid: "npm:10.0.0"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
   bin:
     create-redwood-app: ./dist/create-redwood-app.js
@@ -26544,7 +26544,7 @@ __metadata:
     tstyche: "npm:2.1.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    vitest: "npm:2.0.3"
+    vitest: "npm:2.0.4"
     yargs: "npm:17.7.2"
     zx: "npm:8.1.4"
   languageName: unknown
@@ -29396,9 +29396,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-node@npm:2.0.3":
-  version: 2.0.3
-  resolution: "vite-node@npm:2.0.3"
+"vite-node@npm:2.0.4":
+  version: 2.0.4
+  resolution: "vite-node@npm:2.0.4"
   dependencies:
     cac: "npm:^6.7.14"
     debug: "npm:^4.3.5"
@@ -29407,7 +29407,7 @@ __metadata:
     vite: "npm:^5.0.0"
   bin:
     vite-node: vite-node.mjs
-  checksum: 10c0/a1bcc110aeb49e79a50ae0df41ca692d39e0d992702f7c5b095c969f622eb72636543bed79efb7131fdedaa4c44a6c9c19daf6fca909240acc1f27f79b978c11
+  checksum: 10c0/2689b05b391b59cf3d15e1e80884e9b054f2ca90b2150cc7a08b0f234e79e6750a28cc8d107a57f005185e759c3bc020030f687065317fc37fe169ce17f4cdb7
   languageName: node
   linkType: hard
 
@@ -29476,17 +29476,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:2.0.3":
-  version: 2.0.3
-  resolution: "vitest@npm:2.0.3"
+"vitest@npm:2.0.4":
+  version: 2.0.4
+  resolution: "vitest@npm:2.0.4"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
-    "@vitest/expect": "npm:2.0.3"
-    "@vitest/pretty-format": "npm:^2.0.3"
-    "@vitest/runner": "npm:2.0.3"
-    "@vitest/snapshot": "npm:2.0.3"
-    "@vitest/spy": "npm:2.0.3"
-    "@vitest/utils": "npm:2.0.3"
+    "@vitest/expect": "npm:2.0.4"
+    "@vitest/pretty-format": "npm:^2.0.4"
+    "@vitest/runner": "npm:2.0.4"
+    "@vitest/snapshot": "npm:2.0.4"
+    "@vitest/spy": "npm:2.0.4"
+    "@vitest/utils": "npm:2.0.4"
     chai: "npm:^5.1.1"
     debug: "npm:^4.3.5"
     execa: "npm:^8.0.1"
@@ -29497,13 +29497,13 @@ __metadata:
     tinypool: "npm:^1.0.0"
     tinyrainbow: "npm:^1.2.0"
     vite: "npm:^5.0.0"
-    vite-node: "npm:2.0.3"
-    why-is-node-running: "npm:^2.2.2"
+    vite-node: "npm:2.0.4"
+    why-is-node-running: "npm:^2.3.0"
   peerDependencies:
     "@edge-runtime/vm": "*"
     "@types/node": ^18.0.0 || >=20.0.0
-    "@vitest/browser": 2.0.3
-    "@vitest/ui": 2.0.3
+    "@vitest/browser": 2.0.4
+    "@vitest/ui": 2.0.4
     happy-dom: "*"
     jsdom: "*"
   peerDependenciesMeta:
@@ -29521,7 +29521,7 @@ __metadata:
       optional: true
   bin:
     vitest: vitest.mjs
-  checksum: 10c0/1801ec31eb144063d14a03d054ff573869732dcaf69abd4fefdabe011d183599a7493e49d8e180b29808675309814421c4a12271fb140c708e7c9f68c4a37a3c
+  checksum: 10c0/139200d0bda3270fd00641e4bd5524f78a2b1fe9a3d4a0d5ba2b6ed08bbcf6f1e711cc4bfd8b0d823628a2fcab00f822bb210bd5bf3c6a9260fd6115ea085a3d
   languageName: node
   linkType: hard
 
@@ -29885,15 +29885,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"why-is-node-running@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "why-is-node-running@npm:2.2.2"
+"why-is-node-running@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "why-is-node-running@npm:2.3.0"
   dependencies:
     siginfo: "npm:^2.0.0"
     stackback: "npm:0.0.2"
   bin:
     why-is-node-running: cli.js
-  checksum: 10c0/805d57eb5d33f0fb4e36bae5dceda7fd8c6932c2aeb705e30003970488f1a2bc70029ee64be1a0e1531e2268b11e65606e88e5b71d667ea745e6dc48fc9014bd
+  checksum: 10c0/1cde0b01b827d2cf4cb11db962f3958b9175d5d9e7ac7361d1a7b0e2dc6069a263e69118bd974c4f6d0a890ef4eedfe34cf3d5167ec14203dbc9a18620537054
   languageName: node
   linkType: hard
 
