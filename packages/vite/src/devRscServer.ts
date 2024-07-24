@@ -1,10 +1,10 @@
 import { getPaths } from '@redwoodjs/project-config'
 
-import { buildRouteHooks } from './buildRouteHooks'
-import { buildRouteManifest } from './buildRouteManifest'
-import { buildRscClientAndServer } from './buildRscClientAndServer'
-import { buildForStreamingServer } from './streaming/buildForStreamingServer'
-import { startLiveReload } from './watch'
+import { buildRouteHooks } from './buildRouteHooks.js'
+import { buildRouteManifest } from './buildRouteManifest.js'
+import { buildRscClientAndServer } from './buildRscClientAndServer.js'
+import { buildForStreamingServer } from './streaming/buildForStreamingServer.js'
+import { startLiveReload } from './watch.js'
 
 export async function build() {
   await buildRscClientAndServer({ verbose: false })

@@ -6,7 +6,7 @@ import { rimraf } from 'rimraf'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { build } from './devRscServer'
+import { build } from './devRscServer.js'
 
 export const startLiveReload = async () => {
   const { execaNode } = await import('execa')
