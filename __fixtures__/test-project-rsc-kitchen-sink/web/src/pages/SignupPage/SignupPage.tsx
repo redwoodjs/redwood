@@ -1,5 +1,5 @@
-import { Link } from '@redwoodjs/router/dist/link'
-import { namedRoutes as routes } from '@redwoodjs/router/dist/namedRoutes'
+import { Link } from '@redwoodjs/router/Link'
+import { namedRoutes as routes } from '@redwoodjs/router/namedRoutes'
 import { Metadata } from '@redwoodjs/web/dist/components/Metadata'
 // import { Toaster } from '@redwoodjs/web/toast'
 

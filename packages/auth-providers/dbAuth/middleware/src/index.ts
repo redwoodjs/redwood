@@ -1,15 +1,14 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 
 import type { DbAuthResponse } from '@redwoodjs/auth-dbauth-api'
-import {
-  cookieName as cookieNameCreator,
-  dbAuthSession,
-} from '@redwoodjs/auth-dbauth-api'
+import dbAuthApi from '@redwoodjs/auth-dbauth-api'
+// ^^ above package is still CJS, and named exports aren't supported in import statements
+const { dbAuthSession, cookieName: cookieNameCreator } = dbAuthApi
 import type { GetCurrentUser } from '@redwoodjs/graphql-server'
-import type { Middleware, MiddlewareRequest } from '@redwoodjs/vite/middleware'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
+import type { Middleware, MiddlewareRequest } from '@redwoodjs/web/middleware'
 
-import { defaultGetRoles } from './defaultGetRoles'
+import { defaultGetRoles } from './defaultGetRoles.js'
 
 export interface DbAuthMiddlewareOptions {
   cookieName?: string
@@ -43,13 +42,19 @@ export const initDbAuthMiddleware = ({
       // Short circuit here ...
       // if the call came from packages/auth-providers/dbAuth/web/src/getCurrentUserFromMiddleware.ts
       if (req.url.includes(`${dbAuthUrl}/currentUser`)) {
-        const { currentUser } = await validateSession({
+        const validatedSession = await validateSession({
           req,
           cookieName,
           getCurrentUser,
         })
 
-        return new MiddlewareResponse(JSON.stringify({ currentUser }))
+        if (validatedSession) {
+          return new MiddlewareResponse(
+            JSON.stringify({ currentUser: validatedSession.currentUser }),
+          )
+        } else {
+          return new MiddlewareResponse(JSON.stringify({ currentUser: null }))
+        }
       } else {
         const output = await dbAuthHandler(req)
         console.log('output', output)
@@ -72,20 +77,30 @@ export const initDbAuthMiddleware = ({
 
     const cookieHeader = req.headers.get('Cookie')
 
-    if (!cookieHeader) {
+    // If there is no 'auth-provider' cookie, then the user is not
+    // authenticated
+    if (!cookieHeader?.includes('auth-provider')) {
       // Let the AuthContext fallback to its default value
       return res
     }
 
-    // 👇 Authenticated request
-    try {
-      // Call the dbAuth auth decoder. For dbAuth we have direct access to the `dbAuthSession` function.
-      // Other providers will be slightly different.
-      const { currentUser, decryptedSession } = await validateSession({
-        req,
-        cookieName,
-        getCurrentUser,
-      })
+    // At this point there might, or might not, be a dbAuth session cookie
+    // available.
+    // We treat the absence of the dbAuth session cookie the same way we treat
+    // an invalid session cookie – we clear server auth state and auth related
+    // cookies
+
+    // Call the dbAuth auth decoder. For dbAuth we have direct access to the
+    // `dbAuthSession` function.
+    // Other providers will be slightly different.
+    const validatedSession = await validateSession({
+      req,
+      cookieName,
+      getCurrentUser,
+    })
+
+    if (validatedSession) {
+      const { currentUser, decryptedSession } = validatedSession
 
       req.serverAuthState.set({
         currentUser,
@@ -96,9 +111,8 @@ export const initDbAuthMiddleware = ({
         cookieHeader,
         roles: getRoles(decryptedSession),
       })
-    } catch (e) {
+    } else {
       // Clear server auth context
-      console.error('Error decrypting dbAuth cookie \n', e)
       req.serverAuthState.clear()
 
       // Note we have to use ".unset" and not ".clear"
@@ -126,17 +140,33 @@ async function validateSession({
   cookieName,
   getCurrentUser,
 }: ValidateParams) {
-  const decryptedSession = dbAuthSession(
-    req as Request,
-    cookieNameCreator(cookieName),
-  )
+  let decryptedSession: any
 
-  // So that it goes into the catch block
-  if (!decryptedSession) {
-    throw new Error(
-      'No decrypted session found. Check passed in cookie name option to ' +
-        `middleware. Looking for "${cookieName}"`,
+  try {
+    // If there's no session cookie the return value will be `null`.
+    // If there is a session cookie, but it can't be decrypted, an error will
+    // be thrown
+    decryptedSession = dbAuthSession(
+      req as Request,
+      cookieNameCreator(cookieName),
     )
+  } catch (e) {
+    if (process.env.NODE_ENV === 'development') {
+      console.debug('Could not decrypt dbAuth session', e)
+    }
+
+    return undefined
+  }
+
+  if (!decryptedSession) {
+    if (process.env.NODE_ENV === 'development') {
+      console.debug(
+        'No dbAuth session cookie found. Looking for a cookie named:',
+        cookieName,
+      )
+    }
+
+    return undefined
   }
 
   const currentUser = await getCurrentUser(
@@ -144,15 +174,18 @@ async function validateSession({
     {
       type: 'dbAuth',
       schema: 'cookie',
-      // @MARK: We pass the entire cookie header as a token. This isn't actually the token!
-      // At this point the Cookie header is guaranteed, because otherwise a decryptionError would be thrown
+      // @MARK: We pass the entire cookie header as a token. This isn't
+      // actually the token!
+      // At this point the Cookie header is guaranteed, because otherwise a
+      // decryptionError would have been thrown
       token: req.headers.get('Cookie') as string,
     },
     {
       // MWRequest is a superset of Request
-      event: req as Request,
+      event: req,
     },
   )
+
   return { currentUser, decryptedSession }
 }
 

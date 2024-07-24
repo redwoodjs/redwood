@@ -1,6 +1,5 @@
 import path from 'path'
 
-import chalk from 'chalk'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
@@ -178,10 +177,8 @@ export const handler = async ({ force }) => {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...\n
-          ${c.green('Quick link to the docs:')}\n
-          ${chalk.hex('#e8e8e8')(
-            'https://react.i18next.com/guides/quick-start/',
-          )}
+          ${c.tip('Quick link to the docs:')}\n
+          ${c.link('https://react.i18next.com/guides/quick-start/')}
         `
         },
       },

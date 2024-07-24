@@ -7,6 +7,7 @@ import { parseConfigFileTextToJson } from 'typescript'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getWebSideBabelPlugins } from './web'
+import type { Flags as WebFlags } from './web'
 
 const pkgJson = require('../package.json')
 
@@ -17,6 +18,7 @@ export interface RegisterHookOptions {
    */
   plugins?: PluginItem[]
   overrides?: TransformOptions['overrides']
+  options?: WebFlags
 }
 
 interface BabelRegisterOptions extends TransformOptions {
@@ -76,9 +78,7 @@ export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
 // It's related to yarn workspaces to be or not to be
 export const getRouteHookBabelPlugins = () => {
   return [
-    ...getWebSideBabelPlugins({
-      forVite: true,
-    }),
+    ...getWebSideBabelPlugins(),
     [
       'babel-plugin-module-resolver',
       {

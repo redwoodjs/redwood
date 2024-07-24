@@ -10,9 +10,9 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getMergedConfig } from './lib/getMergedConfig.js'
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
-import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
+import { handleJsAsJsx } from './plugins/vite-plugin-jsx-loader.js'
+import { removeFromBundle } from './plugins/vite-plugin-remove-from-bundle.js'
+import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -138,11 +138,14 @@ export default function redwoodPluginVite(): PluginOption[] {
     streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
-    removeFromBundle([
-      {
-        id: /@redwoodjs\/router\/dist\/splash-page/,
-      },
-    ]),
+    removeFromBundle(
+      [
+        {
+          id: /@redwoodjs\/router\/dist\/splash-page/,
+        },
+      ],
+      ['SplashPage'],
+    ),
     !realtimeEnabled &&
       removeFromBundle([
         {
@@ -152,7 +155,6 @@ export default function redwoodPluginVite(): PluginOption[] {
     react({
       babel: {
         ...getWebSideDefaultBabelConfig({
-          forVite: true,
           forRsc: rscEnabled,
         }),
       },

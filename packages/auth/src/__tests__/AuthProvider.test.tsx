@@ -150,7 +150,11 @@ describe('Custom auth provider', () => {
       <>
         <button
           onClick={() => {
-            isAuthenticated ? logOut() : logIn()
+            if (isAuthenticated) {
+              logOut()
+            } else {
+              logIn()
+            }
           }}
         >
           {isAuthenticated ? 'Log Out' : 'Log In'}

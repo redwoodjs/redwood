@@ -90,7 +90,9 @@ export const createGraphQLYoga = ({
   } catch (e) {
     logger.fatal(e as Error, '\n ⚠️ GraphQL server crashed \n')
 
-    onException && onException()
+    if (onException) {
+      onException()
+    }
 
     // Forcefully crash the graphql server
     // so users know that a misconfiguration has happened
@@ -210,7 +212,9 @@ export const createGraphQLYoga = ({
 
     return { yoga, logger }
   } catch (e) {
-    onException && onException()
+    if (onException) {
+      onException()
+    }
     throw e
   }
 }
