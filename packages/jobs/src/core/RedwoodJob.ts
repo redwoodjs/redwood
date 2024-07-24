@@ -86,7 +86,7 @@ export abstract class RedwoodJob {
   }
 
   // Private property to store options set on the job
-  #options: JobSetOptions = {}
+  private myOptions: JobSetOptions = {}
 
   // A job can be instantiated manually, but this will also be invoked
   // automatically by .set() or .performLater()
@@ -98,7 +98,7 @@ export abstract class RedwoodJob {
   //   const job = RedwoodJob.set({ wait: 300 })
   //   job.performLater('foo', 'bar')
   set(options = {}) {
-    this.#options = { queue: this.queue, priority: this.priority, ...options }
+    this.myOptions = { queue: this.queue, priority: this.priority, ...options }
     return this
   }
 
@@ -111,7 +111,7 @@ export abstract class RedwoodJob {
       `[RedwoodJob] Scheduling ${this.constructor.name}`,
     )
 
-    return this.#schedule(args)
+    return this.schedule(args)
   }
 
   // Instance method to runs the job immediately in the current process
@@ -152,31 +152,33 @@ export abstract class RedwoodJob {
 
   get logger() {
     return (
-      this.#options?.logger || (this.constructor as typeof RedwoodJob).logger
+      this.myOptions?.logger || (this.constructor as typeof RedwoodJob).logger
     )
   }
 
   // Determines the name of the queue
   get queue() {
-    return this.#options?.queue || (this.constructor as typeof RedwoodJob).queue
+    return (
+      this.myOptions?.queue || (this.constructor as typeof RedwoodJob).queue
+    )
   }
 
   // Set the name of the queue directly on an instance of a job
   set queue(value) {
-    this.#options = Object.assign(this.#options || {}, { queue: value })
+    this.myOptions = Object.assign(this.myOptions || {}, { queue: value })
   }
 
   // Determines the priority of the job
   get priority() {
     return (
-      this.#options?.priority ||
+      this.myOptions?.priority ||
       (this.constructor as typeof RedwoodJob).priority
     )
   }
 
   // Set the priority of the job directly on an instance of a job
   set priority(value) {
-    this.#options = Object.assign(this.#options || {}, {
+    this.myOptions = Object.assign(this.myOptions || {}, {
       priority: value,
     })
   }
@@ -187,17 +189,17 @@ export abstract class RedwoodJob {
   // - If a `wait` option is present it sets the number of seconds to wait
   // - If a `waitUntil` option is present it runs at that specific datetime
   get runAt() {
-    if (!this.#options?.runAt) {
-      this.#options = Object.assign(this.#options || {}, {
-        runAt: this.#options?.wait
-          ? new Date(new Date().getTime() + this.#options.wait * 1000)
-          : this.#options?.waitUntil
-            ? this.#options.waitUntil
+    if (!this.myOptions?.runAt) {
+      this.myOptions = Object.assign(this.myOptions || {}, {
+        runAt: this.myOptions?.wait
+          ? new Date(new Date().getTime() + this.myOptions.wait * 1000)
+          : this.myOptions?.waitUntil
+            ? this.myOptions.waitUntil
             : new Date(),
       })
     }
 
-    return this.#options.runAt
+    return this.myOptions.runAt
   }
 
   // Set the runAt time on a job directly:
@@ -205,17 +207,17 @@ export abstract class RedwoodJob {
   //   job.runAt = new Date(2030, 1, 2, 12, 34, 56)
   //   job.performLater()
   set runAt(value) {
-    this.#options = Object.assign(this.#options || {}, { runAt: value })
+    this.myOptions = Object.assign(this.myOptions || {}, { runAt: value })
   }
 
   // Make private this.#options available as a getter only
   get options() {
-    return this.#options
+    return this.myOptions
   }
 
   // Private, schedules a job with the appropriate adapter, returns whatever
   // the adapter returns in response to a successful schedule.
-  #schedule(args: any[]) {
+  private schedule(args: any[]) {
     if (!(this.constructor as typeof RedwoodJob).adapter) {
       throw new AdapterNotConfiguredError()
     }
