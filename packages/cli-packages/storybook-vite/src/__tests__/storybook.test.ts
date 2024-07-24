@@ -25,10 +25,10 @@ describe('storybook', () => {
   })
 
   it("`command`, `aliases`, and `description` haven't unintentionally changed", () => {
-    expect(storybookCommand.command).toEqual('storybook-vite')
-    expect(storybookCommand.aliases).toEqual(['sbv'])
+    expect(storybookCommand.command).toEqual('storybook')
+    expect(storybookCommand.aliases).toEqual(['sb'])
     expect(storybookCommand.description).toEqual(
-      'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite)!',
+      'Launch Storybook: a tool for building UI components and pages in isolation',
     )
   })
 
