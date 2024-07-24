@@ -85,7 +85,7 @@
     "cypress": "13.13.1",
     "cypress-fail-fast": "7.1.0",
     "cypress-wait-until": "3.0.2",
-    "dependency-cruiser": "16.3.9",
+    "dependency-cruiser": "16.3.10",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
     "execa": "5.1.1",

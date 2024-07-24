@@ -15247,9 +15247,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dependency-cruiser@npm:16.3.9":
-  version: 16.3.9
-  resolution: "dependency-cruiser@npm:16.3.9"
+"dependency-cruiser@npm:16.3.10":
+  version: 16.3.10
+  resolution: "dependency-cruiser@npm:16.3.10"
   dependencies:
     acorn: "npm:8.12.1"
     acorn-jsx: "npm:5.3.2"
@@ -15258,12 +15258,11 @@ __metadata:
     acorn-walk: "npm:8.3.3"
     ajv: "npm:8.17.1"
     commander: "npm:12.1.0"
-    enhanced-resolve: "npm:5.17.0"
+    enhanced-resolve: "npm:5.17.1"
     ignore: "npm:5.3.1"
     interpret: "npm:^3.1.1"
     is-installed-globally: "npm:1.0.0"
     json5: "npm:2.2.3"
-    lodash: "npm:4.17.21"
     memoize: "npm:10.0.0"
     picocolors: "npm:1.0.1"
     picomatch: "npm:4.0.2"
@@ -15281,7 +15280,7 @@ __metadata:
     depcruise-wrap-stream-in-html: bin/wrap-stream-in-html.mjs
     dependency-cruise: bin/dependency-cruise.mjs
     dependency-cruiser: bin/dependency-cruise.mjs
-  checksum: 10c0/449d1ddcb2760614fefa39be4281898be520d66aa74e41c4a1c4cc3d41deca6a69d6a5ee804e80a7be030bb17d57c05a0650838a561639eba20d8134b2294238
+  checksum: 10c0/34c975c706353fcff1c784be53d6417f5e4beb1d7de45ab61ab711e7e1224b3f53140ce1b4590d8f94905e1921e8a03fcf024e35d0003184d105ea949a0c5a25
   languageName: node
   linkType: hard
 
@@ -15822,13 +15821,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:5.17.0, enhanced-resolve@npm:^5.7.0":
-  version: 5.17.0
-  resolution: "enhanced-resolve@npm:5.17.0"
+"enhanced-resolve@npm:5.17.1, enhanced-resolve@npm:^5.7.0":
+  version: 5.17.1
+  resolution: "enhanced-resolve@npm:5.17.1"
   dependencies:
     graceful-fs: "npm:^4.2.4"
     tapable: "npm:^2.2.0"
-  checksum: 10c0/90065e58e4fd08e77ba47f827eaa17d60c335e01e4859f6e644bb3b8d0e32b203d33894aee92adfa5121fa262f912b48bdf0d0475e98b4a0a1132eea1169ad37
+  checksum: 10c0/81a0515675eca17efdba2cf5bad87abc91a528fc1191aad50e275e74f045b41506167d420099022da7181c8d787170ea41e4a11a0b10b7a16f6237daecb15370
   languageName: node
   linkType: hard
 
@@ -26505,7 +26504,7 @@ __metadata:
     cypress: "npm:13.13.1"
     cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.2"
-    dependency-cruiser: "npm:16.3.9"
+    dependency-cruiser: "npm:16.3.10"
     dotenv: "npm:16.4.5"
     eslint: "npm:8.57.0"
     execa: "npm:5.1.1"
