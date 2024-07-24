@@ -86,7 +86,9 @@ export abstract class RedwoodJob {
   }
 
   // Private property to store options set on the job
-  private myOptions: JobSetOptions = {}
+  private myOptions: JobSetOptions = {};
+
+  declare ['constructor']: typeof RedwoodJob
 
   // A job can be instantiated manually, but this will also be invoked
   // automatically by .set() or .performLater()
@@ -151,16 +153,12 @@ export abstract class RedwoodJob {
   }
 
   get logger() {
-    return (
-      this.myOptions?.logger || (this.constructor as typeof RedwoodJob).logger
-    )
+    return this.myOptions?.logger || this.constructor.logger
   }
 
   // Determines the name of the queue
   get queue() {
-    return (
-      this.myOptions?.queue || (this.constructor as typeof RedwoodJob).queue
-    )
+    return this.myOptions?.queue || this.constructor.queue
   }
 
   // Set the name of the queue directly on an instance of a job
@@ -170,10 +168,7 @@ export abstract class RedwoodJob {
 
   // Determines the priority of the job
   get priority() {
-    return (
-      this.myOptions?.priority ||
-      (this.constructor as typeof RedwoodJob).priority
-    )
+    return this.myOptions?.priority || this.constructor.priority
   }
 
   // Set the priority of the job directly on an instance of a job
@@ -218,14 +213,12 @@ export abstract class RedwoodJob {
   // Private, schedules a job with the appropriate adapter, returns whatever
   // the adapter returns in response to a successful schedule.
   private schedule(args: any[]) {
-    if (!(this.constructor as typeof RedwoodJob).adapter) {
+    if (!this.constructor.adapter) {
       throw new AdapterNotConfiguredError()
     }
 
     try {
-      return (this.constructor as typeof RedwoodJob).adapter.schedule(
-        this.payload(args),
-      )
+      return this.constructor.adapter.schedule(this.payload(args))
     } catch (e: any) {
       throw new SchedulingError(
         `[RedwoodJob] Exception when scheduling ${this.constructor.name}`,
