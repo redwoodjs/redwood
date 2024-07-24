@@ -2951,11 +2951,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-max-aliases@npm:2.1.0":
-  version: 2.1.0
-  resolution: "@escape.tech/graphql-armor-max-aliases@npm:2.1.0"
+"@escape.tech/graphql-armor-max-aliases@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@escape.tech/graphql-armor-max-aliases@npm:2.3.0"
   dependencies:
-    "@envelop/core": "npm:^4.0.0"
+    "@envelop/core": "npm:^5.0.0"
     "@escape.tech/graphql-armor-types": "npm:0.5.0"
     graphql: "npm:^16.0.0"
   dependenciesMeta:
@@ -2963,7 +2963,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 10c0/7eb9132b95d6f7c638983cec4756359bda5805ccd369facedc168e2112602b2db46280ad3755f1fa586c77cb132a853e470bec6400a5b5ae25f9b5f7bae619d1
+  checksum: 10c0/f3ac70cb88539a3bf8d1f018c8361128d7472a1c147cff08e4898beb18c4f5bcfaf596adefab1bdb2b6619bfe3c06fa254189274082d2da508f15ae441e7e7da
   languageName: node
   linkType: hard
 
@@ -2999,11 +2999,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor-max-tokens@npm:2.2.0":
-  version: 2.2.0
-  resolution: "@escape.tech/graphql-armor-max-tokens@npm:2.2.0"
+"@escape.tech/graphql-armor-max-tokens@npm:2.3.0":
+  version: 2.3.0
+  resolution: "@escape.tech/graphql-armor-max-tokens@npm:2.3.0"
   dependencies:
-    "@envelop/core": "npm:^4.0.0"
+    "@envelop/core": "npm:^5.0.0"
     "@escape.tech/graphql-armor-types": "npm:0.5.0"
     graphql: "npm:^16.0.0"
   dependenciesMeta:
@@ -3011,7 +3011,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 10c0/42278e504a87c622d4abac739321acb88f1f18f0829d546dd24f010d92a0987f50aee7ab92b5e406b0176aaee70eb8e0e2805517fa257699174356875aa9b302
+  checksum: 10c0/742988eb627ade91dc37da9a20074e43ac4628feeb50de1d63cae2c2e140dc3fcdbf38fc72f9bf2b1343a3e9758d5a94f414c4cbb0db79a069506feacbab2626
   languageName: node
   linkType: hard
 
@@ -3024,20 +3024,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@escape.tech/graphql-armor@npm:2.3.1":
-  version: 2.3.1
-  resolution: "@escape.tech/graphql-armor@npm:2.3.1"
+"@escape.tech/graphql-armor@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@escape.tech/graphql-armor@npm:2.4.0"
   dependencies:
     "@escape.tech/graphql-armor-block-field-suggestions": "npm:2.1.0"
     "@escape.tech/graphql-armor-cost-limit": "npm:2.1.0"
-    "@escape.tech/graphql-armor-max-aliases": "npm:2.1.0"
+    "@escape.tech/graphql-armor-max-aliases": "npm:2.3.0"
     "@escape.tech/graphql-armor-max-depth": "npm:2.2.0"
     "@escape.tech/graphql-armor-max-directives": "npm:2.1.0"
-    "@escape.tech/graphql-armor-max-tokens": "npm:2.2.0"
+    "@escape.tech/graphql-armor-max-tokens": "npm:2.3.0"
     graphql: "npm:^16.0.0"
   peerDependencies:
     "@apollo/server": ^4.0.0
-    "@envelop/core": ^4.0.0
+    "@envelop/core": ^5.0.0
     "@escape.tech/graphql-armor-types": 0.5.0
   peerDependenciesMeta:
     "@apollo/server":
@@ -3046,7 +3046,7 @@ __metadata:
       optional: true
     "@escape.tech/graphql-armor-types":
       optional: true
-  checksum: 10c0/40ecfb643fea264eacb7d3d4031e139a3bb3cea6f1519146042d2eb9bbad64b1f5d570886459da75c25ff1a471fc13b04fae2f2795b0c6e0b97922bfb9191d47
+  checksum: 10c0/d48a2b7a894d8575c6f6d5503d7b435b1633837bcaa4a1d89c5134ab5a3d5f197dd7acdc2db990ff69ee2d979c20ab15e30cd05bf1a0918713b8c0fdaea8e282
   languageName: node
   linkType: hard
 
@@ -8228,7 +8228,7 @@ __metadata:
     "@envelop/on-resolve": "npm:4.1.0"
     "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
-    "@escape.tech/graphql-armor": "npm:2.3.1"
+    "@escape.tech/graphql-armor": "npm:2.4.0"
     "@graphql-tools/merge": "npm:9.0.4"
     "@graphql-tools/schema": "npm:10.0.4"
     "@graphql-tools/utils": "npm:10.3.2"
