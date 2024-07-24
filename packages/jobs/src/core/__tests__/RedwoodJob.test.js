@@ -1,4 +1,4 @@
-import { describe, expect, vi, it, beforeEach } from 'vitest'
+import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
 import * as errors from '../../core/errors'
 import { RedwoodJob } from '../RedwoodJob'
@@ -259,7 +259,11 @@ describe('set priority()', () => {
 
 describe('static performLater()', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.spyOn(console, 'info').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.resetAllMocks()
   })
 
   it('invokes the instance performLater()', () => {
@@ -280,7 +284,11 @@ describe('static performLater()', () => {
 
 describe('instance performLater()', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.spyOn(console, 'info').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.resetAllMocks()
   })
 
   it('throws an error if no adapter is configured', async () => {
