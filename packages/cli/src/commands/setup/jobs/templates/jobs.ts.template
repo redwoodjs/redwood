@@ -26,6 +26,4 @@ export const workerConfig: WorkerConfig = {
 
 // Export instances of all your jobs to make them easy to import and use:
 //   export const jobs = { sample: new SampleJob(), email: new EmailJob() }
-export const jobs: AvailableJobs = {
-  foo: new TestJob(),
-}
+export const jobs: AvailableJobs = {}

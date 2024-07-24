@@ -2,13 +2,19 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import * as changeCase from 'change-case'
+import execa from 'execa'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
+import {
+  getPaths,
+  prettify,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 import { prepareForRollback } from '../../../lib/rollback'
@@ -153,7 +159,7 @@ export const handler = async ({ name, force, ...rest }) => {
   validateName(name)
 
   const jobName = normalizeName(name)
-  const newJobExport = `${changeCase.camelCase(jobName)}Job: new ${jobName}Job()`
+  const newJobExport = `${changeCase.camelCase(jobName)}: new ${jobName}Job()`
 
   const tasks = new Listr(
     [
@@ -171,22 +177,33 @@ export const handler = async ({ name, force, ...rest }) => {
           const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
           const newFile = file
             .replace(
-              /export const jobs = \{/,
-              `export const jobs = {\n  ${newJobExport},`,
+              /^(export const jobs = \{)(.*)$/m,
+              `$1\n  ${newJobExport},$2`,
             )
+            .replace(/,\}/, ',\n}')
             .replace(
               /(import \{ db \} from 'src\/lib\/db')/,
               `import ${jobName}Job from 'src/jobs/${jobName}Job'\n$1`,
             )
-          fs.writeFileSync(getPaths().api.jobsConfig, newFile)
+
+          fs.writeFileSync(
+            getPaths().api.jobsConfig,
+            await prettify(getPaths().api.jobsConfig, newFile),
+          )
         },
         skip: () => {
           const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
-          if (!file || !file.match(/export const jobs = \{/)) {
+          if (!file || !file.match(/^export const jobs = \{/m)) {
             return '`jobs` export not found, skipping'
-          } else if (file.match(newJobExport)) {
-            return `${jobName}Job already exported, skipping`
           }
+        },
+      },
+      {
+        title: 'Cleaning up...',
+        task: () => {
+          execa.commandSync(
+            `yarn eslint --fix --config ${getPaths().base}/node_modules/@redwoodjs/eslint-config/shared.js ${getPaths().api.jobsConfig}`,
+          )
         },
       },
     ],
