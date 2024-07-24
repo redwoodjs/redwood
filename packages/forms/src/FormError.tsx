@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { GraphQLError } from 'graphql'
+import type { GraphQLFormattedError } from 'graphql'
 
 export interface ServerParseError extends Error {
   response: Response
@@ -16,7 +16,7 @@ export interface ServerError extends Error {
 
 export interface RWGqlError {
   message: string
-  graphQLErrors: ReadonlyArray<GraphQLError>
+  graphQLErrors: ReadonlyArray<GraphQLFormattedError>
   networkError: Error | ServerParseError | ServerError | null
 }
 
