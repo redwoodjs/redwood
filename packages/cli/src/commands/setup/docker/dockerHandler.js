@@ -11,7 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 import c from '../../../lib/colors'
 
 export async function handler({ force }) {
-  const TEMPLATE_DIR = path.join(__dirname, 'templates', 'docker')
+  const TEMPLATE_DIR = path.join(__dirname, 'templates')
 
   let dockerfileTemplateContent = fs.readFileSync(
     path.resolve(TEMPLATE_DIR, 'Dockerfile'),
