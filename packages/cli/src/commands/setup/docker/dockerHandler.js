@@ -44,21 +44,6 @@ export async function handler({ force }) {
   const tasks = new Listr(
     [
       {
-        title: 'Confirmation',
-        task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
-            type: 'Confirm',
-            message: 'The Dockerfile is experimental. Continue?',
-          })
-
-          if (!confirmation) {
-            throw new Error('User aborted')
-          }
-        },
-        skip: force,
-      },
-
-      {
         title: 'Adding the official yarn workspace-tools plugin...',
         task: async (_ctx, task) => {
           const { stdout } = await execa.command('yarn plugin runtime --json', {
@@ -83,7 +68,6 @@ export async function handler({ force }) {
           }).stdout
         },
       },
-
       {
         title: 'Adding @redwoodjs/api-server and @redwoodjs/web-server...',
         task: async (_ctx, task) => {
@@ -137,9 +121,8 @@ export async function handler({ force }) {
           }).stdout
         },
       },
-
       {
-        title: 'Adding the experimental Dockerfile and compose files...',
+        title: 'Adding the Dockerfile and compose files...',
         task: (_ctx, task) => {
           const shouldSkip = [
             dockerfilePath,
@@ -217,7 +200,6 @@ export async function handler({ force }) {
           )
         },
       },
-
       {
         title: 'Adding postgres to .gitignore...',
         task: (_ctx, task) => {
@@ -239,37 +221,17 @@ export async function handler({ force }) {
           )
         },
       },
-
       {
         title: 'Adding config to redwood.toml...',
-        task: (_ctx, task) => {
+        task: () => {
           const redwoodTomlPath = getConfigPath()
           let configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
 
           const browserOpenRegExp = /open\s*=\s*true/
-
-          const hasOpenSetToTrue = browserOpenRegExp.test(configContent)
-          const hasExperimentalDockerfileConfig = configContent.includes(
-            '[experimental.dockerfile]',
-          )
-
-          if (!hasOpenSetToTrue && hasExperimentalDockerfileConfig) {
-            task.skip(
-              `The [experimental.dockerfile] config block already exists in your 'redwood.toml' file`,
-            )
-            return
-          }
-
-          if (hasOpenSetToTrue) {
+          if (browserOpenRegExp.test(configContent)) {
             configContent = configContent.replace(
               /open\s*=\s*true/,
               'open = false',
-            )
-          }
-
-          if (!hasExperimentalDockerfileConfig) {
-            configContent = configContent.concat(
-              `\n[experimental.dockerfile]\n\tenabled = true\n`,
             )
           }
 
@@ -280,7 +242,6 @@ export async function handler({ force }) {
         },
       },
     ],
-
     {
       renderer: process.env.NODE_ENV === 'test' ? 'verbose' : 'default',
     },
