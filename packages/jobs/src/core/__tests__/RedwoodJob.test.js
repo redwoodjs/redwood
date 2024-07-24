@@ -407,13 +407,18 @@ describe('instance performNow()', () => {
     vi.clearAllMocks()
   })
 
-  it.skip('throws an error if perform() function is not implemented', async () => {
+  it('throws an error if perform() function is not implemented', async () => {
     class TestJob extends RedwoodJob {}
     const job = new TestJob()
 
-    expect(() => job.performNow('foo', 'bar')).toThrow(
-      errors.PerformNotImplementedError,
-    )
+    expect(() => job.perform('foo', 'bar')).toThrow(TypeError)
+  })
+
+  it('re-throws perform() error from performNow() if perform() function is not implemented', async () => {
+    class TestJob extends RedwoodJob {}
+    const job = new TestJob()
+
+    expect(() => job.performNow('foo', 'bar')).toThrow(TypeError)
   })
 
   it('logs that the job is being run', async () => {
@@ -492,10 +497,10 @@ describe('instance performNow()', () => {
 })
 
 describe('perform()', () => {
-  it.skip('throws an error if not implemented', () => {
+  it('throws an error if not implemented', () => {
     const job = new RedwoodJob()
 
-    expect(() => job.perform()).toThrow(errors.PerformNotImplementedError)
+    expect(() => job.perform()).toThrow(TypeError)
   })
 })
 

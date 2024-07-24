@@ -18,7 +18,6 @@ import type { BasicLogger } from '../types'
 
 import {
   AdapterNotConfiguredError,
-  PerformNotImplementedError,
   SchedulingError,
   PerformError,
 } from './errors'
@@ -127,7 +126,7 @@ export abstract class RedwoodJob {
     try {
       return this.perform(...args)
     } catch (e: any) {
-      if (e instanceof PerformNotImplementedError) {
+      if (e instanceof TypeError) {
         throw e
       } else {
         throw new PerformError(

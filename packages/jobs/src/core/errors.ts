@@ -17,20 +17,6 @@ export class AdapterNotConfiguredError extends RedwoodJobError {
   }
 }
 
-// Thrown when trying to schedule a job without a `perform` method
-export class PerformNotImplementedError extends RedwoodJobError {
-  constructor() {
-    super('You must implement the `perform` method in your job class')
-  }
-}
-
-// Thrown when a custom adapter does not implement the `schedule` method
-export class NotImplementedError extends RedwoodJobError {
-  constructor(name: string) {
-    super(`You must implement the \`${name}\` method in your adapter`)
-  }
-}
-
 // Thrown when a given model name isn't actually available in the PrismaClient
 export class ModelNameError extends RedwoodJobError {
   constructor(name: string) {
