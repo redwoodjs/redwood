@@ -22354,7 +22354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.0, minimatch@npm:^10.0.1":
+"minimatch@npm:^10.0.0":
   version: 10.0.1
   resolution: "minimatch@npm:10.0.1"
   dependencies:
@@ -22390,12 +22390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^9.0.0, minimatch@npm:^9.0.1, minimatch@npm:^9.0.3, minimatch@npm:^9.0.4":
-  version: 9.0.4
-  resolution: "minimatch@npm:9.0.4"
+"minimatch@npm:^9.0.0, minimatch@npm:^9.0.1, minimatch@npm:^9.0.3, minimatch@npm:^9.0.4, minimatch@npm:^9.0.5":
+  version: 9.0.5
+  resolution: "minimatch@npm:9.0.5"
   dependencies:
     brace-expansion: "npm:^2.0.1"
-  checksum: 10c0/2c16f21f50e64922864e560ff97c587d15fd491f65d92a677a344e970fe62aafdbeafe648965fa96d33c061b4d0eabfe0213466203dd793367e7f28658cf6414
+  checksum: 10c0/de96cf5e35bdf0eab3e2c853522f98ffbe9a36c37797778d2665231ec1f20a9447a7e567cb640901f89e4daaa95ae5d70c65a9e8aa2bb0019b6facbc3c0575ed
   languageName: node
   linkType: hard
 
@@ -27417,7 +27417,7 @@ __metadata:
     react-docgen: "npm:7.0.3"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
-    unplugin-auto-import: "npm:0.18.1"
+    unplugin-auto-import: "npm:0.18.2"
     vite: "npm:5.3.4"
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
@@ -29031,16 +29031,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unplugin-auto-import@npm:0.18.1":
-  version: 0.18.1
-  resolution: "unplugin-auto-import@npm:0.18.1"
+"unplugin-auto-import@npm:0.18.2":
+  version: 0.18.2
+  resolution: "unplugin-auto-import@npm:0.18.2"
   dependencies:
     "@antfu/utils": "npm:^0.7.10"
     "@rollup/pluginutils": "npm:^5.1.0"
     fast-glob: "npm:^3.3.2"
     local-pkg: "npm:^0.5.0"
     magic-string: "npm:^0.30.10"
-    minimatch: "npm:^10.0.1"
+    minimatch: "npm:^9.0.5"
     unimport: "npm:^3.9.0"
     unplugin: "npm:^1.11.0"
   peerDependencies:
@@ -29051,7 +29051,7 @@ __metadata:
       optional: true
     "@vueuse/core":
       optional: true
-  checksum: 10c0/5fb8d72eee5438e34bcd829225c88335c1a53e900ae132454f1f21e1596d0cb3eca11b84bbcbe1fda6b5c0d49b17eb85aa0bab5242811010a436b62d48a46e32
+  checksum: 10c0/844ed9b96e1b55875f0c690981308ed6a78a225eca09355aac4e06f34fed362771b1e9dbcde8f27d30c028da12781227bfee1c85f5bf1cc355068c581dcbaf0c
   languageName: node
   linkType: hard
 
