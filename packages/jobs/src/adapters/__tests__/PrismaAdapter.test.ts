@@ -19,6 +19,13 @@ vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
 
 let mockDb: PrismaClient
 
+const mockLogger = {
+  debug: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+}
+
 beforeEach(() => {
   mockDb = {
     _activeProvider: 'sqlite',
@@ -46,7 +53,7 @@ afterEach(() => {
 
 describe('constructor', () => {
   it('defaults this.model name', () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
 
     expect(adapter.model).toEqual(DEFAULTS.model)
   })
@@ -62,25 +69,27 @@ describe('constructor', () => {
     const adapter = new PrismaAdapter({
       db: mockDb,
       model: 'Job',
+      logger: mockLogger,
     })
 
     expect(adapter.model).toEqual('Job')
   })
 
   it('throws an error with a model name that does not exist', () => {
-    expect(() => new PrismaAdapter({ db: mockDb, model: 'FooBar' })).toThrow(
-      errors.ModelNameError,
-    )
+    expect(
+      () =>
+        new PrismaAdapter({ db: mockDb, model: 'FooBar', logger: mockLogger }),
+    ).toThrow(errors.ModelNameError)
   })
 
   it('sets this.accessor to the correct Prisma accessor', () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
 
     expect(adapter.accessor).toEqual(mockDb.backgroundJob)
   })
 
   it('sets this.provider based on the active provider', () => {
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
 
     expect(adapter.provider).toEqual('sqlite')
   })
@@ -91,7 +100,7 @@ describe('schedule()', () => {
     const createSpy = vi
       .spyOn(mockDb.backgroundJob, 'create')
       .mockReturnValue({ id: 1 })
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.schedule({
       handler: 'RedwoodJob',
       args: ['foo', 'bar'],
@@ -117,7 +126,7 @@ describe('schedule()', () => {
 describe('find()', () => {
   it('returns null if no job found', async () => {
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(null)
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     const job = await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
@@ -131,7 +140,7 @@ describe('find()', () => {
     const mockJob = { id: 1 }
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(mockJob)
     vi.spyOn(mockDb.backgroundJob, 'updateMany').mockReturnValue({ count: 1 })
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     const job = await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
@@ -147,7 +156,7 @@ describe('find()', () => {
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
       .mockReturnValue({ count: 1 })
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
@@ -167,7 +176,7 @@ describe('find()', () => {
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
       .mockReturnValue({ count: 1 })
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.find({
       processName: 'test-process',
       maxRuntime: 1000,
@@ -187,7 +196,7 @@ describe('find()', () => {
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
       .mockReturnValue({ count: 1 })
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.find({
       processName: 'test-process',
       maxRuntime: 1000,
@@ -219,7 +228,10 @@ const mockPrismaJob = {
 describe('success()', () => {
   it('deletes the job from the DB', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'delete')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({
+      db: mockDb,
+      logger: mockLogger,
+    })
     await adapter.success(mockPrismaJob)
 
     expect(spy).toHaveBeenCalledWith({ where: { id: 1 } })
@@ -229,7 +241,7 @@ describe('success()', () => {
 describe('failure()', () => {
   it('updates the job by id', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'))
 
     expect(spy).toHaveBeenCalledWith(
@@ -239,7 +251,7 @@ describe('failure()', () => {
 
   it('clears the lock fields', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'))
 
     expect(spy).toHaveBeenCalledWith(
@@ -251,7 +263,7 @@ describe('failure()', () => {
 
   it('reschedules the job at a designated backoff time', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'))
 
     expect(spy).toHaveBeenCalledWith(
@@ -265,7 +277,7 @@ describe('failure()', () => {
 
   it('records the error', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'))
 
     expect(spy).toHaveBeenCalledWith(
@@ -279,7 +291,7 @@ describe('failure()', () => {
 
   it('nullifies runtAt if max attempts reached', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'), {
       maxAttempts: 10,
     })
@@ -295,7 +307,7 @@ describe('failure()', () => {
 
   it('marks the job as failed if max attempts reached', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'), {
       maxAttempts: 10,
       deleteFailedJobs: false,
@@ -312,7 +324,7 @@ describe('failure()', () => {
 
   it('deletes the job if max attempts reached and deleteFailedJobs set to true', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'delete')
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.failure(mockPrismaJob, new Error('test error'), {
       maxAttempts: 10,
       deleteFailedJobs: true,
@@ -326,7 +338,7 @@ describe('clear()', () => {
   it('deletes all jobs from the DB', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'deleteMany')
 
-    const adapter = new PrismaAdapter({ db: mockDb })
+    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.clear()
 
     expect(spy).toHaveBeenCalledOnce()
@@ -335,18 +347,30 @@ describe('clear()', () => {
 
 describe('backoffMilliseconds()', () => {
   it('returns the number of milliseconds to wait for the next run', () => {
-    expect(new PrismaAdapter({ db: mockDb }).backoffMilliseconds(0)).toEqual(0)
-    expect(new PrismaAdapter({ db: mockDb }).backoffMilliseconds(1)).toEqual(
-      1000,
-    )
-    expect(new PrismaAdapter({ db: mockDb }).backoffMilliseconds(2)).toEqual(
-      16000,
-    )
-    expect(new PrismaAdapter({ db: mockDb }).backoffMilliseconds(3)).toEqual(
-      81000,
-    )
-    expect(new PrismaAdapter({ db: mockDb }).backoffMilliseconds(20)).toEqual(
-      160000000,
-    )
+    expect(
+      new PrismaAdapter({ db: mockDb, logger: mockLogger }).backoffMilliseconds(
+        0,
+      ),
+    ).toEqual(0)
+    expect(
+      new PrismaAdapter({ db: mockDb, logger: mockLogger }).backoffMilliseconds(
+        1,
+      ),
+    ).toEqual(1000)
+    expect(
+      new PrismaAdapter({ db: mockDb, logger: mockLogger }).backoffMilliseconds(
+        2,
+      ),
+    ).toEqual(16000)
+    expect(
+      new PrismaAdapter({ db: mockDb, logger: mockLogger }).backoffMilliseconds(
+        3,
+      ),
+    ).toEqual(81000)
+    expect(
+      new PrismaAdapter({ db: mockDb, logger: mockLogger }).backoffMilliseconds(
+        20,
+      ),
+    ).toEqual(160000000)
   })
 })

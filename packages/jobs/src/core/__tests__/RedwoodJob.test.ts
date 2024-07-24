@@ -275,12 +275,12 @@ describe('set priority()', () => {
 
 describe('static performLater()', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
+    vi.resetAllMocks()
   })
 
   it('invokes the instance performLater()', () => {
     const spy = vi.spyOn(TestJob.prototype, 'performLater')
-    RedwoodJob.config({ adapter: mockAdapter })
+    RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
 
     TestJob.performLater('foo', 'bar')
 
@@ -295,7 +295,7 @@ describe('instance performLater()', () => {
 
   it('throws an error if no adapter is configured', async () => {
     // @ts-expect-error - testing JS scenario
-    TestJob.config({ adapter: undefined })
+    TestJob.config({ adapter: undefined, logger: mockLogger })
 
     const job = new TestJob()
 
@@ -322,7 +322,7 @@ describe('instance performLater()', () => {
   })
 
   it('calls the `schedule` function on the adapter', async () => {
-    RedwoodJob.config({ adapter: mockAdapter })
+    RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
 
     await new TestJob().performLater('foo', 'bar')
 
@@ -341,7 +341,7 @@ describe('instance performLater()', () => {
       ...mockAdapter,
       schedule: vi.fn(() => scheduleReturn),
     }
-    TestJob.config({ adapter })
+    TestJob.config({ adapter, logger: mockLogger })
 
     const result = await new TestJob().performLater('foo', 'bar')
 
@@ -355,7 +355,7 @@ describe('instance performLater()', () => {
         throw new Error('Could not schedule')
       }),
     }
-    RedwoodJob.config({ adapter })
+    RedwoodJob.config({ adapter, logger: mockLogger })
 
     try {
       await new TestJob().performLater('foo', 'bar')
@@ -398,6 +398,8 @@ describe('instance performNow()', () => {
   })
 
   it('re-throws perform() error from performNow() if perform() function is not implemented', async () => {
+    RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
+
     // @ts-expect-error - testing JS scenario
     class TestJob extends RedwoodJob {}
     const job = new TestJob()
@@ -456,7 +458,7 @@ describe('instance performNow()', () => {
       }),
     }
 
-    RedwoodJob.config({ adapter })
+    RedwoodJob.config({ adapter, logger: mockLogger })
 
     try {
       new TestJobPerf().performNow('foo', 'bar')
