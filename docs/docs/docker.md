@@ -4,13 +4,6 @@ description: Redwood's Dockerfile
 
 # Docker
 
-:::note The Dockerfile is experimental
-
-Redwood's Dockerfile is the collective effort of several hard-working community members.
-We've worked hard to optimize it, but expect changes as we collaborate with users and deploy providers.
-
-:::
-
 If you're not familiar with Docker, we recommend going through their [getting started](https://docs.docker.com/get-started/) documentation.
 
 ## Set up
@@ -18,7 +11,7 @@ If you're not familiar with Docker, we recommend going through their [getting st
 To get started, run the setup command:
 
 ```
-yarn rw experimental setup-docker
+yarn rw setup docker
 ```
 
 The setup commands does several things:
@@ -62,7 +55,7 @@ If you are using a [Server File](#using-the-server-file) then you should [change
 ## Dockerfile
 
 The documentation here goes through and explains every line of Redwood's Dockerfile.
-If you'd like to see the whole Dockerfile for reference, you can find it [here](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/experimental/templates/docker/Dockerfile) or by setting it up in your project: `yarn rw experimental setup-docker`.
+If you'd like to see the whole Dockerfile for reference, you can find it [here](https://github.com/redwoodjs/redwood/tree/main/packages/cli/src/commands/setup/docker/templates/Dockerfile) or by setting it up in your project: `yarn rw setup docker`.
 
 Redwood takes advantage of [Docker's multi-stage build support](https://docs.docker.com/build/building/multi-stage/) to keep the final production images lean.
 
@@ -285,7 +278,7 @@ Not updating the command will not completely configure the GraphQL Server and no
 :::
 
 
-Note that the Redwood CLI isn't available anymore. (It's a dev dependency.)
+Note that the Redwood CLI isn't available anymore because it is a dev dependency.
 To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
 
