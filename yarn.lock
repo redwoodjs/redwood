@@ -7254,7 +7254,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/lodash": "npm:4.17.7"
     "@types/qs": "npm:6.9.15"
     "@types/split2": "npm:4.2.3"
@@ -7296,7 +7296,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@prisma/client": "npm:5.17.0"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/memjs": "npm:1"
     "@types/pascalcase": "npm:1.0.3"
@@ -7390,7 +7390,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.37.1"
     jsonwebtoken: "npm:9.0.2"
@@ -7444,7 +7444,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@clerk/clerk-sdk-node": "npm:4.13.20"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     core-js: "npm:3.37.1"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.4"
@@ -7531,7 +7531,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.9"
     ts-toolbelt: "npm:9.6.0"
@@ -7589,7 +7589,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     core-js: "npm:3.37.1"
     firebase-admin: "npm:12.2.0"
     typescript: "npm:5.5.4"
@@ -7640,7 +7640,7 @@ __metadata:
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.37.1"
     jsonwebtoken: "npm:9.0.2"
@@ -7692,7 +7692,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.24.8"
     "@redwoodjs/api": "workspace:*"
     "@supabase/ssr": "npm:0.4.0"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/jsonwebtoken": "npm:9.0.6"
     core-js: "npm:3.37.1"
     jsonwebtoken: "npm:9.0.2"
@@ -7713,7 +7713,7 @@ __metadata:
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
     "@supabase/ssr": "npm:0.4.0"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.9"
     ts-toolbelt: "npm:9.6.0"
@@ -8252,7 +8252,7 @@ __metadata:
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/realtime": "workspace:*"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/jsonwebtoken": "npm:9.0.6"
     "@types/lodash": "npm:4.17.7"
     "@types/uuid": "npm:10.0.0"
@@ -8649,7 +8649,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
-    "@types/aws-lambda": "npm:8.10.141"
+    "@types/aws-lambda": "npm:8.10.142"
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.12"
     "@types/node": "npm:20.14.12"
@@ -10368,10 +10368,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aws-lambda@npm:8.10.141":
-  version: 8.10.141
-  resolution: "@types/aws-lambda@npm:8.10.141"
-  checksum: 10c0/cb82807c0feee91702321ae492ae24023e05b461f91e155d1ade60a40af779067dd7631bd70f97f8ae4cf107aaa03286db0093694184c79f314edb38f1bfa250
+"@types/aws-lambda@npm:8.10.142":
+  version: 8.10.142
+  resolution: "@types/aws-lambda@npm:8.10.142"
+  checksum: 10c0/9c9544d0f93bb8e1c044cd9d991c5c11d04c4a98d3b2dfade7d420df56270288baa254ec2d9782144ec7291d154c0dd550862f133ba81cca12a28af9f5349414
   languageName: node
   linkType: hard
 
