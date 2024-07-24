@@ -7772,7 +7772,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.32"
     core-js: "npm:3.37.1"
-    memfs: "npm:4.9.3"
+    memfs: "npm:4.9.4"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.4"
   languageName: unknown
@@ -7868,7 +7868,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     jest: "npm:29.7.0"
     listr2: "npm:6.6.1"
-    memfs: "npm:4.9.3"
+    memfs: "npm:4.9.4"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
@@ -7977,7 +7977,7 @@ __metadata:
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
-    memfs: "npm:4.9.3"
+    memfs: "npm:4.9.4"
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
     portfinder: "npm:1.0.32"
@@ -22082,15 +22082,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:4.9.3":
-  version: 4.9.3
-  resolution: "memfs@npm:4.9.3"
+"memfs@npm:4.9.4":
+  version: 4.9.4
+  resolution: "memfs@npm:4.9.4"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
     "@jsonjoy.com/util": "npm:^1.1.2"
     tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/a59537537716653b6cf5287c5a23b3bbb6466aa2e596aa4710279564521d1b23f2fde403e20a91003dac89cb804d17fabee005bd95dab10943d9e4f62f47db09
+  checksum: 10c0/f473194f26002a5a26705b796300524fef551427d283abef933596977758935d80d7ee993280fd20b576d2dde5c04ee7834fa54f03a5d0172851abf9972cf24a
   languageName: node
   linkType: hard
 
