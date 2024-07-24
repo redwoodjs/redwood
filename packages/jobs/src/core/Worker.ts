@@ -7,25 +7,37 @@ import { setTimeout } from 'node:timers'
 import type { BaseAdapter } from '../adapters/BaseAdapter'
 import type { BasicLogger } from '../types'
 
+import {
+  DEFAULT_MAX_ATTEMPTS,
+  DEFAULT_MAX_RUNTIME,
+  DEFAULT_SLEEP_DELAY,
+  DEFAULT_DELETE_FAILED_JOBS,
+} from './consts'
 import { AdapterRequiredError } from './errors'
 import { Executor } from './Executor'
 
-interface WorkerOptions {
+// The options set in api/src/lib/jobs.ts
+export interface WorkerConfig {
   adapter: BaseAdapter
   logger?: BasicLogger
   maxAttempts?: number
   maxRuntime?: number
   deleteFailedJobs?: boolean
   sleepDelay?: number
+}
+
+// Additional options that the rw-jobs-worker process will set when
+// instantiatng the Worker class
+interface Options {
   clear?: boolean
   processName?: string
   queue?: string | null
-  waitTime?: number
   forever?: boolean
   workoff?: boolean
 }
 
-interface WorkerOptionsWithDefaults extends WorkerOptions {
+// The default options to be used if any of the above are not set
+interface DefaultOptions {
   logger: BasicLogger
   maxAttempts: number
   maxRuntime: number
@@ -34,29 +46,25 @@ interface WorkerOptionsWithDefaults extends WorkerOptions {
   clear: boolean
   processName: string
   queue: string | null
-  waitTime: number
   forever: boolean
   workoff: boolean
 }
 
-export const DEFAULT_MAX_ATTEMPTS = 24
-export const DEFAULT_DELETE_FAILED_JOBS = false
-
-export const DEFAULTS = {
+export const DEFAULTS: DefaultOptions = {
   logger: console,
   processName: process.title,
   queue: null,
   clear: false,
   maxAttempts: DEFAULT_MAX_ATTEMPTS,
-  maxRuntime: 14_400, // 4 hours in seconds
-  sleepDelay: 5, // 5 seconds
+  maxRuntime: DEFAULT_MAX_RUNTIME, // 4 hours in seconds
+  sleepDelay: DEFAULT_SLEEP_DELAY, // 5 seconds
   deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
   forever: true,
   workoff: false,
 }
 
 export class Worker {
-  options: WorkerOptionsWithDefaults
+  options: WorkerConfig & Options & DefaultOptions
   adapter: BaseAdapter
   logger: BasicLogger
   clear: boolean
@@ -70,8 +78,8 @@ export class Worker {
   forever: boolean
   workoff: boolean
 
-  constructor(options: WorkerOptions) {
-    this.options = { ...DEFAULTS, ...options } as WorkerOptionsWithDefaults
+  constructor(options: WorkerConfig & Options) {
+    this.options = { ...DEFAULTS, ...options }
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()

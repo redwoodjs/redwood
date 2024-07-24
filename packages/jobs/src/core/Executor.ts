@@ -5,42 +5,46 @@ import console from 'node:console'
 import type { BaseAdapter } from '../adapters/BaseAdapter'
 import type { BasicLogger } from '../types'
 
+import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from './consts'
 import {
   AdapterRequiredError,
   JobRequiredError,
   JobExportNotFoundError,
 } from './errors'
 import { loadJob } from './loaders'
-import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from './Worker'
 
-interface ExecutorOptions {
+interface Options {
   adapter: BaseAdapter
-  logger?: BasicLogger
   job: any
+  logger?: BasicLogger
+  maxAttempts?: number
+  deleteFailedJobs?: boolean
+}
+
+interface DefaultOptions {
+  logger: BasicLogger
   maxAttempts: number
   deleteFailedJobs: boolean
 }
 
-interface ExecutorOptionsWithDefaults extends ExecutorOptions {
-  logger: BasicLogger
-}
+type CompleteOptions = Options & DefaultOptions
 
-export const DEFAULTS = {
+export const DEFAULTS: DefaultOptions = {
   logger: console,
   maxAttempts: DEFAULT_MAX_ATTEMPTS,
   deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
 }
 
 export class Executor {
-  options: ExecutorOptionsWithDefaults
+  options: CompleteOptions
   adapter: BaseAdapter
   logger: BasicLogger
   job: any | null
   maxAttempts: number
   deleteFailedJobs: boolean
 
-  constructor(options: ExecutorOptions) {
-    this.options = { ...DEFAULTS, ...options } as ExecutorOptionsWithDefaults
+  constructor(options: Options) {
+    this.options = { ...DEFAULTS, ...options }
 
     // validate that everything we need is available
     if (!this.options.adapter) {
