@@ -48,6 +48,10 @@ docker compose -f ./docker-compose.dev.yml run --rm -it console /bin/bash
 root@...:/home/node/app# yarn rw prisma migrate dev
 ```
 
+:::info database choice
+The docker setup command assumes that you are using Postgres as your database provider and sets up a local Postgres database for you. You may have to switch from SQLite to Postgres if you have not done so and want to continue with the default setup.
+:::
+
 :::important 
 If you are using a [Server File](#using-the-server-file) then you should [change the command](#command) that runs the `api_serve` service.
 :::
