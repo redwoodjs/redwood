@@ -266,7 +266,16 @@ const clearQueue = ({ logger }: { logger: BasicLogger }) => {
 const main = async () => {
   const { workerDef, command } = parseArgs(process.argv)
   const workerConfig = buildWorkerConfig(workerDef)
-  const { logger } = await loadWorkerConfig()
+
+  // user may have defined a custom logger, so use that if it exists
+  const libWorkerConfig = await loadWorkerConfig()
+  let logger
+
+  if (libWorkerConfig.logger) {
+    logger = libWorkerConfig.logger
+  } else {
+    logger = console
+  }
 
   logger.warn(`Starting RedwoodJob Runner at ${new Date().toISOString()}...`)
 
