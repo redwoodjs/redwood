@@ -57,9 +57,12 @@ export abstract class BaseAdapter<
   // The job engine itself doesn't care about the return value, but the user may
   // want to do something with the result depending on the adapter type, so make
   // it `any` to allow for the subclass to return whatever it wants.
+
   abstract schedule(payload: SchedulePayload): any
 
-  abstract find(args: FindArgs): BaseJob | null | Promise<BaseJob | null>
+  abstract find(
+    args: FindArgs,
+  ): BaseJob | null | undefined | Promise<BaseJob | null | undefined>
 
   // TODO accept an optional `queue` arg to clear only jobs in that queue
   abstract clear(): any
