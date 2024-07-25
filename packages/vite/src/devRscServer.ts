@@ -25,7 +25,7 @@ export const startDevServerWithLiveReload = async () => {
     try {
       child.kill()
     } catch (e) {
-      console.warn('Could not kill frontend server.')
+      console.warn('[rsc-dev-server] could not shutdown server process', e)
     }
 
     await rimraf.rimraf(rwjsPaths.web.dist)
@@ -42,6 +42,7 @@ export const startDevServerWithLiveReload = async () => {
         cwd: rwjsPaths.base,
         stdio: 'inherit',
         env: {
+          NODE_ENV: process.env.NODE_ENV,
           NODE_OPTIONS: '--conditions react-server',
         },
       },
@@ -101,7 +102,6 @@ export const startDevServerWithLiveReload = async () => {
 
       try {
         await child
-        console.log('[rsc-dev-server] started')
       } catch (e) {
         console.error('[rsc-dev-server] error', e)
       }
@@ -123,10 +123,9 @@ export const startDevServerWithLiveReload = async () => {
 process.env.NODE_ENV = 'development'
 startDevServerWithLiveReload()
   .then(() => {
-    console.log('we are ready', process.env.NODE_ENV)
+    console.log('[rsc-dev-server] started')
   })
   .catch((e) => {
-    //
-    console.log('oh no!', e)
+    console.error('[rsc-dev-server] error', e)
     process.exitCode = 1
   })
