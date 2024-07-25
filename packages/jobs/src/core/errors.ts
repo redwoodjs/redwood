@@ -64,8 +64,19 @@ export class JobsLibNotFoundError extends RedwoodJobError {
 
 // Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js
 export class AdapterNotFoundError extends RedwoodJobError {
-  constructor() {
-    super(`api/src/lib/${JOBS_CONFIG_FILENAME} does not export \`adapter\``)
+  constructor(name: string) {
+    super(
+      `api/src/lib/${JOBS_CONFIG_FILENAME} does not export an adapter named \`${name}\``,
+    )
+  }
+}
+
+// Thrown when the runner tries to import `adapter` from api/src/lib/jobs.js
+export class LoggerNotFoundError extends RedwoodJobError {
+  constructor(name: string) {
+    super(
+      `api/src/lib/${JOBS_CONFIG_FILENAME} does not export a logger named \`${name}\``,
+    )
   }
 }
 

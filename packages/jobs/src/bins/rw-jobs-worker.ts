@@ -18,7 +18,10 @@ import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_MAX_RUNTIME,
   DEFAULT_SLEEP_DELAY,
+  DEFAULT_ADAPTER_NAME,
+  DEFAULT_LOGGER_NAME,
 } from '../core/consts'
+import { AdapterNotFoundError, LoggerNotFoundError } from '../core/errors'
 import { loadJobsConfig } from '../core/loaders'
 import { Worker } from '../core/Worker'
 import type { BasicLogger } from '../types'
@@ -71,6 +74,17 @@ const parseArgs = (argv: string[]) => {
       default: DEFAULT_DELETE_FAILED_JOBS,
       description:
         'Whether to remove failed jobs from the queue after max attempts',
+    })
+    .option('adapter', {
+      type: 'string',
+      default: DEFAULT_ADAPTER_NAME,
+      description:
+        'Name of the exported variable from the jobs config file that contains the adapter',
+    })
+    .option('logger', {
+      type: 'string',
+      description:
+        'Name of the exported variable from the jobs config file that contains the adapter',
     })
     .help().argv
 }
@@ -131,6 +145,8 @@ const main = async () => {
     maxRuntime,
     sleepDelay,
     deleteFailedJobs,
+    adapter: adapterName,
+    logger: loggerName,
   } = await parseArgs(process.argv)
   setProcessTitle({ id, queue })
 
@@ -148,14 +164,28 @@ const main = async () => {
     process.exit(1)
   }
 
-  const logger = jobsConfig.logger || console
+  // Exit if the named adapter isn't exported
+  if (!jobsConfig[adapterName]) {
+    throw new AdapterNotFoundError(adapterName)
+  }
+
+  // Exit if the named logger isn't exported (if one was provided)
+  if (loggerName && !jobsConfig[loggerName]) {
+    throw new LoggerNotFoundError(loggerName)
+  }
+
+  // if a named logger was provided, use it, otherwise fall back to the default
+  // name, otherwise just use the console
+  const logger = loggerName
+    ? jobsConfig[loggerName]
+    : jobsConfig[DEFAULT_LOGGER_NAME] || console
 
   logger.info(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
   const worker = new Worker({
-    adapter: jobsConfig.adapter,
+    adapter: jobsConfig[adapterName],
     logger,
     maxAttempts,
     maxRuntime,

@@ -7,3 +7,8 @@ export const DEFAULT_DELETE_FAILED_JOBS = false
 export const DEFAULT_LOGGER = console
 export const DEFAULT_QUEUE = 'default'
 export const DEFAULT_PRIORITY = 50
+
+// the name of the exported variable from the jobs config file that contains the adapter
+export const DEFAULT_ADAPTER_NAME = 'adapter'
+// the name of the exported variable from the jobs config file that contains the logger
+export const DEFAULT_LOGGER_NAME = 'logger'
