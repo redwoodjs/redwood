@@ -13,7 +13,13 @@ import process from 'node:process'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadWorkerConfig } from '../core/loaders'
+import {
+  DEFAULT_DELETE_FAILED_JOBS,
+  DEFAULT_MAX_ATTEMPTS,
+  DEFAULT_MAX_RUNTIME,
+  DEFAULT_SLEEP_DELAY,
+} from '../core/consts'
+import { loadJobsConfig } from '../core/loaders'
 import { Worker } from '../core/Worker'
 import type { BasicLogger } from '../types'
 
@@ -25,34 +31,46 @@ const parseArgs = (argv: string[]) => {
       'Starts a single RedwoodJob worker to process background jobs\n\nUsage: $0 [options]',
     )
     .option('id', {
-      alias: 'i',
       type: 'number',
       description: 'The worker ID',
       default: 0,
     })
     .option('queue', {
-      alias: 'q',
       type: 'string',
       description: 'The named queue to work on',
       default: null,
     })
     .option('workoff', {
-      alias: 'o',
       type: 'boolean',
       default: false,
       description: 'Work off all jobs in the queue and exit',
     })
-    .option('config', {
-      alias: 'c',
-      type: 'string',
-      default: 'workerConfig',
-      description: 'Name of the exported variable containing the worker config',
-    })
     .option('clear', {
-      alias: 'd',
       type: 'boolean',
       default: false,
       description: 'Remove all jobs in the queue and exit',
+    })
+    .option('maxAttempts', {
+      type: 'number',
+      default: DEFAULT_MAX_ATTEMPTS,
+      description: 'The maximum number of times a job can be attempted',
+    })
+    .option('maxRuntime', {
+      type: 'number',
+      default: DEFAULT_MAX_RUNTIME,
+      description: 'The maximum number of seconds a job can run',
+    })
+    .option('sleepDelay', {
+      type: 'number',
+      default: DEFAULT_SLEEP_DELAY,
+      description:
+        'The maximum number of seconds to wait between polling for jobs',
+    })
+    .option('deleteFailedJobs', {
+      type: 'boolean',
+      default: DEFAULT_DELETE_FAILED_JOBS,
+      description:
+        'Whether to remove failed jobs from the queue after max attempts',
     })
     .help().argv
 }
@@ -104,26 +122,45 @@ const setupSignals = ({
 }
 
 const main = async () => {
-  const { id, queue, config, clear, workoff } = await parseArgs(process.argv)
+  const {
+    id,
+    queue,
+    clear,
+    workoff,
+    maxAttempts,
+    maxRuntime,
+    sleepDelay,
+    deleteFailedJobs,
+  } = await parseArgs(process.argv)
   setProcessTitle({ id, queue })
 
-  let workerConfig
+  let jobsConfig
 
+  // Pull the complex config options we can't pass on the command line directly
+  // from the app's jobs config file: `adapter` and `logger`. Remaining config
+  // is passed as command line flags. The rw-jobs script pulls THOSE config
+  // options from the jobs config, but if you're not using that script you need
+  // to pass manually. Calling this script directly is ADVANCED USAGE ONLY!
   try {
-    workerConfig = await loadWorkerConfig(config)
+    jobsConfig = await loadJobsConfig()
   } catch (e) {
     console.error(e)
     process.exit(1)
   }
 
-  const logger = workerConfig.logger || console
+  const logger = jobsConfig.logger || console
 
   logger.info(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
   const worker = new Worker({
-    ...workerConfig,
+    adapter: jobsConfig.adapter,
+    logger,
+    maxAttempts,
+    maxRuntime,
+    sleepDelay,
+    deleteFailedJobs,
     processName: process.title,
     queue,
     workoff,

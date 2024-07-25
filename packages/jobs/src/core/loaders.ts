@@ -6,11 +6,7 @@ import fg from 'fast-glob'
 import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
-import {
-  WorkerConfigNotFoundError,
-  JobsLibNotFoundError,
-  JobNotFoundError,
-} from './errors'
+import { JobsLibNotFoundError, JobNotFoundError } from './errors'
 
 // TODO Don't use this in production, import from dist directly
 registerApiSideBabelHook()
@@ -21,15 +17,10 @@ export function makeFilePath(path: string) {
 
 // Loads the named export from the app's jobs config in api/src/lib/jobs.{js,ts}
 // to configure the worker, defaults to `workerConfig`
-export const loadWorkerConfig = async (name = 'workerConfig') => {
+export const loadJobsConfig = async () => {
   const jobsConfigPath = getPaths().api.jobsConfig
   if (jobsConfigPath) {
-    const jobsModule = require(jobsConfigPath)
-    if (jobsModule[name]) {
-      return jobsModule[name]
-    } else {
-      throw new WorkerConfigNotFoundError(name)
-    }
+    return require(jobsConfigPath)
   } else {
     throw new JobsLibNotFoundError()
   }

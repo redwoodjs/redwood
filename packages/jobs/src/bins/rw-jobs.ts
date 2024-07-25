@@ -14,10 +14,11 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/dist/lib/loadEnvFiles.js'
 
-import { loadWorkerConfig } from '../core/loaders'
+import { loadJobsConfig } from '../core/loaders'
+import type { WorkerConfig } from '../core/Worker'
 import type { BasicLogger } from '../types'
 
-export type WorkerConfig = Array<[string | null, number]> // [queue, id]
+export type NumWorkersConfig = Array<[string | null, number]> // [queue, id]
 
 loadEnvFiles()
 
@@ -84,12 +85,12 @@ const parseArgs = (argv: string[]) => {
   return { workerDef: parsed.n, command: parsed._[0] }
 }
 
-const buildWorkerConfig = (workerDef: string): WorkerConfig => {
+const buildNumWorkers = (workerDef: string): NumWorkersConfig => {
   // Builds up an array of arrays, with queue name and id:
   //   `-n default:2,email:1` => [ ['default', 0], ['default', 1], ['email', 0] ]
   // If only given a number of workers then queue name is null (all queues):
   //   `-n 2` => [ [null, 0], [null, 1] ]
-  const workers: WorkerConfig = []
+  const workers: NumWorkersConfig = []
 
   // default to one worker for commands that don't specify
   if (!workerDef) {
@@ -113,30 +114,46 @@ const buildWorkerConfig = (workerDef: string): WorkerConfig => {
 }
 
 const startWorkers = ({
-  workerConfig,
+  numWorkers,
+  workerConfig = {},
   detach = false,
   workoff = false,
   logger,
 }: {
+  numWorkers: NumWorkersConfig
   workerConfig: WorkerConfig
   detach?: boolean
   workoff?: boolean
   logger: BasicLogger
 }) => {
-  logger.warn(`Starting ${workerConfig.length} worker(s)...`)
+  logger.warn(`Starting ${numWorkers.length} worker(s)...`)
 
-  return workerConfig.map(([queue, id]) => {
+  return numWorkers.map(([queue, id]) => {
     // list of args to send to the forked worker script
     const workerArgs: string[] = ['--id', id.toString()]
 
-    // add the queue name if present
     if (queue) {
       workerArgs.push('--queue', queue)
     }
 
-    // are we in workoff mode?
     if (workoff) {
       workerArgs.push('--workoff')
+    }
+
+    if (workerConfig.maxAttempts) {
+      workerArgs.push('--max-attempts', workerConfig.maxAttempts.toString())
+    }
+
+    if (workerConfig.maxRuntime) {
+      workerArgs.push('--max-runtime', workerConfig.maxRuntime.toString())
+    }
+
+    if (workerConfig.deleteFailedJobs) {
+      workerArgs.push('--delete-failed-jobs')
+    }
+
+    if (workerConfig.sleepDelay) {
+      workerArgs.push('--sleep-delay', workerConfig.sleepDelay.toString())
     }
 
     // fork the worker process
@@ -225,19 +242,19 @@ const findProcessId = async (name: string): Promise<number | null> => {
 
 // TODO add support for stopping with SIGTERM or SIGKILL?
 const stopWorkers = async ({
-  workerConfig,
+  numWorkers,
   signal = 'SIGINT',
   logger,
 }: {
-  workerConfig: WorkerConfig
+  numWorkers: NumWorkersConfig
   signal: string
   logger: BasicLogger
 }) => {
   logger.warn(
-    `Stopping ${workerConfig.length} worker(s) gracefully (${signal})...`,
+    `Stopping ${numWorkers.length} worker(s) gracefully (${signal})...`,
   )
 
-  for (const [queue, id] of workerConfig) {
+  for (const [queue, id] of numWorkers) {
     const workerTitle = `rw-jobs-worker${queue ? `.${queue}` : ''}.${id}`
     const processId = await findProcessId(workerTitle)
 
@@ -265,14 +282,14 @@ const clearQueue = ({ logger }: { logger: BasicLogger }) => {
 
 const main = async () => {
   const { workerDef, command } = parseArgs(process.argv)
-  const workerConfig = buildWorkerConfig(workerDef)
+  const numWorkers = buildNumWorkers(workerDef)
 
-  // user may have defined a custom logger, so use that if it exists
-  const libWorkerConfig = await loadWorkerConfig()
+  // get the worker config defined in the app's job config file
+  const jobsConfig = await loadJobsConfig()
   let logger
 
-  if (libWorkerConfig.logger) {
-    logger = libWorkerConfig.logger
+  if (jobsConfig.logger) {
+    logger = jobsConfig.logger
   } else {
     logger = console
   }
@@ -281,24 +298,43 @@ const main = async () => {
 
   switch (command) {
     case 'start':
-      startWorkers({ workerConfig, detach: true, logger })
+      startWorkers({
+        numWorkers,
+        workerConfig: jobsConfig.workerConfig,
+        detach: true,
+        logger,
+      })
       return process.exit(0)
     case 'restart':
-      await stopWorkers({ workerConfig, signal: 'SIGINT', logger })
-      startWorkers({ workerConfig, detach: true, logger })
+      await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
+      startWorkers({
+        numWorkers,
+        workerConfig: jobsConfig.workerConfig,
+        detach: true,
+        logger,
+      })
       return process.exit(0)
     case 'work':
       return signalSetup({
-        workers: startWorkers({ workerConfig, logger }),
+        workers: startWorkers({
+          numWorkers,
+          workerConfig: jobsConfig.workerConfig,
+          logger,
+        }),
         logger,
       })
     case 'workoff':
       return signalSetup({
-        workers: startWorkers({ workerConfig, workoff: true, logger }),
+        workers: startWorkers({
+          numWorkers,
+          workerConfig: jobsConfig.workerConfig,
+          workoff: true,
+          logger,
+        }),
         logger,
       })
     case 'stop':
-      return await stopWorkers({ workerConfig, signal: 'SIGINT', logger })
+      return await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
     case 'clear':
       return clearQueue({ logger })
   }

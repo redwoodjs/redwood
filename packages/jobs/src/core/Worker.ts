@@ -18,8 +18,6 @@ import { Executor } from './Executor'
 
 // The options set in api/src/lib/jobs.ts
 export interface WorkerConfig {
-  adapter: BaseAdapter
-  logger?: BasicLogger
   maxAttempts?: number
   maxRuntime?: number
   deleteFailedJobs?: boolean
@@ -29,6 +27,8 @@ export interface WorkerConfig {
 // Additional options that the rw-jobs-worker process will set when
 // instantiatng the Worker class
 interface Options {
+  adapter: BaseAdapter
+  logger?: BasicLogger
   clear?: boolean
   processName?: string
   queue?: string | null
