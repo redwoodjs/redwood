@@ -1,7 +1,7 @@
 import http from 'node:http'
 
 import chokidar from 'chokidar'
-import { type ResultPromise } from 'execa'
+import execa from 'execa'
 import { rimraf } from 'rimraf'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -9,9 +9,7 @@ import { getPaths } from '@redwoodjs/project-config'
 import { build } from './devRscServer.js'
 
 export const startLiveReload = async () => {
-  const { execaNode } = await import('execa')
-
-  let child: ResultPromise
+  let child: execa.ExecaChildProcess
   let client: http.ServerResponse
 
   const sendReloadEvent = () => {
@@ -33,33 +31,35 @@ export const startLiveReload = async () => {
 
   process.stdin.on('data', async (data) => {
     const str = data.toString().trim().toLowerCase()
-    if (str === 'rs') {
-      await rimraf.rimraf(rwjsPaths.web.dist)
-      await rimraf.rimraf(rwjsPaths.api.dist)
-      await build()
+    if (str !== 'rs') {
+      return
+    }
 
-      try {
-        child.kill()
-      } catch (e) {
-        console.log(e)
-      }
-      child = execaNode('../node_modules/@redwoodjs/vite/dist/runFeServer.js', {
-        ipc: true,
-        shell: true,
-        stdio: 'inherit',
-      })
-      if (typeof child !== 'undefined') {
-        const m = await child.getOneMessage()
-        if (m === 'server ready') {
-          sendReloadEvent()
-        }
-      }
+    await rimraf.rimraf(rwjsPaths.web.dist)
+    await rimraf.rimraf(rwjsPaths.api.dist)
+    await build()
 
-      try {
-        await child
-      } catch (e) {
-        console.log('.....')
+    try {
+      child.kill()
+    } catch (e) {
+      console.log(e)
+    }
+
+    child = execa.node('../node_modules/@redwoodjs/vite/dist/runFeServer.js', {
+      shell: true,
+      stdio: 'inherit',
+    })
+
+    child.addListener('message', (m) => {
+      if (m === 'server ready') {
+        sendReloadEvent()
       }
+    })
+
+    try {
+      await child
+    } catch (e) {
+      console.log('.....')
     }
   })
 
@@ -70,11 +70,14 @@ export const startLiveReload = async () => {
       await rimraf.rimraf(rwjsPaths.api.dist)
       await build()
 
-      child = execaNode('../node_modules/@redwoodjs/vite/dist/runFeServer.js', {
-        ipc: true,
-        shell: true,
-        stdio: 'inherit',
-      })
+      child = execa.node(
+        '../node_modules/@redwoodjs/vite/dist/runFeServer.js',
+        {
+          // ipc: true,
+          shell: true,
+          stdio: 'inherit',
+        },
+      )
 
       http
         .createServer(async (_req, res) => {
@@ -101,15 +104,18 @@ export const startLiveReload = async () => {
       await build()
 
       child.kill()
-      child = execaNode('../node_modules/@redwoodjs/vite/dist/runFeServer.js', {
-        ipc: true,
-      })
-      if (typeof child !== 'undefined') {
-        const m = await child.getOneMessage()
-        if (m === 'server ready') {
-          sendReloadEvent()
-        }
-      }
+      child = execa.node(
+        '../node_modules/@redwoodjs/vite/dist/runFeServer.js',
+        {
+          // ipc: true,
+        },
+      )
+      // if (typeof child !== 'undefined') {
+      //   const m = await child.getOneMessage()
+      //   if (m === 'server ready') {
+      //     sendReloadEvent()
+      //   }
+      // }
 
       try {
         await child

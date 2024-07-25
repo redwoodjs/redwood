@@ -6,6 +6,7 @@
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
 import path from 'node:path'
+import process from 'node:process'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
@@ -51,8 +52,6 @@ loadDotEnv({
 // ------------------------------------------------
 
 export async function runFeServer() {
-  const { sendMessage } = await import('execa')
-
   const app = express()
   const rwPaths = getPaths()
   const rwConfig = getConfig()
@@ -201,7 +200,10 @@ export async function runFeServer() {
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
-  sendMessage('server ready')
+
+  if (typeof process.send !== 'undefined') {
+    process.send('server ready')
+  }
 }
 
 runFeServer()
