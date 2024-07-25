@@ -79,7 +79,7 @@ window.addEventListener('load', () => {
   window.addEventListener('beforeunload', () => {
     sse.close();
   });
-  // TODO: Handle disconnect / error states.
+  // TODO (RSC): Handle disconnect / error states.
 });
 `
 
