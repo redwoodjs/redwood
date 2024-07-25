@@ -2,6 +2,7 @@ import { describe, expect, vi, it, beforeEach } from 'vitest'
 
 import type CliHelpers from '@redwoodjs/cli-helpers'
 
+import { DEFAULT_LOGGER, DEFAULT_QUEUE, DEFAULT_PRIORITY } from '../consts'
 import * as errors from '../errors'
 import { RedwoodJob } from '../RedwoodJob'
 
@@ -34,28 +35,45 @@ const mockAdapter = {
   failure: (_job: { handler: string; args: any }, _error: Error) => {},
 }
 
-const jobConfig = {
-  adapter: mockAdapter,
-  logger: mockLogger,
-}
-
 class TestJob extends RedwoodJob {
+  static adapter = mockAdapter
+
   async perform() {
     return 'done'
   }
 }
 
-describe('static config', () => {
-  it('can set the adapter', () => {
-    RedwoodJob.config(jobConfig)
+describe('static properties', () => {
+  it('sets a default logger', () => {
+    expect(RedwoodJob.logger).toEqual(DEFAULT_LOGGER)
+  })
 
-    expect(RedwoodJob.adapter).toEqual(jobConfig.adapter)
+  it('sets a default queue', () => {
+    expect(RedwoodJob.queue).toEqual(DEFAULT_QUEUE)
+  })
+
+  it('sets a default priority', () => {
+    expect(RedwoodJob.priority).toEqual(DEFAULT_PRIORITY)
+  })
+})
+
+describe('static config()', () => {
+  it('can set the adapter', () => {
+    RedwoodJob.config({ adapter: mockAdapter })
+
+    expect(RedwoodJob.adapter).toEqual(mockAdapter)
   })
 
   it('can set the logger', () => {
-    RedwoodJob.config(jobConfig)
+    RedwoodJob.config({ adapter: mockAdapter, logger: mockLogger })
 
-    expect(RedwoodJob.logger).toEqual(jobConfig.logger)
+    expect(RedwoodJob.logger).toEqual(mockLogger)
+  })
+
+  it('is inherited by subclasses', () => {
+    RedwoodJob.config({ adapter: mockAdapter })
+
+    expect(TestJob.adapter).toEqual(mockAdapter)
   })
 })
 
@@ -65,17 +83,18 @@ describe('constructor()', () => {
     expect(job).toBeInstanceOf(RedwoodJob)
   })
 
-  it('defaults some options', () => {
-    const job = new TestJob()
-    expect(job.options).toEqual({
-      queue: RedwoodJob.queue,
-      priority: RedwoodJob.priority,
-    })
-  })
-
   it('can set options for the job', () => {
     const job = new TestJob({ wait: 5 })
     expect(job.options.wait).toEqual(5)
+  })
+
+  it('throws an error if no adapter is configured', async () => {
+    // @ts-expect-error - testing JS scenario
+    class AdapterlessJob extends RedwoodJob {
+      static adapter = undefined
+    }
+
+    expect(() => new AdapterlessJob()).toThrow(errors.AdapterNotConfiguredError)
   })
 })
 
@@ -84,24 +103,6 @@ describe('static set()', () => {
     const job = TestJob.set({ wait: 300 })
 
     expect(job).toBeInstanceOf(TestJob)
-  })
-
-  it('sets options for the job', () => {
-    const job = TestJob.set({ runAt: new Date(700) })
-
-    expect(job.options.runAt?.getTime()).toEqual(new Date(700).getTime())
-  })
-
-  it('sets the default queue', () => {
-    const job = TestJob.set({ priority: 3 })
-
-    expect(job.options.queue).toEqual(TestJob.queue)
-  })
-
-  it('sets the default priority', () => {
-    const job = TestJob.set({ queue: 'bar' })
-
-    expect(job.options.priority).toEqual(TestJob.priority)
   })
 
   it('can override the queue name set in the class', () => {
@@ -119,39 +120,115 @@ describe('static set()', () => {
 
 describe('instance set()', () => {
   it('returns a job instance', () => {
-    const job = new TestJob().set({ wait: 300 })
+    const job = new TestJob().set()
 
     expect(job).toBeInstanceOf(TestJob)
   })
 
   it('sets options for the job', () => {
-    const job = new TestJob().set({ runAt: new Date(700) })
+    const job = new TestJob().set({ queue: 'foo', priority: 10, wait: 300 })
 
-    expect(job.options.runAt?.getTime()).toEqual(new Date(700).getTime())
+    expect(job.options).toEqual({ queue: 'foo', priority: 10, wait: 300 })
   })
 
-  it('sets the default queue', () => {
-    const job = new TestJob().set({ foo: 'bar' })
+  it('overrides initialization options', () => {
+    const job = new TestJob({ queue: 'foo' })
+    job.set({ queue: 'bar' })
 
-    expect(job.options.queue).toEqual(TestJob.queue)
+    expect(job.queue).toEqual('bar')
   })
 
-  it('sets the default priority', () => {
-    const job = new TestJob().set({ foo: 'bar' })
+  it('does not override different options', () => {
+    const job = new TestJob({ priority: 10 })
+    job.set({ queue: 'foo' })
 
-    expect(job.options.priority).toEqual(TestJob.priority)
+    expect(job.priority).toEqual(10)
+    expect(job.queue).toEqual('foo')
   })
 
-  it('can override the queue name set in the class', () => {
-    const job = new TestJob().set({ foo: 'bar', queue: 'priority' })
+  it('can override the static (class) queue', () => {
+    const job = new TestJob()
+    expect(job.queue).toEqual(DEFAULT_QUEUE)
 
-    expect(job.options.queue).toEqual('priority')
+    job.set({ queue: 'random' })
+    expect(job.options.queue).toEqual('random')
   })
 
-  it('can override the priority set in the class', () => {
-    const job = new TestJob().set({ foo: 'bar', priority: 10 })
+  it('can override the static (class) priority', () => {
+    const job = new TestJob()
+    expect(job.priority).toEqual(DEFAULT_PRIORITY)
 
+    job.set({ priority: 10 })
     expect(job.options.priority).toEqual(10)
+  })
+})
+
+describe('get options()', () => {
+  it('returns the options set in the class', () => {
+    const job = new TestJob({ queue: 'foo' })
+
+    expect(job.options).toEqual({ queue: 'foo' })
+  })
+})
+
+describe('get adapter()', () => {
+  it('returns the adapter set in the class', () => {
+    const job = new TestJob()
+
+    expect(job.adapter).toEqual(mockAdapter)
+  })
+})
+
+describe('get logger()', () => {
+  it('returns the logger set in the class', () => {
+    const job = new TestJob()
+
+    expect(job.logger).toEqual(mockLogger)
+  })
+})
+
+describe('get queue()', () => {
+  it('returns the queue set in the class if no option set', () => {
+    const job = new TestJob()
+
+    expect(job.queue).toEqual(DEFAULT_QUEUE)
+  })
+
+  it('returns the queue set in the options', () => {
+    const job = new TestJob({ queue: 'foo' })
+
+    expect(job.queue).toEqual('foo')
+  })
+})
+
+describe('get priority()', () => {
+  it('returns the priority set in the class if no option set', () => {
+    const job = new TestJob()
+
+    expect(job.priority).toEqual(DEFAULT_PRIORITY)
+  })
+
+  it('returns the priority set in the options', () => {
+    const job = new TestJob({ priority: 10 })
+
+    expect(job.priority).toEqual(10)
+  })
+})
+
+describe('get wait()', () => {
+  it('returns the wait set in the options', () => {
+    const job = new TestJob({ wait: 10 })
+
+    expect(job.wait).toEqual(10)
+  })
+})
+
+describe('get waitUntil()', () => {
+  it('returns the waitUntil set in the options', () => {
+    const futureDate = new Date(2025, 0, 1)
+    const job = new TestJob({ waitUntil: futureDate })
+
+    expect(job.waitUntil).toEqual(futureDate)
   })
 })
 
@@ -163,113 +240,18 @@ describe('get runAt()', () => {
   })
 
   it('returns a datetime `wait` seconds in the future if option set', async () => {
-    const job = TestJob.set({ wait: 300 })
+    const job = new TestJob().set({ wait: 300 })
 
-    expect(job.runAt).toEqual(new Date(Date.UTC(2024, 0, 1, 0, 5, 0)))
+    expect(job.runAt).toEqual(new Date(Date.UTC(2024, 0, 1, 0, 5, 0))) // 300 seconds in the future
   })
 
   it('returns a datetime set to `waitUntil` if option set', async () => {
     const futureDate = new Date(2030, 1, 2, 12, 34, 56)
-    const job = TestJob.set({
+    const job = new TestJob().set({
       waitUntil: futureDate,
     })
 
     expect(job.runAt).toEqual(futureDate)
-  })
-
-  it('returns any datetime set directly on the instance', () => {
-    const futureDate = new Date(2030, 1, 2, 12, 34, 56)
-    const job = new TestJob()
-    job.runAt = futureDate
-
-    expect(job.runAt).toEqual(futureDate)
-  })
-
-  it('sets the computed time in the `options` property', () => {
-    const job = new TestJob()
-    const runAt = job.runAt
-
-    expect(job.options.runAt).toEqual(runAt)
-  })
-})
-
-describe('set runAt()', () => {
-  it('allows manually setting runAt time directly on the instance', () => {
-    const futureDate = new Date(2030, 1, 2, 12, 34, 56)
-    const job = new TestJob()
-    job.runAt = futureDate
-
-    expect(job.runAt).toEqual(futureDate)
-  })
-
-  it('sets the `options.runAt` property', () => {
-    const futureDate = new Date(2030, 1, 2, 12, 34, 56)
-    const job = new TestJob()
-    job.runAt = futureDate
-
-    expect(job.options.runAt).toEqual(futureDate)
-  })
-})
-
-describe('get queue()', () => {
-  it('defaults to queue set in class', () => {
-    const job = new TestJob()
-
-    expect(job.queue).toEqual(TestJob.queue)
-  })
-
-  it('allows manually setting the queue name on an instance', () => {
-    const job = new TestJob()
-    job.queue = 'priority'
-
-    expect(job.queue).toEqual('priority')
-  })
-
-  it('prefers the queue set manually over queue set as an option', () => {
-    const job = TestJob.set({ queue: 'priority' })
-    job.queue = 'important'
-
-    expect(job.queue).toEqual('important')
-  })
-})
-
-describe('set queue()', () => {
-  it('sets the queue name in `options.queue`', () => {
-    const job = new TestJob()
-    job.queue = 'priority'
-
-    expect(job.options.queue).toEqual('priority')
-  })
-})
-
-describe('get priority()', () => {
-  it('defaults to priority set in class', () => {
-    const job = new TestJob()
-
-    expect(job.priority).toEqual(TestJob.priority)
-  })
-
-  it('allows manually setting the priority name on an instance', () => {
-    const job = new TestJob()
-    job.priority = 10
-
-    expect(job.priority).toEqual(10)
-  })
-
-  it('prefers priority set manually over priority set as an option', () => {
-    const job = TestJob.set({ priority: 20 })
-    job.priority = 10
-
-    expect(job.priority).toEqual(10)
-  })
-})
-
-describe('set priority()', () => {
-  it('sets the priority in `options.priority`', () => {
-    const job = new TestJob()
-    job.priority = 10
-
-    expect(job.options.priority).toEqual(10)
   })
 })
 
@@ -291,17 +273,6 @@ describe('static performLater()', () => {
 describe('instance performLater()', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-  })
-
-  it('throws an error if no adapter is configured', async () => {
-    // @ts-expect-error - testing JS scenario
-    TestJob.config({ adapter: undefined, logger: mockLogger })
-
-    const job = new TestJob()
-
-    expect(() => job.performLater('foo', 'bar')).toThrow(
-      errors.AdapterNotConfiguredError,
-    )
   })
 
   it('logs that the job is being scheduled', async () => {
@@ -476,44 +447,5 @@ describe('perform()', () => {
     const job = new RedwoodJob()
 
     expect(() => job.perform()).toThrow(TypeError)
-  })
-})
-
-describe('subclasses', () => {
-  it('can set its own queue', () => {
-    class MailerJob extends RedwoodJob {
-      static queue = 'mailers'
-
-      perform() {
-        return 'done'
-      }
-    }
-
-    // class access
-    expect(MailerJob.queue).toEqual('mailers')
-    expect(RedwoodJob.queue).toEqual('default')
-
-    // instance access (not including RedwoodJob here, becuase it can't be
-    // instantiated since it's abstract)
-    const mailerJob = new MailerJob()
-    expect(mailerJob.queue).toEqual('mailers')
-  })
-
-  it('can set its own priority', () => {
-    class PriorityJob extends RedwoodJob {
-      static priority = 10
-
-      perform() {
-        return 'done'
-      }
-    }
-
-    // class access
-    expect(PriorityJob.priority).toEqual(10)
-    expect(RedwoodJob.priority).toEqual(50)
-
-    // instance access (again, not testing RedwoodJob. See comment above)
-    const priorityJob = new PriorityJob()
-    expect(priorityJob.priority).toEqual(10)
   })
 })
