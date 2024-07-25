@@ -1,7 +1,7 @@
-import type { Config } from './config.js'
-
 import { execa } from 'execa'
 import fs from 'node:fs'
+
+import type { Config } from './config.js'
 
 export async function shouldRelaunch(config: Config) {
   if (config.verbose) {
@@ -9,7 +9,7 @@ export async function shouldRelaunch(config: Config) {
   }
 
   if (
-    !/[\/\\]_npx[\/\\]/.test(process.argv[1]) &&
+    !/[/\\]_npx[/\\]/.test(process.argv[1]) &&
     // --npx is a hack for bypassing the check when running in dev if needed
     !process.argv.includes('--npx')
   ) {

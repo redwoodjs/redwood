@@ -1,7 +1,7 @@
-import type { Config } from './config.js'
-
 import fs from 'node:fs'
 import path from 'node:path'
+
+import type { Config } from './config.js'
 
 export async function upgradeToLatestCanary(config: Config) {
   const packageJsons = [
@@ -21,8 +21,8 @@ async function getLatestCanary(config: Config, packageName: string) {
     console.log('Fetching', url)
   }
 
-  let resp = await fetch(url)
-  let packument = await resp.json()
+  const resp = await fetch(url)
+  const packument = await resp.json()
 
   if (config.verbose) {
     console.log(
@@ -49,8 +49,8 @@ function updatePackageJsons(
     const contents = fs.readFileSync(path, 'utf8')
     const packageJson = JSON.parse(contents)
 
-    const dependencies = packageJson['dependencies']
-    const devDependencies = packageJson['devDependencies']
+    const dependencies = packageJson.dependencies
+    const devDependencies = packageJson.devDependencies
 
     if (config.verbose) {
       console.log('dependencies', dependencies)
