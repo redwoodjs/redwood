@@ -2,9 +2,9 @@ import { vi, test, describe, expect } from 'vitest'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { command, description, builder, handler } from '../setupDocker'
+import { command, description, builder, handler } from '../docker'
 
-vi.mock('../setupDockerHandler.js')
+vi.mock('../dockerHandler.js')
 
 vi.mock('@redwoodjs/cli-helpers', () => {
   return {
@@ -14,12 +14,12 @@ vi.mock('@redwoodjs/cli-helpers', () => {
 
 describe('setupDocker', () => {
   test("command didn't change unintentionally", () => {
-    expect(command).toMatchInlineSnapshot(`"setup-docker"`)
+    expect(command).toMatchInlineSnapshot(`"docker"`)
   })
 
   test("description didn't change unintentionally", () => {
     expect(description).toMatchInlineSnapshot(
-      `"Setup the experimental Dockerfile"`,
+      `"Setup the default Redwood Dockerfile"`,
     )
   })
 
@@ -46,7 +46,7 @@ describe('setupDocker', () => {
     await handler({})
 
     expect(recordTelemetryAttributes).toHaveBeenCalledWith({
-      command: 'experimental setup-docker',
+      command: 'setup docker',
       force: undefined,
       verbose: undefined,
     })

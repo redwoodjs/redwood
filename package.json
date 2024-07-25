@@ -8,7 +8,8 @@
     "packages/cli-packages/*",
     "packages/mailer/core",
     "packages/mailer/handlers/*",
-    "packages/mailer/renderers/*"
+    "packages/mailer/renderers/*",
+    "!packages/create-redwood-rsc-app"
   ],
   "scripts": {
     "build": "nx run-many -t build",
@@ -23,7 +24,7 @@
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "e2e": "node ./tasks/run-e2e",
     "generate-dependency-graph": "node ./tasks/generateDependencyGraph.mjs",
-    "lint": "RWJS_CWD=packages/create-redwood-app/templates/ts eslint --config .eslintrc.js --ignore-pattern Routes.jsx packages",
+    "lint": "RWJS_CWD=packages/create-redwood-app/templates/ts eslint --config .eslintrc.js --ignore-pattern Routes.jsx --ignore-pattern create-redwood-rsc-app packages",
     "lint:fix": "yarn lint --fix",
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
@@ -85,7 +86,7 @@
     "cypress": "13.13.1",
     "cypress-fail-fast": "7.1.0",
     "cypress-wait-until": "3.0.2",
-    "dependency-cruiser": "16.3.9",
+    "dependency-cruiser": "16.3.10",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
     "execa": "5.1.1",
@@ -101,7 +102,7 @@
     "ncp": "2.0.0",
     "nodemon": "3.1.4",
     "npm-packlist": "8.0.2",
-    "nx": "19.5.2",
+    "nx": "19.5.3",
     "ora": "8.0.1",
     "prompts": "2.4.2",
     "rimraf": "6.0.1",
