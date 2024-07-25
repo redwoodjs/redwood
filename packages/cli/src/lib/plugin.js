@@ -25,10 +25,10 @@ const PLUGIN_CACHE_FILENAME = 'commandCache.json'
  */
 export const PLUGIN_CACHE_DEFAULT = {
   '@redwoodjs/cli-storybook-vite': {
-    'storybook-vite': {
-      aliases: ['storybook-vite', 'sbv'],
+    storybook: {
+      aliases: ['sb'],
       description:
-        'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite!)',
+        'Launch Storybook: a tool for building UI components and pages in isolation',
     },
   },
   '@redwoodjs/cli-data-migrate': {
