@@ -8,7 +8,8 @@
     "packages/cli-packages/*",
     "packages/mailer/core",
     "packages/mailer/handlers/*",
-    "packages/mailer/renderers/*"
+    "packages/mailer/renderers/*",
+    "!packages/create-redwood-rsc-app"
   ],
   "scripts": {
     "build": "nx run-many -t build",
