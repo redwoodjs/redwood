@@ -6,12 +6,12 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2022"
   },
-  "include": ["src"]
+  "include": ["src", "tsconfig.d.ts"]
 }

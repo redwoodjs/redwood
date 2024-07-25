@@ -52,7 +52,7 @@
     "eslint-plugin-markdown": "^5.1.0",
     "eslint-plugin-n": "^17.9.0",
     "eslint-plugin-package-json": "^0.15.2",
-    "eslint-plugin-perfectionist": "^2.11.0",
+    "eslint-plugin-perfectionist": "^3.0.0",
     "eslint-plugin-regexp": "^2.6.0",
     "eslint-plugin-vitest": "^0.5.4",
     "eslint-plugin-yml": "^1.14.0",
