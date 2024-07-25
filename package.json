@@ -8,7 +8,8 @@
     "packages/cli-packages/*",
     "packages/mailer/core",
     "packages/mailer/handlers/*",
-    "packages/mailer/renderers/*"
+    "packages/mailer/renderers/*",
+    "!packages/create-redwood-rsc-app"
   ],
   "scripts": {
     "build": "nx run-many -t build",
@@ -101,7 +102,7 @@
     "ncp": "2.0.0",
     "nodemon": "3.1.4",
     "npm-packlist": "8.0.2",
-    "nx": "19.5.2",
+    "nx": "19.5.3",
     "ora": "8.0.1",
     "prompts": "2.4.2",
     "rimraf": "6.0.1",
