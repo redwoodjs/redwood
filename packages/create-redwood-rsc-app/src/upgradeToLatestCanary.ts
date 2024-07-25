@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import fetch from 'node-fetch'
 
 import type { Config } from './config.js'
 
@@ -22,7 +23,9 @@ async function getLatestCanary(config: Config, packageName: string) {
   }
 
   const resp = await fetch(url)
-  const packument = await resp.json()
+  const packument = (await resp.json()) as {
+    'dist-tags': Record<string, string>
+  }
 
   if (config.verbose) {
     console.log(

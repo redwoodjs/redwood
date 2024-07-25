@@ -1,3 +1,6 @@
+// TODO: Really need to fix this, but I want to get this stuff merged first
+// before I spend more time on it.
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { parseArgs } from 'node:util'
 
 export interface Config {

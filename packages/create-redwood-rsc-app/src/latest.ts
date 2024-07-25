@@ -3,7 +3,7 @@ import fs from 'node:fs'
 
 import type { Config } from './config.js'
 
-export async function shouldRelaunch(config: Config) {
+export function shouldRelaunch(config: Config) {
   if (config.verbose) {
     console.log('shouldRelaunch process.argv', process.argv)
   }
@@ -73,7 +73,10 @@ export async function relaunchOnLatest(config: Config) {
   const args = [...process.argv.slice(2), '--no-check-latest']
 
   if (config.verbose) {
-    console.log('cmd', `npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`)
+    console.log(
+      'cmd',
+      `npx @tobbe.dev/create-redwood-rsc-app@latest ${args.join()}`,
+    )
   }
 
   await execa({

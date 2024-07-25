@@ -13,13 +13,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: [
-      'coverage*',
-      'dist',
-      'node_modules',
-      'pnpm-lock.yaml',
-      '**/*.snap',
-    ],
+    ignores: ['coverage*', 'dist', 'node_modules', '**/*.snap'],
   },
   {
     linterOptions: {
@@ -34,7 +28,14 @@ export default tseslint.config(
   comments.recommended,
   jsdoc.configs['flat/recommended-typescript-error'],
   n.configs['flat/recommended'],
-  packageJson,
+  {
+    ...packageJson,
+    rules: {
+      ...packageJson.rules,
+      // https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/issues/252
+      'package-json/valid-repository-directory': 'off',
+    },
+  },
   perfectionist.configs['recommended-natural'],
   regexp.configs['flat/recommended'],
   ...tseslint.config({
@@ -76,26 +77,24 @@ export default tseslint.config(
 
       // These on-by-default rules work well for this repo if configured
       '@typescript-eslint/no-unused-vars': ['error', { caughtErrors: 'all' }],
-      'perfectionist/sort-objects': 'off',
-      // "perfectionist/sort-objects": [
-      //   "error",
-      //   {
-      //     order: "asc",
-      //     "partition-by-comment": true,
-      //     type: "natural",
-      //   },
-      // ],
       'n/hashbang': [
         'error',
         {
-          convertPath: {
-            'src/**/*.ts': ['src/(.+?)\\.js', 'dist/$1.js'],
-          },
+          convertPath: [
+            {
+              include: ['src/**/*.ts'],
+              replace: ['src/(.+?).ts', 'dist/$1.js'],
+            },
+          ],
         },
       ],
       // Stylistic concerns that don't interfere with Prettier
       'no-useless-rename': 'error',
       'object-shorthand': 'error',
+
+      // When specifying object options for cli prompts custom ordering makes
+      // them a lot easier to read
+      'perfectionist/sort-objects': 'off',
     },
   }),
   {

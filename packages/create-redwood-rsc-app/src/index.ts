@@ -14,7 +14,7 @@ import { unzip } from './zip.js'
 
 const config = initConfig()
 
-if (await shouldRelaunch(config)) {
+if (shouldRelaunch(config)) {
   await relaunchOnLatest(config)
 } else {
   printWelcome()
