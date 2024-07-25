@@ -1,0 +1,93 @@
+{
+  "name": "@tobbe.dev/create-redwood-rsc-app",
+  "version": "0.4.2",
+  "private": false,
+  "description": "Quickstart for a RedwoodJS React Server Components App",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tobbe/create-redwood-rsc-app"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Tobbe Lundberg",
+    "email": "tobbe@tlundberg.com"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": "./dist/index.js",
+  "files": [
+    "dist/",
+    "package.json",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/index.ts",
+    "format": "prettier .",
+    "lint": "eslint . --max-warnings 0",
+    "lint:knip": "knip",
+    "lint:md": "markdownlint \"**/*.md\" \".github/**/*.md\" --rules sentences-per-line",
+    "lint:packages": "pnpm dedupe --check",
+    "lint:spelling": "cspell \"**\" \".github/**/*\"",
+    "prepare": "husky",
+    "test": "vitest",
+    "tsc": "tsc"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
+  },
+  "dependencies": {
+    "chalk": "5.3.0",
+    "enquirer": "2.4.1",
+    "execa": "9.3.0",
+    "node-fetch": "3.3.2",
+    "semver": "7.6.3",
+    "untildify": "5.0.0",
+    "which": "4.0.0",
+    "yauzl-promise": "4.0.0"
+  },
+  "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
+    "@eslint/js": "^9.7.0",
+    "@release-it/conventional-changelog": "^8.0.1",
+    "@types/eslint-plugin-markdown": "^2.0.2",
+    "@types/semver": "7.5.8",
+    "@types/which": "3.0.4",
+    "@types/yauzl-promise": "4.0.1",
+    "@vitest/coverage-v8": "^2.0.3",
+    "console-fail-test": "^0.4.4",
+    "cspell": "^8.11.0",
+    "eslint": "^9.7.0",
+    "eslint-plugin-jsdoc": "^48.7.0",
+    "eslint-plugin-jsonc": "^2.16.0",
+    "eslint-plugin-markdown": "^5.1.0",
+    "eslint-plugin-n": "^17.9.0",
+    "eslint-plugin-package-json": "^0.15.2",
+    "eslint-plugin-perfectionist": "^2.11.0",
+    "eslint-plugin-regexp": "^2.6.0",
+    "eslint-plugin-vitest": "^0.5.4",
+    "eslint-plugin-yml": "^1.14.0",
+    "husky": "^9.1.1",
+    "jsonc-eslint-parser": "^2.4.0",
+    "knip": "^5.26.0",
+    "lint-staged": "^15.2.7",
+    "markdownlint": "^0.34.0",
+    "markdownlint-cli": "^0.41.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-curly": "^0.2.2",
+    "prettier-plugin-packagejson": "^2.5.1",
+    "prettier-plugin-sh": "^0.14.0",
+    "release-it": "^17.6.0",
+    "sentences-per-line": "^0.2.1",
+    "tsup": "^8.2.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^7.16.1",
+    "vitest": "^2.0.3"
+  },
+  "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a",
+  "engines": {
+    "node": ">=16"
+  }
+}
