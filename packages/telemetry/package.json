@@ -23,20 +23,20 @@
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
-    "@whatwg-node/fetch": "0.9.17",
+    "@whatwg-node/fetch": "0.9.19",
     "ci-info": "4.0.0",
     "envinfo": "7.13.0",
     "systeminformation": "5.22.11",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@types/envinfo": "7.8.4",
-    "@types/uuid": "9.0.8",
+    "@types/uuid": "10.0.0",
     "@types/yargs": "17.0.32",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tsx": "4.16.2",
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

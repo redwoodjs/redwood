@@ -17,8 +17,7 @@
     "rw": "./dist/cjs/bins/redwood.js",
     "rwfw": "./dist/cjs/bins/rwfw.js",
     "storybook": "./dist/cjs/bins/storybook.js",
-    "tsc": "./dist/cjs/bins/tsc.js",
-    "webpack": "./dist/cjs/bins/webpack.js"
+    "tsc": "./dist/cjs/bins/tsc.js"
   },
   "exports": {
     ".": {
@@ -32,15 +31,44 @@
       }
     },
     "./serverInject": {
-      "require": "./dist/cjs/components/ServerInject.js",
-      "import": "./dist/components/ServerInject.js",
-      "types": "./dist/components/ServerInject.d.ts",
-      "default": "./dist/components/ServerInject.js"
+      "import": {
+        "types": "./dist/components/ServerInject.d.ts",
+        "default": "./dist/components/ServerInject.js"
+      },
+      "require": {
+        "types": "./dist/cjs/components/ServerInject.d.ts",
+        "default": "./dist/cjs/components/ServerInject.js"
+      }
     },
     "./request": {
-      "require": "./dist/cjs/server/request.js",
-      "import": "./dist/server/request.js",
-      "types": "./dist/server/request.d.ts"
+      "import": {
+        "types": "./dist/server/request.d.ts",
+        "default": "./dist/server/request.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/request.d.ts",
+        "default": "./dist/cjs/server/request.js"
+      }
+    },
+    "./middleware": {
+      "import": {
+        "types": "./dist/server/middleware.d.ts",
+        "default": "./dist/server/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/middleware.d.ts",
+        "default": "./dist/cjs/server/middleware.js"
+      }
+    },
+    "./dist/server/middleware": {
+      "import": {
+        "types": "./dist/server/middleware.d.ts",
+        "default": "./dist/server/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/middleware.d.ts",
+        "default": "./dist/cjs/server/middleware.js"
+      }
     },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
@@ -49,6 +77,10 @@
     "./htmlTags": {
       "require": "./dist/cjs/components/htmlTags.js",
       "import": "./dist/components/htmlTags.js"
+    },
+    "./Metadata": {
+      "require": "./dist/cjs/components/Metadata.js",
+      "import": "./dist/components/Metadata.js"
     },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
@@ -66,15 +98,24 @@
       "default": "./dist/entry/index.js"
     },
     "./toast": {
-      "require": "./dist/cjs/toast/index.js",
-      "import": "./dist/toast/index.js",
-      "types": "./dist/toast/index.d.ts"
+      "import": {
+        "types": "./dist/toast/index.d.ts",
+        "default": "./dist/toast/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/toast/index.d.ts",
+        "default": "./dist/cjs/toast/index.js"
+      }
     },
     "./apollo": {
-      "require": "./dist/cjs/apollo/index.js",
-      "import": "./dist/apollo/index.js",
-      "types": "./dist/apollo/index.d.ts",
-      "default": "./dist/cjs/apollo/index.js"
+      "import": {
+        "types": "./dist/apollo/index.d.ts",
+        "default": "./dist/apollo/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/apollo/index.d.ts",
+        "default": "./dist/cjs/apollo/index.js"
+      }
     },
     "./forceEsmApollo": {
       "require": "./dist/apollo/index.js",
@@ -88,22 +129,25 @@
     "src/entry"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test": "vitest run",
+    "check:attw": "tsx ./attw.ts",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.9.9",
-    "@babel/runtime-corejs3": "7.24.5",
+    "@apollo/client": "3.11.1",
+    "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
+    "@whatwg-node/fetch": "0.9.19",
     "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "2.0.5",
@@ -113,23 +157,27 @@
   },
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
-    "@babel/cli": "7.24.5",
+    "@arethetypeswrong/cli": "0.15.3",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
-    "@babel/plugin-transform-runtime": "7.24.3",
-    "@babel/runtime": "7.24.5",
+    "@babel/plugin-transform-runtime": "7.24.7",
+    "@babel/runtime": "7.24.8",
     "@redwoodjs/framework-tools": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
-    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "nodemon": "3.1.3",
+    "concurrently": "8.2.2",
+    "nodemon": "3.1.4",
+    "publint": "0.2.9",
     "react": "19.0.0-beta-04b058868c-20240508",
     "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.0.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tstyche": "2.1.0",
+    "tsx": "4.16.2",
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",

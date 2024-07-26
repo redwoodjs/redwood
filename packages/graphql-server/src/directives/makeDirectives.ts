@@ -1,4 +1,4 @@
-import type { DocumentNode, ExecutableDefinitionNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 import type {
   RedwoodDirective,
@@ -50,9 +50,9 @@ export const makeDirectivesForPlugin = (
 export const getDirectiveName = (schema: DocumentNode) => {
   const definition = schema.definitions.find(
     (definition) => definition.kind === 'DirectiveDefinition',
-  ) as ExecutableDefinitionNode
+  )
 
-  return definition.name?.value
+  return definition?.name?.value
 }
 
 export const createValidatorDirective = (

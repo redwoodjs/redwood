@@ -27,13 +27,13 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/eslint": "8.56.10",
+    "@types/eslint": "8.56.11",
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "7.3.1",
     "@typescript-eslint/rule-tester": "7.3.1",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tsx": "4.16.2",
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

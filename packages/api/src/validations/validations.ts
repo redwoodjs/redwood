@@ -564,7 +564,7 @@ const prepareExclusionInclusion = (
   // default case sensitivity to true
   const caseSensitive = Array.isArray(options)
     ? true
-    : options.caseSensitive ?? true
+    : (options.caseSensitive ?? true)
 
   return caseSensitive
     ? [inputList, value]

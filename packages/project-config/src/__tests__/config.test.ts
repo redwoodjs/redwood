@@ -48,9 +48,6 @@ describe('getConfig', () => {
             "autoInstall": true,
             "plugins": [
               {
-                "package": "@redwoodjs/cli-storybook",
-              },
-              {
                 "package": "@redwoodjs/cli-storybook-vite",
               },
               {
@@ -103,7 +100,6 @@ describe('getConfig', () => {
         "web": {
           "a11y": true,
           "apiUrl": "/.redwood/functions",
-          "bundler": "vite",
           "fastRefresh": true,
           "includeEnvironmentVariables": [],
           "path": "./web",

@@ -2,17 +2,15 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
-  "include": [
-    "src",
-  ],
+  "include": ["src"],
   "references": [
-    { "path": "../router" },
+    { "path": "../router/tsconfig.build.json" },
     { "path": "../babel-config" },
     { "path": "../project-config" },
-    { "path": "../web" },
+    { "path": "../web/tsconfig.build.json" },
     { "path": "../auth/tsconfig.build.json" },
-    { "path": "../graphql-server" },
+    { "path": "../graphql-server" }
   ]
 }

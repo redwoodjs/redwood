@@ -30,3 +30,4 @@ packages/create-redwood-app/create-redwood-app.tgz
 **/meta.*.json
 
 .nx/cache
+.nx/workspace-data

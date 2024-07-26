@@ -3,27 +3,13 @@ import React from 'react'
 import { render, renderHook as tlrRenderHook } from '@testing-library/react'
 import { describe, it, expect, afterEach } from 'vitest'
 
-import { Link } from '../link'
-import { LocationProvider } from '../location'
-import { useMatch } from '../useMatch'
-import { flattenSearchParams } from '../util'
+import { Link } from '../link.js'
+import { LocationProvider } from '../location.js'
+import { useMatch } from '../useMatch.js'
+import { flattenSearchParams } from '../util.js'
 
 function createDummyLocation(pathname: string, search = '') {
-  return {
-    pathname,
-    hash: '',
-    host: '',
-    hostname: '',
-    href: '',
-    ancestorOrigins: null,
-    assign: () => null,
-    reload: () => null,
-    replace: () => null,
-    origin: '',
-    port: '',
-    protocol: '',
-    search,
-  }
+  return new URL(pathname + search, 'http://localhost/')
 }
 
 describe('useMatch', () => {

@@ -1,6 +1,6 @@
-import { useLocation } from './location'
-import { matchPath } from './util'
-import type { FlattenSearchParams } from './util'
+import { useLocation } from './location.js'
+import { matchPath } from './util.js'
+import type { FlattenSearchParams } from './util.js'
 
 type UseMatchOptions = {
   routeParams?: Record<string, any>

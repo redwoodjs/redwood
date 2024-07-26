@@ -15,7 +15,7 @@
       "path": "../vite"
     },
     {
-      "path": "../router"
+      "path": "../router/tsconfig.build.json"
     },
     {
       "path": "../internal"

@@ -106,7 +106,6 @@ module.exports = {
         'contributing-walkthrough',
         'cors',
         'create-redwood-app',
-        'custom-web-index',
         'data-migrations',
         {
           type: 'category',
@@ -197,20 +196,7 @@ module.exports = {
         'seo-head',
         'serverless-functions',
         'services',
-        {
-          type: 'category',
-          label: 'Storybook',
-          link: {
-            type: 'generated-index',
-            title: 'Storybook',
-            slug: 'storybook/index',
-          },
-          items: [
-            { type: 'doc', label: 'About Storybook', id: 'storybook/about' },
-            { type: 'doc', label: 'Webpack', id: 'storybook/webpack' },
-            { type: 'doc', label: 'Vite', id: 'storybook/vite' },
-          ],
-        },
+        'storybook',
         'studio',
         'testing',
         'toast-notifications',

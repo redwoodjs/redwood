@@ -25,25 +25,25 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@whatwg-node/fetch": "0.9.17",
+    "@whatwg-node/fetch": "0.9.19",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "mime-types": "2.1.35"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@types/mime-types": "2.1.4",
     "babel-plugin-tester": "11.0.4",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",
