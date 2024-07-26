@@ -98,6 +98,29 @@ const tasks = async ({ force }) => {
         },
       },
       {
+        title: 'Adding NODE_ENV var...',
+        task: () => {
+          let envFile = fs
+            .readFileSync(
+              path.resolve(getPaths().base, '.env.defaults'),
+              'utf-8',
+            )
+            .toString()
+
+          envFile = envFile + '\nNODE_ENV=development\n'
+
+          writeFile(path.resolve(getPaths().base, '.env.defaults'), envFile, {
+            overwriteExisting: true,
+          })
+        },
+        skip: () => {
+          if (process.env.NODE_ENV) {
+            return 'NODE_ENV already set, skipping'
+          }
+        },
+      },
+
+      {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...
