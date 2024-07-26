@@ -12,8 +12,7 @@
     "!packages/create-redwood-rsc-app"
   ],
   "scripts": {
-    "build": "nx run-many -t build && yarn build:crwrsca",
-    "build:crwrsca": "yarn --cwd packages/create-redwood-rsc-app build",
+    "build": "nx run-many -t build",
     "build:clean": "node ./tasks/clean.mjs",
     "build:clean:super": "git clean -fdx && yarn && yarn build",
     "build:pack": "nx run-many -t build:pack",
@@ -29,8 +28,7 @@
     "install:ci": "concurrently -g -c auto -n install:fw:ci \"yarn install --inline-builds\" npm:install:crwrsca:ci",
     "install:crwrsca": "yarn --cwd packages/create-redwood-rsc-app install",
     "install:crwrsca:ci": "yarn --cwd packages/create-redwood-rsc-app install --inline-builds",
-    "lint": "yarn lint:fw && yarn lint:crwrsca",
-    "lint:c": "concurrently -c auto npm:lint:fw npm:lint:crwrsca",
+    "lint": "concurrently -c auto npm:lint:fw npm:lint:crwrsca",
     "lint:crwrsca": "yarn --cwd packages/create-redwood-rsc-app run lint",
     "lint:fw": "cross-env RWJS_CWD=packages/create-redwood-app/templates/ts eslint --config .eslintrc.js --ignore-pattern Routes.jsx --ignore-pattern create-redwood-rsc-app packages",
     "lint:fix": "yarn lint --fix",
