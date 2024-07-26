@@ -1,6 +1,5 @@
 import { execa } from 'execa'
 import fs from 'node:fs'
-import path from 'node:path'
 import semver from 'semver'
 import which from 'which'
 
