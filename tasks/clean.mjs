@@ -8,7 +8,7 @@ await $`yarn clean:prisma`
 
 await rimraf('packages/**/dist', {
   glob: {
-    ignore: 'packages/**/{fixtures,__fixtures__}/**/dist',
+    ignore: 'packages/**/{fixtures,__fixtures__,node_modules}/**/dist',
   },
 })
 

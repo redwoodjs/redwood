@@ -529,7 +529,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
         `createContact(input: CreateContactInput!): Contact @skipAuth`,
       )
       .replace(
-        'deleteContact(id: Int!): Contact! @requireAuth',
+        /deleteContact\(id: Int!\): Contact! @requireAuth(?=\s)/,
         'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])',
       ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
