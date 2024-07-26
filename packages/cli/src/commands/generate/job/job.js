@@ -201,9 +201,13 @@ export const handler = async ({ name, force, ...rest }) => {
       {
         title: 'Cleaning up...',
         task: () => {
-          execa.commandSync(
-            `yarn eslint --fix --config ${getPaths().base}/node_modules/@redwoodjs/eslint-config/shared.js ${getPaths().api.jobsConfig}`,
-          )
+          execa.commandSync('yarn', [
+            'eslint',
+            '--fix',
+            '--config',
+            `${getPaths().base}/node_modules/@redwoodjs/eslint-config/shared.js`,
+            `${getPaths().api.jobsConfig}`,
+          ])
         },
       },
     ],
