@@ -33,7 +33,7 @@ export function handleError(e: unknown) {
     }
   } else {
     console.log()
-    if ('message' in e) {
+    if (typeof e === 'object' && e !== null && 'message' in e) {
       console.error('🚨 An error occurred:')
       console.error(e)
     } else {
