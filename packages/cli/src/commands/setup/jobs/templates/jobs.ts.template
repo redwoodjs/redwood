@@ -3,27 +3,26 @@
 // See https://docs.redwoodjs.com/docs/background-jobs
 
 import { PrismaAdapter, RedwoodJob } from '@redwoodjs/jobs'
-import type { AvailableJobs, WorkerConfig } from '@redwoodjs/jobs'
+import type { AvailableJobs, BaseAdapter, WorkerConfig } from '@redwoodjs/jobs'
 
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
-const adapter = new PrismaAdapter({ db, logger })
+// `adapter`, `logger` and `workerConfig` exports are used by the job workers,
+// can override on a per-worker basis:
+// https://docs.redwoodjs.com/docs/background-jobs#worker-configuration
+export const adapter: BaseAdapter = new PrismaAdapter({ db, logger })
+export { logger }
 
-// Global config for all jobs, can override on a per-job basis
-RedwoodJob.config({ adapter, logger })
-
-// Global config for all workers, can override on a per-worker basis
-// see https://docs.redwoodjs.com/docs/background-jobs#worker-configuration
 export const workerConfig: WorkerConfig = {
-  adapter,
-  logger,
-  maxAttempts: 24,
-  maxRuntime: 14_400, // 4 hours
-  sleepDelay: 5,
-  deleteFailedJobs: false,
+  maxAttempts: 10,
+  maxRuntime: 1000, // 4 hours
+  sleepDelay: 2,
+  deleteFailedJobs: true,
 }
 
-// Export instances of all your jobs to make them easy to import and use:
-//   export const jobs = { sample: new SampleJob(), email: new EmailJob() }
+// Global config for all jobs, can override on a per-job basis:
+// https://docs.redwoodjs.com/docs/background-jobs#job-configuration
+RedwoodJob.config({ adapter, logger })
+
 export const jobs: AvailableJobs = {}
