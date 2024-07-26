@@ -26514,6 +26514,7 @@ __metadata:
     boxen: "npm:5.1.2"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
+    cross-env: "npm:7.0.3"
     cypress: "npm:13.13.1"
     cypress-fail-fast: "npm:7.1.0"
     cypress-wait-until: "npm:3.0.2"
