@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES2022"
+    "target": "ES2022",
+    "allowJs": true
   },
-  "include": ["src", "tsconfig.d.ts"]
+  "include": ["."]
 }
