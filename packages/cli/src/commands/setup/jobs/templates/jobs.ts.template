@@ -15,10 +15,10 @@ export const adapter: BaseAdapter = new PrismaAdapter({ db, logger })
 export { logger }
 
 export const workerConfig: WorkerConfig = {
-  maxAttempts: 10,
-  maxRuntime: 1000, // 4 hours
-  sleepDelay: 2,
-  deleteFailedJobs: true,
+  maxAttempts: 24,
+  maxRuntime: 14_400, // 4 hours
+  sleepDelay: 5,
+  deleteFailedJobs: false,
 }
 
 // Global config for all jobs, can override on a per-job basis:
