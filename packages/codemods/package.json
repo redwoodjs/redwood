@@ -33,7 +33,7 @@
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@vscode/ripgrep": "1.15.9",
-    "@whatwg-node/fetch": "0.9.18",
+    "@whatwg-node/fetch": "0.9.19",
     "cheerio": "1.0.0-rc.12",
     "core-js": "3.37.1",
     "deepmerge": "4.3.1",
