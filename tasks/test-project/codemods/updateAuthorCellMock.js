@@ -18,7 +18,7 @@ export default (file, api) => {
       )
     })
 
-  // Update the __typename value from 'author' to 'User'
+  // Update the __typename values
   root
     .find(j.ObjectProperty, {
       key: {
