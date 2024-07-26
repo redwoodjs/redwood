@@ -24,7 +24,9 @@ export interface NodeTargetPaths {
   models: string
   mail: string
   jobs: string
+  distJobs: string
   jobsConfig: string | null
+  distJobsConfig: string | null
   logger: string | null
 }
 
@@ -105,6 +107,7 @@ const PATH_API_DIR_SERVICES = 'api/src/services'
 const PATH_API_DIR_DIRECTIVES = 'api/src/directives'
 const PATH_API_DIR_SUBSCRIPTIONS = 'api/src/subscriptions'
 const PATH_API_DIR_SRC = 'api/src'
+const PATH_API_DIR_DIST = 'api/dist'
 const PATH_WEB_ROUTES = 'web/src/Routes' // .jsx|.tsx
 const PATH_WEB_DIR_LAYOUTS = 'web/src/layouts/'
 const PATH_WEB_DIR_PAGES = 'web/src/pages/'
@@ -210,12 +213,16 @@ export const getPaths = (BASE_DIR: string = getBaseDir()): Paths => {
       directives: path.join(BASE_DIR, PATH_API_DIR_DIRECTIVES),
       subscriptions: path.join(BASE_DIR, PATH_API_DIR_SUBSCRIPTIONS),
       src: path.join(BASE_DIR, PATH_API_DIR_SRC),
-      dist: path.join(BASE_DIR, 'api/dist'),
+      dist: path.join(BASE_DIR, PATH_API_DIR_DIST),
       types: path.join(BASE_DIR, 'api/types'),
       models: path.join(BASE_DIR, PATH_API_DIR_MODELS),
       mail: path.join(BASE_DIR, PATH_API_DIR_SRC, 'mail'),
       jobs: path.join(path.join(BASE_DIR, PATH_API_DIR_JOBS)),
+      distJobs: path.join(path.join(BASE_DIR, PATH_API_DIR_DIST, 'jobs')),
       jobsConfig: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'jobs')),
+      distJobsConfig: resolveFile(
+        path.join(BASE_DIR, PATH_API_DIR_DIST, 'lib', 'jobs'),
+      ),
       logger: resolveFile(path.join(BASE_DIR, PATH_API_DIR_LIB, 'logger')),
     },
 
