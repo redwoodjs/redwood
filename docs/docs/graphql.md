@@ -2043,7 +2043,7 @@ Orm if you want a custom mask:
 }
 ```
 
-``Cannot query field "sta" on type "Media". [REDACTED]?`
+`Cannot query field "sta" on type "Media". [REDACTED]?`
 
 
 ### Error Masking
@@ -2437,7 +2437,7 @@ themeConfig:
 :::tip
 You can overwrite the generated docs and bypass the plugin's diffMethod use `--force`.
 
-``yarn docusaurus graphql-to-doc --force`
+`yarn docusaurus graphql-to-doc --force`
 :::
 
 8. Start Docusaurus
