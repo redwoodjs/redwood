@@ -2378,7 +2378,7 @@ mkdir docs // if needed
 3. Install the GraphQL Generators Plugin
 
 ```terminal
-yarn workspace docs add @graphql-markdown/docusaurus graphql
+yarn workspace docs add @graphql-markdown/docusaurus graphql @graphql-tools/graphql-file-loader
 ```
 
 4. Ensure a Directory for your GraphQL APi generated documentation resides in with the Docusaurus directory `/docs` structure
@@ -2405,6 +2405,9 @@ mkdir docs/graphql-api // if needed
         rootPath: './docs',
         baseURL: 'graphql-api',
         linkRoot: '../..',
+        loaders: {
+          GraphQLFileLoader: '@graphql-tools/graphql-file-loader',
+        },
       },
     ],
   ],
