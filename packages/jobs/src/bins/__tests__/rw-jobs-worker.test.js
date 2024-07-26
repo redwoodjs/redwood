@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import { describe, expect, vi, it } from 'vitest'
 
 // import * as worker from '../worker'

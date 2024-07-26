@@ -2,8 +2,6 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 
 import { getDMMF } from '@prisma/internals'
-import chalk from 'chalk'
-import execa from 'execa'
 import { Listr } from 'listr2'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
