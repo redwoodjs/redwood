@@ -26512,6 +26512,7 @@ __metadata:
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-remove-code: "npm:0.0.6"
     boxen: "npm:5.1.2"
+    concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
     cypress: "npm:13.13.1"
     cypress-fail-fast: "npm:7.1.0"
