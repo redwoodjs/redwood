@@ -1,7 +1,7 @@
 // Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   waterfallBlogPost: {
-    __typename: 'Post' as const,
+    __typename: 'waterfallBlogPost' as const,
     id: 42,
     title: 'Mocked title',
     body: 'Mocked body',
@@ -9,7 +9,6 @@ export const standard = (/* vars, { ctx, req } */) => ({
     authorId: 7,
 
     author: {
-      __typename: 'User' as const,
       email: 'se7en@7.com',
       fullName: 'Se7en Lastname',
     },
