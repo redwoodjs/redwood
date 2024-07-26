@@ -83,6 +83,10 @@ export function checkYarnInstallation(config: Config) {
 
     const yarnSrc = fs.readFileSync(yarnPath, 'utf8')
 
+    if (config.verbose) {
+      console.log('yarn source', yarnSrc)
+    }
+
     if (yarnSrc.includes('corepack')) {
       console.log('')
       console.log(
