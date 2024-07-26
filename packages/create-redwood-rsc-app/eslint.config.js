@@ -7,7 +7,6 @@ import n from 'eslint-plugin-n'
 import packageJson from 'eslint-plugin-package-json/configs/recommended'
 import perfectionist from 'eslint-plugin-perfectionist'
 import * as regexp from 'eslint-plugin-regexp'
-import vitest from 'eslint-plugin-vitest'
 import yml from 'eslint-plugin-yml'
 import tseslint from 'typescript-eslint'
 
@@ -113,20 +112,6 @@ export default tseslint.config(
         'error',
         { allowModules: ['create-redwood-rsc-app'] },
       ],
-    },
-  },
-  {
-    files: ['**/*.test.*'],
-    languageOptions: {
-      globals: vitest.environments.env.globals,
-    },
-    plugins: { vitest },
-    rules: {
-      ...vitest.configs.recommended.rules,
-
-      // These on-by-default rules aren't useful in test files.
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-call': 'off',
     },
   },
   {

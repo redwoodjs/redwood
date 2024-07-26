@@ -22,9 +22,7 @@
     "check:knip": "knip",
     "check:package": "publint",
     "dev": "tsx src/index.ts",
-    "lint": "eslint . --max-warnings 0",
-    "test": "vitest run",
-    "test:watch": "vitest run"
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "chalk": "5.3.0",
@@ -45,9 +43,7 @@
     "@types/semver": "7.5.8",
     "@types/which": "3.0.4",
     "@types/yauzl-promise": "4.0.1",
-    "@vitest/coverage-v8": "^2.0.3",
     "concurrently": "^8.2.2",
-    "console-fail-test": "^0.4.4",
     "esbuild": "0.23.0",
     "eslint": "^9.7.0",
     "eslint-plugin-jsdoc": "^48.7.0",
@@ -57,7 +53,6 @@
     "eslint-plugin-package-json": "^0.15.2",
     "eslint-plugin-perfectionist": "^3.0.0",
     "eslint-plugin-regexp": "^2.6.0",
-    "eslint-plugin-vitest": "^0.5.4",
     "eslint-plugin-yml": "^1.14.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
@@ -70,8 +65,7 @@
     "publint": "^0.2.9",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.16.1",
-    "vitest": "^2.0.3"
+    "typescript-eslint": "^7.16.1"
   },
   "engines": {
     "node": ">=16"
