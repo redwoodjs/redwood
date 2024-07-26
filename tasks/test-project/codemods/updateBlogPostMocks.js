@@ -10,6 +10,14 @@ export default (file, api) => {
     }
 
     const author = j.objectPattern([
+      j.property(
+        'init',
+        j.identifier('__typename'),
+        j.tsAsExpression(
+          j.stringLiteral('User'),
+          j.tsTypeReference(j.identifier('const')),
+        ),
+      ),
       j.property('init', j.identifier('email'), j.literal('five@5.com')),
       j.property('init', j.identifier('fullName'), j.literal('Five Lastname')),
     ])
@@ -50,26 +58,6 @@ export default (file, api) => {
       ) {
         node.value.expression.value = 'Post'
       }
-    })
-  root
-    .find(j.ObjectProperty, {
-      key: {
-        type: 'Identifier',
-        name: 'author',
-      },
-    })
-    .forEach(({ node }) => {
-      console.log(node)
-      node.value.properties.unshift(
-        j.property(
-          'init',
-          j.identifier('__typename'),
-          j.tsAsExpression(
-            j.stringLiteral('User'),
-            j.tsTypeReference(j.identifier('const')),
-          ),
-        ),
-      )
     })
 
   return root.toSource()

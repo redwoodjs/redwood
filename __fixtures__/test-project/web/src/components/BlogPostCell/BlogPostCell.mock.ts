@@ -9,6 +9,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
     authorId: 5,
 
     author: {
+      __typename: 'User' as const,
       email: 'five@5.com',
       fullName: 'Five Lastname',
     },
