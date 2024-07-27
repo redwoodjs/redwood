@@ -202,12 +202,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   async failure(job: PrismaJob, error: Error, options?: FailureOptions) {
     this.logger.debug(`Job ${job.id} failure`)
 
-    // since booleans don't play nicely with || we'll explicitly check for
-    // `undefined` before falling back to the default
-    const shouldDeleteFailed =
-      options?.deleteFailedJobs === undefined
-        ? DEFAULTS.deleteFailedJobs
-        : options.deleteFailedJobs
+    const shouldDeleteFailed = options?.deleteFailedJobs ?? DEFAULTS.deleteFailedJobs
 
     if (
       job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts) &&
