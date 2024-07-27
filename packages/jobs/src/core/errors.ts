@@ -45,7 +45,7 @@ export class JobNotFoundError extends RedwoodJobError {
   }
 }
 
-// Throw when a job file exists, but the export does not match the filename
+// Thrown when a job file exists, but the export does not match the filename
 export class JobExportNotFoundError extends RedwoodJobError {
   constructor(name: string) {
     super(`Job file \`${name}\` does not export a class with the same name`)
