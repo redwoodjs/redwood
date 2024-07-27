@@ -1,24 +1,6 @@
-import { describe, expect, vi, it, expectTypeOf } from 'vitest'
+import { describe, expect, it } from 'tstyche'
 
 import { RedwoodJob } from '../RedwoodJob'
-
-const mockLogger = {
-  log: vi.fn(() => {}),
-  info: vi.fn(() => {}),
-  debug: vi.fn(() => {}),
-  warn: vi.fn(() => {}),
-  error: vi.fn(() => {}),
-}
-
-const mockAdapter = {
-  options: {},
-  logger: mockLogger,
-  schedule: vi.fn(() => {}),
-  find: () => null,
-  clear: () => {},
-  success: (_job: { handler: string; args: any }) => {},
-  failure: (_job: { handler: string; args: any }, _error: Error) => {},
-}
 
 describe('perform()', () => {
   it('respects the types of its arguments', () => {
@@ -28,27 +10,36 @@ describe('perform()', () => {
       }
     }
 
-    TypeSafeJob.config({ adapter: mockAdapter })
-    const job = new TypeSafeJob()
-
-    expectTypeOf(job.perform).toEqualTypeOf<(id: number) => number>()
-    expectTypeOf(new TypeSafeJob().perform).toEqualTypeOf<
-      (id: number) => number
-    >()
+    expect(new TypeSafeJob().perform).type.toBe<(id: number) => number>()
   })
+})
 
-  it('can trust the types when called through performNow', () => {
+describe('performNow()', () => {
+  it('has the same arg types as perform()', () => {
     class TypeSafeJob extends RedwoodJob {
       perform({ id }: { id: string }) {
         return id.toUpperCase()
       }
     }
 
-    TypeSafeJob.config({ adapter: mockAdapter })
     const job = new TypeSafeJob()
+    const returnValue = job.performNow({ id: 'id_1' })
 
-    const returnValue = job.performNow({ id: 1 })
+    expect(returnValue).type.toBeString()
+    expect(TypeSafeJob.performNow({ id: 'id_2' })).type.toBeString()
+  })
 
-    expectTypeOf(returnValue).toBeString()
+  it('has the correct return type', () => {
+    class TypeSafeJob extends RedwoodJob {
+      perform({ id }: { id: string }) {
+        return id.toUpperCase()
+      }
+    }
+
+    const job = new TypeSafeJob()
+    const returnValue = job.performNow({ id: 'id_1' })
+
+    expect(returnValue).type.toBeString()
+    expect(TypeSafeJob.performNow({ id: 'id_2' })).type.toBeString()
   })
 })

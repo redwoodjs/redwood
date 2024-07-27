@@ -8319,6 +8319,7 @@ __metadata:
   dependencies:
     "@redwoodjs/project-config": "workspace:*"
     fast-glob: "npm:3.3.2"
+    tstyche: "npm:2.1.0"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.4"
