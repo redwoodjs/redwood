@@ -23,6 +23,8 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
+    "test:unit": "vitest --project regular run",
+    "test:types": "vitest --project typetests run",
     "test:watch": "vitest"
   },
   "dependencies": {
@@ -33,6 +35,5 @@
     "tsx": "4.16.2",
     "typescript": "5.5.4",
     "vitest": "2.0.4"
-  },
-  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+  }
 }

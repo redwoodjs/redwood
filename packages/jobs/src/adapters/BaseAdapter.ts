@@ -12,7 +12,7 @@ import type { BasicLogger } from '../types'
 // Arguments sent to an adapter to schedule a job
 export interface SchedulePayload {
   handler: string
-  args: any
+  args: unknown
   runAt: Date
   queue: string
   priority: number

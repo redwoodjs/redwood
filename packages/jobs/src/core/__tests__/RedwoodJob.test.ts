@@ -15,7 +15,8 @@ vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
   }
 })
 
-vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+const FAKE_NOW = new Date('2024-01-01')
+vi.useFakeTimers().setSystemTime(FAKE_NOW)
 
 const mockLogger = {
   log: vi.fn(() => {}),
@@ -242,7 +243,8 @@ describe('get runAt()', () => {
   it('returns a datetime `wait` seconds in the future if option set', async () => {
     const job = new TestJob().set({ wait: 300 })
 
-    expect(job.runAt).toEqual(new Date(Date.UTC(2024, 0, 1, 0, 5, 0))) // 300 seconds in the future
+    const nowPlus300s = new Date(FAKE_NOW.getTime() + 300 * 1000)
+    expect(job.runAt).toEqual(nowPlus300s)
   })
 
   it('returns a datetime set to `waitUntil` if option set', async () => {

@@ -263,7 +263,7 @@ export const jobs = {}
 export const adapter = new PrismaAdapter({ db, logger })
 ```
 
-This is the adapter that the job runner itself will use to run your jobs if you don't override the adapter in the job itself. In most cases this will be the same for all jobs, but just be aware that you can user different adapters for different jobs if you really want! Exporting an `adapter` in this file is required for the job runner to start.
+This is the adapter that the job runner itself will use to run your jobs if you don't override the adapter in the job itself. In most cases this will be the same for all jobs, but just be aware that you can use different adapters for different jobs if you really want! Exporting an `adapter` in this file is required for the job runner to start.
 
 ### Configuring All Jobs with `RedwoodJob.config`
 
@@ -373,10 +373,10 @@ Adapters accept an object of options when they are initialized.
 ```js
 import { db } from 'api/src/lib/db'
 
-const adapter = new PrismaAdapter({ 
-  db, 
-  model: 'BackgroundJob', 
-  logger: console, 
+const adapter = new PrismaAdapter({
+  db,
+  model: 'BackgroundJob',
+  logger: console,
 })
 ```
 
@@ -403,7 +403,7 @@ You can also set options when you create the instance. For example, if *every* i
 
 ```js
 // api/src/lib/jobs.js
-export const jobs = { 
+export const jobs = {
   // highlight-next-line
   sendWelcomeEmail: new SendWelcomeEmailJob({ wait: 300 })
 }
@@ -421,7 +421,7 @@ export const createUser = async ({ input }) => {
 
 ```js
 // api/src/lib/jobs.js
-export const jobs = { 
+export const jobs = {
   // highlight-next-line
   sendWelcomeEmail: new SendWelcomeEmailJob({ wait: 300 }) // 5 minutes
 }
@@ -493,7 +493,7 @@ You can pass several options in a `set()` call on your instance or class:
 * `waitUntil`: a specific `Date` in the future to run at
 * `queue`: the named queue to put this job in (overrides any `static queue` set on the job itself)
 * `priority`: the priority to give this job (overrides any `static priority` set on the job itself)
-  
+
 ## Job Runner
 
 The job runner actually executes your jobs. The runners will ask the adapter to find a job to work on. The adapter will mark the job as locked (the process name and a timestamp is set on the job) and then the worker will instantiate the job class and call `perform()` on it, passing in any args that were given to `performLater()`

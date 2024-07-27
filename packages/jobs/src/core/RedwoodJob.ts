@@ -40,13 +40,11 @@ export abstract class RedwoodJob {
 
   // Configure all jobs to use a specific adapter and logger
   static config(options: JobConfigOptions) {
-    if (Object.keys(options).includes('adapter')) {
+    if ('adapter' in options) {
       this.adapter = options.adapter
     }
-    if (
-      Object.keys(options).includes('logger') &&
-      options.logger !== undefined
-    ) {
+
+    if ('logger' in options && options.logger) {
       this.logger = options.logger
     }
   }
@@ -72,6 +70,8 @@ export abstract class RedwoodJob {
   // Private property to store options set on the job. Use `set` to modify
   #options: JobSetOptions = {};
 
+  // This is needed so that TS knows it's safe to do
+  // `this.constructor.<static member>`, like `this.constructor.adapter`
   declare ['constructor']: typeof RedwoodJob
 
   // A job can be instantiated manually, but this will also be invoked
@@ -92,7 +92,7 @@ export abstract class RedwoodJob {
   }
 
   // Schedule a job to run later
-  performLater(...args: any[]) {
+  performLater(...args: unknown[]) {
     this.logger.info(
       this.#payload(args),
       `[RedwoodJob] Scheduling ${this.constructor.name}`,
@@ -102,7 +102,7 @@ export abstract class RedwoodJob {
   }
 
   // Run the job immediately, within in the current process
-  performNow(...args: any[]) {
+  performNow(...args: unknown[]) {
     this.logger.info(
       this.#payload(args),
       `[RedwoodJob] Running ${this.constructor.name} now`,
@@ -123,7 +123,7 @@ export abstract class RedwoodJob {
   }
 
   // Must be implemented by the subclass
-  abstract perform(..._args: any[]): any
+  abstract perform(..._args: unknown[]): any
 
   // Make private this.#options available as a getter only
   get options() {
@@ -169,8 +169,11 @@ export abstract class RedwoodJob {
     }
   }
 
-  // Private, computes the object to be sent to the adapter for scheduling
-  #payload(args: any[]) {
+  /**
+   * Private method that constructs the object to be sent to the adapter for
+   * scheduling
+   */
+  #payload(args: unknown) {
     return {
       handler: this.constructor.name,
       args,
@@ -182,7 +185,7 @@ export abstract class RedwoodJob {
 
   // Private, schedules a job with the appropriate adapter, returns whatever
   // the adapter returns in response to a successful schedule.
-  #schedule(args: any[]) {
+  #schedule(args: unknown) {
     try {
       return this.constructor.adapter.schedule(this.#payload(args))
     } catch (e: any) {
