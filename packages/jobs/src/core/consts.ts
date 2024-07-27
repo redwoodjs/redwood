@@ -15,5 +15,8 @@ export const DEFAULT_PRIORITY = 50
  * the adapter
  */
 export const DEFAULT_ADAPTER_NAME = 'adapter'
-// the name of the exported variable from the jobs config file that contains the logger
+/**
+ * The name of the exported variable from the jobs config file that contains
+ * the logger
+ */
 export const DEFAULT_LOGGER_NAME = 'logger'
