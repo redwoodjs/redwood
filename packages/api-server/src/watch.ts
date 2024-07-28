@@ -45,7 +45,7 @@ async function validateSdls() {
     console.error(chalk.red(e?.message))
     console.error(chalk.redBright('-'.repeat(40)))
 
-    buildManager.cancelRunningBuilds()
+    buildManager.cancelScheduledBuild()
     return false
   }
 }
@@ -134,7 +134,7 @@ chokidar
       chalk.dim(`[${eventName}] ${filePath.replace(rwjsPaths.api.base, '')}`),
     )
 
-    buildManager.cancelRunningBuilds()
+    buildManager.cancelScheduledBuild()
     if (eventName === 'add' || eventName === 'unlink') {
       await buildManager.run({ rebuild: false })
     } else {

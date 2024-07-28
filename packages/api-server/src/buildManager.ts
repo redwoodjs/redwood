@@ -51,7 +51,7 @@ class BuildManager {
     await this.debouncedBuild(options)
   }
 
-  cancelRunningBuilds() {
+  cancelScheduledBuild() {
     this.debouncedBuild.cancel()
   }
 }
