@@ -1,16 +1,6 @@
-import chalk from 'chalk'
 import { debounce } from 'lodash'
 
-import {
-  buildApi,
-  cleanApiBuild,
-  rebuildApi,
-} from '@redwoodjs/internal/dist/build/api'
-
-export type BuildAndRestartOptions = {
-  rebuild?: boolean
-  clean?: boolean
-}
+import type { BuildAndRestartOptions } from './watch'
 
 // We want to delay execution when multiple files are modified on the filesystem,
 // this usually happens when running RedwoodJS generator commands.
@@ -30,13 +20,16 @@ class BuildManager {
     this.debouncedBuild = debounce(
       async (options: BuildAndRestartOptions) => {
         // Use flags with higher precedence to determine if we should rebuild or clean
-        await this.buildFn({
-          ...options,
-          rebuild: this.shouldRebuild,
-          clean: this.shouldClean,
-        })
-        this.shouldRebuild = true
-        this.shouldClean = false
+        try {
+          await this.buildFn({
+            ...options,
+            rebuild: this.shouldRebuild,
+            clean: this.shouldClean,
+          })
+        } finally {
+          this.shouldRebuild = true
+          this.shouldClean = false
+        }
       },
       process.env.RWJS_DELAY_RESTART
         ? parseInt(process.env.RWJS_DELAY_RESTART, 10)
@@ -47,7 +40,7 @@ class BuildManager {
   // Wrapper method to handle options and set precedence flags.
   // If we ever see a `rebuild: false` option while debouncing, we never want to rebuild.
   // If we ever see a `clean: true` option, we always want to clean.
-  async build(options: BuildAndRestartOptions) {
+  async run(options: BuildAndRestartOptions) {
     if (options.rebuild === false) {
       this.shouldRebuild = false
     }
@@ -63,22 +56,4 @@ class BuildManager {
   }
 }
 
-export async function build(options: BuildAndRestartOptions) {
-  const buildTs = Date.now()
-  console.log(chalk.dim.italic('Building...'))
-
-  if (options.clean) {
-    await cleanApiBuild()
-  }
-
-  if (options.rebuild) {
-    await rebuildApi()
-  } else {
-    await buildApi()
-  }
-
-  console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
-}
-
-const buildManager = new BuildManager(build)
-export { BuildManager, buildManager }
+export { BuildManager }

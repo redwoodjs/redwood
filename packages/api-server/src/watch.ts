@@ -4,11 +4,21 @@ import chalk from 'chalk'
 import chokidar from 'chokidar'
 import dotenv from 'dotenv'
 
+import {
+  buildApi,
+  cleanApiBuild,
+  rebuildApi,
+} from '@redwoodjs/internal/dist/build/api'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { buildManager } from './buildManager'
+import { BuildManager } from './buildManager'
 import { serverManager } from './serverManager'
+
+export type BuildAndRestartOptions = {
+  rebuild?: boolean
+  clean?: boolean
+}
 
 const rwjsPaths = getPaths()
 
@@ -49,6 +59,27 @@ const IGNORED_API_PATHS = [
   rwjsPaths.api.db,
 ].map((path) => ensurePosixPath(path))
 
+export async function buildAndServe(options: BuildAndRestartOptions) {
+  const buildTs = Date.now()
+  console.log(chalk.dim.italic('Building...'))
+
+  if (options.clean) {
+    await cleanApiBuild()
+  }
+
+  if (options.rebuild) {
+    await rebuildApi()
+  } else {
+    await buildApi()
+  }
+
+  serverManager.restartApiServer()
+
+  console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
+}
+
+const buildManager = new BuildManager(buildAndServe)
+
 chokidar
   .watch([rwjsPaths.api.src], {
     persistent: true,
@@ -74,8 +105,7 @@ chokidar
   })
   .on('ready', async () => {
     // First time
-    await buildManager.build({ clean: true, rebuild: false })
-    await serverManager.startApiServer()
+    await buildManager.run({ clean: true, rebuild: false })
     await validateSdls()
   })
   .on('all', async (eventName, filePath) => {
@@ -106,11 +136,9 @@ chokidar
 
     buildManager.cancelRunningBuilds()
     if (eventName === 'add' || eventName === 'unlink') {
-      await buildManager.build({ rebuild: false })
-      await serverManager.restartApiServer()
+      await buildManager.run({ rebuild: false })
     } else {
       // If files have just changed, then rebuild
-      await buildManager.build({ rebuild: true })
-      await serverManager.restartApiServer()
+      await buildManager.run({ rebuild: true })
     }
   })

@@ -26,12 +26,7 @@ const rwjsPaths = getPaths()
 export class ServerManager {
   private httpServerProcess: ChildProcess | null = null
 
-  killApiServer() {
-    this.httpServerProcess?.emit('exit')
-    this.httpServerProcess?.kill()
-  }
-
-  async startApiServer() {
+  private async startApiServer() {
     const forkOpts = {
       execArgv: process.execArgv,
     }
@@ -89,6 +84,11 @@ export class ServerManager {
   async restartApiServer() {
     this.killApiServer()
     await this.startApiServer()
+  }
+
+  killApiServer() {
+    this.httpServerProcess?.emit('exit')
+    this.httpServerProcess?.kill()
   }
 }
 

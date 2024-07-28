@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-import type { BuildAndRestartOptions } from '../buildManager'
 import { BuildManager } from '../buildManager'
+import type { BuildAndRestartOptions } from '../watch'
 
 const buildApi = vi.fn()
 const cleanApiBuild = vi.fn()
@@ -34,7 +34,7 @@ describe('BuildManager', () => {
   })
 
   it('should handle rebuild: false correctly', async () => {
-    buildManager.build({ rebuild: false })
+    buildManager.run({ rebuild: false })
 
     await vi.runAllTimersAsync()
 
@@ -43,7 +43,7 @@ describe('BuildManager', () => {
   })
 
   it('should handle clean: true correctly', async () => {
-    buildManager.build({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: true, clean: true })
 
     await vi.runAllTimersAsync()
 
@@ -52,8 +52,8 @@ describe('BuildManager', () => {
   })
 
   it('should prioritize rebuild:false', async () => {
-    buildManager.build({ rebuild: true, clean: true })
-    buildManager.build({ rebuild: false, clean: false })
+    buildManager.run({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: false, clean: false })
 
     await vi.runAllTimersAsync()
 
@@ -63,8 +63,8 @@ describe('BuildManager', () => {
   })
 
   it('should prioritize clean: true', async () => {
-    buildManager.build({ rebuild: true, clean: true })
-    buildManager.build({ rebuild: false, clean: false })
+    buildManager.run({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: false, clean: false })
 
     await vi.runAllTimersAsync()
 
@@ -74,7 +74,7 @@ describe('BuildManager', () => {
   })
 
   it('should reset flags after execution', async () => {
-    buildManager.build({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: true, clean: true })
 
     await vi.runAllTimersAsync()
 
@@ -82,7 +82,7 @@ describe('BuildManager', () => {
     expect(rebuildApi).toHaveBeenCalled()
     expect(cleanApiBuild).toHaveBeenCalled()
 
-    buildManager.build({ rebuild: false, clean: false })
+    buildManager.run({ rebuild: false, clean: false })
 
     await vi.runAllTimersAsync()
 
@@ -90,9 +90,9 @@ describe('BuildManager', () => {
   })
 
   it('should debounce multiple calls', async () => {
-    buildManager.build({ rebuild: true, clean: true })
-    buildManager.build({ rebuild: true, clean: false })
-    buildManager.build({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: true, clean: true })
+    buildManager.run({ rebuild: true, clean: false })
+    buildManager.run({ rebuild: true, clean: true })
 
     await vi.runAllTimersAsync()
 
