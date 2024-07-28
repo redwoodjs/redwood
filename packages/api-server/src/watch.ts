@@ -33,6 +33,27 @@ if (!process.env.REDWOOD_ENV_FILES_LOADED) {
   process.env.REDWOOD_ENV_FILES_LOADED = 'true'
 }
 
+async function buildAndServe(options: BuildAndRestartOptions) {
+  const buildTs = Date.now()
+  console.log(chalk.dim.italic('Building...'))
+
+  if (options.clean) {
+    await cleanApiBuild()
+  }
+
+  if (options.rebuild) {
+    await rebuildApi()
+  } else {
+    await buildApi()
+  }
+
+  serverManager.restartApiServer()
+
+  console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
+}
+
+const buildManager = new BuildManager(buildAndServe)
+
 async function validateSdls() {
   try {
     await loadAndValidateSdls()
@@ -58,27 +79,6 @@ const IGNORED_API_PATHS = [
   rwjsPaths.api.types,
   rwjsPaths.api.db,
 ].map((path) => ensurePosixPath(path))
-
-export async function buildAndServe(options: BuildAndRestartOptions) {
-  const buildTs = Date.now()
-  console.log(chalk.dim.italic('Building...'))
-
-  if (options.clean) {
-    await cleanApiBuild()
-  }
-
-  if (options.rebuild) {
-    await rebuildApi()
-  } else {
-    await buildApi()
-  }
-
-  serverManager.restartApiServer()
-
-  console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
-}
-
-const buildManager = new BuildManager(buildAndServe)
 
 chokidar
   .watch([rwjsPaths.api.src], {
