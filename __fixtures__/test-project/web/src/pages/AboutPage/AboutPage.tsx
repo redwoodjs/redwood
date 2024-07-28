@@ -1,6 +1,3 @@
-import { Link, routes } from '@redwoodjs/router'
-import { Metadata } from '@redwoodjs/web'
-
 const AboutPage = () => {
   return (
     <p className="font-light">
