@@ -4,7 +4,7 @@ import { RedwoodJob } from '../RedwoodJob'
 
 describe('perform()', () => {
   it('respects the types of its arguments', () => {
-    class TypeSafeJob extends RedwoodJob {
+    class TypeSafeJob extends RedwoodJob<[number]> {
       perform(id: number) {
         return id
       }
@@ -15,9 +15,10 @@ describe('perform()', () => {
 })
 
 describe('performNow()', () => {
+  type TPerformArgs = [{ id: string }]
   it('has the same arg types as perform()', () => {
-    class TypeSafeJob extends RedwoodJob {
-      perform({ id }: { id: string }) {
+    class TypeSafeJob extends RedwoodJob<TPerformArgs> {
+      perform({ id }: TPerformArgs[0]) {
         return id.toUpperCase()
       }
     }
@@ -30,8 +31,8 @@ describe('performNow()', () => {
   })
 
   it('has the correct return type', () => {
-    class TypeSafeJob extends RedwoodJob {
-      perform({ id }: { id: string }) {
+    class TypeSafeJob extends RedwoodJob<TPerformArgs> {
+      perform({ id }: TPerformArgs[0]) {
         return id.toUpperCase()
       }
     }

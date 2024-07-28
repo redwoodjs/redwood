@@ -23,22 +23,26 @@ export interface JobSetOptions {
   priority?: number
 }
 
-export abstract class RedwoodJob {
-  // The adapter to use for scheduling all jobs of this class
+export abstract class RedwoodJob<TPerformArgs extends Array<unknown>> {
+  /** The adapter to use for scheduling all jobs of this class */
   static adapter: BaseAdapter
 
-  // The logger to use when scheduling all jobs of the class. Defaults to
-  // `console` if not explicitly set.
+  /**
+   * The logger to use when scheduling all jobs of the class. Defaults to
+   * `console` if not explicitly set.
+   */
   static logger: BasicLogger = DEFAULT_LOGGER
 
-  // The queue that all jobs of this class will be enqueued to
+  /** The queue that all jobs of this class will be enqueued to */
   static queue: string = DEFAULT_QUEUE
 
-  // The priority that all jobs of this class will be given
-  // Lower numbers are higher priority (1 is executed before 100)
+  /**
+   * The priority that all jobs of this class will be given
+   * Lower numbers are higher priority (1 is executed before 100)
+   */
   static priority: number = DEFAULT_PRIORITY
 
-  // Configure all jobs to use a specific adapter and logger
+  /** Configure all jobs to use a specific adapter and logger */
   static config(options: JobConfigOptions) {
     if ('adapter' in options) {
       this.adapter = options.adapter
@@ -49,33 +53,43 @@ export abstract class RedwoodJob {
     }
   }
 
-  // Class method to schedule a job to run later
-  static performLater<T extends RedwoodJob>(this: new () => T, ...args: any[]) {
+  /** Class method to schedule a job to run later */
+  static performLater<
+    TClass extends RedwoodJob<TPerformArgs>,
+    TPerformArgs extends Array<unknown>,
+  >(this: new () => TClass, ...args: TPerformArgs) {
     return new this().performLater(...args)
   }
 
-  // Class method to run the job immediately in the current process
-  static performNow<T extends RedwoodJob>(this: new () => T, ...args: any[]) {
+  /** Class method to run the job immediately in the current process */
+  static performNow<
+    TClass extends RedwoodJob<TPerformArgs>,
+    TPerformArgs extends Array<unknown>,
+  >(this: new () => TClass, ...args: TPerformArgs) {
     return new this().performNow(...args)
   }
 
-  // Set options on the job before enqueueing it
-  static set<T extends RedwoodJob>(
-    this: new (options: JobSetOptions) => T,
-    options: JobSetOptions = {},
-  ) {
+  /** Set options on the job before enqueueing it */
+  static set<
+    TClass extends RedwoodJob<TPerformArgs>,
+    TPerformArgs extends Array<unknown>,
+  >(this: new (options: JobSetOptions) => TClass, options: JobSetOptions = {}) {
     return new this(options)
   }
 
-  // Private property to store options set on the job. Use `set` to modify
+  /** Private property to store options set on the job. Use `set` to modify */
   #options: JobSetOptions = {};
 
-  // This is needed so that TS knows it's safe to do
-  // `this.constructor.<static member>`, like `this.constructor.adapter`
+  /**
+   * This is needed so that TS knows it's safe to do
+   * `this.constructor.<static member>`, like `this.constructor.adapter`
+   */
   declare ['constructor']: typeof RedwoodJob
 
-  // A job can be instantiated manually, but this will also be invoked
-  // automatically by .set() or .performLater()
+  /**
+   * A job can be instantiated manually, but this will also be invoked
+   * automatically by .set() or .performLater()
+   */
   constructor(options: JobSetOptions = {}) {
     this.set(options)
 
@@ -84,15 +98,17 @@ export abstract class RedwoodJob {
     }
   }
 
-  // Set options on the job before enqueueing it, merges with any existing
-  // options set upon instantiation
+  /**
+   * Set options on the job before enqueueing it, merges with any existing
+   * options set upon instantiation
+   */
   set(options: JobSetOptions = {}) {
     this.#options = { ...this.#options, ...options }
     return this
   }
 
-  // Schedule a job to run later
-  performLater(...args: unknown[]) {
+  /** Schedule a job to run later */
+  performLater(...args: TPerformArgs) {
     this.logger.info(
       this.#payload(args),
       `[RedwoodJob] Scheduling ${this.constructor.name}`,
@@ -101,8 +117,8 @@ export abstract class RedwoodJob {
     return this.#schedule(args)
   }
 
-  // Run the job immediately, within in the current process
-  performNow(...args: unknown[]) {
+  /** Run the job immediately, within in the current process */
+  performNow(...args: TPerformArgs): ReturnType<this['perform']> {
     this.logger.info(
       this.#payload(args),
       `[RedwoodJob] Running ${this.constructor.name} now`,
@@ -122,10 +138,10 @@ export abstract class RedwoodJob {
     }
   }
 
-  // Must be implemented by the subclass
-  abstract perform(..._args: unknown[]): any
+  /** Must be implemented by the subclass */
+  abstract perform(...args: TPerformArgs): any
 
-  // Make private this.#options available as a getter only
+  /** Make private this.#options available as a getter only */
   get options() {
     return this.#options
   }
@@ -154,11 +170,13 @@ export abstract class RedwoodJob {
     return this.#options.waitUntil
   }
 
-  // Determines when the job should run.
-  //
-  // - If no options were set, defaults to running as soon as possible
-  // - If a `wait` option is present it sets the number of seconds to wait
-  // - If a `waitUntil` option is present it runs at that specific datetime
+  /**
+   * Determines when the job should run.
+   *
+   * - If no options were set, defaults to running as soon as possible
+   * - If a `wait` option is present it sets the number of seconds to wait
+   * - If a `waitUntil` option is present it runs at that specific datetime
+   */
   get runAt() {
     if (this.#options.wait) {
       return new Date(new Date().getTime() + this.#options.wait * 1000)
@@ -183,8 +201,10 @@ export abstract class RedwoodJob {
     }
   }
 
-  // Private, schedules a job with the appropriate adapter, returns whatever
-  // the adapter returns in response to a successful schedule.
+  /**
+   * Private, schedules a job with the appropriate adapter, returns whatever
+   * the adapter returns in response to a successful schedule.
+   */
   #schedule(args: unknown) {
     try {
       return this.constructor.adapter.schedule(this.#payload(args))
