@@ -9,8 +9,7 @@ export function initConfig() {
     verbose: false,
   }
 
-  console.log('process.argv:', process.argv)
-  let args = {
+  const args = {
     verbose: false,
     help: false,
     version: false,
