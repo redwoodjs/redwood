@@ -9,9 +9,7 @@
   },
   "license": "MIT",
   "type": "module",
-  "bin": {
-    "create-redwood-rsc-app": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "files": [
     "dist/",
     "package.json",
