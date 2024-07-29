@@ -1554,7 +1554,7 @@ __metadata:
     which: "npm:4.0.0"
     yauzl-promise: "npm:4.0.0"
   bin:
-    create-redwood-rsc-app: ./dist/index.js
+    create-redwood-rsc-app: dist/index.js
   languageName: unknown
   linkType: soft
 
