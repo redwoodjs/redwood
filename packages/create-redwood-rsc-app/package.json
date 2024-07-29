@@ -4,12 +4,14 @@
   "description": "Quickstart for a RedwoodJS React Server Components App",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/create-redwood-rsc-app"
   },
   "license": "MIT",
   "type": "module",
-  "bin": "./dist/index.js",
+  "bin": {
+    "create-redwood-rsc-app": "dist/index.js"
+  },
   "files": [
     "dist/",
     "package.json",
