@@ -1,8 +1,3 @@
-// TODO: Really need to fix this, but I want to get this stuff merged first
-// before I spend more time on it.
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
-import { parseArgs } from 'node:util'
-
 export interface Config {
   installationDir: string
   verbose: boolean
@@ -14,32 +9,39 @@ export function initConfig() {
     verbose: false,
   }
 
-  const { positionals, values } = parseArgs({
-    options: {
-      help: {
-        short: 'h',
-        type: 'boolean',
-      },
-      verbose: {
-        short: 'v',
-        type: 'boolean',
-      },
-      version: {
-        short: 'V',
-        type: 'boolean',
-      },
-    },
-    strict: false,
-  })
-
-  if (values.verbose) {
-    console.log('Parsed command line arguments:')
-    console.log('    arguments:', values)
-    console.log('    positionals:', positionals)
+  const args = {
+    verbose: false,
+    help: false,
+    version: false,
   }
 
-  config.verbose = !!values.verbose
-  config.installationDir = positionals[0]
+  // Skipping the first two arguments, which are the path to the node executable
+  // and the path to the script being executed, we find the first argument that
+  // does not start with a dash. This is the installation directory.
+  const installationDir = process.argv
+    .slice(2)
+    .find((arg) => !arg.startsWith('-'))
+
+  if (process.argv.includes('--verbose') || process.argv.includes('-v')) {
+    args.verbose = true
+  }
+
+  if (process.argv.includes('--help') || process.argv.includes('-h')) {
+    args.help = true
+  }
+
+  if (process.argv.includes('--version') || process.argv.includes('-V')) {
+    args.version = true
+  }
+
+  if (args.verbose) {
+    console.log('Parsed command line arguments:')
+    console.log('    arguments:', args)
+    console.log('    installationDir:', installationDir)
+  }
+
+  config.verbose = !!args.verbose
+  config.installationDir = installationDir ?? ''
 
   return config
 }

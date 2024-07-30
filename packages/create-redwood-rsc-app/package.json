@@ -1,15 +1,15 @@
 {
   "name": "create-redwood-rsc-app",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "Quickstart for a RedwoodJS React Server Components App",
   "repository": {
     "type": "git",
-    "url": "https://github.com/redwoodjs/redwood.git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/create-redwood-rsc-app"
   },
   "license": "MIT",
   "type": "module",
-  "bin": "./dist/index.js",
+  "bin": "dist/index.js",
   "files": [
     "dist/",
     "package.json",
@@ -63,9 +63,11 @@
     "prettier-plugin-packagejson": "^2.5.1",
     "prettier-plugin-sh": "^0.14.0",
     "publint": "^0.2.9",
+    "rimraf": "^6.0.1",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.16.1"
+    "typescript-eslint": "^7.16.1",
+    "zx": "^8.1.4"
   },
   "engines": {
     "node": ">=16"

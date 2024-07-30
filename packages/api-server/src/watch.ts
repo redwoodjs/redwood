@@ -243,6 +243,7 @@ chokidar
       debouncedBuild()
     } else {
       // If files have just changed, then rebuild
+      debouncedBuild.cancel()
       debouncedRebuild.cancel()
       debouncedRebuild()
     }
