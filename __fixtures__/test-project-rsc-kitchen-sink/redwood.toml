@@ -20,6 +20,10 @@
 [notifications]
   versionUpdates = ["latest"]
 
+[generate]
+  tests = false
+  stories = false
+
 [experimental.streamingSsr]
   enabled = true
 
