@@ -21,7 +21,11 @@ export async function unzip(config: Config, zipFilePath: string) {
 
   try {
     for await (const entry of zip) {
-      const baseDir = 'redwood-main/__fixtures__/test-project-rsc-kitchen-sink/'
+      const baseDir = `redwood-main/__fixtures__/${config.template}/`
+
+      if (config.verbose) {
+        console.log('baseDir:', baseDir)
+      }
 
       const isDir = entry.filename.endsWith('/')
 

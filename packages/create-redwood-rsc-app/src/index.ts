@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import type { Config } from './config.js'
+
 import { initConfig } from './config.js'
 import { downloadTemplate } from './download.js'
 import { handleError } from './error.js'
@@ -12,7 +14,13 @@ import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
 import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
 import { unzip } from './zip.js'
 
-const config = initConfig()
+let config: Config | null = null
+
+try {
+  config = initConfig()
+} catch (e) {
+  handleError(e)
+}
 
 if (shouldRelaunch(config)) {
   await relaunchOnLatest(config)

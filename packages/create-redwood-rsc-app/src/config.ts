@@ -1,17 +1,22 @@
+import { ExitCodeError } from './error.js'
+
 export interface Config {
   installationDir: string
+  template: string
   verbose: boolean
 }
 
 export function initConfig() {
   const config: Config = {
     installationDir: '',
+    template: '',
     verbose: false,
   }
 
   const args = {
-    verbose: false,
     help: false,
+    template: '',
+    verbose: false,
     version: false,
   }
 
@@ -34,6 +39,25 @@ export function initConfig() {
     args.version = true
   }
 
+  const templateIndex = process.argv.findIndex(
+    (arg) => arg.startsWith('--template') || arg.startsWith('-t'),
+  )
+  if (templateIndex >= 0) {
+    if (process.argv[templateIndex].includes('=')) {
+      args.template = process.argv[templateIndex].split('=')[1]
+    } else if (
+      process.argv[templateIndex + 1] &&
+      !process.argv[templateIndex + 1].startsWith('-')
+    ) {
+      args.template = process.argv[templateIndex + 1]
+    } else {
+      throw new ExitCodeError(
+        1,
+        'Error: No template provided after --template flag',
+      )
+    }
+  }
+
   if (args.verbose) {
     console.log('Parsed command line arguments:')
     console.log('    arguments:', args)
@@ -42,6 +66,7 @@ export function initConfig() {
 
   config.verbose = !!args.verbose
   config.installationDir = installationDir ?? ''
+  config.template = args.template || 'test-project-rsc-kitchen-sink'
 
   return config
 }
