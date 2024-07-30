@@ -66,4 +66,5 @@ module.exports = {
       },
     ],
   },
+  testPathIgnorePatterns: ['.scenarios.[jt]s$'],
 }
