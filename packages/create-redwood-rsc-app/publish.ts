@@ -57,7 +57,7 @@ async function main() {
   await $`git commit -am "create-redwood-rsc-app v${packageJson.version}"`
   await $`git tag "create-redwood-rsc-app/v${packageJson.version}"`
   await $`yarn npm publish --otp ${otp}`
-  await $`git push --follow-tags`
+  await $`git push upstream --follow-tags`
 }
 
 main().catch((error: unknown) => {
