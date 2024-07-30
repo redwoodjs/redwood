@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import type { Config } from './config.js'
+
 import { initConfig } from './config.js'
 import { downloadTemplate } from './download.js'
 import { handleError } from './error.js'

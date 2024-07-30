@@ -2,22 +2,22 @@ import { ExitCodeError } from './error.js'
 
 export interface Config {
   installationDir: string
-  verbose: boolean
   template: string
+  verbose: boolean
 }
 
 export function initConfig() {
   const config: Config = {
     installationDir: '',
-    verbose: false,
     template: '',
+    verbose: false,
   }
 
   const args = {
-    verbose: false,
     help: false,
-    version: false,
     template: '',
+    verbose: false,
+    version: false,
   }
 
   // Skipping the first two arguments, which are the path to the node executable
