@@ -2,6 +2,7 @@ import { namedRoutes } from '@redwoodjs/router/namedRoutes'
 import { NavLink } from '@redwoodjs/router/NavLink'
 
 import CachingBoxes from 'src/components/CachingBoxes/CachingBoxes'
+import ServerDelayForm from 'src/components/ServerDelayForm'
 
 import './MainLayout.css'
 
@@ -12,7 +13,10 @@ interface Props {
 const MainLayout = ({ children }: Props) => {
   return (
     <div className="main-layout">
-      <CachingBoxes />
+      <div className="demo-wrapper">
+        <CachingBoxes />
+        <ServerDelayForm />
+      </div>
 
       <nav>
         <ul>

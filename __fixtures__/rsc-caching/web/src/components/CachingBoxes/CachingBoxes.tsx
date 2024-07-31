@@ -1,3 +1,5 @@
+import fs from 'node:fs'
+
 import './CachingBoxes.css'
 
 const colors = [
@@ -28,7 +30,16 @@ const colors = [
   'violet',
 ]
 
-const CachingBoxes = () => {
+const CachingBoxes = async () => {
+  let delay = 0
+
+  if (fs.existsSync('settings.json')) {
+    delay = JSON.parse(fs.readFileSync('settings.json', 'utf8')).delay || 0
+  }
+
+  console.log('delaying execution', delay, 'ms')
+  await new Promise((resolve) => setTimeout(resolve, delay))
+
   const shuffledColors = colors
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
