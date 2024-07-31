@@ -1,4 +1,10 @@
 .main-layout {
+  .demo-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   nav {
     display: flex;
     justify-content: center;
