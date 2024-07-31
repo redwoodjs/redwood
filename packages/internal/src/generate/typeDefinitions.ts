@@ -413,15 +413,11 @@ declare module '@storybook/react' {
     ),
   )
 
-  const hasCliStorybook = Object.keys(packageJson['devDependencies']).includes(
-    '@redwoodjs/cli-storybook',
-  )
-
   const hasCliStorybookVite = Object.keys(
     packageJson['devDependencies'],
   ).includes('@redwoodjs/cli-storybook-vite')
 
-  if (hasCliStorybook || hasCliStorybookVite) {
+  if (hasCliStorybookVite) {
     return []
   }
 

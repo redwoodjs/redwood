@@ -141,11 +141,11 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.9.9",
+    "@apollo/client": "3.11.1",
     "@babel/runtime-corejs3": "7.24.8",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "@whatwg-node/fetch": "0.9.18",
+    "@whatwg-node/fetch": "0.9.19",
     "core-js": "3.37.1",
     "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
@@ -165,7 +165,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
-    "@testing-library/jest-dom": "6.4.7",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
@@ -176,8 +176,8 @@
     "react-dom": "19.0.0-beta-04b058868c-20240508",
     "tstyche": "2.1.0",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "react": "19.0.0-beta-04b058868c-20240508",

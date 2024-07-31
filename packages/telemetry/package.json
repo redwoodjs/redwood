@@ -23,7 +23,7 @@
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
-    "@whatwg-node/fetch": "0.9.18",
+    "@whatwg-node/fetch": "0.9.19",
     "ci-info": "4.0.0",
     "envinfo": "7.13.0",
     "systeminformation": "5.22.11",
@@ -35,8 +35,8 @@
     "@types/uuid": "10.0.0",
     "@types/yargs": "17.0.32",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

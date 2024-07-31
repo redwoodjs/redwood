@@ -17,7 +17,9 @@
     "build:pack": "yarn pack -o redwoodjs-cli-storybook-vite.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "yarn test:unit",
+    "test:unit": "vitest run"
   },
   "dependencies": {
     "@redwoodjs/cli-helpers": "workspace:*",
@@ -28,13 +30,14 @@
     "storybook": "7.6.17",
     "storybook-framework-redwoodjs-vite": "workspace:*",
     "terminal-link": "2.1.1",
+    "vitest": "2.0.4",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/yargs": "17.0.32",
     "tsx": "4.16.2",
-    "typescript": "5.5.3"
+    "typescript": "5.5.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -273,6 +273,13 @@ export function validatePath(path: string, routeName: string) {
     )
   }
 
+  // Guard the following regex matching
+  if (path.length > 2000) {
+    throw new Error(
+      `Route path for ${routeName} is too long to process at ${path.length} characters, limit is 2000 characters.`,
+    )
+  }
+
   // Check for duplicate named params.
   const matches = path.matchAll(/\{([^}]+)\}/g)
   const memo: Record<string, boolean> = {}

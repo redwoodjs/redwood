@@ -7,10 +7,8 @@
     "outDir": "dist",
     "typeRoots": [
       "../../node_modules/@types",
-      "./node_modules/@types",
       "../../node_modules/@testing-library"
-    ],
-    "types": ["jest", "jest-dom"]
+    ]
   },
   "include": ["."],
   "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],

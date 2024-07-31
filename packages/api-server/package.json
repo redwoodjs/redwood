@@ -50,15 +50,15 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.141",
+    "@types/aws-lambda": "8.10.142",
     "@types/lodash": "4.17.7",
     "@types/qs": "6.9.15",
     "@types/split2": "4.2.3",
     "@types/yargs": "17.0.32",
     "pino-abstract-transport": "1.2.0",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "peerDependencies": {
     "@redwoodjs/graphql-server": "workspace:*"

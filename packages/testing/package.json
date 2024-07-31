@@ -36,13 +36,13 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@testing-library/jest-dom": "6.4.7",
+    "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
-    "@types/aws-lambda": "8.10.141",
+    "@types/aws-lambda": "8.10.142",
     "@types/babel-core": "6.25.10",
     "@types/jest": "29.5.12",
-    "@types/node": "20.14.11",
+    "@types/node": "20.14.12",
     "babel-jest": "^29.7.0",
     "core-js": "3.37.1",
     "fast-glob": "3.3.2",
@@ -57,8 +57,8 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "jsdom": "24.1.1",
-    "typescript": "5.5.3",
-    "vitest": "2.0.3"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
