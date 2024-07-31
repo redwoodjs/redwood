@@ -38,26 +38,20 @@ export class RscCache {
           }
           this.cache.delete(data.key)
 
-          this.sendToWebSocket('update', {
-            fullCache: Object.fromEntries(
-              Array.from(this.cache.entries()).map(
-                ([location, elementThenable]) => [
-                  location,
-                  // @ts-expect-error hack to get the value of a Thenable
-                  elementThenable.value,
-                ],
-              ),
-            ),
-          })
+          this.sendUpdateToWebSocket()
         } else if (data.id === 'rsc-cache-clear') {
           this.cache.clear()
           this.sendToWebSocket('update', { fullCache: {} })
         } else if (data.id === 'rsc-cache-enable') {
           console.log('RscCache::message::rsc-cache-enable')
           this.isEnabled = true
+          this.sendUpdateToWebSocket()
         } else if (data.id === 'rsc-cache-disable') {
           console.log('RscCache::message::rsc-cache-disable')
           this.isEnabled = false
+        } else if (data.id === 'rsc-cache-read') {
+          console.log('RscCache::message::rsc-cache-read')
+          this.sendUpdateToWebSocket()
         }
       }
     })
@@ -116,5 +110,17 @@ export class RscCache {
     } else {
       console.error('WebSocket connection is closed.')
     }
+  }
+
+  private sendUpdateToWebSocket() {
+    this.sendToWebSocket('update', {
+      fullCache: Object.fromEntries(
+        Array.from(this.cache.entries()).map(([location, elementThenable]) => [
+          location,
+          // @ts-expect-error hack to get the value of a Thenable
+          elementThenable.value,
+        ]),
+      ),
+    })
   }
 }
