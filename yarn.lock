@@ -11262,21 +11262,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:^8":
+"@types/ws@npm:^8, @types/ws@npm:^8.0.0, @types/ws@npm:^8.5.10":
   version: 8.5.11
   resolution: "@types/ws@npm:8.5.11"
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/50bd2e1a12659fa024a97d7e8c267fbf2a2c2251f1edf2057aa7dfc99682f5c025a188df9e27414675c78d3b189346a3567e1e4c218ad79a9d2b0f1f2b860c3a
-  languageName: node
-  linkType: hard
-
-"@types/ws@npm:^8.0.0, @types/ws@npm:^8.5.10":
-  version: 8.5.10
-  resolution: "@types/ws@npm:8.5.10"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/e9af279b984c4a04ab53295a40aa95c3e9685f04888df5c6920860d1dd073fcc57c7bd33578a04b285b2c655a0b52258d34bee0a20569dca8defb8393e1e5d29
   languageName: node
   linkType: hard
 
