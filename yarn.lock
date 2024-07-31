@@ -16582,6 +16582,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-unused-imports@npm:3.2.0":
+  version: 3.2.0
+  resolution: "eslint-plugin-unused-imports@npm:3.2.0"
+  dependencies:
+    eslint-rule-composer: "npm:^0.3.0"
+  peerDependencies:
+    "@typescript-eslint/eslint-plugin": 6 - 7
+    eslint: 8
+  peerDependenciesMeta:
+    "@typescript-eslint/eslint-plugin":
+      optional: true
+  checksum: 10c0/70c93efaa4dccd1172db3858b27968184c97cb8b7ffb2d9e6ffb09d9509863c70651b533b48eec4d10bc7f633d7f50fd190fdd5b36e8cac2c4efd5cecb5d5d98
+  languageName: node
+  linkType: hard
+
 "eslint-rule-composer@npm:^0.3.0":
   version: 0.3.0
   resolution: "eslint-rule-composer@npm:0.3.0"
@@ -26532,6 +26547,7 @@ __metadata:
     dependency-cruiser: "npm:16.3.10"
     dotenv: "npm:16.4.5"
     eslint: "npm:8.57.0"
+    eslint-plugin-unused-imports: "npm:3.2.0"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
