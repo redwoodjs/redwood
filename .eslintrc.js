@@ -31,10 +31,12 @@ module.exports = {
     'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
   ],
+  plugins: ['unused-imports'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
+    'unused-imports/no-unused-imports': 'error',
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -200,6 +202,16 @@ module.exports = {
             peerDependencies: true,
           },
         ],
+      },
+    },
+    {
+      files: [
+        'packages/create-redwood-app/templates/js/scripts/seed.js',
+        'packages/create-redwood-app/templates/ts/scripts/seed.ts',
+        'packages/testing/src/web/global.ts',
+      ],
+      rules: {
+        'unused-imports/no-unused-imports': 'off',
       },
     },
   ],
