@@ -9,6 +9,7 @@ export class RscCache {
   private cache = new Map<string, Thenable<React.ReactElement>>()
   private socket: WebSocket
   private sendRetries = 0
+  private isEnabled = true
 
   constructor() {
     this.socket = new WebSocket('ws://localhost:18998')
@@ -48,6 +49,15 @@ export class RscCache {
               ),
             ),
           })
+        } else if (data.id === 'rsc-cache-clear') {
+          this.cache.clear()
+          this.sendToWebSocket('update', { fullCache: {} })
+        } else if (data.id === 'rsc-cache-enable') {
+          console.log('RscCache::message::rsc-cache-enable')
+          this.isEnabled = true
+        } else if (data.id === 'rsc-cache-disable') {
+          console.log('RscCache::message::rsc-cache-disable')
+          this.isEnabled = false
         }
       }
     })
@@ -61,6 +71,12 @@ export class RscCache {
 
   set(key: string, value: Thenable<React.ReactElement>) {
     console.log('RscCache.set', key, value)
+
+    if (!this.isEnabled) {
+      // Always clear the cache if the cache is disabled
+      this.cache.clear()
+    }
+
     this.cache.set(key, value)
 
     // There's no point in sending a Promise over the WebSocket, so we wait for
