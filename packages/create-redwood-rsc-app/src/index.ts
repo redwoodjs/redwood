@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-import type { Config } from './config.js'
-
 import { initConfig } from './config.js'
 import { downloadTemplate } from './download.js'
 import { handleError } from './error.js'
@@ -14,20 +12,14 @@ import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
 import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
 import { unzip } from './zip.js'
 
-let config: Config | null = null
-
 try {
-  config = initConfig()
-} catch (e) {
-  handleError(e)
-}
+  const config = initConfig()
 
-if (shouldRelaunch(config)) {
-  await relaunchOnLatest(config)
-} else {
-  printWelcome()
+  if (shouldRelaunch(config)) {
+    await relaunchOnLatest(config)
+  } else {
+    printWelcome()
 
-  try {
     await checkNodeVersion(config)
     checkYarnInstallation(config)
     await setInstallationDir(config)
@@ -38,7 +30,7 @@ if (shouldRelaunch(config)) {
     await initialCommit(config)
 
     printDone(config)
-  } catch (e) {
-    handleError(e)
   }
+} catch (e) {
+  handleError(e)
 }
