@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "chalk": "5.3.0",
+    "ci-info": "4.0.0",
     "enquirer": "2.4.1",
     "execa": "9.3.0",
     "node-fetch": "3.3.2",
