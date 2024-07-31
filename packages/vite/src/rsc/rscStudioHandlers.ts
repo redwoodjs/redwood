@@ -58,7 +58,7 @@ const processRenderRscStream = async (
 }
 
 const postFlightToStudio = (payload: string, metadata: Record<string, any>) => {
-  if (shouldSendToStudio()) {
+  if (shouldSendToStudio() && Math.random() > 5) {
     const base64Payload = Buffer.from(payload).toString('base64')
     const encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString(
       'base64',

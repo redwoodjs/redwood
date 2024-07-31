@@ -15,6 +15,7 @@ import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
+import WebSocket, { WebSocketServer } from 'ws'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { getRscStylesheetLinkGenerator } from '@redwoodjs/router/rscCss'
@@ -61,6 +62,8 @@ export async function runFeServer() {
 
   if (rscEnabled) {
     const { setClientEntries } = await import('./rsc/rscWorkerCommunication.js')
+
+    createWebSocketServer()
 
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
@@ -204,6 +207,32 @@ export async function runFeServer() {
   if (typeof process.send !== 'undefined') {
     process.send('server ready')
   }
+}
+
+function createWebSocketServer() {
+  const wsServer = new WebSocketServer({ port: 18998 })
+
+  wsServer.on('connection', (ws) => {
+    console.log('A new client connected.')
+
+    // Event listener for incoming messages. The `data` is a Buffer
+    ws.on('message', (data) => {
+      const message = data.toString()
+      console.log('Received message:', message)
+
+      // Broadcast the message to all connected clients
+      wsServer.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message)
+        }
+      })
+    })
+
+    // Event listener for client disconnection
+    ws.on('close', () => {
+      console.log('A client disconnected.')
+    })
+  })
 }
 
 runFeServer()
