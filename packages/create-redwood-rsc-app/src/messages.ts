@@ -15,7 +15,7 @@ export function printWelcome() {
   )
   console.log(
     'If you need a more customized setup, please use the official installer ' +
-      'by running `yarn create redwood-app`',
+    'by running `yarn create redwood-app`',
   )
   console.log()
 }
@@ -26,7 +26,7 @@ export function printDone(config: Config) {
   console.log()
   console.log(
     'You can now run the following commands to build and serve the included ' +
-      'example application',
+    'example application',
   )
   console.log()
   console.log(chalk.hex('cef792')('> cd ' + config.installationDir))

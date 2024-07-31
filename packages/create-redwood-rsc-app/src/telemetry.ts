@@ -20,13 +20,13 @@ interface TelemetryPayload {
 
 function buildPayload(config: Config | null, duration: number): TelemetryPayload {
   const command = ['create', 'redwood-rsc-app']
-  if(process.argv.includes('--no-check-latest')){
+  if (process.argv.includes('--no-check-latest')) {
     command.push('--no-check-latest')
   }
 
   // We don't have a field for the template, so we're using/abusing the experiments field
   const experiments: string[] = []
-  if(config?.template){
+  if (config?.template) {
     experiments.push(`template:${config.template}`)
   }
 
