@@ -7,8 +7,6 @@ export function rscAnalyzePlugin(
   clientEntryCallback: (id: string) => void,
   serverEntryCallback: (id: string) => void,
 ): Plugin {
-  const clientEntryIdSet = new Set<string>()
-
   return {
     name: 'redwood-rsc-analyze-plugin',
     transform(code, id) {
@@ -27,7 +25,6 @@ export function rscAnalyzePlugin(
           ) {
             if (item.expression.value === 'use client') {
               clientEntryCallback(id)
-              clientEntryIdSet.add(id)
             } else if (item.expression.value === 'use server') {
               serverEntryCallback(id)
             }
