@@ -1,24 +1,29 @@
 import ci from 'ci-info'
 import fetch from 'node-fetch'
 
-import { Config } from './config.js'
+import type { Config } from './config.js'
 
-const TELEMETRY_URL = process.env.REDWOOD_REDIRECT_TELEMETRY ?? 'https://telemetry.redwoodjs.com/api/v1/telemetry'
+const TELEMETRY_URL =
+  process.env.REDWOOD_REDIRECT_TELEMETRY ??
+  'https://telemetry.redwoodjs.com/api/v1/telemetry'
 
 // Note: The fields and their names are constrained by the telemetry API
 interface TelemetryPayload {
-  ci: boolean,
-  command: string,
+  ci: boolean
+  command: string
   complexity: string
-  duration: number,
+  duration: number
   error?: string
-  experiments?: string[],
+  experiments?: string[]
   redwoodCi: boolean
-  system: string,
-  type: 'command',
+  system: string
+  type: 'command'
 }
 
-function buildPayload(config: Config | null, duration: number): TelemetryPayload {
+function buildPayload(
+  config: Config | null,
+  duration: number,
+): TelemetryPayload {
   const command = ['create', 'redwood-rsc-app']
   if (process.argv.includes('--no-check-latest')) {
     command.push('--no-check-latest')
