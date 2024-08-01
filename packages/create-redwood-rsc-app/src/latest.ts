@@ -8,6 +8,14 @@ export function shouldRelaunch(config: Config) {
     console.log('shouldRelaunch process.argv', process.argv)
   }
 
+  if (process.argv.includes('--no-check-latest')) {
+    if (config.verbose) {
+      console.log('process.argv includes --no-check-latest. Returning false')
+    }
+
+    return false
+  }
+
   if (
     !/[/\\]_npx[/\\]/.test(process.argv[1]) &&
     // --npx is a hack for bypassing the check when running in dev if needed
@@ -18,14 +26,6 @@ export function shouldRelaunch(config: Config) {
     }
 
     // Not running via npx (so probably running in dev mode, or running tests)
-    return false
-  }
-
-  if (process.argv.includes('--no-check-latest')) {
-    if (config.verbose) {
-      console.log('process.argv includes --no-check-latest. Returning false')
-    }
-
     return false
   }
 
@@ -73,16 +73,28 @@ export async function relaunchOnLatest(config: Config) {
   const args = [...process.argv.slice(2), '--no-check-latest']
 
   if (config.verbose) {
-    console.log(
-      'cmd',
-      `npx @tobbe.dev/create-redwood-rsc-app@latest ${args.join()}`,
-    )
+    if (process.argv.includes('--npx')) {
+      console.log('cmd', `yarn dev ${args.join(' ')}`)
+    } else {
+      console.log(
+        'cmd',
+        `npx @tobbe.dev/create-redwood-rsc-app@latest ${args.join(' ')}`,
+      )
+    }
   }
 
-  await execa({
+  const execaOpts = {
     stdio: 'inherit',
     env: {
       npm_config_yes: 'true',
     },
-  })`npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`
+  } as const
+
+  // the execa template string tag is used to escape arguments. It handles
+  // arrays, like `args` correctly
+  if (process.argv.includes('--npx')) {
+    await execa(execaOpts)`yarn dev ${args}`
+  } else {
+    await execa(execaOpts)`npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`
+  }
 }
