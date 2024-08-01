@@ -1,6 +1,6 @@
 {
   "name": "create-redwood-rsc-app",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Quickstart for a RedwoodJS React Server Components App",
   "repository": {
     "type": "git",
