@@ -19,14 +19,14 @@ export async function unzip(config: Config, zipFilePath: string) {
     console.log(zip.entryCount, 'entries in zip file')
   }
 
+  const baseDir = `redwood-main/__fixtures__/${config.template}/`
+
+  if (config.verbose) {
+    console.log('baseDir:', baseDir)
+  }
+
   try {
     for await (const entry of zip) {
-      const baseDir = `redwood-main/__fixtures__/${config.template}/`
-
-      if (config.verbose) {
-        console.log('baseDir:', baseDir)
-      }
-
       const isDir = entry.filename.endsWith('/')
 
       if (isDir || !entry.filename.includes(baseDir)) {
