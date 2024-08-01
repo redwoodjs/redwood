@@ -1,11 +1,13 @@
 import ci from 'ci-info'
 import fetch from 'node-fetch'
 
-import type { Config } from './config.js'
-
 const TELEMETRY_URL =
   process.env.REDWOOD_REDIRECT_TELEMETRY ??
   'https://telemetry.redwoodjs.com/api/v1/telemetry'
+
+export interface TelemetryInfo {
+  template?: string
+}
 
 // Note: The fields and their names are constrained by the telemetry API
 interface TelemetryPayload {
@@ -21,7 +23,7 @@ interface TelemetryPayload {
 }
 
 function buildPayload(
-  config: Config | null,
+  telemetryInfo: TelemetryInfo,
   duration: number,
 ): TelemetryPayload {
   const command = ['create', 'redwood-rsc-app']
@@ -31,8 +33,8 @@ function buildPayload(
 
   // We don't have a field for the template, so we're using/abusing the experiments field
   const experiments: string[] = []
-  if (config?.template) {
-    experiments.push(`template:${config.template}`)
+  if (telemetryInfo.template) {
+    experiments.push(`template:${telemetryInfo.template}`)
   }
 
   // Detect CI environments
@@ -57,13 +59,16 @@ function buildPayload(
   }
 }
 
-export async function sendTelemetry(config: Config | null, duration: number) {
+export async function sendTelemetry(
+  telemetryInfo: TelemetryInfo,
+  duration: number,
+) {
   if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }
 
   try {
-    const payload = buildPayload(config, duration)
+    const payload = buildPayload(telemetryInfo, duration)
 
     if (process.env.REDWOOD_VERBOSE_TELEMETRY) {
       console.info('Redwood Telemetry Payload', payload)

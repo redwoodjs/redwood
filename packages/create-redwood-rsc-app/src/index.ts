@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import type { TelemetryInfo } from './telemetry.js'
+
 import { initConfig } from './config.js'
 import { downloadTemplate } from './download.js'
 import { handleError } from './error.js'
@@ -13,15 +15,12 @@ import { sendTelemetry } from './telemetry.js'
 import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
 import { unzip } from './zip.js'
 
-<<<<<<< HEAD
-let config: Config | null = null
-
 const startTime = Date.now()
+const telemetryInfo: TelemetryInfo = {}
 
-=======
->>>>>>> main
 try {
   const config = initConfig()
+  telemetryInfo.template = config.template
 
   if (shouldRelaunch(config)) {
     await relaunchOnLatest(config)
@@ -43,4 +42,4 @@ try {
   handleError(e)
 }
 
-await sendTelemetry(config, Date.now() - startTime)
+await sendTelemetry(telemetryInfo, Date.now() - startTime)
