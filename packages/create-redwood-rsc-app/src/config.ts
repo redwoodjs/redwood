@@ -59,6 +59,7 @@ export function initConfig() {
   }
 
   if (args.verbose) {
+    console.log('process.argv', process.argv)
     console.log('Parsed command line arguments:')
     console.log('    arguments:', args)
     console.log('    installationDir:', installationDir)
