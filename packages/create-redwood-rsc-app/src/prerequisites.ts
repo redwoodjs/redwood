@@ -90,7 +90,7 @@ export function checkYarnInstallation(config: Config) {
       console.log('')
       console.log(
         'You have more than one active yarn installation. One is installed ' +
-          "by corepack,\nbut it's not the first one in $PATH.",
+        "by corepack,\nbut it's not the first one in $PATH.",
       )
       console.log("Perhaps you've manually installed it using Homebrew or npm.")
       console.log(

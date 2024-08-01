@@ -1421,6 +1421,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ci-info@npm:4.0.0":
+  version: 4.0.0
+  resolution: "ci-info@npm:4.0.0"
+  checksum: 10c0/ecc003e5b60580bd081d83dd61d398ddb8607537f916313e40af4667f9c92a1243bd8e8a591a5aa78e418afec245dbe8e90a0e26e39ca0825129a99b978dd3f9
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -1532,6 +1539,7 @@ __metadata:
     "@types/which": "npm:3.0.4"
     "@types/yauzl-promise": "npm:4.0.1"
     chalk: "npm:5.3.0"
+    ci-info: "npm:4.0.0"
     concurrently: "npm:^8.2.2"
     enquirer: "npm:2.4.1"
     esbuild: "npm:0.23.0"

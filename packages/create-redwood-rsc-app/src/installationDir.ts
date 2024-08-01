@@ -72,7 +72,7 @@ async function promptForInstallationDir() {
     console.log('The `~username` syntax is not supported here')
     console.log(
       'Please use the full path or specify the target directory on the ' +
-        'command line.',
+      'command line.',
     )
 
     return await promptForInstallationDir()
