@@ -13,61 +13,69 @@ export function initConfig() {
     verbose: false,
   }
 
-  const args = {
-    help: false,
-    template: '',
-    verbose: false,
-    version: false,
-  }
+  const positionals: string[] = []
 
-  // Skipping the first two arguments, which are the path to the node executable
-  // and the path to the script being executed, we find the first argument that
-  // does not start with a dash. This is the installation directory.
-  const installationDir = process.argv
-    .slice(2)
-    .find((arg) => !arg.startsWith('-'))
+  const args = process.argv.slice(2)
 
-  if (process.argv.includes('--verbose') || process.argv.includes('-v')) {
-    args.verbose = true
-  }
+  let i = 0
+  while (i < args.length) {
+    const arg = args[i]
 
-  if (process.argv.includes('--help') || process.argv.includes('-h')) {
-    args.help = true
-  }
+    if (arg === '--verbose' || arg === '-v') {
+      config.verbose = true
+    } else if (arg === '--help' || arg === '-h') {
+      console.log()
+      console.log('--help is not implemented yet')
+      console.log('PR welcome!')
+      console.log()
+    } else if (arg === '--version' || arg === '-V') {
+      console.log()
+      console.log('--version is not implemented yet')
+      console.log('PR welcome!')
+      console.log()
+    } else if (arg.startsWith('--template') || arg.startsWith('-t')) {
+      // +2 because we do slice(2) above
+      const templateIndex = i + 2
 
-  if (process.argv.includes('--version') || process.argv.includes('-V')) {
-    args.version = true
-  }
-
-  const templateIndex = process.argv.findIndex(
-    (arg) => arg.startsWith('--template') || arg.startsWith('-t'),
-  )
-  if (templateIndex >= 0) {
-    if (process.argv[templateIndex].includes('=')) {
-      args.template = process.argv[templateIndex].split('=')[1]
-    } else if (
-      process.argv[templateIndex + 1] &&
-      !process.argv[templateIndex + 1].startsWith('-')
-    ) {
-      args.template = process.argv[templateIndex + 1]
+      if (process.argv[templateIndex].includes('=')) {
+        config.template = process.argv[templateIndex].split('=')[1]
+      } else if (
+        process.argv[templateIndex + 1] &&
+        !process.argv[templateIndex + 1].startsWith('-')
+      ) {
+        config.template = process.argv[templateIndex + 1]
+        // skip looping over the next argument as we've already consumed it
+        i++
+      } else {
+        throw new ExitCodeError(
+          1,
+          `Error: No template provided after ${arg} flag`,
+        )
+      }
+    } else if (arg === '--npx') {
+      // Do nothing. Intended for internal use only.
+    } else if (arg === '--no-check-latest') {
+      // Do nothing. Intended for internal use only.
+    } else if (arg.startsWith('-')) {
+      console.log('Unknown argument:', arg)
     } else {
-      throw new ExitCodeError(
-        1,
-        'Error: No template provided after --template flag',
-      )
+      positionals.push(arg)
     }
+
+    i++
   }
 
-  if (args.verbose) {
+  if (positionals.length === 0) {
+    throw new ExitCodeError(1, 'Error: No installation directory provided')
+  }
+
+  config.installationDir = positionals[0]
+  config.template ||= 'test-project-rsc-kitchen-sink'
+
+  if (config.verbose) {
     console.log('process.argv', process.argv)
-    console.log('Parsed command line arguments:')
-    console.log('    arguments:', args)
-    console.log('    installationDir:', installationDir)
+    console.log('config', config)
   }
-
-  config.verbose = !!args.verbose
-  config.installationDir = installationDir ?? ''
-  config.template = args.template || 'test-project-rsc-kitchen-sink'
 
   return config
 }
