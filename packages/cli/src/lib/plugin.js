@@ -14,7 +14,7 @@ const { Select } = require('enquirer')
 /**
  * The file inside .redwood which will contain cached plugin command mappings
  */
-const PLUGIN_CACHE_FILENAME = 'commandCache.json'
+export const PLUGIN_CACHE_FILENAME = 'commandCache.json'
 
 /**
  * A cache of yargs information for redwood commands that are available from plugins.
