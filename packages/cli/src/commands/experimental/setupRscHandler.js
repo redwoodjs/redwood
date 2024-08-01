@@ -359,7 +359,7 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Updating react version...',
+        title: 'Updating React version...',
         task: async () => {
           // Fetch the web package.json from the main branch
           const canaryWebPackageJsonUrl =
