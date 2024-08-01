@@ -1,5 +1,6 @@
 import path from 'path'
 
+import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
@@ -324,7 +325,7 @@ export const handler = async ({ force, verbose }) => {
         },
       },
       {
-        title: 'Add React experimental types',
+        title: 'Add React experimental types...',
         task: async () => {
           const tsconfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
           const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf-8'))
@@ -354,6 +355,44 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(rwPaths.web.routes, routesTemplate, {
             overwriteExisting: true,
+          })
+        },
+      },
+      {
+        title: 'Updating react version...',
+        task: async () => {
+          // Fetch the web package.json from the main branch
+          const canaryWebPackageJsonUrl =
+            'https://raw.githubusercontent.com/redwoodjs/redwood/main/packages/create-redwood-app/templates/ts/web/package.json'
+          const response = await fetch(canaryWebPackageJsonUrl)
+          const canaryPackageJson = await response.json()
+
+          // Parse the current package.json in the web side
+          const currentPackageJsonPath = path.join(
+            rwPaths.web.base,
+            'package.json',
+          )
+          const currentPackageJson = JSON.parse(
+            fs.readFileSync(currentPackageJsonPath, 'utf-8'),
+          )
+
+          // Update the versions to match
+          const packagesToUpdate = ['react', 'react-dom']
+          for (const packageName of packagesToUpdate) {
+            currentPackageJson.dependencies[packageName] =
+              canaryPackageJson.dependencies[packageName]
+          }
+          writeFile(
+            currentPackageJsonPath,
+            JSON.stringify(currentPackageJson, null, 2),
+            {
+              overwriteExisting: true,
+            },
+          )
+
+          // Run yarn install to apply the changes
+          await execa('yarn', [], {
+            cwd: getPaths().web.base,
           })
         },
       },
