@@ -29,7 +29,7 @@ export function checkNodeVersion(config: Config) {
 
   if (!semver.satisfies(version, '>=20')) {
     console.error('❌Your Node.js version must be >=20')
-    console.error('Plesae install or switch to a newer version of Node')
+    console.error('Please install or switch to a newer version of Node')
     console.error(
       'We recommend using a Node version manager like `fnm`, `nvm` or `n`',
     )
