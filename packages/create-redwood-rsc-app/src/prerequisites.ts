@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import semver from 'semver'
 import which from 'which'
@@ -7,18 +7,18 @@ import type { Config } from './config.js'
 
 import { ExitCodeError } from './error.js'
 
-export async function checkNodeVersion(config: Config) {
+export function checkNodeVersion(config: Config) {
   if (config.verbose) {
     console.log('Running `node --version`')
   }
 
-  const { stdout: version } = await execa`node --version`
+  const { stdout: version } = spawnSync('node --version')
 
   if (config.verbose) {
     console.log('Node version:', version)
   }
 
-  if (!semver.satisfies(version, '>=20')) {
+  if (!semver.satisfies(version.toString(), '>=20')) {
     console.error('❌Your Node.js version must be >=20')
     console.error('Plesae install or switch to a newer version of Node')
     console.error(
@@ -90,7 +90,7 @@ export function checkYarnInstallation(config: Config) {
       console.log('')
       console.log(
         'You have more than one active yarn installation. One is installed ' +
-        "by corepack,\nbut it's not the first one in $PATH.",
+          "by corepack,\nbut it's not the first one in $PATH.",
       )
       console.log("Perhaps you've manually installed it using Homebrew or npm.")
       console.log(

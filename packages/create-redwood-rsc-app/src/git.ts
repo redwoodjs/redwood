@@ -1,22 +1,22 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 
 import type { Config } from './config.js'
 
-export async function initialCommit(config: Config) {
+export function initialCommit(config: Config) {
   if (config.verbose) {
     console.log('Running `git init .`')
   }
-  await execa({ cwd: config.installationDir })`git init .`
+  spawnSync('git init .', { cwd: config.installationDir })
 
   if (config.verbose) {
     console.log('Running `git add .`')
   }
-  await execa({ cwd: config.installationDir })`git add .`
+  spawnSync('git add .', { cwd: config.installationDir })
 
   if (config.verbose) {
     console.log('Running `git commit`')
   }
-  await execa({
+  spawnSync('git', ['commit', '-m', 'Initial commit'], {
     cwd: config.installationDir,
-  })`git commit -m ${'Initial commit'}`
+  })
 }

@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 import type { Config } from './config.js'
@@ -65,7 +65,7 @@ export function shouldRelaunch(config: Config) {
   return true
 }
 
-export async function relaunchOnLatest(config: Config) {
+export function relaunchOnLatest(config: Config) {
   if (config.verbose) {
     console.log('relaunchOnLatest process.argv', process.argv)
   }
@@ -83,7 +83,7 @@ export async function relaunchOnLatest(config: Config) {
     }
   }
 
-  const execaOpts = {
+  const spawnOpts = {
     stdio: 'inherit',
     env: {
       npm_config_yes: 'true',
@@ -93,8 +93,12 @@ export async function relaunchOnLatest(config: Config) {
   // the execa template string tag is used to escape arguments. It handles
   // arrays, like `args` correctly
   if (process.argv.includes('--npx')) {
-    await execa(execaOpts)`yarn dev ${args}`
+    spawnSync('yarn', ['dev', ...args], spawnOpts)
   } else {
-    await execa(execaOpts)`npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`
+    spawnSync(
+      'npx',
+      ['@tobbe.dev/create-redwood-rsc-app@latest', ...args],
+      spawnOpts,
+    )
   }
 }
