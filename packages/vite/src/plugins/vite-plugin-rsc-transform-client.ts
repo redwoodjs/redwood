@@ -269,14 +269,13 @@ async function transformClientModule(
   )
 
   let newSrc =
-    "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
+    'import {registerClientReference} from "react-server-dom-webpack/server";\n'
 
   for (let i = 0; i < names.length; i++) {
     const name = names[i]
 
     if (name === 'default') {
-      newSrc += 'export default '
-      newSrc += 'Object.defineProperties(function() {'
+      newSrc += 'export default registerClientReference(function() {'
       newSrc +=
         'throw new Error(' +
         JSON.stringify(
@@ -289,7 +288,7 @@ async function transformClientModule(
         ');'
     } else {
       newSrc += 'export const ' + name + ' = '
-      newSrc += 'Object.defineProperties(function() {'
+      newSrc += 'registerClientReference(function() {'
       newSrc +=
         'throw new Error(' +
         JSON.stringify(
@@ -304,10 +303,7 @@ async function transformClientModule(
         ');'
     }
 
-    newSrc += '},{'
-    newSrc += '$$typeof: {value: CLIENT_REFERENCE},'
-    newSrc += '$$id: {value: ' + JSON.stringify(loadId + '#' + name) + '}'
-    newSrc += '});\n'
+    newSrc += `},${JSON.stringify(loadId)},${JSON.stringify(name)})\n;`
   }
 
   return newSrc

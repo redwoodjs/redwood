@@ -165,18 +165,22 @@ function transformServerModule(body: any, url: string, code: string): string {
     }
   }
 
-  let newSrc = '"use server"\n' + code + '\n\n'
+  let newSrc =
+    '"use server"\n' +
+    code +
+    '\n\n' +
+    'import {registerServerReference} from ' +
+    '"react-server-dom-webpack/server";\n'
+
   localNames.forEach(function (exported, local) {
     if (localTypes.get(local) !== 'function') {
       // We first check if the export is a function and if so annotate it.
       newSrc += 'if (typeof ' + local + ' === "function") '
     }
 
-    newSrc += 'Object.defineProperties(' + local + ',{'
-    newSrc += '$$typeof: {value: Symbol.for("react.server.reference")},'
-    newSrc += '$$id: {value: ' + JSON.stringify(url + '#' + exported) + '},'
-    newSrc += '$$bound: { value: null }'
-    newSrc += '});\n\n'
+    const urlStr = JSON.stringify(url)
+    const exportedStr = JSON.stringify(exported)
+    newSrc += `registerServerReference(${local},${urlStr},${exportedStr});\n`
   })
 
   return newSrc
