@@ -8,14 +8,6 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import { JobsLibNotFoundError, JobNotFoundError } from './errors'
 
-const DEV_ENVIRONMENTS = ['development', 'test']
-
-const isDev = DEV_ENVIRONMENTS.includes(process.env.NODE_ENV || '')
-
-if (isDev) {
-  registerApiSideBabelHook()
-}
-
 export function makeFilePath(path: string) {
   return pathToFileURL(path).href
 }
@@ -23,9 +15,7 @@ export function makeFilePath(path: string) {
 // Loads the named export from the app's jobs config in api/src/lib/jobs.{js,ts}
 // to configure the worker, defaults to `workerConfig`
 export const loadJobsConfig = async () => {
-  const jobsConfigPath = isDev
-    ? getPaths().api.jobsConfig
-    : getPaths().api.distJobsConfig
+  const jobsConfigPath = getPaths().api.jobsConfig
 
   if (jobsConfigPath) {
     return require(jobsConfigPath)
@@ -36,14 +26,14 @@ export const loadJobsConfig = async () => {
 
 // Loads a job from the app's filesystem in api/src/jobs
 export const loadJob = async (name: string) => {
-  const baseJobsPath = isDev ? getPaths().api.jobs : getPaths().api.distJobs
+  const jobsPath = getPaths().api.distJobs
 
   // Specifying {js,ts} extensions, so we don't accidentally try to load .json
   // files or similar
-  const files = fg.sync(`**/${name}.{js,ts}`, { cwd: baseJobsPath })
+  const files = fg.sync(`**/${name}.{js,ts}`, { cwd: jobsPath })
   if (!files[0]) {
     throw new JobNotFoundError(name)
   }
-  const jobModule = require(path.join(baseJobsPath, files[0]))
+  const jobModule = require(path.join(jobsPath, files[0]))
   return jobModule
 }
