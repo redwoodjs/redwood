@@ -202,7 +202,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   async failure(job: PrismaJob, error: Error, options?: FailureOptions) {
     this.logger.debug(`Job ${job.id} failure`)
 
-    const shouldDeleteFailed = options?.deleteFailedJobs ?? DEFAULTS.deleteFailedJobs
+    const shouldDeleteFailed =
+      options?.deleteFailedJobs ?? DEFAULTS.deleteFailedJobs
 
     if (
       job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts) &&
@@ -234,10 +235,10 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
 
   // Schedules a job by creating a new record in a `BackgroundJob` table
   // (or whatever the accessor is configured to point to).
-  async schedule({ handler, args, runAt, queue, priority }: SchedulePayload) {
+  async schedule({ job, args, runAt, queue, priority }: SchedulePayload) {
     return await this.accessor.create({
       data: {
-        handler: JSON.stringify({ handler, args }),
+        handler: JSON.stringify({ job, args }),
         runAt,
         queue,
         priority,

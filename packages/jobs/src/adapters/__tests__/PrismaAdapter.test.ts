@@ -102,7 +102,7 @@ describe('schedule()', () => {
       .mockReturnValue({ id: 1 })
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.schedule({
-      handler: 'RedwoodJob',
+      job: 'RedwoodJob',
       args: ['foo', 'bar'],
       queue: 'default',
       priority: 50,
@@ -112,7 +112,7 @@ describe('schedule()', () => {
     expect(createSpy).toHaveBeenCalledWith({
       data: {
         handler: JSON.stringify({
-          handler: 'RedwoodJob',
+          job: 'RedwoodJob',
           args: ['foo', 'bar'],
         }),
         priority: 50,
