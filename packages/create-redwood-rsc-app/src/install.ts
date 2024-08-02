@@ -13,5 +13,5 @@ export function install(config: Config) {
   // this project)
   fs.writeFileSync(path.join(config.installationDir, 'yarn.lock'), '')
 
-  spawnSync('yarn install', { cwd: config.installationDir })
+  spawnSync('yarn', ['install'], { cwd: config.installationDir })
 }

@@ -6,12 +6,12 @@ export function initialCommit(config: Config) {
   if (config.verbose) {
     console.log('Running `git init .`')
   }
-  spawnSync('git init .', { cwd: config.installationDir })
+  spawnSync('git', ['init', '.'], { cwd: config.installationDir })
 
   if (config.verbose) {
     console.log('Running `git add .`')
   }
-  spawnSync('git add .', { cwd: config.installationDir })
+  spawnSync('git', ['add', '.'], { cwd: config.installationDir })
 
   if (config.verbose) {
     console.log('Running `git commit`')

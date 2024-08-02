@@ -12,13 +12,22 @@ export function checkNodeVersion(config: Config) {
     console.log('Running `node --version`')
   }
 
-  const { stdout: version } = spawnSync('node --version')
+  // const { stdout: version } = spawnSync('node --version')
+  const result = spawnSync('node', ['--version'])
+
+  if (result.error) {
+    console.error('❌ Could not run `node --version`')
+
+    throw new ExitCodeError(1, result.error.message)
+  }
+
+  const version = result.stdout.toString()
 
   if (config.verbose) {
     console.log('Node version:', version)
   }
 
-  if (!semver.satisfies(version.toString(), '>=20')) {
+  if (!semver.satisfies(version, '>=20')) {
     console.error('❌Your Node.js version must be >=20')
     console.error('Plesae install or switch to a newer version of Node')
     console.error(
