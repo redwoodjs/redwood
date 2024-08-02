@@ -23,18 +23,18 @@ try {
   telemetryInfo.template = config.template
 
   if (shouldRelaunch(config)) {
-    await relaunchOnLatest(config)
+    relaunchOnLatest(config)
   } else {
     printWelcome()
 
-    await checkNodeVersion(config)
+    checkNodeVersion(config)
     checkYarnInstallation(config)
     await setInstallationDir(config)
     const templateZipPath = await downloadTemplate(config)
     await unzip(config, templateZipPath)
     await upgradeToLatestCanary(config)
-    await install(config)
-    await initialCommit(config)
+    install(config)
+    initialCommit(config)
 
     printDone(config)
   }
