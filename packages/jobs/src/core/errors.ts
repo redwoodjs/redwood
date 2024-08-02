@@ -10,10 +10,10 @@ export class RedwoodJobError extends Error {
   }
 }
 
-// Thrown when trying to schedule a job without an adapter configured
+// Thrown when trying to configure a scheduler without an adapter
 export class AdapterNotConfiguredError extends RedwoodJobError {
   constructor() {
-    super('No adapter configured for RedwoodJob')
+    super('No adapter configured for the job scheduler')
   }
 }
 
@@ -134,5 +134,11 @@ export class SchedulingError extends RethrownJobError {
 export class PerformError extends RethrownJobError {
   constructor(message: string, error: Error) {
     super(message, error)
+  }
+}
+
+export class QueueNotDefinedError extends RedwoodJobError {
+  constructor() {
+    super('Scheduler requires a named `queue` to place jobs in')
   }
 }
