@@ -106,6 +106,10 @@ export function relaunchOnLatest(config: Config) {
     )
   }
 
+  if (config.verbose) {
+    console.log('spawnSync result', result)
+  }
+
   if (result.error) {
     console.error(
       'There was an error launching the latest version of create-redwood-rsc-app.',
