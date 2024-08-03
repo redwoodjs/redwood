@@ -2,6 +2,7 @@ import { ExitCodeError } from './error.js'
 
 export interface Config {
   installationDir: string
+  printVersion: boolean
   template: string
   verbose: boolean
 }
@@ -9,6 +10,7 @@ export interface Config {
 export function initConfig() {
   const config: Config = {
     installationDir: '',
+    printVersion: false,
     template: '',
     verbose: false,
   }
@@ -29,10 +31,7 @@ export function initConfig() {
       console.log('PR welcome!')
       console.log()
     } else if (arg === '--version' || arg === '-V') {
-      console.log()
-      console.log('--version is not implemented yet')
-      console.log('PR welcome!')
-      console.log()
+      config.printVersion = true
     } else if (arg.startsWith('--template') || arg.startsWith('-t')) {
       // +2 because we do slice(2) above
       const templateIndex = i + 2
@@ -65,7 +64,7 @@ export function initConfig() {
     i++
   }
 
-  if (positionals.length === 0) {
+  if (positionals.length === 0 && !config.printVersion) {
     throw new ExitCodeError(1, 'Error: No installation directory provided')
   }
 
