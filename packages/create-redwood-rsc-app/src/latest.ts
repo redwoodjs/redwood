@@ -76,10 +76,7 @@ export function relaunchOnLatest(config: Config) {
     if (process.argv.includes('--npx')) {
       console.log('cmd', `yarn dev ${args.join(' ')}`)
     } else {
-      console.log(
-        'cmd',
-        `npx @tobbe.dev/create-redwood-rsc-app@latest ${args.join(' ')}`,
-      )
+      console.log('cmd', `npx create-redwood-rsc-app@latest ${args.join(' ')}`)
     }
   }
 
@@ -95,10 +92,6 @@ export function relaunchOnLatest(config: Config) {
   if (process.argv.includes('--npx')) {
     spawnSync('yarn', ['dev', ...args], spawnOpts)
   } else {
-    spawnSync(
-      'npx',
-      ['@tobbe.dev/create-redwood-rsc-app@latest', ...args],
-      spawnOpts,
-    )
+    spawnSync('npx', ['create-redwood-rsc-app@latest', ...args], spawnOpts)
   }
 }
