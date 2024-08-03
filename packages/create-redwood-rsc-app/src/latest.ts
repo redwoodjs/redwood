@@ -3,6 +3,8 @@ import fs from 'node:fs'
 
 import type { Config } from './config.js'
 
+import { ExitCodeError } from './error.js'
+
 export function shouldRelaunch(config: Config) {
   if (config.verbose) {
     console.log('shouldRelaunch process.argv', process.argv)
@@ -74,24 +76,43 @@ export function relaunchOnLatest(config: Config) {
 
   if (config.verbose) {
     if (process.argv.includes('--npx')) {
-      console.log('cmd', `yarn dev ${args.join(' ')}`)
+      console.log('cmd:', 'yarn', ['dev', ...args].join(' '))
     } else {
-      console.log('cmd', `npx create-redwood-rsc-app@latest ${args.join(' ')}`)
+      console.log(
+        'cmd:',
+        'npx',
+        ['create-redwood-rsc-app@latest', ...args].join(' '),
+      )
     }
   }
 
   const spawnOpts = {
     stdio: 'inherit',
     env: {
+      ...process.env,
       npm_config_yes: 'true',
     },
   } as const
 
-  // the execa template string tag is used to escape arguments. It handles
-  // arrays, like `args` correctly
+  let result: ReturnType<typeof spawnSync>
+
   if (process.argv.includes('--npx')) {
-    spawnSync('yarn', ['dev', ...args], spawnOpts)
+    result = spawnSync('yarn', ['dev', ...args], spawnOpts)
   } else {
-    spawnSync('npx', ['create-redwood-rsc-app@latest', ...args], spawnOpts)
+    result = spawnSync(
+      'npx',
+      ['create-redwood-rsc-app@latest', ...args],
+      spawnOpts,
+    )
+  }
+
+  if (result.error) {
+    console.error(
+      'There was an error launching the latest version of create-redwood-rsc-app.',
+    )
+    console.error('Please try running it manually with `@latest')
+    console.error('npx -y create-redwood-rsc-app@latest APP_PATH')
+
+    throw new ExitCodeError(1, result.error.message)
   }
 }
