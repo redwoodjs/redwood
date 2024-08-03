@@ -3,7 +3,6 @@ import { pathToFileURL } from 'node:url'
 
 import fg from 'fast-glob'
 
-import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { JobsLibNotFoundError, JobNotFoundError } from './errors'

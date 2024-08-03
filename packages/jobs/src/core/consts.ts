@@ -10,6 +10,11 @@ export const DEFAULT_LOGGER = console
 export const DEFAULT_QUEUE = 'default'
 export const DEFAULT_PRIORITY = 50
 
+// TODO(jgmw): Confirm this
+export const DEFAULT_WAIT = 0
+// TODO(jgmw): Confirm this
+export const DEFAULT_WAIT_UNTIL = new Date(0)
+
 /**
  * The name of the exported variable from the jobs config file that contains
  * the adapter
