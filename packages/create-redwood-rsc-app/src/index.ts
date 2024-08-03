@@ -13,6 +13,7 @@ import { printDone, printWelcome } from './messages.js'
 import { checkNodeVersion, checkYarnInstallation } from './prerequisites.js'
 import { sendTelemetry } from './telemetry.js'
 import { upgradeToLatestCanary } from './upgradeToLatestCanary.js'
+import { printVersion } from './version.js'
 import { unzip } from './zip.js'
 
 const startTime = Date.now()
@@ -22,7 +23,9 @@ try {
   const config = initConfig()
   telemetryInfo.template = config.template
 
-  if (shouldRelaunch(config)) {
+  if (config.printVersion) {
+    printVersion()
+  } else if (shouldRelaunch(config)) {
     relaunchOnLatest(config)
   } else {
     printWelcome()
