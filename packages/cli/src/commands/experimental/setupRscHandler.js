@@ -367,24 +367,34 @@ export const handler = async ({ force, verbose }) => {
           const response = await fetch(canaryWebPackageJsonUrl)
           const canaryPackageJson = await response.json()
 
-          // Parse the current package.json in the web side
-          const currentPackageJsonPath = path.join(
+          // Read current package.json files
+          const currentRootPackageJsonPath = path.join(
+            rwPaths.base,
+            'package.json',
+          )
+          const currentRootPackageJson = JSON.parse(
+            fs.readFileSync(currentRootPackageJsonPath, 'utf-8'),
+          )
+          const currentWebPackageJsonPath = path.join(
             rwPaths.web.base,
             'package.json',
           )
-          const currentPackageJson = JSON.parse(
-            fs.readFileSync(currentPackageJsonPath, 'utf-8'),
+          const currentWebPackageJson = JSON.parse(
+            fs.readFileSync(currentWebPackageJsonPath, 'utf-8'),
           )
 
           // Update the versions to match
           const packagesToUpdate = ['react', 'react-dom']
           for (const packageName of packagesToUpdate) {
-            currentPackageJson.dependencies[packageName] =
+            currentRootPackageJson.resolutions ||= {}
+            currentRootPackageJson.resolutions[packageName] =
+              canaryPackageJson.dependencies[packageName]
+            currentWebPackageJson.dependencies[packageName] =
               canaryPackageJson.dependencies[packageName]
           }
           writeFile(
-            currentPackageJsonPath,
-            JSON.stringify(currentPackageJson, null, 2),
+            currentWebPackageJsonPath,
+            JSON.stringify(currentWebPackageJson, null, 2),
             {
               overwriteExisting: true,
             },
