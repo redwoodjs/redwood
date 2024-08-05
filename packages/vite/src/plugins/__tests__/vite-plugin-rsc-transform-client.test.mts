@@ -1,7 +1,7 @@
 import path from 'node:path'
+
 import { vol } from 'memfs'
 import { normalizePath } from 'vite'
-
 import {
   afterAll,
   beforeAll,
@@ -41,7 +41,7 @@ describe('rscRoutesAutoLoader', () => {
   it('should handle CJS modules with exports.Link = ...', async () => {
     const id = normalizePath(
       path.join(
-        process.env.RWJS_CWD,
+        process.env.RWJS_CWD || '',
         'node_modules',
         '@redwoodjs',
         'router',
@@ -105,23 +105,11 @@ describe('rscRoutesAutoLoader', () => {
       id,
     )
 
-    const clientId = normalizePath(
-      path.join(
-        process.env.RWJS_CWD,
-        'web',
-        'dist',
-        'rsc',
-        'assets',
-        'rsc-link.js-13.mjs',
-      ),
-    )
-
     // What we are interested in seeing here is:
     // - There's a CLIENT_REFERENCE
     // - There's a Link export
     // - There's a proper $$id
-    expect(output)
-      .toMatchInlineSnapshot(`
+    expect(output).toMatchInlineSnapshot(`
         "import {registerClientReference} from "react-server-dom-webpack/server";
         export const Link = registerClientReference(function() {throw new Error("Attempted to call Link() from the server but Link is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},"/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-link.js-13.mjs","Link")
         ;"
@@ -131,7 +119,7 @@ describe('rscRoutesAutoLoader', () => {
   it('should handle CJS modules with module.exports = { ErrorIcon, ToastBar, ... }', async () => {
     const id = normalizePath(
       path.join(
-        process.env.RWJS_CWD,
+        process.env.RWJS_CWD || '',
         'node_modules',
         'react-hot-toast',
         'dist',
@@ -175,22 +163,10 @@ describe('rscRoutesAutoLoader', () => {
       id,
     )
 
-    const clientId = normalizePath(
-      path.join(
-        process.env.RWJS_CWD,
-        'web',
-        'dist',
-        'rsc',
-        'assets',
-        'rsc-index.js-15.mjs',
-      ),
-    )
-
     // What we are interested in seeing here is:
     // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
     // - The call to `renderFromRscServer` for each page that wasn't already imported
-    expect(output)
-      .toMatchInlineSnapshot(`
+    expect(output).toMatchInlineSnapshot(`
         "import {registerClientReference} from "react-server-dom-webpack/server";
         export const CheckmarkIcon = registerClientReference(function() {throw new Error("Attempted to call CheckmarkIcon() from the server but CheckmarkIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},"/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs","CheckmarkIcon")
         ;export const ErrorIcon = registerClientReference(function() {throw new Error("Attempted to call ErrorIcon() from the server but ErrorIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},"/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs","ErrorIcon")
