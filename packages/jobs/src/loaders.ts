@@ -3,7 +3,6 @@ import { pathToFileURL } from 'node:url'
 
 import fg from 'fast-glob'
 
-import { registerApiSideBabelHook } from '@redwoodjs/babel-config'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { JobsLibNotFoundError, JobNotFoundError } from './errors'
@@ -15,7 +14,7 @@ export function makeFilePath(path: string) {
 // Loads the named export from the app's jobs config in api/src/lib/jobs.{js,ts}
 // to configure the worker, defaults to `workerConfig`
 export const loadJobsConfig = async () => {
-  const jobsConfigPath = getPaths().api.jobsConfig
+  const jobsConfigPath = getPaths().api.distJobsConfig
 
   if (jobsConfigPath) {
     return require(jobsConfigPath)

@@ -1,4 +1,4 @@
-export * from './core/errors'
+export * from './errors'
 
 export { RedwoodJob } from './core/RedwoodJob'
 export { Executor } from './core/Executor'
@@ -8,4 +8,3 @@ export { BaseAdapter } from './adapters/BaseAdapter'
 export { PrismaAdapter } from './adapters/PrismaAdapter'
 
 export type { WorkerConfig } from './core/Worker'
-export type { AvailableJobs } from './types'
