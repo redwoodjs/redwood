@@ -62,9 +62,17 @@ describe('Uploads Prisma Extension', () => {
       expect(dumboUploadConfig.onFileSaved).toHaveBeenCalledTimes(2)
     })
 
-    // @TODO implement these tests
-    it('handles empty, null, or undefined fields', async () => {})
+    it('handles empty fields', async () => {
+      const emptyUploadFieldPromise = prismaClient.dummy.create({
+        data: {
+          uploadField: '',
+        },
+      })
 
+      await expect(emptyUploadFieldPromise).resolves.not.toThrow()
+    })
+
+    // @TODO implement these tests
     // it('handles updates, and removes old files', async () => {})
 
     // it('handles deletes, and removes files', async () => {})
