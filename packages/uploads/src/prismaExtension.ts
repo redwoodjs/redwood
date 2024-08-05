@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import { PrismaClient } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
+import mime from 'mime-types'
 import { ulid } from 'ulid'
 
 import { getPaths } from '@redwoodjs/project-config'
@@ -12,7 +13,7 @@ type FilterOutDollarPrefixed<T> = T extends `$${string}` ? never : T
 type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
 
 export type UploadConfigForModel = {
-  fields: [string] | string
+  fields: string[] | string
   savePath?: ((args: unknown) => string) | string
   fileName?: (args: unknown) => string
   onFileSaved?: (filePath: string) => void | Promise<void>
@@ -38,11 +39,11 @@ type ResultExtends = {
   [key in ModelNames]?: {
     withDataUri: {
       needs: any
-      compute: (record: any) => () => Promise<any>
+      compute: <T>(record: T) => () => Promise<T>
     }
     withPublicUrl: {
       needs: any
-      compute: (record: any) => () => Promise<any>
+      compute: <T>(record: T) => () => Promise<T>
     }
   }
 }
@@ -80,6 +81,7 @@ export const createUploadsExtension = (
   }
   // This gives us typesafety when we write the extension,
   // but we override it on return, because TS complains on instantiation of the PrismaClient
+  // its important that the resultsExtends
   const queryExtends: ExtendsType['query'] = {}
   const resultExtends: ExtendsType['result'] = {}
 
@@ -91,8 +93,6 @@ export const createUploadsExtension = (
       : [modelConfig.fields]
 
     queryExtends[modelName] = {
-      // @TODO: in update we'll need to delete the old file, if the field is being updated
-      // THis will depend on whether we have a table for uploads or not
       async update({ query, model, args }) {
         await deleteUploadsFromDiskForArgs({
           model,
@@ -339,13 +339,21 @@ async function saveBase65File(
   dataUrlString: string,
   { saveDir, fileName }: { saveDir: string; fileName: string },
 ) {
-  // @TODO, use mime-types package to get the extension here.
   const [dataType, fileContent] = dataUrlString.split(',')
   // format is data:image/png;base64,....
-  const fileExtension = dataType.split('/')[1].split(';')[0]
+  const fileExtension = getFileExtension(dataType)
   const filePath = path.join(saveDir, `${fileName}.${fileExtension}`)
 
   await fs.writeFile(filePath, Buffer.from(fileContent, 'base64'))
 
   return filePath
+}
+
+export function getFileExtension(dataType: string): string {
+  const mimeType = dataType.split(':')[1].split(';')[0]
+  const extension = mime.extension(mimeType)
+  if (!extension) {
+    throw new Error(`Unsupported file type: ${mimeType}`)
+  }
+  return extension
 }

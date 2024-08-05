@@ -25,7 +25,9 @@
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "tsx attw.ts",
-    "check:package": "concurrently npm:check:attw yarn publint"
+    "check:package": "concurrently npm:check:attw yarn publint",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
@@ -39,10 +41,12 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "@types/mime-types": "2.1.4",
+    "concurrently": "8.2.2",
     "esbuild": "0.23.0",
     "publint": "0.2.9",
     "tsx": "4.16.2",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "vitest": "2.0.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

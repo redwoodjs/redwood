@@ -8675,10 +8675,12 @@ __metadata:
   resolution: "@redwoodjs/uploads@workspace:packages/uploads"
   dependencies:
     "@arethetypeswrong/cli": "npm:0.15.3"
+    "@prisma/client": "npm:5.17.0"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
     "@types/mime-types": "npm:2.1.4"
+    concurrently: "npm:8.2.2"
     esbuild: "npm:0.23.0"
     fs-extra: "npm:11.2.0"
     mime-types: "npm:2.1.35"
@@ -8686,6 +8688,7 @@ __metadata:
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     ulid: "npm:2.3.0"
+    vitest: "npm:2.0.4"
   languageName: unknown
   linkType: soft
 
