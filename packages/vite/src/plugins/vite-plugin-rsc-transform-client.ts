@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import type { Statement, ModuleDeclaration, AssignmentExpression } from 'acorn'
+import type { AssignmentExpression, Program } from 'acorn'
 import * as acorn from 'acorn-loose'
 import { normalizePath, type Plugin } from 'vite'
 
@@ -27,7 +27,7 @@ export function rscTransformUseClientPlugin(
         return code
       }
 
-      let body: (Statement | ModuleDeclaration)[]
+      let body: Program['body']
 
       try {
         body = acorn.parse(code, {
@@ -126,7 +126,7 @@ function addExportNames(names: Array<string>, node: any) {
  */
 async function parseExportNamesIntoNames(
   code: string,
-  body: (Statement | ModuleDeclaration)[],
+  body: Program['body'],
   names: Array<string>,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
@@ -246,7 +246,7 @@ async function parseExportNamesIntoNames(
 
 async function transformClientModule(
   code: string,
-  body: (Statement | ModuleDeclaration)[],
+  body: Program['body'],
   url: string,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {

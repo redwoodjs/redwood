@@ -1,4 +1,5 @@
-import * as acorn from 'acorn-loose'
+import type { AssignmentProperty, Expression, Pattern, Program } from 'acorn'
+import { parse } from 'acorn-loose'
 import type { Plugin } from 'vite'
 
 export function rscTransformUseServerPlugin(): Plugin {
@@ -20,10 +21,10 @@ export function rscTransformUseServerPlugin(): Plugin {
         return code
       }
 
-      let body
+      let body: Program['body']
 
       try {
-        body = acorn.parse(code, {
+        body = parse(code, {
           ecmaVersion: 2024,
           sourceType: 'module',
         }).body
@@ -68,7 +69,10 @@ export function rscTransformUseServerPlugin(): Plugin {
   }
 }
 
-function addLocalExportedNames(names: Map<string, string>, node: any) {
+function addLocalExportedNames(
+  names: Map<string, string>,
+  node: Pattern | AssignmentProperty | Expression,
+) {
   switch (node.type) {
     case 'Identifier':
       names.set(node.name, node.name)
@@ -106,13 +110,20 @@ function addLocalExportedNames(names: Map<string, string>, node: any) {
     case 'ParenthesizedExpression':
       addLocalExportedNames(names, node.expression)
       return
+
+    default:
+      throw new Error(`Unsupported node type: ${node.type}`)
   }
 }
 
-function transformServerModule(body: any, url: string, code: string): string {
+function transformServerModule(
+  body: Program['body'],
+  url: string,
+  code: string,
+): string {
   // If the same local name is exported more than once, we only need one of the names.
-  const localNames = new Map()
-  const localTypes = new Map()
+  const localNames = new Map<string, string>()
+  const localTypes = new Map<string, string>()
 
   for (let i = 0; i < body.length; i++) {
     const node = body[i]
@@ -157,7 +168,14 @@ function transformServerModule(body: any, url: string, code: string): string {
 
           for (let j = 0; j < specifiers.length; j++) {
             const specifier = specifiers[j]
-            localNames.set(specifier.local.name, specifier.exported.name)
+            if (
+              specifier.local.type === 'Identifier' &&
+              specifier.exported.type === 'Identifier'
+            ) {
+              localNames.set(specifier.local.name, specifier.exported.name)
+            } else {
+              throw new Error('Unsupported export specifier')
+            }
           }
         }
 
