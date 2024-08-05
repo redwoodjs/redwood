@@ -1,0 +1,19 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:never_used.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Dummy {
+  id Int @id @default(autoincrement())
+  uploadField String
+}
+
+model Dumbo {
+  id Int @id @default(autoincrement())
+  firstUpload String
+  secondUpload String
+}

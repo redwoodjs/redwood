@@ -67,7 +67,10 @@ export const createUploadsExtension = (
     args: runtime.JsArgs // @TODO: type this better this is actually a where
     fields: string[]
   }) {
-    const record = await prismaInstance[model].findFirstOrThrow(args)
+    const record =
+      // in the project its OK
+      // @ts-expect-error can't get prisma to stop complaining here
+      await prismaInstance[model as ModelNames].findFirstOrThrow(args)
 
     // Delete the file from the file system
     fields.forEach(async (field) => {
@@ -81,7 +84,8 @@ export const createUploadsExtension = (
   const resultExtends: ExtendsType['result'] = {}
 
   for (const modelName in config) {
-    const modelConfig = config[modelName] as UploadConfigForModel
+    // Guaranteed to have modelConfig, we're looping over config 🙄
+    const modelConfig = config[modelName as ModelNames] as UploadConfigForModel
     const uploadFields = Array.isArray(modelConfig.fields)
       ? modelConfig.fields
       : [modelConfig.fields]

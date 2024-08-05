@@ -8674,6 +8674,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/uploads@workspace:packages/uploads"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.3"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
@@ -8681,6 +8682,7 @@ __metadata:
     esbuild: "npm:0.23.0"
     fs-extra: "npm:11.2.0"
     mime-types: "npm:2.1.35"
+    publint: "npm:0.2.9"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     ulid: "npm:2.3.0"

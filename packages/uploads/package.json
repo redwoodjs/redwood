@@ -2,6 +2,7 @@
   "name": "@redwoodjs/uploads",
   "type": "module",
   "version": "7.0.0",
+  "types": "dist/prismaExtension.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -22,7 +23,9 @@
     "build": "tsx ./build.mts && run build:types",
     "build:pack": "yarn pack -o redwoodjs-uploads.tgz",
     "build:types": "tsc --build --verbose",
-    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json"
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
+    "check:attw": "tsx attw.ts",
+    "check:package": "concurrently npm:check:attw yarn publint"
   },
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
@@ -31,10 +34,13 @@
     "ulid": "2.3.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.3",
+    "@prisma/client": "5.17.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "@types/mime-types": "2.1.4",
     "esbuild": "0.23.0",
+    "publint": "0.2.9",
     "tsx": "4.16.2",
     "typescript": "5.5.4"
   },
