@@ -9,5 +9,11 @@
   },
   "include": ["src"],
   "references": [
+    {
+      "path": "../project-config"
+    },
+    {
+      "path": "../framework-tools"
+    },
   ]
 }
