@@ -1,6 +1,13 @@
+// @ts-ignore Who cares
 import { Scheduler } from './Scheduler'
 
-class RedwoodJob {
+export class RedwoodJob {
+  config: any
+  adapters: any
+  queues: any
+  logger: any
+  workers: any
+
   // config looks like:
   //   adapters: { [key: string]: BaseAdapter }
   //   queues: string[]
@@ -13,7 +20,7 @@ class RedwoodJob {
   //     deleteFailedJobs: boolean
   //     sleepDelay: number
   //     count: number
-  constructor(config) {
+  constructor(config: any) {
     this.config = config
 
     this.adapters = config.adapters
@@ -28,13 +35,14 @@ class RedwoodJob {
   //  priority: number
   //  wait: number  (either/or)
   //  waitUntil: Date
-  createScheduler(schedulerConfig) {
+  createScheduler(schedulerConfig: any) {
     const scheduler = new Scheduler({
       config: schedulerConfig,
       adapter: this.adapters[schedulerConfig.adapter],
       logger: this.logger,
     })
 
+    // @ts-ignore Who cares
     return (job, jobArgs = [], jobOptions = {}) => {
       return scheduler.schedule(job, jobArgs, jobOptions)
     }
@@ -47,11 +55,7 @@ class RedwoodJob {
   //   waitUntil: Date
   //   perform: function
   //   userDefinedFunction(s)
-  createJob(jobDefinition) {
+  createJob(jobDefinition: any) {
     return jobDefinition
-  }
-
-  createWorker() {
-    // coming soon
   }
 }
