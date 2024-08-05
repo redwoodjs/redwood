@@ -14,11 +14,11 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/dist/lib/loadEnvFiles.js'
 
-import { loadJobsConfig } from '../core/loaders'
-import type { WorkerConfig } from '../core/Worker'
+import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
+import { loadJobsConfig } from '../loaders'
 import type { BasicLogger } from '../types'
 
-export type NumWorkersConfig = Array<[string | null, number]> // [queue, id]
+export type NumWorkersConfig = Array<[number, number]>
 
 loadEnvFiles()
 
@@ -31,45 +31,9 @@ const parseArgs = (argv: string[]) => {
     )
     .command('work', 'Start a worker and process jobs')
     .command('workoff', 'Start a worker and exit after all jobs processed')
-    .command('start', 'Start workers in daemon mode', (yargs) => {
-      yargs
-        .option('n', {
-          type: 'string',
-          describe:
-            'Number of workers to start OR queue:num pairs of workers to start (see examples)',
-          default: '1',
-        })
-        .example(
-          '$0 start -n 2',
-          'Start the job runner with 2 workers in daemon mode',
-        )
-        .example(
-          '$0 start -n default:2,email:1',
-          'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue',
-        )
-    })
+    .command('start', 'Start workers in daemon mode')
     .command('stop', 'Stop any daemonized job workers')
-    .command(
-      'restart',
-      'Stop and start any daemonized job workers',
-      (yargs) => {
-        yargs
-          .option('n', {
-            type: 'string',
-            describe:
-              'Number of workers to start OR queue:num pairs of workers to start (see examples)',
-            default: '1',
-          })
-          .example(
-            '$0 restart -n 2',
-            'Restart the job runner with 2 workers in daemon mode',
-          )
-          .example(
-            '$0 restart -n default:2,email:1',
-            'Restart the job runner in daemon mode with 2 workers for the `default` queue and 1 for the `email` queue',
-          )
-      },
-    )
+    .command('restart', 'Stop and start any daemonized job workers')
     .command('clear', 'Clear the job queue')
     .demandCommand(1, 'You must specify a mode to start in')
     .example(
@@ -82,31 +46,39 @@ const parseArgs = (argv: string[]) => {
     )
     .help().argv
 
-  return { workerDef: parsed.n, command: parsed._[0] }
+  return { command: parsed._[0] }
 }
 
-const buildNumWorkers = (workerDef: string): NumWorkersConfig => {
-  // Builds up an array of arrays, with queue name and id:
-  //   `-n default:2,email:1` => [ ['default', 0], ['default', 1], ['email', 0] ]
-  // If only given a number of workers then queue name is null (all queues):
-  //   `-n 2` => [ [null, 0], [null, 1] ]
-  const workers: NumWorkersConfig = []
-
-  // default to one worker for commands that don't specify
-  if (!workerDef) {
-    workerDef = '1'
-  }
-
-  // if only a number was given, convert it to a nameless worker: `2` => `:2`
-  if (!isNaN(parseInt(workerDef))) {
-    workerDef = `:${workerDef}`
-  }
-
-  // split the queue:num pairs and build the workers array
-  workerDef.split(',').forEach((count: string) => {
-    const [queue, num] = count.split(':')
-    for (let i = 0; i < parseInt(num); i++) {
-      workers.push([queue || null, i])
+// Builds up an array of arrays, with the worker config index and id based on
+// how many workers should use this config. For the following config:
+//
+// {
+//   workers: [
+//     {
+//       adapter: 'prisma',
+//       count: 2,
+//       queue: 'default',
+//     },
+//     {
+//       adapter: 'prisma',
+//       count: 1,
+//       queue: 'email',
+//     },
+//   ]
+// }
+//
+// The output would be:
+//
+// [
+//   [0, 0],
+//   [0, 1],
+//   [1, 0],
+// ]
+const buildNumWorkers = (config: any) => {
+  // @ts-ignore who cares
+  const workers = config.map((worker: any, index: number) => {
+    for (let id = 0; id < worker.count; id++) {
+      return [index, id]
     }
   })
 
@@ -115,45 +87,25 @@ const buildNumWorkers = (workerDef: string): NumWorkersConfig => {
 
 const startWorkers = ({
   numWorkers,
-  workerConfig = {},
   detach = false,
   workoff = false,
   logger,
 }: {
   numWorkers: NumWorkersConfig
-  workerConfig: WorkerConfig
   detach?: boolean
   workoff?: boolean
   logger: BasicLogger
 }) => {
   logger.warn(`Starting ${numWorkers.length} worker(s)...`)
 
-  return numWorkers.map(([queue, id]) => {
+  return numWorkers.map(([index, id]) => {
     // list of args to send to the forked worker script
-    const workerArgs: string[] = ['--id', id.toString()]
-
-    if (queue) {
-      workerArgs.push('--queue', queue)
-    }
+    const workerArgs: string[] = []
+    workerArgs.push('--index', index.toString())
+    workerArgs.push('--id', id.toString())
 
     if (workoff) {
       workerArgs.push('--workoff')
-    }
-
-    if (workerConfig.maxAttempts) {
-      workerArgs.push('--max-attempts', workerConfig.maxAttempts.toString())
-    }
-
-    if (workerConfig.maxRuntime) {
-      workerArgs.push('--max-runtime', workerConfig.maxRuntime.toString())
-    }
-
-    if (workerConfig.deleteFailedJobs) {
-      workerArgs.push('--delete-failed-jobs')
-    }
-
-    if (workerConfig.sleepDelay) {
-      workerArgs.push('--sleep-delay', workerConfig.sleepDelay.toString())
     }
 
     // fork the worker process
@@ -173,6 +125,49 @@ const startWorkers = ({
 
     return worker
   })
+}
+
+// TODO add support for stopping with SIGTERM or SIGKILL?
+const stopWorkers = async ({
+  numWorkers,
+  // @ts-ignore who cares
+  workerConfig,
+  signal = 'SIGINT',
+  logger,
+}: {
+  numWorkers: NumWorkersConfig
+  signal: string
+  logger: BasicLogger
+}) => {
+  logger.warn(
+    `Stopping ${numWorkers.length} worker(s) gracefully (${signal})...`,
+  )
+
+  for (const [index, id] of numWorkers) {
+    const queue = workerConfig[index].queue
+    const workerTitle = `${PROCESS_TITLE_PREFIX}${queue ? `.${queue}` : ''}.${id}`
+    const processId = await findProcessId(workerTitle)
+
+    if (!processId) {
+      logger.warn(`No worker found with title ${workerTitle}`)
+      continue
+    }
+
+    logger.info(
+      `Stopping worker ${workerTitle} with process id ${processId}...`,
+    )
+    process.kill(processId, signal)
+
+    // wait for the process to actually exit before going to next iteration
+    while (await findProcessId(workerTitle)) {
+      await new Promise((resolve) => setTimeout(resolve, 250))
+    }
+  }
+}
+
+const clearQueue = ({ logger }: { logger: BasicLogger }) => {
+  logger.warn(`Starting worker to clear job queue...`)
+  fork(path.join(__dirname, 'worker.js'), ['--clear'])
 }
 
 const signalSetup = ({
@@ -240,59 +235,20 @@ const findProcessId = async (name: string): Promise<number | null> => {
   })
 }
 
-// TODO add support for stopping with SIGTERM or SIGKILL?
-const stopWorkers = async ({
-  numWorkers,
-  signal = 'SIGINT',
-  logger,
-}: {
-  numWorkers: NumWorkersConfig
-  signal: string
-  logger: BasicLogger
-}) => {
-  logger.warn(
-    `Stopping ${numWorkers.length} worker(s) gracefully (${signal})...`,
-  )
-
-  for (const [queue, id] of numWorkers) {
-    const workerTitle = `rw-jobs-worker${queue ? `.${queue}` : ''}.${id}`
-    const processId = await findProcessId(workerTitle)
-
-    if (!processId) {
-      logger.warn(`No worker found with title ${workerTitle}`)
-      continue
-    }
-
-    logger.info(
-      `Stopping worker ${workerTitle} with process id ${processId}...`,
-    )
-    process.kill(processId, signal)
-
-    // wait for the process to actually exit before going to next iteration
-    while (await findProcessId(workerTitle)) {
-      await new Promise((resolve) => setTimeout(resolve, 250))
-    }
-  }
-}
-
-const clearQueue = ({ logger }: { logger: BasicLogger }) => {
-  logger.warn(`Starting worker to clear job queue...`)
-  fork(path.join(__dirname, 'worker.js'), ['--clear'])
-}
-
 const main = async () => {
-  const { workerDef, command } = parseArgs(process.argv)
-  const numWorkers = buildNumWorkers(workerDef)
+  const { command } = parseArgs(process.argv)
+  let jobsConfig
 
-  // get the worker config defined in the app's job config file
-  const jobsConfig = await loadJobsConfig()
-  let logger
-
-  if (jobsConfig.logger) {
-    logger = jobsConfig.logger
-  } else {
-    logger = console
+  try {
+    jobsConfig = (await loadJobsConfig()).jobs
+  } catch (e) {
+    console.error(e)
+    process.exit(1)
   }
+
+  const workerConfig = jobsConfig.workers
+  const numWorkers = buildNumWorkers(workerConfig)
+  const logger = jobsConfig.logger ?? DEFAULT_LOGGER
 
   logger.warn(`Starting RedwoodJob Runner at ${new Date().toISOString()}...`)
 
@@ -300,16 +256,15 @@ const main = async () => {
     case 'start':
       startWorkers({
         numWorkers,
-        workerConfig: jobsConfig.workerConfig,
         detach: true,
         logger,
       })
       return process.exit(0)
     case 'restart':
-      await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
+      // @ts-ignore who cares
+      await stopWorkers({ numWorkers, workerConfig, signal: 'SIGINT', logger })
       startWorkers({
         numWorkers,
-        workerConfig: jobsConfig.workerConfig,
         detach: true,
         logger,
       })
@@ -318,7 +273,6 @@ const main = async () => {
       return signalSetup({
         workers: startWorkers({
           numWorkers,
-          workerConfig: jobsConfig.workerConfig,
           logger,
         }),
         logger,
@@ -327,14 +281,19 @@ const main = async () => {
       return signalSetup({
         workers: startWorkers({
           numWorkers,
-          workerConfig: jobsConfig.workerConfig,
           workoff: true,
           logger,
         }),
         logger,
       })
     case 'stop':
-      return await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
+      return await stopWorkers({
+        numWorkers,
+        // @ts-ignore who cares
+        workerConfig,
+        signal: 'SIGINT',
+        logger,
+      })
     case 'clear':
       return clearQueue({ logger })
   }
