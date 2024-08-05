@@ -5,15 +5,15 @@ import process from 'node:process'
 import { setTimeout } from 'node:timers'
 
 import type { BaseAdapter } from '../adapters/BaseAdapter'
-import type { BasicLogger } from '../types'
-
 import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_MAX_RUNTIME,
   DEFAULT_SLEEP_DELAY,
   DEFAULT_DELETE_FAILED_JOBS,
-} from './consts'
-import { AdapterRequiredError } from './errors'
+} from '../consts'
+import { AdapterRequiredError } from '../errors'
+import type { BasicLogger } from '../types'
+
 import { Executor } from './Executor'
 
 // The options set in api/src/lib/jobs.ts

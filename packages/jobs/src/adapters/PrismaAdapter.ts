@@ -28,7 +28,7 @@
 import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
-import { ModelNameError } from '../core/errors'
+import { ModelNameError } from '../errors'
 
 import type {
   BaseJob,

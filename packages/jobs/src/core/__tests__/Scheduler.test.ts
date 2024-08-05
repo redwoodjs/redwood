@@ -8,8 +8,8 @@ import {
   DEFAULT_QUEUE,
   DEFAULT_WAIT,
   DEFAULT_WAIT_UNTIL,
-} from '../consts.ts'
-import { AdapterNotConfiguredError, SchedulingError } from '../errors.ts'
+} from '../../consts.ts'
+import { AdapterNotConfiguredError, SchedulingError } from '../../errors.ts'
 import { Scheduler } from '../Scheduler.js'
 
 import { mockAdapter, mockLogger } from './mocks.ts'

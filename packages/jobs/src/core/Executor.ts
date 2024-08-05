@@ -3,15 +3,14 @@
 import console from 'node:console'
 
 import type { BaseAdapter } from '../adapters/BaseAdapter'
-import type { BasicLogger } from '../types'
-
-import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from './consts'
+import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from '../consts'
 import {
   AdapterRequiredError,
   JobRequiredError,
   JobExportNotFoundError,
-} from './errors'
-import { loadJob } from './loaders'
+} from '../errors'
+import { loadJob } from '../loaders'
+import type { BasicLogger } from '../types'
 
 interface Options {
   adapter: BaseAdapter

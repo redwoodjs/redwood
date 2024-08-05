@@ -3,12 +3,12 @@ import {
   DEFAULT_PRIORITY,
   DEFAULT_WAIT,
   DEFAULT_WAIT_UNTIL,
-} from './consts'
+} from '../consts'
 import {
   AdapterNotConfiguredError,
   QueueNotConfiguredError,
   SchedulingError,
-} from './errors'
+} from '../errors'
 
 export class Scheduler {
   constructor({ config, adapter, logger }) {
