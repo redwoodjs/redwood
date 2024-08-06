@@ -7,7 +7,10 @@ export function rscTransformUseServerPlugin(): Plugin {
     name: 'rsc-transform-use-server-plugin',
     transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
-      // bother parsing.
+      // bother parsing. This check doesn't have to be perfect. It's just a
+      // quick check to avoid doing a full parse to build an AST.
+      // Plesae benchmark before making any changes here.
+      // See https://github.com/redwoodjs/redwood/pull/11158
       if (!code.includes('use server')) {
         return code
       }
