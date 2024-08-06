@@ -5,7 +5,8 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, '**/fixtures'],
     deps: {
       interopDefault: false,
-    }
+    },
+    globalSetup: ['vitest.setup.mts'],
   },
 
 })

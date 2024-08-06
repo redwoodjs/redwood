@@ -44,6 +44,8 @@ type ResultExtends = {
   [key in ModelNames]?: {
     withDataUri: {
       needs: any
+      // @TODO(TS): this generates unknowns. We dont have access to the Prisma type here
+      // because it depends on the type it was called from
       compute: <T>(record: T) => () => Promise<T>
     }
     withPublicUrl: {
