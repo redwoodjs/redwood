@@ -11,8 +11,14 @@
   "license": "MIT",
   "exports": {
     "./prisma": {
-      "require": "./dist/cjs/prismaExtension.js",
-      "import": "./dist/prismaExtension.js"
+      "require": {
+        "types": "./dist/cjs/prismaExtension.d.ts",
+        "default": "./dist/cjs/prismaExtension.js"
+      },
+      "import": {
+        "types": "./dist/prismaExtension.d.ts",
+        "default": "./dist/prismaExtension.js"
+      }
     }
   },
   "files": [

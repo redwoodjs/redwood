@@ -1,4 +1,4 @@
 {
   "main": "./index.js",
-  "types": "../dist/cjs/prisma/index.d.ts"
+  "types": "../dist/cjs/prismaExtension.d.ts"
 }
