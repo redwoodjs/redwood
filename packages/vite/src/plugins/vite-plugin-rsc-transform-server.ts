@@ -22,8 +22,8 @@ export function rscTransformUseServerPlugin(): Plugin {
           ecmaVersion: 2024,
           sourceType: 'module',
         }).body
-      } catch (x: any) {
-        console.error('Error parsing %s %s', id, x.message)
+      } catch (e: any) {
+        console.error('Error parsing', id, e.message)
         return code
       }
 
