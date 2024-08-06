@@ -8,7 +8,7 @@ export function rscTransformUseServerPlugin(): Plugin {
     transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
       // bother parsing.
-      if (!code.includes('use server')) {
+      if (!code.includes("'use server'") && !code.includes('"use server"')) {
         return code
       }
 
