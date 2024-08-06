@@ -3,10 +3,6 @@
 // The process that actually starts an instance of Worker to process jobs.
 // Can be run independently with `yarn rw-jobs-worker` but by default is forked
 // by `yarn rw-jobs` and either monitored, or detached to run independently.
-//
-// If you want to get fancy and have different workers running with different
-// configurations, you need to invoke this script manually and pass the --config
-// option with the name of the named export from api/src/lib/jobs.js
 import console from 'node:console'
 import process from 'node:process'
 
@@ -18,30 +14,30 @@ import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_MAX_RUNTIME,
   DEFAULT_SLEEP_DELAY,
-  DEFAULT_ADAPTER_NAME,
-  DEFAULT_LOGGER_NAME,
-} from '../core/consts'
-import { AdapterNotFoundError, LoggerNotFoundError } from '../core/errors'
-import { loadJobsConfig } from '../core/loaders'
+  DEFAULT_WORK_QUEUE,
+  DEFAULT_LOGGER,
+  PROCESS_TITLE_PREFIX,
+} from '../consts'
 import { Worker } from '../core/Worker'
+import { AdapterNotFoundError, WorkerConfigIndexNotFoundError } from '../errors'
+import { loadJobsConfig } from '../loaders'
 import type { BasicLogger } from '../types'
-
-const TITLE_PREFIX = `rw-jobs-worker`
 
 const parseArgs = (argv: string[]) => {
   return yargs(hideBin(argv))
     .usage(
       'Starts a single RedwoodJob worker to process background jobs\n\nUsage: $0 [options]',
     )
-    .option('id', {
+    .option('index', {
       type: 'number',
-      description: 'The worker ID',
+      description:
+        'The index of the `workers` property from the exported `jobs` config to use to configure this worker',
       default: 0,
     })
-    .option('queue', {
-      type: 'string',
-      description: 'The named queue to work on',
-      default: null,
+    .option('id', {
+      type: 'number',
+      description: 'The worker count id to identify this worker',
+      default: 0,
     })
     .option('workoff', {
       type: 'boolean',
@@ -53,58 +49,11 @@ const parseArgs = (argv: string[]) => {
       default: false,
       description: 'Remove all jobs in the queue and exit',
     })
-    .option('maxAttempts', {
-      type: 'number',
-      default: DEFAULT_MAX_ATTEMPTS,
-      description: 'The maximum number of times a job can be attempted',
-    })
-    .option('maxRuntime', {
-      type: 'number',
-      default: DEFAULT_MAX_RUNTIME,
-      description: 'The maximum number of seconds a job can run',
-    })
-    .option('sleepDelay', {
-      type: 'number',
-      default: DEFAULT_SLEEP_DELAY,
-      description:
-        'The maximum number of seconds to wait between polling for jobs',
-    })
-    .option('deleteFailedJobs', {
-      type: 'boolean',
-      default: DEFAULT_DELETE_FAILED_JOBS,
-      description:
-        'Whether to remove failed jobs from the queue after max attempts',
-    })
-    .option('adapter', {
-      type: 'string',
-      default: DEFAULT_ADAPTER_NAME,
-      description:
-        'Name of the exported variable from the jobs config file that contains the adapter',
-    })
-    .option('logger', {
-      type: 'string',
-      description:
-        'Name of the exported variable from the jobs config file that contains the adapter',
-    })
     .help().argv
 }
 
-const setProcessTitle = ({
-  id,
-  queue,
-}: {
-  id: number
-  queue: string | null
-}) => {
-  // set the process title
-  let title = TITLE_PREFIX
-  if (queue) {
-    title += `.${queue}.${id}`
-  } else {
-    title += `.${id}`
-  }
-
-  process.title = title
+const setProcessTitle = ({ id, queue }: { id: number; queue: string }) => {
+  process.title = `${PROCESS_TITLE_PREFIX}.${queue}.${id}`
 }
 
 const setupSignals = ({
@@ -136,63 +85,50 @@ const setupSignals = ({
 }
 
 const main = async () => {
-  const {
-    id,
-    queue,
-    clear,
-    workoff,
-    maxAttempts,
-    maxRuntime,
-    sleepDelay,
-    deleteFailedJobs,
-    adapter: adapterName,
-    logger: loggerName,
-  } = await parseArgs(process.argv)
-  setProcessTitle({ id, queue })
+  const { index, id, clear, workoff } = await parseArgs(process.argv)
 
   let jobsConfig
 
-  // Pull the complex config options we can't pass on the command line directly
-  // from the app's jobs config file: `adapter` and `logger`. Remaining config
-  // is passed as command line flags. The rw-jobs script pulls THOSE config
-  // options from the jobs config, but if you're not using that script you need
-  // to pass manually. Calling this script directly is ADVANCED USAGE ONLY!
   try {
-    jobsConfig = await loadJobsConfig()
+    jobsConfig = (await loadJobsConfig()).jobs
   } catch (e) {
     console.error(e)
     process.exit(1)
   }
 
+  const workerConfig = jobsConfig.workers[index]
+
+  // Exit if the indexed worker options doesn't exist
+  if (!workerConfig) {
+    throw new WorkerConfigIndexNotFoundError(index)
+  }
+
+  const adapter = jobsConfig.adapters[workerConfig.adapter]
+
   // Exit if the named adapter isn't exported
-  if (!jobsConfig[adapterName]) {
-    throw new AdapterNotFoundError(adapterName)
+  if (!adapter) {
+    throw new AdapterNotFoundError(workerConfig.adapter)
   }
 
-  // Exit if the named logger isn't exported (if one was provided)
-  if (loggerName && !jobsConfig[loggerName]) {
-    throw new LoggerNotFoundError(loggerName)
-  }
-
-  // if a named logger was provided, use it, otherwise fall back to the default
-  // name, otherwise just use the console
-  const logger = loggerName
-    ? jobsConfig[loggerName]
-    : jobsConfig[DEFAULT_LOGGER_NAME] || console
+  // Use worker logger, or jobs worker, or fallback to console
+  const logger = workerConfig.logger ?? jobsConfig.logger ?? DEFAULT_LOGGER
 
   logger.info(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
+  setProcessTitle({ id, queue: workerConfig.queue })
+
   const worker = new Worker({
-    adapter: jobsConfig[adapterName],
+    adapter,
     logger,
-    maxAttempts,
-    maxRuntime,
-    sleepDelay,
-    deleteFailedJobs,
+    maxAttempts: workerConfig.maxAttempts ?? DEFAULT_MAX_ATTEMPTS,
+    maxRuntime: workerConfig.maxRuntime ?? DEFAULT_MAX_RUNTIME,
+    sleepDelay: workerConfig.sleepDelay ?? DEFAULT_SLEEP_DELAY,
+    deleteFailedJobs:
+      workerConfig.deleteFailedJobs ?? DEFAULT_DELETE_FAILED_JOBS,
     processName: process.title,
-    queue,
+    queue: workerConfig.queue ?? DEFAULT_WORK_QUEUE,
     workoff,
     clear,
   })

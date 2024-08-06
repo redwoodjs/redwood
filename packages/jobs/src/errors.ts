@@ -142,3 +142,9 @@ export class QueueNotDefinedError extends RedwoodJobError {
     super('Scheduler requires a named `queue` to place jobs in')
   }
 }
+
+export class WorkerConfigIndexNotFoundError extends RedwoodJobError {
+  constructor(index: number) {
+    super(`Worker index ${index} not found in jobs config`)
+  }
+}

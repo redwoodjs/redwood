@@ -1,17 +1,16 @@
 import type { BaseAdapter, SchedulePayload } from '../adapters/BaseAdapter'
-import type { BasicLogger, Job, ScheduleJobOptions } from '../types'
-
 import {
   DEFAULT_LOGGER,
   DEFAULT_PRIORITY,
   DEFAULT_WAIT,
   DEFAULT_WAIT_UNTIL,
-} from './consts'
+} from '../consts'
 import {
   AdapterNotConfiguredError,
   QueueNotDefinedError,
   SchedulingError,
-} from './errors'
+} from '../errors'
+import type { BasicLogger, Job, ScheduleJobOptions } from '../types'
 
 interface SchedulerConfig<TAdapter extends BaseAdapter> {
   adapter: TAdapter
@@ -31,7 +30,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  computeRunAt(wait: number, waitUntil: Date) {
+  computeRunAt(wait: number, waitUntil: Date | null) {
     if (wait && wait > 0) {
       return new Date(new Date().getTime() + wait * 1000)
     } else if (waitUntil) {

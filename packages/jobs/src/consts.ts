@@ -8,12 +8,11 @@ export const DEFAULT_SLEEP_DELAY = 5
 export const DEFAULT_DELETE_FAILED_JOBS = false
 export const DEFAULT_LOGGER = console
 export const DEFAULT_QUEUE = 'default'
+export const DEFAULT_WORK_QUEUE = '*'
 export const DEFAULT_PRIORITY = 50
-
-// TODO(jgmw): Confirm this
 export const DEFAULT_WAIT = 0
-// TODO(jgmw): Confirm this
-export const DEFAULT_WAIT_UNTIL = new Date(0)
+export const DEFAULT_WAIT_UNTIL = null
+export const PROCESS_TITLE_PREFIX = 'rw-jobs-worker'
 
 /**
  * The name of the exported variable from the jobs config file that contains
