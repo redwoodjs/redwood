@@ -8,7 +8,12 @@ import { ulid } from 'ulid'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-type FilterOutDollarPrefixed<T> = T extends `$${string}` ? never : T
+type FilterOutDollarPrefixed<T> = T extends `$${string}`
+  ? never
+  : T extends symbol // Remove symbol here, because it doesn't help users
+    ? never
+    : T
+
 // Filter out $on, $connect, etc.
 type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
 
@@ -59,19 +64,20 @@ export const createUploadsExtension = (
   // but without these types prisma won''t show types for the new methods
   const prismaInstance = new PrismaClient()
 
-  async function deleteUploadsFromDiskForArgs({
+  async function deleteUploadsFromDiskForArgs<T extends runtime.JsArgs>({
     model,
     args,
     fields,
   }: {
     model: string
-    args: runtime.JsArgs // @TODO: type this better this is actually a where
+    args: T
     fields: string[]
   }) {
-    const record =
-      // in the project its OK
-      // @ts-expect-error can't get prisma to stop complaining here
-      await prismaInstance[model as ModelNames].findFirstOrThrow(args)
+    // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
+    // Ideally there's a better way to do this
+    const record = await (
+      prismaInstance[model as ModelNames] as any
+    ).findFirstOrThrow(args)
 
     // Delete the file from the file system
     fields.forEach(async (field) => {
