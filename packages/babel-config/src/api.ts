@@ -20,6 +20,7 @@ import pluginRedwoodContextWrapping from './plugins/babel-plugin-redwood-context
 import pluginRedwoodDirectoryNamedImport from './plugins/babel-plugin-redwood-directory-named-import'
 import pluginRedwoodGraphqlOptionsExtract from './plugins/babel-plugin-redwood-graphql-options-extract'
 import pluginRedwoodImportDir from './plugins/babel-plugin-redwood-import-dir'
+import pluginRedwoodJobPathInjector from './plugins/babel-plugin-redwood-job-path-injector'
 import pluginRedwoodOTelWrapping from './plugins/babel-plugin-redwood-otel-wrapping'
 
 export const TARGETS_NODE = '20.10'
@@ -177,6 +178,12 @@ export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
           },
         ],
       ],
+    },
+    // Add import names and paths to job definitions
+    {
+      // match */api/src/jobs/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])jobs(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [[pluginRedwoodJobPathInjector]],
     },
   ].filter(Boolean)
   return overrides as TransformOptions[]
