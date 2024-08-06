@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 
 import { PrismaClient } from '@prisma/client'
+import { vol } from 'memfs'
 import { describe, it, vi, expect } from 'vitest'
 
 import { createUploadsExtension } from '../prismaExtension'
@@ -10,8 +11,21 @@ import { dataUrlPng } from './fileMocks'
 vi.mock('node:fs/promises', () => ({
   default: {
     writeFile: vi.fn(),
+    unlink: vi.fn(),
+    readFile: vi.fn((path, encoding) => {
+      if (encoding === 'base64url') {
+        return 'BASE64::THIS_IS_A_MOCKED_DATA_URL'
+      }
+
+      return 'MOCKED_FILE_CONTENT'
+    }),
   },
 }))
+
+vol.fromJSON({
+  '/tmp/tus-uploads/123.json': '{}',
+  '/tmp/tus-uploads/ABCD.json': '{}',
+})
 
 describe('Uploads Prisma Extension', () => {
   const dummyUploadConfig = {
@@ -25,11 +39,18 @@ describe('Uploads Prisma Extension', () => {
     savePath: '/dumbo',
     onFileSaved: vi.fn(),
   }
+
+  const tusConfig = {
+    tusUploadDirectory: '/tmp/tus-uploads',
+  }
   const prismaClient = new PrismaClient().$extends(
-    createUploadsExtension({
-      dummy: dummyUploadConfig,
-      dumbo: dumboUploadConfig,
-    }),
+    createUploadsExtension(
+      {
+        dummy: dummyUploadConfig,
+        dumbo: dumboUploadConfig,
+      },
+      tusConfig,
+    ),
   )
 
   describe('Query extensions', () => {
@@ -72,16 +93,91 @@ describe('Uploads Prisma Extension', () => {
       await expect(emptyUploadFieldPromise).resolves.not.toThrow()
     })
 
-    // @TODO implement these tests
-    // it('handles updates, and removes old files', async () => {})
+    it('handles updates, and removes old files', async () => {
+      const dum1 = await prismaClient.dummy.create({
+        data: {
+          uploadField: dataUrlPng,
+        },
+      })
 
-    // it('handles deletes, and removes files', async () => {})
+      const originalPath = dum1.uploadField
 
-    // it('supports custom file name functions', async () => {})
+      const dum2 = await prismaClient.dummy.update({
+        where: { id: dum1.id },
+        data: {
+          uploadField: dataUrlPng,
+        },
+      })
 
-    // it('supports custom save path functions', async () => {})
+      expect(dum2.uploadField).not.toEqual(originalPath)
+      expect(dum2.uploadField).toMatch(/bazinga\/.*\.png/)
+      expect(fs.unlink).toHaveBeenCalledWith(originalPath)
+    })
 
-    // it('will move file to new location with TUS uploads', async () => {})
+    it('handles deletes, and removes files', async () => {
+      const dum1 = await prismaClient.dummy.create({
+        data: {
+          uploadField: dataUrlPng,
+        },
+      })
+
+      await prismaClient.dummy.delete({
+        where: { id: dum1.id },
+      })
+
+      expect(fs.unlink).toHaveBeenCalledWith(dum1.uploadField)
+    })
+
+    it('supports custom file name and save path functions', async () => {
+      const customNameConfig = {
+        fields: 'firstUpload',
+        savePath: '/custom',
+        onFileSaved: vi.fn(),
+        fileName: (args) => {
+          // 👇 Using args here
+          return `my-name-is-dumbo-${args.data.id}`
+        },
+      }
+
+      const clientWithFileName = new PrismaClient().$extends(
+        createUploadsExtension({
+          dumbo: customNameConfig,
+        }),
+      )
+
+      const dumbo = await clientWithFileName.dumbo.create({
+        data: {
+          firstUpload: dataUrlPng,
+          secondUpload: '',
+          id: 55,
+        },
+      })
+
+      expect(customNameConfig.onFileSaved).toHaveBeenCalled()
+      expect(dumbo.firstUpload).toBe('/custom/my-name-is-dumbo-55.png')
+
+      // Delete it to clean up
+      await clientWithFileName.dumbo.delete({
+        where: {
+          id: 55,
+        },
+      })
+    })
+
+    // @TODO have to figure out how to mock the
+    // it('will move file to new location with TUS uploads', async () => {
+    //   const dumbo = await prismaClient.dumbo.create({
+    //     data: {
+    //       firstUpload:
+    //         'http://example.com/.redwood/functions/tusUploadEndpoint/123',
+    //       secondUpload:
+    //         'http://example.com/.redwood/functions/tusUploadEndpoint/ABCD',
+    //     },
+    //   })
+
+    //   expect(dumbo.firstUpload).toBe('balknsdg')
+    //   expect(dumbo.secondUpload).toBe('balknsdg')
+    // })
 
     // it('will remove old file when updating with TUS uploads', async () => {})
 
@@ -89,9 +185,20 @@ describe('Uploads Prisma Extension', () => {
   })
 
   describe('Result extensions', () => {
-    it('will return a data URL for the file', async () => {})
+    it('will return a data URL for the file', async () => {
+      const res1 = await (
+        await prismaClient.dummy.create({
+          data: {
+            uploadField: dataUrlPng,
+          },
+        })
+      ).withDataUri() // WHY NO TYPES?
+
+      // Mocked in FS mocks
+      expect(res1.uploadField).toBe('BASE64::THIS_IS_A_MOCKED_DATA_URL')
+    })
+
     // @TODO implement
-    // it('will return a public URL for the file', async () => {})
     // it('if file is not found, will throw an error', async () => {})
     // it('if saved file is not a path, will throw an error', async () => {})
   })

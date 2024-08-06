@@ -142,40 +142,38 @@ export const createUploadsExtension = (
       // findMany({ query, args, operation }) {}
     }
 
+    // This makes the result extension only available for models with uploadFields
+    const needs = Object.fromEntries(uploadFields.map((field) => [field, true]))
+    console.log(`👉 \n ~ needs:`, needs)
+
     resultExtends[modelName] = {
       withDataUri: {
-        needs: { avatar: true }, // specify the field name here, so it doesn't appear as a function if avatar isn't requested
-        compute(contact) {
+        needs,
+        compute(modelData) {
           return async () => {
+            const base64UploadFields: Record<keyof typeof needs, string> = {}
+            for await (const field of uploadFields) {
+              base64UploadFields[field] = await fs.readFile(
+                modelData[field],
+                'base64url',
+              )
+            }
+
             // @TODO: edge cases
             // 1. If readfile fails - file not found, etc.
             // 2. If not a path, relative or absolute, throw error
-            const base64Content = await fs.readFile(contact.avatar, 'base64url')
+
             return {
-              ...contact,
-              avatar: base64Content,
-            }
-          }
-        },
-      },
-      withPublicUrl: {
-        needs: { avatar: true }, // specify the field name here, so it doesn't appear as a function if avatar isn't requested
-        compute(contact) {
-          return async () => {
-            // @TODO: Test cases
-            // 1. If the avatar is a base64 string, we should return it as is, but warn
-            // 2. If absolute path, but not public, throw error
-            // 3. If relative path, but not public, throw error
-            const webPublicPath = contact.avatar.replace('web/public', '')
-            return {
-              ...contact,
-              avatar: webPublicPath,
+              ...modelData,
+              ...base64UploadFields,
             }
           }
         },
       },
     }
   }
+
+  console.log('xxxx resultExtends', resultExtends)
 
   return {
     name: 'redwood-upload-prisma-plugin',
@@ -301,6 +299,8 @@ async function saveTusUpload(
     fileName: string
   },
 ) {
+  // Get the last part of the TUS upload url
+  // http://localhost:8910/.redwood/functions/uploadTUS/👉28fa96bf5772338d51👈
   const tusId = uploadUrl.split('/').slice(-1).pop()
 
   if (!tusId) {
