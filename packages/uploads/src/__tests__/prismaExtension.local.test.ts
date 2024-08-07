@@ -24,8 +24,8 @@ vi.mock('node:fs/promises', () => ({
     writeFile: vi.fn(),
     unlink: vi.fn(),
     readFile: vi.fn((path, encoding) => {
-      if (encoding === 'base64url') {
-        return 'BASE64::THIS_IS_A_MOCKED_DATA_URL'
+      if (encoding === 'base64') {
+        return 'BASE64_FILE_CONTENT'
       }
 
       return 'MOCKED_FILE_CONTENT'
@@ -43,7 +43,6 @@ describe.runIf(shouldRunPrismaExtensionTests)(
   () => {
     beforeAll(async () => {
       console.log('[setup] Setting up unit test prisma db....')
-      await $`yarn clean:prisma`
       await $`npx prisma migrate reset -f --skip-seed --schema src/__tests__/unit-test-schema.prisma`
       console.log('[setup] Done! \n')
     })
@@ -215,7 +214,9 @@ describe.runIf(shouldRunPrismaExtensionTests)(
         ).withDataUri()
 
         // Mocked in FS mocks
-        expect(res1.uploadField).toBe('BASE64::THIS_IS_A_MOCKED_DATA_URL')
+        expect(res1.uploadField).toBe(
+          'data:image/png;base64,BASE64_FILE_CONTENT',
+        )
       })
 
       // @TODO implement
