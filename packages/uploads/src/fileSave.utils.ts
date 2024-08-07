@@ -83,7 +83,6 @@ export async function saveTusUpload(
         path.join(getPaths().base, tusConfig.tusUploadDirectory),
     `${tusId}.json`,
   )
-  // Can't await import, because JSON file.
   const tusMeta = await import(metaFile)
 
   const fileExtension = tusMeta.metadata.filetype.split('/')[1]
