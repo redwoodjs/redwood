@@ -20,7 +20,7 @@ import {
 } from '../consts'
 import { Worker } from '../core/Worker'
 import { AdapterNotFoundError, WorkerConfigIndexNotFoundError } from '../errors'
-import { loadJobsConfig } from '../loaders'
+import { loadJobsManager } from '../loaders'
 import type { BasicLogger } from '../types'
 
 const parseArgs = (argv: string[]) => {
@@ -52,8 +52,14 @@ const parseArgs = (argv: string[]) => {
     .help().argv
 }
 
-const setProcessTitle = ({ id, queue }: { id: number; queue: string }) => {
-  process.title = `${PROCESS_TITLE_PREFIX}.${queue}.${id}`
+const setProcessTitle = ({
+  id,
+  queue,
+}: {
+  id: number
+  queue: string | string[]
+}) => {
+  process.title = `${PROCESS_TITLE_PREFIX}.${[queue].flat().join('-')}.${id}`
 }
 
 const setupSignals = ({
@@ -90,7 +96,7 @@ const main = async () => {
   let jobsConfig
 
   try {
-    jobsConfig = (await loadJobsConfig()).jobs
+    jobsConfig = loadJobsManager()
   } catch (e) {
     console.error(e)
     process.exit(1)
@@ -128,7 +134,7 @@ const main = async () => {
     deleteFailedJobs:
       workerConfig.deleteFailedJobs ?? DEFAULT_DELETE_FAILED_JOBS,
     processName: process.title,
-    queue: workerConfig.queue ?? DEFAULT_WORK_QUEUE,
+    queues: [workerConfig.queue ?? DEFAULT_WORK_QUEUE].flat(),
     workoff,
     clear,
   })

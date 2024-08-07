@@ -12,11 +12,13 @@ import { setTimeout } from 'node:timers'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli-helpers/dist/lib/loadEnvFiles.js'
+// @ts-expect-error - doesn't understand dual CJS/ESM export
+import * as cliHelperLoadEnv from '@redwoodjs/cli-helpers/loadEnvFiles'
+const { loadEnvFiles } = cliHelperLoadEnv
 
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
-import { loadJobsConfig } from '../loaders'
-import type { BasicLogger } from '../types'
+import { loadJobsManager } from '../loaders'
+import type { Adapters, BasicLogger, WorkerConfig } from '../types'
 
 export type NumWorkersConfig = Array<[number, number]>
 
@@ -70,15 +72,16 @@ const parseArgs = (argv: string[]) => {
 // The output would be:
 //
 // [
-//   [0, 0],
-//   [0, 1],
-//   [1, 0],
+//   [0, 0], // first array, first worker
+//   [0, 1], // first array, second worker
+//   [1, 0], // second array, first worker
 // ]
 const buildNumWorkers = (config: any) => {
-  // @ts-ignore who cares
-  const workers = config.map((worker: any, index: number) => {
+  const workers: NumWorkersConfig = []
+
+  config.map((worker: any, index: number) => {
     for (let id = 0; id < worker.count; id++) {
-      return [index, id]
+      workers.push([index, id])
     }
   })
 
@@ -130,8 +133,6 @@ const startWorkers = ({
 // TODO add support for stopping with SIGTERM or SIGKILL?
 const stopWorkers = async ({
   numWorkers,
-  // @ts-ignore who cares
-  workerConfig,
   signal = 'SIGINT',
   logger,
 }: {
@@ -143,23 +144,19 @@ const stopWorkers = async ({
     `Stopping ${numWorkers.length} worker(s) gracefully (${signal})...`,
   )
 
-  for (const [index, id] of numWorkers) {
-    const queue = workerConfig[index].queue
-    const workerTitle = `${PROCESS_TITLE_PREFIX}${queue ? `.${queue}` : ''}.${id}`
-    const processId = await findProcessId(workerTitle)
+  const processIds = await findWorkerProcesses()
 
-    if (!processId) {
-      logger.warn(`No worker found with title ${workerTitle}`)
-      continue
-    }
+  if (processIds.length === 0) {
+    logger.warn(`No running workers found.`)
+    return
+  }
 
-    logger.info(
-      `Stopping worker ${workerTitle} with process id ${processId}...`,
-    )
+  for (const processId of processIds) {
+    logger.info(`Stopping process id ${processId}...`)
     process.kill(processId, signal)
 
     // wait for the process to actually exit before going to next iteration
-    while (await findProcessId(workerTitle)) {
+    while ((await findWorkerProcesses(processId)).length) {
       await new Promise((resolve) => setTimeout(resolve, 250))
     }
   }
@@ -200,19 +197,19 @@ const signalSetup = ({
 }
 
 // Find the process id of a worker by its title
-const findProcessId = async (name: string): Promise<number | null> => {
+const findWorkerProcesses = async (id?: number): Promise<number[]> => {
   return new Promise(function (resolve, reject) {
     const plat = process.platform
     const cmd =
       plat === 'win32'
         ? 'tasklist'
         : plat === 'darwin'
-          ? 'ps -ax | grep ' + name
+          ? 'ps -ax | grep ' + PROCESS_TITLE_PREFIX
           : plat === 'linux'
             ? 'ps -A'
             : ''
-    if (cmd === '' || name === '') {
-      resolve(null)
+    if (cmd === '') {
+      resolve([])
     }
     exec(cmd, function (err, stdout) {
       if (err) {
@@ -226,10 +223,20 @@ const findProcessId = async (name: string): Promise<number | null> => {
         }
         return true
       })
+
+      // no job workers running
       if (matches.length === 0) {
-        resolve(null)
+        resolve([])
+      }
+
+      const pids = matches.map((line) => parseInt(line.split(' ')[0]))
+
+      if (id) {
+        // will return the single job worker process ID if still running
+        resolve(pids.filter((pid) => pid === id))
       } else {
-        resolve(parseInt(matches[0].split(' ')[0]))
+        // return all job worker process IDs
+        resolve(pids)
       }
     })
   })
@@ -240,13 +247,13 @@ const main = async () => {
   let jobsConfig
 
   try {
-    jobsConfig = (await loadJobsConfig()).jobs
+    jobsConfig = loadJobsManager()
   } catch (e) {
     console.error(e)
     process.exit(1)
   }
 
-  const workerConfig = jobsConfig.workers
+  const workerConfig: WorkerConfig<Adapters, string[]>[] = jobsConfig.workers
   const numWorkers = buildNumWorkers(workerConfig)
   const logger = jobsConfig.logger ?? DEFAULT_LOGGER
 
@@ -261,8 +268,7 @@ const main = async () => {
       })
       return process.exit(0)
     case 'restart':
-      // @ts-ignore who cares
-      await stopWorkers({ numWorkers, workerConfig, signal: 'SIGINT', logger })
+      await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
       startWorkers({
         numWorkers,
         detach: true,
@@ -289,8 +295,6 @@ const main = async () => {
     case 'stop':
       return await stopWorkers({
         numWorkers,
-        // @ts-ignore who cares
-        workerConfig,
         signal: 'SIGINT',
         logger,
       })
