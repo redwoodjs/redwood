@@ -34,8 +34,7 @@
     "check:package": "concurrently npm:check:attw yarn publint",
     "setup:test": "npx prisma migrate reset -f --schema src/__tests__/unit-test-schema.prisma",
     "test": "vitest run",
-    "test:watch": "vitest watch",
-    "test:prismaExtension": "PRISMA_EXTENSION_TESTS=true vitest run"
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",

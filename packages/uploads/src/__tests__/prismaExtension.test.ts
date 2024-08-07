@@ -2,8 +2,7 @@ import fs from 'node:fs/promises'
 
 import { PrismaClient } from '@prisma/client'
 import { vol } from 'memfs'
-import { describe, it, vi, expect, beforeAll } from 'vitest'
-import { $ } from 'zx'
+import { describe, it, vi, expect } from 'vitest'
 
 import { createUploadsExtension } from '../prismaExtension'
 
@@ -36,12 +35,6 @@ vol.fromJSON({
 })
 
 describe('Uploads Prisma Extension', () => {
-  beforeAll(async () => {
-    console.log('[setup] Setting up unit test prisma db....')
-    await $`npx prisma migrate reset -f --skip-seed --schema src/__tests__/unit-test-schema.prisma`
-    console.log('[setup] Done! \n')
-  })
-
   const dummyUploadConfig = {
     fields: 'uploadField',
     savePath: '/bazinga',
