@@ -69,12 +69,11 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     [K in MNames]: {
       withDataUri: {
         needs: Record<string, boolean>
-        compute: (
-          // @MARK: this is a hack
-          // There has to be a better way to type this... because if you used a select or omit
-          // it would be a different type
-          modelData: ReturnType<PrismaClient[K]['findFirst']>,
-        ) => () => ReturnType<PrismaClient[K]['findFirst']>
+        compute: <T>(
+          // @MARK: this generic doesn't get picked up by prisma
+          // the returned type ends up being unknown
+          modelData: T,
+        ) => () => Promise<T>
       }
     }
   }
@@ -163,7 +162,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   return Prisma.defineExtension((client) => {
     return client.$extends({
       name: 'redwood-upload-prisma-plugin',
-      // query: queryExtends,
+      query: queryExtends,
       result: resultExtends,
     })
   })
