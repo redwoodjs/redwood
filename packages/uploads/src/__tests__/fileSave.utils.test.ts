@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 
 import {
   getFileExtensionFromDataUri,
@@ -24,29 +24,6 @@ describe('getFileExtension', () => {
 })
 
 describe('saveUploadToFile', () => {
-  vi.mock('node:fs/promises', () => ({
-    default: {
-      writeFile: vi.fn(),
-      unlink: vi.fn(),
-      // readFile: vi.fn((path, encoding) => {
-      //   if (encoding === 'base64') {
-      //     return 'BASE64_FILE_CONTENT'
-      //   }
-
-      //   return 'MOCKED_FILE_CONTENT'
-      // }),
-    },
-  }))
-
-  // it('Should call saveBase64DataUriToFile if the uploadUrlOrDataUrl is a base64 data uri', async () => {
-  //   saveUploadToFile('data:image/png;base64,....', {
-  //     saveDir: 'uploads',
-  //     fileName: 'test',
-  //   })
-  // })
-
-  // it('Should call saveTusFileToFile if the uploadUrlOrDataUrl is a tus url', async () => {})
-
   it('Should throw an error if the uploadUrlOrDataUrl is not a base64 data uri or a tus url', async () => {
     try {
       await saveUploadToFile('/random/path/to/whatever.png', {
