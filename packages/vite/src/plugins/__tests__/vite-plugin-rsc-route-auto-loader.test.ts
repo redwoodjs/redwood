@@ -1,18 +1,28 @@
 import path from 'node:path'
 
 import { vol } from 'memfs'
+import type { TransformPluginContext } from 'rollup'
 import { normalizePath } from 'vite'
-
-import { afterAll, beforeAll, describe, it, expect, vi, Mock, beforeEach, afterEach } from 'vitest'
+import {
+  afterAll,
+  beforeAll,
+  describe,
+  it,
+  expect,
+  vi,
+  afterEach,
+} from 'vitest'
 
 import { processPagesDir } from '@redwoodjs/project-config'
 import type * as ProjectConfig from '@redwoodjs/project-config'
 
-import { rscRoutesAutoLoader } from '../vite-plugin-rsc-routes-auto-loader'
+import { rscRoutesAutoLoader } from '../vite-plugin-rsc-routes-auto-loader.js'
 
 vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
+const TEST_RWJS_CWD = '/Users/mojombo/rw-app/'
 const RWJS_CWD = process.env.RWJS_CWD
+process.env.RWJS_CWD = TEST_RWJS_CWD
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
@@ -27,41 +37,43 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
         },
       }
     },
-    processPagesDir: vi.fn(),
+    processPagesDir: vi.fn(() => pages),
   }
 })
 
+const id = path.join(TEST_RWJS_CWD, 'web', 'src', 'Routes.tsx')
+
+let pluginTransform: ReturnType<typeof getPluginTransform>
+
+function getPluginTransform() {
+  const plugin = rscRoutesAutoLoader()
+  if (typeof plugin.transform !== 'function') {
+    throw new Error('Expected plugin to have a `transform` function')
+  }
+
+  // Calling `bind` to please TS https://stackoverflow.com/a/70463512/88106
+  // Typecasting because we're only going to call transform, and we don't need
+  // anything provided by the context.
+  return plugin.transform.bind({} as TransformPluginContext)
+}
+
 beforeAll(() => {
   // Add a toml entry for getPaths et al.
-  process.env.RWJS_CWD = '/Users/mojombo/rw-app/'
-  vol.fromJSON({
-    'redwood.toml': '',
-  }, process.env.RWJS_CWD)
+  vol.fromJSON({ 'redwood.toml': '' }, TEST_RWJS_CWD)
+  pluginTransform = getPluginTransform()
 })
 
 afterAll(() => {
   process.env.RWJS_CWD = RWJS_CWD
 })
 
+afterEach(() => {
+  vi.resetAllMocks()
+})
+
 describe('rscRoutesAutoLoader', () => {
-  beforeEach(() => {
-    (processPagesDir as Mock).mockReturnValue(pages)
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   it('should insert the correct imports for non-ssr', async () => {
-    const plugin = rscRoutesAutoLoader()
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    // Calling `bind` to please TS
-    // See https://stackoverflow.com/a/70463512/88106
-    const id = path.join(process.env.RWJS_CWD!, 'web', 'src', 'Routes.tsx')
-    const output = await plugin.transform.bind({})(
+    const output = await pluginTransform(
       `import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
       import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
@@ -89,7 +101,7 @@ describe('rscRoutesAutoLoader', () => {
       export default Routes;`,
       normalizePath(id),
       // Passing undefined here to explicitly demonstrate that we're not passing { ssr: true }
-      undefined
+      undefined,
     )
 
     // What we are interested in seeing here is:
@@ -170,15 +182,7 @@ describe('rscRoutesAutoLoader', () => {
   })
 
   it('should insert the correct imports for ssr', async () => {
-    const plugin = rscRoutesAutoLoader()
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    // Calling `bind` to please TS
-    // See https://stackoverflow.com/a/70463512/88106
-    const id = path.join(process.env.RWJS_CWD!, 'web', 'src', 'Routes.tsx')
-    const output = await plugin.transform.bind({})(
+    const output = await pluginTransform(
       `import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
       import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
@@ -205,7 +209,7 @@ describe('rscRoutesAutoLoader', () => {
       };
       export default Routes;`,
       normalizePath(id),
-      { ssr: true }
+      { ssr: true },
     )
 
     // What we are interested in seeing here is:
@@ -287,18 +291,11 @@ describe('rscRoutesAutoLoader', () => {
   })
 
   it('should throw for duplicate page import names', async () => {
-    (processPagesDir as Mock).mockReturnValue(pagesWithDuplicate)
+    vi.mocked(processPagesDir).mockReturnValue(pagesWithDuplicate)
 
     const getOutput = async () => {
-      const plugin = rscRoutesAutoLoader()
-      if (typeof plugin.transform !== 'function') {
-        return
-      }
-
-      // Calling `bind` to please TS
-      // See https://stackoverflow.com/a/70463512/88106
-      const id = path.join(process.env.RWJS_CWD!, 'web', 'src', 'Routes.tsx')
-      const output = await plugin.transform.bind({})(
+      const pluginTransform = getPluginTransform()
+      const output = await pluginTransform(
         `import { jsx, jsxs } from "react/jsx-runtime";
         import { Router, Route, Set } from "@redwoodjs/router";
         import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
@@ -331,20 +328,12 @@ describe('rscRoutesAutoLoader', () => {
     }
 
     expect(getOutput).rejects.toThrowErrorMatchingInlineSnapshot(
-      "[Error: Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the following page directories: 'AboutPage']"
+      "[Error: Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' in the following page directories: 'AboutPage']",
     )
   })
 
   it('should handle existing imports in the routes file', async () => {
-    const plugin = rscRoutesAutoLoader()
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    // Calling `bind` to please TS
-    // See https://stackoverflow.com/a/70463512/88106
-    const id = path.join(process.env.RWJS_CWD!, 'web', 'src', 'Routes.tsx')
-    const output = await plugin.transform.bind({})(
+    const output = await pluginTransform(
       `import { jsx, jsxs } from "react/jsx-runtime";
       import { Router, Route, Set } from "@redwoodjs/router";
       import NavigationLayout from "./layouts/NavigationLayout/NavigationLayout";
@@ -372,14 +361,13 @@ describe('rscRoutesAutoLoader', () => {
       };
       export default Routes;`,
       normalizePath(id),
-      undefined
+      undefined,
     )
 
     // We don't have to add calls for the AboutPage as it was already imported
     expect(output).not.toContain('renderFromDist("AboutPage")')
     expect(output).not.toContain('renderFromRscServer("AboutPage")')
   })
-
 })
 
 const pages = [
@@ -388,60 +376,70 @@ const pages = [
     constName: 'AboutPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage',
     path: '/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage.tsx',
-    importStatement: "const AboutPage = { name: 'AboutPage', loader: import('/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage') }"
+    importStatement:
+      "const AboutPage = { name: 'AboutPage', loader: import('/Users/mojombo/rw-app/web/src/pages/AboutPage/AboutPage') }",
   },
   {
     importName: 'FatalErrorPage',
     constName: 'FatalErrorPage',
-    importPath: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage',
+    importPath:
+      '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage',
     path: '/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage.tsx',
-    importStatement: "const FatalErrorPage = { name: 'FatalErrorPage', loader: import('/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage') }"
+    importStatement:
+      "const FatalErrorPage = { name: 'FatalErrorPage', loader: import('/Users/mojombo/rw-app/web/src/pages/FatalErrorPage/FatalErrorPage') }",
   },
   {
     importName: 'HomePage',
     constName: 'HomePage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage',
     path: '/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage.tsx',
-    importStatement: "const HomePage = { name: 'HomePage', loader: import('/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage') }"
+    importStatement:
+      "const HomePage = { name: 'HomePage', loader: import('/Users/mojombo/rw-app/web/src/pages/HomePage/HomePage') }",
   },
   {
     importName: 'NotFoundPage',
     constName: 'NotFoundPage',
     importPath: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage',
     path: '/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage.tsx',
-    importStatement: "const NotFoundPage = { name: 'NotFoundPage', loader: import('/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage') }"
+    importStatement:
+      "const NotFoundPage = { name: 'NotFoundPage', loader: import('/Users/mojombo/rw-app/web/src/pages/NotFoundPage/NotFoundPage') }",
   },
   {
     importName: 'EmptyUserEditEmptyUserPage',
     constName: 'EmptyUserEditEmptyUserPage',
-    importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage',
+    importPath:
+      '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage.tsx',
-    importStatement: "const EmptyUserEditEmptyUserPage = { name: 'EmptyUserEditEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage') }"
+    importStatement:
+      "const EmptyUserEditEmptyUserPage = { name: 'EmptyUserEditEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EditEmptyUserPage/EditEmptyUserPage') }",
   },
   {
     importName: 'EmptyUserEmptyUserPage',
     constName: 'EmptyUserEmptyUserPage',
-    importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage',
+    importPath:
+      '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage.tsx',
-    importStatement: "const EmptyUserEmptyUserPage = { name: 'EmptyUserEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage') }"
+    importStatement:
+      "const EmptyUserEmptyUserPage = { name: 'EmptyUserEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUserPage/EmptyUserPage') }",
   },
   {
     importName: 'EmptyUserEmptyUsersPage',
     constName: 'EmptyUserEmptyUsersPage',
-    importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage',
+    importPath:
+      '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage.tsx',
-    importStatement: "const EmptyUserEmptyUsersPage = { name: 'EmptyUserEmptyUsersPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage') }"
+    importStatement:
+      "const EmptyUserEmptyUsersPage = { name: 'EmptyUserEmptyUsersPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/EmptyUsersPage/EmptyUsersPage') }",
   },
   {
     importName: 'EmptyUserNewEmptyUserPage',
     constName: 'EmptyUserNewEmptyUserPage',
-    importPath: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage',
+    importPath:
+      '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage',
     path: '/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage.tsx',
-    importStatement: "const EmptyUserNewEmptyUserPage = { name: 'EmptyUserNewEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage') }"
+    importStatement:
+      "const EmptyUserNewEmptyUserPage = { name: 'EmptyUserNewEmptyUserPage', loader: import('/Users/mojombo/rw-app/web/src/pages/EmptyUser/NewEmptyUserPage/NewEmptyUserPage') }",
   },
 ]
 
-const pagesWithDuplicate = [
-  ...pages,
-  pages[0]
-]
+const pagesWithDuplicate = [...pages, pages[0]]
