@@ -83,9 +83,14 @@ export async function saveTusUpload(
         path.join(getPaths().base, tusConfig.tusUploadDirectory),
     `${tusId}.json`,
   )
-  const tusMeta = await import(metaFile)
+  const metafile = await import(metaFile, { assert: { type: 'json' } })
 
-  const fileExtension = tusMeta.metadata.filetype.split('/')[1]
+  // CJS dynamic imports wrap in default
+  const tusMetadata: { filetype: string } = metafile.metadata
+    ? metafile.metadata
+    : metafile.default.metadata
+
+  const fileExtension = tusMetadata.filetype.split('/')[1]
 
   const savedFilePath = path.join(saveDir, `${fileName}.${fileExtension}`)
 
