@@ -32,7 +32,7 @@
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "tsx attw.ts",
     "check:package": "concurrently npm:check:attw yarn publint",
-    "setup:test": "npx prisma migrate reset -f --schema src/__tests__/unit-test-schema.prisma",
+    "setup:test": "npx prisma migrate reset -f --schema ./src/__tests__/unit-test-schema.prisma",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
