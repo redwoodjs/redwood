@@ -8,13 +8,6 @@ import { createUploadsExtension } from '../prismaExtension'
 
 import { dataUrlPng } from './fileMocks'
 
-/***
- * NOTE: this test does not run in CI, because it requires a local prisma db
- * which causes build failures elsewhere. It's still useful to have locally when adding/changing features though
- *
- * To run it use the script `yarn test:prismaExtension`
- */
-
 vi.mock('node:fs/promises', () => ({
   default: {
     writeFile: vi.fn(),
@@ -26,6 +19,7 @@ vi.mock('node:fs/promises', () => ({
 
       return 'MOCKED_FILE_CONTENT'
     }),
+    copyFile: vi.fn(),
   },
 }))
 
@@ -171,24 +165,96 @@ describe('Uploads Prisma Extension', () => {
       })
     })
 
-    // @TODO have to figure out how to mock the
-    // it('will move file to new location with TUS uploads', async () => {
-    //   const dumbo = await prismaClient.dumbo.create({
-    //     data: {
-    //       firstUpload:
-    //         'http://example.com/.redwood/functions/tusUploadEndpoint/123',
-    //       secondUpload:
-    //         'http://example.com/.redwood/functions/tusUploadEndpoint/ABCD',
-    //     },
-    //   })
+    it('will move file to new location with TUS uploads', async () => {
+      // Mock TUS metadata files
+      vi.mock('/tmp/tus-uploads/123.json', () => {
+        return {
+          metadata: {
+            filetype: 'image/png',
+          },
+        }
+      })
 
-    //   expect(dumbo.firstUpload).toBe('balknsdg')
-    //   expect(dumbo.secondUpload).toBe('balknsdg')
-    // })
+      vi.mock('/tmp/tus-uploads/ABCD.json', () => {
+        return {
+          metadata: {
+            filetype: 'application/pdf',
+          },
+        }
+      })
 
-    // it('will remove old file when updating with TUS uploads', async () => {})
+      const dumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload:
+            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
+          secondUpload:
+            'http://example.com/.redwood/functions/tusUploadEndpoint/ABCD',
+        },
+      })
 
-    // it('will remove file when deleting with TUS uploads', async () => {})
+      expect(fs.copyFile).toHaveBeenCalledTimes(2)
+      expect(dumbo.firstUpload).toMatch(/dumbo\/.*\.png/)
+      expect(dumbo.secondUpload).toMatch(/dumbo\/.*\.pdf/)
+    })
+
+    it('will remove old file when updating with TUS uploads', async () => {
+      // Mock TUS metadata files
+      vi.mock('/tmp/tus-uploads/512356.json', () => {
+        return {
+          metadata: {
+            filetype: 'image/gif',
+          },
+        }
+      })
+
+      const dumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload:
+            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
+          secondUpload: '',
+        },
+      })
+
+      const originalPath = dumbo.firstUpload
+
+      const dumbo2 = await prismaClient.dumbo.update({
+        where: { id: dumbo.id },
+        data: {
+          firstUpload:
+            'http://example.com/.redwood/functions/tusUploadEndpoint/512356',
+        },
+      })
+
+      expect(dumbo2.firstUpload).not.toEqual(originalPath)
+      expect(dumbo2.firstUpload).toMatch(/dumbo\/.*\.gif/)
+
+      // And deletes it!
+      expect(fs.unlink).toHaveBeenCalledWith(originalPath)
+    })
+
+    it('will remove file when deleting with TUS uploads', async () => {
+      // Mock TUS metadata files
+      vi.mock('/tmp/tus-uploads/512356.json', () => {
+        return {
+          metadata: {
+            filetype: 'image/gif',
+          },
+        }
+      })
+
+      const dummy = await prismaClient.dummy.create({
+        data: {
+          uploadField:
+            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
+        },
+      })
+
+      await prismaClient.dummy.delete({
+        where: { id: dummy.id },
+      })
+
+      expect(fs.unlink).toHaveBeenCalledWith(dummy.uploadField)
+    })
   })
 
   describe('Result extensions', () => {
@@ -205,7 +271,7 @@ describe('Uploads Prisma Extension', () => {
       expect(res1.uploadField).toBe('data:image/png;base64,BASE64_FILE_CONTENT')
     })
 
-    // @TODO implement
+    // @TODO Handle edge cases (file removed, data modified, etc.)
     // it('if file is not found, will throw an error', async () => {})
     // it('if saved file is not a path, will throw an error', async () => {})
   })

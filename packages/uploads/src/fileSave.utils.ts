@@ -84,7 +84,7 @@ export async function saveTusUpload(
     `${tusId}.json`,
   )
   // Can't await import, because JSON file.
-  const tusMeta = require(metaFile)
+  const tusMeta = await import(metaFile)
 
   const fileExtension = tusMeta.metadata.filetype.split('/')[1]
 
