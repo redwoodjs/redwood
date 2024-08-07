@@ -6,7 +6,6 @@ export default defineConfig({
     deps: {
       interopDefault: false,
     },
-    globalSetup: ['vitest.setup.mts'],
   },
 
 })
