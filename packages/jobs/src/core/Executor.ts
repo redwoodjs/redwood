@@ -4,11 +4,7 @@ import console from 'node:console'
 
 import type { BaseAdapter } from '../adapters/BaseAdapter'
 import { DEFAULT_MAX_ATTEMPTS, DEFAULT_DELETE_FAILED_JOBS } from '../consts'
-import {
-  AdapterRequiredError,
-  JobRequiredError,
-  JobExportNotFoundError,
-} from '../errors'
+import { AdapterRequiredError, JobRequiredError } from '../errors'
 import { loadJob } from '../loaders'
 import type { BasicLogger } from '../types'
 
@@ -62,18 +58,14 @@ export class Executor {
 
   async perform() {
     this.logger.info(this.job, `Started job ${this.job.id}`)
-    const details = JSON.parse(this.job.handler)
 
     // TODO break these lines down into individual try/catch blocks?
     try {
-      const jobModule = await loadJob(details.handler)
-      await new jobModule[details.handler]().perform(...details.args)
+      const job = loadJob({ name: this.job.name, path: this.job.path })
+      await job.perform(...this.job.args)
       return this.adapter.success(this.job)
     } catch (e: any) {
-      let error = e
-      if (e.message.match(/is not a constructor/)) {
-        error = new JobExportNotFoundError(details.handler)
-      }
+      const error = e
       this.logger.error(error.stack)
       return this.adapter.failure(this.job, error, {
         maxAttempts: this.maxAttempts,

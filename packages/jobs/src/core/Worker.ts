@@ -1,75 +1,33 @@
 // Used by the job runner to find the next job to run and invoke the Executor
 
-import console from 'node:console'
-import process from 'node:process'
 import { setTimeout } from 'node:timers'
 
 import type { BaseAdapter } from '../adapters/BaseAdapter'
-import {
-  DEFAULT_MAX_ATTEMPTS,
-  DEFAULT_MAX_RUNTIME,
-  DEFAULT_SLEEP_DELAY,
-  DEFAULT_DELETE_FAILED_JOBS,
-} from '../consts'
 import { AdapterRequiredError } from '../errors'
 import type { BasicLogger } from '../types'
 
 import { Executor } from './Executor'
 
-// The options set in api/src/lib/jobs.ts
-export interface WorkerConfig {
-  maxAttempts?: number
-  maxRuntime?: number
-  deleteFailedJobs?: boolean
-  sleepDelay?: number
-}
-
-// Additional options that the rw-jobs-worker process will set when
-// instantiatng the Worker class
-interface Options {
+interface WorkerConfig {
   adapter: BaseAdapter
-  logger?: BasicLogger
-  clear?: boolean
-  processName?: string
-  queue?: string | null
-  forever?: boolean
-  workoff?: boolean
-}
-
-// The default options to be used if any of the above are not set
-interface DefaultOptions {
   logger: BasicLogger
+  clear: boolean
+  processName: string
+  queues: string[]
   maxAttempts: number
   maxRuntime: number
   deleteFailedJobs: boolean
   sleepDelay: number
-  clear: boolean
-  processName: string
-  queue: string | null
-  forever: boolean
   workoff: boolean
 }
 
-export const DEFAULTS: DefaultOptions = {
-  logger: console,
-  processName: process.title,
-  queue: null,
-  clear: false,
-  maxAttempts: DEFAULT_MAX_ATTEMPTS,
-  maxRuntime: DEFAULT_MAX_RUNTIME, // 4 hours in seconds
-  sleepDelay: DEFAULT_SLEEP_DELAY, // 5 seconds
-  deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
-  forever: true,
-  workoff: false,
-}
-
 export class Worker {
-  options: WorkerConfig & Options & DefaultOptions
+  options: WorkerConfig
   adapter: BaseAdapter
   logger: BasicLogger
   clear: boolean
   processName: string
-  queue: string | null
+  queues: string[]
   maxAttempts: number
   maxRuntime: number
   deleteFailedJobs: boolean
@@ -78,8 +36,8 @@ export class Worker {
   forever: boolean
   workoff: boolean
 
-  constructor(options: WorkerConfig & Options) {
-    this.options = { ...DEFAULTS, ...options }
+  constructor(options: WorkerConfig) {
+    this.options = options
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()
@@ -95,7 +53,7 @@ export class Worker {
     this.processName = this.options.processName
 
     // if not given a queue name then will work on jobs in any queue
-    this.queue = this.options.queue
+    this.queues = this.options.queues
 
     // the maximum number of times to retry a failed job
     this.maxAttempts = this.options.maxAttempts
@@ -112,11 +70,11 @@ export class Worker {
     // maximum wait time. Do an `undefined` check here so we can set to 0
     this.sleepDelay = this.options.sleepDelay * 1000
 
-    // Set to `false` if the work loop should only run one time, regardless
-    // of how many outstanding jobs there are to be worked on. The worker
-    // process will set this to `false` as soon as the user hits ctrl-c so
-    // any current job will complete before exiting.
-    this.forever = this.options.forever
+    // Set to `false` and the work loop will quit when the current job is done
+    // running (regardless of how many outstanding jobs there are to be worked
+    // on). The worker process will set this to `false` as soon as the user hits
+    // ctrl-c so any current job will complete before exiting.
+    this.forever = true
 
     // Set to `true` if the work loop should run through all *available* jobs
     // and then quit. Serves a slightly different purpose than `forever` which
@@ -139,6 +97,14 @@ export class Worker {
     }
   }
 
+  get queueNames() {
+    if (this.queues.length === 1 && this.queues[0] === '*') {
+      return 'all (*)'
+    } else {
+      return this.queues.join(', ')
+    }
+  }
+
   async #clearQueue() {
     return await this.adapter.clear()
   }
@@ -148,13 +114,13 @@ export class Worker {
       this.lastCheckTime = new Date()
 
       this.logger.debug(
-        `[${this.processName}] Checking for jobs in ${this.queue ? `${this.queue} queue` : 'all queues'}...`,
+        `[${this.processName}] Checking for jobs in ${this.queueNames} queues...`,
       )
 
       const job = await this.adapter.find({
         processName: this.processName,
         maxRuntime: this.maxRuntime,
-        queue: this.queue,
+        queues: this.queues,
       })
 
       if (job) {
