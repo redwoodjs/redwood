@@ -6,7 +6,7 @@
     "module": "NodeNext",
     "outDir": "dist"
   },
-  "inclue": ["."],
+  "include": ["."],
   "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
   "references": [
     { "path": "../cookie-jar" },

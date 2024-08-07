@@ -16,6 +16,7 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
+    tsconfig: 'tsconfig.build.json',
     outdir: 'dist/cjs',
     packages: 'external',
   },
@@ -28,6 +29,7 @@ await build({
   },
   buildOptions: {
     ...defaultBuildOptions,
+    tsconfig: 'tsconfig.build.json',
     format: 'esm',
     packages: 'external',
   },
@@ -51,6 +53,7 @@ await esbuild.build({
   // https://github.com/evanw/esbuild/pull/2067
   plugins: [commonjs()],
   logLevel: 'info',
+  tsconfig: 'tsconfig.build.json',
 })
 
 // Place a package.json file with `type: commonjs` in the dist/cjs folder so
