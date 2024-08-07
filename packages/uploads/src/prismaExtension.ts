@@ -33,17 +33,12 @@ export type UploadsConfig<MName extends string> = Record<
 type TUSServerConfig = {
   tusUploadDirectory: string
 }
-
-// type ExtendsType = runtime.ExtensionArgs
-// type ExtendsType = Parameters<typeof Prisma.defineExtension>[0]
-
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
   tusConfig?: TUSServerConfig,
 ) => {
-  // @MARK typing these with ExtendsType['query'] and ExtendsType['result']
-  // will create an error when we instiate the PrismaClient 🤷
-  // but without these types prisma won''t show types for the new methods
+  // @TODO I think we can use Prisma.getExtensionContext(this)
+  // instead of creating a new PrismaClient instance
   const prismaInstance = new PrismaClient()
 
   async function deleteUploadsFromDiskForArgs<T extends runtime.JsArgs>({
