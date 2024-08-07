@@ -1,4 +1,5 @@
-import * as acorn from 'acorn-loose'
+import type { AssignmentProperty, Expression, Pattern, Program } from 'acorn'
+import { parse } from 'acorn-loose'
 import type { Plugin } from 'vite'
 
 export function rscTransformUseServerPlugin(): Plugin {
@@ -6,29 +7,23 @@ export function rscTransformUseServerPlugin(): Plugin {
     name: 'rsc-transform-use-server-plugin',
     transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
-      // bother parsing.
+      // bother parsing. This check doesn't have to be perfect. It's just a
+      // quick check to avoid doing a full parse to build an AST.
+      // Plesae benchmark before making any changes here.
+      // See https://github.com/redwoodjs/redwood/pull/11158
       if (!code.includes('use server')) {
         return code
       }
 
-      // TODO (RSC): Bad bad hack. Don't do this.
-      // At least look for something that's guaranteed to be only present in
-      // transformed modules
-      // Ideally don't even try to transform twice
-      if (code.includes('$$id')) {
-        // Already transformed
-        return code
-      }
-
-      let body
+      let body: Program['body']
 
       try {
-        body = acorn.parse(code, {
+        body = parse(code, {
           ecmaVersion: 2024,
           sourceType: 'module',
         }).body
-      } catch (x: any) {
-        console.error('Error parsing %s %s', id, x.message)
+      } catch (e: any) {
+        console.error('Error parsing', id, e.message)
         return code
       }
 
@@ -68,7 +63,10 @@ export function rscTransformUseServerPlugin(): Plugin {
   }
 }
 
-function addLocalExportedNames(names: Map<string, string>, node: any) {
+function addLocalExportedNames(
+  names: Map<string, string>,
+  node: Pattern | AssignmentProperty | Expression,
+) {
   switch (node.type) {
     case 'Identifier':
       names.set(node.name, node.name)
@@ -106,13 +104,20 @@ function addLocalExportedNames(names: Map<string, string>, node: any) {
     case 'ParenthesizedExpression':
       addLocalExportedNames(names, node.expression)
       return
+
+    default:
+      throw new Error(`Unsupported node type: ${node.type}`)
   }
 }
 
-function transformServerModule(body: any, url: string, code: string): string {
+function transformServerModule(
+  body: Program['body'],
+  url: string,
+  code: string,
+): string {
   // If the same local name is exported more than once, we only need one of the names.
-  const localNames = new Map()
-  const localTypes = new Map()
+  const localNames = new Map<string, string>()
+  const localTypes = new Map<string, string>()
 
   for (let i = 0; i < body.length; i++) {
     const node = body[i]
@@ -157,7 +162,14 @@ function transformServerModule(body: any, url: string, code: string): string {
 
           for (let j = 0; j < specifiers.length; j++) {
             const specifier = specifiers[j]
-            localNames.set(specifier.local.name, specifier.exported.name)
+            if (
+              specifier.local.type === 'Identifier' &&
+              specifier.exported.type === 'Identifier'
+            ) {
+              localNames.set(specifier.local.name, specifier.exported.name)
+            } else {
+              throw new Error('Unsupported export specifier')
+            }
           }
         }
 
