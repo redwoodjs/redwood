@@ -23,14 +23,15 @@ export interface SchedulePayload {
 // adapter will likely return more info, like the number of previous tries, so
 // that it can reschedule the job to run in the future.
 export interface BaseJob {
-  handler: string
-  args: any
+  name: string
+  path: string
+  args: unknown[]
 }
 
 export interface FindArgs {
   processName: string
   maxRuntime: number
-  queue: string | null
+  queues: string[]
 }
 
 export interface BaseAdapterOptions {

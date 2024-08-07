@@ -48,6 +48,7 @@ export const DEFAULTS = {
 
 interface PrismaJob extends BaseJob {
   id: number
+  handler: string
   attempts: number
   runAt: Date
   lockedAt: Date
@@ -105,10 +106,10 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   // TODO: there may be more optimized versions of the locking queries in
   // Postgres and MySQL, this.options.db._activeProvider returns the provider
   // name
-  async find({
+  override async find({
     processName,
     maxRuntime,
-    queue,
+    queues,
   }: FindArgs): Promise<PrismaJob | null> {
     const maxRuntimeExpire = new Date(
       new Date().getTime() + (maxRuntime || DEFAULTS.maxRuntime * 1000),
@@ -148,10 +149,11 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       ],
     }
 
+    // TODO(@rob): make this a WHERE..IN for multiple queues
     // for some reason prisma doesn't like it's own `query: { not: null }`
     // syntax, so only add the query condition if we're filtering by queue
     const whereWithQueue = Object.assign(where, {
-      AND: [...where.AND, { queue: queue || undefined }],
+      AND: [...where.AND, { queue: queues || undefined }],
     })
 
     // Find the next job that should run now
@@ -181,7 +183,9 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
 
       // Assuming the update worked, return the full details of the job
       if (count) {
-        return await this.accessor.findFirst({ where: { id: job.id } })
+        const data = await this.accessor.findFirst({ where: { id: job.id } })
+        const { name, path, args } = JSON.parse(data.handler)
+        return { ...data, name, path, args }
       }
     }
 
@@ -194,7 +198,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   // awaited, so do the await here to ensure they actually run. Otherwise the
   // user must always await `performLater()` or the job won't actually be
   // scheduled.
-  async success(job: PrismaJob) {
+  override async success(job: PrismaJob) {
     this.logger.debug(`Job ${job.id} success`)
     return await this.accessor.delete({ where: { id: job.id } })
   }
