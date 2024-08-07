@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.3",
-    "@prisma/client": "5.17.0",
+    "@prisma/client": "5.18.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "@types/mime-types": "2.1.4",

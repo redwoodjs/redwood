@@ -8675,7 +8675,7 @@ __metadata:
   resolution: "@redwoodjs/uploads@workspace:packages/uploads"
   dependencies:
     "@arethetypeswrong/cli": "npm:0.15.3"
-    "@prisma/client": "npm:5.17.0"
+    "@prisma/client": "npm:5.18.0"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
