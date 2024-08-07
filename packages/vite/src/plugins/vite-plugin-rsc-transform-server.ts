@@ -50,7 +50,7 @@ export function rscTransformUseServerPlugin(): Plugin {
         )
       }
 
-      let transformedCode = ''
+      let transformedCode = code
 
       if (useServer) {
         transformedCode = transformServerModule(body, id, code)
@@ -174,7 +174,6 @@ function transformServerModule(
   }
 
   let newSrc =
-    '"use server"\n' +
     code +
     '\n\n' +
     'import {registerServerReference} from ' +

@@ -58,44 +58,28 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
       export async function formAction(formData: FormData) {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction,"${id}","formAction");`,
-    )
-    // One import and (exactly) one call to registerServerReference, so two
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(2)
+            import fs from 'node:fs'
+
+            export async function formAction(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      "
+    `)
   })
 
   it('should handle two functions', async () => {
@@ -108,54 +92,43 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
       export async function formAction1(formData: FormData) {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
       }
 
       export async function formAction2(formData: FormData) {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction1,"${id}","formAction1");`,
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction2,"${id}","formAction2");`,
-    )
-    // One import and (exactly) two calls to registerServerReference, so three
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(3)
+            import fs from 'node:fs'
+
+            export async function formAction1(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+            export async function formAction2(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      registerServerReference(formAction1,"some/path/to/actions.ts","formAction1");
+      registerServerReference(formAction2,"some/path/to/actions.ts","formAction2");
+      "
+    `)
   })
 
   it('should handle arrow function', async () => {
@@ -168,144 +141,96 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
       export const formAction = async (formData: FormData) => {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction,"${id}","formAction");`,
-    )
-    // One import and (exactly) one call to registerServerReference, so two
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(2)
+            import fs from 'node:fs'
+
+            export const formAction = async (formData: FormData) => {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      "
+    `)
   })
 
-  it('should handle default exported arrow function', async () => {
+  it.todo('should handle default exported arrow function', async () => {
     const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
       import fs from 'node:fs'
 
-      export const formAction = async (formData: FormData) => {
+      export default async (formData: FormData) => {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction,"${id}","formAction");`,
-    )
-    // One import and (exactly) one call to registerServerReference, so two
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(2)
+            import fs from 'node:fs'
+
+            export default async (formData: FormData) => {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      registerServerReference(default,"some/path/to/actions.ts","default");
+      "
+    `)
   })
 
   it('should handle default exported named function', async () => {
     const id = 'some/path/to/actions.ts'
     const input = `
-      'use server'
+      "use server"
 
       import fs from 'node:fs'
 
       export default async function formAction(formData: FormData) {
         await fs.promises.writeFile(
           'settings.json',
-          \`{ "delay": \${formData.get('delay')} }\n\`
+          \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      ""use server"
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction,"${id}","default");`,
-    )
-    // One import and (exactly) one call to registerServerReference, so two
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(2)
+            import fs from 'node:fs'
+
+            export default async function formAction(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      registerServerReference(formAction,"some/path/to/actions.ts","default");
+      "
+    `)
   })
 
   it.todo('should handle default exported anonymous function', async () => {
