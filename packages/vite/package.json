@@ -53,7 +53,7 @@
   "scripts": {
     "build": "tsx build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "check:attw": "tsx ./attw.ts",
     "test": "vitest run",
     "check:package": "concurrently npm:check:attw yarn:publint",
