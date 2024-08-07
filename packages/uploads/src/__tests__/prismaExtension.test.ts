@@ -192,7 +192,7 @@ describe('Uploads Prisma Extension', () => {
             uploadField: dataUrlPng,
           },
         })
-      ).withDataUri() // WHY NO TYPES?
+      ).withDataUri()
 
       // Mocked in FS mocks
       expect(res1.uploadField).toBe('BASE64::THIS_IS_A_MOCKED_DATA_URL')

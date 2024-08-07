@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 import mime from 'mime-types'
 import { ulid } from 'ulid'
@@ -24,41 +25,20 @@ export type UploadConfigForModel = {
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig = {
-  [key in ModelNames]?: UploadConfigForModel
-}
+export type UploadsConfig<MName extends string> = Record<
+  MName,
+  UploadConfigForModel
+>
 
 type TUSServerConfig = {
   tusUploadDirectory: string
 }
 
-type QueryExtends = {
-  [key in ModelNames]?: {
-    update: any
-    create: any
-    delete: any
-  }
-}
+// type ExtendsType = runtime.ExtensionArgs
+// type ExtendsType = Parameters<typeof Prisma.defineExtension>[0]
 
-type ResultExtends = {
-  [key in ModelNames]?: {
-    withDataUri: {
-      needs: any
-      // @TODO(TS): this generates unknowns. We dont have access to the Prisma type here
-      // because it depends on the type it was called from
-      compute: <T>(record: T) => () => Promise<T>
-    }
-    withPublicUrl: {
-      needs: any
-      compute: <T>(record: T) => () => Promise<T>
-    }
-  }
-}
-
-type ExtendsType = runtime.ExtensionArgs
-
-export const createUploadsExtension = (
-  config: UploadsConfig,
+export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
+  config: UploadsConfig<MNames>,
   tusConfig?: TUSServerConfig,
 ) => {
   // @MARK typing these with ExtendsType['query'] and ExtendsType['result']
@@ -87,15 +67,21 @@ export const createUploadsExtension = (
       await fs.unlink(filePath)
     })
   }
-  // This gives us typesafety when we write the extension,
-  // but we override it on return, because TS complains on instantiation of the PrismaClient
-  // its important that the resultsExtends
-  const queryExtends: ExtendsType['query'] = {}
-  const resultExtends: ExtendsType['result'] = {}
+
+  const queryExtends: runtime.ExtensionArgs['query'] = {}
+
+  const resultExtends = {} as {
+    [K in MNames]: {
+      withDataUri: {
+        needs: Record<string, boolean>
+        compute: <T>(modelData: T) => () => Promise<T>
+      }
+    }
+  }
 
   for (const modelName in config) {
     // Guaranteed to have modelConfig, we're looping over config 🙄
-    const modelConfig = config[modelName as ModelNames] as UploadConfigForModel
+    const modelConfig = config[modelName] as UploadConfigForModel
     const uploadFields = Array.isArray(modelConfig.fields)
       ? modelConfig.fields
       : [modelConfig.fields]
@@ -143,8 +129,9 @@ export const createUploadsExtension = (
     }
 
     // This makes the result extension only available for models with uploadFields
-    const needs = Object.fromEntries(uploadFields.map((field) => [field, true]))
-    console.log(`👉 \n ~ needs:`, needs)
+    const needs: any = Object.fromEntries(
+      uploadFields.map((field) => [field, true]),
+    )
 
     resultExtends[modelName] = {
       withDataUri: {
@@ -152,9 +139,11 @@ export const createUploadsExtension = (
         compute(modelData) {
           return async () => {
             const base64UploadFields: Record<keyof typeof needs, string> = {}
+            type ModelField = keyof typeof modelData
+
             for await (const field of uploadFields) {
               base64UploadFields[field] = await fs.readFile(
-                modelData[field],
+                modelData[field as ModelField] as string,
                 'base64url',
               )
             }
@@ -175,11 +164,13 @@ export const createUploadsExtension = (
 
   console.log('xxxx resultExtends', resultExtends)
 
-  return {
-    name: 'redwood-upload-prisma-plugin',
-    query: queryExtends as QueryExtends,
-    result: resultExtends as ResultExtends,
-  }
+  return Prisma.defineExtension((client) => {
+    return client.$extends({
+      name: 'redwood-upload-prisma-plugin',
+      query: queryExtends,
+      result: resultExtends,
+    })
+  })
 }
 
 /**
