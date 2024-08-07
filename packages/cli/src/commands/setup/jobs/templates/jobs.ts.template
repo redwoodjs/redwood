@@ -2,27 +2,31 @@
 // Execute jobs in dev with `yarn rw jobs work`
 // See https://docs.redwoodjs.com/docs/background-jobs
 
-import { PrismaAdapter, RedwoodJob } from '@redwoodjs/jobs'
-import type { AvailableJobs, BaseAdapter, WorkerConfig } from '@redwoodjs/jobs'
+import { PrismaAdapter, JobManager } from '@redwoodjs/jobs'
 
 import { db } from 'src/lib/db'
 import { logger } from 'src/lib/logger'
 
-// `adapter`, `logger` and `workerConfig` exports are used by the job workers,
-// can override on a per-worker basis:
-// https://docs.redwoodjs.com/docs/background-jobs#worker-configuration
-export const adapter: BaseAdapter = new PrismaAdapter({ db, logger })
-export { logger }
+export const jobs = new JobManager({
+  adapters: {
+    prisma: new PrismaAdapter({ db, logger }),
+  },
+  queues: ['default'] as const,
+  logger,
+  workers: [
+    {
+      adapter: 'prisma',
+      logger,
+      queue: '*',
+      count: 1,
+      maxAttempts: 24,
+      maxRuntime: 14_400,
+      deleteFailedJobs: false,
+      sleepDelay: 5,
+    },
+  ],
+})
 
-export const workerConfig: WorkerConfig = {
-  maxAttempts: 24,
-  maxRuntime: 14_400, // 4 hours
-  sleepDelay: 5,
-  deleteFailedJobs: false,
-}
-
-// Global config for all jobs, can override on a per-job basis:
-// https://docs.redwoodjs.com/docs/background-jobs#job-configuration
-RedwoodJob.config({ adapter, logger })
-
-export const jobs: AvailableJobs = {}
+export const later = jobs.createScheduler({
+  adapter: 'prisma',
+})
