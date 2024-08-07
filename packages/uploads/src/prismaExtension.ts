@@ -74,7 +74,12 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     [K in MNames]: {
       withDataUri: {
         needs: Record<string, boolean>
-        compute: <T>(modelData: T) => () => Promise<T>
+        compute: (
+          // @MARK: this is a hack
+          // There has to be a better way to type this... because if you used a select or omit
+          // it would be a different type
+          modelData: ReturnType<PrismaClient[K]['findFirst']>,
+        ) => () => ReturnType<PrismaClient[K]['findFirst']>
       }
     }
   }
@@ -129,45 +134,39 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     }
 
     // This makes the result extension only available for models with uploadFields
-    const needs: any = Object.fromEntries(
-      uploadFields.map((field) => [field, true]),
-    )
+    const needs = Object.fromEntries(uploadFields.map((field) => [field, true]))
 
     resultExtends[modelName] = {
       withDataUri: {
         needs,
-        compute(modelData) {
-          return async () => {
-            const base64UploadFields: Record<keyof typeof needs, string> = {}
-            type ModelField = keyof typeof modelData
+        async compute(modelData) {
+          const base64UploadFields: Record<keyof typeof needs, string> = {}
+          type ModelField = keyof typeof modelData
 
-            for await (const field of uploadFields) {
-              base64UploadFields[field] = await fs.readFile(
-                modelData[field as ModelField] as string,
-                'base64url',
-              )
-            }
+          for await (const field of uploadFields) {
+            base64UploadFields[field] = await fs.readFile(
+              modelData[field as ModelField] as string,
+              'base64url',
+            )
+          }
 
-            // @TODO: edge cases
-            // 1. If readfile fails - file not found, etc.
-            // 2. If not a path, relative or absolute, throw error
+          // @TODO: edge cases
+          // 1. If readfile fails - file not found, etc.
+          // 2. If not a path, relative or absolute, throw error
 
-            return {
-              ...modelData,
-              ...base64UploadFields,
-            }
+          return {
+            ...modelData,
+            ...base64UploadFields,
           }
         },
       },
     }
   }
 
-  console.log('xxxx resultExtends', resultExtends)
-
   return Prisma.defineExtension((client) => {
     return client.$extends({
       name: 'redwood-upload-prisma-plugin',
-      query: queryExtends,
+      // query: queryExtends,
       result: resultExtends,
     })
   })
