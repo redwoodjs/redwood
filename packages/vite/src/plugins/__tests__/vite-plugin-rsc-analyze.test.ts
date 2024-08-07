@@ -1,17 +1,36 @@
-import { describe, expect, it } from 'vitest'
+import type { TransformPluginContext } from 'rollup'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { rscAnalyzePlugin } from '../vite-plugin-rsc-analyze.js'
 
+const foundFiles: Array<string> = []
+
+function callback(id: string) {
+  foundFiles.push(id)
+}
+
+function getPluginTransform() {
+  const plugin = rscAnalyzePlugin(callback, callback)
+
+  if (typeof plugin.transform !== 'function') {
+    throw new Error('Plugin does not have a transform function')
+  }
+
+  // Calling `bind` to please TS
+  // See https://stackoverflow.com/a/70463512/88106
+  // Typecasting because we're only going to call transform, and we don't need
+  // anything provided by the context.
+  return plugin.transform.bind({} as TransformPluginContext)
+}
+
+const pluginTransform = getPluginTransform()
+
+beforeEach(() => {
+  foundFiles.length = 0
+})
+
 describe('vite-plugin-rsc-analyze', () => {
   it('finds "use server" action inlined as an arrow function', async () => {
-    const foundFiles: Array<string> = []
-
-    function callback(id: string) {
-      foundFiles.push(id)
-    }
-
-    const plugin = rscAnalyzePlugin(callback, callback)
-
     const code = `
       import { jsx, jsxs } from "react/jsx-runtime";
       import fs from "node:fs";
@@ -40,25 +59,13 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    plugin.transform.bind({})(code, 'test.tsx')
+    pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')
   })
 
   it('finds "use server" action inlined as a named function', async () => {
-    const foundFiles: Array<string> = []
-
-    function callback(id: string) {
-      foundFiles.push(id)
-    }
-
-    const plugin = rscAnalyzePlugin(callback, callback)
-
     const code = `
       import { jsx, jsxs } from "react/jsx-runtime";
       import fs from "node:fs";
@@ -87,25 +94,13 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    plugin.transform.bind({})(code, 'test.tsx')
+    pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')
   })
 
   it('finds "use server" action as a named function', async () => {
-    const foundFiles: Array<string> = []
-
-    function callback(id: string) {
-      foundFiles.push(id)
-    }
-
-    const plugin = rscAnalyzePlugin(callback, callback)
-
     const code = `
       import { jsx, jsxs } from "react/jsx-runtime";
       import fs from "node:fs";
@@ -135,11 +130,7 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    if (typeof plugin.transform !== 'function') {
-      return
-    }
-
-    plugin.transform.bind({})(code, 'test.tsx')
+    pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')
