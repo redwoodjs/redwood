@@ -25,7 +25,7 @@ export type UploadConfigForModel = {
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig<MName extends string> = Record<
+export type UploadsConfig<MName extends string | number | symbol> = Record<
   MName,
   UploadConfigForModel
 >
@@ -81,7 +81,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
 
   for (const modelName in config) {
     // Guaranteed to have modelConfig, we're looping over config 🙄
-    const modelConfig = config[modelName] as UploadConfigForModel
+    const modelConfig = config[modelName as MNames] as UploadConfigForModel
     const uploadFields = Array.isArray(modelConfig.fields)
       ? modelConfig.fields
       : [modelConfig.fields]
@@ -134,24 +134,26 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     resultExtends[modelName] = {
       withDataUri: {
         needs,
-        async compute(modelData) {
-          const base64UploadFields: Record<keyof typeof needs, string> = {}
-          type ModelField = keyof typeof modelData
+        compute(modelData) {
+          return async () => {
+            const base64UploadFields: Record<keyof typeof needs, string> = {}
+            type ModelField = keyof typeof modelData
 
-          for await (const field of uploadFields) {
-            base64UploadFields[field] = await fs.readFile(
-              modelData[field as ModelField] as string,
-              'base64url',
-            )
-          }
+            for await (const field of uploadFields) {
+              base64UploadFields[field] = await fs.readFile(
+                modelData[field as ModelField] as string,
+                'base64url',
+              )
+            }
 
-          // @TODO: edge cases
-          // 1. If readfile fails - file not found, etc.
-          // 2. If not a path, relative or absolute, throw error
+            // @TODO: edge cases
+            // 1. If readfile fails - file not found, etc.
+            // 2. If not a path, relative or absolute, throw error
 
-          return {
-            ...modelData,
-            ...base64UploadFields,
+            return {
+              ...modelData,
+              ...base64UploadFields,
+            }
           }
         },
       },
