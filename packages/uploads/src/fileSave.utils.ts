@@ -34,6 +34,8 @@ export async function saveUploadToFile(
       saveDir,
       fileName,
     })
+  } else {
+    throw new Error('Unsupported upload format')
   }
 
   if (!outputPath) {
@@ -98,7 +100,7 @@ export async function saveTusUpload(
 }
 
 function isBase64DataUri(uploadUrlOrDataUrl: string) {
-  // Check if the uploadUrlOrDataUrl is a valid base64 string
+  // Check if the uploadUrlOrDataUrl is a valid base64 data uri
   const base64Regex = /^data:(.*?);base64,/
   return base64Regex.test(uploadUrlOrDataUrl)
 }

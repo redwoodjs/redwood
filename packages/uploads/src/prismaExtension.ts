@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 
 import { PrismaClient } from '@prisma/client'
-import { Prisma } from '@prisma/client/extension'
+import { Prisma } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
 import { ulid } from 'ulid'
 
