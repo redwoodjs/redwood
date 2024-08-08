@@ -3,8 +3,9 @@ import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
 import type CliHelpers from '@redwoodjs/cli-helpers'
 
-import * as errors from '../../core/errors'
-import { PrismaAdapter, DEFAULTS } from '../PrismaAdapter'
+import { DEFAULT_MODEL_NAME } from '../../consts'
+import * as errors from '../../errors'
+import { PrismaAdapter } from '../PrismaAdapter'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
@@ -55,7 +56,7 @@ describe('constructor', () => {
   it('defaults this.model name', () => {
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
 
-    expect(adapter.model).toEqual(DEFAULTS.model)
+    expect(adapter.model).toEqual(DEFAULT_MODEL_NAME)
   })
 
   it('can manually set this.model', () => {
@@ -130,28 +131,48 @@ describe('find()', () => {
     const job = await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
-      queue: 'foobar',
+      queues: ['foobar'],
     })
 
     expect(job).toBeNull()
   })
 
   it('returns a job if found', async () => {
-    const mockJob = { id: 1 }
+    const mockJob = {
+      id: 1,
+      handler: JSON.stringify({
+        name: 'TestJob',
+        path: 'TestJob/TestJob',
+        args: [],
+      }),
+    }
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(mockJob)
     vi.spyOn(mockDb.backgroundJob, 'updateMany').mockReturnValue({ count: 1 })
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     const job = await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
-      queue: 'default',
+      queues: ['default'],
     })
 
-    expect(job).toEqual(mockJob)
+    expect(job).toEqual({
+      ...mockJob,
+      name: 'TestJob',
+      path: 'TestJob/TestJob',
+      args: [],
+    })
   })
 
   it('increments the `attempts` count on the found job', async () => {
-    const mockJob = { id: 1, attempts: 0 }
+    const mockJob = {
+      id: 1,
+      handler: JSON.stringify({
+        name: 'TestJob',
+        path: 'TestJob/TestJob',
+        args: [],
+      }),
+      attempts: 0,
+    }
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(mockJob)
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
@@ -160,7 +181,7 @@ describe('find()', () => {
     await adapter.find({
       processName: 'test',
       maxRuntime: 1000,
-      queue: 'default',
+      queues: ['default'],
     })
 
     expect(updateSpy).toHaveBeenCalledWith(
@@ -171,7 +192,15 @@ describe('find()', () => {
   })
 
   it('locks the job for the current process', async () => {
-    const mockJob = { id: 1, attempts: 0 }
+    const mockJob = {
+      id: 1,
+      attempts: 0,
+      handler: JSON.stringify({
+        name: 'TestJob',
+        path: 'TestJob/TestJob',
+        args: [],
+      }),
+    }
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(mockJob)
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
@@ -180,7 +209,7 @@ describe('find()', () => {
     await adapter.find({
       processName: 'test-process',
       maxRuntime: 1000,
-      queue: 'default',
+      queues: ['default'],
     })
 
     expect(updateSpy).toHaveBeenCalledWith(
@@ -191,7 +220,15 @@ describe('find()', () => {
   })
 
   it('locks the job with a current timestamp', async () => {
-    const mockJob = { id: 1, attempts: 0 }
+    const mockJob = {
+      id: 1,
+      attempts: 0,
+      handler: JSON.stringify({
+        name: 'TestJob',
+        path: 'TestJob/TestJob',
+        args: [],
+      }),
+    }
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(mockJob)
     const updateSpy = vi
       .spyOn(mockDb.backgroundJob, 'updateMany')
@@ -200,7 +237,7 @@ describe('find()', () => {
     await adapter.find({
       processName: 'test-process',
       maxRuntime: 1000,
-      queue: 'default',
+      queues: ['default'],
     })
 
     expect(updateSpy).toHaveBeenCalledWith(
@@ -214,7 +251,6 @@ describe('find()', () => {
 const mockPrismaJob = {
   id: 1,
   handler: '',
-  args: undefined,
   attempts: 10,
   runAt: new Date(),
   lockedAt: new Date(),
@@ -223,26 +259,48 @@ const mockPrismaJob = {
   failedAt: null,
   createdAt: new Date(),
   updatedAt: new Date(),
+  name: 'TestJob',
+  path: 'TestJob/TestJob',
+  args: [],
 }
 
 describe('success()', () => {
-  it('deletes the job from the DB', async () => {
+  it('deletes the job from the DB if option set', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'delete')
     const adapter = new PrismaAdapter({
       db: mockDb,
       logger: mockLogger,
     })
-    await adapter.success(mockPrismaJob)
+    await adapter.success({ job: mockPrismaJob, deleteJob: true })
 
     expect(spy).toHaveBeenCalledWith({ where: { id: 1 } })
   })
+
+  it('updates the job if option not set', async () => {
+    const spy = vi.spyOn(mockDb.backgroundJob, 'update')
+    const adapter = new PrismaAdapter({
+      db: mockDb,
+      logger: mockLogger,
+    })
+    await adapter.success({ job: mockPrismaJob, deleteJob: false })
+
+    expect(spy).toHaveBeenCalledWith({
+      where: { id: mockPrismaJob.id },
+      data: {
+        lockedAt: null,
+        lockedBy: null,
+        lastError: null,
+        runAt: null,
+      },
+    })
+  })
 })
 
-describe('failure()', () => {
+describe('error()', () => {
   it('updates the job by id', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'))
+    await adapter.error({ job: mockPrismaJob, error: new Error('test error') })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 1 } }),
@@ -252,7 +310,7 @@ describe('failure()', () => {
   it('clears the lock fields', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'))
+    await adapter.error({ job: mockPrismaJob, error: new Error('test error') })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -264,7 +322,7 @@ describe('failure()', () => {
   it('reschedules the job at a designated backoff time', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'))
+    await adapter.error({ job: mockPrismaJob, error: new Error('test error') })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -278,7 +336,7 @@ describe('failure()', () => {
   it('records the error', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'))
+    await adapter.error({ job: mockPrismaJob, error: new Error('test error') })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -288,30 +346,13 @@ describe('failure()', () => {
       }),
     )
   })
+})
 
-  it('nullifies runtAt if max attempts reached', async () => {
-    const spy = vi.spyOn(mockDb.backgroundJob, 'update')
-    const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'), {
-      maxAttempts: 10,
-    })
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          runAt: null,
-        }),
-      }),
-    )
-  })
-
+describe('failure()', () => {
   it('marks the job as failed if max attempts reached', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'update')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'), {
-      maxAttempts: 10,
-      deleteFailedJobs: false,
-    })
+    await adapter.failure({ job: mockPrismaJob, deleteJob: false })
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -322,13 +363,10 @@ describe('failure()', () => {
     )
   })
 
-  it('deletes the job if max attempts reached and deleteFailedJobs set to true', async () => {
+  it('deletes the job if option is set', async () => {
     const spy = vi.spyOn(mockDb.backgroundJob, 'delete')
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
-    await adapter.failure(mockPrismaJob, new Error('test error'), {
-      maxAttempts: 10,
-      deleteFailedJobs: true,
-    })
+    await adapter.failure({ job: mockPrismaJob, deleteJob: true })
 
     expect(spy).toHaveBeenCalledWith({ where: { id: 1 } })
   })

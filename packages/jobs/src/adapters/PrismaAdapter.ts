@@ -1,5 +1,5 @@
 // Implements a job adapter using Prisma ORM. Assumes a table exists with the
-// following schema (the table name and primary key name can be customized):
+// following schema (the table name can be customized):
 //
 //   model BackgroundJob {
 //     id        Int       @id @default(autoincrement())
@@ -15,19 +15,11 @@
 //     createdAt DateTime  @default(now())
 //     updatedAt DateTime  @updatedAt
 //   }
-//
-// Initialize this adapter passing an `accessor` which is the property on an
-// instance of PrismaClient that points to the table thats stores the jobs. In
-// the above schema, PrismaClient will create a `backgroundJob` property on
-// Redwood's `db` instance:
-//
-//   import { db } from 'src/lib/db'
-//   const adapter = new PrismaAdapter({ accessor: db.backgroundJob })
-//   RedwoodJob.config({ adapter })
 
 import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
+import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../consts'
 import { ModelNameError } from '../errors'
 
 import type {
@@ -35,21 +27,12 @@ import type {
   BaseAdapterOptions,
   FindArgs,
   SchedulePayload,
-  FailureOptions,
 } from './BaseAdapter'
 import { BaseAdapter } from './BaseAdapter'
-
-export const DEFAULTS = {
-  model: 'BackgroundJob',
-  maxAttempts: 24,
-  maxRuntime: 14_400,
-  deleteFailedJobs: false,
-}
 
 interface PrismaJob extends BaseJob {
   id: number
   handler: string
-  attempts: number
   runAt: Date
   lockedAt: Date
   lockedBy: string
@@ -60,8 +43,22 @@ interface PrismaJob extends BaseJob {
 }
 
 interface PrismaAdapterOptions extends BaseAdapterOptions {
+  /**
+   * An instance of PrismaClient which will be used to talk to the database
+   */
   db: PrismaClient
+  /**
+   * The name of the model in the Prisma schema that represents the job table.
+   * @default 'BackgroundJob'
+   */
   model?: string
+}
+
+interface SuccessData {
+  lockedAt: null
+  lockedBy: null
+  lastError: null
+  runAt: null
 }
 
 interface FailureData {
@@ -81,16 +78,16 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   constructor(options: PrismaAdapterOptions) {
     super(options)
 
-    // instance of PrismaClient
     this.db = options.db
 
     // name of the model as defined in schema.prisma
-    this.model = options.model || DEFAULTS.model
+    this.model = options.model || DEFAULT_MODEL_NAME
 
     // the function to call on `db` to make queries: `db.backgroundJob`
     this.accessor = this.db[camelCase(this.model)]
 
     // the database provider type: 'sqlite' | 'postgresql' | 'mysql'
+    // not used currently, but may be useful in the future for optimizations
     this.provider = options.db._activeProvider
 
     // validate that everything we need is available
@@ -103,16 +100,16 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   // The act of locking a job is dependant on the DB server, so we'll run some
   // raw SQL to do it in each case—Prisma doesn't provide enough flexibility
   // in their generated code to do this in a DB-agnostic way.
+  //
   // TODO: there may be more optimized versions of the locking queries in
-  // Postgres and MySQL, this.options.db._activeProvider returns the provider
-  // name
+  // Postgres and MySQL
   override async find({
     processName,
     maxRuntime,
     queues,
   }: FindArgs): Promise<PrismaJob | null> {
     const maxRuntimeExpire = new Date(
-      new Date().getTime() + (maxRuntime || DEFAULTS.maxRuntime * 1000),
+      new Date().getTime() + (maxRuntime || DEFAULT_MAX_RUNTIME * 1000),
     )
 
     // This query is gnarly but not so bad once you know what it's doing. For a
@@ -149,14 +146,16 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       ],
     }
 
-    // TODO(@rob): make this a WHERE..IN for multiple queues
-    // for some reason prisma doesn't like it's own `query: { not: null }`
-    // syntax, so only add the query condition if we're filtering by queue
-    const whereWithQueue = Object.assign(where, {
-      AND: [...where.AND, { queue: queues || undefined }],
-    })
+    // If queues is ['*'] then skip, otherwise add a WHERE...IN for the array of
+    // queue names
+    const whereWithQueue = where
+    if (queues.length > 1 || queues[0] !== '*') {
+      Object.assign(whereWithQueue, {
+        AND: [...where.AND, { queue: { in: queues } }],
+      })
+    }
 
-    // Find the next job that should run now
+    // Actually query the DB
     const job = await this.accessor.findFirst({
       select: { id: true, attempts: true },
       where: whereWithQueue,
@@ -172,6 +171,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
         AND: [...whereWithQueue.AND, { id: job.id }],
       })
 
+      // Update and increment the attempts count
       const { count } = await this.accessor.updateMany({
         where: whereWithQueueAndId,
         data: {
@@ -198,23 +198,26 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   // awaited, so do the await here to ensure they actually run. Otherwise the
   // user must always await `performLater()` or the job won't actually be
   // scheduled.
-  override async success(job: PrismaJob) {
+  override success({ job, deleteJob }: { job: PrismaJob; deleteJob: boolean }) {
     this.logger.debug(`Job ${job.id} success`)
-    return await this.accessor.delete({ where: { id: job.id } })
+
+    if (deleteJob) {
+      this.accessor.delete({ where: { id: job.id } })
+    } else {
+      this.accessor.update({
+        where: { id: job.id },
+        data: {
+          lockedAt: null,
+          lockedBy: null,
+          lastError: null,
+          runAt: null,
+        },
+      })
+    }
   }
 
-  async failure(job: PrismaJob, error: Error, options?: FailureOptions) {
+  override error({ job, error }: { job: PrismaJob; error: Error }) {
     this.logger.debug(`Job ${job.id} failure`)
-
-    const shouldDeleteFailed =
-      options?.deleteFailedJobs ?? DEFAULTS.deleteFailedJobs
-
-    if (
-      job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts) &&
-      shouldDeleteFailed
-    ) {
-      return await this.accessor.delete({ where: { id: job.id } })
-    }
 
     const data: FailureData = {
       lockedAt: null,
@@ -223,24 +226,31 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       runAt: null,
     }
 
-    if (job.attempts >= (options?.maxAttempts || DEFAULTS.maxAttempts)) {
-      data.failedAt = new Date()
-    } else {
-      data.runAt = new Date(
-        new Date().getTime() + this.backoffMilliseconds(job.attempts),
-      )
-    }
+    data.runAt = new Date(
+      new Date().getTime() + this.backoffMilliseconds(job.attempts),
+    )
 
-    return await this.accessor.update({
+    this.accessor.update({
       where: { id: job.id },
       data,
     })
   }
 
-  // Schedules a job by creating a new record in a `BackgroundJob` table
-  // (or whatever the accessor is configured to point to).
-  async schedule({ job, args, runAt, queue, priority }: SchedulePayload) {
-    return await this.accessor.create({
+  // Job has had too many attempts, it is not permanently failed.
+  override failure({ job, deleteJob }: { job: PrismaJob; deleteJob: boolean }) {
+    if (deleteJob) {
+      this.accessor.delete({ where: { id: job.id } })
+    } else {
+      this.accessor.update({
+        where: { id: job.id },
+        data: { failedAt: new Date() },
+      })
+    }
+  }
+
+  // Schedules a job by creating a new record in the background job table
+  override schedule({ job, args, runAt, queue, priority }: SchedulePayload) {
+    this.accessor.create({
       data: {
         handler: JSON.stringify({ job, args }),
         runAt,
@@ -250,8 +260,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     })
   }
 
-  async clear() {
-    return await this.accessor.deleteMany()
+  override clear() {
+    this.accessor.deleteMany()
   }
 
   backoffMilliseconds(attempts: number) {

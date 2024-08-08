@@ -17,12 +17,13 @@ interface TestAdapterOptions extends BaseAdapterOptions {
 
 class TestAdapter extends BaseAdapter<TestAdapterOptions> {
   schedule() {}
-  clear() {}
-  success() {}
-  failure() {}
   find() {
-    return undefined
+    return null
   }
+  success() {}
+  error() {}
+  failure() {}
+  clear() {}
 }
 
 describe('constructor', () => {

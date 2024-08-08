@@ -26,6 +26,7 @@ export interface BaseJob {
   name: string
   path: string
   args: unknown[]
+  attempts: number
 }
 
 export interface FindArgs {
@@ -38,8 +39,11 @@ export interface BaseAdapterOptions {
   logger?: BasicLogger
 }
 
+export interface SuccessOptions {
+  deleteSuccessfulJobs?: boolean
+}
+
 export interface FailureOptions {
-  maxAttempts?: number
   deleteFailedJobs?: boolean
 }
 
@@ -59,16 +63,42 @@ export abstract class BaseAdapter<
   // want to do something with the result depending on the adapter type, so make
   // it `any` to allow for the subclass to return whatever it wants.
 
-  abstract schedule(payload: SchedulePayload): any
+  abstract schedule({
+    job,
+    args,
+    runAt,
+    queue,
+    priority,
+  }: SchedulePayload): void
 
-  abstract find(
-    args: FindArgs,
-  ): BaseJob | null | undefined | Promise<BaseJob | null | undefined>
+  // Find a single job that's elegible to run with the given args
+  abstract find({
+    processName,
+    maxRuntime,
+    queues,
+  }: FindArgs): BaseJob | null | Promise<BaseJob | null>
 
-  // TODO accept an optional `queue` arg to clear only jobs in that queue
-  abstract clear(): any
+  // Job succeeded
+  abstract success({
+    job,
+    deleteJob,
+  }: {
+    job: BaseJob
+    deleteJob: boolean
+  }): void
 
-  abstract success(job: BaseJob): any
+  // Job errored
+  abstract error({ job, error }: { job: BaseJob; error: Error }): void
 
-  abstract failure(job: BaseJob, error: Error, options: FailureOptions): any
+  // Job errored more than maxAttempts, now a permanent failure
+  abstract failure({
+    job,
+    deleteJob,
+  }: {
+    job: BaseJob
+    deleteJob: boolean
+  }): void
+
+  // Remove all jobs from storage
+  abstract clear(): void
 }
