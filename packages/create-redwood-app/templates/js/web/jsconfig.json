@@ -2,7 +2,7 @@
   "compilerOptions": {
     "noEmit": true,
     "esModuleInterop": true,
-    "target": "ES2023",
+    "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "Bundler",
     "skipLibCheck": false,
