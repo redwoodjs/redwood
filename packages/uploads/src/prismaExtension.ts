@@ -27,10 +27,8 @@ export type UploadConfigForModel = {
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig<MName extends string | number | symbol> = Record<
-  MName,
-  UploadConfigForModel
->
+export type UploadsConfig<MName extends string | number | symbol = Model> =
+  Record<MName, UploadConfigForModel>
 
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
@@ -68,11 +66,9 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     [K in MNames]: {
       withDataUri: {
         needs: Record<string, boolean>
-        compute: <T>(
-          // @MARK: this generic doesn't get picked up by prisma
-          // the returned type ends up being unknown
-          modelData: T,
-        ) => () => Promise<T>
+        compute: (
+          modelData: Record<string, unknown>,
+        ) => <T>(this: T) => Promise<T>
       }
     }
   }
@@ -148,7 +144,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             // 2. If not a path, relative or absolute, throw error
 
             return {
-              ...modelData,
+              ...(modelData as any),
               ...base64UploadFields,
             }
           }

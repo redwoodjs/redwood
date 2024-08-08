@@ -1,12 +1,13 @@
 import fs from 'node:fs/promises'
 
-import { PrismaClient } from '@prisma/client'
 import { vol } from 'memfs'
 import { describe, it, vi, expect } from 'vitest'
 
 import { createUploadsExtension } from '../prismaExtension'
 
 import { dataUrlPng } from './fileMocks'
+// @MARK: use the local prisma client
+import { PrismaClient } from './prisma-client'
 
 vi.mock('node:fs/promises', () => ({
   default: {
