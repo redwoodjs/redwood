@@ -9,6 +9,10 @@ outputs:
   ssr:
     description: If SSR-related changes have been made
 
+inputs:
+  labels:
+    required: true
+
 runs:
   using: node20
   main: detectChanges.mjs

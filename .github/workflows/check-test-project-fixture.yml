@@ -33,6 +33,8 @@ jobs:
       - name: 🔍 Detect changes
         id: detect-changes
         uses: ./.github/actions/detect-changes
+        with:
+          labels: '{ "labels": ${{ toJSON(github.event.pull_request.labels) }} }'
 
   check-test-project-fixture:
     needs: detect-changes
