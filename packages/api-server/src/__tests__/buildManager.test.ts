@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 import { BuildManager } from '../buildManager'
-import type { BuildAndRestartOptions } from '../watch'
+import type { BuildAndRestartOptions } from '../buildManager'
 
 const buildApi = vi.fn()
 const cleanApiBuild = vi.fn()

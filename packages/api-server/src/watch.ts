@@ -12,13 +12,8 @@ import {
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { BuildManager } from './buildManager'
+import { BuildAndRestartOptions, BuildManager } from './buildManager'
 import { serverManager } from './serverManager'
-
-export type BuildAndRestartOptions = {
-  rebuild?: boolean
-  clean?: boolean
-}
 
 const rwjsPaths = getPaths()
 
@@ -47,7 +42,7 @@ async function buildAndServe(options: BuildAndRestartOptions) {
     await buildApi()
   }
 
-  serverManager.restartApiServer()
+  await serverManager.restartApiServer()
 
   console.log(chalk.dim.italic('Took ' + (Date.now() - buildTs) + ' ms'))
 }

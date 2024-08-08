@@ -1,6 +1,9 @@
 import { debounce } from 'lodash'
 
-import type { BuildAndRestartOptions } from './watch'
+export type BuildAndRestartOptions = {
+  rebuild?: boolean
+  clean?: boolean
+}
 
 // We want to delay execution when multiple files are modified on the filesystem,
 // this usually happens when running RedwoodJS generator commands.
