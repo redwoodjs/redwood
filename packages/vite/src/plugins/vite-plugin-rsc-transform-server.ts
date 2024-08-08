@@ -1,4 +1,5 @@
-import * as acorn from 'acorn-loose'
+import type { AssignmentProperty, Expression, Pattern, Program } from 'acorn'
+import { parse } from 'acorn-loose'
 import type { Plugin } from 'vite'
 
 export function rscTransformUseServerPlugin(): Plugin {
@@ -6,40 +7,32 @@ export function rscTransformUseServerPlugin(): Plugin {
     name: 'rsc-transform-use-server-plugin',
     transform: async function (code, id) {
       // Do a quick check for the exact string. If it doesn't exist, don't
-      // bother parsing.
+      // bother parsing. This check doesn't have to be perfect. It's just a
+      // quick check to avoid doing a full parse to build an AST.
+      // Plesae benchmark before making any changes here.
+      // See https://github.com/redwoodjs/redwood/pull/11158
       if (!code.includes('use server')) {
         return code
       }
 
-      // TODO (RSC): Bad bad hack. Don't do this.
-      // At least look for something that's guaranteed to be only present in
-      // transformed modules
-      // Ideally don't even try to transform twice
-      if (code.includes('$$id')) {
-        // Already transformed
-        return code
-      }
-
-      let body
+      let body: Program['body']
 
       try {
-        body = acorn.parse(code, {
+        body = parse(code, {
           ecmaVersion: 2024,
           sourceType: 'module',
         }).body
-      } catch (x: any) {
-        console.error('Error parsing %s %s', id, x.message)
+      } catch (e: any) {
+        console.error('Error parsing', id, e.message)
         return code
       }
 
       let useClient = false
       let useServer = false
 
-      for (let i = 0; i < body.length; i++) {
-        const node = body[i]
-
+      for (const node of body) {
         if (node.type !== 'ExpressionStatement' || !node.directive) {
-          break
+          continue
         }
 
         if (node.directive === 'use client') {
@@ -51,24 +44,27 @@ export function rscTransformUseServerPlugin(): Plugin {
         }
       }
 
-      if (!useServer) {
-        return code
-      }
-
       if (useClient && useServer) {
         throw new Error(
           'Cannot have both "use client" and "use server" directives in the same file.',
         )
       }
 
-      const transformedCode = transformServerModule(body, id, code)
+      let transformedCode = code
+
+      if (useServer) {
+        transformedCode = transformServerModule(body, id, code)
+      }
 
       return transformedCode
     },
   }
 }
 
-function addLocalExportedNames(names: Map<string, string>, node: any) {
+function addLocalExportedNames(
+  names: Map<string, string>,
+  node: Pattern | AssignmentProperty | Expression,
+) {
   switch (node.type) {
     case 'Identifier':
       names.set(node.name, node.name)
@@ -106,17 +102,22 @@ function addLocalExportedNames(names: Map<string, string>, node: any) {
     case 'ParenthesizedExpression':
       addLocalExportedNames(names, node.expression)
       return
+
+    default:
+      throw new Error(`Unsupported node type: ${node.type}`)
   }
 }
 
-function transformServerModule(body: any, url: string, code: string): string {
+function transformServerModule(
+  body: Program['body'],
+  url: string,
+  code: string,
+): string {
   // If the same local name is exported more than once, we only need one of the names.
-  const localNames = new Map()
-  const localTypes = new Map()
+  const localNames = new Map<string, string>()
+  const localTypes = new Map<string, string>()
 
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     switch (node.type) {
       case 'ExportAllDeclaration':
         // If export * is used, the other file needs to explicitly opt into "use server" too.
@@ -132,7 +133,7 @@ function transformServerModule(body: any, url: string, code: string): string {
           }
         }
 
-        continue
+        break
 
       case 'ExportNamedDeclaration':
         if (node.declaration) {
@@ -157,26 +158,36 @@ function transformServerModule(body: any, url: string, code: string): string {
 
           for (let j = 0; j < specifiers.length; j++) {
             const specifier = specifiers[j]
-            localNames.set(specifier.local.name, specifier.exported.name)
+            if (
+              specifier.local.type === 'Identifier' &&
+              specifier.exported.type === 'Identifier'
+            ) {
+              localNames.set(specifier.local.name, specifier.exported.name)
+            } else {
+              throw new Error('Unsupported export specifier')
+            }
           }
         }
 
-        continue
+        break
     }
   }
 
-  let newSrc = '"use server"\n' + code + '\n\n'
+  let newSrc =
+    code +
+    '\n\n' +
+    'import {registerServerReference} from ' +
+    '"react-server-dom-webpack/server";\n'
+
   localNames.forEach(function (exported, local) {
     if (localTypes.get(local) !== 'function') {
       // We first check if the export is a function and if so annotate it.
       newSrc += 'if (typeof ' + local + ' === "function") '
     }
 
-    newSrc += 'Object.defineProperties(' + local + ',{'
-    newSrc += '$$typeof: {value: Symbol.for("react.server.reference")},'
-    newSrc += '$$id: {value: ' + JSON.stringify(url + '#' + exported) + '},'
-    newSrc += '$$bound: { value: null }'
-    newSrc += '});\n\n'
+    const urlStr = JSON.stringify(url)
+    const exportedStr = JSON.stringify(exported)
+    newSrc += `registerServerReference(${local},${urlStr},${exportedStr});\n`
   })
 
   return newSrc

@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import semver from 'semver'
 import which from 'which'
@@ -7,12 +7,21 @@ import type { Config } from './config.js'
 
 import { ExitCodeError } from './error.js'
 
-export async function checkNodeVersion(config: Config) {
+export function checkNodeVersion(config: Config) {
   if (config.verbose) {
     console.log('Running `node --version`')
   }
 
-  const { stdout: version } = await execa`node --version`
+  // const { stdout: version } = spawnSync('node --version')
+  const result = spawnSync('node', ['--version'])
+
+  if (result.error) {
+    console.error('❌ Could not run `node --version`')
+
+    throw new ExitCodeError(1, result.error.message)
+  }
+
+  const version = result.stdout.toString()
 
   if (config.verbose) {
     console.log('Node version:', version)
@@ -20,7 +29,7 @@ export async function checkNodeVersion(config: Config) {
 
   if (!semver.satisfies(version, '>=20')) {
     console.error('❌Your Node.js version must be >=20')
-    console.error('Plesae install or switch to a newer version of Node')
+    console.error('Please install or switch to a newer version of Node')
     console.error(
       'We recommend using a Node version manager like `fnm`, `nvm` or `n`',
     )
