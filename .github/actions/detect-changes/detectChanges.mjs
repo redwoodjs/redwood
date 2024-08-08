@@ -232,6 +232,17 @@ async function main() {
     return
   }
 
+  // If the PR has the "force-ci" label, set all to true.
+  const { labels } = JSON.parse(core.getInput('labels'))
+  const hasForceCiLabel = labels.some((label) => label.name === 'force-ci')
+  if (hasForceCiLabel) {
+    console.log('Skipping check because of the "force-ci" label')
+    core.setOutput('code', true)
+    core.setOutput('rsc', true)
+    core.setOutput('ssr', true)
+    return
+  }
+
   const branchName = await getPrBranchName()
   const workflowRun = await getLatestCompletedWorkflowRun(branchName)
   const prCommits = await getCommitsNewerThan(workflowRun?.updated_at)
