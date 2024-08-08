@@ -12,7 +12,8 @@ import {
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import { BuildAndRestartOptions, BuildManager } from './buildManager'
+import type { BuildAndRestartOptions } from './buildManager'
+import { BuildManager } from './buildManager'
 import { serverManager } from './serverManager'
 
 const rwjsPaths = getPaths()
