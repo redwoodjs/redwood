@@ -38,6 +38,17 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   // instead of creating a new PrismaClient instance
   const prismaInstance = new PrismaClient()
 
+  type ResultExtends = {
+    [K in MNames]: {
+      withDataUri: {
+        needs: Record<string, boolean>
+        compute: (
+          modelData: Record<string, unknown>,
+        ) => <T>(this: T) => Promise<T>
+      }
+    }
+  }
+
   async function deleteUploadsFromDiskForArgs<T extends runtime.JsArgs>({
     model,
     args,
@@ -62,17 +73,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
 
   const queryExtends: runtime.ExtensionArgs['query'] = {}
 
-  const resultExtends = {} as {
-    [K in MNames]: {
-      withDataUri: {
-        needs: Record<string, boolean>
-        compute: (
-          modelData: Record<string, unknown>,
-        ) => <T>(this: T) => Promise<T>
-      }
-    }
-  }
-
+  const resultExtends = {} as ResultExtends
   for (const modelName in config) {
     // Guaranteed to have modelConfig, we're looping over config 🙄
     const modelConfig = config[modelName as MNames] as UploadConfigForModel
@@ -139,11 +140,8 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
               )
             }
 
-            // @TODO: edge cases
-            // 1. If readfile fails - file not found, etc.
-            // 2. If not a path, relative or absolute, throw error
-
             return {
+              // modelData is of type unknown at this point
               ...(modelData as any),
               ...base64UploadFields,
             }
