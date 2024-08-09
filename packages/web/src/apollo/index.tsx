@@ -275,8 +275,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     },
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
-    }).concat(uploadOrSSELink as any),
-    uploadOrSSELink as any,
+    }).concat(uploadOrSSELink),
+    uploadOrSSELink,
   )
 
   // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.
