@@ -46,7 +46,7 @@ export interface CreateServerOptions {
 
 type DefaultCreateServerOptions = Required<
   Omit<CreateServerOptions, 'fastifyServerOptions'> & {
-    fastifyServerOptions: Pick<FastifyServerOptions, 'requestTimeout'>
+    fastifyServerOptions: FastifyServerOptions
   }
 >
 
@@ -59,6 +59,7 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
   },
   fastifyServerOptions: {
     requestTimeout: 15_000,
+    bodyLimit: 1024 * 1024 * 15, // 15MB
   },
   configureApiServer: () => {},
   parseArgs: true,

@@ -167,6 +167,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/client@npm:^3.8.0":
+  version: 3.11.4
+  resolution: "@apollo/client@npm:3.11.4"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.1"
+    "@wry/caches": "npm:^1.0.0"
+    "@wry/equality": "npm:^0.5.6"
+    "@wry/trie": "npm:^0.5.0"
+    graphql-tag: "npm:^2.12.6"
+    hoist-non-react-statics: "npm:^3.3.2"
+    optimism: "npm:^0.18.0"
+    prop-types: "npm:^15.7.2"
+    rehackt: "npm:^0.1.0"
+    response-iterator: "npm:^0.2.6"
+    symbol-observable: "npm:^4.0.0"
+    ts-invariant: "npm:^0.10.3"
+    tslib: "npm:^2.3.0"
+    zen-observable-ts: "npm:^1.2.5"
+  peerDependencies:
+    graphql: ^15.0.0 || ^16.0.0
+    graphql-ws: ^5.5.5
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc <19.0.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+  peerDependenciesMeta:
+    graphql-ws:
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+    subscriptions-transport-ws:
+      optional: true
+  checksum: 10c0/1d0f848a68803e4987f7bceb6c4d76a1c9c584a66cefbcacfe8aebb342b68e4cca96ecb76e7a5a423f5047da8c35e52d971cad3d532248976976c32336eac7d9
+  languageName: node
+  linkType: hard
+
 "@ardatan/relay-compiler@npm:12.0.0":
   version: 12.0.0
   resolution: "@ardatan/relay-compiler@npm:12.0.0"
@@ -3118,7 +3155,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/busboy@npm:^2.0.0":
+"@fastify/busboy@npm:^2.0.0, @fastify/busboy@npm:^2.1.0":
   version: 2.1.1
   resolution: "@fastify/busboy@npm:2.1.1"
   checksum: 10c0/6f8027a8cba7f8f7b736718b013f5a38c0476eea67034c94a0d3c375e2b114366ad4419e6a6fa7ffc2ef9c6d3e0435d76dd584a7a1cbac23962fda7650b579e3
@@ -3164,6 +3201,20 @@ __metadata:
     fastify-plugin: "npm:^4.5.0"
     ws: "npm:^8.4.2"
   checksum: 10c0/601f8b1553e515a7a8e937bea10f290ab4298fd938047c94398aeda9d9213d77e67b37aafce648f4f34ea702ea234dd03f2680f97794f8489b2c8b044bf47c34
+  languageName: node
+  linkType: hard
+
+"@fastify/multipart@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "@fastify/multipart@npm:8.3.0"
+  dependencies:
+    "@fastify/busboy": "npm:^2.1.0"
+    "@fastify/deepmerge": "npm:^1.0.0"
+    "@fastify/error": "npm:^3.0.0"
+    fastify-plugin: "npm:^4.0.0"
+    secure-json-parse: "npm:^2.4.0"
+    stream-wormhole: "npm:^1.1.0"
+  checksum: 10c0/1021675af149435b1e585cfcaf8aba848c3799cbc213c18a0e3d74c6d64d21db27572a99295a8da5263f5562869452234dea2680e83e248456d97b560fb627eb
   languageName: node
   linkType: hard
 
@@ -7236,6 +7287,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
+    "@fastify/multipart": "npm:^8.3.0"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/fastify-web": "workspace:*"
@@ -8773,9 +8825,11 @@ __metadata:
     "@rollup/plugin-babel": "npm:6.0.4"
     "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
+    "@types/apollo-upload-client": "npm:^18"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@whatwg-node/fetch": "npm:0.9.19"
+    apollo-upload-client: "npm:^18.0.1"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
@@ -10346,6 +10400,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/apollo-upload-client@npm:^18":
+  version: 18.0.0
+  resolution: "@types/apollo-upload-client@npm:18.0.0"
+  dependencies:
+    "@apollo/client": "npm:^3.8.0"
+    "@types/extract-files": "npm:*"
+    graphql: "npm:14 - 16"
+  checksum: 10c0/e733c3a2abe6286da5557e393c0fcc9946bfdeb9115aabc978d7443f58ada466cb56ba98331d25266664186c6e424aea783eadd4fb7870c3d93f5b3fcafc696a
+  languageName: node
+  linkType: hard
+
 "@types/archiver@npm:^6":
   version: 6.0.2
   resolution: "@types/archiver@npm:6.0.2"
@@ -10672,6 +10737,13 @@ __metadata:
     "@types/qs": "npm:*"
     "@types/serve-static": "npm:*"
   checksum: 10c0/616e3618dfcbafe387bf2213e1e40f77f101685f3e9efff47c66fd2da611b7578ed5f4e61e1cdb1f2a32c8f01eff4ee74f93c52ad56d45e69b7154da66b3443a
+  languageName: node
+  linkType: hard
+
+"@types/extract-files@npm:*":
+  version: 13.0.1
+  resolution: "@types/extract-files@npm:13.0.1"
+  checksum: 10c0/4732f875db36498a4bf3deb6965267d515cc7a82be6a3b0346a6b9a6c9eec173ebae774301070de6c7f9b879121d81bc106498cce9cc7bc521b2e75b84710ed2
   languageName: node
   linkType: hard
 
@@ -12119,6 +12191,18 @@ __metadata:
     normalize-path: "npm:^3.0.0"
     picomatch: "npm:^2.0.4"
   checksum: 10c0/57b06ae984bc32a0d22592c87384cd88fe4511b1dd7581497831c56d41939c8a001b28e7b853e1450f2bf61992dfcaa8ae2d0d161a0a90c4fb631ef07098fbac
+  languageName: node
+  linkType: hard
+
+"apollo-upload-client@npm:^18.0.1":
+  version: 18.0.1
+  resolution: "apollo-upload-client@npm:18.0.1"
+  dependencies:
+    extract-files: "npm:^13.0.0"
+  peerDependencies:
+    "@apollo/client": ^3.8.0
+    graphql: 14 - 16
+  checksum: 10c0/30803d91df5ee32231afc8e15fa52be2a46b11c827255e8028b4f49149bcc8e4b4d4469e33d4331e63e12aa697e9a5e359a32ae3608335c51a76dbe62ad55bcb
   languageName: node
   linkType: hard
 
@@ -16974,6 +17058,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"extract-files@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "extract-files@npm:13.0.0"
+  dependencies:
+    is-plain-obj: "npm:^4.1.0"
+  checksum: 10c0/ee1e6e37f24fcb7de5019c0dc054f3e075664f63b5a9bd38c9ba1a32481ed1e77fd237adf826a7f6c7a1db406d9db4428f8ae4395fb2dfb602235b15f8f4bc3e
+  languageName: node
+  linkType: hard
+
 "extract-zip@npm:2.0.1":
   version: 2.0.1
   resolution: "extract-zip@npm:2.0.1"
@@ -18448,7 +18541,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.9.0, graphql@npm:^16.0.0, graphql@npm:^16.8.1":
+"graphql@npm:14 - 16, graphql@npm:16.9.0, graphql@npm:^16.0.0, graphql@npm:^16.8.1":
   version: 16.9.0
   resolution: "graphql@npm:16.9.0"
   checksum: 10c0/a8850f077ff767377237d1f8b1da2ec70aeb7623cdf1dfc9e1c7ae93accc0c8149c85abe68923be9871a2934b1bce5a2496f846d4d56e1cfb03eaaa7ddba9b6a
@@ -19631,6 +19724,13 @@ __metadata:
   version: 3.0.0
   resolution: "is-plain-obj@npm:3.0.0"
   checksum: 10c0/8e6483bfb051d42ec9c704c0ede051a821c6b6f9a6c7a3e3b55aa855e00981b0580c8f3b1f5e2e62649b39179b1abfee35d6f8086d999bfaa32c1908d29b07bc
+  languageName: node
+  linkType: hard
+
+"is-plain-obj@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "is-plain-obj@npm:4.1.0"
+  checksum: 10c0/32130d651d71d9564dc88ba7e6fda0e91a1010a3694648e9f4f47bb6080438140696d3e3e15c741411d712e47ac9edc1a8a9de1fe76f3487b0d90be06ac9975e
   languageName: node
   linkType: hard
 
@@ -27506,6 +27606,13 @@ __metadata:
   version: 1.0.3
   resolution: "stream-shift@npm:1.0.3"
   checksum: 10c0/939cd1051ca750d240a0625b106a2b988c45fb5a3be0cebe9a9858cb01bc1955e8c7b9fac17a9462976bea4a7b704e317c5c2200c70f0ca715a3363b9aa4fd3b
+  languageName: node
+  linkType: hard
+
+"stream-wormhole@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "stream-wormhole@npm:1.1.0"
+  checksum: 10c0/50800bcc919c01085b0bafa175c61a0c0bec27987dcc20aec92f8125bdc8b191102a030e114760d2ac86265eea65627d0145eea3adb8cb4453b3295e4468661a
   languageName: node
   linkType: hard
 

@@ -1,3 +1,4 @@
+import fastifyMultiPart from '@fastify/multipart'
 import fastifyUrlData from '@fastify/url-data'
 import fg from 'fast-glob'
 import type {
@@ -6,7 +7,6 @@ import type {
   FastifyReply,
   FastifyRequest,
 } from 'fastify'
-import fastifyRawBody from 'fastify-raw-body'
 import type { Plugin } from 'graphql-yoga'
 
 import type { GlobalContext } from '@redwoodjs/context'
@@ -33,10 +33,13 @@ export async function redwoodFastifyGraphQLServer(
   redwoodOptions.apiRootPath ??= '/'
   redwoodOptions.apiRootPath = coerceRootPath(redwoodOptions.apiRootPath)
 
+  // @MARK: We need to disable this in order for multipart requests to work
+  // otherwise you get incomprehensible errors like: 'Missing multipart form field "operations"'
+  // await fastify.register(fastifyRawBody)
   fastify.register(fastifyUrlData)
+  fastify.register(fastifyMultiPart)
   // Starting in Fastify v4, we have to await the fastifyRawBody plugin's registration
   // to ensure it's ready
-  await fastify.register(fastifyRawBody)
 
   const method = ['GET', 'POST', 'OPTIONS'] as HTTPMethods[]
 
