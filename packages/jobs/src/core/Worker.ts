@@ -158,7 +158,6 @@ export class Worker {
 
   async #work() {
     do {
-      console.info('Checking...')
       this.lastCheckTime = new Date()
 
       this.logger.debug(
