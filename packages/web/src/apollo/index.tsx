@@ -226,7 +226,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const uploadLink: ApolloLink = createUploadLink({
     uri,
     ...httpLinkConfig,
-    // The upload link types don't seem to match the ApolloLink types, even though it comes from Apollo.
+    // The upload link types don't match the ApolloLink types, even though it comes from Apollo
+    // because they use ESM imports and we're using the default ones.
   }) as unknown as ApolloLink
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query

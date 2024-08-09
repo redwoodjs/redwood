@@ -8829,7 +8829,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     "@whatwg-node/fetch": "npm:0.9.19"
-    apollo-upload-client: "npm:^18.0.1"
+    apollo-upload-client: "npm:18.0.1"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.37.1"
     graphql: "npm:16.9.0"
@@ -12194,7 +12194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-upload-client@npm:^18.0.1":
+"apollo-upload-client@npm:18.0.1":
   version: 18.0.1
   resolution: "apollo-upload-client@npm:18.0.1"
   dependencies:
