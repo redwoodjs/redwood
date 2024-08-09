@@ -34,7 +34,7 @@
     "@types/react": "^18.2.55",
     "react": "19.0.0-rc-8269d55d-20240802",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "netlify-identity-widget": "1.9.2"
