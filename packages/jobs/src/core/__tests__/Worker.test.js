@@ -12,15 +12,6 @@ import { mockLogger } from './mocks'
 // called
 vi.mock('../Executor')
 
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => false,
-  }
-})
-
 describe('constructor', () => {
   it('saves options', () => {
     const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }

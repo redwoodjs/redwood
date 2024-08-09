@@ -9,15 +9,6 @@ import { PrismaAdapter } from '../PrismaAdapter'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal<typeof CliHelpers>()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => false,
-  }
-})
-
 let mockDb: PrismaClient
 
 const mockLogger = {

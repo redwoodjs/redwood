@@ -7,15 +7,6 @@ import { Executor } from '../Executor'
 
 import { mockLogger } from './mocks'
 
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => false,
-  }
-})
-
 const mocks = vi.hoisted(() => {
   return {
     loadJob: vi.fn(),

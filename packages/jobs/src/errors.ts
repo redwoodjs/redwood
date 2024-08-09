@@ -1,7 +1,4 @@
-// @ts-expect-error - doesn't understand dual CJS/ESM export
-import { isTypeScriptProject } from '@redwoodjs/cli-helpers'
-
-const JOBS_CONFIG_FILENAME = isTypeScriptProject() ? 'jobs.ts' : 'jobs.js'
+const JOBS_CONFIG_FILENAME = 'jobs.ts/js'
 
 // Parent class for any RedwoodJob-related error
 export class RedwoodJobError extends Error {

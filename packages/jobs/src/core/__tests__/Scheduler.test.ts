@@ -14,15 +14,6 @@ import { Scheduler } from '../Scheduler.js'
 
 import { mockAdapter, mockLogger } from './mocks.ts'
 
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal<typeof CliHelpers>()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => true,
-  }
-})
-
 const FAKE_NOW = new Date('2024-01-01')
 vi.useFakeTimers().setSystemTime(FAKE_NOW)
 

@@ -2,18 +2,9 @@ import { describe, expect, vi, it, beforeEach } from 'vitest'
 
 import type CliHelpers from '@redwoodjs/cli-helpers'
 
-import { DEFAULT_LOGGER, DEFAULT_QUEUE, DEFAULT_PRIORITY } from '../consts'
-import * as errors from '../errors'
+import { DEFAULT_LOGGER, DEFAULT_QUEUE, DEFAULT_PRIORITY } from '../../consts'
+import * as errors from '../../errors'
 import { RedwoodJob } from '../RedwoodJob'
-
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal<typeof CliHelpers>()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => true,
-  }
-})
 
 const FAKE_NOW = new Date('2024-01-01')
 vi.useFakeTimers().setSystemTime(FAKE_NOW)

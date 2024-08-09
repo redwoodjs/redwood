@@ -10,15 +10,6 @@ import { mockAdapter } from './mocks'
 
 vi.mock('../Scheduler')
 
-vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
-  const originalCliHelpers = await importOriginal<typeof CliHelpers>()
-
-  return {
-    ...originalCliHelpers,
-    isTypeScriptProject: () => true,
-  }
-})
-
 describe('createScheduler', () => {
   it('returns a function', () => {
     const scheduler = createScheduler({
