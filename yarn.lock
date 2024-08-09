@@ -5258,11 +5258,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lerna/create@npm:8.1.7":
-  version: 8.1.7
-  resolution: "@lerna/create@npm:8.1.7"
+"@lerna/create@npm:8.1.8":
+  version: 8.1.8
+  resolution: "@lerna/create@npm:8.1.8"
   dependencies:
-    "@npmcli/arborist": "npm:7.5.3"
+    "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
     "@npmcli/run-script": "npm:8.1.0"
     "@nx/devkit": "npm:>=17.1.2 < 20"
@@ -5333,7 +5333,7 @@ __metadata:
     write-pkg: "npm:4.0.0"
     yargs: "npm:17.7.2"
     yargs-parser: "npm:21.1.1"
-  checksum: 10c0/9f44f4bf7741b0b594b8bd10be60c7aed8aa5335fcc9ec75bcac40744fcf4cadad40ff37b8f85445c4b9d470388df6e0bbdfcd7d5de43b681e315dc288a2fc9d
+  checksum: 10c0/be58b0fcaf9e02abc69ed9b95cb81acfc919c1f01bb430d3c4d5b532d8f6fadff1a8504386f8ddf7a68ded0a70c6ad2b4ed63c3c756ee5f1deee138bd5632355
   languageName: node
   linkType: hard
 
@@ -5500,51 +5500,6 @@ __metadata:
     lru-cache: "npm:^10.0.1"
     socks-proxy-agent: "npm:^8.0.1"
   checksum: 10c0/7b89590598476dda88e79c473766b67c682aae6e0ab0213491daa6083dcc0c171f86b3868f5506f22c09aa5ea69ad7dfb78f4bf39a8dca375d89a42f408645b3
-  languageName: node
-  linkType: hard
-
-"@npmcli/arborist@npm:7.5.3":
-  version: 7.5.3
-  resolution: "@npmcli/arborist@npm:7.5.3"
-  dependencies:
-    "@isaacs/string-locale-compare": "npm:^1.1.0"
-    "@npmcli/fs": "npm:^3.1.1"
-    "@npmcli/installed-package-contents": "npm:^2.1.0"
-    "@npmcli/map-workspaces": "npm:^3.0.2"
-    "@npmcli/metavuln-calculator": "npm:^7.1.1"
-    "@npmcli/name-from-folder": "npm:^2.0.0"
-    "@npmcli/node-gyp": "npm:^3.0.0"
-    "@npmcli/package-json": "npm:^5.1.0"
-    "@npmcli/query": "npm:^3.1.0"
-    "@npmcli/redact": "npm:^2.0.0"
-    "@npmcli/run-script": "npm:^8.1.0"
-    bin-links: "npm:^4.0.4"
-    cacache: "npm:^18.0.3"
-    common-ancestor-path: "npm:^1.0.1"
-    hosted-git-info: "npm:^7.0.2"
-    json-parse-even-better-errors: "npm:^3.0.2"
-    json-stringify-nice: "npm:^1.1.4"
-    lru-cache: "npm:^10.2.2"
-    minimatch: "npm:^9.0.4"
-    nopt: "npm:^7.2.1"
-    npm-install-checks: "npm:^6.2.0"
-    npm-package-arg: "npm:^11.0.2"
-    npm-pick-manifest: "npm:^9.0.1"
-    npm-registry-fetch: "npm:^17.0.1"
-    pacote: "npm:^18.0.6"
-    parse-conflict-json: "npm:^3.0.0"
-    proc-log: "npm:^4.2.0"
-    proggy: "npm:^2.0.0"
-    promise-all-reject-late: "npm:^1.0.0"
-    promise-call-limit: "npm:^3.0.1"
-    read-package-json-fast: "npm:^3.0.2"
-    semver: "npm:^7.3.7"
-    ssri: "npm:^10.0.6"
-    treeverse: "npm:^3.0.0"
-    walk-up-path: "npm:^3.0.1"
-  bin:
-    arborist: bin/index.js
-  checksum: 10c0/61e8f73f687c5c62704de6d2a081490afe6ba5e5526b9b2da44c6cb137df30256d5650235d4ece73454ddc4c40a291e26881bbcaa83c03404177cb3e05e26721
   languageName: node
   linkType: hard
 
@@ -21225,12 +21180,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:8.1.7":
-  version: 8.1.7
-  resolution: "lerna@npm:8.1.7"
+"lerna@npm:8.1.8":
+  version: 8.1.8
+  resolution: "lerna@npm:8.1.8"
   dependencies:
-    "@lerna/create": "npm:8.1.7"
-    "@npmcli/arborist": "npm:7.5.3"
+    "@lerna/create": "npm:8.1.8"
+    "@npmcli/arborist": "npm:7.5.4"
     "@npmcli/package-json": "npm:5.2.0"
     "@npmcli/run-script": "npm:8.1.0"
     "@nx/devkit": "npm:>=17.1.2 < 20"
@@ -21312,7 +21267,7 @@ __metadata:
     yargs-parser: "npm:21.1.1"
   bin:
     lerna: dist/cli.js
-  checksum: 10c0/aa3f4fb12eadafedc4736c9832a2ca7557757254b2e62f6454b4ed71cd4a92b354ced6acd92b505a8701cd948473df8bb70753fc0dd7213f8bbf4349d0b1c4d5
+  checksum: 10c0/8d5e4515e6d4b854398202eabc6700e9470d1f3d1f079cf6db1bb3d609f2fb61ab694d6ad879ecf57e2ff7f17d0b1b1c2e1680f084ad3e9b518f354937ffe33c
   languageName: node
   linkType: hard
 
@@ -26597,7 +26552,7 @@ __metadata:
     human-id: "npm:^4.1.1"
     jest: "npm:29.7.0"
     jscodeshift: "npm:0.16.1"
-    lerna: "npm:8.1.7"
+    lerna: "npm:8.1.8"
     listr2: "npm:6.6.1"
     make-dir-cli: "npm:4.0.0"
     msw: "npm:1.3.3"
