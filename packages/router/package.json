@@ -96,7 +96,7 @@
     "core-js": "3.37.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@redwoodjs/framework-tools": "workspace:*",

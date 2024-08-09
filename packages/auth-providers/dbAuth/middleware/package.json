@@ -41,7 +41,7 @@
     "@redwoodjs/web": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
