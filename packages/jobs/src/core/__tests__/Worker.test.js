@@ -1,6 +1,6 @@
 import console from 'node:console'
 
-import { describe, expect, vi, it } from 'vitest'
+import { beforeEach, describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
@@ -194,6 +194,10 @@ describe('constructor', () => {
 })
 
 describe('run', async () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+  })
+
   it('tries to find a job', async () => {
     const adapter = { find: vi.fn(() => null) }
     const worker = new Worker({
@@ -269,7 +273,7 @@ describe('run', async () => {
         .mockImplementationOnce(() => ({ id: 1 }))
         .mockImplementationOnce(() => null),
     }
-    vi.spyOn(Executor, 'constructor')
+    //vi.spyOn(Executor, 'constructor')
 
     const worker = new Worker({
       adapter,
@@ -310,7 +314,6 @@ describe('run', async () => {
 
   it('calls `perform` on the Executor instance', async () => {
     const adapter = { find: vi.fn(() => ({ id: 1 })) }
-    const spy = vi.spyOn(Executor.prototype, 'perform')
     const worker = new Worker({
       adapter,
       logger: mockLogger,
@@ -321,6 +324,6 @@ describe('run', async () => {
 
     await worker.run()
 
-    expect(spy).toHaveBeenCalled()
+    expect(Executor.prototype.perform).toHaveBeenCalled()
   })
 })
