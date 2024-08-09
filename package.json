@@ -92,7 +92,7 @@
     "core-js": "3.37.1",
     "cross-env": "7.0.3",
     "cypress": "13.13.2",
-    "cypress-fail-fast": "7.1.0",
+    "cypress-fail-fast": "7.1.1",
     "cypress-wait-until": "3.0.2",
     "dependency-cruiser": "16.3.10",
     "dotenv": "16.4.5",
