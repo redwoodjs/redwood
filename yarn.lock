@@ -14806,14 +14806,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-fail-fast@npm:7.1.0":
-  version: 7.1.0
-  resolution: "cypress-fail-fast@npm:7.1.0"
+"cypress-fail-fast@npm:7.1.1":
+  version: 7.1.1
+  resolution: "cypress-fail-fast@npm:7.1.1"
   dependencies:
     chalk: "npm:4.1.2"
   peerDependencies:
     cypress: ">=8.0.0"
-  checksum: 10c0/a523c0dac14c8c6a7297282e0dfd275f9bbcf242661932a449a5a2a02521886ceb70d420ed81d042a1d69bc62dc96209310225a9e54a2c44cf9c929dd2b8d7e4
+  checksum: 10c0/82087c30e56e8675806e265cf8d33e05ac043bd9227d77912921cc36f9a4d188f7e2429c52f9f98e69d24365ebea8e8737d60711c3186727029adabef6056cce
   languageName: node
   linkType: hard
 
@@ -26533,7 +26533,7 @@ __metadata:
     core-js: "npm:3.37.1"
     cross-env: "npm:7.0.3"
     cypress: "npm:13.13.2"
-    cypress-fail-fast: "npm:7.1.0"
+    cypress-fail-fast: "npm:7.1.1"
     cypress-wait-until: "npm:3.0.2"
     dependency-cruiser: "npm:16.3.10"
     dotenv: "npm:16.4.5"
