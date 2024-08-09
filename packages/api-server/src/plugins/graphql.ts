@@ -38,8 +38,6 @@ export async function redwoodFastifyGraphQLServer(
   // await fastify.register(fastifyRawBody)
   fastify.register(fastifyUrlData)
   fastify.register(fastifyMultiPart)
-  // Starting in Fastify v4, we have to await the fastifyRawBody plugin's registration
-  // to ensure it's ready
 
   const method = ['GET', 'POST', 'OPTIONS'] as HTTPMethods[]
 

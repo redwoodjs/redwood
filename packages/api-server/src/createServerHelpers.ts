@@ -90,6 +90,7 @@ export function resolveOptions(
       requestTimeout:
         DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
       logger: options.logger ?? DEFAULT_CREATE_SERVER_OPTIONS.logger,
+      bodyLimit: DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.bodyLimit,
     },
     configureApiServer:
       options.configureApiServer ??
