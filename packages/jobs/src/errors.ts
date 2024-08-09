@@ -25,10 +25,17 @@ export class ModelNameError extends RedwoodJobError {
   }
 }
 
-// Thrown when the Executor is instantiated without an adapter
+// Thrown when the Worker or Executor is instantiated without an adapter
 export class AdapterRequiredError extends RedwoodJobError {
   constructor() {
     super('`adapter` is required to perform a job')
+  }
+}
+
+// Thrown when the Worker is instantiated without an array of queues
+export class QueuesRequiredError extends RedwoodJobError {
+  constructor() {
+    super('`queues` is required to find a job to run')
   }
 }
 
