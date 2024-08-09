@@ -5,8 +5,7 @@ import { beforeEach, describe, expect, vi, it } from 'vitest'
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
 
-// so that registerApiSideBabelHook() doesn't freak out about redwood.toml
-vi.mock('@redwoodjs/babel-config')
+import { mockLogger } from './mocks'
 
 vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
   const originalCliHelpers = await importOriginal()
@@ -28,13 +27,6 @@ vi.mock('../../loaders', () => {
     loadJob: mocks.loadJob,
   }
 })
-
-const mockLogger = {
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-}
 
 describe('constructor', () => {
   it('saves options', () => {

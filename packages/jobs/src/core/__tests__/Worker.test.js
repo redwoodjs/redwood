@@ -1,25 +1,16 @@
 import console from 'node:console'
 
-import {
-  describe,
-  expect,
-  vi,
-  it,
-  beforeAll,
-  afterAll,
-  afterEach,
-} from 'vitest'
+import { describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
-import { Worker, DEFAULTS } from '../Worker'
+import { Worker } from '../Worker'
+
+import { mockLogger } from './mocks'
 
 // don't execute any code inside Executor, just spy on whether functions are
 // called
 vi.mock('../Executor')
-
-// so that registerApiSideBabelHook() doesn't freak out about redwood.toml
-vi.mock('@redwoodjs/babel-config')
 
 vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
   const originalCliHelpers = await importOriginal()
@@ -30,27 +21,16 @@ vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
   }
 })
 
-// vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
-
-const mockLogger = {
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-}
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
 describe('constructor', () => {
   it('saves options', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.options.adapter).toEqual(options.adapter)
   })
 
   it('extracts adapter from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.adapter).toEqual('adapter')
@@ -59,12 +39,12 @@ describe('constructor', () => {
   it('extracts logger from options to variable', () => {
     const options = {
       adapter: 'adapter',
+      logger: mockLogger,
       queues: ['*'],
-      logger: { foo: 'bar' },
     }
     const worker = new Worker(options)
 
-    expect(worker.logger).toEqual({ foo: 'bar' })
+    expect(worker.logger).toEqual(mockLogger)
   })
 
   it('defaults logger if not provided', () => {
@@ -77,6 +57,7 @@ describe('constructor', () => {
   it('extracts processName from options to variable', () => {
     const options = {
       adapter: 'adapter',
+      logger: mockLogger,
       queues: ['*'],
       processName: 'processName',
     }
@@ -86,84 +67,123 @@ describe('constructor', () => {
   })
 
   it('extracts queue from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['default'] }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['default'],
+    }
     const worker = new Worker(options)
 
     expect(worker.queues).toEqual(['default'])
   })
 
   it('extracts clear from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], clear: true }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      clear: true,
+    }
     const worker = new Worker(options)
 
     expect(worker.clear).toEqual(true)
   })
 
   it('defaults clear if not provided', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.clear).toEqual(false)
   })
 
   it('extracts maxAttempts from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], maxAttempts: 10 }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      maxAttempts: 10,
+    }
     const worker = new Worker(options)
 
     expect(worker.maxAttempts).toEqual(10)
   })
 
   it('extracts maxRuntime from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], maxRuntime: 10 }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      maxRuntime: 10,
+    }
     const worker = new Worker(options)
 
     expect(worker.maxRuntime).toEqual(10)
   })
 
   it('extracts deleteFailedJobs from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], deleteFailedJobs: 10 }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      deleteFailedJobs: 10,
+    }
     const worker = new Worker(options)
 
     expect(worker.deleteFailedJobs).toEqual(10)
   })
 
   it('extracts sleepDelay from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], sleepDelay: 5 }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      sleepDelay: 5,
+    }
     const worker = new Worker(options)
 
     expect(worker.sleepDelay).toEqual(5000)
   })
 
   it('can set sleepDelay to 0', () => {
-    const options = { adapter: 'adapter', queues: ['*'], sleepDelay: 0 }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      sleepDelay: 0,
+    }
     const worker = new Worker(options)
 
     expect(worker.sleepDelay).toEqual(0)
   })
 
   it('sets forever', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.forever).toEqual(true)
   })
 
   it('extracts workoff from options to variable', () => {
-    const options = { adapter: 'adapter', queues: ['*'], workoff: true }
+    const options = {
+      adapter: 'adapter',
+      logger: mockLogger,
+      queues: ['*'],
+      workoff: true,
+    }
     const worker = new Worker(options)
 
     expect(worker.workoff).toEqual(true)
   })
 
   it('defaults workoff if not provided', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.workoff).toEqual(false)
   })
 
   it('sets lastCheckTime to the current time', () => {
-    const options = { adapter: 'adapter', queues: ['*'] }
+    const options = { adapter: 'adapter', logger: mockLogger, queues: ['*'] }
     const worker = new Worker(options)
 
     expect(worker.lastCheckTime).toBeInstanceOf(Date)
@@ -187,6 +207,7 @@ describe('run', async () => {
     const adapter = { find: vi.fn(() => null) }
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       forever: false,
@@ -205,6 +226,7 @@ describe('run', async () => {
     const adapter = { find: vi.fn(() => null) }
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0.01,
       forever: true,
@@ -223,6 +245,7 @@ describe('run', async () => {
 
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       forever: false,
@@ -238,6 +261,7 @@ describe('run', async () => {
 
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       workoff: true,
@@ -258,6 +282,7 @@ describe('run', async () => {
 
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       workoff: true,
@@ -271,6 +296,7 @@ describe('run', async () => {
     const adapter = { find: vi.fn(() => ({ id: 1 })) }
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       forever: false,
@@ -296,6 +322,7 @@ describe('run', async () => {
     const spy = vi.spyOn(Executor.prototype, 'perform')
     const worker = new Worker({
       adapter,
+      logger: mockLogger,
       queues: ['*'],
       sleepDelay: 0,
       forever: false,
