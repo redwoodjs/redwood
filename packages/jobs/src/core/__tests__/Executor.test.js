@@ -3,7 +3,6 @@ import console from 'node:console'
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../errors'
-import { loadJob } from '../../loaders'
 import { Executor } from '../Executor'
 
 // so that registerApiSideBabelHook() doesn't freak out about redwood.toml
