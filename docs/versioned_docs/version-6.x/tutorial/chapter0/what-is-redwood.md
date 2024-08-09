@@ -312,7 +312,6 @@ Redwood's job doesn't end until your application is deployed to the world! That'
 * [AWS](https://aws.amazon.com/)
 * [Vercel](https://vercel.com/)
 * [Google Cloud](https://cloud.google.com/)
-* [Azure](https://azure.microsoft.com/en-us/)
 * [Render](https://render.com/)
 * [Flightcontrol](https://www.flightcontrol.dev/)
 * [Netlify](https://www.netlify.com/)
