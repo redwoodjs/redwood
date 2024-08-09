@@ -28,13 +28,13 @@ import {
   useSuspenseQuery,
 } from '@apollo/client/react/hooks/hooks.cjs'
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
-import './typeOverride.js'
 
+import './typeOverride.js'
+import { createUploadLink } from '../bundled/apollo-upload-client.js'
 import {
   FetchConfigProvider,
   useFetchConfig,
