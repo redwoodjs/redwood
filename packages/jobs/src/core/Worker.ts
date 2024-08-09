@@ -17,11 +17,13 @@ import type { BasicLogger } from '../types'
 import { Executor } from './Executor'
 
 interface WorkerOptions {
+  // required
   adapter: BaseAdapter
-  logger?: BasicLogger
-  clear?: boolean
   processName: string
   queues: string[]
+  // optional
+  logger?: BasicLogger
+  clear?: boolean
   maxAttempts?: number
   maxRuntime?: number
   deleteSuccessfulJobs?: boolean
@@ -45,7 +47,7 @@ interface DefaultOptions {
   forever: WorkerOptions['forever']
 }
 
-type CompleteOptions = WorkerOptions & DefaultOptions
+type CompleteOptions = Required<WorkerOptions>
 
 const DEFAULT_OPTIONS: DefaultOptions = {
   logger: DEFAULT_LOGGER,
