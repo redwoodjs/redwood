@@ -66,7 +66,7 @@ export class Executor {
   }
 
   async perform() {
-    this.logger.info(this.job, `Started job ${this.job.id}`)
+    this.logger.info(`Started job ${this.job.id}`)
 
     // TODO break these lines down into individual try/catch blocks?
     try {
@@ -90,7 +90,7 @@ export class Executor {
       if (this.job.attempts >= this.maxAttempts) {
         this.logger.warn(
           this.job,
-          `Failed job ${this.job.id}: reached max attempts`,
+          `Failed job ${this.job.id}: reached max attempts (${this.maxAttempts})`,
         )
         await this.adapter.failure({
           job: this.job,
