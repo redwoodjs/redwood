@@ -3,44 +3,87 @@
 import { setTimeout } from 'node:timers'
 
 import type { BaseAdapter } from '../adapters/BaseAdapter'
-import { AdapterRequiredError } from '../errors'
+import {
+  DEFAULT_DELETE_FAILED_JOBS,
+  DEFAULT_DELETE_SUCCESSFUL_JOBS,
+  DEFAULT_LOGGER,
+  DEFAULT_MAX_ATTEMPTS,
+  DEFAULT_MAX_RUNTIME,
+  DEFAULT_SLEEP_DELAY,
+} from '../consts'
+import { AdapterRequiredError, QueuesRequiredError } from '../errors'
 import type { BasicLogger } from '../types'
 
 import { Executor } from './Executor'
 
-interface WorkerConfig {
+interface WorkerOptions {
   adapter: BaseAdapter
-  logger: BasicLogger
-  clear: boolean
+  logger?: BasicLogger
+  clear?: boolean
   processName: string
   queues: string[]
-  maxAttempts: number
-  maxRuntime: number
-  deleteFailedJobs: boolean
-  sleepDelay: number
-  workoff: boolean
+  maxAttempts?: number
+  maxRuntime?: number
+  deleteSuccessfulJobs?: boolean
+  deleteFailedJobs?: boolean
+  sleepDelay?: number
+  workoff?: boolean
+  // Makes testing much easier: we can set to false to NOT run in an infinite
+  // loop by default during tests
+  forever?: boolean
+}
+
+interface DefaultOptions {
+  logger: WorkerOptions['logger']
+  clear: WorkerOptions['clear']
+  maxAttempts: WorkerOptions['maxAttempts']
+  maxRuntime: WorkerOptions['maxRuntime']
+  deleteSuccessfulJobs: WorkerOptions['deleteSuccessfulJobs']
+  deleteFailedJobs: WorkerOptions['deleteFailedJobs']
+  sleepDelay: WorkerOptions['sleepDelay']
+  workoff: WorkerOptions['workoff']
+  forever: WorkerOptions['forever']
+}
+
+type CompleteOptions = WorkerOptions & DefaultOptions
+
+const DEFAULT_OPTIONS: DefaultOptions = {
+  logger: DEFAULT_LOGGER,
+  clear: false,
+  maxAttempts: DEFAULT_MAX_ATTEMPTS,
+  maxRuntime: DEFAULT_MAX_RUNTIME,
+  deleteSuccessfulJobs: DEFAULT_DELETE_SUCCESSFUL_JOBS,
+  deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
+  sleepDelay: DEFAULT_SLEEP_DELAY,
+  workoff: false,
+  forever: true,
 }
 
 export class Worker {
-  options: WorkerConfig
-  adapter: BaseAdapter
-  logger: BasicLogger
-  clear: boolean
-  processName: string
-  queues: string[]
-  maxAttempts: number
-  maxRuntime: number
-  deleteFailedJobs: boolean
-  sleepDelay: number
+  options: CompleteOptions
+  adapter: CompleteOptions['adapter']
+  logger: CompleteOptions['logger']
+  clear: CompleteOptions['clear']
+  processName: CompleteOptions['processName']
+  queues: CompleteOptions['queues']
+  maxAttempts: CompleteOptions['maxAttempts']
+  maxRuntime: CompleteOptions['maxRuntime']
+  deleteSuccessfulJobs: CompleteOptions['deleteSuccessfulJobs']
+  deleteFailedJobs: CompleteOptions['deleteFailedJobs']
+  sleepDelay: CompleteOptions['sleepDelay']
+  forever: CompleteOptions['forever']
+  workoff: CompleteOptions['workoff']
   lastCheckTime: Date
-  forever: boolean
-  workoff: boolean
 
-  constructor(options: WorkerConfig) {
-    this.options = options
+  constructor(options: WorkerOptions) {
+    this.options = { ...DEFAULT_OPTIONS, ...options }
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()
+    }
+
+    if (!options?.queues || options.queues.length === 0) {
+      throw new QueuesRequiredError()
     }
 
     this.adapter = this.options.adapter
@@ -58,11 +101,13 @@ export class Worker {
     // the maximum number of times to retry a failed job
     this.maxAttempts = this.options.maxAttempts
 
-    // the maximum amount of time to let a job run
+    // the maximum amount of time to let a job run in seconds
     this.maxRuntime = this.options.maxRuntime
 
+    // whether to keep succeeded jobs in the database
+    this.deleteSuccessfulJobs = this.options.deleteSuccessfulJobs
+
     // whether to keep failed jobs in the database after reaching maxAttempts
-    // `undefined` check needed here so we can explicitly set to `false`
     this.deleteFailedJobs = this.options.deleteFailedJobs
 
     // the amount of time to wait in milliseconds between checking for jobs.
@@ -74,7 +119,7 @@ export class Worker {
     // running (regardless of how many outstanding jobs there are to be worked
     // on). The worker process will set this to `false` as soon as the user hits
     // ctrl-c so any current job will complete before exiting.
-    this.forever = true
+    this.forever = this.options.forever
 
     // Set to `true` if the work loop should run through all *available* jobs
     // and then quit. Serves a slightly different purpose than `forever` which
@@ -111,6 +156,7 @@ export class Worker {
 
   async #work() {
     do {
+      console.info('Checking...')
       this.lastCheckTime = new Date()
 
       this.logger.debug(
@@ -125,11 +171,13 @@ export class Worker {
 
       if (job) {
         // TODO add timeout handling if runs for more than `this.maxRuntime`
+        // will need to run Executor in a separate process with a timeout
         await new Executor({
           adapter: this.adapter,
           logger: this.logger,
           job,
           maxAttempts: this.maxAttempts,
+          deleteSuccessfulJobs: this.deleteSuccessfulJobs,
           deleteFailedJobs: this.deleteFailedJobs,
         }).perform()
       } else if (this.workoff) {
