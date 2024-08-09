@@ -1,0 +1,7 @@
+import { RedwoodJob } from '@redwoodjs/jobs'
+
+export class ${name}Job extends RedwoodJob {
+  async perform() {
+    // job implementation here
+  }
+}

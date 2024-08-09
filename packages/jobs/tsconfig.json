@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../babel-config" },
+    { "path": "../cli-helpers" },
+    { "path": "../project-config" },
+  ]
+}

@@ -8313,6 +8313,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/jobs@workspace:packages/jobs":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/jobs@workspace:packages/jobs"
+  dependencies:
+    "@redwoodjs/project-config": "workspace:*"
+    fast-glob: "npm:3.3.2"
+    tstyche: "npm:2.1.0"
+    tsx: "npm:4.16.2"
+    typescript: "npm:5.5.4"
+    vitest: "npm:2.0.4"
+  bin:
+    rw-jobs: ./dist/bins/rw-jobs.js
+    rw-jobs-worker: ./dist/bins/rw-jobs-worker.js
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/mailer-core@workspace:*, @redwoodjs/mailer-core@workspace:packages/mailer/core":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-core@workspace:packages/mailer/core"

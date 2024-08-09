@@ -27,6 +27,7 @@
     "baremetal",
     "bazinga",
     "corepack",
+    "daemonized",
     "envinfo",
     "execa",
     "Fastify",

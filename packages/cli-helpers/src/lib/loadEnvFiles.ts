@@ -17,7 +17,10 @@ export function loadEnvFiles() {
   loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  const { loadEnvFiles } = Parser.default(hideBin(process.argv), {
+  // TODO(@jgmw): what the hell is going on here?
+  // @ts-expect-error Used to be Parser.default but that blows up when starting
+  // job worker coordinator
+  const { loadEnvFiles } = Parser(hideBin(process.argv), {
     array: ['load-env-files'],
     default: {
       loadEnvFiles: [],
