@@ -3,11 +3,12 @@ import chalk from 'chalk'
 import { redwoodFastifyWeb, coerceRootPath } from '@redwoodjs/fastify-web'
 
 import { getWebHost, getWebPort, getAPIHost, getAPIPort } from './cliHelpers'
+import { createServer as createApiServer } from './createServer'
 import createFastifyInstance from './fastify'
-import { redwoodFastifyAPI } from './plugins/api'
 import type { BothParsedOptions } from './types'
 
 export async function handler(options: BothParsedOptions) {
+  console.log('Using BOTH CLI CONFIG HANDLER')
   const timeStart = Date.now()
   console.log(chalk.dim.italic('Starting API and Web Servers...'))
 
@@ -33,12 +34,8 @@ export async function handler(options: BothParsedOptions) {
     },
   })
 
-  const apiFastify = await createFastifyInstance()
-  apiFastify.register(redwoodFastifyAPI, {
-    redwood: {
-      apiRootPath: options.apiRootPath,
-      loadUserConfig: true,
-    },
+  const apiFastify = await await createApiServer({
+    apiRootPath: options.apiRootPath,
   })
 
   await webFastify.listen({
