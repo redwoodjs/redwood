@@ -8,7 +8,6 @@ import createFastifyInstance from './fastify'
 import type { BothParsedOptions } from './types'
 
 export async function handler(options: BothParsedOptions) {
-  console.log('Using BOTH CLI CONFIG HANDLER')
   const timeStart = Date.now()
   console.log(chalk.dim.italic('Starting API and Web Servers...'))
 
