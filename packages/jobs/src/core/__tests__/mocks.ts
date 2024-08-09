@@ -14,6 +14,7 @@ export const mockAdapter = {
   schedule: vi.fn(() => {}),
   find: () => null,
   clear: () => {},
-  success: (_job: { handler: string; args: any }) => {},
-  failure: (_job: { handler: string; args: any }, _error: Error) => {},
+  success: (_options) => {},
+  error: (_options) => {},
+  failure: (_options) => {},
 }
