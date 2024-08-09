@@ -233,6 +233,7 @@ describe('resolveOptions', () => {
         requestTimeout:
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
+        bodyLimit: DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.bodyLimit,
       },
       apiPort: 65501,
       apiHost: '::',
