@@ -1,9 +1,11 @@
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
+import { RscCache } from './RscCache.js'
+
 const BASE_PATH = '/rw-rsc/'
 
-const rscCache = new Map<string, Thenable<React.ReactElement>>()
+const rscCache = new RscCache()
 
 export interface RscFetchProps extends Record<string, unknown> {
   location: {
@@ -67,6 +69,7 @@ export function rscFetch(rscId: string, props: RscFetchProps) {
     response,
     options,
   )
+
   rscCache.set(serializedProps, componentPromise)
 
   return componentPromise

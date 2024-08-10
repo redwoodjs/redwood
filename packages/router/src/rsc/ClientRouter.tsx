@@ -86,7 +86,7 @@ const LocationAwareRouter = ({
     )
   }
 
-  // @TODO(RSC): Our types dont fully handle async components
+  // TODO (RSC): Our types dont fully handle async components
   return rscFetch('__rwjs__Routes', {
     location: { pathname, search },
   }) as unknown as ReactNode

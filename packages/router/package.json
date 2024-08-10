@@ -96,7 +96,7 @@
     "core-js": "3.37.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@redwoodjs/framework-tools": "workspace:*",
@@ -105,16 +105,16 @@
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
     "publint": "0.2.9",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.1.0",
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802",
+    "tstyche": "2.1.1",
     "tsx": "4.16.2",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

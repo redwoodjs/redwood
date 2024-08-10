@@ -30,12 +30,12 @@
     "storybook": "7.6.17",
     "storybook-framework-redwoodjs-vite": "workspace:*",
     "terminal-link": "2.1.1",
-    "vitest": "2.0.4",
+    "vitest": "2.0.5",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/yargs": "17.0.32",
+    "@types/yargs": "17.0.33",
     "tsx": "4.16.2",
     "typescript": "5.5.4"
   },

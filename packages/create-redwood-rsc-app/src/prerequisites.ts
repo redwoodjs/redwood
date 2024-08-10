@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import semver from 'semver'
 import which from 'which'
@@ -7,12 +7,21 @@ import type { Config } from './config.js'
 
 import { ExitCodeError } from './error.js'
 
-export async function checkNodeVersion(config: Config) {
+export function checkNodeVersion(config: Config) {
   if (config.verbose) {
     console.log('Running `node --version`')
   }
 
-  const { stdout: version } = await execa`node --version`
+  // const { stdout: version } = spawnSync('node --version')
+  const result = spawnSync('node', ['--version'])
+
+  if (result.error) {
+    console.error('❌ Could not run `node --version`')
+
+    throw new ExitCodeError(1, result.error.message)
+  }
+
+  const version = result.stdout.toString()
 
   if (config.verbose) {
     console.log('Node version:', version)
@@ -20,7 +29,7 @@ export async function checkNodeVersion(config: Config) {
 
   if (!semver.satisfies(version, '>=20')) {
     console.error('❌Your Node.js version must be >=20')
-    console.error('Plesae install or switch to a newer version of Node')
+    console.error('Please install or switch to a newer version of Node')
     console.error(
       'We recommend using a Node version manager like `fnm`, `nvm` or `n`',
     )
@@ -34,9 +43,10 @@ export function checkYarnInstallation(config: Config) {
   const allYarns = which.sync('yarn', { all: true, nothrow: true })
 
   if (!allYarns) {
-    console.error('Could not find `yarn`')
-    console.error('Please enable yarn by running `corepack enable`')
-    console.error(
+    console.log('')
+    console.log('Could not find `yarn`')
+    console.log('Please enable yarn by running `corepack enable`')
+    console.log(
       'and then upgrade by running `corepack install --global yarn@latest',
     )
     throw new ExitCodeError(1, 'Yarn not found')
@@ -58,15 +68,40 @@ export function checkYarnInstallation(config: Config) {
     return
   }
 
+  // When running with `tsx` yarn sometimes(?) is run from a temporary
+  // directory, so we fall back to reading the source code
+  const yarnSrc = fs.readFileSync(yarnPath, 'utf8')
+
+  if (config.verbose) {
+    console.log('yarn source', yarnSrc)
+  }
+
+  if (yarnSrc.includes('corepack')) {
+    console.log('✅ Yarn requirements met')
+    return
+  }
+
   // Skipping the first one, as we've already checked it further up
   for (const yarn of allYarns.slice(1)) {
+    const yarnPath = fs.realpathSync(yarn)
+
     if (config.verbose) {
-      console.log('Found yarn:', yarn)
+      console.log('Found yarn:', yarnPath)
     }
 
-    if (yarn.includes('/corepack/') || yarn.includes('\\corepack\\')) {
-      console.log('You have more than one active yarn installation')
-      console.log("Perhaps you've manually installed it using Homebrew or npm")
+    const yarnSrc = fs.readFileSync(yarnPath, 'utf8')
+
+    if (config.verbose) {
+      console.log('yarn source', yarnSrc)
+    }
+
+    if (yarnSrc.includes('corepack')) {
+      console.log('')
+      console.log(
+        'You have more than one active yarn installation. One is installed ' +
+          "by corepack,\nbut it's not the first one in $PATH.",
+      )
+      console.log("Perhaps you've manually installed it using Homebrew or npm.")
       console.log(
         'Please completely uninstall yarn and then enable it using corepack',
       )
@@ -74,15 +109,13 @@ export function checkYarnInstallation(config: Config) {
       console.log(
         '(yarn is already shipped with Node, you just need to enable it)',
       )
-      console.log(
-        "Found yarn installed by corepack, but it's not the first one in $PATH",
-      )
       throw new ExitCodeError(1, 'corepack yarn is not first in $PATH')
     }
   }
 
-  console.log("Found yarn, but it's not enabled by corepack")
-  console.log('Redwood works best with yarn enabled via corepack')
+  console.log('')
+  console.log("Found yarn, but it's not enabled by corepack.")
+  console.log('Redwood works best with yarn enabled via corepack.')
   console.log(
     'Please completely uninstall yarn and then enable it using corepack',
   )

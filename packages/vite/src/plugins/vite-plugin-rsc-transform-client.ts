@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import type { Statement, ModuleDeclaration, AssignmentExpression } from 'acorn'
+import type { AssignmentExpression, Program } from 'acorn'
 import * as acorn from 'acorn-loose'
 import { normalizePath, type Plugin } from 'vite'
 
@@ -27,7 +27,7 @@ export function rscTransformUseClientPlugin(
         return code
       }
 
-      let body: (Statement | ModuleDeclaration)[]
+      let body: Program['body']
 
       try {
         body = acorn.parse(code, {
@@ -126,7 +126,7 @@ function addExportNames(names: Array<string>, node: any) {
  */
 async function parseExportNamesIntoNames(
   code: string,
-  body: (Statement | ModuleDeclaration)[],
+  body: Program['body'],
   names: Array<string>,
 ): Promise<void> {
   for (let i = 0; i < body.length; i++) {
@@ -246,7 +246,7 @@ async function parseExportNamesIntoNames(
 
 async function transformClientModule(
   code: string,
-  body: (Statement | ModuleDeclaration)[],
+  body: Program['body'],
   url: string,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {
@@ -269,14 +269,13 @@ async function transformClientModule(
   )
 
   let newSrc =
-    "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
+    'import {registerClientReference} from "react-server-dom-webpack/server";\n'
 
   for (let i = 0; i < names.length; i++) {
     const name = names[i]
 
     if (name === 'default') {
-      newSrc += 'export default '
-      newSrc += 'Object.defineProperties(function() {'
+      newSrc += 'export default registerClientReference(function() {'
       newSrc +=
         'throw new Error(' +
         JSON.stringify(
@@ -289,7 +288,7 @@ async function transformClientModule(
         ');'
     } else {
       newSrc += 'export const ' + name + ' = '
-      newSrc += 'Object.defineProperties(function() {'
+      newSrc += 'registerClientReference(function() {'
       newSrc +=
         'throw new Error(' +
         JSON.stringify(
@@ -304,10 +303,7 @@ async function transformClientModule(
         ');'
     }
 
-    newSrc += '},{'
-    newSrc += '$$typeof: {value: CLIENT_REFERENCE},'
-    newSrc += '$$id: {value: ' + JSON.stringify(loadId + '#' + name) + '}'
-    newSrc += '});\n'
+    newSrc += `},${JSON.stringify(loadId)},${JSON.stringify(name)})\n;`
   }
 
   return newSrc

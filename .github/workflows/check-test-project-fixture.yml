@@ -69,6 +69,9 @@ jobs:
             echo 'Untracked files:'
             git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
             echo
+            echo
+            echo 'Full diff:'
+            git diff
             exit 1;
           fi
 

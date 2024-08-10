@@ -193,7 +193,7 @@ export async function reactRenderToStreamResponse(
     bootstrapScriptContent:
       // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}; ${rscLiveReload};`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}; ${isProd ? '' : rscLiveReload}`
         : undefined,
     bootstrapModules: jsBundles,
   }

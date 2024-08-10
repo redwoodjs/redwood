@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { useForm } from 'react-hook-form'
 
 import {
@@ -8,11 +10,9 @@ import {
   FieldError,
   Label,
 } from '@redwoodjs/forms'
-import { Link, routes, useBlocker } from '@redwoodjs/router'
-import { Metadata } from '@redwoodjs/web'
+import { useBlocker } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
-import { useState } from 'react'
 
 const CREATE_CONTACT = gql`
   mutation CreateContactMutation($input: CreateContactInput!) {
@@ -25,7 +25,9 @@ const CREATE_CONTACT = gql`
 const ContactUsPage = () => {
   const formMethods = useForm()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const blocker = useBlocker({ when: formMethods.formState.isDirty && !isSubmitting, })
+  const blocker = useBlocker({
+    when: formMethods.formState.isDirty && !isSubmitting,
+  })
 
   const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
     onCompleted: () => {
@@ -49,8 +51,12 @@ const ContactUsPage = () => {
   return (
     <>
       <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
-      <Form onSubmit={onSubmit} formMethods={formMethods} config={{ mode: 'onBlur' }} error={error}>
-
+      <Form
+        onSubmit={onSubmit}
+        formMethods={formMethods}
+        config={{ mode: 'onBlur' }}
+        error={error}
+      >
         {blocker.state === 'BLOCKED' ? (
           <div>
             <button type="button" onClick={() => blocker.confirm()}>
