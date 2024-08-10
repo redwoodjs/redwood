@@ -1,5 +1,5 @@
-import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 import * as changeCase from 'change-case'
 import execa from 'execa'
@@ -9,12 +9,7 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import {
-  getPaths,
-  prettify,
-  transformTSToJS,
-  writeFilesTask,
-} from '../../../lib'
+import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 import { prepareForRollback } from '../../../lib/rollback'
@@ -29,6 +24,7 @@ const normalizeName = (name) => {
 
 export const files = async ({
   name,
+  queueName,
   typescript: generateTypescript,
   tests: generateTests = true,
   ...rest
@@ -46,7 +42,7 @@ export const files = async ({
     apiPathSection: 'jobs',
     generator: 'job',
     templatePath: 'job.ts.template',
-    templateVars: { name: jobName, ...rest },
+    templateVars: { name: jobName, queueName, ...rest },
     outputPath: path.join(
       getPaths().api.jobs,
       `${jobName}Job`,
@@ -158,44 +154,27 @@ export const handler = async ({ name, force, ...rest }) => {
 
   validateName(name)
 
-  const jobName = normalizeName(name)
-  const newJobExport = `${changeCase.camelCase(jobName)}: new ${jobName}Job()`
+  let queueName = 'default'
+
+  // TODO(jgmw): It would be better if imported the src version so we could "hit"
+  // on the queue name more often
+  // Attempt to read the first queue in the users job config file
+  try {
+    const jobsManagerFile = getPaths().api.distJobsConfig
+    const jobManager = await import(pathToFileURL(jobsManagerFile).href)
+    queueName = jobManager.jobs?.queues[0] ?? 'default'
+  } catch (_e) {
+    // We don't care if this fails because we'll fall back to 'default'
+  }
 
   const tasks = new Listr(
     [
       {
         title: 'Generating job files...',
         task: async () => {
-          return writeFilesTask(await files({ name, ...rest }), {
+          return writeFilesTask(await files({ name, queueName, ...rest }), {
             overwriteExisting: force,
           })
-        },
-      },
-      {
-        title: 'Adding to api/src/lib/jobs export...',
-        task: async () => {
-          const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
-          const newFile = file
-            .replace(
-              /^(export const jobs = \{)(.*)$/m,
-              `$1\n  ${newJobExport},$2`,
-            )
-            .replace(/,\}/, ',\n}')
-            .replace(
-              /(import \{ db \} from 'src\/lib\/db')/,
-              `import ${jobName}Job from 'src/jobs/${jobName}Job'\n$1`,
-            )
-
-          fs.writeFileSync(
-            getPaths().api.jobsConfig,
-            await prettify(getPaths().api.jobsConfig, newFile),
-          )
-        },
-        skip: () => {
-          const file = fs.readFileSync(getPaths().api.jobsConfig).toString()
-          if (!file || !file.match(/^export const jobs = \{/m)) {
-            return '`jobs` export not found, skipping'
-          }
         },
       },
       {

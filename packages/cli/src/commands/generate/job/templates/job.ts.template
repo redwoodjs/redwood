@@ -1,7 +1,8 @@
-import { RedwoodJob } from '@redwoodjs/jobs'
+import { jobs } from 'src/lib/jobs'
 
-export class ${name}Job extends RedwoodJob {
-  async perform() {
+export const ${name}Job = jobs.createJob({
+  queue: '${queueName}',
+  perform: async () => {
     // job implementation here
   }
-}
+})

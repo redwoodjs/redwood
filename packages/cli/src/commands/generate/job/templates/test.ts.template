@@ -2,8 +2,6 @@ import { ${name}Job } from './${name}Job'
 
 describe('${name}', () => {
   it('should not throw any errors', async () => {
-    const job = new ${name}Job()
-
-    await expect(job.perform()).resolves.not.toThrow()
+    await expect(${name}Job.perform()).resolves.not.toThrow()
   })
 })
