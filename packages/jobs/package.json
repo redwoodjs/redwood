@@ -26,9 +26,6 @@
     "test:types": "tstyche",
     "test:watch": "vitest"
   },
-  "dependencies": {
-    "fast-glob": "3.3.2"
-  },
   "devDependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "tstyche": "2.1.0",
