@@ -2,8 +2,8 @@ import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
 import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../../consts'
+import type { BaseJob } from '../../types'
 import type {
-  BaseJob,
   BaseAdapterOptions,
   SchedulePayload,
   FindArgs,
@@ -261,10 +261,17 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   }
 
   // Schedules a job by creating a new record in the background job table
-  override schedule({ job, args, runAt, queue, priority }: SchedulePayload) {
+  override schedule({
+    name,
+    path,
+    args,
+    runAt,
+    queue,
+    priority,
+  }: SchedulePayload) {
     this.accessor.create({
       data: {
-        handler: JSON.stringify({ job, args }),
+        handler: JSON.stringify({ name, path, args }),
         runAt,
         queue,
         priority,

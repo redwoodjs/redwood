@@ -5,7 +5,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 import type { JobManager } from './core/JobManager'
 import { JobsLibNotFoundError, JobNotFoundError } from './errors'
-import type { Adapters, BasicLogger, Job } from './types'
+import type { Adapters, BasicLogger, Job, JobComputedProperties } from './types'
 import { makeFilePath } from './util'
 
 /**
@@ -38,10 +38,7 @@ export const loadJobsManager = async (): Promise<
 export const loadJob = async ({
   name: jobName,
   path: jobPath,
-}: {
-  name: string
-  path: string
-}): Promise<Job<string[], unknown[]>> => {
+}: JobComputedProperties): Promise<Job<string[], unknown[]>> => {
   // Confirm the specific job file exists
   const completeJobPath = path.join(getPaths().api.distJobs, jobPath) + '.js'
   const importPath = makeFilePath(completeJobPath)

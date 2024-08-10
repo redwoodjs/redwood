@@ -4,7 +4,8 @@ import type { BaseJob, BasicLogger, PossibleBaseJob } from '../../types'
 
 // Arguments sent to an adapter to schedule a job
 export interface SchedulePayload {
-  job: string
+  name: string
+  path: string
   args: unknown[]
   runAt: Date
   queue: string
@@ -61,37 +62,27 @@ export abstract class BaseAdapter<
   // want to do something with the result depending on the adapter type, so make
   // it `any` to allow for the subclass to return whatever it wants.
 
-  abstract schedule({
-    job,
-    args,
-    runAt,
-    queue,
-    priority,
-  }: SchedulePayload): TScheduleReturn
+  abstract schedule(payload: SchedulePayload): TScheduleReturn
 
   /**
    * Find a single job that's eligible to run with the given args
    */
-  abstract find({
-    processName,
-    maxRuntime,
-    queues,
-  }: FindArgs): PossibleBaseJob | Promise<PossibleBaseJob>
+  abstract find(args: FindArgs): PossibleBaseJob | Promise<PossibleBaseJob>
 
   /**
    * Called when a job has successfully completed
    */
-  abstract success({ job, deleteJob }: SuccessOptions): void | Promise<void>
+  abstract success(options: SuccessOptions): void | Promise<void>
 
   /**
    * Called when an attempt to run a job produced an error
    */
-  abstract error({ job, error }: ErrorOptions): void | Promise<void>
+  abstract error(options: ErrorOptions): void | Promise<void>
 
   /**
    * Called when a job has errored more than maxAttempts and will not be retried
    */
-  abstract failure({ job, deleteJob }: FailureOptions): void | Promise<void>
+  abstract failure(options: FailureOptions): void | Promise<void>
 
   /**
    * Clear all jobs from storage

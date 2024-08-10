@@ -1,4 +1,7 @@
-import type { BaseAdapter, SchedulePayload } from '../adapters/BaseAdapter'
+import type {
+  BaseAdapter,
+  SchedulePayload,
+} from '../adapters/BaseAdapter/BaseAdapter'
 import {
   DEFAULT_LOGGER,
   DEFAULT_PRIORITY,
@@ -19,9 +22,10 @@ interface SchedulerConfig<TAdapter extends BaseAdapter> {
 
 export class Scheduler<TAdapter extends BaseAdapter> {
   adapter: TAdapter
-  logger: BasicLogger
+  logger: NonNullable<SchedulerConfig<TAdapter>['logger']>
 
   constructor({ adapter, logger }: SchedulerConfig<TAdapter>) {
+    // TODO(jgmw): Confirm everywhere else uses this DEFAULT_LOGGER
     this.logger = logger ?? DEFAULT_LOGGER
     this.adapter = adapter
 
@@ -32,7 +36,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
 
   computeRunAt(wait: number, waitUntil: Date | null) {
     if (wait && wait > 0) {
-      return new Date(new Date().getTime() + wait * 1000)
+      return new Date(Date.now() + wait * 1000)
     } else if (waitUntil) {
       return waitUntil
     } else {
@@ -55,8 +59,8 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
 
     return {
-      // @ts-expect-error(jgmw): Fix this
-      job: job.name as string,
+      name: job.name,
+      path: job.path,
       args: args ?? [],
       runAt: this.computeRunAt(wait, waitUntil),
       queue: queue,
@@ -75,8 +79,10 @@ export class Scheduler<TAdapter extends BaseAdapter> {
   }) {
     const payload = this.buildPayload(job, jobArgs, jobOptions)
 
+    // TODO(jgmw): Ask Rob about this [RedwoodJob] prefix, consistent usage in worker, executor, etc?
     this.logger.info(
       payload,
+      // TODO(jgmw): Ask Rob what this prints out?
       `[RedwoodJob] Scheduling ${this.constructor.name}`,
     )
 
@@ -85,7 +91,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
       return true
     } catch (e) {
       throw new SchedulingError(
-        `[RedwoodJob] Exception when scheduling ${payload.job}`,
+        `[RedwoodJob] Exception when scheduling ${payload.name}`,
         e as Error,
       )
     }

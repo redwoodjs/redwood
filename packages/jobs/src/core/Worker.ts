@@ -2,7 +2,7 @@
 
 import { setTimeout } from 'node:timers'
 
-import type { BaseAdapter } from '../adapters/BaseAdapter'
+import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter'
 import {
   DEFAULT_DELETE_FAILED_JOBS,
   DEFAULT_DELETE_SUCCESSFUL_JOBS,

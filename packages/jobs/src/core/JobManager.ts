@@ -46,7 +46,10 @@ export class JobManager<
   createJob<TArgs extends unknown[]>(
     jobDefinition: JobDefinition<TQueues, TArgs>,
   ): Job<TQueues, TArgs> {
-    return jobDefinition
+    // The cast is necessary because the JobDefinition type lacks the `name` and
+    // `path` properties that are required by the Job type. These properties are
+    // added to the job at build time by a plugin in the build process.
+    return jobDefinition as Job<TQueues, TArgs>
   }
 
   createWorker() {

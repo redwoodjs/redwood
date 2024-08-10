@@ -157,10 +157,22 @@ export interface JobDefinition<
   perform: (...args: TArgs) => Promise<void> | void
 }
 
+export type JobComputedProperties = {
+  /**
+   * The name of the job that was defined in the job file.
+   */
+  name: string
+
+  /**
+   * The path to the job file that this job was defined in.
+   */
+  path: string
+}
+
 export type Job<
   TQueues extends string[],
   TArgs extends unknown[] = [],
-> = JobDefinition<TQueues, TArgs>
+> = JobDefinition<TQueues, TArgs> & JobComputedProperties
 
 export type ScheduleJobOptions =
   | {
