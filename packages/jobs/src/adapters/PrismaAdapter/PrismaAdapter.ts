@@ -1,36 +1,20 @@
-// Implements a job adapter using Prisma ORM. Assumes a table exists with the
-// following schema (the table name can be customized):
-//
-//   model BackgroundJob {
-//     id        Int       @id @default(autoincrement())
-//     attempts  Int       @default(0)
-//     handler   String
-//     queue     String
-//     priority  Int
-//     runAt     DateTime
-//     lockedAt  DateTime?
-//     lockedBy  String?
-//     lastError String?
-//     failedAt  DateTime?
-//     createdAt DateTime  @default(now())
-//     updatedAt DateTime  @updatedAt
-//   }
-
 import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
-import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../consts'
-import { ModelNameError } from '../errors'
-
+import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../../consts'
+import { ModelNameError } from '../../errors'
 import type {
   BaseJob,
   BaseAdapterOptions,
-  FindArgs,
   SchedulePayload,
-} from './BaseAdapter'
-import { BaseAdapter } from './BaseAdapter'
+  FindArgs,
+  SuccessOptions,
+  ErrorOptions,
+  FailureOptions,
+} from '../BaseAdapter/BaseAdapter'
+import { BaseAdapter } from '../BaseAdapter/BaseAdapter'
 
-interface PrismaJob extends BaseJob {
+export interface PrismaJob extends BaseJob {
   id: number
   handler: string
   runAt: Date
@@ -42,11 +26,12 @@ interface PrismaJob extends BaseJob {
   updatedAt: Date
 }
 
-interface PrismaAdapterOptions extends BaseAdapterOptions {
+export interface PrismaAdapterOptions extends BaseAdapterOptions {
   /**
    * An instance of PrismaClient which will be used to talk to the database
    */
   db: PrismaClient
+
   /**
    * The name of the model in the Prisma schema that represents the job table.
    * @default 'BackgroundJob'
@@ -54,12 +39,13 @@ interface PrismaAdapterOptions extends BaseAdapterOptions {
   model?: string
 }
 
-interface SuccessData {
-  lockedAt: null
-  lockedBy: null
-  lastError: null
-  runAt: null
-}
+// TODO(jgmw)
+// interface SuccessData {
+//   lockedAt: null
+//   lockedBy: null
+//   lastError: null
+//   runAt: null
+// }
 
 interface FailureData {
   lockedAt: null
@@ -69,6 +55,27 @@ interface FailureData {
   runAt: Date | null
 }
 
+/**
+ * Implements a job adapter using Prisma ORM.
+ *
+ * Assumes a table exists with the following schema (the table name can be customized):
+ * ```prisma
+ * model BackgroundJob {
+ *   id        Int       \@id \@default(autoincrement())
+ *   attempts  Int       \@default(0)
+ *   handler   String
+ *   queue     String
+ *   priority  Int
+ *   runAt     DateTime
+ *   lockedAt  DateTime?
+ *   lockedBy  String?
+ *   lastError String?
+ *   failedAt  DateTime?
+ *   createdAt DateTime  \@default(now())
+ *   updatedAt DateTime  \@updatedAt
+ * }
+ * ```
+ */
 export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   db: PrismaClient
   model: string
@@ -96,18 +103,20 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     }
   }
 
-  // Finds the next job to run, locking it so that no other process can pick it
-  // The act of locking a job is dependant on the DB server, so we'll run some
-  // raw SQL to do it in each case—Prisma doesn't provide enough flexibility
-  // in their generated code to do this in a DB-agnostic way.
-  //
-  // TODO: there may be more optimized versions of the locking queries in
-  // Postgres and MySQL
+  /**
+   * Finds the next job to run, locking it so that no other process can pick it
+   * The act of locking a job is dependant on the DB server, so we'll run some
+   * raw SQL to do it in each case—Prisma doesn't provide enough flexibility
+   * in their generated code to do this in a DB-agnostic way.
+   *
+   * TODO: there may be more optimized versions of the locking queries in
+   * Postgres and MySQL
+   */
   override async find({
     processName,
     maxRuntime,
     queues,
-  }: FindArgs): Promise<PrismaJob | null> {
+  }: FindArgs): Promise<PrismaJob | undefined> {
     const maxRuntimeExpire = new Date(
       new Date().getTime() + (maxRuntime || DEFAULT_MAX_RUNTIME * 1000),
     )
@@ -191,14 +200,16 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
 
     // If we get here then there were either no jobs, or the one we found
     // was locked by another worker
-    return null
+    return undefined
   }
+
+  // TODO(jgmw): This comment doesn't seem to link with the implementation below
 
   // Prisma queries are lazily evaluated and only sent to the db when they are
   // awaited, so do the await here to ensure they actually run. Otherwise the
   // user must always await `performLater()` or the job won't actually be
   // scheduled.
-  override success({ job, deleteJob }: { job: PrismaJob; deleteJob: boolean }) {
+  override success({ job, deleteJob }: SuccessOptions<PrismaJob>) {
     this.logger.debug(`Job ${job.id} success`)
 
     if (deleteJob) {
@@ -216,7 +227,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     }
   }
 
-  override error({ job, error }: { job: PrismaJob; error: Error }) {
+  override error({ job, error }: ErrorOptions<PrismaJob>) {
     this.logger.debug(`Job ${job.id} failure`)
 
     const data: FailureData = {
@@ -236,8 +247,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     })
   }
 
-  // Job has had too many attempts, it is not permanently failed.
-  override failure({ job, deleteJob }: { job: PrismaJob; deleteJob: boolean }) {
+  // Job has had too many attempts, it has now permanently failed.
+  override failure({ job, deleteJob }: FailureOptions<PrismaJob>) {
     if (deleteJob) {
       this.accessor.delete({ where: { id: job.id } })
     } else {
