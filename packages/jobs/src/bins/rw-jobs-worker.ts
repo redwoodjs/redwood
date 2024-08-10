@@ -96,7 +96,7 @@ const main = async () => {
   let jobsConfig
 
   try {
-    jobsConfig = loadJobsManager()
+    jobsConfig = await loadJobsManager()
   } catch (e) {
     console.error(e)
     process.exit(1)
