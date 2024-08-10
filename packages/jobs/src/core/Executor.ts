@@ -2,7 +2,7 @@
 
 import console from 'node:console'
 
-import type { BaseAdapter } from '../adapters/BaseAdapter'
+import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter'
 import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_DELETE_FAILED_JOBS,
@@ -10,27 +10,18 @@ import {
 } from '../consts'
 import { AdapterRequiredError, JobRequiredError } from '../errors'
 import { loadJob } from '../loaders'
-import type { BasicLogger } from '../types'
+import type { BaseJob, BasicLogger } from '../types'
 
 interface Options {
   adapter: BaseAdapter
-  job: any
+  job: BaseJob
   logger?: BasicLogger
   maxAttempts?: number
   deleteFailedJobs?: boolean
   deleteSuccessfulJobs?: boolean
 }
 
-interface DefaultOptions {
-  logger: BasicLogger
-  maxAttempts: number
-  deleteFailedJobs: boolean
-  deleteSuccessfulJobs: boolean
-}
-
-type CompleteOptions = Options & DefaultOptions
-
-export const DEFAULTS: DefaultOptions = {
+export const DEFAULTS = {
   logger: console,
   maxAttempts: DEFAULT_MAX_ATTEMPTS,
   deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
@@ -38,13 +29,13 @@ export const DEFAULTS: DefaultOptions = {
 }
 
 export class Executor {
-  options: CompleteOptions
-  adapter: BaseAdapter
-  logger: BasicLogger
-  job: any | null
-  maxAttempts: number
-  deleteFailedJobs: boolean
-  deleteSuccessfulJobs: boolean
+  options: Required<Options>
+  adapter: Options['adapter']
+  logger: NonNullable<Options['logger']>
+  job: BaseJob
+  maxAttempts: NonNullable<Options['maxAttempts']>
+  deleteFailedJobs: NonNullable<Options['deleteFailedJobs']>
+  deleteSuccessfulJobs: NonNullable<Options['deleteSuccessfulJobs']>
 
   constructor(options: Options) {
     this.options = { ...DEFAULTS, ...options }
@@ -65,21 +56,24 @@ export class Executor {
     this.deleteSuccessfulJobs = this.options.deleteSuccessfulJobs
   }
 
-  async perform() {
-    this.logger.info(`Started job ${this.job.id}`)
+  get jobId() {
+    return `${this.job.path}:${this.job.name}`
+  }
 
-    // TODO break these lines down into individual try/catch blocks?
+  async perform() {
+    this.logger.info(`Started job ${this.jobId}`)
+
     try {
-      const job = loadJob({ name: this.job.name, path: this.job.path })
+      const job = await loadJob({ name: this.job.name, path: this.job.path })
       await job.perform(...this.job.args)
 
-      // TODO(@rob): Ask Josh about why this would "have no effect"?
       await this.adapter.success({
         job: this.job,
         deleteJob: DEFAULT_DELETE_SUCCESSFUL_JOBS,
       })
     } catch (error: any) {
-      this.logger.error(`Error in job ${this.job.id}: ${error.message}`)
+      // TODO(jgmw): Handle the error 'any' better
+      this.logger.error(`Error in job ${this.jobId}: ${error.message}`)
       this.logger.error(error.stack)
 
       await this.adapter.error({
@@ -90,7 +84,7 @@ export class Executor {
       if (this.job.attempts >= this.maxAttempts) {
         this.logger.warn(
           this.job,
-          `Failed job ${this.job.id}: reached max attempts (${this.maxAttempts})`,
+          `Failed job ${this.jobId}: reached max attempts (${this.maxAttempts})`,
         )
         await this.adapter.failure({
           job: this.job,

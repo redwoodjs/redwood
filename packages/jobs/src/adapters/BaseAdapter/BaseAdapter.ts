@@ -1,6 +1,6 @@
 import console from 'node:console'
 
-import type { BasicLogger } from '../../types'
+import type { BaseJob, BasicLogger, PossibleBaseJob } from '../../types'
 
 // Arguments sent to an adapter to schedule a job
 export interface SchedulePayload {
@@ -10,18 +10,6 @@ export interface SchedulePayload {
   queue: string
   priority: number
 }
-
-// Arguments returned from an adapter when a job is found. This is the absolute
-// minimum interface that's needed for the Executor to invoke the job, but any
-// adapter will likely return more info, like the number of previous tries, so
-// that it can reschedule the job to run in the future.
-export interface BaseJob {
-  name: string
-  path: string
-  args: unknown[]
-  attempts: number
-}
-export type PossibleBaseJob = BaseJob | undefined
 
 export interface FindArgs {
   processName: string

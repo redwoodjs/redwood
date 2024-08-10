@@ -2,15 +2,25 @@
 // debug messages. RedwoodJob will fallback to use `console` if no
 // logger is passed in to RedwoodJob or any adapter. Luckily both Redwood's
 
-import type { BaseAdapter } from './adapters/BaseAdapter'
+import type { BaseAdapter } from './adapters/BaseAdapter/BaseAdapter'
 
-// Logger and the standard console logger conform to this shape.
+// Redwood's logger and the standard console logger conform to this shape.
 export interface BasicLogger {
   debug: (message?: any, ...optionalParams: any[]) => void
   info: (message?: any, ...optionalParams: any[]) => void
   warn: (message?: any, ...optionalParams: any[]) => void
   error: (message?: any, ...optionalParams: any[]) => void
 }
+
+// This is the minimum interface that a "job" must conform to in order to be
+// scheduled and executed by Redwood's job engine.
+export interface BaseJob {
+  name: string
+  path: string
+  args: unknown[]
+  attempts: number
+}
+export type PossibleBaseJob = BaseJob | undefined
 
 export type Adapters = Record<string, BaseAdapter>
 
