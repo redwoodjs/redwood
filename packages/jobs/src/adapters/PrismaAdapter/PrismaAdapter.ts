@@ -40,14 +40,6 @@ export interface PrismaAdapterOptions extends BaseAdapterOptions {
   model?: string
 }
 
-// TODO(jgmw)
-// interface SuccessData {
-//   lockedAt: null
-//   lockedBy: null
-//   lastError: null
-//   runAt: null
-// }
-
 interface FailureData {
   lockedAt: null
   lockedBy: null
@@ -205,6 +197,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   }
 
   // TODO(jgmw): This comment doesn't seem to link with the implementation below
+  // TODO(jgmw): I think maybe these all need to be async and awaited?
 
   // Prisma queries are lazily evaluated and only sent to the db when they are
   // awaited, so do the await here to ensure they actually run. Otherwise the
