@@ -2,7 +2,7 @@ import type { PrismaClient } from '@prisma/client'
 import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
 import { DEFAULT_MODEL_NAME } from '../../../consts'
-import * as errors from '../../../errors'
+import * as errors from '../errors'
 import { PrismaAdapter } from '../PrismaAdapter'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))

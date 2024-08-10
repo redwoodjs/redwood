@@ -15,13 +15,6 @@ export class AdapterNotConfiguredError extends RedwoodJobError {
   }
 }
 
-// Thrown when a given model name isn't actually available in the PrismaClient
-export class ModelNameError extends RedwoodJobError {
-  constructor(name: string) {
-    super(`Model \`${name}\` not found in PrismaClient`)
-  }
-}
-
 // Thrown when the Worker or Executor is instantiated without an adapter
 export class AdapterRequiredError extends RedwoodJobError {
   constructor() {

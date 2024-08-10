@@ -2,7 +2,6 @@ import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
 import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../../consts'
-import { ModelNameError } from '../../errors'
 import type {
   BaseJob,
   BaseAdapterOptions,
@@ -13,6 +12,8 @@ import type {
   FailureOptions,
 } from '../BaseAdapter/BaseAdapter'
 import { BaseAdapter } from '../BaseAdapter/BaseAdapter'
+
+import { ModelNameError } from './errors'
 
 export interface PrismaJob extends BaseJob {
   id: number
