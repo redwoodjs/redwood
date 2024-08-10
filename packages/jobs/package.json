@@ -23,12 +23,10 @@
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
-    "test:types": "tstyche",
     "test:watch": "vitest"
   },
   "devDependencies": {
     "@redwoodjs/project-config": "workspace:*",
-    "tstyche": "2.1.0",
     "tsx": "4.16.2",
     "typescript": "5.5.4",
     "vitest": "2.0.4"
