@@ -18,7 +18,7 @@ interface TestAdapterOptions extends BaseAdapterOptions {
 class TestAdapter extends BaseAdapter<TestAdapterOptions> {
   schedule() {}
   find() {
-    return null
+    return undefined
   }
   success() {}
   error() {}
