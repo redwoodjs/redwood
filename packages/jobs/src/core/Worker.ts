@@ -78,7 +78,8 @@ export class Worker {
   lastCheckTime: Date
 
   constructor(options: WorkerOptions) {
-    this.options = { ...DEFAULT_OPTIONS, ...options }
+    // TODO(jgmw)
+    this.options = { ...DEFAULT_OPTIONS, ...options } as CompleteOptions
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()
