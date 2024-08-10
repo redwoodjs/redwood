@@ -92,7 +92,8 @@ describe('schedule()', () => {
       .mockReturnValue({ id: 1 })
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     await adapter.schedule({
-      job: 'RedwoodJob',
+      name: 'RedwoodJob',
+      path: 'RedwoodJob/RedwoodJob',
       args: ['foo', 'bar'],
       queue: 'default',
       priority: 50,
@@ -102,7 +103,8 @@ describe('schedule()', () => {
     expect(createSpy).toHaveBeenCalledWith({
       data: {
         handler: JSON.stringify({
-          job: 'RedwoodJob',
+          name: 'RedwoodJob',
+          path: 'RedwoodJob/RedwoodJob',
           args: ['foo', 'bar'],
         }),
         priority: 50,
@@ -114,7 +116,7 @@ describe('schedule()', () => {
 })
 
 describe('find()', () => {
-  it('returns null if no job found', async () => {
+  it('returns undefined if no job found', async () => {
     vi.spyOn(mockDb.backgroundJob, 'findFirst').mockReturnValue(null)
     const adapter = new PrismaAdapter({ db: mockDb, logger: mockLogger })
     const job = await adapter.find({
@@ -123,7 +125,7 @@ describe('find()', () => {
       queues: ['foobar'],
     })
 
-    expect(job).toBeNull()
+    expect(job).toBeUndefined()
   })
 
   it('returns a job if found', async () => {

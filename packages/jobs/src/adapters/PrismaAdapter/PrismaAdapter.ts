@@ -261,7 +261,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   }
 
   // Schedules a job by creating a new record in the background job table
-  override schedule({
+  override async schedule({
     name,
     path,
     args,
