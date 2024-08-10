@@ -4,6 +4,8 @@ import * as path from 'node:path'
 import { getDMMF } from '@prisma/internals'
 import { Listr } from 'listr2'
 
+import { addApiPackages } from '@redwoodjs/cli-helpers'
+
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
@@ -31,7 +33,8 @@ const getModelNames = async () => {
   return schema.datamodel.models.map((model) => model.name)
 }
 
-const addModel = () => {
+// TODO(jgmw): This won't handle prisma with schema folder preview feature
+const addDatabaseModel = () => {
   const schema = fs.readFileSync(getPaths().api.dbSchema, 'utf-8')
 
   const schemaWithUser = schema + MODEL_SCHEMA
@@ -42,12 +45,18 @@ const addModel = () => {
 const tasks = async ({ force }) => {
   const modelExists = (await getModelNames()).includes('BackgroundJob')
 
+  const redwoodVersion =
+    require(path.join(getPaths().base, 'package.json')).devDependencies[
+      '@redwoodjs/core'
+    ] ?? 'latest'
+  const jobsPackage = `@redwoodjs/jobs@${redwoodVersion}`
+
   return new Listr(
     [
       {
-        title: 'Creating job model...',
+        title: 'Creating job database model...',
         task: () => {
-          addModel()
+          addDatabaseModel()
         },
         skip: () => {
           if (modelExists) {
@@ -117,7 +126,7 @@ const tasks = async ({ force }) => {
           }
         },
       },
-
+      addApiPackages([jobsPackage]),
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
