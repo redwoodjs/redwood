@@ -31,7 +31,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
-    "@types/aws-lambda": "8.10.142",
+    "@types/aws-lambda": "8.10.143",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
