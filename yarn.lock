@@ -7943,7 +7943,7 @@ __metadata:
     semver: "npm:7.6.3"
     smol-toml: "npm:1.3.0"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.22.11"
+    systeminformation: "npm:5.23.4"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
     tsx: "npm:4.16.2"
@@ -8254,7 +8254,7 @@ __metadata:
     rimraf: "npm:6.0.1"
     source-map: "npm:0.7.4"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.22.11"
+    systeminformation: "npm:5.23.4"
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.2"
     tsx: "npm:4.16.2"
@@ -8564,7 +8564,7 @@ __metadata:
     "@whatwg-node/fetch": "npm:0.9.19"
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.13.0"
-    systeminformation: "npm:5.22.11"
+    systeminformation: "npm:5.23.4"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
     uuid: "npm:10.0.0"
@@ -14599,7 +14599,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     klaw-sync: "npm:6.0.0"
     semver: "npm:7.6.3"
-    systeminformation: "npm:5.22.11"
+    systeminformation: "npm:5.23.4"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.16.2"
     untildify: "npm:4.0.0"
@@ -27959,12 +27959,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"systeminformation@npm:5.22.11":
-  version: 5.22.11
-  resolution: "systeminformation@npm:5.22.11"
+"systeminformation@npm:5.23.4":
+  version: 5.23.4
+  resolution: "systeminformation@npm:5.23.4"
   bin:
     systeminformation: lib/cli.js
-  checksum: 10c0/9817a48a4ab3584b575a796e27f8e898aa87834aa4b566ea2c6cfc637b42f156e1500f6c366db4e2339da1339d8ba08d978e73f0dc70450c482734ede7a45510
+  checksum: 10c0/ed779bb3682a61f6cd049d01d9999c4c03818513d297e202e5fa6b42787b05ff2cbbfa69ad2b30773b5071987e5aba62205799e9d648cf21318eba07853b7454
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
