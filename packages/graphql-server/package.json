@@ -51,7 +51,7 @@
     "@envelop/types": "5.0.0",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/realtime": "workspace:*",
-    "@types/aws-lambda": "8.10.142",
+    "@types/aws-lambda": "8.10.143",
     "@types/jsonwebtoken": "9.0.6",
     "@types/lodash": "4.17.7",
     "@types/uuid": "10.0.0",
