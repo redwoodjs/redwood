@@ -5233,12 +5233,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsonjoy.com/util@npm:^1.1.2":
-  version: 1.1.3
-  resolution: "@jsonjoy.com/util@npm:1.1.3"
+"@jsonjoy.com/util@npm:^1.1.2, @jsonjoy.com/util@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@jsonjoy.com/util@npm:1.3.0"
   peerDependencies:
     tslib: 2
-  checksum: 10c0/29931163e316822f4dd4ccf169b2f85cc61b964c54770621afc1518f60c1e73c3d17990bdcb114091e3ef1493cdfde9b268fae7e1baa445b76a86c44c84d636c
+  checksum: 10c0/892bbe2073bb20bf392dd4dfed77881c6f7ae6a0cc5802e537fe3cbeeadde7738de5369f2d4529156efc5e98d9d43b15c85906ddb79140e322f1b26eaaf854df
   languageName: node
   linkType: hard
 
@@ -7727,7 +7727,7 @@ __metadata:
     "@redwoodjs/cli-helpers": "workspace:*"
     "@types/yargs": "npm:17.0.33"
     core-js: "npm:3.37.1"
-    memfs: "npm:4.9.4"
+    memfs: "npm:4.11.1"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   languageName: unknown
@@ -7823,7 +7823,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     jest: "npm:29.7.0"
     listr2: "npm:6.6.1"
-    memfs: "npm:4.9.4"
+    memfs: "npm:4.11.1"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.16.2"
     typescript: "npm:5.5.4"
@@ -7932,7 +7932,7 @@ __metadata:
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
-    memfs: "npm:4.9.4"
+    memfs: "npm:4.11.1"
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
     portfinder: "npm:1.0.32"
@@ -22083,15 +22083,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:4.9.4":
-  version: 4.9.4
-  resolution: "memfs@npm:4.9.4"
+"memfs@npm:4.11.1":
+  version: 4.11.1
+  resolution: "memfs@npm:4.11.1"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
-    "@jsonjoy.com/util": "npm:^1.1.2"
+    "@jsonjoy.com/util": "npm:^1.3.0"
     tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/f473194f26002a5a26705b796300524fef551427d283abef933596977758935d80d7ee993280fd20b576d2dde5c04ee7834fa54f03a5d0172851abf9972cf24a
+  checksum: 10c0/738f3ba7204d7f0a5bc09ae9f62d4151e0bbb14b5f5c2bb39c59e93d1b6da1bfc0c94240f23f450538578a331d1458da995b4976aee889da0fac2219322e8377
   languageName: node
   linkType: hard
 
