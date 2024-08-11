@@ -109,7 +109,7 @@
     "concurrently": "8.2.2",
     "glob": "11.0.0",
     "publint": "0.2.9",
-    "rollup": "4.19.0",
+    "rollup": "4.20.0",
     "tsx": "4.16.2",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
