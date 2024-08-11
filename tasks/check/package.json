@@ -6,5 +6,5 @@
     "@actions/exec": "1.1.1",
     "sort-package-json": "2.10.0"
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.4.0"
 }
