@@ -46,7 +46,7 @@
     "smol-toml": "1.3.0",
     "ts-morph": "23.0.0",
     "vscode-languageserver": "6.1.1",
-    "vscode-languageserver-textdocument": "1.0.11",
+    "vscode-languageserver-textdocument": "1.0.12",
     "vscode-languageserver-types": "3.17.5",
     "yargs-parser": "21.1.1"
   },
