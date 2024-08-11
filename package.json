@@ -47,7 +47,7 @@
   "resolutions": {
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.17.5",
-    "vscode-languageserver-textdocument": "1.0.11",
+    "vscode-languageserver-textdocument": "1.0.12",
     "vscode-languageserver-types": "3.17.5",
     "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz"
   },
