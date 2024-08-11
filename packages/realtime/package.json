@@ -24,7 +24,7 @@
   "dependencies": {
     "@envelop/live-query": "7.0.0",
     "@graphql-tools/schema": "10.0.4",
-    "@graphql-tools/utils": "10.3.2",
+    "@graphql-tools/utils": "10.3.4",
     "@graphql-yoga/plugin-defer-stream": "3.6.2",
     "@graphql-yoga/plugin-graphql-sse": "3.6.2",
     "@graphql-yoga/redis-event-target": "3.0.1",
