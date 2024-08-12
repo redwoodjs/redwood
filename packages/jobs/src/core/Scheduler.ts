@@ -85,7 +85,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     )
 
     try {
-      this.adapter.schedule(payload)
+      await this.adapter.schedule(payload)
       return true
     } catch (e) {
       throw new SchedulingError(
