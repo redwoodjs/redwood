@@ -2173,16 +2173,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.32.2":
-  version: 4.32.2
-  resolution: "@clerk/clerk-react@npm:4.32.2"
+"@clerk/clerk-react@npm:4.32.3":
+  version: 4.32.3
+  resolution: "@clerk/clerk-react@npm:4.32.3"
   dependencies:
     "@clerk/shared": "npm:1.4.1"
-    "@clerk/types": "npm:3.65.2"
+    "@clerk/types": "npm:3.65.3"
     tslib: "npm:2.4.1"
   peerDependencies:
     react: ">=16"
-  checksum: 10c0/ef8ea477bfbc834939a47bf22e3a5724c2a8c4ce8d5135645828bf2d0f117bbb2a30c6ae0ed99e1812beda4349fbbc34d20f21b2bb100d6fd4ebceb0fe511fd7
+  checksum: 10c0/531de3a3e814ae7f8b0f46281fb8d95e8ab89e62c2331fe90183e2a37f0744a88b68bc70a99e475185084eeac53827087f63af7889e1d2770d416cc39d4033c8
   languageName: node
   linkType: hard
 
@@ -7422,7 +7422,7 @@ __metadata:
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.24.8"
-    "@clerk/clerk-react": "npm:4.32.2"
+    "@clerk/clerk-react": "npm:4.32.3"
     "@clerk/types": "npm:3.65.2"
     "@redwoodjs/auth": "workspace:*"
     "@types/react": "npm:^18.2.55"
@@ -7431,7 +7431,7 @@ __metadata:
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   peerDependencies:
-    "@clerk/clerk-react": 4.32.2
+    "@clerk/clerk-react": 4.32.3
   languageName: unknown
   linkType: soft
 
