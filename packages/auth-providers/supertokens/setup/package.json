@@ -31,7 +31,7 @@
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@types/yargs": "17.0.33",
-    "memfs": "4.9.4",
+    "memfs": "4.11.1",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },
