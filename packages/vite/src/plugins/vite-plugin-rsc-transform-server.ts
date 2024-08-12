@@ -30,11 +30,9 @@ export function rscTransformUseServerPlugin(): Plugin {
       let useClient = false
       let useServer = false
 
-      for (let i = 0; i < body.length; i++) {
-        const node = body[i]
-
+      for (const node of body) {
         if (node.type !== 'ExpressionStatement' || !node.directive) {
-          break
+          continue
         }
 
         if (node.directive === 'use client') {
@@ -46,17 +44,17 @@ export function rscTransformUseServerPlugin(): Plugin {
         }
       }
 
-      if (!useServer) {
-        return code
-      }
-
       if (useClient && useServer) {
         throw new Error(
           'Cannot have both "use client" and "use server" directives in the same file.',
         )
       }
 
-      const transformedCode = transformServerModule(body, id, code)
+      let transformedCode = code
+
+      if (useServer) {
+        transformedCode = transformServerModule(body, id, code)
+      }
 
       return transformedCode
     },
@@ -119,9 +117,7 @@ function transformServerModule(
   const localNames = new Map<string, string>()
   const localTypes = new Map<string, string>()
 
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     switch (node.type) {
       case 'ExportAllDeclaration':
         // If export * is used, the other file needs to explicitly opt into "use server" too.
@@ -137,7 +133,7 @@ function transformServerModule(
           }
         }
 
-        continue
+        break
 
       case 'ExportNamedDeclaration':
         if (node.declaration) {
@@ -173,12 +169,11 @@ function transformServerModule(
           }
         }
 
-        continue
+        break
     }
   }
 
   let newSrc =
-    '"use server"\n' +
     code +
     '\n\n' +
     'import {registerServerReference} from ' +

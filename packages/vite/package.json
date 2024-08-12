@@ -70,10 +70,10 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.7.2",
+    "@swc/core": "1.7.10",
     "@vitejs/plugin-react": "4.3.1",
     "@whatwg-node/fetch": "0.9.19",
-    "@whatwg-node/server": "0.9.44",
+    "@whatwg-node/server": "0.9.46",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
@@ -86,18 +86,18 @@
     "find-my-way": "8.2.0",
     "fs-extra": "11.2.0",
     "http-proxy-middleware": "3.0.0",
-    "isbot": "5.1.13",
+    "isbot": "5.1.14",
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-server-dom-webpack": "19.0.0-rc-8269d55d-20240802",
     "rimraf": "6.0.1",
-    "vite": "5.3.5",
+    "vite": "5.4.0",
     "vite-plugin-cjs-interop": "2.1.1",
     "vite-plugin-node-polyfills": "0.22.0",
     "ws": "8.18.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@hyrious/esbuild-plugin-commonjs": "0.2.4",
     "@types/busboy": "^1",
     "@types/cookie": "^0",
@@ -109,10 +109,10 @@
     "concurrently": "8.2.2",
     "glob": "11.0.0",
     "publint": "0.2.9",
-    "rollup": "4.19.0",
-    "tsx": "4.16.2",
+    "rollup": "4.20.0",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
