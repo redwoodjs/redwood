@@ -36,7 +36,7 @@
     "@prisma/client": "5.18.0",
     "@whatwg-node/fetch": "0.9.19",
     "cookie": "0.6.0",
-    "core-js": "3.37.1",
+    "core-js": "3.38.0",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.2",
     "pascalcase": "1.0.0",
