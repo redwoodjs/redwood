@@ -61,7 +61,7 @@ export class Executor {
   }
 
   async perform() {
-    this.logger.info(`Started job ${this.jobId}`)
+    this.logger.info(`[RedwoodJob] Started job ${this.jobId}`)
 
     try {
       const job = await loadJob({ name: this.job.name, path: this.job.path })
@@ -73,7 +73,9 @@ export class Executor {
       })
     } catch (error: any) {
       // TODO(jgmw): Handle the error 'any' better
-      this.logger.error(`Error in job ${this.jobId}: ${error.message}`)
+      this.logger.error(
+        `[RedwoodJob] Error in job ${this.jobId}: ${error.message}`,
+      )
       this.logger.error(error.stack)
 
       await this.adapter.error({
@@ -84,7 +86,7 @@ export class Executor {
       if (this.job.attempts >= this.maxAttempts) {
         this.logger.warn(
           this.job,
-          `Failed job ${this.jobId}: reached max attempts (${this.maxAttempts})`,
+          `[RedwoodJob] Failed job ${this.jobId}: reached max attempts (${this.maxAttempts})`,
         )
         await this.adapter.failure({
           job: this.job,

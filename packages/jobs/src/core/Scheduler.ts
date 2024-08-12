@@ -79,11 +79,9 @@ export class Scheduler<TAdapter extends BaseAdapter> {
   }) {
     const payload = this.buildPayload(job, jobArgs, jobOptions)
 
-    // TODO(jgmw): Ask Rob about this [RedwoodJob] prefix, consistent usage in worker, executor, etc?
     this.logger.info(
       payload,
-      // TODO(jgmw): Ask Rob what this prints out?
-      `[RedwoodJob] Scheduling ${this.constructor.name}`,
+      `[RedwoodJob] Scheduling ${job.name}`,
     )
 
     try {
