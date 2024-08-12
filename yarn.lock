@@ -8682,7 +8682,7 @@ __metadata:
     tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     vite: "npm:5.4.0"
-    vite-plugin-cjs-interop: "npm:2.1.1"
+    vite-plugin-cjs-interop: "npm:2.1.2"
     vite-plugin-node-polyfills: "npm:0.22.0"
     vitest: "npm:2.0.5"
     ws: "npm:8.18.0"
@@ -21884,7 +21884,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:0.30.11, magic-string@npm:^0.30.0, magic-string@npm:^0.30.10, magic-string@npm:^0.30.3":
+"magic-string@npm:0.30.11, magic-string@npm:^0.30.0, magic-string@npm:^0.30.10, magic-string@npm:^0.30.11, magic-string@npm:^0.30.3":
   version: 0.30.11
   resolution: "magic-string@npm:0.30.11"
   dependencies:
@@ -22402,7 +22402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.0":
+"minimatch@npm:^10.0.0, minimatch@npm:^10.0.1":
   version: 10.0.1
   resolution: "minimatch@npm:10.0.1"
   dependencies:
@@ -29512,16 +29512,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-cjs-interop@npm:2.1.1":
-  version: 2.1.1
-  resolution: "vite-plugin-cjs-interop@npm:2.1.1"
+"vite-plugin-cjs-interop@npm:2.1.2":
+  version: 2.1.2
+  resolution: "vite-plugin-cjs-interop@npm:2.1.2"
   dependencies:
-    acorn: "npm:^8.11.3"
+    acorn: "npm:^8.12.1"
     acorn-import-assertions: "npm:^1.9.0"
     estree-walker: "npm:^3.0.3"
-    magic-string: "npm:^0.30.10"
-    minimatch: "npm:^9.0.4"
-  checksum: 10c0/17ae116184c00269dae7498d82302362d42d2ec013998c8c9400116a53c7f96e06e12e08de2e85878fa560338d8715218381243240868ac334c4b03575b6dc69
+    magic-string: "npm:^0.30.11"
+    minimatch: "npm:^10.0.1"
+  checksum: 10c0/618fbc8aa7bae9c79a0e33a0449a8c55ba6b0b4bd2ab33e0a874ea956e3a7609cc6a38e4e26d8fecbb9d9903f6bc6404342fc1af2adc08844e0cce6cc7bc6d9a
   languageName: node
   linkType: hard
 
