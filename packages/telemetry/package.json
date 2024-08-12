@@ -34,7 +34,7 @@
     "@types/envinfo": "7.8.4",
     "@types/uuid": "10.0.0",
     "@types/yargs": "17.0.33",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },
