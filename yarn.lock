@@ -7793,7 +7793,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@types/babel-plugin-tester": "npm:9.0.10"
     "@types/babel__core": "npm:7.20.5"
-    "@types/node": "npm:20.14.12"
+    "@types/node": "npm:20.14.15"
     babel-plugin-auto-import: "npm:1.1.0"
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.2"
@@ -8525,7 +8525,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.2"
     "@types/lodash": "npm:4.17.7"
-    "@types/node": "npm:20.14.12"
+    "@types/node": "npm:20.14.15"
     "@types/vscode": "npm:1.91.0"
     camelcase: "npm:6.3.0"
     core-js: "npm:3.37.1"
@@ -8593,7 +8593,7 @@ __metadata:
     "@types/aws-lambda": "npm:8.10.143"
     "@types/babel-core": "npm:6.25.10"
     "@types/jest": "npm:29.5.12"
-    "@types/node": "npm:20.14.12"
+    "@types/node": "npm:20.14.15"
     babel-jest: "npm:^29.7.0"
     core-js: "npm:3.37.1"
     fast-glob: "npm:3.3.2"
@@ -10949,12 +10949,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.14.12":
-  version: 20.14.12
-  resolution: "@types/node@npm:20.14.12"
+"@types/node@npm:20.14.15":
+  version: 20.14.15
+  resolution: "@types/node@npm:20.14.15"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/59bc5fa11fdd23fd517f859063118f54a1ab53d3399ef63c926f8902429d7453abc0db22ef4b0a6110026b6ab81b6472fee894e1d235c24b01a0b3e10cfae0bb
+  checksum: 10c0/093713db52dc544f3931a3dec9d7d8ef661f323e57becd083a7918c778cef1eb6ec32d1017bf5ade06bb06dc5c7551f4f4d749a14e40868cce44d51e54acd8ed
   languageName: node
   linkType: hard
 
@@ -27450,7 +27450,7 @@ __metadata:
     "@storybook/addon-essentials": "npm:7.6.17"
     "@storybook/builder-vite": "npm:7.6.17"
     "@storybook/react": "npm:7.6.17"
-    "@types/node": "npm:20.14.12"
+    "@types/node": "npm:20.14.15"
     magic-string: "npm:0.30.11"
     react-docgen: "npm:7.0.3"
     tsx: "npm:4.16.2"
