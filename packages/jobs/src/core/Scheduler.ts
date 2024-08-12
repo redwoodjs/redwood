@@ -34,7 +34,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  computeRunAt(wait: number, waitUntil: Date | null) {
+  computeRunAt({ wait, waitUntil }: { wait: number, waitUntil: Date | null }) {
     if (wait && wait > 0) {
       return new Date(Date.now() + wait * 1000)
     } else if (waitUntil) {
@@ -62,7 +62,7 @@ export class Scheduler<TAdapter extends BaseAdapter> {
       name: job.name,
       path: job.path,
       args: args ?? [],
-      runAt: this.computeRunAt(wait, waitUntil),
+      runAt: this.computeRunAt({ wait, waitUntil }),
       queue: queue,
       priority: priority,
     }
