@@ -42,12 +42,12 @@
     "fs-extra": "11.2.0",
     "klaw-sync": "6.0.0",
     "semver": "7.6.3",
-    "systeminformation": "5.22.11",
+    "systeminformation": "5.23.4",
     "terminal-link": "2.1.1",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "untildify": "4.0.0",
     "uuid": "10.0.0",
-    "vitest": "2.0.4",
+    "vitest": "2.0.5",
     "yargs": "17.7.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

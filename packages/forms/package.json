@@ -27,7 +27,7 @@
     "core-js": "3.37.1",
     "graphql": "16.9.0",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.52.1"
+    "react-hook-form": "7.52.2"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
@@ -43,7 +43,7 @@
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-dom": "19.0.0-rc-8269d55d-20240802",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "react": "19.0.0-rc-8269d55d-20240802"
