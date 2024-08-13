@@ -156,8 +156,6 @@ export const handler = async ({ name, force, ...rest }) => {
 
   let queueName = 'default'
 
-  // TODO(jgmw): It would be better if imported the src version so we could "hit"
-  // on the queue name more often
   // Attempt to read the first queue in the users job config file
   try {
     const jobsManagerFile = getPaths().api.distJobsConfig

@@ -196,20 +196,16 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     return undefined
   }
 
-  // TODO(jgmw): This comment doesn't seem to link with the implementation below
-  // TODO(jgmw): I think maybe these all need to be async and awaited?
-
   // Prisma queries are lazily evaluated and only sent to the db when they are
-  // awaited, so do the await here to ensure they actually run. Otherwise the
-  // user must always await `performLater()` or the job won't actually be
-  // scheduled.
-  override success({ job, deleteJob }: SuccessOptions<PrismaJob>) {
-    this.logger.debug(`Job ${job.id} success`)
+  // awaited, so do the await here to ensure they actually run (if the user
+  // doesn't await the Promise then the queries will never be executed!)
+  override async success({ job, deleteJob }: SuccessOptions<PrismaJob>) {
+    this.logger.debug(`[RedwoodJob] Job ${job.id} success`)
 
     if (deleteJob) {
-      this.accessor.delete({ where: { id: job.id } })
+      await this.accessor.delete({ where: { id: job.id } })
     } else {
-      this.accessor.update({
+      await this.accessor.update({
         where: { id: job.id },
         data: {
           lockedAt: null,
@@ -221,7 +217,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     }
   }
 
-  override error({ job, error }: ErrorOptions<PrismaJob>) {
+  override async error({ job, error }: ErrorOptions<PrismaJob>) {
     this.logger.debug(`[RedwoodJob] Job ${job.id} failure`)
 
     const data: FailureData = {
@@ -235,18 +231,18 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       new Date().getTime() + this.backoffMilliseconds(job.attempts),
     )
 
-    this.accessor.update({
+    await this.accessor.update({
       where: { id: job.id },
       data,
     })
   }
 
   // Job has had too many attempts, it has now permanently failed.
-  override failure({ job, deleteJob }: FailureOptions<PrismaJob>) {
+  override async failure({ job, deleteJob }: FailureOptions<PrismaJob>) {
     if (deleteJob) {
-      this.accessor.delete({ where: { id: job.id } })
+      await this.accessor.delete({ where: { id: job.id } })
     } else {
-      this.accessor.update({
+      await this.accessor.update({
         where: { id: job.id },
         data: { failedAt: new Date() },
       })
@@ -262,7 +258,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     queue,
     priority,
   }: SchedulePayload) {
-    this.accessor.create({
+    await this.accessor.create({
       data: {
         handler: JSON.stringify({ name, path, args }),
         runAt,
@@ -272,8 +268,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     })
   }
 
-  override clear() {
-    this.accessor.deleteMany()
+  override async clear() {
+    await this.accessor.deleteMany()
   }
 
   backoffMilliseconds(attempts: number) {

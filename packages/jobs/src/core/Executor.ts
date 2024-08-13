@@ -71,7 +71,6 @@ export class Executor {
         deleteJob: DEFAULT_DELETE_SUCCESSFUL_JOBS,
       })
     } catch (error: any) {
-      // TODO(jgmw): Handle the error 'any' better
       this.logger.error(
         `[RedwoodJob] Error in job ${this.jobId}: ${error.message}`,
       )

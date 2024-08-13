@@ -72,8 +72,6 @@ describe('perform', () => {
     vi.resetAllMocks()
   })
 
-  // TODO(jgmw): I'm not sure I understand the comment below.
-  // TODO once these dynamic imports are converted into loadJob in shared, just mock out the result of loadJob
   it('invokes the `perform` method on the job class', async () => {
     const mockAdapter = { success: vi.fn() }
     const options = {
