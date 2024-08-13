@@ -33,9 +33,7 @@ module.exports = {
   ],
   plugins: ['unused-imports'],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
-    '@typescript-eslint/consistent-type-imports': 'error',
     'unused-imports/no-unused-imports': 'error',
   },
   env: {
@@ -44,6 +42,13 @@ module.exports = {
     es2022: true,
   },
   overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/consistent-type-imports': 'error',
+      },
+    },
     {
       files: ['packages/structure/src/**'],
       rules: {
