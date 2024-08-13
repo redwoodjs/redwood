@@ -28,7 +28,7 @@
   "devDependencies": {
     "@prisma/client": "5.18.0",
     "@redwoodjs/project-config": "workspace:*",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   }

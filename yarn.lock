@@ -8252,8 +8252,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/jobs@workspace:packages/jobs"
   dependencies:
+    "@prisma/client": "npm:5.18.0"
     "@redwoodjs/project-config": "workspace:*"
-    tsx: "npm:4.16.2"
+    tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   bin:
