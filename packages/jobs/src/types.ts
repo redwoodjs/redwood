@@ -15,6 +15,7 @@ export interface BasicLogger {
 // This is the minimum interface that a "job" must conform to in order to be
 // scheduled and executed by Redwood's job engine.
 export interface BaseJob {
+  id: string | number
   name: string
   path: string
   args: unknown[]
