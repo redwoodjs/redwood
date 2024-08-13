@@ -113,7 +113,6 @@ const startWorkers = ({
     }
 
     // fork the worker process
-    // TODO squiggles under __dirname, but import.meta.dirname blows up when running the process
     const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
