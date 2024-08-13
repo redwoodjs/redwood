@@ -111,7 +111,10 @@ Don't make secrets available to your web side. Everything in `includeEnvironment
 | `host`         | Hostname for the api server to listen at               | Defaults to `'0.0.0.0'` in production and `'::'` in development              |
 | `schemaPath`   |  The location of your Prisma schema. If you have [enabled Prisma multi file schemas](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema), then its value is the directory where your `schema.prisma` can be found, for example: `'./api/db/schema'` | Defaults to `'./api/db/schema.prisma'` |
 | `debugPort`    | Port for the debugger to listen at     | `18911`                    |
-| `serverConfig` | [Deprecated; use the [server file](./docker.md#using-the-server-file) instead] Path to the `server.config.js` file | `'./api/server.config.js'` |
+
+
+Additional server configuration can be done using [Server File](docker.md#using-the-server-file)
+
 
 ### Multi File Schema
 
