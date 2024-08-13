@@ -165,7 +165,7 @@ const stopWorkers = async ({
 
 const clearQueue = ({ logger }: { logger: BasicLogger }) => {
   logger.warn(`Starting worker to clear job queue...`)
-  fork(path.join(__dirname, 'worker.js'), ['--clear'])
+  fork(path.join(__dirname, 'rw-jobs-worker.js'), ['--clear'])
 }
 
 const signalSetup = ({
