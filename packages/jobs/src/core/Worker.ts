@@ -16,7 +16,7 @@ import type { BasicLogger } from '../types'
 
 import { Executor } from './Executor'
 
-interface WorkerOptions {
+export interface WorkerOptions {
   // required
   adapter: BaseAdapter
   processName: string
@@ -35,21 +35,9 @@ interface WorkerOptions {
   forever?: boolean
 }
 
-interface DefaultOptions {
-  logger: WorkerOptions['logger']
-  clear: WorkerOptions['clear']
-  maxAttempts: WorkerOptions['maxAttempts']
-  maxRuntime: WorkerOptions['maxRuntime']
-  deleteSuccessfulJobs: WorkerOptions['deleteSuccessfulJobs']
-  deleteFailedJobs: WorkerOptions['deleteFailedJobs']
-  sleepDelay: WorkerOptions['sleepDelay']
-  workoff: WorkerOptions['workoff']
-  forever: WorkerOptions['forever']
-}
-
 type CompleteOptions = Required<WorkerOptions>
 
-const DEFAULT_OPTIONS: DefaultOptions = {
+const DEFAULT_OPTIONS = {
   logger: DEFAULT_LOGGER,
   clear: false,
   maxAttempts: DEFAULT_MAX_ATTEMPTS,
@@ -78,8 +66,7 @@ export class Worker {
   lastCheckTime: Date
 
   constructor(options: WorkerOptions) {
-    // TODO(jgmw)
-    this.options = { ...DEFAULT_OPTIONS, ...options } as CompleteOptions
+    this.options = { ...DEFAULT_OPTIONS, ...options }
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()
