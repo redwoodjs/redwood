@@ -55,12 +55,12 @@ export class Executor {
     this.deleteSuccessfulJobs = this.options.deleteSuccessfulJobs
   }
 
-  get jobId() {
-    return `${this.job.path}:${this.job.name}`
+  get jobIdentifier() {
+    return `${this.job.id} (${this.job.path}:${this.job.name})`
   }
 
   async perform() {
-    this.logger.info(`[RedwoodJob] Started job ${this.jobId}`)
+    this.logger.info(`[RedwoodJob] Started job ${this.jobIdentifier}`)
 
     try {
       const job = await loadJob({ name: this.job.name, path: this.job.path })
@@ -72,7 +72,7 @@ export class Executor {
       })
     } catch (error: any) {
       this.logger.error(
-        `[RedwoodJob] Error in job ${this.jobId}: ${error.message}`,
+        `[RedwoodJob] Error in job ${this.jobIdentifier}: ${error.message}`,
       )
       this.logger.error(error.stack)
 
@@ -84,7 +84,7 @@ export class Executor {
       if (this.job.attempts >= this.maxAttempts) {
         this.logger.warn(
           this.job,
-          `[RedwoodJob] Failed job ${this.jobId}: reached max attempts (${this.maxAttempts})`,
+          `[RedwoodJob] Failed job ${this.jobIdentifier}: reached max attempts (${this.maxAttempts})`,
         )
         await this.adapter.failure({
           job: this.job,
