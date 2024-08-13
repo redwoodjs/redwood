@@ -1,3 +1,4 @@
+import { AdapterNotFoundError } from '../errors'
 import type {
   Adapters,
   BasicLogger,
@@ -8,8 +9,16 @@ import type {
   ScheduleJobOptions,
   WorkerConfig,
 } from '../types'
+import type { WorkerOptions } from './Worker'
 
 import { Scheduler } from './Scheduler'
+import { Worker } from './Worker'
+
+export interface CreateWorkerArgs {
+  index: number
+  workoff: WorkerOptions['workoff']
+  clear: WorkerOptions['clear']
+}
 
 export class JobManager<
   TAdapters extends Adapters,
@@ -52,7 +61,24 @@ export class JobManager<
     return jobDefinition as Job<TQueues, TArgs>
   }
 
-  createWorker() {
-    // coming soon
+  createWorker({ index, workoff, clear }: CreateWorkerArgs) {
+    const config = this.workers[index]
+    const adapter = this.adapters[config.adapter]
+    if (!adapter) {
+      throw new AdapterNotFoundError(config.adapter.toString())
+    }
+
+    return new Worker({
+      adapter: this.adapters[config.adapter],
+      logger: config.logger || this.logger,
+      maxAttempts: config.maxAttempts,
+      maxRuntime: config.maxRuntime,
+      sleepDelay: config.sleepDelay,
+      deleteFailedJobs: config.deleteFailedJobs,
+      processName: process.title,
+      queues: [config.queue].flat(),
+      workoff,
+      clear,
+    })
   }
 }

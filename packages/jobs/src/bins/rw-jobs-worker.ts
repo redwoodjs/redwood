@@ -10,16 +10,11 @@ import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
 import {
-  DEFAULT_DELETE_FAILED_JOBS,
-  DEFAULT_MAX_ATTEMPTS,
-  DEFAULT_MAX_RUNTIME,
-  DEFAULT_SLEEP_DELAY,
-  DEFAULT_WORK_QUEUE,
   DEFAULT_LOGGER,
   PROCESS_TITLE_PREFIX,
 } from '../consts'
 import { Worker } from '../core/Worker'
-import { AdapterNotFoundError, WorkerConfigIndexNotFoundError } from '../errors'
+import { WorkerConfigIndexNotFoundError } from '../errors'
 import { loadJobsManager } from '../loaders'
 import type { BasicLogger } from '../types'
 
@@ -93,52 +88,28 @@ const setupSignals = ({
 const main = async () => {
   const { index, id, clear, workoff } = await parseArgs(process.argv)
 
-  let jobsConfig
+  let manager
 
   try {
-    jobsConfig = await loadJobsManager()
+    manager = await loadJobsManager()
   } catch (e) {
     console.error(e)
     process.exit(1)
   }
 
-  const workerConfig = jobsConfig.workers[index]
-
-  // Exit if the indexed worker options doesn't exist
+  const workerConfig = manager.workers[index]
   if (!workerConfig) {
     throw new WorkerConfigIndexNotFoundError(index)
   }
 
-  const adapter = jobsConfig.adapters[workerConfig.adapter]
-
-  // Exit if the named adapter isn't exported
-  if (!adapter) {
-    throw new AdapterNotFoundError(workerConfig.adapter)
-  }
-
-  // Use worker logger, or jobs worker, or fallback to console
-  const logger = workerConfig.logger ?? jobsConfig.logger ?? DEFAULT_LOGGER
-
+  const logger = workerConfig.logger ?? manager.logger ?? DEFAULT_LOGGER
   logger.info(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
   setProcessTitle({ id, queue: workerConfig.queue })
 
-  const worker = new Worker({
-    adapter,
-    logger,
-    maxAttempts: workerConfig.maxAttempts ?? DEFAULT_MAX_ATTEMPTS,
-    maxRuntime: workerConfig.maxRuntime ?? DEFAULT_MAX_RUNTIME,
-    sleepDelay: workerConfig.sleepDelay ?? DEFAULT_SLEEP_DELAY,
-    deleteFailedJobs:
-      workerConfig.deleteFailedJobs ?? DEFAULT_DELETE_FAILED_JOBS,
-    processName: process.title,
-    queues: [workerConfig.queue ?? DEFAULT_WORK_QUEUE].flat(),
-    workoff,
-    clear,
-  })
-
+  const worker = manager.createWorker({ index, clear, workoff })
   worker.run().then(() => {
     logger.info(`[${process.title}] Worker finished, shutting down.`)
     process.exit(0)
