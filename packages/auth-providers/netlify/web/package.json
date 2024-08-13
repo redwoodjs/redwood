@@ -23,18 +23,18 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1"
+    "core-js": "3.38.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@types/netlify-identity-widget": "1.9.6",
     "@types/react": "^18.2.55",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "netlify-identity-widget": "1.9.2"

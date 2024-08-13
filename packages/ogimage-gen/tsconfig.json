@@ -4,21 +4,11 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
-    {
-      "path": "../project-config"
-    },
-    {
-      "path": "../vite"
-    },
-    {
-      "path": "../router"
-    },
-    {
-      "path": "../internal"
-    }
+    { "path": "../project-config" },
+    { "path": "../vite/tsconfig.build.json" },
+    { "path": "../router/tsconfig.build.json" },
+    { "path": "../internal" }
   ]
 }

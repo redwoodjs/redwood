@@ -21,22 +21,18 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./preset": {
       "types": "./dist/preset.d.ts",
-      "require": "./dist/cjs/preset.js",
-      "import": "./dist/preset.js"
+      "default": "./dist/preset.js"
     },
     "./dist/mocks/MockRouter": {
-      "require": "./dist/cjs/mocks/MockRouter.js",
-      "import": "./dist/mocks/MockRouter.js"
+      "default": "./dist/mocks/MockRouter.js"
     },
     "./dist/preview.js": "./dist/preview.js",
     "./package.json": "./package.json"
   },
-  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -52,27 +48,27 @@
     "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "^5.0.2",
+    "@rollup/pluginutils": "5.1.0",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "^0.30.0",
-    "react-docgen": "^7.0.0",
-    "unplugin-auto-import": "^0.17.5"
+    "magic-string": "0.30.11",
+    "react-docgen": "7.0.3",
+    "unplugin-auto-import": "0.18.2"
   },
   "devDependencies": {
-    "@types/node": "20.12.12",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vite": "5.3.1"
+    "@types/node": "20.14.15",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4",
+    "vite": "5.4.0"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802",
     "storybook": "7.6.17"
   },
   "engines": {

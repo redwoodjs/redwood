@@ -4,10 +4,10 @@ import { act, cleanup, render, screen } from '@testing-library/react'
 import { describe, beforeEach, afterEach, it, expect } from 'vitest'
 import type { Mock } from 'vitest'
 
-import { navigate } from '../history'
-import { namedRoutes as routes } from '../namedRoutes'
-import { Route } from '../Route'
-import { Router } from '../router'
+import { navigate } from '../history.js'
+import { namedRoutes as routes } from '../namedRoutes.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
 
 describe('Router scroll reset', () => {
   const Page1 = () => <div>Page 1</div>

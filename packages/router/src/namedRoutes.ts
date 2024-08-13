@@ -1,4 +1,4 @@
-import type { AvailableRoutes } from './index'
+import type { AvailableRoutes } from './index.js'
 
 // namedRoutes is populated at run-time by iterating over the `<Route />`
 // components, and appending them to this object.

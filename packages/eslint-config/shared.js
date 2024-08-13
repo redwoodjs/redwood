@@ -157,6 +157,8 @@ module.exports = {
 
         // Specific 'recommended' rules we alter
         '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },

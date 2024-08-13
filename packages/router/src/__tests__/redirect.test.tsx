@@ -3,9 +3,9 @@ import React from 'react'
 import { act, render, waitFor } from '@testing-library/react'
 import { test } from 'vitest'
 
-import { navigate } from '../history'
-import { Route } from '../Route'
-import { Router } from '../router'
+import { navigate } from '../history.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
 
 const RedirectedRoutes = () => {
   const SimplePage = () => <h1>FindMeSimple</h1>

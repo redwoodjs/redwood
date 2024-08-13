@@ -6,7 +6,6 @@ import { MockingLoader, StorybookProvider } from './mocks/StorybookProvider'
 
 const decorators: Addon_DecoratorFunction<any>[] = [
   (storyFn, { id }) => {
-    console.log('In decorators')
     return React.createElement(StorybookProvider, { storyFn, id })
   },
 ]

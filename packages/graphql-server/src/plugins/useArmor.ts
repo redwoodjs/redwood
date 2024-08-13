@@ -30,6 +30,7 @@ export const useArmor = (logger: Logger, config?: ArmorConfig) => {
       onReject: [logRejection],
     },
     maxAliases: {
+      allowList: [],
       ...config?.maxAliases,
       onReject: [logRejection],
     },

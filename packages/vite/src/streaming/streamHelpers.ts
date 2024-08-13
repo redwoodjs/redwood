@@ -11,12 +11,11 @@ import type { default as RDServerModule } from 'react-dom/server.edge'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import type * as ServerAuthProviderModule from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
-import type * as LocationModule from '@redwoodjs/router/dist/location.js'
+import type * as LocationModule from '@redwoodjs/router/location'
 import type { TagDescriptor } from '@redwoodjs/web'
-// @TODO (ESM), use exports field. Cannot import from web because of index exports
-import type * as ServerInjectModule from '@redwoodjs/web/dist/components/ServerInject'
+import type { MiddlewareResponse } from '@redwoodjs/web/middleware'
+import type * as ServerInjectModule from '@redwoodjs/web/serverInject'
 
-import type { MiddlewareResponse } from '../middleware/MiddlewareResponse.js'
 import type { ServerEntryType } from '../types.js'
 import { makeFilePath } from '../utils.js'
 
@@ -70,6 +69,20 @@ globalThis.__webpack_require__ ||= (id) => {
 };
 `
 
+const rscLiveReload = `\
+// NOTE: This code is used during development to enable "live-reload."
+window.addEventListener('load', () => {
+  const sse = new EventSource('http://localhost:8913');
+  sse.addEventListener('reload', () => {
+    window.location.reload();
+  });
+  window.addEventListener('beforeunload', () => {
+    sse.close();
+  });
+  // TODO (RSC): Handle disconnect / error states.
+});
+`
+
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
@@ -89,7 +102,10 @@ export async function reactRenderToStreamResponse(
 
   if (!isProd) {
     // For development, we need to inject the react-refresh runtime
-    jsBundles.push(path.join(__dirname, '../../inject', 'reactRefresh.js'))
+    // Avoid using __dirname because this module is now ESM
+    jsBundles.push(
+      new URL('../../inject/reactRefresh.js', import.meta.url).pathname,
+    )
   }
 
   const assetMap = JSON.stringify({
@@ -109,9 +125,7 @@ export async function reactRenderToStreamResponse(
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
     ? await importModule('__rwjs__server_inject')
-    : // @ts-expect-error this is defined in packages/web/package.json exports.
-      // This package just doesn't have moduleResolution configured
-      await import('@redwoodjs/web/serverInject')
+    : await import('@redwoodjs/web/serverInject')
   const { renderToString }: RDServerType = rscEnabled
     ? await importModule('rd-server')
     : await import('react-dom/server')
@@ -145,7 +159,7 @@ export async function reactRenderToStreamResponse(
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
   const { LocationProvider }: LocationType = rscEnabled
     ? await importModule('__rwjs__location')
-    : await import('@redwoodjs/router/dist/location.js')
+    : await import('@redwoodjs/router/location')
 
   const renderRoot = (url: URL) => {
     return createElement(
@@ -179,7 +193,7 @@ export async function reactRenderToStreamResponse(
     bootstrapScriptContent:
       // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}; ${isProd ? '' : rscLiveReload}`
         : undefined,
     bootstrapModules: jsBundles,
   }
@@ -293,7 +307,6 @@ function applyStreamTransforms(
 // initialized properly
 export async function importModule(
   mod:
-    | '__rwjs__rsdw-client'
     | 'rd-server'
     | '__rwjs__react'
     | '__rwjs__location'
@@ -301,9 +314,6 @@ export async function importModule(
     | '__rwjs__server_inject',
 ) {
   const distSsr = getPaths().web.distSsr
-  const rsdwClientPath = makeFilePath(
-    path.join(distSsr, '__rwjs__rsdw-client.mjs'),
-  )
   const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
   const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
   const locationPath = makeFilePath(path.join(distSsr, '__rwjs__location.mjs'))
@@ -314,14 +324,12 @@ export async function importModule(
     path.join(distSsr, '__rwjs__server_inject.mjs'),
   )
 
-  if (mod === '__rwjs__rsdw-client') {
-    return (await import(rsdwClientPath)).default
-  } else if (mod === 'rd-server') {
+  if (mod === 'rd-server') {
     return (await import(rdServerPath)).default
   } else if (mod === '__rwjs__react') {
     return (await import(reactPath)).default
   } else if (mod === '__rwjs__location') {
-    return (await import(locationPath)).default
+    return await import(locationPath)
   } else if (mod === '__rwjs__server_auth_provider') {
     return await import(ServerAuthProviderPath)
   } else if (mod === '__rwjs__server_inject') {

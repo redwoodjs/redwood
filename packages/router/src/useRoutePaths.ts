@@ -1,8 +1,8 @@
-import type { GeneratedRoutesMap } from './analyzeRoutes'
-import { useRouterState } from './router-context'
-import { useRouteName } from './useRouteName'
+import type { GeneratedRoutesMap } from './analyzeRoutes.js'
+import { useRouterState } from './router-context.js'
+import { useRouteName } from './useRouteName.js'
 
-import type { AvailableRoutes } from '.'
+import type { AvailableRoutes } from './index.js'
 
 // This has to be a function, otherwise we're not able to do declaration merging
 export function useRoutePaths() {

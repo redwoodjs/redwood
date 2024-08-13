@@ -6,6 +6,7 @@ import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import type { LoadSchemaOptions } from '@graphql-tools/load'
 import { loadSchema } from '@graphql-tools/load'
+import { getSchema } from '@prisma/internals'
 import chalk from 'chalk'
 import type { DocumentNode } from 'graphql'
 import { print } from 'graphql'
@@ -66,7 +67,9 @@ export const generateGraphQLSchema = async () => {
     if (e instanceof Error) {
       const match = e.message.match(/Unknown type: "(\w+)"/)
       const name = match?.[1]
-      const schemaPrisma = fs.readFileSync(redwoodProjectPaths.api.dbSchema)
+      const schemaPrisma = (
+        await getSchema(redwoodProjectPaths.api.dbSchema)
+      ).toString()
 
       const errorObject = {
         message: `Schema loading failed. ${e.message}`,

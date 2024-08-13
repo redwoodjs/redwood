@@ -628,6 +628,38 @@ const SomePage = () => {
 }
 ```
 
+## Blocking
+
+### useBlocker
+
+The `useBlocker` hook allows you to prevent navigation away from a page under certain conditions. This is useful for scenarios such as preventing a user from accidentally navigating away from a form with unsaved changes.
+
+```jsx
+import { useBlocker } from '@redwoodjs/router'
+import { useForm } from '@redwoodjs/forms'
+
+const SomeForm = () => {
+  const form = useForm<FormInput>() 
+  const blocker = useBlocker({ when: form.formState.isDirty })
+
+  return (
+    <Form formMethods={form} onSubmit={onSubmit} error={props.error}>
+      {blocker.state === 'BLOCKED' && (
+        <div>
+          <button type="button" onClick={() => blocker.confirm()}>
+            Confirm
+          </button>
+          <button type="button" onClick={() => blocker.abort()}>
+            Abort
+          </button>
+        </div>
+      )}
+      ...
+    </Form>
+  )
+}
+```
+
 ## Redirect
 
 If you want to declaratively redirect to a different page, use the `<Redirect>` component.

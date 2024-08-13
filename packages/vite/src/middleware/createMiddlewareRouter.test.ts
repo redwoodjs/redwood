@@ -31,18 +31,16 @@ vi.mock('@redwoodjs/project-config', async () => {
 
 const distRegisterMwMock = vi.fn()
 vi.mock('/proj/web/dist/ssr/entry-server.mjs', () => {
-  console.log('using unix mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }
 })
 vi.mock('/C:/proj/web/dist/ssr/entry-server.mjs', () => {
-  console.log('using win32 mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }
 })
-vi.mock('/C:/proj/web/dist/ssr/entry-server.mjs', () => {
+vi.mock('C:/proj/web/dist/ssr/entry-server.mjs', () => {
   return {
     registerMiddleware: distRegisterMwMock,
   }

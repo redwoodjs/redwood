@@ -7,7 +7,7 @@ import {
   validatePath,
   flattenSearchParams,
   replaceParams,
-} from '../util'
+} from '../util.js'
 
 describe('paramsForRoute', () => {
   it.each([

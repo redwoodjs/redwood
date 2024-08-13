@@ -1,0 +1,12 @@
+{
+  "dictionaries": ["typescript"],
+  "ignorePaths": [
+    ".github",
+    "CHANGELOG.md",
+    "coverage",
+    "lib",
+    "node_modules",
+    "pnpm-lock.yaml"
+  ],
+  "words": ["knip", "packagejson", "Quickstart", "tseslint", "tsup"]
+}

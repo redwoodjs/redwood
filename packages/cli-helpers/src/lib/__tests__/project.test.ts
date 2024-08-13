@@ -54,13 +54,9 @@ describe('addEnvVar', () => {
 
   describe('addEnvVar adds environment variables as part of a setup task', () => {
     beforeEach(() => {
-      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
-        return true
-      })
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
-      vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
-        return envFileContent
-      })
+      vi.spyOn(fs, 'readFileSync').mockImplementation(() => envFileContent)
 
       vi.spyOn(fs, 'writeFileSync').mockImplementation((envPath, envFile) => {
         expect(envPath).toContain('.env')
@@ -128,9 +124,7 @@ describe('addEnvVar', () => {
 describe('updateTomlConfig', () => {
   describe('updateTomlConfig configures a new CLI plugin', () => {
     beforeEach(() => {
-      vi.spyOn(fs, 'existsSync').mockImplementation(() => {
-        return true
-      })
+      vi.spyOn(fs, 'existsSync').mockReturnValue(true)
 
       vi.spyOn(fs, 'readFileSync').mockImplementation(() => {
         return toml.stringify(defaultRedwoodToml)

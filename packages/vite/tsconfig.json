@@ -1,16 +1,20 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "isolatedModules": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
     "outDir": "dist"
   },
-  "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
+  "include": ["."],
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
   "references": [
     { "path": "../cookie-jar" },
+    { "path": "../framework-tools" },
     { "path": "../internal" },
     { "path": "../project-config" },
-    { "path": "../router" },
+    { "path": "../router/tsconfig.build.json" },
     { "path": "../server-store" },
-    { "path": "../web" }
+    { "path": "../web/tsconfig.build.json" }
   ]
 }

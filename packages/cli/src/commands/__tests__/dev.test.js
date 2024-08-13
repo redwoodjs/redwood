@@ -216,33 +216,4 @@ describe('yarn rw dev', () => {
 
     expect(apiCommand.command).not.toContain('--debug-port')
   })
-
-  it('Will run vite, via rw-vite-dev bin if config has bundler set to Vite', async () => {
-    getConfig.mockReturnValue({
-      web: {
-        port: 8910,
-        bundler: 'vite', // <-- enable vite mode
-      },
-      api: {
-        port: 8911,
-      },
-      experimental: {
-        streamingSsr: {
-          enabled: false,
-        },
-      },
-    })
-
-    await handler({
-      side: ['web'],
-    })
-
-    const concurrentlyArgs = concurrently.mock.lastCall[0]
-
-    const webCommand = find(concurrentlyArgs, { name: 'web' })
-
-    expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development rw-vite-dev',
-    )
-  })
 })

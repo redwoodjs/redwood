@@ -1,9 +1,17 @@
-import { describe, expect, it, vitest } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 
-import { MiddlewareRequest } from './MiddlewareRequest'
-import { MiddlewareResponse } from './MiddlewareResponse'
-import { addMiddlewareHandlers, chain, groupByRoutePatterns } from './register'
-import type { Middleware, MiddlewareClass, MiddlewareReg } from './types'
+import type { Middleware, MiddlewareClass } from '@redwoodjs/web/middleware'
+import {
+  MiddlewareRequest,
+  MiddlewareResponse,
+} from '@redwoodjs/web/middleware'
+
+import {
+  addMiddlewareHandlers,
+  chain,
+  groupByRoutePatterns,
+} from './register.js'
+import type { MiddlewareReg } from './types.js'
 
 const fakeMiddleware: Middleware = vitest.fn()
 
@@ -22,6 +30,14 @@ class FakeClassMw implements MiddlewareClass {
 }
 
 describe('groupByRoutePatterns', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.mocked(console).error.mockRestore()
+  })
+
   it('should group middleware by default *', () => {
     const simpleExample = [fakeMiddleware]
 
