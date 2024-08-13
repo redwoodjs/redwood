@@ -26,6 +26,7 @@
     "test:watch": "vitest"
   },
   "devDependencies": {
+    "@prisma/client": "5.18.0",
     "@redwoodjs/project-config": "workspace:*",
     "tsx": "4.16.2",
     "typescript": "5.5.4",
