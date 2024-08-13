@@ -103,7 +103,7 @@
     "fs-extra": "11.2.0",
     "human-id": "^4.1.1",
     "jest": "29.7.0",
-    "jscodeshift": "0.16.1",
+    "jscodeshift": "17.0.0",
     "lerna": "8.1.8",
     "listr2": "6.6.1",
     "make-dir-cli": "4.0.0",
