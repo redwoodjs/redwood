@@ -90,10 +90,10 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "core-js": "3.37.1"
+    "core-js": "3.38.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.4",
@@ -108,7 +108,7 @@
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-dom": "19.0.0-rc-8269d55d-20240802",
     "tstyche": "2.1.1",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

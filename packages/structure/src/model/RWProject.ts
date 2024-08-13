@@ -89,7 +89,7 @@ export class RWProject extends BaseNode {
       const datamodel = await getSchema(this.pathHelper.api.dbSchema)
       // consider case where dmmf doesn't exist (or fails to parse)
       return await getDMMF({ datamodel })
-    } catch (_e) {
+    } catch {
       return undefined
     }
   }

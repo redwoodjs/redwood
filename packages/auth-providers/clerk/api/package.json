@@ -23,15 +23,15 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
-    "@clerk/clerk-sdk-node": "4.13.20",
-    "core-js": "3.37.1"
+    "@babel/runtime-corejs3": "7.25.0",
+    "@clerk/clerk-sdk-node": "4.13.21",
+    "core-js": "3.38.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@redwoodjs/api": "workspace:*",
-    "@types/aws-lambda": "8.10.142",
+    "@types/aws-lambda": "8.10.143",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

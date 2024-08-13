@@ -60,7 +60,7 @@ export const prebuildWebFiles = async (srcFiles: string[], flags?: Flags) => {
 
       fs.mkdirSync(path.dirname(dstPath), { recursive: true })
       fs.writeFileSync(dstPath, result.code)
-    } catch (_error) {
+    } catch {
       console.warn('Error:', srcPath, 'could not prebuilt.')
       return undefined
     }

@@ -23,9 +23,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1"
+    "core-js": "3.38.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
