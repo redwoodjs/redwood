@@ -25,7 +25,6 @@ export class Scheduler<TAdapter extends BaseAdapter> {
   logger: NonNullable<SchedulerConfig<TAdapter>['logger']>
 
   constructor({ adapter, logger }: SchedulerConfig<TAdapter>) {
-    // TODO(jgmw): Confirm everywhere else uses this DEFAULT_LOGGER
     this.logger = logger ?? DEFAULT_LOGGER
     this.adapter = adapter
 

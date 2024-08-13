@@ -1,12 +1,11 @@
 // Used by the job runner to execute a job and track success or failure
 
-import console from 'node:console'
-
 import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter'
 import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_DELETE_FAILED_JOBS,
   DEFAULT_DELETE_SUCCESSFUL_JOBS,
+  DEFAULT_LOGGER,
 } from '../consts'
 import { AdapterRequiredError, JobRequiredError } from '../errors'
 import { loadJob } from '../loaders'
@@ -22,7 +21,7 @@ interface Options {
 }
 
 export const DEFAULTS = {
-  logger: console,
+  logger: DEFAULT_LOGGER,
   maxAttempts: DEFAULT_MAX_ATTEMPTS,
   deleteFailedJobs: DEFAULT_DELETE_FAILED_JOBS,
   deleteSuccessfulJobs: DEFAULT_DELETE_SUCCESSFUL_JOBS,

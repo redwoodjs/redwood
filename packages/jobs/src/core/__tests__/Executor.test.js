@@ -1,11 +1,10 @@
-import console from 'node:console'
-
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
 
 import { mockLogger } from './mocks'
+import { DEFAULT_LOGGER } from '../../consts'
 
 const mocks = vi.hoisted(() => {
   return {
@@ -52,7 +51,7 @@ describe('constructor', () => {
     const options = { adapter: 'adapter', job: 'job' }
     const exector = new Executor(options)
 
-    expect(exector.logger).toEqual(console)
+    expect(exector.logger).toEqual(DEFAULT_LOGGER)
   })
 
   it('throws AdapterRequiredError if adapter is not provided', () => {

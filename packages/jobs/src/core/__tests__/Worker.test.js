@@ -1,5 +1,3 @@
-import console from 'node:console'
-
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
 import * as errors from '../../errors'
@@ -7,6 +5,7 @@ import { Executor } from '../Executor'
 import { Worker } from '../Worker'
 
 import { mockLogger } from './mocks'
+import { DEFAULT_LOGGER } from '../../consts'
 
 // don't execute any code inside Executor, just spy on whether functions are
 // called
@@ -42,7 +41,7 @@ describe('constructor', () => {
     const options = { adapter: 'adapter', queues: ['*'] }
     const worker = new Worker(options)
 
-    expect(worker.logger).toEqual(console)
+    expect(worker.logger).toEqual(DEFAULT_LOGGER)
   })
 
   it('extracts processName from options to variable', () => {

@@ -2,6 +2,7 @@
 
 // Coordinates the worker processes: running attached in [work] mode or
 // detaching in [start] mode.
+import console from 'node:console'
 
 import type { ChildProcess } from 'node:child_process'
 import { fork, exec } from 'node:child_process'

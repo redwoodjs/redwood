@@ -222,7 +222,7 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
   }
 
   override error({ job, error }: ErrorOptions<PrismaJob>) {
-    this.logger.debug(`Job ${job.id} failure`)
+    this.logger.debug(`[RedwoodJob] Job ${job.id} failure`)
 
     const data: FailureData = {
       lockedAt: null,

@@ -1,5 +1,4 @@
-import console from 'node:console'
-
+import { DEFAULT_LOGGER } from '../../consts'
 import type { BaseJob, BasicLogger, PossibleBaseJob } from '../../types'
 
 // Arguments sent to an adapter to schedule a job
@@ -54,7 +53,7 @@ export abstract class BaseAdapter<
 
   constructor(options: TOptions) {
     this.options = options
-    this.logger = options?.logger ?? console
+    this.logger = options?.logger ?? DEFAULT_LOGGER
   }
 
   // It's up to the subclass to decide what to return for these functions.
