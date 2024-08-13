@@ -9,6 +9,10 @@ import process from 'node:process'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
+// @ts-expect-error - doesn't understand dual CJS/ESM export
+import * as cliHelperLoadEnv from '@redwoodjs/cli-helpers/loadEnvFiles'
+const { loadEnvFiles } = cliHelperLoadEnv
+
 import {
   DEFAULT_LOGGER,
   PROCESS_TITLE_PREFIX,
@@ -17,6 +21,8 @@ import { Worker } from '../core/Worker'
 import { WorkerConfigIndexNotFoundError } from '../errors'
 import { loadJobsManager } from '../loaders'
 import type { BasicLogger } from '../types'
+
+loadEnvFiles()
 
 const parseArgs = (argv: string[]) => {
   return yargs(hideBin(argv))
@@ -78,7 +84,7 @@ const setupSignals = ({
   // instead in which case we exit immediately no matter what state the worker is
   // in
   process.on('SIGTERM', () => {
-    logger.info(
+    logger.warn(
       `[${process.title}] SIGTERM received at ${new Date().toISOString()}, exiting now!`,
     )
     process.exit(0)
@@ -103,7 +109,7 @@ const main = async () => {
   }
 
   const logger = workerConfig.logger ?? manager.logger ?? DEFAULT_LOGGER
-  logger.info(
+  logger.warn(
     `[${process.title}] Starting work at ${new Date().toISOString()}...`,
   )
 
