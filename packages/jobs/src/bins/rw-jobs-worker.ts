@@ -118,4 +118,7 @@ const main = async () => {
   setupSignals({ worker, logger })
 }
 
-main()
+// Don't actaully run the worker if we're in a test environment
+if (process.env.NODE_ENV !== 'test') {
+  main()
+}
