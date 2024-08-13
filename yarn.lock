@@ -7902,7 +7902,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     humanize-string: "npm:2.1.0"
-    jscodeshift: "npm:0.16.1"
+    jscodeshift: "npm:17.0.0"
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
@@ -7958,7 +7958,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     graphql: "npm:16.9.0"
-    jscodeshift: "npm:0.16.1"
+    jscodeshift: "npm:17.0.0"
     pascalcase: "npm:1.0.0"
     prettier: "npm:3.3.3"
     tasuku: "npm:2.0.1"
@@ -20621,9 +20621,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jscodeshift@npm:0.16.1":
-  version: 0.16.1
-  resolution: "jscodeshift@npm:0.16.1"
+"jscodeshift@npm:17.0.0":
+  version: 17.0.0
+  resolution: "jscodeshift@npm:17.0.0"
   dependencies:
     "@babel/core": "npm:^7.24.7"
     "@babel/parser": "npm:^7.24.7"
@@ -20635,12 +20635,11 @@ __metadata:
     "@babel/preset-flow": "npm:^7.24.7"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@babel/register": "npm:^7.24.6"
-    chalk: "npm:^4.1.2"
     flow-parser: "npm:0.*"
     graceful-fs: "npm:^4.2.4"
     micromatch: "npm:^4.0.7"
     neo-async: "npm:^2.5.0"
-    node-dir: "npm:^0.1.17"
+    picocolors: "npm:^1.0.1"
     recast: "npm:^0.23.9"
     temp: "npm:^0.9.4"
     write-file-atomic: "npm:^5.0.1"
@@ -20651,7 +20650,7 @@ __metadata:
       optional: true
   bin:
     jscodeshift: bin/jscodeshift.js
-  checksum: 10c0/6025dbb223499a650b6f07e5ed89c82ca5ba1fe4b379d6b87ce3ed39b590d04d1c80f9a79ce47445415b871ef714260b550343affcfa745d3d6e4eef6dd1006d
+  checksum: 10c0/9a5ae1b4320edf25bf78540306b7439e1e9ca3a48bd58ce65c18d8c52d8685b3fd1931c5f8cbb41fc1644a37794d432ca3e85a4c86d4f1b8d903b05d2c38407c
   languageName: node
   linkType: hard
 
@@ -26570,7 +26569,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     human-id: "npm:^4.1.1"
     jest: "npm:29.7.0"
-    jscodeshift: "npm:0.16.1"
+    jscodeshift: "npm:17.0.0"
     lerna: "npm:8.1.8"
     listr2: "npm:6.6.1"
     make-dir-cli: "npm:4.0.0"
