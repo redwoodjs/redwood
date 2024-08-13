@@ -62,7 +62,7 @@
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "humanize-string": "2.1.0",
-    "jscodeshift": "0.16.1",
+    "jscodeshift": "17.0.0",
     "latest-version": "5.1.0",
     "listr2": "6.6.1",
     "lodash": "4.17.21",
