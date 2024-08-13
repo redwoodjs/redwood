@@ -1,13 +1,16 @@
+import tsEslintParser from '@typescript-eslint/parser'
 import { RuleTester } from '@typescript-eslint/rule-tester'
 
 import { unsupportedRouteComponents } from '../unsupported-route-components.js'
 
 const ruleTester = new RuleTester({
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 'latest',
-    ecmaFeatures: {
-      jsx: true,
+  languageOptions: {
+    parser: tsEslintParser,
+    parserOptions: {
+      ecmaVersion: 'latest',
+      ecmaFeatures: {
+        jsx: true,
+      },
     },
   },
 })
