@@ -1,6 +1,6 @@
 import { ${name}Job } from './${name}Job'
 
-describe('${name}', () => {
+describe('${name}Job', () => {
   it('should not throw any errors', async () => {
     await expect(${name}Job.perform()).resolves.not.toThrow()
   })
