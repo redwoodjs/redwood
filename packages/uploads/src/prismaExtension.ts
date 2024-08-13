@@ -1,15 +1,10 @@
-import fs from 'node:fs/promises'
-
 import { PrismaClient } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
 import { ulid } from 'ulid'
 
-import {
-  fileToDataUri,
-  saveUploadToFile,
-  type TUSServerConfig,
-} from './fileSave.utils.js'
+import { fileToDataUri } from './fileSave.utils.js'
+import type { StorageAdapter } from './StorageAdapter.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
   ? never
@@ -32,7 +27,7 @@ export type UploadsConfig<MName extends string | number | symbol = Model> =
 
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
-  tusConfig?: TUSServerConfig,
+  storageAdapter: StorageAdapter,
 ) => {
   // @TODO I think we can use Prisma.getExtensionContext(this)
   // instead of creating a new PrismaClient instance
@@ -49,15 +44,18 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     }
   }
 
-  async function deleteUploadsFromDiskForArgs<T extends runtime.JsArgs>({
-    model,
-    args,
-    fields,
-  }: {
-    model: string
-    args: T
-    fields: string[]
-  }) {
+  async function deleteUpload<T extends runtime.JsArgs>(
+    {
+      model,
+      args,
+      fields,
+    }: {
+      model: string
+      args: T
+      fields: string[]
+    },
+    storageAdapter: StorageAdapter,
+  ) {
     // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
     // Ideally there's a better way to do this
     const record = await (
@@ -67,7 +65,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     // Delete the file from the file system
     fields.forEach(async (field) => {
       const filePath = record[field]
-      await fs.unlink(filePath)
+      await storageAdapter.remove(filePath)
     })
   }
 
@@ -83,20 +81,23 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
 
     queryExtends[modelName] = {
       async update({ query, model, args }) {
-        await deleteUploadsFromDiskForArgs({
-          model,
-          args: {
-            // The update args contains data, which we don't need to supply to delete
-            where: args.where,
+        await deleteUpload(
+          {
+            model,
+            args: {
+              // The update args contains data, which we don't need to supply to delete
+              where: args.where,
+            },
+            fields: uploadFields,
           },
-          fields: uploadFields,
-        })
+          storageAdapter,
+        )
 
         const uploadArgs = await saveUploads(
           uploadFields,
           args,
           modelConfig,
-          tusConfig,
+          storageAdapter,
         )
 
         return query(uploadArgs)
@@ -106,21 +107,23 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           uploadFields,
           args,
           modelConfig,
-          tusConfig,
+          storageAdapter,
         )
 
         return query(uploadArgs)
       },
       async delete({ model, query, args }) {
-        await deleteUploadsFromDiskForArgs({
-          model,
-          args,
-          fields: uploadFields,
-        })
+        await deleteUpload(
+          {
+            model,
+            args,
+            fields: uploadFields,
+          },
+          storageAdapter,
+        )
 
         return query(args)
       },
-      // findMany({ query, args, operation }) {}
     }
 
     // This makes the result extension only available for models with uploadFields
@@ -169,11 +172,11 @@ async function saveUploads(
   uploadFields: string[],
   args: runtime.JsArgs & {
     data?: {
-      [key: string]: runtime.JsInputValue
+      [key: string]: runtime.JsInputValue | File
     }
   },
   modelConfig: UploadConfigForModel,
-  tusConfig?: TUSServerConfig,
+  storageAdapter: StorageAdapter,
 ) {
   const fieldsToUpdate: {
     [key: string]: string
@@ -183,13 +186,14 @@ async function saveUploads(
     throw new Error('No data in prisma query')
   }
 
-  // For each upload property, we need to:
+  // For each upload property, we need to:z
   // 1. save the file to the file system (path or name from config)
   // 2. replace the value of the field
   for await (const field of uploadFields) {
-    const uploadUrlOrDataUrl = args.data[field] as string
+    const uploadFile = args.data[field] as File
+    console.log(`👉 \n ~ uploadFile:`, uploadFile)
 
-    if (!uploadUrlOrDataUrl) {
+    if (!uploadFile) {
       continue
     }
 
@@ -203,21 +207,18 @@ async function saveUploads(
         ? modelConfig.savePath(args)
         : modelConfig.savePath || 'web/public/uploads'
 
-    const savedFilePath = await saveUploadToFile(
-      uploadUrlOrDataUrl,
-      {
-        fileName,
-        saveDir,
-      },
-      tusConfig,
-    )
+    const savedFile = await storageAdapter.save(uploadFile, {
+      fileName,
+      path: saveDir,
+    })
 
-    fieldsToUpdate[field] = savedFilePath
+    // @TODO should we return location or fileId?
+    fieldsToUpdate[field] = savedFile.location
 
     // Call the onFileSaved callback
     // Having it here means it'll always trigger whether create/update
     if (modelConfig.onFileSaved) {
-      await modelConfig.onFileSaved(savedFilePath)
+      await modelConfig.onFileSaved(savedFile.location)
     }
   }
 

@@ -3,9 +3,10 @@ import fs from 'node:fs/promises'
 import { vol } from 'memfs'
 import { describe, it, vi, expect } from 'vitest'
 
-import { createUploadsExtension } from '../prismaExtension'
+import { FileSystemStorage } from '../FileSystemStorage.js'
+import { createUploadsExtension } from '../prismaExtension.js'
 
-import { dataUrlPng } from './fileMocks'
+import { dataUrlPng } from './fileMocks.js'
 // @MARK: use the local prisma client
 import { PrismaClient } from './prisma-client'
 
@@ -42,24 +43,27 @@ describe('Uploads Prisma Extension', () => {
     onFileSaved: vi.fn(),
   }
 
-  const tusConfig = {
-    tusUploadDirectory: '/tmp/tus-uploads',
-  }
   const prismaClient = new PrismaClient().$extends(
     createUploadsExtension(
       {
         dummy: dummyUploadConfig,
         dumbo: dumboUploadConfig,
       },
-      tusConfig,
+      new FileSystemStorage(),
     ),
   )
 
   describe('Query extensions', () => {
-    it('will create a file with base64 encoded png', async () => {
+    it.only('will create a file with base64 encoded png', async () => {
+      const file = new File(['hello'], 'hello.txt', {
+        type: 'text/plain',
+      })
+      console.log(`👉 \n ~ file:`, file)
+      console.log(`👉 \n ~ file arraybuf:`, await file.arrayBuffer())
+
       const dum1 = await prismaClient.dummy.create({
         data: {
-          uploadField: dataUrlPng,
+          uploadField: file,
         },
       })
 
@@ -142,9 +146,12 @@ describe('Uploads Prisma Extension', () => {
       }
 
       const clientWithFileName = new PrismaClient().$extends(
-        createUploadsExtension({
-          dumbo: customNameConfig,
-        }),
+        createUploadsExtension(
+          {
+            dumbo: customNameConfig,
+          },
+          new FileSystemStorage(),
+        ),
       )
 
       const dumbo = await clientWithFileName.dumbo.create({
