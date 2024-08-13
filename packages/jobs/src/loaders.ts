@@ -41,13 +41,14 @@ export const loadJob = async ({
 }: JobComputedProperties): Promise<Job<string[], unknown[]>> => {
   // Confirm the specific job file exists
   const completeJobPath = path.join(getPaths().api.distJobs, jobPath) + '.js'
-  const importPath = makeFilePath(completeJobPath)
-  if (!fs.existsSync(importPath)) {
+
+  if (!fs.existsSync(completeJobPath)) {
     throw new JobNotFoundError(jobName)
   }
 
-  // Import the job
+  const importPath = makeFilePath(completeJobPath)
   const jobModule = await import(importPath)
+
   if (!jobModule[jobName]) {
     throw new JobNotFoundError(jobName)
   }
