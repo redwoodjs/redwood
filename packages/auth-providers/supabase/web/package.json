@@ -23,22 +23,22 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1"
+    "core-js": "3.38.0"
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@supabase/ssr": "0.4.0",
-    "@supabase/supabase-js": "2.44.4",
+    "@supabase/supabase-js": "2.45.1",
     "@types/react": "^18.2.55",
     "react": "19.0.0-rc-8269d55d-20240802",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "@supabase/supabase-js": "2.44.4"
+    "@supabase/supabase-js": "2.45.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

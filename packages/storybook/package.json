@@ -54,15 +54,15 @@
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "0.30.10",
+    "magic-string": "0.30.11",
     "react-docgen": "7.0.3",
     "unplugin-auto-import": "0.18.2"
   },
   "devDependencies": {
-    "@types/node": "20.14.12",
-    "tsx": "4.16.2",
+    "@types/node": "20.14.15",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vite": "5.3.5"
+    "vite": "5.4.0"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
