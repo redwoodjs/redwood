@@ -65,6 +65,53 @@ export function rscTransformUseServerPlugin(): Plugin {
   }
 }
 
+function addLocalExportedNames(
+  names: Map<string, string>,
+  node: Pattern | AssignmentProperty | Expression,
+) {
+  switch (node.type) {
+    case 'Identifier':
+      names.set(node.name, node.name)
+      return
+
+    case 'ObjectPattern':
+      for (let i = 0; i < node.properties.length; i++) {
+        addLocalExportedNames(names, node.properties[i])
+      }
+
+      return
+
+    case 'ArrayPattern':
+      for (let i = 0; i < node.elements.length; i++) {
+        const element = node.elements[i]
+        if (element) {
+          addLocalExportedNames(names, element)
+        }
+      }
+
+      return
+
+    case 'Property':
+      addLocalExportedNames(names, node.value)
+      return
+
+    case 'AssignmentPattern':
+      addLocalExportedNames(names, node.left)
+      return
+
+    case 'RestElement':
+      addLocalExportedNames(names, node.argument)
+      return
+
+    case 'ParenthesizedExpression':
+      addLocalExportedNames(names, node.expression)
+      return
+
+    default:
+      throw new Error(`Unsupported node type: ${node.type}`)
+  }
+}
+
 function transformServerModule(
   mod: swc.Module,
   url: string,
