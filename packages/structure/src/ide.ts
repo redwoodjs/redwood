@@ -205,7 +205,6 @@ export abstract class BaseNode {
   }
 
   @lazy() get closestContainingUri(): string | undefined {
-     
     const { uri } = this as any
     if (uri) {
       return uri

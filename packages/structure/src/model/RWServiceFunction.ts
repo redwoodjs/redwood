@@ -76,7 +76,11 @@ export class RWServiceFunction extends BaseNode {
           },
         } as ExtendedDiagnostic
         // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
-        if (false) yield diagnostic // eslint-disable-line
+
+        // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
+        if (false) {
+          yield diagnostic
+        } // eslint-disable-line // eslint-disable-line
       }
 
       // TODO: check that types match
