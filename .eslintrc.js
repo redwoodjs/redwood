@@ -398,11 +398,5 @@ module.exports = {
         ],
       },
     },
-    {
-      files: ['packages/testing/src/web/global.ts'],
-      rules: {
-        'unused-imports/no-unused-imports': 'off',
-      },
-    },
   ],
 }
