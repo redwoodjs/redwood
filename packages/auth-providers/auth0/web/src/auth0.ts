@@ -8,7 +8,7 @@ import type { CurrentUser } from '@redwoodjs/auth'
 import { createAuthentication } from '@redwoodjs/auth'
 
 // TODO: Map out this user properly.
-export interface Auth0User {}
+export type Auth0User = object
 
 export function createAuth(
   auth0Client: Auth0Client,
