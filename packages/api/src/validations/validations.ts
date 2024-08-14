@@ -28,8 +28,8 @@ interface AcceptanceValidatorOptions extends WithOptionalMessage {
   in?: Array<unknown>
 }
 
-// No additional properties so this type is essentially an alias for WithOptionalMessage
-type EmailValidatorOptions = WithOptionalMessage
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface EmailValidatorOptions extends WithOptionalMessage {}
 
 interface ExclusionValidatorOptions extends WithOptionalMessage {
   /**

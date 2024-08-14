@@ -3,7 +3,8 @@ import { getAsyncStoreInstance } from './globalContextStore'
 /**
  * @deprecated This type will be available only from the `@redwoodjs/context` package in a future release.
  */
-export type GlobalContext = Record<string, unknown>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface GlobalContext extends Record<string, unknown> {}
 
 /**
  * @deprecated This function will be available only from the `@redwoodjs/context` package in a future release.

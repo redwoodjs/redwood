@@ -8,7 +8,8 @@ import type { CurrentUser } from '@redwoodjs/auth'
 import { createAuthentication } from '@redwoodjs/auth'
 
 // TODO: Map out this user properly.
-export type Auth0User = object
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Auth0User {}
 
 export function createAuth(
   auth0Client: Auth0Client,

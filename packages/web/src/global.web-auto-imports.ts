@@ -43,7 +43,8 @@ declare global {
   }
 
   // not defining it here, because it gets overridden by Apollo provider anyway
-  type MutationOperationResult<TData, TVariables> = object
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface MutationOperationResult<TData, TVariables> {}
 
   // Overridable useQuery and useMutation hooks
   interface GraphQLQueryHookOptions<TData, TVariables> {

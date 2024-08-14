@@ -13,45 +13,49 @@ import type {
 
 // @MARK: Override relevant types from Apollo here
 declare global {
-  type QueryOperationResult<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface QueryOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > = QueryResult<TData, TVariables>
+  > extends QueryResult<TData, TVariables> {}
 
-  type MutationOperationResult<TData, TVariables> = MutationTuple<
-    TData,
-    TVariables
-  >
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface MutationOperationResult<TData, TVariables>
+    extends MutationTuple<TData, TVariables> {}
 
-  type SubscriptionOperationResult<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface SubscriptionOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > = SubscriptionResult<TData, TVariables>
+  > extends SubscriptionResult<TData, TVariables> {}
 
-  type GraphQLQueryHookOptions<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface GraphQLQueryHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > = QueryHookOptions<TData, TVariables>
+  > extends QueryHookOptions<TData, TVariables> {}
 
-  type GraphQLMutationHookOptions<TData, TVariables> = MutationHookOptions<
-    TData,
-    TVariables
-  >
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface GraphQLMutationHookOptions<TData, TVariables>
+    extends MutationHookOptions<TData, TVariables> {}
 
-  type GraphQLSubscriptionHookOptions<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface GraphQLSubscriptionHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > = SubscriptionHookOptions<TData, TVariables>
+  > extends SubscriptionHookOptions<TData, TVariables> {}
 
-  type SuspenseQueryOperationResult<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface SuspenseQueryOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > = UseSuspenseQueryResult<TData, TVariables>
+  > extends UseSuspenseQueryResult<TData, TVariables> {}
 
-  type GraphQLSuspenseQueryHookOptions<
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface GraphQLSuspenseQueryHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > = SuspenseQueryHookOptions<TData, TVariables>
+  > extends SuspenseQueryHookOptions<TData, TVariables> {}
 }
 
 export {}

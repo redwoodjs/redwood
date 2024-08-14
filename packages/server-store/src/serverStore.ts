@@ -3,7 +3,8 @@ import { AsyncLocalStorage } from 'async_hooks'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js' with { 'resolution-mode': 'import' }
 import { CookieJar } from '@redwoodjs/cookie-jar'
 
-export type ServerStore = Map<string, any>
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ServerStore extends Map<string, any> {}
 
 let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 

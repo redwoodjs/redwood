@@ -82,7 +82,8 @@ interface CustomMatchers<R = unknown> {
 }
 
 declare module 'vitest' {
-  type Assertion<T = any> = CustomMatchers<T>
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface Assertion<T = any> extends CustomMatchers<T> {}
 }
 
 export {}
