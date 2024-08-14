@@ -10,6 +10,12 @@ docs/
 # Ignore the .nx directory
 /.nx
 
+# Ignore create-redwood-app (we don't want to mismatch between framework and project)
+packages/create-redwood-app
+
+# Ignore create-redwood-rsc-app (it has it's own config)
+packages/create-redwood-rsc-app
+
 # TODO(jgmw): Is this too broad?
 # Ignore test fixtures
 **/__testfixtures__

@@ -1,9 +1,6 @@
-import {
-  build,
-  defaultBuildOptions,
-} from '@redwoodjs/framework-tools'
+import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
 
-import { generateCjsTypes} from '@redwoodjs/framework-tools/cjsTypes'
+import { generateCjsTypes } from '@redwoodjs/framework-tools/cjsTypes'
 import { writeFileSync } from 'node:fs'
 
 // CJS build

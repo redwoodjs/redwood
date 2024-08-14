@@ -1,5 +1,3 @@
- 
-
 // vscode is a compile-time only dependency
 // we only use it in type declarations
 // (we can't use "import type" since we need to do use it in some typeof expressions)
@@ -228,7 +226,7 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   onDidChangeTreeData(listener: (e: string | undefined) => void) {
     this.lazyInit()
     this.listeners.push(listener)
-     
+
     return null as any // TODO: disposable (we're not using it for now)
   }
 

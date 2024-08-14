@@ -2,11 +2,8 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["ambient.d.ts", "src/**/*"],
-  "references": [
-    { "path": "../api" },
-    { "path": "../context" },
-  ]
+  "references": [{ "path": "../api" }, { "path": "../context" }]
 }

@@ -8,7 +8,5 @@
     "outDir": "dist"
   },
   "include": ["src"],
-  "references": [
-    { "path": "../framework-tools" }
-  ]
+  "references": [{ "path": "../framework-tools" }]
 }

@@ -1,4 +1,3 @@
- 
 import type { GlobalContext } from './context'
 
 declare global {

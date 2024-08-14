@@ -1,5 +1,3 @@
- 
-
 import { getAsyncStoreInstance } from './store'
 
 export interface GlobalContext extends Record<string, unknown> {}
