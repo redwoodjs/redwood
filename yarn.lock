@@ -26582,6 +26582,7 @@ __metadata:
     npm-packlist: "npm:8.0.2"
     nx: "npm:19.5.7"
     ora: "npm:8.0.1"
+    prettier: "npm:3.3.3"
     prompts: "npm:2.4.2"
     rimraf: "npm:6.0.1"
     tstyche: "npm:2.1.1"
