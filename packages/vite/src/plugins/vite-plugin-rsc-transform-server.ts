@@ -181,12 +181,7 @@ function transformServerFunction(
           // Check if the body contains a "use server" directive as the first
           // statement.
           const firstStmt = node.declaration.body.stmts[0]
-          if (
-            firstStmt &&
-            firstStmt.type === 'ExpressionStatement' &&
-            firstStmt.expression.type === 'StringLiteral' &&
-            firstStmt.expression.value === 'use server'
-          ) {
+          if (isUseServerDirective(firstStmt)) {
             localNames.set(name, name)
             localTypes.set(name, 'function')
           }
@@ -201,12 +196,7 @@ function transformServerFunction(
             ) {
               const firstStmt = declaration.init.body.stmts[0]
 
-              if (
-                firstStmt &&
-                firstStmt.type === 'ExpressionStatement' &&
-                firstStmt.expression.type === 'StringLiteral' &&
-                firstStmt.expression.value === 'use server'
-              ) {
+              if (isUseServerDirective(firstStmt)) {
                 const name = declaration.id.value
                 localNames.set(name, name)
               }
@@ -225,12 +215,7 @@ function transformServerFunction(
         ) {
           const firstStmt = node.decl.body.stmts[0]
 
-          if (
-            firstStmt &&
-            firstStmt.type === 'ExpressionStatement' &&
-            firstStmt.expression.type === 'StringLiteral' &&
-            firstStmt.expression.value === 'use server'
-          ) {
+          if (isUseServerDirective(firstStmt)) {
             const identifier = node.decl.identifier
             if (identifier) {
               localNames.set(identifier.value, 'default')
@@ -271,12 +256,7 @@ function transformServerFunction(
         if (node.body?.type === 'BlockStatement') {
           const firstStmt = node.body.stmts[0]
 
-          if (
-            firstStmt &&
-            firstStmt.type === 'ExpressionStatement' &&
-            firstStmt.expression.type === 'StringLiteral' &&
-            firstStmt.expression.value === 'use server'
-          ) {
+          if (isUseServerDirective(firstStmt)) {
             serverActions.add(name)
           }
         }
@@ -295,12 +275,7 @@ function transformServerFunction(
           ) {
             const firstStmt = declaration.init.body.stmts[0]
 
-            if (
-              firstStmt &&
-              firstStmt.type === 'ExpressionStatement' &&
-              firstStmt.expression.type === 'StringLiteral' &&
-              firstStmt.expression.value === 'use server'
-            ) {
+            if (isUseServerDirective(firstStmt)) {
               serverActions.add(declaration.id.value)
             }
           }
@@ -338,4 +313,13 @@ function transformServerFunction(
   })
 
   return newSrc
+}
+
+function isUseServerDirective(stmt: swc.Statement | undefined): boolean {
+  return (
+    !!stmt &&
+    stmt.type === 'ExpressionStatement' &&
+    stmt.expression.type === 'StringLiteral' &&
+    stmt.expression.value === 'use server'
+  )
 }
