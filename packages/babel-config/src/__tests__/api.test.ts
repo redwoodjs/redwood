@@ -194,7 +194,7 @@ describe('api', () => {
         loglevel: string
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+       
       const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
         (plugin) => plugin[0] === 'babel-plugin-module-resolver',
       )! as [any, ModuleResolverConfig, any]
