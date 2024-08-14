@@ -180,9 +180,8 @@ module.exports = {
         'plugin:@typescript-eslint/stylistic',
       ],
       rules: {
-        // Specific 'recommended' rules we alter
+        // This is disabled for now because of our legacy usage of `require`. It should be enabled in the future.
         '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
 
         // We allow exceptions to the no-unused-vars rule for variables that start with an underscore
         'no-unused-vars': 'off',

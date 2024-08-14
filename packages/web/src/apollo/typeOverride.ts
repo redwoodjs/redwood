@@ -13,41 +13,45 @@ import type {
 
 // @MARK: Override relevant types from Apollo here
 declare global {
-  interface QueryOperationResult<
+  type QueryOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > extends QueryResult<TData, TVariables> {}
+  > = QueryResult<TData, TVariables>
 
-  interface MutationOperationResult<TData, TVariables>
-    extends MutationTuple<TData, TVariables> {}
+  type MutationOperationResult<TData, TVariables> = MutationTuple<
+    TData,
+    TVariables
+  >
 
-  interface SubscriptionOperationResult<
+  type SubscriptionOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > extends SubscriptionResult<TData, TVariables> {}
+  > = SubscriptionResult<TData, TVariables>
 
-  interface GraphQLQueryHookOptions<
+  type GraphQLQueryHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > extends QueryHookOptions<TData, TVariables> {}
+  > = QueryHookOptions<TData, TVariables>
 
-  interface GraphQLMutationHookOptions<TData, TVariables>
-    extends MutationHookOptions<TData, TVariables> {}
+  type GraphQLMutationHookOptions<TData, TVariables> = MutationHookOptions<
+    TData,
+    TVariables
+  >
 
-  interface GraphQLSubscriptionHookOptions<
+  type GraphQLSubscriptionHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > extends SubscriptionHookOptions<TData, TVariables> {}
+  > = SubscriptionHookOptions<TData, TVariables>
 
-  interface SuspenseQueryOperationResult<
+  type SuspenseQueryOperationResult<
     TData = any,
     TVariables extends OperationVariables = OperationVariables,
-  > extends UseSuspenseQueryResult<TData, TVariables> {}
+  > = UseSuspenseQueryResult<TData, TVariables>
 
-  interface GraphQLSuspenseQueryHookOptions<
+  type GraphQLSuspenseQueryHookOptions<
     TData,
     TVariables extends OperationVariables,
-  > extends SuspenseQueryHookOptions<TData, TVariables> {}
+  > = SuspenseQueryHookOptions<TData, TVariables>
 }
 
 export {}

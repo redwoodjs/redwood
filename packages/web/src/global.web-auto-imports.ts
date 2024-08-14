@@ -43,7 +43,7 @@ declare global {
   }
 
   // not defining it here, because it gets overridden by Apollo provider anyway
-  interface MutationOperationResult<TData, TVariables> {}
+  type MutationOperationResult<TData, TVariables> = object
 
   // Overridable useQuery and useMutation hooks
   interface GraphQLQueryHookOptions<TData, TVariables> {
