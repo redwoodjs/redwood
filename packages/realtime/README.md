@@ -28,8 +28,8 @@ and have the latest data reflected in your app.
 Lastly, the Redwood CLI has commands to
 
 - generate a boilerplate implementation and sample code needed to create your custom
-    - subscriptions
-    - live Queries
+  - subscriptions
+  - live Queries
 
 Regardless of the implementation chosen, **a stateful server and store are needed** to track changes, invalidation, or who wants to be informed about the change.
 

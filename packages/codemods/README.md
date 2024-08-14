@@ -71,13 +71,13 @@ Codemods are sometimes really simple, e.g. just normal string replace or updatin
 Here are a few different examples to help you get familiarised:
 
 - [Rename config in Redwood.toml](packages/codemods/src/codemods/v0.38.x/renameApiProxyPath)—
-Simple string replace on the user's `redwood.toml`. No ASTs, no complications!
+  Simple string replace on the user's `redwood.toml`. No ASTs, no complications!
 
 - [Add Directives](packages/codemods/src/codemods/v0.37.x/addDirectives)—
-Download files from the RedwoodJS template because we've added new files that are needed in a user's project. No ASTs involved
+  Download files from the RedwoodJS template because we've added new files that are needed in a user's project. No ASTs involved
 
 - [Update GraphQL Function](packages/codemods/src/codemods/v0.37.x/updateGraphQLFunction)—
-A more complex example, which uses `jscodeshift` and ASTs to update code in a user's project
+  A more complex example, which uses `jscodeshift` and ASTs to update code in a user's project
 
 The rest of the docs will focus on the more complex cases (the third example).
 
@@ -95,10 +95,7 @@ export default function transform(file: FileInfo, api: API) {
 
   const root = j(file.source)
 
-  return root
-    .findVariableDeclarators('foo')
-    .renameTo('bar')
-    .toSource()
+  return root.findVariableDeclarators('foo').renameTo('bar').toSource()
 }
 ```
 
@@ -132,7 +129,7 @@ The best way to familiarize yourself with its methods is to either 1) look at a 
 
 When beginning to write a transform, your best bet is to start by pasting the code you want to transform into [AST Explorer](https://astexplorer.net/). Use it to figure out what node you want, and then use one of `jscodeshift`'s `find` methods to find it:
 
-```typescript
+````typescript
 import type { FileInfo, API } from 'jscodeshift'
 
 export default function transform(file: FileInfo, api: API) {
@@ -151,10 +148,10 @@ export default function transform(file: FileInfo, api: API) {
     source: {
       type: 'Literal',
       value: '@redwoodjs/router',
-      },
-    })
+    },
+  })
 }
-```
+````
 
 Sometimes `jscodeshift` has a more-specific find method than `find`, like `findVariableDeclarators`. Use it when you can—it makes things a lot easier.
 But note that these find methods aren't on `Collection`.
@@ -192,28 +189,28 @@ describe('Update API Imports', () => {
 2. `matchInlineTransformSnapshot`—very similar to above, but use this in case you want to just provide your fixtures inline
 
 ```js
-  it('Modifies imports (inline)', async () => {
-    await matchInlineTransformSnapshot(
-      'updateGraphQLFunction',  // <--- transform name, so we know which transform to apply
-      `import {
+it('Modifies imports (inline)', async () => {
+  await matchInlineTransformSnapshot(
+    'updateGraphQLFunction', // <--- transform name, so we know which transform to apply
+    `import {
         createGraphQLHandler,   // <-- input source
         makeMergedSchema,
       } from '@redwoodjs/api'`,
-      `import { createGraphQLHandler } from '@redwoodjs/graphql-server'` // <-- expected output
-    )
-  })
+    `import { createGraphQLHandler } from '@redwoodjs/graphql-server'`, // <-- expected output
+  )
+})
 ```
 
 3. `matchFolderTransform` - use this, when you're modifying contents of multiple files, and adding/deleting files from the user's project during the codemod.
 
 ```js
-  test('Removes babel config for default setup', async () => {
-    import transform from '../updateBabelConfig'
+test('Removes babel config for default setup', async () => {
+  import transform from '../updateBabelConfig'
 
-    // pass in your transform here 👇
-    await matchFolderTransform(transform, 'my-default-fixture')
-    // and tell it which folder to use as fixture here ☝️
-  })
+  // pass in your transform here 👇
+  await matchFolderTransform(transform, 'my-default-fixture')
+  // and tell it which folder to use as fixture here ☝️
+})
 ```
 
 In the above example, it will run the transform from `updateBabelConfig` against a fixture located in the `__testfixtures__/my-default-fixture/input` folder and compare with the `__testfixtures__/my-default-fixture/output` folder.
@@ -251,6 +248,7 @@ RWJS_CWD=/path/to/rw-project node "./packages/codemods/dist/codemods.js" {your-c
 > **💡 Tip**
 >
 > If you're making changes, and want to watch your source and build on changes, you can use the [watch cli](https://www.npmjs.com/package/watch-cli)
+>
 > ```shell
 > # Assuming in packages/codemods/
 > watch -p "./src/**/*" -c "yarn build"
