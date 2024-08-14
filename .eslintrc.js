@@ -42,10 +42,8 @@ module.exports = {
     'fixtures',
     'packages/babel-config/src/plugins/__tests__/__fixtures__/**/*',
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
-    'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/cli/**/__testfixtures__/**/*',
-    'packages/core/config/storybook/**/*',
     'packages/studio/dist-*/**/*',
   ],
   plugins: [
@@ -317,7 +315,6 @@ module.exports = {
         'packages/api/src/**',
         'packages/api-server/src/**',
         'packages/cli/src/**',
-        'packages/core/config/**',
         'packages/create-redwood-app/src/*.js',
         'packages/internal/src/**',
         'packages/prerender/src/**',
@@ -371,11 +368,7 @@ module.exports = {
     },
     // Allow computed member access on process.env in NodeJS contexts and tests
     {
-      files: [
-        'packages/core/config/webpack.common.js',
-        'packages/testing/**',
-        'packages/vite/src/index.ts',
-      ],
+      files: ['packages/testing/**', 'packages/vite/src/index.ts'],
       rules: {
         '@redwoodjs/process-env-computed': 'off',
       },
