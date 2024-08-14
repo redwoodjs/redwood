@@ -184,6 +184,9 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-empty-object-type': 'off',
+
+        // We allow exceptions to the no-unused-vars rule for variables that start with an underscore
+        'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
