@@ -180,9 +180,6 @@ module.exports = {
         'plugin:@typescript-eslint/stylistic',
       ],
       rules: {
-        // TODO: look into enabling these eventually
-        '@typescript-eslint/prefer-function-type': 'off',
-
         // Specific 'recommended' rules we alter
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/no-require-imports': 'off',
