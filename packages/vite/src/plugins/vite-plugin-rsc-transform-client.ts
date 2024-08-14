@@ -78,7 +78,7 @@ export function rscTransformUseClientPlugin(
   }
 }
 
-function addExportNames(names: Array<string>, node: any) {
+function addExportNames(names: string[], node: any) {
   switch (node.type) {
     case 'Identifier':
       names.push(node.name)
@@ -124,7 +124,7 @@ function addExportNames(names: Array<string>, node: any) {
 async function parseExportNamesIntoNames(
   code: string,
   body: Program['body'],
-  names: Array<string>,
+  names: string[],
 ): Promise<void> {
   for (const node of body) {
     switch (node.type) {
@@ -245,7 +245,7 @@ async function transformClientModule(
   url: string,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {
-  const names: Array<string> = []
+  const names: string[] = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(code, body, names)

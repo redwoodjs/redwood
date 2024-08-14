@@ -361,7 +361,7 @@ export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
  * ```
  */
 export function flattenSearchParams(queryString: string) {
-  const searchParams: Array<Record<string, unknown>> = []
+  const searchParams: Record<string, unknown>[] = []
 
   for (const [key, value] of Object.entries(parseSearch(queryString))) {
     searchParams.push({ [key]: value })

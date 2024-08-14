@@ -1,6 +1,6 @@
-let mockExecutedTaskTitles: Array<string> = []
-let mockSkippedTaskTitles: Array<string> = []
-let mockSkipValues: Array<string> = []
+let mockExecutedTaskTitles: string[] = []
+let mockSkippedTaskTitles: string[] = []
+let mockSkipValues: string[] = []
 let mockPrompt: (() => boolean) | undefined
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
@@ -21,7 +21,7 @@ vi.mock('fs-extra', async () => {
   }
 })
 vi.mock('execa', () => ({
-  default: (...args: Array<any>) => {
+  default: (...args: any[]) => {
     // Create an empty config file when `tailwindcss init` is called.
     // If we don't do this, later stages of the setup will fail.
     if (args[0] === 'yarn' && args[1].join(' ').includes('tailwindcss init')) {
@@ -33,7 +33,7 @@ vi.mock('execa', () => ({
 vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
+    Listr: vi.fn().mockImplementation((tasks: any[]) => {
       return {
         run: async () => {
           mockExecutedTaskTitles = []

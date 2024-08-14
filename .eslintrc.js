@@ -191,7 +191,6 @@ module.exports = {
         ],
 
         // TODO(jgmw): Look into enabling these eventually
-        '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-generic-constructors': 'off',
         '@typescript-eslint/consistent-indexed-object-style': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',

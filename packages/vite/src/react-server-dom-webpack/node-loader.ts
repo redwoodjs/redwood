@@ -19,7 +19,7 @@ import { getPaths } from '@redwoodjs/project-config'
 
 interface ResolveContext {
   parentURL: string | void
-  conditions: Array<string>
+  conditions: string[]
 }
 
 export type ResolveFunction = (
@@ -29,7 +29,7 @@ export type ResolveFunction = (
 ) => { url: string } | Promise<{ url: string }>
 
 interface LoadContext {
-  conditions: Array<string>
+  conditions: string[]
   format: string | null | void
   importAssertions: object
 }
@@ -191,7 +191,7 @@ function transformServerModule(
   return newSrc
 }
 
-function addExportNames(names: Array<string>, node: any) {
+function addExportNames(names: string[], node: any) {
   switch (node.type) {
     case 'Identifier':
       names.push(node.name)
@@ -262,7 +262,7 @@ function resolveClientImport(
  */
 async function parseExportNamesIntoNames(
   body: any,
-  names: Array<string>,
+  names: string[],
   parentURL: string,
   loader: LoadFunction,
 ): Promise<void> {
@@ -342,7 +342,7 @@ async function transformClientModule(
   loader: LoadFunction,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {
-  const names: Array<string> = []
+  const names: string[] = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(body, names, url, loader)

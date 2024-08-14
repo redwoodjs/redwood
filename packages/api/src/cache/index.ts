@@ -27,7 +27,7 @@ export interface CacheFindManyOptions<
   conditions?: TFindManyArgs
 }
 
-export type CacheKey = string | Array<string>
+export type CacheKey = string | string[]
 export type LatestQuery = Record<string, unknown>
 
 type GenericDelegate = {

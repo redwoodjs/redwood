@@ -222,7 +222,7 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   }
 
   // ----- start TreeDataProvider impl
-  private listeners: Array<(e: string | undefined) => void> = []
+  private listeners: ((e: string | undefined) => void)[] = []
   onDidChangeTreeData(listener: (e: string | undefined) => void) {
     this.lazyInit()
     this.listeners.push(listener)

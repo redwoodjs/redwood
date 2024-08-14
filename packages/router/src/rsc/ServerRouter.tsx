@@ -174,7 +174,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
 
 interface WrappedPageProps {
   routeLoaderElement: ReactNode
-  sets: Array<{
+  sets: {
     id: string
     wrappers: Wrappers
     isPrivate: boolean
@@ -182,7 +182,7 @@ interface WrappedPageProps {
       private?: boolean
       [key: string]: unknown
     }
-  }>
+  }[]
 }
 
 /**

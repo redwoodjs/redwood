@@ -101,7 +101,7 @@ export const createGraphQLYoga = ({
   try {
     // Important: Plugins are executed in order of their usage, and inject functionality serially,
     // so the order here matters
-    const plugins: Array<Plugin<any>> = []
+    const plugins: Plugin<any>[] = []
 
     const { disableIntrospection } = configureGraphQLIntrospection({
       allowIntrospection,

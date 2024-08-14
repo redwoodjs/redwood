@@ -74,7 +74,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 // Plugin shape: [ ["Target", "Options", "name"] ],
 // a custom "name" can be supplied so that user's do not accidentally overwrite
 // Redwood's own plugins when they specify their own.
-export type PluginList = Array<PluginShape>
+export type PluginList = PluginShape[]
 type PluginShape =
   | [PluginTarget, PluginOptions, undefined | string]
   | [PluginTarget, PluginOptions]
@@ -85,7 +85,7 @@ export const getApiSideBabelPlugins = ({
 } = {}) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
-  const plugins: Array<PluginShape | boolean> = [
+  const plugins: (PluginShape | boolean)[] = [
     ...getCommonPlugins(),
     // Needed to support `/** @jsxImportSource custom-jsx-library */`
     // comments in JSX files
