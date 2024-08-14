@@ -1,6 +1,6 @@
 import { getAsyncStoreInstance } from './store'
 
-export interface GlobalContext extends Record<string, unknown> {}
+export type GlobalContext = Record<string, unknown>
 
 export const createContextProxy = (target: GlobalContext) => {
   return new Proxy<GlobalContext>(target, {
