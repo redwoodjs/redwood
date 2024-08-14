@@ -29,11 +29,11 @@ async function copyAssets() {
       absolute: true,
       cwd: cliSrcDirPath,
       ignore: defaultIgnorePatterns,
-    }
+    },
   )
 
   // For Windows.
-  pathnames = pathnames.map(p => path.normalize(p))
+  pathnames = pathnames.map((p) => path.normalize(p))
 
   for (const pathname of pathnames) {
     const distPathname = pathname.replace(cliSrcDirPath, cliDistDirPath)
@@ -43,8 +43,8 @@ async function copyAssets() {
     } catch (error) {
       console.error(
         `Couldn't copy ${pathname} to ${distPathname}. ` +
-          `(Replaced ${cliSrcDirPath} with ${cliDistDirPath} to get the dist pathname.)`
-        )
+          `(Replaced ${cliSrcDirPath} with ${cliDistDirPath} to get the dist pathname.)`,
+      )
       throw error
     }
   }
