@@ -1,11 +1,9 @@
 {
   "recommendations": [
     "EditorConfig.EditorConfig",
-    "dbaeumer.vscode-eslint", // eslint
-    "mgmcdermott.vscode-language-babel", // babel
-    "esbenp.prettier-vscode", // prettier
+    "dbaeumer.vscode-eslint",
+    "mgmcdermott.vscode-language-babel",
+    "esbenp.prettier-vscode"
   ],
-  "unwantedRecommendations": [
-    "johnpapa.vscode-peacock" // not used, still tries to apply it's settings
-  ]
+  "unwantedRecommendations": ["johnpapa.vscode-peacock"]
 }

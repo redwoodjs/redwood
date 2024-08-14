@@ -32,14 +32,14 @@
     "install:crwrsca:ci": "yarn --cwd packages/create-redwood-rsc-app install --inline-builds",
     "lint": "concurrently -c auto npm:lint:fw npm:lint:crwrsca",
     "lint:crwrsca": "yarn --cwd packages/create-redwood-rsc-app run lint",
-    "lint:fw": "cross-env RWJS_CWD=packages/create-redwood-app/templates/ts eslint --config .eslintrc.js --ignore-pattern Routes.jsx --ignore-pattern create-redwood-rsc-app packages",
     "lint:fix": "yarn lint --fix",
+    "lint:fw": "cross-env RWJS_CWD=packages/create-redwood-app/templates/ts eslint --config .eslintrc.js --ignore-pattern Routes.jsx --ignore-pattern create-redwood-rsc-app packages",
     "project:copy": "node ./tasks/framework-tools/frameworkFilesToProject.mjs",
     "project:deps": "node ./tasks/framework-tools/frameworkDepsToProject.mjs",
     "project:sync": "node ./tasks/framework-tools/frameworkSyncToProject.mjs",
     "project:tarsync": "node ./tasks/framework-tools/tarsync.mjs",
-    "rebuild-test-project-fixture": "tsx ./tasks/test-project/rebuild-test-project-fixture.ts",
     "rebuild-fragments-test-project-fixture": "tsx ./tasks/test-project/rebuild-fragments-test-project-fixture.ts",
+    "rebuild-test-project-fixture": "tsx ./tasks/test-project/rebuild-test-project-fixture.ts",
     "smoke-tests": "node ./tasks/smoke-tests/smoke-tests.mjs",
     "test": "nx run-many -t test -- --minWorkers=1 --maxWorkers=4",
     "test-ci": "nx run-many -t test",
@@ -47,11 +47,11 @@
     "test:types": "tstyche"
   },
   "resolutions": {
+    "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.17.5",
     "vscode-languageserver-textdocument": "1.0.12",
-    "vscode-languageserver-types": "3.17.5",
-    "@storybook/react-dom-shim@npm:7.6.17": "https://verdaccio.tobbe.dev/@storybook/react-dom-shim/-/react-dom-shim-8.0.8.tgz"
+    "vscode-languageserver-types": "3.17.5"
   },
   "devDependencies": {
     "@actions/cache": "3.2.4",
