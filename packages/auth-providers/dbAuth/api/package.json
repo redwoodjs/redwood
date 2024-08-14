@@ -23,10 +23,10 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/project-config": "workspace:*",
     "base64url": "3.0.1",
-    "core-js": "3.37.1",
+    "core-js": "3.38.0",
     "md5": "2.3.0",
     "uuid": "10.0.0"
   },
@@ -38,7 +38,7 @@
     "@types/md5": "2.3.5",
     "@types/uuid": "10.0.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -48,13 +48,13 @@
     "react-dom": "19.0.0-rc-8269d55d-20240802"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "1.46.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vite": "5.3.5",
-    "vitest": "2.0.4"
+    "vite": "5.4.0",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

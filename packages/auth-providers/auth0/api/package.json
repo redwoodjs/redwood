@@ -23,8 +23,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.8",
-    "core-js": "3.37.1",
+    "@babel/runtime-corejs3": "7.25.0",
+    "core-js": "3.38.0",
     "jsonwebtoken": "9.0.2",
     "jwks-rsa": "3.1.0"
   },
@@ -34,7 +34,7 @@
     "@redwoodjs/api": "workspace:*",
     "@types/jsonwebtoken": "9.0.6",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

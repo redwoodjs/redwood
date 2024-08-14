@@ -2,7 +2,7 @@
 
 import yargs from 'yargs'
 
-// eslint-disable-next-line no-unused-expressions
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 yargs
   .scriptName('codemods')
   .example([['$0 add-directives', 'Run the add-directives codemod']])
