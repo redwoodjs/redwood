@@ -5,11 +5,11 @@ import { createNamedContext } from './createNamedContext.js'
 import { gHistory } from './history.js'
 import type { TrailingSlashesTypes } from './util.js'
 
-export interface LocationContextType extends URL {}
+export type LocationContextType = URL
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
-interface Location extends URL {}
+type Location = URL
 
 interface LocationProviderProps {
   location?: Location
