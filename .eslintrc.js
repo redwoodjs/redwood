@@ -23,6 +23,8 @@ module.exports = {
       configFile: findBabelConfig(),
     },
   },
+  // Prevents unused eslint-disable comments
+  reportUnusedDisableDirectives: true,
   settings: {
     react: {
       version: 'detect',
