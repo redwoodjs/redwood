@@ -78,9 +78,10 @@ export class RWServiceFunction extends BaseNode {
         // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
 
         // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
+        // eslint-disable-next-line no-constant-condition
         if (false) {
           yield diagnostic
-        } // eslint-disable-line // eslint-disable-line
+        }
       }
 
       // TODO: check that types match
