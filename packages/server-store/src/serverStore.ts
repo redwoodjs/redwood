@@ -3,7 +3,7 @@ import { AsyncLocalStorage } from 'async_hooks'
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js' with { 'resolution-mode': 'import' }
 import { CookieJar } from '@redwoodjs/cookie-jar'
 
-export interface ServerStore extends Map<string, any> {}
+export type ServerStore = Map<string, any>
 
 let PER_REQ_STORAGE: AsyncLocalStorage<ServerStore>
 
