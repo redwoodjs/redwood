@@ -171,10 +171,14 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'off',
       },
     },
+    // TypeScript specific linting
     {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser',
-      extends: ['plugin:@typescript-eslint/recommended'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/stylistic',
+      ],
       rules: {
         // TODO: look into enabling these eventually
         '@typescript-eslint/no-empty-function': 'off',
@@ -188,6 +192,23 @@ module.exports = {
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
+
+        // TODO: Look into enabling these eventually
+        '@typescript-eslint/array-type': 'off',
+        '@typescript-eslint/consistent-generic-constructors': 'off',
+        '@typescript-eslint/consistent-indexed-object-style': 'off',
+        '@typescript-eslint/consistent-type-definitions': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/prefer-for-of': 'off',
+        '@typescript-eslint/prefer-function-type': 'off',
+        '@typescript-eslint/consistent-type-imports': 'error',
+
+        // Specific 'stylistic' rules we alter
+        camelcase: 'off',
+        curly: 'error',
       },
     },
     {
@@ -211,28 +232,6 @@ module.exports = {
         node: true,
         commonjs: true,
         jest: true,
-      },
-    },
-    {
-      extends: ['plugin:@typescript-eslint/stylistic'],
-      files: ['*.ts', '*.tsx'],
-      rules: {
-        // TODO: Look into enabling these eventually
-        '@typescript-eslint/array-type': 'off',
-        '@typescript-eslint/consistent-generic-constructors': 'off',
-        '@typescript-eslint/consistent-indexed-object-style': 'off',
-        '@typescript-eslint/consistent-type-definitions': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/prefer-for-of': 'off',
-        '@typescript-eslint/prefer-function-type': 'off',
-        '@typescript-eslint/consistent-type-imports': 'error',
-
-        // Specific 'stylistic' rules we alter
-        camelcase: 'off',
-        curly: 'error',
       },
     },
     {
