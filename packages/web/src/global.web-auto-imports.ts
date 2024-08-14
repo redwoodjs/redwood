@@ -30,7 +30,7 @@ declare global {
 
   type GraphQLOperationVariables = Record<string, any>
 
-  /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   // Overridable graphQL hook return types
   interface QueryOperationResult<
     TData = any,
