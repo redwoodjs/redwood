@@ -4,12 +4,12 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src"],
   "references": [
     { "path": "../framework-tools" },
     { "path": "../telemetry" },
     { "path": "../project-config" }
-  ],
+  ]
 }

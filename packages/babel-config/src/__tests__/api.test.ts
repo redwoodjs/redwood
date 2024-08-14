@@ -194,7 +194,6 @@ describe('api', () => {
         loglevel: string
       }
 
-       
       const [_, babelPluginModuleResolverConfig] = apiSideBabelPlugins.find(
         (plugin) => plugin[0] === 'babel-plugin-module-resolver',
       )! as [any, ModuleResolverConfig, any]

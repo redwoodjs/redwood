@@ -6,14 +6,12 @@
     "experimentalDecorators": true,
     "noImplicitReturns": false,
     "noImplicitAny": false,
-    "noUnusedLocals": false,
+    "noUnusedLocals": false
   },
-  "include": [
-    "src",
-  ],
+  "include": ["src"],
   "references": [
     {
       "path": "../project-config"
-    },
-  ],
+    }
+  ]
 }

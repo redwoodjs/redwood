@@ -1,13 +1,13 @@
 {
   "name": "@redwoodjs/auth-supabase-middleware",
   "version": "7.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supabase/middleware"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -32,9 +32,9 @@
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "yarn attw -P",
-    "test": "vitest run",
-    "prepublishOnly": "NODE_ENV=production yarn build",
     "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
