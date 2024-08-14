@@ -90,6 +90,9 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
+      - name: 📝 Formatting
+        run: yarn format:check
+
       - name: 🥡 Check packaging and attw
         run: yarn check:package
 
