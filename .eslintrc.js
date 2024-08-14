@@ -181,7 +181,6 @@ module.exports = {
       ],
       rules: {
         // Specific 'recommended' rules we alter
-        '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-empty-object-type': 'off',
 
