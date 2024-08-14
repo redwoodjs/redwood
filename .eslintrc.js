@@ -197,7 +197,6 @@ module.exports = {
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-function-type': 'off',
         '@typescript-eslint/consistent-type-imports': 'error',
 

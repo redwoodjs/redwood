@@ -83,15 +83,14 @@ function addLocalExportedNames(names: Map<string, string>, node: any) {
       return
 
     case 'ObjectPattern':
-      for (let i = 0; i < node.properties.length; i++) {
-        addLocalExportedNames(names, node.properties[i])
+      for (const property of node.properties) {
+        addLocalExportedNames(names, property)
       }
 
       return
 
     case 'ArrayPattern':
-      for (let i = 0; i < node.elements.length; i++) {
-        const element = node.elements[i]
+      for (const element of node.elements) {
         if (element) {
           addLocalExportedNames(names, element)
         }
@@ -127,9 +126,7 @@ function transformServerModule(
   const localNames = new Map()
   const localTypes = new Map()
 
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     switch (node.type) {
       case 'ExportAllDeclaration':
         // If export * is used, the other file needs to explicitly opt into "use server" too.
@@ -152,8 +149,8 @@ function transformServerModule(
           if (node.declaration.type === 'VariableDeclaration') {
             const declarations = node.declaration.declarations
 
-            for (let j = 0; j < declarations.length; j++) {
-              addLocalExportedNames(localNames, declarations[j].id)
+            for (const declaration of declarations) {
+              addLocalExportedNames(localNames, declaration.id)
             }
           } else {
             const name = node.declaration.id.name
@@ -168,8 +165,7 @@ function transformServerModule(
         if (node.specifiers) {
           const specifiers = node.specifiers
 
-          for (let j = 0; j < specifiers.length; j++) {
-            const specifier = specifiers[j]
+          for (const specifier of specifiers) {
             localNames.set(specifier.local.name, specifier.exported.name)
           }
         }
@@ -202,15 +198,14 @@ function addExportNames(names: Array<string>, node: any) {
       return
 
     case 'ObjectPattern':
-      for (let i = 0; i < node.properties.length; i++) {
-        addExportNames(names, node.properties[i])
+      for (const property of node.properties) {
+        addExportNames(names, property)
       }
 
       return
 
     case 'ArrayPattern':
-      for (let i = 0; i < node.elements.length; i++) {
-        const element = node.elements[i]
+      for (const element of node.elements) {
         if (element) {
           addExportNames(names, element)
         }
@@ -271,9 +266,7 @@ async function parseExportNamesIntoNames(
   parentURL: string,
   loader: LoadFunction,
 ): Promise<void> {
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     switch (node.type) {
       case 'ExportAllDeclaration':
         if (node.exported) {
@@ -322,8 +315,8 @@ async function parseExportNamesIntoNames(
           if (node.declaration.type === 'VariableDeclaration') {
             const declarations = node.declaration.declarations
 
-            for (let j = 0; j < declarations.length; j++) {
-              addExportNames(names, declarations[j].id)
+            for (const declaration of declarations) {
+              addExportNames(names, declaration.id)
             }
           } else {
             addExportNames(names, node.declaration.id)
@@ -333,8 +326,8 @@ async function parseExportNamesIntoNames(
         if (node.specifiers) {
           const specifiers = node.specifiers
 
-          for (let j = 0; j < specifiers.length; j++) {
-            addExportNames(names, specifiers[j].exported)
+          for (const specifier of specifiers) {
+            addExportNames(names, specifier.exported)
           }
         }
 
@@ -371,9 +364,7 @@ async function transformClientModule(
   let newSrc =
     "const CLIENT_REFERENCE = Symbol.for('react.client.reference');\n"
 
-  for (let i = 0; i < names.length; i++) {
-    const name = names[i]
-
+  for (const name of names) {
     if (name === 'default') {
       newSrc += 'export default '
       newSrc += 'Object.defineProperties(function() {'
@@ -449,9 +440,7 @@ async function transformModuleIfNeeded(
   let useClient = false
   let useServer = false
 
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     if (node.type !== 'ExpressionStatement' || !node.directive) {
       break
     }

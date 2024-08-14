@@ -34,10 +34,9 @@ export class ResendMailHandler extends AbstractMailHandler {
     // to the Resend client, so I'm going to transform them to Buffers if they are
     // strings.
     const transformedAttachments = []
-    const attachements = sendOptions.attachments
-    if (attachements) {
-      for (let i = 0; i < attachements.length; i++) {
-        const attachment = attachements[i]
+    const attachments = sendOptions.attachments
+    if (attachments) {
+      for (const attachment of attachments) {
         if (typeof attachment.content === 'string') {
           transformedAttachments.push({
             ...attachment,
