@@ -68,7 +68,7 @@ describe('validate absence', () => {
 
 describe('validate acceptance', () => {
   it('checks for truthiness', () => {
-    [null, undefined, 0, 1, '1', 'true'].forEach((val) => {
+    ;[null, undefined, 0, 1, '1', 'true'].forEach((val) => {
       expect(() => validate(val, 'terms', { acceptance: true })).toThrow(
         ValidationErrors.AcceptanceValidationError,
       )
@@ -128,7 +128,7 @@ describe('validate acceptance', () => {
 
 describe('validate email', () => {
   it('checks for email format', () => {
-    [
+    ;[
       'rob',
       'tom@redwoodjs',
       'peter@redwoodjs.',

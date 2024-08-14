@@ -1,4 +1,4 @@
- 
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { GraphQLSchema } from 'graphql'
@@ -65,7 +65,7 @@ export const createGraphQLYoga = ({
     const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
-      (redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
+      ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
         projectDirectives.map((directive) =>
           useRedwoodDirective(directive as DirectivePluginOptions),
         )

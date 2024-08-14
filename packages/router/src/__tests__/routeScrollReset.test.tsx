@@ -20,7 +20,7 @@ describe('Router scroll reset', () => {
   )
 
   beforeEach(async () => {
-    (globalThis.scrollTo as Mock).mockClear()
+    ;(globalThis.scrollTo as Mock).mockClear()
     render(<TestRouter />)
 
     // Make sure we're starting on the home route
