@@ -207,13 +207,6 @@ module.exports = {
       },
     },
     {
-      files: [
-        'web/src/**/*.routeHooks.{js,ts}',
-        'web/src/entry.server.{jsx,tsx}',
-      ],
-      rules: { 'no-restricted-imports': 'off' },
-    },
-    {
       extends: ['plugin:@typescript-eslint/stylistic'],
       files: ['*.ts', '*.tsx'],
       rules: {
