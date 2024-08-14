@@ -182,6 +182,7 @@ function transformServerFunction(
           // statement.
           const firstStmt = node.declaration.body.stmts[0]
           if (
+            firstStmt &&
             firstStmt.type === 'ExpressionStatement' &&
             firstStmt.expression.type === 'StringLiteral' &&
             firstStmt.expression.value === 'use server'
@@ -201,6 +202,7 @@ function transformServerFunction(
               const firstStmt = declaration.init.body.stmts[0]
 
               if (
+                firstStmt &&
                 firstStmt.type === 'ExpressionStatement' &&
                 firstStmt.expression.type === 'StringLiteral' &&
                 firstStmt.expression.value === 'use server'
@@ -224,6 +226,7 @@ function transformServerFunction(
           const firstStmt = node.decl.body.stmts[0]
 
           if (
+            firstStmt &&
             firstStmt.type === 'ExpressionStatement' &&
             firstStmt.expression.type === 'StringLiteral' &&
             firstStmt.expression.value === 'use server'
@@ -269,6 +272,7 @@ function transformServerFunction(
           const firstStmt = node.body.stmts[0]
 
           if (
+            firstStmt &&
             firstStmt.type === 'ExpressionStatement' &&
             firstStmt.expression.type === 'StringLiteral' &&
             firstStmt.expression.value === 'use server'
@@ -292,6 +296,7 @@ function transformServerFunction(
             const firstStmt = declaration.init.body.stmts[0]
 
             if (
+              firstStmt &&
               firstStmt.type === 'ExpressionStatement' &&
               firstStmt.expression.type === 'StringLiteral' &&
               firstStmt.expression.value === 'use server'
