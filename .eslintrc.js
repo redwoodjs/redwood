@@ -293,7 +293,7 @@ module.exports = {
     },
     // Entry.js rules
     {
-      files: ['packages/web/src/entry/index.js'],
+      files: ['packages/web/src/entry/index.jsx'],
       env: {
         browser: true,
       },
