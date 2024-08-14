@@ -61,6 +61,7 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
     '@redwoodjs/process-env-computed': 'error',
     'no-console': 'off',
+    'no-extra-semi': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',
     'no-unused-expressions': [
