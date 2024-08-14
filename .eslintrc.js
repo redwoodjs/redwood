@@ -181,7 +181,6 @@ module.exports = {
       ],
       rules: {
         // TODO: look into enabling these eventually
-        '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/prefer-function-type': 'off',
 
         // Specific 'recommended' rules we alter
