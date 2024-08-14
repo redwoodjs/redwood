@@ -147,7 +147,6 @@ const mockGraphQL = (
     )
   }
 
-   
   registerHandler(graphql[type](operation, resolver))
   return data
 }
