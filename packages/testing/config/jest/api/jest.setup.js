@@ -96,7 +96,7 @@ const buildScenario =
     let scenarioName, testName, testFunc
 
     if (args.length === 3) {
-      ;[scenarioName, testName, testFunc] = args
+      [scenarioName, testName, testFunc] = args
     } else if (args.length === 2) {
       scenarioName = DEFAULT_SCENARIO
       ;[testName, testFunc] = args
@@ -131,7 +131,7 @@ const buildDescribeScenario =
     let scenarioName, describeBlockName, describeBlock
 
     if (args.length === 3) {
-      ;[scenarioName, describeBlockName, describeBlock] = args
+      [scenarioName, describeBlockName, describeBlock] = args
     } else if (args.length === 2) {
       scenarioName = DEFAULT_SCENARIO
       ;[describeBlockName, describeBlock] = args

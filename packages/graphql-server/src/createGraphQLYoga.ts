@@ -65,7 +65,7 @@ export const createGraphQLYoga = ({
     const projectDirectives = makeDirectivesForPlugin(directives)
 
     if (projectDirectives.length > 0) {
-      ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
+      (redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
         projectDirectives.map((directive) =>
           useRedwoodDirective(directive as DirectivePluginOptions),
         )

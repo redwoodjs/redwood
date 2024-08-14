@@ -71,7 +71,7 @@ export const Metadata = (props: Record<string, any>) => {
 
   // custom overrides
   if (metaProps.title) {
-    ;[metaProps.title]
+    [metaProps.title]
       .flat()
       .reverse()
       .map((title) => {

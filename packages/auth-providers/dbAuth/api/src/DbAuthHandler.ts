@@ -705,7 +705,7 @@ export class DbAuthHandler<
     }
 
     // check if password is valid using signup criteria
-    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
+    (this.options.signup as SignupFlowOptions).passwordValidation?.(
       password as string,
     )
 
