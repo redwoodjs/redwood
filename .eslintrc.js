@@ -398,15 +398,5 @@ module.exports = {
         ],
       },
     },
-    {
-      files: [
-        'packages/create-redwood-app/templates/js/scripts/seed.js',
-        'packages/create-redwood-app/templates/ts/scripts/seed.ts',
-        'packages/testing/src/web/global.ts',
-      ],
-      rules: {
-        'unused-imports/no-unused-imports': 'off',
-      },
-    },
   ],
 }
