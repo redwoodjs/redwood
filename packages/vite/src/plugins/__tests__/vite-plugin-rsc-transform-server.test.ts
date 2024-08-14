@@ -245,41 +245,25 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
           'settings.json',
           \`{ "delay": \${formData.get('delay')} }\n\`
         )
-      }`
+      }`.trim()
 
     const output = await pluginTransform(input, id)
 
-    if (typeof output !== 'string') {
-      throw new Error('Expected output to be a string')
-    }
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
 
-    // Check that the file has a "use server" directive at the top
-    // Comments and other directives are allowed before it.
-    // Maybe also imports, I'm not sure, but am going to allow it for now. If
-    // someone finds a problem with that, we can revisit.
-    const outputLines = output.split('\n')
-    const firstCodeLineIndex = outputLines.findIndex(
-      (line) =>
-        line.startsWith('export ') ||
-        line.startsWith('async ') ||
-        line.startsWith('function ') ||
-        line.startsWith('const ') ||
-        line.startsWith('let ') ||
-        line.startsWith('var '),
-    )
-    expect(
-      outputLines
-        .slice(0, firstCodeLineIndex)
-        .some((line) => line.startsWith('"use server"')),
-    ).toBeTruthy()
-    expect(output).toContain(
-      'import {registerServerReference} from "react-server-dom-webpack/server";',
-    )
-    expect(output).toContain(
-      `registerServerReference(formAction,"${id}","default");`,
-    )
-    // One import and (exactly) one call to registerServerReference, so two
-    // matches
-    expect(output.match(/registerServerReference/g)).toHaveLength(2)
+            import fs from 'node:fs'
+
+            export async function formAction(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      "
+    `)
   })
 })
