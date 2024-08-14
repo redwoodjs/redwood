@@ -190,7 +190,7 @@ module.exports = {
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
 
-        // TODO: Look into enabling these eventually
+        // TODO(jgmw): Look into enabling these eventually
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-generic-constructors': 'off',
         '@typescript-eslint/consistent-indexed-object-style': 'off',
@@ -215,14 +215,17 @@ module.exports = {
         jest: true,
       },
     },
+    // Set the correct environment for this eslint config file
     {
-      files: [
-        '.babelrc.js',
-        'babel.config.js',
-        '.eslintrc.js',
-        '*.config.js',
-        'jest.setup.js',
-      ],
+      files: ['.eslintrc.js'],
+      env: {
+        node: true,
+        commonjs: true,
+      },
+    },
+    // Set the correct environment for Jest config files
+    {
+      files: ['jest.config.js', 'jest.setup.js'],
       env: {
         node: true,
         commonjs: true,
