@@ -28,7 +28,8 @@ interface AcceptanceValidatorOptions extends WithOptionalMessage {
   in?: Array<unknown>
 }
 
-interface EmailValidatorOptions extends WithOptionalMessage {}
+// No additional properties so this type is essentially an alias for WithOptionalMessage
+type EmailValidatorOptions = WithOptionalMessage
 
 interface ExclusionValidatorOptions extends WithOptionalMessage {
   /**
