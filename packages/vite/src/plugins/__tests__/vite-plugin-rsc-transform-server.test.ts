@@ -165,6 +165,147 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
     `)
   })
 
+  it('should handle exports with two consts', async () => {
+    const id = 'some/path/to/actions.ts'
+    const input = `
+      'use server'
+
+      import fs from 'node:fs'
+
+      export const fortyTwo = () => 42, formAction = async (formData: FormData) => {
+        await fs.promises.writeFile(
+          'settings.json',
+          \`{ "delay": \${formData.get('delay')} }\`
+        )
+      }`.trim()
+
+    const output = await pluginTransform(input, id)
+
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
+
+            import fs from 'node:fs'
+
+            export const fortyTwo = () => 42, formAction = async (formData: FormData) => {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/path/to/actions.ts","fortyTwo");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      "
+    `)
+  })
+
+  it('should handle named function and arrow function with separate export', async () => {
+    const id = 'some/path/to/actions.ts'
+    const input = `
+      'use server'
+
+      import fs from 'node:fs'
+
+      async function formAction(formData: FormData) {
+        await fs.promises.writeFile(
+          'settings.json',
+          \`{ "delay": \${formData.get('delay')} }\`
+        )
+      }
+
+      const arrowAction = async (formData: FormData) => {
+        await fs.promises.writeFile(
+          'settings.json',
+          \`{ "delay": \${formData.get('delay')} }\`
+        )
+      }
+
+      export { formAction, arrowAction }`.trim()
+
+    const output = await pluginTransform(input, id)
+
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
+
+            import fs from 'node:fs'
+
+            async function formAction(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+            const arrowAction = async (formData: FormData) => {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+            export { formAction, arrowAction }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      "
+    `)
+  })
+
+  it('should handle separate renamed export', async () => {
+    const id = 'some/path/to/actions.ts'
+    const input = `
+      'use server'
+
+      import fs from 'node:fs'
+
+      async function formAction(formData: FormData) {
+        await fs.promises.writeFile(
+          'settings.json',
+          \`{ "delay": \${formData.get('delay')} }\`
+        )
+      }
+
+      const arrowAction = async (formData: FormData) => {
+        await fs.promises.writeFile(
+          'settings.json',
+          \`{ "delay": \${formData.get('delay')} }\`
+        )
+      }
+
+      export { formAction as fA, arrowAction }`.trim()
+
+    const output = await pluginTransform(input, id)
+
+    expect(output).toMatchInlineSnapshot(`
+      "'use server'
+
+            import fs from 'node:fs'
+
+            async function formAction(formData: FormData) {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+            const arrowAction = async (formData: FormData) => {
+              await fs.promises.writeFile(
+                'settings.json',
+                \`{ "delay": \${formData.get('delay')} }\`
+              )
+            }
+
+            export { formAction as fA, arrowAction }
+
+      import {registerServerReference} from "react-server-dom-webpack/server";
+      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","fA");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      "
+    `)
+  })
+
   it.todo('should handle default exported arrow function', async () => {
     const id = 'some/path/to/actions.ts'
     const input = `
@@ -206,12 +347,14 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
 
       import fs from 'node:fs'
 
-      export default async function formAction(formData: FormData) {
+      async function formAction(formData: FormData) {
         await fs.promises.writeFile(
           'settings.json',
           \`{ "delay": \${formData.get('delay')} }\`
         )
-      }`.trim()
+      }
+
+      export default formAction`.trim()
 
     const output = await pluginTransform(input, id)
 
@@ -220,17 +363,53 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
 
             import fs from 'node:fs'
 
-            export default async function formAction(formData: FormData) {
+            async function formAction(formData: FormData) {
               await fs.promises.writeFile(
                 'settings.json',
                 \`{ "delay": \${formData.get('delay')} }\`
               )
             }
 
+            export default formAction
+
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/path/to/actions.ts","default");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","default");
       "
     `)
+  })
+
+  it('should handle default exported inline-named function', async () => {
+    const id = 'some/path/to/actions.ts'
+    const input = `
+        "use server"
+
+        import fs from 'node:fs'
+
+        export default async function formAction(formData: FormData) {
+          await fs.promises.writeFile(
+            'settings.json',
+            \`{ "delay": \${formData.get('delay')} }\`
+          )
+        }`.trim()
+
+    const output = await pluginTransform(input, id)
+
+    expect(output).toMatchInlineSnapshot(`
+        ""use server"
+
+              import fs from 'node:fs'
+
+              export default async function formAction(formData: FormData) {
+                await fs.promises.writeFile(
+                  'settings.json',
+                  \`{ "delay": \${formData.get('delay')} }\`
+                )
+              }
+
+        import {registerServerReference} from "react-server-dom-webpack/server";
+        registerServerReference(formAction,"some/path/to/actions.ts","default");
+        "
+      `)
   })
 
   it.todo('should handle default exported anonymous function', async () => {

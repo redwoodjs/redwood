@@ -1,5 +1,4 @@
-import type { AssignmentProperty, Expression, Pattern, Program } from 'acorn'
-import { parse } from 'acorn-loose'
+import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
 export function rscTransformUseServerPlugin(): Plugin {
@@ -15,13 +14,15 @@ export function rscTransformUseServerPlugin(): Plugin {
         return code
       }
 
-      let body: Program['body']
+      let mod: swc.Module
+
+      const isTypescript = id.endsWith('.ts') || id.endsWith('.tsx')
 
       try {
-        body = parse(code, {
-          ecmaVersion: 2024,
-          sourceType: 'module',
-        }).body
+        mod = swc.parseSync(code, {
+          target: 'es2022',
+          syntax: isTypescript ? 'typescript' : 'ecmascript',
+        })
       } catch (e: any) {
         console.error('Error parsing', id, e.message)
         return code
@@ -30,16 +31,19 @@ export function rscTransformUseServerPlugin(): Plugin {
       let useClient = false
       let useServer = false
 
-      for (const node of body) {
-        if (node.type !== 'ExpressionStatement' || !node.directive) {
+      for (const node of mod.body) {
+        if (
+          node.type !== 'ExpressionStatement' ||
+          node.expression.type !== 'StringLiteral'
+        ) {
           continue
         }
 
-        if (node.directive === 'use client') {
+        if (node.expression.value === 'use client') {
           useClient = true
         }
 
-        if (node.directive === 'use server') {
+        if (node.expression.value === 'use server') {
           useServer = true
         }
       }
@@ -53,7 +57,7 @@ export function rscTransformUseServerPlugin(): Plugin {
       let transformedCode = code
 
       if (useServer) {
-        transformedCode = transformServerModule(body, id, code)
+        transformedCode = transformServerModule(mod, id, code)
       }
 
       return transformedCode
@@ -61,55 +65,8 @@ export function rscTransformUseServerPlugin(): Plugin {
   }
 }
 
-function addLocalExportedNames(
-  names: Map<string, string>,
-  node: Pattern | AssignmentProperty | Expression,
-) {
-  switch (node.type) {
-    case 'Identifier':
-      names.set(node.name, node.name)
-      return
-
-    case 'ObjectPattern':
-      for (let i = 0; i < node.properties.length; i++) {
-        addLocalExportedNames(names, node.properties[i])
-      }
-
-      return
-
-    case 'ArrayPattern':
-      for (let i = 0; i < node.elements.length; i++) {
-        const element = node.elements[i]
-        if (element) {
-          addLocalExportedNames(names, element)
-        }
-      }
-
-      return
-
-    case 'Property':
-      addLocalExportedNames(names, node.value)
-      return
-
-    case 'AssignmentPattern':
-      addLocalExportedNames(names, node.left)
-      return
-
-    case 'RestElement':
-      addLocalExportedNames(names, node.argument)
-      return
-
-    case 'ParenthesizedExpression':
-      addLocalExportedNames(names, node.expression)
-      return
-
-    default:
-      throw new Error(`Unsupported node type: ${node.type}`)
-  }
-}
-
 function transformServerModule(
-  body: Program['body'],
+  mod: swc.Module,
   url: string,
   code: string,
 ): string {
@@ -117,56 +74,56 @@ function transformServerModule(
   const localNames = new Map<string, string>()
   const localTypes = new Map<string, string>()
 
-  for (const node of body) {
+  for (const node of mod.body) {
     switch (node.type) {
-      case 'ExportAllDeclaration':
-        // If export * is used, the other file needs to explicitly opt into "use server" too.
+      // TODO (RSC): Add code comments with examples of each type of node
+
+      case 'ExportDeclaration':
+        if (node.declaration.type === 'FunctionDeclaration') {
+          const name = node.declaration.identifier.value
+          localNames.set(name, name)
+          localTypes.set(name, 'function')
+        } else if (node.declaration.type === 'VariableDeclaration') {
+          for (const declaration of node.declaration.declarations) {
+            if (declaration.id.type === 'Identifier') {
+              const name = declaration.id.value
+              localNames.set(name, name)
+            }
+          }
+        }
+
         break
 
       case 'ExportDefaultDeclaration':
-        if (node.declaration.type === 'Identifier') {
-          localNames.set(node.declaration.name, 'default')
-        } else if (node.declaration.type === 'FunctionDeclaration') {
-          if (node.declaration.id) {
-            localNames.set(node.declaration.id.name, 'default')
-            localTypes.set(node.declaration.id.name, 'function')
+        if (node.decl.type === 'FunctionExpression') {
+          const identifier = node.decl.identifier
+          if (identifier) {
+            localNames.set(identifier.value, 'default')
+            localTypes.set(identifier.value, 'function')
           }
         }
 
         break
 
       case 'ExportNamedDeclaration':
-        if (node.declaration) {
-          if (node.declaration.type === 'VariableDeclaration') {
-            const declarations = node.declaration.declarations
+        for (const specifier of node.specifiers) {
+          if (specifier.type === 'ExportSpecifier') {
+            const name = specifier.orig.value
 
-            for (let j = 0; j < declarations.length; j++) {
-              addLocalExportedNames(localNames, declarations[j].id)
-            }
-          } else {
-            const name = node.declaration.id.name
-            localNames.set(name, name)
-
-            if (node.declaration.type === 'FunctionDeclaration') {
-              localTypes.set(name, 'function')
+            if (specifier.exported?.type === 'Identifier') {
+              const exportedName = specifier.exported.value
+              localNames.set(name, exportedName)
+            } else if (specifier.orig.type === 'Identifier') {
+              localNames.set(name, name)
             }
           }
         }
 
-        if (node.specifiers) {
-          const specifiers = node.specifiers
+        break
 
-          for (let j = 0; j < specifiers.length; j++) {
-            const specifier = specifiers[j]
-            if (
-              specifier.local.type === 'Identifier' &&
-              specifier.exported.type === 'Identifier'
-            ) {
-              localNames.set(specifier.local.name, specifier.exported.name)
-            } else {
-              throw new Error('Unsupported export specifier')
-            }
-          }
+      case 'ExportDefaultExpression':
+        if (node.expression.type === 'Identifier') {
+          localNames.set(node.expression.value, 'default')
         }
 
         break
