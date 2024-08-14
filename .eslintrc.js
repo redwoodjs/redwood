@@ -14,15 +14,29 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:jest-dom/recommended',
   ],
   parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 'latest',
+    ecmaFeatures: {
+      jsx: true,
+    },
     babelOptions: {
       configFile: findBabelConfig(),
     },
   },
+  plugins: [
+    'unused-imports',
+    '@babel',
+    'import',
+    'jsx-a11y',
+    'react',
+    'react-hooks',
+    'jest-dom',
+    '@redwoodjs',
+  ],
   // Prevents unused eslint-disable comments
   reportUnusedDisableDirectives: true,
   settings: {
@@ -45,16 +59,6 @@ module.exports = {
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/cli/**/__testfixtures__/**/*',
-  ],
-  plugins: [
-    'unused-imports',
-    '@babel',
-    'import',
-    'jsx-a11y',
-    'react',
-    'react-hooks',
-    'jest-dom',
-    '@redwoodjs',
   ],
   rules: {
     curly: 'error',
@@ -156,11 +160,15 @@ module.exports = {
     es2022: true,
   },
   overrides: [
+    // We disable react-hooks/rules-of-hooks for packages which do not deal with React code
     {
-      files: ['*.tsx', '*.js', '*.jsx'],
-      excludedFiles: ['api/src/**'],
+      files: [
+        'packages/api-server/**/*.ts',
+        'packages/graphql-server/**/*.ts',
+        'packages/realtime/**/*.ts',
+      ],
       rules: {
-        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/rules-of-hooks': 'off',
       },
     },
     {

@@ -26661,6 +26661,8 @@ __metadata:
     dependency-cruiser: "npm:16.3.10"
     dotenv: "npm:16.4.5"
     eslint: "npm:8.57.0"
+    eslint-plugin-react: "npm:7.35.0"
+    eslint-plugin-react-hooks: "npm:4.6.0"
     eslint-plugin-unused-imports: "npm:3.2.0"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
