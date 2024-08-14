@@ -1,5 +1,3 @@
-const path = require('path')
-
 const { findUp } = require('@redwoodjs/project-config')
 
 // Framework Babel config is monorepo root ./babel.config.js
@@ -13,30 +11,145 @@ const findBabelConfig = (cwd = process.cwd()) => {
 }
 
 module.exports = {
-  extends: path.join(__dirname, 'packages/eslint-config/shared.js'),
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    'plugin:jest-dom/recommended',
+  ],
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 'latest',
     babelOptions: {
       configFile: findBabelConfig(),
     },
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    // For the import/order rule. Configures how it tells if an import is "internal" or not.
+    // An "internal" import is basically just one that's aliased.
+    //
+    // See...
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+    // - https://github.com/import-js/eslint-plugin-import/blob/main/README.md#importinternal-regex
+    'import/internal-regex': '^src/',
+  },
   ignorePatterns: [
+    'node_modules',
     'dist',
     'fixtures',
     'packages/babel-config/src/plugins/__tests__/__fixtures__/**/*',
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
-    'packages/core/**/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/cli/**/__testfixtures__/**/*',
-    'packages/core/config/storybook/**/*',
-    'packages/studio/dist-*/**/*',
   ],
-  plugins: ['unused-imports'],
+  plugins: [
+    'unused-imports',
+    'prettier',
+    '@babel',
+    'import',
+    'jsx-a11y',
+    'react',
+    'react-hooks',
+    'jest-dom',
+    '@redwoodjs',
+  ],
   rules: {
-    '@typescript-eslint/no-explicit-any': 'off',
     curly: 'error',
-    '@typescript-eslint/consistent-type-imports': 'error',
     'unused-imports/no-unused-imports': 'error',
+    '@redwoodjs/process-env-computed': 'error',
+    'prettier/prettier': 'warn',
+    'no-console': 'off',
+    'prefer-object-spread': 'warn',
+    'prefer-spread': 'warn',
+    'no-unused-expressions': [
+      'error',
+      { allowShortCircuit: true, allowTernary: true },
+    ],
+    'no-useless-escape': 'off',
+    camelcase: ['warn', { properties: 'never' }],
+    'no-new': 'warn',
+    'new-cap': ['error', { newIsCap: true, capIsNew: false }],
+    'no-unused-vars': [
+      'error',
+      { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+    ],
+    // React rules
+    'react/prop-types': 'off',
+    'react/display-name': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        // We set this to an empty array to override the default value, which is `['builtin', 'external', 'object']`.
+        // Judging by the number of issues on the repo, this option seems to be notoriously tricky to understand.
+        // From what I can tell, if the value of this is `['builtin']` that means it won't sort builtins.
+        // But we have a rule for builtins below (react), so that's not what we want.
+        //
+        // See...
+        // - https://github.com/import-js/eslint-plugin-import/pull/1570
+        // - https://github.com/import-js/eslint-plugin-import/issues/1565
+        pathGroupsExcludedImportTypes: [],
+        // Only doing this to add internal. The order here maters.
+        // See https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#groups-array
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'after',
+          },
+          {
+            pattern: '@redwoodjs/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            // Matches...
+            // - src/directives/**/*.{js,ts}
+            // - src/services/**/*.{js,ts}
+            // - src/graphql/**/*.sdl.{js,ts}
+            //
+            // Uses https://github.com/isaacs/minimatch under the hood
+            // See https://github.com/isaacs/node-glob#glob-primer for syntax
+            // eslint-disable-next-line prettier/prettier
+            pattern: 'src/*/**/*.?(sdl.){js,ts}',
+            patternOptions: {
+              nobrace: true,
+              noglobstar: true,
+            },
+            group: 'internal',
+            position: 'before',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+      },
+    ],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['$api/*'],
+            message:
+              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
+          },
+        ],
+      },
+    ],
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -44,6 +157,77 @@ module.exports = {
     es2022: true,
   },
   overrides: [
+    {
+      files: ['*.tsx', '*.js', '*.jsx'],
+      excludedFiles: ['api/src/**'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'error',
+      },
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
+      rules: {
+        // TODO: look into enabling these eventually
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/prefer-function-type': 'off',
+
+        // Specific 'recommended' rules we alter
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+        ],
+      },
+    },
+    {
+      files: ['*.test.*', '**/__mocks__/**'],
+      env: {
+        node: true,
+        es6: true,
+        commonjs: true,
+        jest: true,
+      },
+    },
+    {
+      files: [
+        '.babelrc.js',
+        'babel.config.js',
+        '.eslintrc.js',
+        '*.config.js',
+        'jest.setup.js',
+      ],
+      env: {
+        node: true,
+        commonjs: true,
+        jest: true,
+      },
+    },
+    {
+      extends: ['plugin:@typescript-eslint/stylistic'],
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        // TODO: Look into enabling these eventually
+        '@typescript-eslint/array-type': 'off',
+        '@typescript-eslint/consistent-generic-constructors': 'off',
+        '@typescript-eslint/consistent-indexed-object-style': 'off',
+        '@typescript-eslint/consistent-type-definitions': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/prefer-for-of': 'off',
+        '@typescript-eslint/prefer-function-type': 'off',
+        '@typescript-eslint/consistent-type-imports': 'error',
+
+        // Specific 'stylistic' rules we alter
+        camelcase: 'off',
+        curly: 'error',
+      },
+    },
     {
       files: ['packages/structure/src/**'],
       rules: {
@@ -109,7 +293,7 @@ module.exports = {
     },
     // Entry.js rules
     {
-      files: ['packages/web/src/entry/index.js'],
+      files: ['packages/web/src/entry/index.jsx'],
       env: {
         browser: true,
       },
@@ -123,7 +307,6 @@ module.exports = {
         'packages/api/src/**',
         'packages/api-server/src/**',
         'packages/cli/src/**',
-        'packages/core/config/**',
         'packages/create-redwood-app/src/*.js',
         'packages/internal/src/**',
         'packages/prerender/src/**',
@@ -177,11 +360,7 @@ module.exports = {
     },
     // Allow computed member access on process.env in NodeJS contexts and tests
     {
-      files: [
-        'packages/core/config/webpack.common.js',
-        'packages/testing/**',
-        'packages/vite/src/index.ts',
-      ],
+      files: ['packages/testing/**', 'packages/vite/src/index.ts'],
       rules: {
         '@redwoodjs/process-env-computed': 'off',
       },
@@ -202,16 +381,6 @@ module.exports = {
             peerDependencies: true,
           },
         ],
-      },
-    },
-    {
-      files: [
-        'packages/create-redwood-app/templates/js/scripts/seed.js',
-        'packages/create-redwood-app/templates/ts/scripts/seed.ts',
-        'packages/testing/src/web/global.ts',
-      ],
-      rules: {
-        'unused-imports/no-unused-imports': 'off',
       },
     },
   ],

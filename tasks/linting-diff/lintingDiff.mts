@@ -57,7 +57,6 @@ async function main() {
   const fileUpdatedConfig = await getConfigsForFiles(files)
 
   // Compare the configs
-  const differences = new Map<string, { existing: any, updated: any }>()
   const logs: string[] = []
   const logAndPrint = (message: string) => {
     console.log(message)
@@ -66,7 +65,6 @@ async function main() {
   for (const file of files) {
     const existingConfig = fileExistingConfig.get(file)
     const updatedConfig = fileUpdatedConfig.get(file)
-    differences.set(file, { existing: existingConfig, updated: updatedConfig })
 
     // Check for differences in the more simplistic keys
     const simpleChecks = [
@@ -99,19 +97,9 @@ async function main() {
   // Write the output to files for later analysis
   console.log("Writing results to files...")
   const __dirname = import.meta.dirname ?? '.'
-  await fs.writeJSON(path.join(__dirname, 'differences.json'), Object.fromEntries(differences), { spaces: 2 })
+  await fs.writeJSON(path.join(__dirname, 'before.json'), Object.fromEntries(fileExistingConfig), { spaces: 2 })
+  await fs.writeJSON(path.join(__dirname, 'after.json'), Object.fromEntries(fileUpdatedConfig), { spaces: 2 })
   await fs.writeFile(path.join(__dirname, 'log.txt'), logs.join("\n"))
-
-  // Output the differences
-  if (differences.size > 0) {
-    console.log(`Found ${differences.size} files with different configs`)
-    console.log(`Output written to: ${__dirname}"`)
-  } else {
-    console.log("No differences found")
-  }
-
-  // Exit with non-zero code if there are differences
-  process.exitCode ||= differences.size > 0 ? 1 : 0
 }
 
 await main()
