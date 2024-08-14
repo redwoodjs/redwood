@@ -6,7 +6,6 @@ import fg from 'fast-glob'
 
 import { build, defaultIgnorePatterns } from '@redwoodjs/framework-tools'
 
-
 await build()
 
 // The CLI depends on assets like templates files
