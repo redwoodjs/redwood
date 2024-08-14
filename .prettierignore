@@ -1,6 +1,11 @@
+# Ignore built code
 **/dist
 
-# Do not format Markdown files to allow easier documentation contribution
-*.md
+# Ignore fixture projects
+__fixtures__
 
+# Ignore the docs (docusaurus) project
+docs/
+
+# Ignore the .nx directory
 /.nx
