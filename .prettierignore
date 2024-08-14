@@ -3,4 +3,4 @@
 # Do not format Markdown files to allow easier documentation contribution
 *.md
 
-/.nx/cache
+/.nx
