@@ -14,7 +14,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
     'plugin:jest-dom/recommended',
   ],
   parser: '@babel/eslint-parser',
@@ -47,7 +46,6 @@ module.exports = {
   ],
   plugins: [
     'unused-imports',
-    'prettier',
     '@babel',
     'import',
     'jsx-a11y',
@@ -60,7 +58,6 @@ module.exports = {
     curly: 'error',
     'unused-imports/no-unused-imports': 'error',
     '@redwoodjs/process-env-computed': 'error',
-    'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
     'prefer-spread': 'warn',
@@ -122,7 +119,6 @@ module.exports = {
             //
             // Uses https://github.com/isaacs/minimatch under the hood
             // See https://github.com/isaacs/node-glob#glob-primer for syntax
-            // eslint-disable-next-line prettier/prettier
             pattern: 'src/*/**/*.?(sdl.){js,ts}',
             patternOptions: {
               nobrace: true,
@@ -167,7 +163,7 @@ module.exports = {
     {
       files: ['*.ts', '*.tsx'],
       parser: '@typescript-eslint/parser',
-      extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
+      extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
         // TODO: look into enabling these eventually
         '@typescript-eslint/no-empty-function': 'off',
