@@ -173,7 +173,7 @@ module.exports = {
     },
     // TypeScript specific linting
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.ts', '*.mts', '*.tsx'],
       parser: '@typescript-eslint/parser',
       extends: [
         'plugin:@typescript-eslint/recommended',
