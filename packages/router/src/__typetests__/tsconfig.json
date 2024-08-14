@@ -8,5 +8,5 @@
   },
   "include": ["./"],
   "exclude": [],
-  "references": [{"path": "../../"}]
+  "references": [{ "path": "../../" }]
 }
