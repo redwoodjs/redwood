@@ -1,7 +1,8 @@
 {
   "editor.tabSize": 2,
   "files.trimTrailingWhitespace": true,
-  "editor.formatOnSave": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
@@ -20,7 +21,6 @@
     "files.trimTrailingWhitespace": false
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "peacock.color": "#b85833",
   "cSpell.words": [
     "attw",
     "autoplay",

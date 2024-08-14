@@ -147,7 +147,7 @@ const mockGraphQL = (
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+   
   registerHandler(graphql[type](operation, resolver))
   return data
 }
