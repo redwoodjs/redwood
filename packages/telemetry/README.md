@@ -6,24 +6,24 @@ Here is an example JSON packet containing the telemetry data for running yarn rw
 
 ```json
 {
-    type: 'command',
-    command: 'info',         // actual CLI command that was invoked, including flags
-    ci: false,               // whether or not this is running in a CI environment
-    duration: 2353,          // how long the process took, in milliseconds
-    NODE_ENV: 'development', // the value of NODE_ENV, if set
-    complexity: '4.2.6.3',   // a measure of how complex the app is (route, service, cell and page counts)
-    system: '8.32',          // cpu core count, memory in GB
-    sides: 'web,api',        // sides that are in use
-    shell: 'zsh',
-    nodeVersion: '14.17.1',
-    yarnVersion: '14.17.1',
-    npmVersion: '14.17.1',
-    vsCodeVersion: '1.58.0',
-    redwoodVersion: '0.35.1',
-    os: 'macOS',
-    osVersion: '11.4',
-    system: '8.32'          // number of cpu cores and system memory
-  }
+  "type": "command",
+  "command": "info", // actual CLI command that was invoked, including flags
+  "ci": false, // whether or not this is running in a CI environment
+  "duration": 2353, // how long the process took, in milliseconds
+  "NODE_ENV": "development", // the value of NODE_ENV, if set
+  "complexity": "4.2.6.3", // a measure of how complex the app is (route, service, cell and page counts)
+  "system": "8.32", // cpu core count, memory in GB
+  "sides": "web,api", // sides that are in use
+  "shell": "zsh",
+  "nodeVersion": "14.17.1",
+  "yarnVersion": "14.17.1",
+  "npmVersion": "14.17.1",
+  "vsCodeVersion": "1.58.0",
+  "redwoodVersion": "0.35.1",
+  "os": "macOS",
+  "osVersion": "11.4",
+  "system": "8.32" // number of cpu cores and system memory
+}
 ```
 
 ## How do I turn it off?

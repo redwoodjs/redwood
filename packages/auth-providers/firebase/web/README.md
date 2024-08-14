@@ -44,7 +44,11 @@ such as headers and cookies, and the context information about the invocation su
 This example is the standard use of `getCurrentUser`.
 
 ```js
-export const getCurrentUser = async (decoded, { _token, _type }, { _event, _context }) => {
+export const getCurrentUser = async (
+  decoded,
+  { _token, _type },
+  { _event, _context },
+) => {
   return { ...decoded, roles: parseJWT({ decoded }).roles }
 }
 ```
@@ -77,7 +81,9 @@ export const getCurrentUser = async (decoded) => {
 
 ```js
 export const getCurrentUser = async (decoded) => {
-  const currentUser = await db.user.findUnique({ where: { email: decoded.email } })
+  const currentUser = await db.user.findUnique({
+    where: { email: decoded.email },
+  })
 
   return {
     ...currentUser,
@@ -90,7 +96,9 @@ export const getCurrentUser = async (decoded) => {
 
 ```js
 const getCurrentUser = async (decoded) => {
-  const currentUser = await db.user.findUnique({ where: { userIdentity: decoded.sub } })
+  const currentUser = await db.user.findUnique({
+    where: { userIdentity: decoded.sub },
+  })
   return {
     ...currentUser,
     roles: parseJWT({ decoded: decoded }).roles,
@@ -109,10 +117,9 @@ const getCurrentUser = async (_decoded, _raw, { event, _context }) => {
 }
 ```
 
-
 ## requireAuth
 
- Use `requireAuth` in your services to check that a user is logged in, whether or not they are assigned a role, and optionally raise an error if they're not.
+Use `requireAuth` in your services to check that a user is logged in, whether or not they are assigned a role, and optionally raise an error if they're not.
 
 ```js
 @param {string=} roles - An optional role or list of roles
@@ -135,7 +142,7 @@ requireAuth()
 #### Checks if currentUser is authenticated and assigned one of the given roles
 
 ```js
- requireAuth({ role: 'admin' })
- requireAuth({ role: ['editor', 'author'] })
- requireAuth({ role: ['publisher'] })
+requireAuth({ role: 'admin' })
+requireAuth({ role: ['editor', 'author'] })
+requireAuth({ role: ['publisher'] })
 ```

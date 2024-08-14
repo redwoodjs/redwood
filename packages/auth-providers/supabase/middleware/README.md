@@ -4,7 +4,7 @@
 import type { TagDescriptor } from '@redwoodjs/web'
 
 import App from './App'
-import  initSupabaseMiddleware from '@redwoodjs/auth-supabase-middleware'
+import initSupabaseMiddleware from '@redwoodjs/auth-supabase-middleware'
 import { Document } from './Document'
 
 import { getCurrentUser } from '$api/src/lib/auth'
@@ -21,7 +21,7 @@ export const registerMiddleware = () => {
     getCurrentUser,
     // Optional. If you wish to enforce RBAC, define a function to return roles.
     // Typically, one will define roles in Supabase in the user's app_metadata.
-    getRoles
+    getRoles,
   })
 
   return [supabaseAuthMiddleware]
@@ -40,7 +40,7 @@ export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
 
 ### How To Set Roles in Supabase
 
-Typically, one will define roles in Supabase in the user's `app_metadata`. 
+Typically, one will define roles in Supabase in the user's `app_metadata`.
 
 Supabase `app_metadata` includes the provider attribute indicates the first provider that the user used to sign up with. The providers attribute indicates the list of providers that the user can use to login with.
 
@@ -51,7 +51,7 @@ You can set a single role:
 ```sql
 update AUTH.users
   set raw_app_meta_data = raw_app_meta_data || '{"roles": "admin"}'
-where 
+where
   id = '11111111-1111-1111-1111-111111111111';
 ```
 
@@ -60,7 +60,7 @@ Or multiple roles:
 ```sql
 update AUTH.users
   set raw_app_meta_data = raw_app_meta_data || '{"roles": ["admin", "owner"]}'
-where 
+where
   id = '11111111-1111-1111-1111-111111111111';
 ```
 
@@ -71,16 +71,18 @@ Alternatively, you can update the user's `app_metadata` via the [Auth Admin `upd
 ```ts
 const { data: user, error } = await supabase.auth.admin.updateUserById(
   '11111111-1111-1111-1111-111111111111',
-  { app_metadata: { roles: ['admin', 'owner'] } }
+  { app_metadata: { roles: ['admin', 'owner'] } },
 )
 ```
 
 Note: You may see a `role` attribute on the Supabase user. This is an internal claim used by Postgres to perform Row Level Security (RLS) checks.
 
-### What is the default implementation? 
-If you do not supply a `getRoles` function, we look in the `app_metadata.roles` property. 
+### What is the default implementation?
+
+If you do not supply a `getRoles` function, we look in the `app_metadata.roles` property.
 
 If you only had a string, e.g.
+
 ```
 {
   app_metadata: {
@@ -93,7 +95,7 @@ If you only had a string, e.g.
 }
 ```
 
-it will convert the roles here to `['admin']`. 
+it will convert the roles here to `['admin']`.
 
 If you place your roles somewhere else, you will need to provide an implementation of the `getRoles` function. e.g.
 
@@ -112,7 +114,6 @@ If you place your roles somewhere else, you will need to provide an implementati
 }
 ```
 
-
 ```js
 // In entry.server.jsx
 export const registerMiddleware = () => {
@@ -120,10 +121,9 @@ export const registerMiddleware = () => {
     // Customise where you get your roles from
     getRoles: (decoded) => {
       return decoded.app_metadata.organization?.userRoles
-    }
+    },
   })
 
   return [supabaseAuthMiddleware]
 }
-
 ```

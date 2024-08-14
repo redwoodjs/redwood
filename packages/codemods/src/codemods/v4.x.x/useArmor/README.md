@@ -12,7 +12,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-This codemod replaces any current `depthLimitOptions` with the equivalent GraphQL Armor  configuration.
+This codemod replaces any current `depthLimitOptions` with the equivalent GraphQL Armor configuration.
 
 ```ts
 export const handler = createGraphQLHandler({
