@@ -9,3 +9,14 @@ docs/
 
 # Ignore the .nx directory
 /.nx
+
+# TODO(jgmw): Is this too broad?
+# Ignore test fixtures
+**/__testfixtures__
+**/__tests__/fixtures
+
+# TODO(jgmw): Re-enable these in managable chunks
+tasks
+.github
+.changesets
+packages/create-redwood-app/tests/e2e_prompts*
