@@ -85,6 +85,8 @@
     "@types/jscodeshift": "0.11.11",
     "@types/ncp": "2.0.8",
     "@types/prompts": "2.4.9",
+    "@typescript-eslint/eslint-plugin": "8.1.0",
+    "@typescript-eslint/parser": "8.1.0",
     "all-contributors-cli": "6.26.1",
     "babel-jest": "^29.7.0",
     "babel-plugin-auto-import": "1.1.0",

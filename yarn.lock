@@ -26647,6 +26647,8 @@ __metadata:
     "@types/jscodeshift": "npm:0.11.11"
     "@types/ncp": "npm:2.0.8"
     "@types/prompts": "npm:2.4.9"
+    "@typescript-eslint/eslint-plugin": "npm:8.1.0"
+    "@typescript-eslint/parser": "npm:8.1.0"
     all-contributors-cli: "npm:6.26.1"
     babel-jest: "npm:^29.7.0"
     babel-plugin-auto-import: "npm:1.1.0"
