@@ -288,6 +288,7 @@ async function getPluginConfig(side: CodegenSide) {
       JSONObject: 'Prisma.JsonObject',
       Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
       Byte: 'Buffer',
+      File: 'File',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
