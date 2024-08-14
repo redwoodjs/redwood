@@ -1,24 +1,13 @@
 {
   "name": "@redwoodjs/web",
   "version": "7.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/web"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "cross-env": "./dist/cjs/bins/cross-env.js",
-    "msw": "./dist/cjs/bins/msw.js",
-    "redwood": "./dist/cjs/bins/redwood.js",
-    "rw": "./dist/cjs/bins/redwood.js",
-    "rwfw": "./dist/cjs/bins/rwfw.js",
-    "storybook": "./dist/cjs/bins/storybook.js",
-    "tsc": "./dist/cjs/bins/tsc.js"
-  },
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -122,6 +111,17 @@
       "import": "./dist/apollo/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "cross-env": "./dist/cjs/bins/cross-env.js",
+    "msw": "./dist/cjs/bins/msw.js",
+    "redwood": "./dist/cjs/bins/redwood.js",
+    "rw": "./dist/cjs/bins/redwood.js",
+    "rwfw": "./dist/cjs/bins/rwfw.js",
+    "storybook": "./dist/cjs/bins/storybook.js",
+    "tsc": "./dist/cjs/bins/tsc.js"
+  },
   "files": [
     "dist",
     "apollo",
@@ -133,10 +133,10 @@
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.types-cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn:publint",
-    "test": "vitest run",
     "check:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
