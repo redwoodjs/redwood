@@ -44,7 +44,6 @@ module.exports = {
     'packages/babel-config/src/__tests__/__fixtures__/**/*',
     'packages/codemods/**/__testfixtures__/**/*',
     'packages/cli/**/__testfixtures__/**/*',
-    'packages/studio/dist-*/**/*',
   ],
   plugins: [
     'unused-imports',
