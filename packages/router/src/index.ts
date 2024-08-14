@@ -42,6 +42,7 @@ export { SkipNavLink, SkipNavContent } from './skipNav.js'
  * }
  */
 // Keep this in index.ts so it can be extended with declaration merging
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AvailableRoutes {}
 
 // Used by packages/internal/src/generate/templates/web-routerRoutes.d.ts.template

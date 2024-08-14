@@ -173,35 +173,30 @@ module.exports = {
     },
     // TypeScript specific linting
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.ts', '*.mts', '*.tsx'],
       parser: '@typescript-eslint/parser',
       extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/stylistic',
       ],
       rules: {
-        // TODO: look into enabling these eventually
-        '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/prefer-function-type': 'off',
-
-        // Specific 'recommended' rules we alter
-        '@typescript-eslint/no-var-requires': 'off',
+        // This is disabled for now because of our legacy usage of `require`. It should be enabled in the future.
         '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
+
+        // We allow exceptions to the no-unused-vars rule for variables that start with an underscore
+        'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
 
-        // TODO: Look into enabling these eventually
+        // TODO(jgmw): Look into enabling these eventually
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/consistent-generic-constructors': 'off',
         '@typescript-eslint/consistent-indexed-object-style': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-function-type': 'off',
         '@typescript-eslint/consistent-type-imports': 'error',
@@ -220,14 +215,17 @@ module.exports = {
         jest: true,
       },
     },
+    // Set the correct environment for this eslint config file
     {
-      files: [
-        '.babelrc.js',
-        'babel.config.js',
-        '.eslintrc.js',
-        '*.config.js',
-        'jest.setup.js',
-      ],
+      files: ['.eslintrc.js'],
+      env: {
+        node: true,
+        commonjs: true,
+      },
+    },
+    // Set the correct environment for Jest config files
+    {
+      files: ['jest.config.js', 'jest.setup.js'],
       env: {
         node: true,
         commonjs: true,

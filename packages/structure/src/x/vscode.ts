@@ -340,6 +340,6 @@ export function Command_cli(cmd: string, title = 'run...'): Command {
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
-type ReplacePropTypes<T extends {}, Replacements extends {}> = {
+type ReplacePropTypes<T extends object, Replacements extends object> = {
   [K in keyof T]: K extends keyof Replacements ? Replacements[K] : T[K]
 }

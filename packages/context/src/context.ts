@@ -1,5 +1,6 @@
 import { getAsyncStoreInstance } from './store'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GlobalContext extends Record<string, unknown> {}
 
 export const createContextProxy = (target: GlobalContext) => {

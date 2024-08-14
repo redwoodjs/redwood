@@ -28,7 +28,7 @@ interface AcceptanceValidatorOptions extends WithOptionalMessage {
   in?: Array<unknown>
 }
 
-interface EmailValidatorOptions extends WithOptionalMessage {}
+type EmailValidatorOptions = WithOptionalMessage
 
 interface ExclusionValidatorOptions extends WithOptionalMessage {
   /**

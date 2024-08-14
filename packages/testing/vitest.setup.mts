@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
-import { afterEach, beforeAll } from 'vitest'
 import { cleanup } from '@testing-library/react'
+import { afterEach, beforeAll } from 'vitest'
 
 import { startMSW } from './src/web/mockRequests'
 
