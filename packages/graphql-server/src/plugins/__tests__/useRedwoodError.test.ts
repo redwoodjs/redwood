@@ -1,6 +1,7 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { CurrencyDefinition, CurrencyResolver } from 'graphql-scalars'
 
+import { RedwoodError, EmailValidationError } from '@redwoodjs/api'
 import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
@@ -12,7 +13,6 @@ jest.mock('../../makeMergedSchema', () => {
     ForbiddenError,
     RedwoodGraphQLError,
   } = require('@redwoodjs/graphql-server/dist/errors')
-  const { EmailValidationError, RedwoodError } = require('@redwoodjs/api')
 
   const { CurrencyResolver } = require('graphql-scalars')
 
