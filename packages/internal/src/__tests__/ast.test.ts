@@ -10,7 +10,7 @@ import {
   fileToAst,
 } from '../ast'
 
-vi.mock('@redwoodjs/project-config', async () => {
+vi.mock('@redwoodjs/project-config', () => {
   const baseFixturePath = path.join(__dirname, 'fixtures')
   return {
     getPaths: () => ({
