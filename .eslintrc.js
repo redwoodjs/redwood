@@ -232,17 +232,6 @@ module.exports = {
         jest: true,
       },
     },
-    {
-      files: ['packages/structure/src/**'],
-      rules: {
-        '@typescript-eslint/no-this-alias': 'off',
-        '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-case-declarations': 'off',
-        'prefer-const': 'off',
-        'no-empty': 'warn',
-        'no-unused-expressions': 'off',
-      },
-    },
     // Browser Context
     //
     // We prevent "window" from being used, and instead require "global".

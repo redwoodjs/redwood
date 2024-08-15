@@ -51,6 +51,7 @@ export class RWSDL extends FileNode {
     return base.substr(0, base.length - '.sdl.js'.length)
   }
   @lazy() get implementableFields() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
     return iter(function* () {
       if (!self.schemaString) {
