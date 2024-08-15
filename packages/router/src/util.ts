@@ -83,8 +83,6 @@ const coreParamTypes: Record<string, ParamType> = {
   },
 }
 
-type SupportedRouterParamTypes = keyof typeof coreParamTypes
-
 /**
  * Determine if the given route is a match for the given pathname. If so,
  * extract any named params and return them in an object.
@@ -145,8 +143,7 @@ export function matchPath(
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
         const [name, transformName] = routeParamsDefinition[index]
-        const typeInfo =
-          allParamTypes[transformName as SupportedRouterParamTypes]
+        const typeInfo = allParamTypes[transformName]
 
         let transformedValue: string | unknown = value
         if (typeof typeInfo?.parse === 'function') {
@@ -192,7 +189,7 @@ export function getRouteRegexAndParams(
   // /recipe/{id} -> /recipe/([^/$1*]+)
   for (const [_name, type, match] of routeParams) {
     // `undefined` matcher if `type` is not supported
-    const matcher = allParamTypes[type as SupportedRouterParamTypes]?.match
+    const matcher = allParamTypes[type]?.match
 
     // Get the regex as a string, or default regexp if `match` is not specified
     const typeRegexp = matcher?.source || '[^/]+'
