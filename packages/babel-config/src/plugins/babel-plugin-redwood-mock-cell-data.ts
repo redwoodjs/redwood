@@ -7,7 +7,7 @@ import { parse as babelParse } from '@babel/parser'
 import type { ParserPlugin } from '@babel/parser'
 import traverse from '@babel/traverse'
 import fg from 'fast-glob'
-import { parse as graphqlParse } from 'graphql'
+import { parse as graphqlParse, Kind } from 'graphql'
 
 export default function ({ types: t }: { types: typeof types }): PluginObj {
   let nodesToRemove: any[] = []
@@ -248,7 +248,10 @@ export const getCellMetadata = (p: string) => {
     const document = graphqlParse(operation)
 
     for (const definition of document.definitions) {
-      if (definition.kind === 'OperationDefinition' && definition.name?.value) {
+      if (
+        definition.kind === Kind.OPERATION_DEFINITION &&
+        definition.name?.value
+      ) {
         operationName = definition.name.value
       }
     }
