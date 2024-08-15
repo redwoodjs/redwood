@@ -175,9 +175,12 @@ module.exports = {
     {
       files: ['*.ts', '*.mts', '*.tsx'],
       parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: './tsconfig.eslint.json',
+      },
       extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/stylistic',
+        'plugin:@typescript-eslint/recommended-type-checked',
+        'plugin:@typescript-eslint/stylistic-type-checked',
       ],
       rules: {
         // This is disabled for now because of our legacy usage of `require`. It should be enabled in the future.
