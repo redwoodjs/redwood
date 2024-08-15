@@ -19,8 +19,13 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
   findScripts().forEach((scriptPath) => {
-    const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+    const relativePath = path.relative(getPaths().scripts, scriptPath)
+    const { ext } = path.parse(relativePath)
+    const relativePathWithoutExt =
+      // Using \\ to escape the . in the file extension
+      // Ending with $ to match the end of the string
+      relativePath.replace(new RegExp(`\\${ext}$`), '')
+    console.log(c.info(`- ${relativePathWithoutExt}`))
   })
   console.log()
 }
