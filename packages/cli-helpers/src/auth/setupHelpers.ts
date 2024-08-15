@@ -52,7 +52,7 @@ export interface AuthHandlerArgs {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTasks?: Array<ListrTask<AuthGeneratorCtx> | undefined>
+  extraTasks?: (ListrTask<AuthGeneratorCtx> | undefined)[]
   notes?: string[]
   verbose?: boolean
 }

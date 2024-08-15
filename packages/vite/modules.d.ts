@@ -5,7 +5,7 @@ declare module 'react-server-dom-webpack/client.edge'
 type ImportManifestEntry = {
   id: string
   // chunks is a double indexed array of chunkId / chunkFilename pairs
-  chunks: Array<string>
+  chunks: string[]
   name: string
 }
 

@@ -47,7 +47,8 @@ export class RedwoodCommandString {
   }
 
   @lazy() get isInterceptable() {
-    let [a, b] = this.parsed._
+    let a = this.parsed._[0]
+    const b = this.parsed._[1]
     if (a === 'g') {
       a = 'generate'
     }

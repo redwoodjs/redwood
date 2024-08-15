@@ -9,7 +9,7 @@ services:
       - .:/home/node/app
       - node_modules:/home/node/app/node_modules
     ports:
-      - "8910:8910"
+      - '8910:8910'
     depends_on:
       - db
     environment:
@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: redwood
       POSTGRES_DB: redwood
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres:/var/lib/postgresql/data
 
@@ -46,7 +46,7 @@ services:
       target: console
     tmpfs:
       - /tmp
-    command: "true"
+    command: 'true'
     environment:
       - DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood
       - TEST_DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood_test

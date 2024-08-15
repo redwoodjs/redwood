@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src", "ambient.d.ts"],
   "references": [
@@ -10,5 +10,5 @@
     { "path": "../project-config" },
     { "path": "../adapters/fastify/web" },
     { "path": "../web-server" }
-  ],
+  ]
 }

@@ -10,7 +10,7 @@ expect.extend({
   toMatchFileContents(
     receivedPath,
     expectedPath,
-    { removeWhitespace } = { removeWhitespace: false }
+    { removeWhitespace } = { removeWhitespace: false },
   ) {
     let pass = true
     let message = ''
@@ -27,7 +27,7 @@ expect.extend({
     } catch (e) {
       const relativePath = path.relative(
         path.join(__dirname, 'src/codemods'),
-        expectedPath
+        expectedPath,
       )
       pass = false
       message = `${e}\nFile contents do not match for fixture at: \n ${relativePath}`

@@ -186,7 +186,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
 interface WrappedPageProps {
   children: ReactNode
-  sets: Array<{
+  sets: {
     id: string
     wrappers: Wrappers
     isPrivate: boolean
@@ -194,7 +194,7 @@ interface WrappedPageProps {
       private?: boolean
       [key: string]: unknown
     }
-  }>
+  }[]
 }
 
 /**

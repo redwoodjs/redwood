@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json.schemastore.org/prettierrc",
+  "bracketSpacing": true,
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "plugins": [
+    "prettier-plugin-curly",
+    "prettier-plugin-sh",
+    "prettier-plugin-packagejson"
+  ]
+}

@@ -63,10 +63,10 @@ export default async function transform(file: FileInfo, api: API) {
     )
   })
 
-  const svgsToConvert: Array<{
+  const svgsToConvert: {
     filePath: string
     importSourcePath: StringLiteral
-  }> = []
+  }[] = []
 
   const importOrExportStatementsWithSvg = [
     ...svgImports.paths(),

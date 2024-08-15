@@ -148,9 +148,11 @@ for my nascent web app framework. Namely:
 And there you have it.
 
 ## Contributors
-*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀*
+
+_A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀_
 
 ### Core Team: Leadership
+
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
@@ -866,4 +868,4 @@ And there you have it.
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.
+Redwood projects _(mostly)_ follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.
