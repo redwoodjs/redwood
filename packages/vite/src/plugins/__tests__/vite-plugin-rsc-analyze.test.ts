@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { rscAnalyzePlugin } from '../vite-plugin-rsc-analyze.js'
 
-const foundFiles: Array<string> = []
+const foundFiles: string[] = []
 
 function callback(id: string) {
   foundFiles.push(id)

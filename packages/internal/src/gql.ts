@@ -15,11 +15,11 @@ import { getPaths } from '@redwoodjs/project-config'
 interface Operation {
   operation: OperationTypeNode
   name: string | undefined
-  fields: Array<string | Field>
+  fields: (string | Field)[]
 }
 
 interface Field {
-  string: Array<string | Field>
+  string: (string | Field)[]
 }
 
 export const parseGqlQueryToAst = (gqlQuery: string) => {
@@ -28,7 +28,7 @@ export const parseGqlQueryToAst = (gqlQuery: string) => {
 }
 
 export const parseDocumentAST = (document: DocumentNode) => {
-  const operations: Array<Operation> = []
+  const operations: Operation[] = []
 
   visit(document, {
     OperationDefinition(node: OperationDefinitionNode) {

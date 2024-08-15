@@ -22,7 +22,7 @@ type Recipe = {
 // e.g. query ListRecipes { recipes { id name } }
 type QueryResult = {
   __typename?: 'Query'
-  recipes: Array<Recipe>
+  recipes: Recipe[]
 }
 
 // This is how graphql-codegen defines queries that don't take vars

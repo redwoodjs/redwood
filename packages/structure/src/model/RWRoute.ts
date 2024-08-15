@@ -94,7 +94,7 @@ export class RWRoute extends BaseNode {
 
       // Handle string literals
       if (tsm.Node.isStringLiteral(init)) {
-        let literalValue = init.getLiteralValue()
+        const literalValue = init.getLiteralValue()
 
         // Check if the string looks like an array with single quotes
         if (literalValue.startsWith('[') && literalValue.endsWith(']')) {

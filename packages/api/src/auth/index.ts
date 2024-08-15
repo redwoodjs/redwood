@@ -149,7 +149,7 @@ export const getAuthenticationContext = async ({
   }
 
   // Run through decoders until one returns a decoded payload
-  let authDecoders: Array<Decoder> = []
+  let authDecoders: Decoder[] = []
 
   if (Array.isArray(authDecoder)) {
     authDecoders = authDecoder
