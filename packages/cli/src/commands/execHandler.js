@@ -18,9 +18,11 @@ import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const printAvailableScriptsToConsole = () => {
   console.log('Available scripts:')
-  findScripts().forEach((scriptPath) => {
-    const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+  findScripts(getPaths().scripts).forEach((scriptPath) => {
+    const relativePath = path.relative(getPaths().scripts, scriptPath)
+    const { ext } = path.parse(relativePath)
+    const relativePathWithoutExt = relativePath.slice(0, -ext.length)
+    console.log(c.info(`- ${relativePathWithoutExt}`))
   })
   console.log()
 }
