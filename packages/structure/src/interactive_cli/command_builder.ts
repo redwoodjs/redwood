@@ -43,9 +43,10 @@ class CommandBuilder {
           return await this.generate(await this.arg_generate_type())
         case 'db':
           switch (await this.arg_db_operation()) {
-            case 'save':
+            case 'save': {
               const name = await this.prompts.prompt('Choose migration name')
               return `db save ${name}`
+            }
             case 'up':
               return `db up`
           }
@@ -65,13 +66,14 @@ class CommandBuilder {
 
   private async generate(type: string) {
     switch (type) {
-      case 'page':
+      case 'page': {
         const pageName = await this.prompts.prompt(
           'Page Name (ex: Home, about, MyPage, contact)',
         )
         const defaultPath = '/' + camelcase(pageName)
         const path = await this.prompts.pagePath(defaultPath)
         return `generate page ${pageName} ${path}`
+      }
       case 'cell':
         return `generate cell ${await this.prompts.prompt('Cell Name')}`
       case 'scaffold':
@@ -82,7 +84,7 @@ class CommandBuilder {
         )}`
       case 'layout':
         return `generate layout ${await this.prompts.prompt('Layout Name')}`
-      case 'sdl':
+      case 'sdl': {
         const modelName = await this.arg_generate_sdl_modelName()
         const opts = await this.prompts.sdl_options()
         if (!opts) {
@@ -93,6 +95,7 @@ class CommandBuilder {
         // crud: { type: 'boolean', default: false },
         // force: { type: 'boolean', default: false },
         return `generate sdl ${modelName}`
+      }
     }
   }
 

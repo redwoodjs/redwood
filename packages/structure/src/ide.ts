@@ -205,7 +205,6 @@ export abstract class BaseNode {
   }
 
   @lazy() get closestContainingUri(): string | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { uri } = this as any
     if (uri) {
       return uri

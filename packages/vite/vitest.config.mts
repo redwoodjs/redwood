@@ -11,7 +11,6 @@ export default defineConfig({
          This change makes Vitest aligned with how Vite behaves in actual use
        */
       interopDefault: false,
-    }
+    },
   },
-
 })

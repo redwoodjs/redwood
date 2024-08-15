@@ -134,7 +134,7 @@ export class RedisLiveQueryStore {
     })
   }
 
-  async invalidate(identifiers: Array<string> | string) {
+  async invalidate(identifiers: string[] | string) {
     if (typeof identifiers === 'string') {
       identifiers = [identifiers]
     }

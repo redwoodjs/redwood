@@ -13,7 +13,5 @@
     "modules.d.ts",
     "testing-library.d.ts"
   ],
-  "references": [
-    { "path": "../internal" }
-  ]
+  "references": [{ "path": "../internal" }]
 }

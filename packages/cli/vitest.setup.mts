@@ -1,4 +1,4 @@
-import { beforeAll } from "vitest"
+import { beforeAll } from 'vitest'
 
 // Disable telemetry within framework tests
 beforeAll(() => {
