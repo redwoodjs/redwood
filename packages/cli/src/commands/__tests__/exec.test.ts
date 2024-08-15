@@ -38,10 +38,9 @@ afterEach(() => {
 describe('yarn rw exec --list', () => {
   it('includes nested scripts', async () => {
     await handler({ list: true })
+    const scriptPath = 'one' + path.sep + 'two' + path.sep + 'myNestedScript'
     expect(vi.mocked(console).log).toHaveBeenCalledWith(
-      expect.stringContaining(
-        'one' + path.sep + 'two' + path.sep + 'myNestedScript'
-      )
+      expect.stringMatching(new RegExp('\\b' + scriptPath + '\\b'))
     )
   })
 })
