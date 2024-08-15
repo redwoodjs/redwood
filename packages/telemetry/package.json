@@ -23,7 +23,7 @@
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
-    "@whatwg-node/fetch": "0.9.19",
+    "@whatwg-node/fetch": "0.9.20",
     "ci-info": "4.0.0",
     "envinfo": "7.13.0",
     "systeminformation": "5.23.4",
