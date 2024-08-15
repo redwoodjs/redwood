@@ -69,7 +69,7 @@ export async function redwoodFastifyGraphQLServer(
     if (graphqlOptions?.realtime) {
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
-      const originalExtraPlugins: Array<Plugin<any>> =
+      const originalExtraPlugins: Plugin<any>[] =
         graphqlOptions.extraPlugins ?? []
       originalExtraPlugins.push(useRedwoodRealtime(graphqlOptions.realtime))
       graphqlOptions.extraPlugins = originalExtraPlugins

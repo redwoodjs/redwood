@@ -1,7 +1,6 @@
 {
   "name": "@redwoodjs/vite",
   "version": "7.0.0",
-  "type": "module",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
@@ -9,6 +8,7 @@
     "directory": "packages/vite"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -55,8 +55,8 @@
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "check:attw": "tsx ./attw.ts",
-    "test": "vitest run",
     "check:package": "concurrently npm:check:attw yarn:publint",
+    "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
