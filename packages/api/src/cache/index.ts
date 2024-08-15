@@ -191,7 +191,7 @@ export const createCache = (
 
     try {
       await Promise.race([
-        (result = client.del(cacheKey as string)),
+        (result = client.del(cacheKey)),
         wait(timeout).then(() => {
           throw new CacheTimeoutError()
         }),
