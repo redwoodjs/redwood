@@ -221,7 +221,6 @@ module.exports = {
         '@typescript-eslint/restrict-template-expressions': 'off',
         '@typescript-eslint/non-nullable-type-assertion-style': 'off',
         '@typescript-eslint/no-implied-eval': 'off',
-        '@typescript-eslint/prefer-includes': 'off',
         '@typescript-eslint/no-base-to-string': 'off',
         '@typescript-eslint/no-duplicate-type-constituents': 'off',
         '@typescript-eslint/unbound-method': 'off',
