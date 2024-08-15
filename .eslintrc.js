@@ -198,7 +198,6 @@ module.exports = {
         camelcase: 'off',
 
         // TODO(jgmw): Work through these and either keep disabled or fix and re-enable
-        '@typescript-eslint/prefer-string-starts-ends-with': 'off',
         '@typescript-eslint/await-thenable': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
