@@ -55,7 +55,7 @@ export function createSuspendingCell<
   function SuspendingSuccess(props: SuspendingSuccessProps) {
     const { queryRef, suspenseQueryResult, userProps } = props
     const { data, networkStatus } = useReadQuery<DataObject>(queryRef)
-    const afterQueryData = afterQuery(data as DataObject)
+    const afterQueryData = afterQuery(data)
 
     const queryResultWithNetworkStatus: SuspenseCellQueryResult = {
       ...suspenseQueryResult,
