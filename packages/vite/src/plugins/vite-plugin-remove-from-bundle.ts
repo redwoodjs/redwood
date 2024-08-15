@@ -1,6 +1,6 @@
 import type { PluginOption } from 'vite'
 
-type ModulesToExclude = Array<{ id: RegExp }>
+type ModulesToExclude = { id: RegExp }[]
 
 /**
  *

@@ -4,7 +4,7 @@ type AsymmetricMatcher = {
   $$typeof: symbol
 }
 
-type ExpectedValue = Array<any> | any | AsymmetricMatcher
+type ExpectedValue = any[] | any | AsymmetricMatcher
 type ExpectedKey = string | RegExp
 // Custom Jest matchers to be used with Redwood's server caching
 // Just needs a global import like import '@redwoodjs/testing/cache'
@@ -170,9 +170,7 @@ declare global {
  *
  * @param value Object or Array of object to match
  */
-export const partialMatch = (
-  value: Record<any, any> | Array<Record<any, any>>,
-) => {
+export const partialMatch = (value: Record<any, any> | Record<any, any>[]) => {
   return Array.isArray(value)
     ? expect.arrayContaining(value.map((v) => expect.objectContaining(v)))
     : expect.objectContaining(value)

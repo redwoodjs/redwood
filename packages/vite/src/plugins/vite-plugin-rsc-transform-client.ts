@@ -42,9 +42,7 @@ export function rscTransformUseClientPlugin(
       let useClient = false
       let useServer = false
 
-      for (let i = 0; i < body.length; i++) {
-        const node = body[i]
-
+      for (const node of body) {
         if (node.type !== 'ExpressionStatement' || !node.directive) {
           break
         }
@@ -80,22 +78,21 @@ export function rscTransformUseClientPlugin(
   }
 }
 
-function addExportNames(names: Array<string>, node: any) {
+function addExportNames(names: string[], node: any) {
   switch (node.type) {
     case 'Identifier':
       names.push(node.name)
       return
 
     case 'ObjectPattern':
-      for (let i = 0; i < node.properties.length; i++) {
-        addExportNames(names, node.properties[i])
+      for (const property of node.properties) {
+        addExportNames(names, property)
       }
 
       return
 
     case 'ArrayPattern':
-      for (let i = 0; i < node.elements.length; i++) {
-        const element = node.elements[i]
+      for (const element of node.elements) {
         if (element) {
           addExportNames(names, element)
         }
@@ -127,11 +124,9 @@ function addExportNames(names: Array<string>, node: any) {
 async function parseExportNamesIntoNames(
   code: string,
   body: Program['body'],
-  names: Array<string>,
+  names: string[],
 ): Promise<void> {
-  for (let i = 0; i < body.length; i++) {
-    const node = body[i]
-
+  for (const node of body) {
     switch (node.type) {
       case 'ExportAllDeclaration':
         if (node.exported) {
@@ -164,8 +159,8 @@ async function parseExportNamesIntoNames(
           if (node.declaration.type === 'VariableDeclaration') {
             const declarations = node.declaration.declarations
 
-            for (let j = 0; j < declarations.length; j++) {
-              addExportNames(names, declarations[j].id)
+            for (const declaration of declarations) {
+              addExportNames(names, declaration.id)
             }
           } else {
             addExportNames(names, node.declaration.id)
@@ -175,8 +170,8 @@ async function parseExportNamesIntoNames(
         if (node.specifiers) {
           const specifiers = node.specifiers
 
-          for (let j = 0; j < specifiers.length; j++) {
-            addExportNames(names, specifiers[j].exported)
+          for (const specifier of specifiers) {
+            addExportNames(names, specifier.exported)
           }
         }
 
@@ -250,7 +245,7 @@ async function transformClientModule(
   url: string,
   clientEntryFiles: Record<string, string>,
 ): Promise<string> {
-  const names: Array<string> = []
+  const names: string[] = []
 
   // This will insert the names into the `names` array
   await parseExportNamesIntoNames(code, body, names)
@@ -271,9 +266,7 @@ async function transformClientModule(
   let newSrc =
     'import {registerClientReference} from "react-server-dom-webpack/server";\n'
 
-  for (let i = 0; i < names.length; i++) {
-    const name = names[i]
-
+  for (const name of names) {
     if (name === 'default') {
       newSrc += 'export default registerClientReference(function() {'
       newSrc +=

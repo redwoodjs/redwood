@@ -180,7 +180,7 @@ function insertChunkLoadingScript(
     ),
   )
 
-  const chunkPaths: Array<string> = []
+  const chunkPaths: string[] = []
 
   if (route?.filePath) {
     const pagesIndex =

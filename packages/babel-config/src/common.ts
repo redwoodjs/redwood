@@ -63,7 +63,7 @@ if (!RUNTIME_CORE_JS_VERSION) {
   )
 }
 
-export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
+export const getCommonPlugins = (): [string, PluginOptions][] => {
   return [
     ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the

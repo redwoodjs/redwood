@@ -36,6 +36,7 @@ export class RWServiceFunction extends BaseNode {
   }
 
   @lazy() get parameterNames() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
     return iter(function* () {
       for (const p of self.node.getParameters()) {

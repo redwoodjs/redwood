@@ -277,15 +277,15 @@ export function getDbAuthResponseBuilder(
     },
     corsHeaders: CorsHeaders,
   ) => {
-    const headers: Record<string, string | Array<string>> = {
+    const headers: Record<string, string | string[]> = {
       ...Object.fromEntries(response.headers?.entries() || []),
       ...corsHeaders,
     }
 
     const dbAuthResponse: {
       statusCode: number
-      headers: Record<string, string | Array<string>>
-      multiValueHeaders?: Record<string, Array<string>>
+      headers: Record<string, string | string[]>
+      multiValueHeaders?: Record<string, string[]>
       body?: string
     } = {
       ...response,

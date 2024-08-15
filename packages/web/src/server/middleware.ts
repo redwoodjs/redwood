@@ -12,7 +12,7 @@ export * from './MiddlewareResponse.js'
 
 export type MiddlewareInvokeOptions = {
   route?: RWRouteManifestItem
-  cssPaths?: Array<string>
+  cssPaths?: string[]
   params?: Record<string, unknown>
   viteDevServer?: ViteDevServer
 }

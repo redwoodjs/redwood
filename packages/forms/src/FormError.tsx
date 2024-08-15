@@ -16,7 +16,7 @@ export interface ServerError extends Error {
 
 export interface RWGqlError {
   message: string
-  graphQLErrors: ReadonlyArray<GraphQLFormattedError>
+  graphQLErrors: readonly GraphQLFormattedError[]
   networkError: Error | ServerParseError | ServerError | null
 }
 

@@ -141,18 +141,6 @@ module.exports = {
         },
       },
     ],
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['$api/*'],
-            message:
-              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
-          },
-        ],
-      },
-    ],
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -185,6 +173,8 @@ module.exports = {
       rules: {
         // This is disabled for now because of our legacy usage of `require`. It should be enabled in the future.
         '@typescript-eslint/no-require-imports': 'off',
+        // This is disabled for now because of our vast usage of `any`. It should be enabled in the future.
+        '@typescript-eslint/no-explicit-any': 'off',
 
         // We allow exceptions to the no-unused-vars rule for variables that start with an underscore
         'no-unused-vars': 'off',
@@ -193,20 +183,18 @@ module.exports = {
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
 
-        // TODO(jgmw): Look into enabling these eventually
-        '@typescript-eslint/array-type': 'off',
-        '@typescript-eslint/consistent-generic-constructors': 'off',
+        // We want consistent `import type {} from '...'`
+        '@typescript-eslint/consistent-type-imports': 'error',
+
+        // We want consistent curly brackets
+        curly: 'error',
+
+        // Stylistic rules we have disabled
         '@typescript-eslint/consistent-indexed-object-style': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-function-type': 'off',
-        '@typescript-eslint/consistent-type-imports': 'error',
-
-        // Specific 'stylistic' rules we alter
         camelcase: 'off',
-        curly: 'error',
       },
     },
     {
@@ -233,17 +221,6 @@ module.exports = {
         node: true,
         commonjs: true,
         jest: true,
-      },
-    },
-    {
-      files: ['packages/structure/src/**'],
-      rules: {
-        '@typescript-eslint/no-this-alias': 'off',
-        '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-case-declarations': 'off',
-        'prefer-const': 'off',
-        'no-empty': 'warn',
-        'no-unused-expressions': 'off',
       },
     },
     // Browser Context
