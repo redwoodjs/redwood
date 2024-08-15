@@ -204,7 +204,6 @@ module.exports = {
         '@typescript-eslint/require-await': 'off',
         '@typescript-eslint/prefer-nullish-coalescing': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
-        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
