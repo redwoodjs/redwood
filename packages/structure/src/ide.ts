@@ -265,7 +265,7 @@ export abstract class FileNode extends BaseNode {
     if (typeof this.text === 'undefined') {
       throw new Error('undefined file ' + this.filePath)
     }
-    return createTSMSourceFile_cached(this.filePath, this.text!)
+    return createTSMSourceFile_cached(this.filePath, this.text)
   }
   @lazy() get basenameNoExt() {
     return basenameNoExt(this.filePath)
