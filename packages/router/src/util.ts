@@ -38,7 +38,7 @@ export function paramsForRoute(route: string) {
 
       // Normalize the name
       let name = parts[0]
-      if (name.slice(-3) === '...') {
+      if (name.endsWith('...')) {
         // Globs have their ellipsis removed
         name = name.slice(0, -3)
       }
@@ -47,7 +47,7 @@ export function paramsForRoute(route: string) {
       let type = parts[1]
       if (!type) {
         // Strings and Globs are implicit in the syntax
-        type = match.slice(-3) === '...' ? 'Glob' : 'String'
+        type = match.endsWith('...') ? 'Glob' : 'String'
       }
 
       return [name, type, `{${match}}`]
