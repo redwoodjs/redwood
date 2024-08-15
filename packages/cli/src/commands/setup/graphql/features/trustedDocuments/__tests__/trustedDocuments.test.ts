@@ -1,5 +1,5 @@
-let mockExecutedTaskTitles: Array<string> = []
-let mockSkippedTaskTitles: Array<string> = []
+let mockExecutedTaskTitles: string[] = []
+let mockSkippedTaskTitles: string[] = []
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
@@ -12,7 +12,7 @@ vi.mock('../../../../../../lib/runTransform', () => ({
 vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
+    Listr: vi.fn().mockImplementation((tasks: any[]) => {
       return {
         run: async () => {
           mockExecutedTaskTitles = []

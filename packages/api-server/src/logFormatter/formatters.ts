@@ -13,7 +13,7 @@ export const emojiLog: Record<string, string> = {
   trace: '🧵',
 }
 
-export const ignoredCustomData: Array<string> = [
+export const ignoredCustomData: string[] = [
   'time',
   'pid',
   'hostname',

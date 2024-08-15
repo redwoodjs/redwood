@@ -2,9 +2,9 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { build, defaultIgnorePatterns } from '@redwoodjs/framework-tools'
-
 import fg from 'fast-glob'
+
+import { build, defaultIgnorePatterns } from '@redwoodjs/framework-tools'
 
 await build()
 

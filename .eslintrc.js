@@ -141,18 +141,6 @@ module.exports = {
         },
       },
     ],
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['$api/*'],
-            message:
-              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
-          },
-        ],
-      },
-    ],
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
@@ -173,42 +161,71 @@ module.exports = {
     },
     // TypeScript specific linting
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.ts', '*.mts', '*.tsx'],
       parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: './tsconfig.eslint.json',
+        tsconfigRootDir: __dirname,
+      },
       extends: [
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/stylistic',
+        'plugin:@typescript-eslint/recommended-type-checked',
+        'plugin:@typescript-eslint/stylistic-type-checked',
       ],
       rules: {
-        // TODO: look into enabling these eventually
-        '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/prefer-function-type': 'off',
-
-        // Specific 'recommended' rules we alter
-        '@typescript-eslint/no-var-requires': 'off',
+        // This is disabled for now because of our legacy usage of `require`. It should be enabled in the future.
         '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
+        // This is disabled for now because of our vast usage of `any`. It should be enabled in the future.
+        '@typescript-eslint/no-explicit-any': 'off',
+
+        // We allow exceptions to the no-unused-vars rule for variables that start with an underscore
+        'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
 
-        // TODO: Look into enabling these eventually
-        '@typescript-eslint/array-type': 'off',
-        '@typescript-eslint/consistent-generic-constructors': 'off',
+        // We want consistent `import type {} from '...'`
+        '@typescript-eslint/consistent-type-imports': 'error',
+
+        // We want consistent curly brackets
+        curly: 'error',
+
+        // Stylistic rules we have disabled
         '@typescript-eslint/consistent-indexed-object-style': 'off',
         '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/no-empty-function': 'off',
-        '@typescript-eslint/no-empty-object-type': 'off',
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-function-type': 'off',
-        '@typescript-eslint/consistent-type-imports': 'error',
-
-        // Specific 'stylistic' rules we alter
         camelcase: 'off',
-        curly: 'error',
+
+        // TODO(jgmw): Work through these and either keep disabled or fix and re-enable
+        '@typescript-eslint/prefer-string-starts-ends-with': 'off',
+        '@typescript-eslint/await-thenable': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/require-await': 'off',
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+        '@typescript-eslint/no-unsafe-enum-comparison': 'off',
+        '@typescript-eslint/dot-notation': 'off',
+        '@typescript-eslint/only-throw-error': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/prefer-optional-chain': 'off',
+        '@typescript-eslint/prefer-promise-reject-errors': 'off',
+        '@typescript-eslint/no-redundant-type-constituents': 'off',
+        '@typescript-eslint/restrict-plus-operands': 'off',
+        '@typescript-eslint/no-misused-promises': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
+        '@typescript-eslint/prefer-regexp-exec': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+        '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+        '@typescript-eslint/no-implied-eval': 'off',
+        '@typescript-eslint/prefer-includes': 'off',
+        '@typescript-eslint/no-base-to-string': 'off',
+        '@typescript-eslint/no-duplicate-type-constituents': 'off',
+        '@typescript-eslint/unbound-method': 'off',
+        '@typescript-eslint/prefer-find': 'off',
       },
     },
     {
@@ -220,29 +237,21 @@ module.exports = {
         jest: true,
       },
     },
+    // Set the correct environment for this eslint config file
     {
-      files: [
-        '.babelrc.js',
-        'babel.config.js',
-        '.eslintrc.js',
-        '*.config.js',
-        'jest.setup.js',
-      ],
+      files: ['.eslintrc.js'],
+      env: {
+        node: true,
+        commonjs: true,
+      },
+    },
+    // Set the correct environment for Jest config files
+    {
+      files: ['jest.config.js', 'jest.setup.js'],
       env: {
         node: true,
         commonjs: true,
         jest: true,
-      },
-    },
-    {
-      files: ['packages/structure/src/**'],
-      rules: {
-        '@typescript-eslint/no-this-alias': 'off',
-        '@typescript-eslint/no-non-null-assertion': 'off',
-        'no-case-declarations': 'off',
-        'prefer-const': 'off',
-        'no-empty': 'warn',
-        'no-unused-expressions': 'off',
       },
     },
     // Browser Context

@@ -22,7 +22,7 @@ const rwPaths = getPaths()
 export const handler = async ({ force }: Args) => {
   const extension = isTypeScriptProject() ? 'ts' : 'js'
 
-  const notes: Array<string> = []
+  const notes: string[] = []
 
   const tasks = new Listr([
     addApiPackages(['@envelop/sentry@5', '@sentry/node@7']),

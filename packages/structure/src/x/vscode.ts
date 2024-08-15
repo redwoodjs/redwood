@@ -222,7 +222,7 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   }
 
   // ----- start TreeDataProvider impl
-  private listeners: Array<(e: string | undefined) => void> = []
+  private listeners: ((e: string | undefined) => void)[] = []
   onDidChangeTreeData(listener: (e: string | undefined) => void) {
     this.lazyInit()
     this.listeners.push(listener)
@@ -340,6 +340,6 @@ export function Command_cli(cmd: string, title = 'run...'): Command {
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
-type ReplacePropTypes<T extends {}, Replacements extends {}> = {
+type ReplacePropTypes<T extends object, Replacements extends object> = {
   [K in keyof T]: K extends keyof Replacements ? Replacements[K] : T[K]
 }
