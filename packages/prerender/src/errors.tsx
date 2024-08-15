@@ -2,12 +2,10 @@ import type { DocumentNode } from 'graphql'
 import { print } from 'graphql'
 
 export class PrerenderGqlError extends Error {
-  message: string
   stack: string
 
   constructor(message: string) {
     super('GQL error: ' + message)
-    this.message = 'GQL error: ' + message
     // The stacktrace would just point to this file, which isn't helpful,
     // because that's not where the error is. So we're just putting the
     // message there as well
@@ -16,12 +14,10 @@ export class PrerenderGqlError extends Error {
 }
 
 export class GqlHandlerImportError extends Error {
-  message: string
   stack: string
 
   constructor(message: string) {
     super('Gql Handler Import Error:  ' + message)
-    this.message = 'Gql Handler Import Error:  ' + message
     // The stacktrace would just point to this file, which isn't helpful,
     // because that's not where the error is. So we're just putting the
     // message there as well
