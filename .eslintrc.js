@@ -208,7 +208,6 @@ module.exports = {
         '@typescript-eslint/no-unnecessary-type-assertion': 'off',
         '@typescript-eslint/no-unsafe-enum-comparison': 'off',
         '@typescript-eslint/dot-notation': 'off',
-        '@typescript-eslint/only-throw-error': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
         '@typescript-eslint/prefer-optional-chain': 'off',

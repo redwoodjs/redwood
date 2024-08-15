@@ -107,7 +107,10 @@ export function createSuspendingCell<
     const FailureComponent = ({ error, resetErrorBoundary }: FallbackProps) => {
       if (!Failure) {
         // So that it bubbles up to the nearest error boundary
-        throw error
+        if (error) {
+          throw error
+        }
+        throw new Error('Unreachable code: FailureComponent without a Failure')
       }
 
       const queryResultWithErrorReset = {
