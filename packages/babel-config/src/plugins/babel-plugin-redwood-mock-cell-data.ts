@@ -212,7 +212,7 @@ export const getCellMetadata = (p: string) => {
         const id = declaration.declarations[0].id as types.Identifier
 
         namedExports.push({
-          name: id.name as string,
+          name: id.name,
           type: 'variable',
         })
       } else if (declaration.type === 'FunctionDeclaration') {
