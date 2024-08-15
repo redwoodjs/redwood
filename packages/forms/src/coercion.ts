@@ -261,6 +261,6 @@ export const setCoercion = (
     valueAs, // type
     emptyAs, // emptyAs
     validation.required !== undefined && validation.required !== false, // required
-    /Id$/.test(name || ''), // isId
+    (name || '').endsWith('Id'), // isId
   )
 }
