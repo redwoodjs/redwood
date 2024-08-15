@@ -137,7 +137,7 @@ export const handler = async (args) => {
 
   const tasks = new Listr(scriptTasks, {
     rendererOptions: { collapseSubtasks: false },
-    renderer: 'verbose',
+    renderer: args.silent ? 'silent' : 'verbose',
   })
 
   // Prevent user project telemetry from within the script from being recorded
