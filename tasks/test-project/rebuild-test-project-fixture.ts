@@ -386,8 +386,29 @@ async function runCommand() {
     },
   })
 
+    await tuiTask({
+      step: 9,
+      title: 'Add scripts',
+      task: () => {
+        const nestedPath = path.join(
+          OUTPUT_PROJECT_PATH,
+          'scripts',
+          'one',
+          'two'
+        )
+
+        fs.mkdirSync(nestedPath, { recursive: true })
+        fs.writeFileSync(
+          path.join(nestedPath, 'myNestedScript.ts'),
+          'export default async () => {\n' +
+            "  console.log('Hello from myNestedScript.ts')\n" +
+            '}\n\n'
+        )
+      },
+    })
+
   await tuiTask({
-    step: 9,
+    step: 10,
     title: 'Running prisma migrate reset',
     task: () => {
       return exec(
@@ -399,7 +420,7 @@ async function runCommand() {
   })
 
   await tuiTask({
-    step: 10,
+    step: 11,
     title: 'Lint --fix all the things',
     task: async () => {
       try {
@@ -431,7 +452,7 @@ async function runCommand() {
   })
 
   await tuiTask({
-    step: 11,
+    step: 12,
     title: 'Replace and Cleanup Fixture',
     task: async () => {
       // @TODO: This only works on UNIX, we should use path.join everywhere
@@ -469,7 +490,7 @@ async function runCommand() {
   })
 
   await tuiTask({
-    step: 12,
+    step: 13,
     title: 'All done!',
     task: () => {
       console.log('-'.repeat(30))
