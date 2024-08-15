@@ -66,7 +66,7 @@ export const handler = async ({ force }: Args) => {
           .split('\n')
 
         const handlerIndex = contentLines.findLastIndex((line) =>
-          /^export const handler = createGraphQLHandler\({/.test(line),
+          line.startsWith('export const handler = createGraphQLHandler({'),
         )
 
         const pluginsIndex = contentLines.findLastIndex((line) =>
