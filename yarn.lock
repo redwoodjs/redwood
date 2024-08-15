@@ -8638,7 +8638,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     glob: "npm:11.0.0"
     http-proxy-middleware: "npm:3.0.0"
-    isbot: "npm:5.1.14"
+    isbot: "npm:5.1.16"
     publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
     react-server-dom-webpack: "npm:19.0.0-rc-8269d55d-20240802"
@@ -19910,10 +19910,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isbot@npm:5.1.14":
-  version: 5.1.14
-  resolution: "isbot@npm:5.1.14"
-  checksum: 10c0/a5ab10944aa1edff87f00c4af7162182751fe1cd200cb166fca73095fa5af9e19ef46dcfc27d9059cead28e13eb440098cda2b852e091594b4ea26172b2947fa
+"isbot@npm:5.1.16":
+  version: 5.1.16
+  resolution: "isbot@npm:5.1.16"
+  checksum: 10c0/363d8ebcc65393e3b23794cfae80763d2ee10f4300d35861d301286892765dc7b134cc050471646905c255d4de3e2133654f21fdb2cb84a1b11c281c84f41334
   languageName: node
   linkType: hard
 
