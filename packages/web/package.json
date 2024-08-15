@@ -171,7 +171,7 @@
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
     "nodemon": "3.1.4",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-dom": "19.0.0-rc-8269d55d-20240802",
     "tstyche": "2.1.1",
