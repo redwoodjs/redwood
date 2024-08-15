@@ -145,7 +145,7 @@ async function createServer() {
   const routeHandler = await createReactStreamingHandler(
     {
       routes,
-      clientEntryPath: rwPaths.web.entryClient as string,
+      clientEntryPath: rwPaths.web.entryClient,
       getStylesheetLinks: (route) => {
         // In dev route is a RouteSpec, with additional properties
         return getCssLinks({ rwPaths, route: route as RouteSpec, vite })

@@ -47,7 +47,7 @@ const processRenderRscStream = async (
 
     pipeable.on('end', () => {
       const resultBuffer = Buffer.concat(chunks)
-      const resultString = resultBuffer.toString('utf-8') as string
+      const resultString = resultBuffer.toString('utf-8')
       resolve(resultString)
     })
 
