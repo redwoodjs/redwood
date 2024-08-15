@@ -62,7 +62,7 @@ const getFields = (field: FieldNode): any => {
       node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
           case Kind.FIELD:
-            obj[field.name.value].push(getFields(subField as FieldNode))
+            obj[field.name.value].push(getFields(subField))
             break
           case Kind.FRAGMENT_SPREAD:
             // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
