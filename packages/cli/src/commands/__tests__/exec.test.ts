@@ -9,9 +9,12 @@ import { handler } from '../execHandler'
 vi.mock('envinfo', () => ({ default: { run: () => '' } }))
 vi.mock('@redwoodjs/project-config', () => ({
   getPaths: () => ({
-    scripts: path.join(__dirname, '../../../../../__fixtures__/test-project/scripts'),
+    scripts: path.join(
+      __dirname,
+      '../../../../../__fixtures__/test-project/scripts',
+    ),
   }),
-  resolveFile: (path: string) => path
+  resolveFile: (path: string) => path,
 }))
 
 const mockRedwoodToml = {
@@ -40,7 +43,7 @@ describe('yarn rw exec --list', () => {
     await handler({ list: true })
     const scriptPath = 'one' + path.sep + 'two' + path.sep + 'myNestedScript'
     expect(vi.mocked(console).log).toHaveBeenCalledWith(
-      expect.stringMatching(new RegExp('\\b' + scriptPath + '\\b'))
+      expect.stringMatching(new RegExp('\\b' + scriptPath + '\\b')),
     )
   })
 })

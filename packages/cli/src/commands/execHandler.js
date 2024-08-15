@@ -21,10 +21,7 @@ const printAvailableScriptsToConsole = () => {
   findScripts(getPaths().scripts).forEach((scriptPath) => {
     const relativePath = path.relative(getPaths().scripts, scriptPath)
     const { ext } = path.parse(relativePath)
-    const relativePathWithoutExt =
-      // Using \\ to escape the . in the file extension
-      // Ending with $ to match the end of the string
-      relativePath.replace(new RegExp(`\\${ext}$`), '')
+    const relativePathWithoutExt = relativePath.slice(0, -ext.length)
     console.log(c.info(`- ${relativePathWithoutExt}`))
   })
   console.log()
