@@ -141,18 +141,6 @@ module.exports = {
         },
       },
     ],
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['$api/*'],
-            message:
-              'Importing from $api is only supported in *.routeHooks.{js,ts} files',
-          },
-        ],
-      },
-    ],
   },
   env: {
     // We use the most modern environment available. Then we rely on Babel to
