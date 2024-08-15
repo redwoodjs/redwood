@@ -4,7 +4,7 @@ import terminalLink from 'terminal-link'
 import { transformTSToJS } from '../../../lib'
 import { pluralize, singularize } from '../../../lib/rwPluralize'
 import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
+import { yargsDefaults, relationsForModel } from '../helpers'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
@@ -304,6 +304,9 @@ export const files = async ({
   const model = name
   const idName = await getIdName(model)
   const extension = 'ts'
+
+  const modelRelations = relations || relationsForModel(await getSchema(model))
+
   const serviceFile = await templateForComponentFile({
     name,
     componentName: componentName,
@@ -311,7 +314,7 @@ export const files = async ({
     apiPathSection: 'services',
     generator: 'service',
     templatePath: `service.${extension}.template`,
-    templateVars: { relations: relations || [], idName, ...rest },
+    templateVars: { relations: modelRelations, idName, ...rest },
   })
 
   const testFile = await templateForComponentFile({
@@ -347,6 +350,7 @@ export const files = async ({
       stringifiedScenario: await buildStringifiedScenario(model),
       prismaModel: model,
       idName,
+      relations: modelRelations,
       ...rest,
     },
   })
