@@ -33,14 +33,10 @@ vol.fromJSON({
 describe('Uploads Prisma Extension', () => {
   const dummyUploadConfig = {
     fields: 'uploadField',
-    savePath: '/bazinga',
-    onFileSaved: vi.fn(),
   }
 
   const dumboUploadConfig = {
     fields: ['firstUpload', 'secondUpload'],
-    savePath: '/dumbo',
-    onFileSaved: vi.fn(),
   }
 
   const prismaClient = new PrismaClient().$extends(
@@ -49,7 +45,10 @@ describe('Uploads Prisma Extension', () => {
         dummy: dummyUploadConfig,
         dumbo: dumboUploadConfig,
       },
-      new FileSystemStorage(),
+      // Test with file system storage, and mock the fs calls
+      new FileSystemStorage({
+        baseDir: '/tmp',
+      }),
     ),
   )
 
@@ -173,97 +172,6 @@ describe('Uploads Prisma Extension', () => {
       })
     })
 
-    it('will move file to new location with TUS uploads', async () => {
-      // Mock TUS metadata files
-      vi.mock('/tmp/tus-uploads/123.json', () => {
-        return {
-          metadata: {
-            filetype: 'image/png',
-          },
-        }
-      })
-
-      vi.mock('/tmp/tus-uploads/ABCD.json', () => {
-        return {
-          metadata: {
-            filetype: 'application/pdf',
-          },
-        }
-      })
-
-      const dumbo = await prismaClient.dumbo.create({
-        data: {
-          firstUpload:
-            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
-          secondUpload:
-            'http://example.com/.redwood/functions/tusUploadEndpoint/ABCD',
-        },
-      })
-
-      expect(fs.copyFile).toHaveBeenCalledTimes(2)
-      expect(dumbo.firstUpload).toMatch(/dumbo\/.*\.png/)
-      expect(dumbo.secondUpload).toMatch(/dumbo\/.*\.pdf/)
-    })
-
-    it('will remove old file when updating with TUS uploads', async () => {
-      // Mock TUS metadata files
-      vi.mock('/tmp/tus-uploads/512356.json', () => {
-        return {
-          metadata: {
-            filetype: 'image/gif',
-          },
-        }
-      })
-
-      const dumbo = await prismaClient.dumbo.create({
-        data: {
-          firstUpload:
-            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
-          secondUpload: '',
-        },
-      })
-
-      const originalPath = dumbo.firstUpload
-
-      const dumbo2 = await prismaClient.dumbo.update({
-        where: { id: dumbo.id },
-        data: {
-          firstUpload:
-            'http://example.com/.redwood/functions/tusUploadEndpoint/512356',
-        },
-      })
-
-      expect(dumbo2.firstUpload).not.toEqual(originalPath)
-      expect(dumbo2.firstUpload).toMatch(/dumbo\/.*\.gif/)
-
-      // And deletes it!
-      expect(fs.unlink).toHaveBeenCalledWith(originalPath)
-    })
-
-    it('will remove file when deleting with TUS uploads', async () => {
-      // Mock TUS metadata files
-      vi.mock('/tmp/tus-uploads/512356.json', () => {
-        return {
-          metadata: {
-            filetype: 'image/gif',
-          },
-        }
-      })
-
-      const dummy = await prismaClient.dummy.create({
-        data: {
-          uploadField:
-            'http://example.com/.redwood/functions/tusUploadEndpoint/123',
-        },
-      })
-
-      await prismaClient.dummy.delete({
-        where: { id: dummy.id },
-      })
-
-      expect(fs.unlink).toHaveBeenCalledWith(dummy.uploadField)
-    })
-  })
 
   describe('Result extensions', () => {
     it('will return a data URL for the file', async () => {

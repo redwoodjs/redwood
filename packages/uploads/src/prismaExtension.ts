@@ -22,7 +22,7 @@ export type UploadConfigForModel = {
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig<MName extends string | number | symbol> = Record<
+export type UploadsConfig<MName extends string | number | symbol = ModelNames> = Record<
   MName,
   UploadConfigForModel
 >

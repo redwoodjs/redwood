@@ -10,13 +10,22 @@ export type AdapterResult = {
   location: string
 }
 
-export type SaveOptions = {
-  fileName: string
-  path: string
+export type SaveOptionsOverride = {
+  fileName?: string
+  path?: string
+}
+
+export type AdapterOptions = {
+  baseDir: string
 }
 
 export abstract class StorageAdapter {
-  abstract save(file: File, saveOpts?: SaveOptions): Promise<AdapterResult>
+  adapterOpts: AdapterOptions
+  constructor(adapterOpts: AdapterOptions){
+    this.adapterOpts = adapterOpts
+  }
+
+  abstract save(file: File, saveOpts?: SaveOptionsOverride): Promise<AdapterResult>
   abstract remove(fileLocation: AdapterResult['location']): Promise<void>
   // abstract replace(fileId: string, file: File): Promise<AdapterResult>
 }

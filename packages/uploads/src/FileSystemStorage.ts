@@ -1,26 +1,26 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import type { StorageAdapter } from './StorageAdapter.js'
-import type { SaveOptions } from './StorageAdapter.js'
+import mime from 'mime-types'
+import { ulid } from 'ulid'
+
+import type { AdapterOptions, SaveOptionsOverride, StorageAdapter } from './StorageAdapter.js'
 
 export class FileSystemStorage implements StorageAdapter {
-  // let basePath: string
-  // @TODO enable base path
-  // constructor({ basePath }) {
-  //   this.basePath = basePath
-  // }
+  constructor(adapterOpts: AdapterOptions) {
+    this.adapterOpts = adapterOpts
+   }
 
-  async save(o_file: File, saveOpts: SaveOptions) {
-    // const file = new File([o_file], o_file.name)
-    // console.log(`👉 \n ~ FileSystemStorage ~ file:`, file.name)
-    console.log(`👉 \n ~ FileSystemStorage ~ file:`, await o_file.text())
+    adapterOpts: AdapterOptions
 
-    const location = path.join(saveOpts.path, saveOpts.fileName + o_file.type)
-    const nodeBuffer = await o_file.arrayBuffer()
-    const extension = path.extname(o_file.name)
+  async save(file: File, saveOpts?: SaveOptionsOverride) {
+    const randomFileName = ulid()
+    const extension = mime.extension(file.type)
+    const location = path.join(saveOpts?.path || this.adapterOpts.baseDir, saveOpts?.fileName || randomFileName + `.${extension}`)
+    const nodeBuffer = await file.arrayBuffer()
 
-    await fs.writeFile(`${location}.${extension}`, Buffer.from(nodeBuffer))
+
+    await fs.writeFile(location, Buffer.from(nodeBuffer))
     return { location }
   }
   async remove(filePath: string) {
