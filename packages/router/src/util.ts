@@ -259,7 +259,7 @@ export function validatePath(path: string, routeName: string) {
     )
   }
 
-  if (path.indexOf(' ') >= 0) {
+  if (path.includes(' ')) {
     throw new Error(`Route path for ${routeName} contains spaces: "${path}"`)
   }
 

@@ -5,7 +5,7 @@ export function validateRoutePath(path: string) {
     throw new Error(`Route path does not begin with a slash: "${path}"`)
   }
 
-  if (path.indexOf(' ') >= 0) {
+  if (path.includes(' ')) {
     throw new Error(`Route path contains spaces: "${path}"`)
   }
 
