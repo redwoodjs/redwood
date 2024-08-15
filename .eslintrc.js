@@ -224,7 +224,6 @@ module.exports = {
         '@typescript-eslint/no-base-to-string': 'off',
         '@typescript-eslint/no-duplicate-type-constituents': 'off',
         '@typescript-eslint/unbound-method': 'off',
-        '@typescript-eslint/prefer-find': 'off',
       },
     },
     {
