@@ -2,9 +2,11 @@
 **/dist
 
 # Ignore fixture projects
-__fixtures__
+/__fixtures__
 
 # Ignore the certain files in /docs
+/docs/.docusaurus
+/docs/build
 /docs/versioned_docs
 /docs/versioned_sidebars
 
@@ -21,6 +23,7 @@ packages/create-redwood-rsc-app
 # Ignore test fixtures
 **/__testfixtures__
 **/__tests__/fixtures
+**/__tests__/__fixtures__
 
 # TODO(jgmw): Re-enable these in managable chunks
 packages/create-redwood-app/tests/e2e_prompts*

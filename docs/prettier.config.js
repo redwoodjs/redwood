@@ -1,4 +1,7 @@
-import rootConfig from '../prettier.config.mjs'
+/* eslint-env node */
+// @ts-check
+
+const rootConfig = require('../prettier.config')
 
 /**
  * @see https://prettier.io/docs/en/configuration.html
@@ -9,4 +12,4 @@ const config = {
   trailingComma: 'es5',
 }
 
-export default config
+module.exports = config
