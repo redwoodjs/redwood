@@ -14,17 +14,17 @@ export class MemoryStorage extends StorageAdapter implements StorageAdapter {
     const extension = mime.extension(file.type)
       ? `.${mime.extension(file.type)}`
       : ''
+
     const location = path.join(
       saveOpts?.path || this.adapterOpts.baseDir,
       fileName + `${extension}`,
     )
     const nodeBuffer = await file.arrayBuffer()
 
-    const result = `${location}`
-    this.store[result] = Buffer.from(nodeBuffer)
+    this.store[location] = Buffer.from(nodeBuffer)
 
     return {
-      location: result,
+      location,
     }
   }
   async remove(filePath: string) {

@@ -12,11 +12,14 @@ export class FileSystemStorage
   implements StorageAdapter
 {
   async save(file: File, saveOpts?: SaveOptionsOverride) {
-    const randomFileName = ulid()
+    const fileName = saveOpts?.fileName || ulid()
     const extension = mime.extension(file.type)
+      ? `.${mime.extension(file.type)}`
+      : ''
+
     const location = path.join(
       saveOpts?.path || this.adapterOpts.baseDir,
-      saveOpts?.fileName || randomFileName + `.${extension}`,
+      fileName + `${extension}`,
     )
     const nodeBuffer = await file.arrayBuffer()
 
