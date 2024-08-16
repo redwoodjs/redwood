@@ -7,6 +7,7 @@ import { createGraphQLHandler } from '../../functions/graphql'
 
 vi.mock('../../makeMergedSchema', async () => {
   const { makeExecutableSchema } = await import('@graphql-tools/schema')
+  const { context } = await import('@redwoodjs/context')
 
   // Return executable schema
   return {
@@ -28,7 +29,7 @@ vi.mock('../../makeMergedSchema', async () => {
         resolvers: {
           Query: {
             me: () => {
-              const globalContext = require('@redwoodjs/context').context
+              const globalContext = context as any
               const currentUser = globalContext.currentUser
 
               return {
