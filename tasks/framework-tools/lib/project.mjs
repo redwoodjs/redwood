@@ -92,17 +92,17 @@ export function fixProjectBinaries(projectPath) {
  */
 export function addDependenciesToPackageJson(
   packageJsonPath,
-  dependencies = getFrameworkDependencies()
+  dependencies = getFrameworkDependencies(),
 ) {
   const packageJsonLink = terminalLink(
     'package.json',
-    'file://' + packageJsonPath
+    'file://' + packageJsonPath,
   )
 
   const numberOfDependencies = Object.keys(dependencies).length
 
   const spinner = ora(
-    `Adding ${numberOfDependencies} framework dependencies to ${packageJsonLink}...`
+    `Adding ${numberOfDependencies} framework dependencies to ${packageJsonLink}...`,
   ).start()
 
   const packageJson = fs.readJSONSync(packageJsonPath)
@@ -115,7 +115,7 @@ export function addDependenciesToPackageJson(
   fs.writeJSONSync(packageJsonPath, packageJson, { spaces: 2 })
 
   spinner.succeed(
-    `Added ${numberOfDependencies} framework dependencies to ${packageJsonLink}`
+    `Added ${numberOfDependencies} framework dependencies to ${packageJsonLink}`,
   )
 }
 
@@ -134,8 +134,8 @@ export function installProjectPackages(projectPath) {
     spinner.warn(
       `Error running 'yarn install', check ${terminalLink(
         'yarn-error.log',
-        'file://' + path.join(projectPath, 'yarn-error.log')
-      )} for more information.`
+        'file://' + path.join(projectPath, 'yarn-error.log'),
+      )} for more information.`,
     )
 
     console.log('-'.repeat(80))
@@ -144,7 +144,7 @@ export function installProjectPackages(projectPath) {
 
 export async function copyFrameworkFilesToProject(
   projectPath,
-  packageJsonPaths = getFrameworkPackageJsonPaths()
+  packageJsonPaths = getFrameworkPackageJsonPaths(),
 ) {
   // Loop over every package, delete all existing files and copy over the new files
   const packagesFiles = await getFrameworkPackagesFiles(packageJsonPaths)
@@ -155,7 +155,7 @@ export async function copyFrameworkFilesToProject(
         path.dirname(packagePath)
       return packageNamesToPaths
     },
-    {}
+    {},
   )
 
   for (const [packageName, files] of Object.entries(packagesFiles)) {
@@ -164,7 +164,7 @@ export async function copyFrameworkFilesToProject(
     console.log(
       terminalLink(packageName, 'file://' + packageDistPath),
       files.length,
-      'files'
+      'files',
     )
 
     await rimraf(packageDistPath)
