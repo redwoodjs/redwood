@@ -7,7 +7,7 @@ import type {
   OperationDefinitionNode,
   OperationTypeNode,
 } from 'graphql'
-import { parse, print, visit } from 'graphql'
+import { Kind, parse, print, visit } from 'graphql'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
 import { getPaths } from '@redwoodjs/project-config'
@@ -61,13 +61,13 @@ const getFields = (field: FieldNode): any => {
     const lookAtFieldNode = (node: FieldNode | InlineFragmentNode): void => {
       node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
-          case 'Field':
+          case Kind.FIELD:
             obj[field.name.value].push(getFields(subField as FieldNode))
             break
-          case 'FragmentSpread':
+          case Kind.FRAGMENT_SPREAD:
             // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
             break
-          case 'InlineFragment':
+          case Kind.INLINE_FRAGMENT:
             lookAtFieldNode(subField)
         }
       })
