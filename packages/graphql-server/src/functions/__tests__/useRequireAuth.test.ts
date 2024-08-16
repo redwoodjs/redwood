@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import { describe, it, expect } from 'vitest'
 
 import { AuthenticationError } from '../../errors'
-import type { UseRequireAuth } from '../useRequireAuth'
 
 import { getCurrentUser } from './fixtures/auth'
 
@@ -65,7 +64,7 @@ const handler = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('@redwoodjs/context').context
+  const { context: globalContext } = await import('@redwoodjs/context')
   const currentUser = globalContext.currentUser
 
   return {
@@ -84,7 +83,9 @@ const handlerWithAuthChecks = async (
   // TODO: Add requireAuth('role') here
   // or isAuthenticated()
 
-  const { hasRole, isAuthenticated, requireAuth } = require('./fixtures/auth')
+  const { hasRole, isAuthenticated, requireAuth } = await import(
+    './fixtures/auth.js'
+  )
 
   const body = {
     message: '',
@@ -115,7 +116,7 @@ const handlerWithError = async (
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('@redwoodjs/context').context
+  const { context: globalContext } = await import('@redwoodjs/context')
   const currentUser = globalContext.currentUser
 
   try {
@@ -151,9 +152,7 @@ describe('useRequireAuth', () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
     // once we disable context isolation for our test
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -185,9 +184,7 @@ describe('useRequireAuth', () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
     // once we disable context isolation for our test
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -227,9 +224,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if an error occurs when getting current user info', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -252,9 +247,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if no auth headers present', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -281,9 +274,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status with token if the auth provider is unsupported', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -314,9 +305,7 @@ describe('useRequireAuth', () => {
   })
 
   it('returns 200 if decoding JWT succeeds for netlify', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -356,9 +345,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if decoding JWT fails for netlify', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -382,9 +369,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 200 status if decoding JWT fails for supabase', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const handlerEnrichedWithAuthentication = useRequireAuth({
       handlerFn: handler,
@@ -408,9 +393,7 @@ describe('useRequireAuth', () => {
   })
 
   it('is 500 Server Error status if handler errors', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const customHeaders = {
       'auth-provider': 'custom',
@@ -434,9 +417,7 @@ describe('useRequireAuth', () => {
   })
 
   it('enables the use of auth functions inside the handler to check that isAuthenticated blocks unauthenticated users', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     const netlifyJWTHeaders = {
       'auth-provider': 'netlify',
@@ -460,9 +441,7 @@ describe('useRequireAuth', () => {
   })
 
   it("enables the use of auth functions inside the handler to check that requireAuth throws if the user doesn't have the required role", async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     // Note: The Bearer token JWT contains:
     // {
@@ -498,9 +477,7 @@ describe('useRequireAuth', () => {
   })
 
   it('enables the use of auth functions inside the handler to check editor role', async () => {
-    const {
-      useRequireAuth,
-    }: { useRequireAuth: UseRequireAuth } = require('../useRequireAuth')
+    const { useRequireAuth } = await import('../useRequireAuth.js')
 
     // The authorization JWT is valid and has roles in app metadata
     // {
