@@ -194,7 +194,7 @@ function getCssLinks({
   vite: ViteDevServer
 }) {
   const appAndRouteModules = componentsModules(
-    [rwPaths.web.app, route && route.filePath].filter(Boolean) as string[],
+    [rwPaths.web.app, route?.filePath].filter(Boolean) as string[],
     vite,
   )
 
