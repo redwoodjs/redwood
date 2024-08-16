@@ -19,6 +19,7 @@ rm -rf api
 You can also run `yarn install` to cleanup those packages that aren't used any more.
 
 ## Disable Prisma functionality
+
 The `--prisma` and `--dm` flags are set to `true` by default and need to be set to `false` in the build command.
 
 ```toml {4}

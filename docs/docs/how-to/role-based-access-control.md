@@ -57,9 +57,9 @@ If your 🏠 could enforce RBAC, it needs to know the rules.
 
 | Role     | Kitchen | Basement | Office | Bathroom | Laundry | Bedroom |
 | -------- | :-----: | :------: | :----: | :------: | :-----: | :-----: |
-| Neighbor |    ✅    |          |   ✅    |    ✅     |         |         |
-| Plumber  |    ✅    |    ✅     |        |    ✅     |    ✅    |         |
-| Owner    |    ✅    |    ✅     |   ✅    |    ✅     |    ✅    |    ✅    |
+| Neighbor |   ✅    |          |   ✅   |    ✅    |         |         |
+| Plumber  |   ✅    |    ✅    |        |    ✅    |   ✅    |         |
+| Owner    |   ✅    |    ✅    |   ✅   |    ✅    |   ✅    |   ✅    |
 
 #### RBAC Example: Blog
 
@@ -72,12 +72,12 @@ In our Blog example anyone can view Posts (authenticated or not). They are _publ
 
 #### Role Matrix for Blog RBAC
 
-| Role      | View  |  New  | Edit  | Delete | Manage Users |
-| --------- | :---: | :---: | :---: | :----: | :----------: |
-| Author    |   ✅   |   ✅   |       |        |              |
-| Editor    |   ✅   |       |   ✅   |        |              |
-| Publisher |   ✅   |   ✅   |   ✅   |   ✅    |              |
-| Admin     |   ✅   |   ✅   |   ✅   |   ✅    |      ✅       |
+| Role      | View | New | Edit | Delete | Manage Users |
+| --------- | :--: | :-: | :--: | :----: | :----------: |
+| Author    |  ✅  | ✅  |      |        |              |
+| Editor    |  ✅  |     |  ✅  |        |              |
+| Publisher |  ✅  | ✅  |  ✅  |   ✅   |              |
+| Admin     |  ✅  | ✅  |  ✅  |   ✅   |      ✅      |
 
 ## Auth and RBAC Checklist
 
@@ -140,7 +140,7 @@ Roles may be stored within `app_metadata` or sometimes within `authorization` un
     "roles": ["author"]
   },
   "user_metadata": {
-    "full_name": "Arthur Author",
+    "full_name": "Arthur Author"
   }
 }
 ```
@@ -157,7 +157,9 @@ The `parseJWT` helper will consider both locations to extract roles on the decod
 import { parseJWT } from '@redwoodjs/api'
 
 export const getCurrentUser = async (decoded) => {
-  return context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
+  return (
+    context.currentUser || { ...decoded, roles: parseJWT({ decoded }).roles }
+  )
 }
 ```
 
@@ -473,7 +475,7 @@ This function should be located in `api/src/lib/auth.js` for your RedwoodJS app 
 
 ```javascript
 export const requireAuth = ({ roles } = {}) => {
-    if (!isAuthenticated()) {
+  if (!isAuthenticated()) {
     throw new AuthenticationError("You don't have permission to do that.")
   }
 
@@ -609,7 +611,7 @@ yarn add netlify-cli -g
 yarn rw build api
 
 # Invoke your function with the CLI, pointing it to the rw dev port
-netlify functions:invoke <function-name> --port 8910
+netlify functions:invoke 8910 < function-name > --port
 ```
 
 `<function-name>` should be replaced by `identity-validate`, `identity-signup`, `identity-login` or your own function.

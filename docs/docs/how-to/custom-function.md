@@ -70,7 +70,7 @@ Ok&mdash;back to our custom Function. Let's get the current time and return it i
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
-    body: new Date()
+    body: new Date(),
   }
 }
 ```

@@ -18,7 +18,6 @@ Here's a basic example of how you might use GraphQL fragments in developer docum
 
 Let's say you have a GraphQL schema representing books, and you want to create a fragment for retrieving basic book information like title, author, and publication year.
 
-
 ```graphql
 # Define a GraphQL fragment for book information
 fragment BookInfo on Book {
@@ -77,9 +76,11 @@ With `fragmentRegistry`, you can interact with the registry directly.
 
 With `registerFragment`, you can register a fragment with the registry and get back:
 
- ```ts
- { fragment, typename, getCacheKey, useRegisteredFragment }
- ```
+```ts
+{
+  fragment, typename, getCacheKey, useRegisteredFragment
+}
+```
 
 which can then be used to work with the registered fragment.
 
@@ -96,20 +97,17 @@ To register a fragment, you can simply register it with `registerFragment`.
 ```ts
 import { registerFragment } from '@redwoodjs/web/apollo'
 
-registerFragment(
-  gql`
-    fragment BookInfo on Book {
-      id
-      title
-      author
-      publicationYear
-    }
-  `
-)
+registerFragment(gql`
+  fragment BookInfo on Book {
+    id
+    title
+    author
+    publicationYear
+  }
+`)
 ```
 
 This makes the `BookInfo` available to use in your query:
-
 
 ```ts
 import type { GetBookDetails } from 'types/graphql'
@@ -132,7 +130,6 @@ const GET_BOOK_DETAILS = gql`
 const { data, loading} = useQuery<GetBookDetails>(GET_BOOK_DETAILS)
 
 ```
-
 
 You can then access the book info from `data` and render:
 
@@ -175,7 +172,6 @@ fragment BookInfo on Book {
 
 the `typename` is `Book`.
 
-
 ### getCacheKey
 
 A helper function to create the cache key for the data associated with the fragment in Apollo cache.
@@ -207,15 +203,13 @@ We describe how [cache keys and identifiers](./caching.md#identify) are used in 
 ```ts
 import { registerFragment } from '@redwoodjs/web/apollo'
 
-const { useRegisteredFragment } = registerFragment(
-  // ...
-)
+const { useRegisteredFragment } = registerFragment()
+// ...
 ```
 
 A helper function relies on Apollo's [`useFragment` hook](https://www.apollographql.com/docs/react/data/fragments/#usefragment) in Apollo cache.
 
 The useFragment hook represents a lightweight live binding into the Apollo Client Cache. It enables Apollo Client to broadcast specific fragment results to individual components. This hook returns an always-up-to-date view of whatever data the cache currently contains for a given fragment. useFragment never triggers network requests of its own.
-
 
 This means that once the Apollo Client Cache has loaded the data needed for the fragment, one can simply render the data for the fragment component with its id reference.
 
@@ -259,7 +253,6 @@ In order to use [fragments](#what-are-fragments) with [unions](./../graphql#unio
 Please see how to [generate possible types from fragments and union types](#possible-types-for-unions).
 :::
 
-
 ## Possible Types for Unions
 
 In order to use [fragments](#fragments) with [unions](#unions) and interfaces in Apollo Client, you need to tell the client how to discriminate between the different types that implement or belong to a supertype.
@@ -286,7 +279,6 @@ For example:
 ```
 
 To make this easier to maintain, RedwoodJS GraphQL CodeGen automatically generates `possibleTypes` so you can simply assign it to the `graphQLClientConfig`:
-
 
 ```ts
 // web/src/App.tsx
@@ -324,16 +316,14 @@ import type { Book } from 'types/graphql'
 
 import { registerFragment } from '@redwoodjs/web/apollo'
 
-const { useRegisteredFragment } = registerFragment(
-  gql`
-    fragment BookInfo on Book {
-      id
-      title
-      author
-      publicationYear
-    }
-  `
-)
+const { useRegisteredFragment } = registerFragment(gql`
+  fragment BookInfo on Book {
+    id
+    title
+    author
+    publicationYear
+  }
+`)
 ```
 
 ```ts
@@ -365,12 +355,13 @@ export const standard = {
     title: 'Ulysses',
     author: 'James Joyce',
     publicationYear: 1922,
-    description: 'The experiences of three Dubliners over the course of a single day, 16 June 1904.'
-  }
+    description:
+      'The experiences of three Dubliners over the course of a single day, 16 June 1904.',
+  },
 }
 ```
-If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
 
+If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
 
 :::tip note
 

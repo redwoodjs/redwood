@@ -103,11 +103,12 @@ Change the route path back to `/` before continuing!
 
 ### Simple Styles
 
-Previous versions of this tutorial had you build everything without any styling, so we could really focus on the code, but let's face it: an unstyled site is pretty ugly. Let's add a really simple stylesheet that will just make things a *little* easier on the eyes as we build out the site. Paste the following into `web/src/index.css`:
+Previous versions of this tutorial had you build everything without any styling, so we could really focus on the code, but let's face it: an unstyled site is pretty ugly. Let's add a really simple stylesheet that will just make things a _little_ easier on the eyes as we build out the site. Paste the following into `web/src/index.css`:
 
 ```css title="web/src/index.css"
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 ul {
   list-style-type: none;
@@ -116,13 +117,16 @@ ul {
 }
 li {
   display: inline-block;
-  margin: 0 1rem 0 0 ;
+  margin: 0 1rem 0 0;
 }
 h1 > a {
   text-decoration: none;
   color: black;
 }
-button, input, label, textarea {
+button,
+input,
+label,
+textarea {
   display: block;
   outline: none;
 }
@@ -132,7 +136,8 @@ label {
 .error {
   color: red;
 }
-input.error, textarea.error {
+input.error,
+textarea.error {
   border: 1px solid red;
 }
 .form-error {

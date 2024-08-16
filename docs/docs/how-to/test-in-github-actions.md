@@ -48,13 +48,13 @@ If it is, you should see something like this:
 ```sh
 ...
 
- PASS   api  api/src/directives/requireAuth/requireAuth.test.ts
- PASS   api  api/src/directives/skipAuth/skipAuth.test.ts
+PASS api api/src/directives/requireAuth/requireAuth.test.ts
+PASS api api/src/directives/skipAuth/skipAuth.test.ts
 
 Test Suites: 2 passed, 2 total
-Tests:       3 passed, 3 total
-Snapshots:   0 total
-Time:        1.669 s
+Tests: 3 passed, 3 total
+Snapshots: 0 total
+Time: 1.669 s
 Ran all test suites.
 
 Watch Usage: Press w to show more.
@@ -165,13 +165,13 @@ yarn rw test
 You should see something like this:
 
 ```sh
- PASS   web  web/src/lib/formatters.test.tsx
- PASS   api  api/src/services/userExamples/userExamples.test.ts
+PASS web web/src/lib/formatters.test.tsx
+PASS api api/src/services/userExamples/userExamples.test.ts
 
 Test Suites: 2 passed, 2 total
-Tests:       21 passed, 21 total
-Snapshots:   0 total
-Time:        3.587 s
+Tests: 21 passed, 21 total
+Snapshots: 0 total
+Time: 3.587 s
 Ran all test suites related to changed files in 2 projects.
 ```
 
@@ -269,8 +269,6 @@ name: Redwood CI for Pull Requests
 on:
   pull_request:
     branches: ['main']
-
-...
 ```
 
 Now, if you open or push to a pull request, this action will run and you'll see something like this:

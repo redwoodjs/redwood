@@ -13,11 +13,12 @@
 ## Mocking a Cell's Query
 
 Locate the file ending with `.mock.js` in your Cell's folder. This file exports a value named `standard`, which is the mock-data that will be returned for your Cell's `QUERY`.
+
 ```jsx {3,4,5,11,12,13} title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
     userProfile {
-       id
+      id
     }
   }
 `
@@ -25,12 +26,13 @@ export const QUERY = gql`
 // UserProfileCell/UserProfileCell.mock.js
 export const standard = {
   userProfile: {
-    id: 42
-  }
+    id: 42,
+  },
 }
 ```
 
 The value assigned to `standard` is the mock-data associated to the `QUERY`, so modifying the `QUERY` means you need to modify the mock-data.
+
 ```diff title="UserProfileCell/UserProfileCell.js"
 export const QUERY = gql`
   query UserProfileQuery {
@@ -55,14 +57,15 @@ export const standard = {
 ### GraphQL request variables
 
 If you want to dynamically modify mock-data based on a queries variables the `standard` export can also be a function, and the first parameter will be an object containing the variables:
+
 ```jsx {1,6} title="UserProfileCell/UserProfileCell.mock.js"
 export const standard = (variables) => {
   return {
     userProfile: {
       id: 42,
       name: 'peterp',
-      profileImage: `https://example.com/profile.png?size=${variables.size}`
-    }
+      profileImage: `https://example.com/profile.png?size=${variables.size}`,
+    },
   }
 }
 ```
@@ -90,16 +93,17 @@ export const withReallyLongName = () => {
 Use `mockGraphQLMutation`:
 
 ```jsx title="UserProfileCell/UserProfileCell.mock.js"
-export const standard = /* ... */
+export const standard =
+  /* ... */
 
-mockGraphQLMutation('UpdateUserName', ({ name }) => {
-  return {
-    userProfile: {
-      id: 99,
-      name,
+  mockGraphQLMutation('UpdateUserName', ({ name }) => {
+    return {
+      userProfile: {
+        id: 99,
+        name,
+      },
     }
-  }
-})
+  })
 ```
 
 ## Mock-requests that intentionally produce errors

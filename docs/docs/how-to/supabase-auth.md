@@ -286,7 +286,6 @@ export default SignupPage
 > Errors may be returned in two fashions:
 >
 > 1. upon promise fulfillment, within the `error` property of the object returned by the promise
->
 > 2. upon promise rejection, within an error returned by the promise (you can handle this via the `catch` block)
 
 Now we can handle a successful submission. If we sign up without email confirmation, then successful sign up also _signs in_ the user. Once they've signed in, we'll want to redirect them back to our app.
@@ -685,7 +684,7 @@ As you continue refining your app, the following resources may come in handy:
 
 Finally, keep the following features in mind (future how to's could go deep into any of these):
 
-- Authentication state changes can be observed via an event listener.  The [Supabase Auth playground](https://github.com/redwoodjs/playground-auth/blob/main/web/src/lib/code-samples/supabase.md) shows an example.
+- Authentication state changes can be observed via an event listener. The [Supabase Auth playground](https://github.com/redwoodjs/playground-auth/blob/main/web/src/lib/code-samples/supabase.md) shows an example.
 - Authentication options include...
   - Passwordless (enter email and get a magic confirmation link)
   - Third party (via GitHub, Google, etc)

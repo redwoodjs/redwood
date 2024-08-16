@@ -48,8 +48,9 @@ The Baremetal deploy runs several commands in sequence. These can be customized,
 ### First Run Lifecycle
 
 If the `--first-run` flag is specified then step 6 above will execute the following commands instead:
-  - `pm2 start [service]` - starts the serving process(es)
-  - `pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
+
+- `pm2 start [service]` - starts the serving process(es)
+- `pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
 
 ## Directory Structure
 
@@ -155,29 +156,29 @@ This lists a single server, in the `production` environment, providing the hostn
 
 #### Config Options
 
-* `host` - hostname to the server
-* `port` - [optional] ssh port for server connection, defaults to 22
-* `username` - the user to login as
-* `password` - [optional] if you are using password authentication, include that here
-* `privateKey` - [optional] if you connect with a private key, include the content of the key here, as a buffer: `privateKey: Buffer.from('...')`. Use this *or* `privateKeyPath`, not both.
-* `privateKeyPath` - [optional] if you connect with a private key, include the path to the key here: `privateKeyPath: path.join('path','to','key.pem')` Use this *or* `privateKey`, not both.
-* `passphrase` - [optional] if your private key contains a passphrase, enter it here
-* `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further SSH connections from the server (like when connecting to GitHub)
-* `sides` - An array of sides that will be built on this server
-* `packageManagerCommand` - The package manager bin to call, defaults to `yarn` but could be updated to be prefixed with another command first, for example: `doppler run -- yarn`
-* `monitorCommand` - The monitor bin to call, defaults to `pm2` but could be updated to be prefixed with another command first, for example: `doppler run -- pm2`
-* `path` - The absolute path to the root of the application on the server
-* `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
-* `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
-* `repo` - The path to the git repo to clone
-* `branch` - [optional] The branch to deploy (defaults to `main`)
-* `keepReleases` - [optional] The number of previous releases to keep on the server, including the one currently being served (defaults to 5)
+- `host` - hostname to the server
+- `port` - [optional] ssh port for server connection, defaults to 22
+- `username` - the user to login as
+- `password` - [optional] if you are using password authentication, include that here
+- `privateKey` - [optional] if you connect with a private key, include the content of the key here, as a buffer: `privateKey: Buffer.from('...')`. Use this _or_ `privateKeyPath`, not both.
+- `privateKeyPath` - [optional] if you connect with a private key, include the path to the key here: `privateKeyPath: path.join('path','to','key.pem')` Use this _or_ `privateKey`, not both.
+- `passphrase` - [optional] if your private key contains a passphrase, enter it here
+- `agentForward` - [optional] if you have [agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding) enabled, set this to `true` and your own credentials will be used for further SSH connections from the server (like when connecting to GitHub)
+- `sides` - An array of sides that will be built on this server
+- `packageManagerCommand` - The package manager bin to call, defaults to `yarn` but could be updated to be prefixed with another command first, for example: `doppler run -- yarn`
+- `monitorCommand` - The monitor bin to call, defaults to `pm2` but could be updated to be prefixed with another command first, for example: `doppler run -- pm2`
+- `path` - The absolute path to the root of the application on the server
+- `migrate` - [optional] Whether or not to run migration processes on this server, defaults to `true`
+- `processNames` - An array of service names from `ecosystem.config.js` which will be (re)started on a successful deploy
+- `repo` - The path to the git repo to clone
+- `branch` - [optional] The branch to deploy (defaults to `main`)
+- `keepReleases` - [optional] The number of previous releases to keep on the server, including the one currently being served (defaults to 5)
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` mannually or by running `ssh-copy-id user@server.com` from your local machine, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
 
 #### Using Environment Variables in `deploy.toml`
 
-Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables.  For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](/docs/app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
+Similarly to `redwood.toml`, `deploy.toml` supports interpolation of environment variables. For more details on how to use the environment variable interpolation see [Using Environment Variables in redwood.toml](/docs/app-configuration-redwood-toml#using-environment-variables-in-redwoodtoml)
 
 #### Multiple Servers
 
@@ -278,7 +279,7 @@ You'll want to create an `.env` file in this directory containing any environmen
 
 The deployment process uses a '[non-interactive](https://tldp.org/LDP/abs/html/intandnonint.html)' SSH session to run commands on the remote server. A non-interactive session will often load a minimal amount of settings for better compatibility and speed. In some versions of Linux `.bashrc` by default does not load (by design) from a non-interactive session. This can lead to `yarn` (or other commands) not being found by the deployment script, even though they are in your path, because additional ENV vars are set in `~/.bashrc` which provide things like NPM paths and setup.
 
-A quick fix on some distros is to edit the deployment user's `~/.bashrc` file and comment out the lines that *stop* non-interactive processing.
+A quick fix on some distros is to edit the deployment user's `~/.bashrc` file and comment out the lines that _stop_ non-interactive processing.
 
 ```diff title="~/.bashrc"
 # If not running interactively, don't do anything
@@ -322,9 +323,9 @@ If it worked, hooray! You're deployed to BAREMETAL. If not, read on...
 On the server you should see a new directory inside the `path` you defined in `deploy.toml`. It should be a timestamp of the deploy, like:
 
 ```bash
-drwxrwxr-x  7 ubuntu ubuntu 4096 Apr 22 23:00 ./
-drwxr-xr-x  7 ubuntu ubuntu 4096 Apr 22 22:46 ../
--rw-rw-r--  1 ubuntu ubuntu 1167 Apr 22 20:49 .env
+drwxrwxr-x 7 ubuntu ubuntu 4096 Apr 22 23:00 ./
+drwxr-xr-x 7 ubuntu ubuntu 4096 Apr 22 22:46 ../
+-rw-rw-r-- 1 ubuntu ubuntu 1167 Apr 22 20:49 .env
 drwxrwxr-x 10 ubuntu ubuntu 4096 Apr 22 21:43 20220422214218/
 ```
 
@@ -408,7 +409,7 @@ Note that if you have more than one process running, like we do here, requesting
 
 ## Starting Processes on Server Restart
 
-The `pm2` service requires some system "hooks" to be installed so it can boot up using your system's service manager.  Otherwise, your PM2 services will need to be manually started again on a server restart.  These steps only need to be run the first time you install PM2.
+The `pm2` service requires some system "hooks" to be installed so it can boot up using your system's service manager. Otherwise, your PM2 services will need to be manually started again on a server restart. These steps only need to be run the first time you install PM2.
 
 SSH into your server and then run:
 
@@ -416,11 +417,11 @@ SSH into your server and then run:
 pm2 startup
 ```
 
-You will see some output similar to the output below. We care about the output after "copy/paste the following command:" You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. *Note* this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
+You will see some output similar to the output below. We care about the output after "copy/paste the following command:" You'll need to do just that: copy the command starting with `sudo` and then paste and execute it. _Note_ this command uses `sudo` so you'll need the root password to the machine in order for it to complete successfully.
 
 :::warning
 
-The below text is *example* output, yours will be different, don't copy and paste ours!
+The below text is _example_ output, yours will be different, don't copy and paste ours!
 
 :::
 
@@ -463,22 +464,22 @@ Baremetal supports running your own custom commands before or after the regular 
 
 You can define your before/after commands in three different places:
 
-* Globally - runs for any environment
-* Environment specific - runs for only a single environment
-* Server specific - runs for only a single server in a single environment
+- Globally - runs for any environment
+- Environment specific - runs for only a single environment
+- Server specific - runs for only a single server in a single environment
 
 :::warning
 
 Custom commands are run in the new **deploy** directory, not the root of your application directory. During a deploy the `current` symlink will point to the previous directory while your code is executed in the new one, before the `current` symlink location is updated.
 
 ```bash
-drwxrwxr-x  5 ubuntu ubuntu 4096 May 10 18:20 ./
-drwxr-xr-x  7 ubuntu ubuntu 4096 Apr 27 17:43 ../
-drwxrwxr-x  2 ubuntu ubuntu 4096 May  9 22:59 20220503211428/
-drwxrwxr-x  2 ubuntu ubuntu 4096 May  9 22:59 20220503211429/
-drwxrwxr-x 10 ubuntu ubuntu 4096 May 10 18:18 20220510181730/ <-- commands are run in here
-lrwxrwxrwx  1 ubuntu ubuntu   14 May 10 18:19 current -> 20220503211429/
--rw-rw-r--  1 ubuntu ubuntu 1167 Apr 22 20:49 .env
+drwxrwxr-x 5 ubuntu ubuntu 4096 May 10 18:20 ./
+drwxr-xr-x 7 ubuntu ubuntu 4096 Apr 27 17:43 ../
+drwxrwxr-x 2 ubuntu ubuntu 4096 May 9 22:59 20220503211428/
+drwxrwxr-x 2 ubuntu ubuntu 4096 May 9 22:59 20220503211429/
+drwxrwxr-x 10 ubuntu ubuntu 4096 May 10 18:18 20220510181730/ commands are run in here < --
+lrwxrwxrwx 1 ubuntu ubuntu 14 May 10 18:19 current - > 20220503211429/
+-rw-rw-r-- 1 ubuntu ubuntu 1167 Apr 22 20:49 .env
 ```
 
 :::
@@ -536,7 +537,6 @@ host = 'server.com'
 
 You can include commands in any/all of the three configurations (global, env and server) and they will all be stacked up and run in that order: `global -> environment -> server`. For example:
 
-
 ```toml
 [[production.servers]]
 host = 'server.com'
@@ -571,7 +571,7 @@ You can even rollback multiple deploys, up to the total number you still have de
 yarn rw deploy baremetal production --rollback 3
 ```
 
-Note that this will *not* rollback your database—if you had a release that changed the database, that updated database will still be in effect, but with the previous version of the web and api sides. Trying to undo database migrations is a very difficult proposition and isn't even possible in many cases.
+Note that this will _not_ rollback your database—if you had a release that changed the database, that updated database will still be in effect, but with the previous version of the web and api sides. Trying to undo database migrations is a very difficult proposition and isn't even possible in many cases.
 
 Make sure to thoroughly test releases that change the database before doing it for real!
 
@@ -583,7 +583,7 @@ If you find that you have a particular complex deploy, one that may involve inco
 yarn rw deploy baremetal production --maintenance up
 ```
 
-It does this by replacing `web/dist/200.html` with `web/src/maintenance.html`. This means any new web requests, at any URL, will show the maintenance page. This process also stops any services listed in the `processNames` option of `deploy.toml`—this is important for the api server as it will otherwise keep serving requests to users currently running the app, even though no *new* users can get the Javascript packages required to start a new session in their browser.
+It does this by replacing `web/dist/200.html` with `web/src/maintenance.html`. This means any new web requests, at any URL, will show the maintenance page. This process also stops any services listed in the `processNames` option of `deploy.toml`—this is important for the api server as it will otherwise keep serving requests to users currently running the app, even though no _new_ users can get the Javascript packages required to start a new session in their browser.
 
 You can remove the maintenance page with:
 
@@ -613,7 +613,7 @@ The default configuration, which requires the least amount of manual configurati
 
 ### Redwood Serves Web and Api Sides, Bind to Port 80
 
-This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most *nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (`node` in this case) to bind to one of those ports anyway.
+This is almost as easy as the default configuration, you just need to tell Redwood to bind to port 80. However, most \*nix distributions will not allow a process to bind to ports lower than 1024 without root/sudo permissions. There is a command you can run to allow access to a specific binary (`node` in this case) to bind to one of those ports anyway.
 
 #### Tell Redwood to Bind to Port 80
 
@@ -729,8 +729,8 @@ module.exports = {
       exec_mode: 'cluster',
       wait_ready: true,
       listen_timeout: 10000,
-    }
-  ]
+    },
+  ],
 }
 ```
 

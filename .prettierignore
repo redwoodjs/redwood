@@ -4,8 +4,9 @@
 # Ignore fixture projects
 __fixtures__
 
-# Ignore the docs (docusaurus) project
-docs/
+# Ignore the certain files in /docs
+/docs/versioned_docs
+/docs/versioned_sidebars
 
 # Ignore the .nx directory
 /.nx

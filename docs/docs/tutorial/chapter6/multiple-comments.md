@@ -2,11 +2,11 @@
 
 Our amazing blog posts will obviously garner a huge and passionate fanbase and we will very rarely have only a single comment. Let's work on displaying a list of comments.
 
-Let's think about where our comments are being displayed. Probably not on the homepage, since that only shows a summary of each post. A user would need to go to the full page to show the comments for that blog post. But that page is only fetching the data for the single blog post itself, nothing else. We'll need to get the comments and since we'll be fetching *and* displaying them, that sounds like a job for a Cell.
+Let's think about where our comments are being displayed. Probably not on the homepage, since that only shows a summary of each post. A user would need to go to the full page to show the comments for that blog post. But that page is only fetching the data for the single blog post itself, nothing else. We'll need to get the comments and since we'll be fetching _and_ displaying them, that sounds like a job for a Cell.
 
 :::info Couldn't the query for the blog post page also fetch the comments?
 
-Yes, it could! But the idea behind Cells is to make components even more [composable](https://en.wikipedia.org/wiki/Composability) by having them be responsible for their own data fetching *and* display. If we rely on a blog post to fetch the comments then the new Comments component we're about to create now requires something *else* to fetch the comments and pass them in. If we re-use the Comments component somewhere, now we're fetching comments in two different places.
+Yes, it could! But the idea behind Cells is to make components even more [composable](https://en.wikipedia.org/wiki/Composability) by having them be responsible for their own data fetching _and_ display. If we rely on a blog post to fetch the comments then the new Comments component we're about to create now requires something _else_ to fetch the comments and pass them in. If we re-use the Comments component somewhere, now we're fetching comments in two different places.
 
 **But what about the Comment component we just made, why doesn't that fetch its own data?**
 
@@ -14,7 +14,7 @@ There aren't any instances I (the author) could think of where we would ever wan
 
 **Then why make a standalone Comment component at all? Why not just do all the display in the CommentsCell?**
 
-We're trying to start in small chunks to make the tutorial more digestible for a new audience so we're starting simple and getting more complex as we go. But it also just feels *nice* to build up a UI from these smaller chunks that are easier to reason about and keep separate in your head.
+We're trying to start in small chunks to make the tutorial more digestible for a new audience so we're starting simple and getting more complex as we go. But it also just feels _nice_ to build up a UI from these smaller chunks that are easier to reason about and keep separate in your head.
 
 **But what about—**
 
@@ -112,13 +112,13 @@ export const Failure = ({ error }: CellFailureProps) => (
 
 export const Success = ({ comments }: CellSuccessProps<CommentsQuery>) => {
   return (
-  // highlight-start
+    // highlight-start
     <>
       {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
     </>
-  // highlight-end
+    // highlight-end
   )
 }
 ```
@@ -221,7 +221,7 @@ export const Success = ({ comments }) => {
       {comments.map((comment) => (
         <Comment comment={comment} key={comment.id} />
       ))}
-    // highlight-next-line
+      // highlight-next-line
     </div>
   )
 }
@@ -232,7 +232,7 @@ export const Success = ({ comments }) => {
 
 :::tip
 
-`space-y-8` is a handy Tailwind class that puts a space *between* elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
+`space-y-8` is a handy Tailwind class that puts a space _between_ elements, but not above or below the entire stack (which is what would happen if you gave each `<Comment>` its own top/bottom margin).
 
 :::
 
@@ -312,7 +312,7 @@ export default Article
 </TabItem>
 </Tabs>
 
-If we are *not* showing the summary, then we'll show the comments. Take a look at the **Full** and **Summary** stories in Storybook and you should see comments on one and not on the other.
+If we are _not_ showing the summary, then we'll show the comments. Take a look at the **Full** and **Summary** stories in Storybook and you should see comments on one and not on the other.
 
 :::info Shouldn't the `CommentsCell` cause an actual GraphQL request? How does this work?
 
@@ -399,10 +399,10 @@ We added a component, `CommentsCell`, and edited another, `Article`, so what do 
 
 The actual `Comment` component does most of the work so there's no need to test all of that functionality again in `CommentsCell`: our `Comment` tests cover that just fine. What things does `CommentsCell` do that make it unique?
 
-* Has a loading message
-* Has an error message
-* Has a failure message
-* When it renders successfully, it outputs as many comments as were returned by the `QUERY` (*what* is rendered we'll leave to the `Comment` tests)
+- Has a loading message
+- Has an error message
+- Has a failure message
+- When it renders successfully, it outputs as many comments as were returned by the `QUERY` (_what_ is rendered we'll leave to the `Comment` tests)
 
 The default `CommentsCell.test.{jsx,tsx}` actually tests every state for us, albeit at an absolute minimum level—it makes sure no errors are thrown:
 
@@ -568,17 +568,16 @@ describe('CommentsCell', () => {
     // highlight-end
   })
 })
-
 ```
 
 </TabItem>
 </Tabs>
 
-We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are two total comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this, especially [magic numbers](https://en.wikipedia.org/wiki/Magic_number_(programming)), into your test when you can derive it from your mocked data!
+We're looping through each `comment` from the mock, the same mock used by Storybook, so that even if we add more later, we're covered. You may find yourself writing a test and saying "just test that there are two total comments," which will work today, but months from now when you add more comments to the mock to try some different iterations in Storybook, that test will start failing. Avoid hardcoding data like this, especially [magic numbers](<https://en.wikipedia.org/wiki/Magic_number_(programming)>), into your test when you can derive it from your mocked data!
 
 #### Testing Article
 
-The functionality we added to `Article` says to show the comments for the post if we are *not* showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want a test to be testing "one thing," like whether the body of the article is present, and another test for whether the comments are displaying. If you find that you're using "and" in your test description (like "renders a blog post and its comments") that's a good sign that it should probably be split into two separate tests.
+The functionality we added to `Article` says to show the comments for the post if we are _not_ showing the summary. We've got a test for both the "full" and "summary" renders already. Generally you want a test to be testing "one thing," like whether the body of the article is present, and another test for whether the comments are displaying. If you find that you're using "and" in your test description (like "renders a blog post and its comments") that's a good sign that it should probably be split into two separate tests.
 
 Let's add two additional tests for our new functionality:
 
@@ -715,7 +714,7 @@ We're introducing a new test function here, `waitFor()`, which will wait for thi
 
 :::info
 
-The summary version of `Article` does *not* render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
+The summary version of `Article` does _not_ render the `CommentsCell`, but we should still wait. Why? If we did mistakenly start including `CommentsCell`, but didn't wait for the render, we would get a falsely passing test—indeed the text isn't on the page but that's because it's still showing the `Loading` component! If we had waited we would have seen the actual comment body get rendered, and the test would (correctly) fail.
 
 :::
 

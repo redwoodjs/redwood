@@ -165,7 +165,7 @@ As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest
 
 :::tip
 
-*Psssstttt* I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
+_Psssstttt_ I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
 
 `yarn rw g sdl Contact --no-crud`
 
@@ -173,7 +173,7 @@ You'd only get a single `contacts` type to return them all.
 
 :::
 
-We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
+We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need to change `@requireAuth` to `@skipAuth`. This one says that authentication is _not_ required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
 
 :::info
 
@@ -936,9 +936,9 @@ Remember: we haven't added authentication yet, so the concept of someone being l
 
 Our contact form works but it has a couple of issues at the moment:
 
-* Clicking the submit button multiple times will result in multiple submits
-* The user has no idea if their submission was successful
-* If an error was to occur on the server, we have no way of notifying the user
+- Clicking the submit button multiple times will result in multiple submits
+- The user has no idea if their submission was successful
+- If an error was to occur on the server, we have no way of notifying the user
 
 Let's address these issues.
 
@@ -1179,7 +1179,6 @@ const ContactPage = () => {
   return (
     <>
       <Metadata title="Contact" description="Contact page" />
-
       // highlight-next-line
       <Toaster />
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
@@ -1251,7 +1250,7 @@ We do have an additional layer of validation for free: because name, email and m
 
 :::
 
-We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with  [Service Validations](../../services.md#service-validations).
+We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with [Service Validations](../../services.md#service-validations).
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
@@ -1282,7 +1281,9 @@ import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact: MutationResolvers['createContact'] = ({ input }) => {
+export const createContact: MutationResolvers['createContact'] = ({
+  input,
+}) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
@@ -1484,13 +1485,11 @@ const ContactPage = () => {
   return (
     <>
       <Metadata title="Contact" description="Contact page" />
-
       <Toaster />
       // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
         <FormError error={error} wrapperClassName="form-error" />
         // highlight-end
-
         <Label name="name" errorClassName="error">
           Name
         </Label>
@@ -1500,7 +1499,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="name" className="error" />
-
         <Label name="email" errorClassName="error">
           Email
         </Label>
@@ -1512,7 +1510,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="email" className="error" />
-
         <Label name="message" errorClassName="error">
           Message
         </Label>
@@ -1522,7 +1519,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="message" className="error" />
-
         <Submit disabled={loading}>Save</Submit>
       </Form>
     </>
@@ -1539,16 +1535,16 @@ Now submit a message with an invalid email address:
 
 ![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
 
-We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't *have* to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
+We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't _have_ to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
 
 :::info
 
 `<FormError>` has several styling options which are attached to different parts of the message:
 
-* `wrapperStyle` / `wrapperClassName`: the container for the entire message
-* `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
-* `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
-* `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+- `wrapperStyle` / `wrapperClassName`: the container for the entire message
+- `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
+- `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
+- `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
 
 :::
 
@@ -1563,17 +1559,17 @@ export const createCar = ({ input }) => {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
   })
   validate(input.color, 'color', {
-    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+    exclusion: { in: ['Beige', 'Mauve'], message: 'No one wants that color' },
   })
   validate(input.hasDamage, 'hasDamage', {
-    absence: true
+    absence: true,
   })
   validate(input.vin, 'vin', {
     format: /[A-Z0-9]+/,
-    length: { equal: 17 }
+    length: { equal: 17 },
   })
   validate(input.odometer, 'odometer', {
-    numericality: { positive: true, lessThanOrEqual: 10000 }
+    numericality: { positive: true, lessThanOrEqual: 10000 },
   })
 
   return db.car.create({ data: input })
@@ -1589,17 +1585,17 @@ export const createCar = ({ input }: Car) => {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
   })
   validate(input.color, 'color', {
-    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+    exclusion: { in: ['Beige', 'Mauve'], message: 'No one wants that color' },
   })
   validate(input.hasDamage, 'hasDamage', {
-    absence: true
+    absence: true,
   })
   validate(input.vin, 'vin', {
     format: /[A-Z0-9]+/,
-    length: { equal: 17 }
+    length: { equal: 17 },
   })
   validate(input.odometer, 'odometer', {
-    numericality: { positive: true, lessThanOrEqual: 10000 }
+    numericality: { positive: true, lessThanOrEqual: 10000 },
   })
 
   return db.car.create({ data: input })
