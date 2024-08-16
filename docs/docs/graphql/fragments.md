@@ -203,9 +203,8 @@ We describe how [cache keys and identifiers](./caching.md#identify) are used in 
 ```ts
 import { registerFragment } from '@redwoodjs/web/apollo'
 
-const { useRegisteredFragment } =
-  registerFragment()
-  // ...
+const { useRegisteredFragment } = registerFragment()
+// ...
 ```
 
 A helper function relies on Apollo's [`useFragment` hook](https://www.apollographql.com/docs/react/data/fragments/#usefragment) in Apollo cache.
