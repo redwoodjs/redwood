@@ -1,7 +1,9 @@
-
 import { describe, it, expect } from 'vitest'
 
-import { createUploadProcessors } from '../createProcessors.js'
+import {
+  createFileListProcessor,
+  createUploadProcessors,
+} from '../createProcessors.js'
 import { MemoryStorage } from '../MemoryStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
@@ -98,5 +100,38 @@ describe('Create processors', () => {
     })
     expect(withOverride.uploadField).toMatch(/[^.]+$/)
     expect(withOverride.uploadField).toBe('/memory_store_basedir/hello')
+  })
+})
+// FileLists
+// Problem is - in the database world, a string[] is not a thing
+// so we need a generic way of doing this
+describe('FileList processing', () => {
+  const fileListProcessor = createFileListProcessor(memStore)
+
+  const notPrismaData = [
+    new File(['Hello'], 'hello.png', {
+      type: 'image/png',
+    }),
+    new File(['World'], 'world.jpeg', {
+      type: 'image/jpeg',
+    }),
+  ]
+
+  it('Should handle FileLists', async () => {
+    const result = await fileListProcessor(notPrismaData)
+
+    expect(result).toHaveLength(2)
+    expect(result[0]).toMatch(/\/memory_store_basedir\/.*\.png/)
+    expect(result[1]).toMatch(/\/memory_store_basedir\/.*\.jpeg/)
+  })
+
+  it('Should handle FileLists with SaveOptions', async () => {
+    const result = await fileListProcessor(notPrismaData, {
+      path: '/bazinga_not_mem_store',
+    })
+
+    expect(result).toHaveLength(2)
+    expect(result[0]).toMatch(/\/bazinga_not_mem_store\/.*\.png/)
+    expect(result[1]).toMatch(/\/bazinga_not_mem_store\/.*\.jpeg/)
   })
 })

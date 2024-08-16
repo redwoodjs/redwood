@@ -6,6 +6,24 @@ type MakeFilesString<T> = {
   [K in keyof T]: T[K] extends File ? string : T[K]
 }
 
+export const createFileListProcessor = (storage: StorageAdapter) => {
+  return async (files: File[], pathOverrideOnly?: { path?: string }) => {
+    const locations = await Promise.all(
+      files.map(async (file) => {
+        const { location } = await storage.save(file, pathOverrideOnly)
+        return location
+      })
+    )
+
+    return locations
+  }
+
+}
+
+/*
+This creates a processor for each model in the uploads config (i.e. tied to a model in the prisma schema)
+The processor will only handle single file uploads, not file lists.
+*/
 export const createUploadProcessors = (
   storage: StorageAdapter,
   uploadConfig: UploadsConfig
