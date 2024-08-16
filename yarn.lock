@@ -7983,7 +7983,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.4"
     "@redwoodjs/framework-tools": "workspace:*"
+    concurrently: "npm:8.2.2"
+    publint: "npm:0.2.10"
     tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
   languageName: unknown
