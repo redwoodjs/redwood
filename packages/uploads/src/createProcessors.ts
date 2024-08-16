@@ -10,21 +10,32 @@ export const createUploadProcessors = (
   storage: StorageAdapter,
   uploadConfig: UploadsConfig
 ) => {
+  type modelNamesInUploadConfig = keyof typeof uploadConfig
+
+  type uploadProcessorNames =
+    `process${Capitalize<modelNamesInUploadConfig>}Uploads`
   type Processors = {
-    [K in keyof typeof uploadConfig]: <T extends Record<string, any>>(data: T, overrideSaveOptions?: SaveOptionsOverride) => Promise<MakeFilesString<T>>
+    [K in uploadProcessorNames]: <T extends Record<string, any>>(
+      data: T,
+      overrideSaveOptions?: SaveOptionsOverride,
+    ) => Promise<MakeFilesString<T>>
   }
 
-  // @TODO TS: how do I get make it process${keyof UploadsConfig}Uploads so it autocompletes?
-  const processors: Processors = {}
+  const processors = {} as Processors
 
   Object.keys(uploadConfig).forEach((model) => {
-    const currentModelUploadFields = Array.isArray(uploadConfig[model].fields) ? uploadConfig[model].fields : [uploadConfig[model].fields]
+    const modelKey = model as keyof typeof uploadConfig
+
+    const currentModelUploadFields = Array.isArray(
+      uploadConfig[modelKey].fields,
+    )
+      ? uploadConfig[modelKey].fields
+      : [uploadConfig[modelKey].fields]
 
     const capitalCaseModel = `${model.charAt(0).toUpperCase() + model.slice(1)}`
-    processors[`process${capitalCaseModel}Uploads`] = async(
-      data,
-      overrideSaveOptions
-    ) => {
+    const processorKey = `process${capitalCaseModel}Uploads` as keyof Processors
+
+    processors[processorKey] = async (data, overrideSaveOptions) => {
       const updatedFields = {} as Record<string, string>
       for await (const field of currentModelUploadFields) {
         if (data[field]) {
@@ -40,7 +51,7 @@ export const createUploadProcessors = (
       }
       return {
         ...data,
-        ...updatedFields
+        ...updatedFields,
       }
     }
   })

@@ -3,12 +3,15 @@ import { describe, it, expect } from 'vitest'
 
 import { createUploadProcessors } from '../createProcessors.js'
 import { MemoryStorage } from '../MemoryStorage.js'
+import type { UploadsConfig } from '../prismaExtension.js'
 
 const memStore = new MemoryStorage({
-  baseDir: '/memory_store_basedir'
+  baseDir: '/memory_store_basedir',
 })
 
-const uploadsConfig = {
+// @TODO(TS): How can I make this accept not all model names?
+// This is error-ing out because it wants all the models in my prisma client
+const uploadsConfig: UploadsConfig = {
   dumbo: {
     fields: ['firstUpload', 'secondUpload'],
   },
@@ -25,7 +28,7 @@ describe('Create processors', () => {
     expect(processors.processDummyUploads).toBeDefined()
   })
 
-  it('Should replace file types with location strings', async() => {
+  it('Should replace file types with location strings', async () => {
     const data = {
       firstUpload: new File(['Meaow'], 'kitten.txt', {
         type: 'text/plain',
@@ -47,7 +50,7 @@ describe('Create processors', () => {
     expect(secondContents.toString()).toBe('Woof')
   })
 
-  it('Should be able to override save options', async() => {
+  it('Should be able to override save options', async () => {
     const data = {
       uploadField: new File(['Hello'], 'hello.png', {
         type: 'image/png',
@@ -56,46 +59,44 @@ describe('Create processors', () => {
 
     const fileNameOverrideOnly = await processors.processDummyUploads(data, {
       fileName: 'overridden.txt',
+    })
+
+    const pathOverrideOnly = await processors.processDummyUploads(data, {
+      path: '/bazinga',
+    })
+
+    const bothOverride = await processors.processDummyUploads(data, {
+      path: '/bazinga',
+      fileName: 'overridden.png',
+    })
+
+    expect(fileNameOverrideOnly.uploadField).toBe(
+      '/memory_store_basedir/overridden.txt',
+    ) // 👈 overrode the extension too
+
+    expect(pathOverrideOnly.uploadField).toMatch(/\/bazinga\/.*\.png/)
+    // Overriding path ignores the baseDir
+    expect(pathOverrideOnly.uploadField).not.toContain('memory_store_basedir')
+
+    expect(bothOverride.uploadField).toBe('/bazinga/overridden.png')
   })
 
-  const pathOverrideOnly = await processors.processDummyUploads(data, {
-    path: '/bazinga',
-})
+  it('Should not add extension for unknown file type', async () => {
+    const data = {
+      uploadField: new File(['Hello'], 'hello', {
+        type: 'bazinga/unknown',
+      }),
+    }
 
-const bothOverride = await processors.processDummyUploads(data, {
-  path: '/bazinga',
-  fileName: 'overridden.png',
-})
+    const noOverride = await processors.processDummyUploads(data)
 
-  expect(fileNameOverrideOnly.uploadField).toBe('/memory_store_basedir/overridden.txt') // 👈 overrode the extension too
+    // No extension
+    expect(noOverride.uploadField).toMatch(/\/memory_store_basedir\/.*[^.]+$/)
 
-  expect(pathOverrideOnly.uploadField).toMatch(/\/bazinga\/.*\.png/)
-  // Overriding path ignores the baseDir
-  expect(pathOverrideOnly.uploadField).not.toContain('memory_store_basedir')
-
-
-  expect(bothOverride.uploadField).toBe('/bazinga/overridden.png')
-})
-
-it('Should not add extension for unknown file type', async() => {
-  const data = {
-    uploadField: new File(['Hello'], 'hello', {
-      type: 'bazinga/unknown',
-    }),
-  }
-
-  const noOverride = await processors.processDummyUploads(data)
-
-  // No extension
-  expect(noOverride.uploadField).toMatch(/\/memory_store_basedir\/.*[^.]+$/);
-
-  const withOverride = await processors.processDummyUploads(data, {
-    fileName: 'hello',
+    const withOverride = await processors.processDummyUploads(data, {
+      fileName: 'hello',
+    })
+    expect(withOverride.uploadField).toMatch(/[^.]+$/)
+    expect(withOverride.uploadField).toBe('/memory_store_basedir/hello')
   })
-  expect(withOverride.uploadField).toMatch(/[^.]+$/);
-  expect(withOverride.uploadField).toBe('/memory_store_basedir/hello')
-
-})
-
-
 })

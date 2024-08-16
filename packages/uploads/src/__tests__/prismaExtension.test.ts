@@ -51,7 +51,7 @@ describe('Uploads Prisma Extension', () => {
   )
 
   describe('Query extensions', () => {
-    it('not implemented yet after refactor')
+    it('not implemented yet after refactor', async () => {})
   })
 
 

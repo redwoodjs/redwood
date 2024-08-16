@@ -3,6 +3,10 @@ import { Prisma } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
 import { ulid } from 'ulid'
 
+// @TODO(TS): UploadsConfig behaves differently here.. probably
+// the prisma-override not quite there yet?
+// import { PrismaClient } from './__tests__/prisma-client/index.js'
+// import { Prisma } from './__tests__/prisma-client/index.js'
 import { fileToDataUri } from './fileSave.utils.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
@@ -22,10 +26,8 @@ export type UploadConfigForModel = {
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig<MName extends string | number | symbol = ModelNames> = Record<
-  MName,
-  UploadConfigForModel
->
+export type UploadsConfig<MName extends string | number | symbol = ModelNames> =
+  Record<MName, UploadConfigForModel>
 
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,

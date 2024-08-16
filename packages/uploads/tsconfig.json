@@ -7,13 +7,14 @@
     "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["src", "prisma-override.d.ts"],
+
   "references": [
     {
       "path": "../project-config"
     },
     {
       "path": "../framework-tools"
-    },
+    }
   ]
 }
