@@ -56,7 +56,7 @@ jobs:
           build: false
 
       - name: ✅ Check constraints, dependencies, and package.json's
-        uses: ./tasks/check
+        run: yarn check
 
   check-skip:
     needs: detect-changes
