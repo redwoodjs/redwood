@@ -113,7 +113,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
       if (declaration.type === 'VariableDeclaration') {
         const id = declaration.declarations[0].id as types.Identifier
         namedExports.push({
-          name: id.name as string,
+          name: id.name,
           type: 'variable',
         })
       } else if (declaration.type === 'FunctionDeclaration') {
@@ -240,7 +240,7 @@ const getFields = (field: FieldNode): any => {
       node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
           case Kind.FIELD:
-            obj[field.name.value].push(getFields(subField as FieldNode))
+            obj[field.name.value].push(getFields(subField))
             break
           case Kind.FRAGMENT_SPREAD:
             // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests

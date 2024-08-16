@@ -705,11 +705,9 @@ export class DbAuthHandler<
     }
 
     // check if password is valid using signup criteria
-    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
-      password as string,
-    )
+    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(password)
 
-    let user = await this._findUserByToken(resetToken as string)
+    let user = await this._findUserByToken(resetToken)
     const [hashedPassword] = hashPassword(password, {
       salt: user.salt,
     })

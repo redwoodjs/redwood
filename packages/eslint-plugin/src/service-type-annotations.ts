@@ -74,7 +74,7 @@ export const serviceTypeAnnotations = createRule({
             }
 
             // Switch from the estree type to the typescript-eslint type
-            const tsID = vd.id as TSESTree.Identifier
+            const tsID = vd.id
 
             // If there's no type annotation, then we should add one
             if (!tsID.typeAnnotation) {
