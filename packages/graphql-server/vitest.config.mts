@@ -7,5 +7,10 @@ export default defineConfig({
       WEBHOOK_SECRET: 'MY_VOICE_IS_MY_PASSPORT_VERIFY_ME',
     },
     setupFiles: ['vitest.setup.mts'],
+    server: {
+      deps: {
+        fallbackCJS: true,
+      },
+    },
   },
 })
