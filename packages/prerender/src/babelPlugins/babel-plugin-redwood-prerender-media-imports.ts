@@ -32,7 +32,7 @@ const defaultOptions = {
 type ViteManifest = Record<string, ViteManifestChunk>
 
 function getVariableName(p: NodePath<types.ImportDeclaration>) {
-  if (p.node.specifiers?.[0] && p.node.specifiers[0].local) {
+  if (p.node.specifiers?.[0]?.local) {
     return p.node.specifiers[0].local.name
   }
   return null

@@ -207,7 +207,6 @@ module.exports = {
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
-        '@typescript-eslint/prefer-optional-chain': 'off',
         '@typescript-eslint/prefer-promise-reject-errors': 'off',
         '@typescript-eslint/no-redundant-type-constituents': 'off',
         '@typescript-eslint/restrict-plus-operands': 'off',

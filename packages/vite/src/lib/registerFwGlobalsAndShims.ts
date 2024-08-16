@@ -26,9 +26,7 @@ function registerFwGlobals() {
       rwConfig.web.apiGraphQLUrl ?? rwConfig.web.apiUrl + '/graphql',
     RWJS_API_URL: rwConfig.web.apiUrl,
     __REDWOOD__APP_TITLE: rwConfig.web.title || path.basename(rwPaths.base),
-    RWJS_EXP_STREAMING_SSR:
-      rwConfig.experimental.streamingSsr &&
-      rwConfig.experimental.streamingSsr.enabled,
+    RWJS_EXP_STREAMING_SSR: rwConfig.experimental.streamingSsr?.enabled,
     RWJS_EXP_RSC: rwConfig.experimental?.rsc?.enabled,
     RWJS_EXP_SSR_GRAPHQL_ENDPOINT: (() => {
       const apiPath =

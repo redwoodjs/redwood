@@ -167,7 +167,7 @@ export const useRedwoodRealtime = (options: RedwoodRealtimeOptions): Plugin => {
    */
   const wasLiveQueryAdded = Symbol.for('useRedwoodRealtime.wasLiveQueryAdded')
 
-  if (options.liveQueries && options.liveQueries.store) {
+  if (options.liveQueries?.store) {
     if (options.liveQueries.store === 'in-memory') {
       liveQueriesEnabled = true
 
