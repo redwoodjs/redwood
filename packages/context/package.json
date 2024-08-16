@@ -7,7 +7,21 @@
     "directory": "packages/context"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
+  },
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
@@ -15,12 +29,17 @@
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-context.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/framework-tools": "workspace:*",
+    "concurrently": "8.2.2",
+    "publint": "0.2.10",
     "tsx": "4.17.0",
     "typescript": "5.5.4"
   },
