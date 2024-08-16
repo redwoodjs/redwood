@@ -1,4 +1,4 @@
-import { getAsyncStoreInstance } from './store'
+import { getAsyncStoreInstance } from './store.js'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GlobalContext extends Record<string, unknown> {}
