@@ -12,6 +12,6 @@ test('Fragments', async ({ page }) => {
   const vegetableCard = page.locator('div', { has: lettuceChild })
   await expect(vegetableCard.getByText('Vegetable Name: Lettuce')).toBeVisible()
   await expect(
-    vegetableCard.getByText('Stall Name: Salad Veggies')
+    vegetableCard.getByText('Stall Name: Salad Veggies'),
   ).toBeVisible()
 })

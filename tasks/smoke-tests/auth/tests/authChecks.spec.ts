@@ -21,7 +21,7 @@ test('useAuth hook, auth redirects checks', async ({ page }) => {
 
   // To check redirects to the login page
   await expect(page).toHaveURL(
-    `http://localhost:8910/login?redirectTo=/profile`
+    `http://localhost:8910/login?redirectTo=/profile`,
   )
 
   await loginAsTestUser({ page, ...testUser })
@@ -30,19 +30,19 @@ test('useAuth hook, auth redirects checks', async ({ page }) => {
 
   const usernameRow = await page.waitForSelector('*css=tr >> text=EMAIL')
   await expect(await usernameRow.innerHTML()).toBe(
-    '<td>EMAIL</td><td>testuser@bazinga.com</td>'
+    '<td>EMAIL</td><td>testuser@bazinga.com</td>',
   )
 
   const isAuthenticatedRow = await page.waitForSelector(
-    '*css=tr >> text=isAuthenticated'
+    '*css=tr >> text=isAuthenticated',
   )
   await expect(await isAuthenticatedRow.innerHTML()).toBe(
-    '<td>isAuthenticated</td><td>true</td>'
+    '<td>isAuthenticated</td><td>true</td>',
   )
 
   const isAdminRow = await page.waitForSelector('*css=tr >> text=Is Admin')
   await expect(await isAdminRow.innerHTML()).toBe(
-    '<td>Is Admin</td><td>false</td>'
+    '<td>Is Admin</td><td>false</td>',
   )
 
   await page.goto('/')
@@ -63,7 +63,7 @@ test('requireAuth graphql checks', async ({ page }) => {
   await expect(
     page
       .locator('.rw-form-error-title')
-      .locator("text=You don't have permission to do that")
+      .locator("text=You don't have permission to do that"),
   ).toBeTruthy()
 
   await page.goto('/')

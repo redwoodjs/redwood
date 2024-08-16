@@ -80,7 +80,7 @@ async function parseArgs() {
         '  2. the `RWJS_CWD` env var',
         '',
         chalk.gray('  RWJS_CWD=/path/to/redwood/project yarn project:tarsync'),
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -111,7 +111,7 @@ async function getOptions() {
 
 const mockSpinner = {
   text: '',
-  succeed: () => { },
+  succeed: () => {},
 }
 
 function getProjectSpinner({ text }) {
@@ -140,19 +140,23 @@ async function moveTarballs(projectPath) {
     tarballs.map((tarball) =>
       fs.move(tarball, path.join(tarballDest, path.basename(tarball)), {
         overwrite: true,
-      })
-    )
+      }),
+    ),
   )
 }
 
 async function getReactResolutions() {
-  const packageConfig = await fs.readJson(path.join(FRAMEWORK_PATH, 'packages/web/package.json'))
+  const packageConfig = await fs.readJson(
+    path.join(FRAMEWORK_PATH, 'packages/web/package.json'),
+  )
 
   const react = packageConfig.peerDependencies.react
   const reactDom = packageConfig.peerDependencies['react-dom']
 
   if (!react || !reactDom) {
-    throw new Error("Couldn't find react or react-dom in @redwoodjs/web's peerDependencies")
+    throw new Error(
+      "Couldn't find react or react-dom in @redwoodjs/web's peerDependencies",
+    )
   }
 
   return {
@@ -172,8 +176,9 @@ async function updateResolutions(projectPath) {
       return {
         ...resolutions,
         // Turn a Redwood package name like `@redwoodjs/project-config` into `redwoodjs-project-config.tgz`.
-        [name]: `./${TARBALL_DEST_DIRNAME}/${name.replace('@', '').replaceAll('/', '-') + '.tgz'
-          }`,
+        [name]: `./${TARBALL_DEST_DIRNAME}/${
+          name.replace('@', '').replaceAll('/', '-') + '.tgz'
+        }`,
       }
     }, {})
 
@@ -187,12 +192,12 @@ async function updateResolutions(projectPath) {
       resolutions: {
         ...projectPackageJson.resolutions,
         ...resolutions,
-        ...(await getReactResolutions())
+        ...(await getReactResolutions()),
       },
     },
     {
       spaces: 2,
-    }
+    },
   )
 }
 
@@ -212,5 +217,4 @@ async function yarnInstall(projectPath) {
 
     spinner.succeed(`finished in ${(entry.duration / 1000).toFixed(2)} seconds`)
   })
-
 }

@@ -4,7 +4,7 @@ import { setContext } from '@redwoodjs/context'
 
 export const handler = async (
   event: APIGatewayProxyEvent,
-  _context: Context
+  _context: Context,
 ) => {
   const magicNumber = event.queryStringParameters?.magicNumber ?? 0
 
