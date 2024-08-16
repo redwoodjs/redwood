@@ -19,7 +19,7 @@ afterAll(() => {
 
 describe('SDL with no reserved names used', () => {
   describe('SDL is valid', () => {
-    test.only('with proper type definition names', () => {
+    test('with proper type definition names', () => {
       const document = gql`
         type Message {
           from: String
