@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/actions/set-up-job
         with:
           set-up-yarn-cache: false
-          yarn-install-directory: ./tasks/check
+          yarn-install-directory: .
           build: false
 
       - name: ✅ Check constraints, dependencies, and package.json's
