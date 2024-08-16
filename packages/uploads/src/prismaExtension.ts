@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
-import { ulid } from 'ulid'
 
 // @TODO(TS): UploadsConfig behaves differently here.. probably
 // the prisma-override not quite there yet?
@@ -20,6 +19,7 @@ type FilterOutDollarPrefixed<T> = T extends `$${string}`
 type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
 
 export type UploadConfigForModel = {
+  // @TODO(TS): I want the fields here to be the fields of the model
   fields: string[] | string
   savePath?: ((args: unknown) => string) | string
   fileName?: (args: unknown) => string
@@ -84,6 +84,16 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       : [modelConfig.fields]
 
     queryExtends[modelName] = {
+      async create({ query, args }) {
+        try {
+          const result = await query(args)
+          return result
+        } catch (e) {
+          // If the create fails, we need to delete the uploaded files
+          await removeUploadedFiles(uploadFields, args)
+          throw e
+        }
+      },
       async update({ query, model, args }) {
         await deleteUpload(
           {
@@ -97,25 +107,17 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           storageAdapter,
         )
 
-        const uploadArgs = await saveUploads(
-          uploadFields,
-          args,
-          modelConfig,
-          storageAdapter,
-        )
-
-        return query(uploadArgs)
+        // Same as create 👇
+        try {
+          const result = await query(args)
+          return result
+        } catch (e) {
+          // If the create fails, we need to delete the uploaded files
+          await removeUploadedFiles(uploadFields, args)
+          throw e
+        }
       },
-      async create({ query, args }) {
-        const uploadArgs = await saveUploads(
-          uploadFields,
-          args,
-          modelConfig,
-          storageAdapter,
-        )
 
-        return query(uploadArgs)
-      },
       async delete({ model, query, args }) {
         await deleteUpload(
           {
@@ -165,72 +167,16 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       result: resultExtends,
     })
   })
-}
 
-/**
- * Returns new args to use in create or update.
- *
- * Pass this to the query function!
- */
-async function saveUploads(
-  uploadFields: string[],
-  args: runtime.JsArgs & {
-    data?: {
-      [key: string]: runtime.JsInputValue | File
+  // @TODO(TS): According to TS, data could be a non-object...
+  // Setting args to JsArgs causes errors. This could be a legit issue
+  async function removeUploadedFiles(uploadFields: string[], args: any) {
+    for await (const field of uploadFields) {
+      const uploadLocation = args.data?.[field] as string
+      if (uploadLocation) {
+        console.log('Removing file >>>', uploadLocation)
+        await storageAdapter.remove(uploadLocation)
+      }
     }
-  },
-  modelConfig: UploadConfigForModel,
-  storageAdapter: StorageAdapter,
-) {
-  const fieldsToUpdate: {
-    [key: string]: string
-  } = {}
-
-  if (!args.data) {
-    throw new Error('No data in prisma query')
-  }
-
-  // For each upload property, we need to:z
-  // 1. save the file to the file system (path or name from config)
-  // 2. replace the value of the field
-  for await (const field of uploadFields) {
-    const uploadFile = args.data[field] as File
-    console.log(`👉 \n ~ uploadFile:`, uploadFile)
-
-    if (!uploadFile) {
-      continue
-    }
-
-    const fileName =
-      modelConfig.fileName && typeof modelConfig.fileName === 'function'
-        ? modelConfig.fileName(args)
-        : ulid()
-
-    const saveDir =
-      typeof modelConfig.savePath === 'function'
-        ? modelConfig.savePath(args)
-        : modelConfig.savePath || 'web/public/uploads'
-
-    const savedFile = await storageAdapter.save(uploadFile, {
-      fileName,
-      path: saveDir,
-    })
-
-    // @TODO should we return location or fileId?
-    fieldsToUpdate[field] = savedFile.location
-
-    // Call the onFileSaved callback
-    // Having it here means it'll always trigger whether create/update
-    if (modelConfig.onFileSaved) {
-      await modelConfig.onFileSaved(savedFile.location)
-    }
-  }
-
-  // Can't spread according to TS
-  const newData = Object.assign(args.data, fieldsToUpdate)
-
-  return {
-    ...args,
-    data: newData,
   }
 }

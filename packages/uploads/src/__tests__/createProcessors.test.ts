@@ -23,7 +23,7 @@ const uploadsConfig: UploadsConfig = {
 }
 
 describe('Create processors', () => {
-  const processors = createUploadProcessors(memStore, uploadsConfig)
+  const processors = createUploadProcessors(uploadsConfig, memStore)
 
   it('should create processors with CapitalCased model name', () => {
     expect(processors.processDumboUploads).toBeDefined()
@@ -42,8 +42,11 @@ describe('Create processors', () => {
 
     const result = await processors.processDumboUploads(data)
 
-    expect(result.firstUpload).toMatch(/\/memory_store_basedir\/.*\.txt/)
-    expect(result.secondUpload).toMatch(/\/memory_store_basedir\/.*\.txt/)
+    // Location strings in this format: {baseDir/{model}-{field}-{ulid}.{ext}
+    expect(result.firstUpload).toMatch(/\/memory_store_basedir\/dumbo-*.*\.txt/)
+    expect(result.secondUpload).toMatch(
+      /\/memory_store_basedir\/dumbo-*.*\.txt/,
+    )
 
     const firstContents = await memStore.read(result.firstUpload)
     expect(firstContents.toString()).toBe('Meaow')
@@ -60,7 +63,7 @@ describe('Create processors', () => {
     }
 
     const fileNameOverrideOnly = await processors.processDummyUploads(data, {
-      fileName: 'overridden.txt',
+      fileName: 'overridden',
     })
 
     const pathOverrideOnly = await processors.processDummyUploads(data, {
@@ -69,12 +72,12 @@ describe('Create processors', () => {
 
     const bothOverride = await processors.processDummyUploads(data, {
       path: '/bazinga',
-      fileName: 'overridden.png',
+      fileName: 'overridden',
     })
 
     expect(fileNameOverrideOnly.uploadField).toBe(
-      '/memory_store_basedir/overridden.txt',
-    ) // 👈 overrode the extension too
+      '/memory_store_basedir/overridden.png',
+    )
 
     expect(pathOverrideOnly.uploadField).toMatch(/\/bazinga\/.*\.png/)
     // Overriding path ignores the baseDir

@@ -1,5 +1,7 @@
-import type { UploadsConfig } from "./prismaExtension.js"
-import type { SaveOptionsOverride, StorageAdapter } from "./StorageAdapter.js"
+import { ulid } from 'ulid'
+
+import type { UploadsConfig } from './prismaExtension.js'
+import type { SaveOptionsOverride, StorageAdapter } from './StorageAdapter.js'
 
 // Assumes you pass in the graphql type
 type MakeFilesString<T> = {
@@ -12,12 +14,11 @@ export const createFileListProcessor = (storage: StorageAdapter) => {
       files.map(async (file) => {
         const { location } = await storage.save(file, pathOverrideOnly)
         return location
-      })
+      }),
     )
 
     return locations
   }
-
 }
 
 /*
@@ -25,15 +26,17 @@ This creates a processor for each model in the uploads config (i.e. tied to a mo
 The processor will only handle single file uploads, not file lists.
 */
 export const createUploadProcessors = (
+  uploadConfig: UploadsConfig,
   storage: StorageAdapter,
-  uploadConfig: UploadsConfig
 ) => {
   type modelNamesInUploadConfig = keyof typeof uploadConfig
 
   type uploadProcessorNames =
     `process${Capitalize<modelNamesInUploadConfig>}Uploads`
+
   type Processors = {
     [K in uploadProcessorNames]: <T extends Record<string, any>>(
+      // @TODO(TS): T should be the type of the model
       data: T,
       overrideSaveOptions?: SaveOptionsOverride,
     ) => Promise<MakeFilesString<T>>
@@ -57,12 +60,12 @@ export const createUploadProcessors = (
       const updatedFields = {} as Record<string, string>
       for await (const field of currentModelUploadFields) {
         if (data[field]) {
-          // @TODO deal with file lists
           const file = data[field] as File
 
-          // @TODO: should we automatically create a directory for each model?
-          // you can always override it in the saveOpts
-          const { location } = await storage.save(file, overrideSaveOptions)
+          const saveOptions = overrideSaveOptions || {
+            fileName: `${model}-${field}-${ulid()}`,
+          }
+          const { location } = await storage.save(file, saveOptions)
 
           updatedFields[field] = location
         }
