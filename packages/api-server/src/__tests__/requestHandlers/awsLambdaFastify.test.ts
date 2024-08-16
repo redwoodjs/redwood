@@ -35,9 +35,11 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     vi.spyOn(mockedReply, 'status')
 
     const handler: Handler = async () => {
-      return {
-        body: { foo: 'bar' },
-      }
+      return new Promise((resolve) => {
+        resolve({
+          body: { foo: 'bar' },
+        })
+      })
     }
 
     await requestHandler(request, mockedReply, handler)
@@ -51,10 +53,12 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     vi.spyOn(mockedReply, 'status')
 
     const handler: Handler = async () => {
-      return {
-        body: 'this_is_a_test_of_base64Encoding',
-        isBase64Encoded: true,
-      }
+      return new Promise((resolve) => {
+        resolve({
+          body: 'this_is_a_test_of_base64Encoding',
+          isBase64Encoded: true,
+        })
+      })
     }
 
     await requestHandler(request, mockedReply, handler)
@@ -81,7 +85,9 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
       vi.spyOn(mockedReply, 'status')
 
       const handler = async () => {
-        throw new Error('error')
+        return new Promise((_resolve, reject) => {
+          reject(new Error('error'))
+        })
       }
 
       await requestHandler(request, mockedReply, handler)
@@ -106,13 +112,15 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     vi.spyOn(mockedReply, 'header')
 
     const handler: Handler = async () => {
-      return {
-        body: { foo: 'bar' },
-        headers: {
-          'content-type': 'application/json',
-          authorization: 'Bearer token 123',
-        },
-      }
+      return new Promise((resolve) => {
+        resolve({
+          body: { foo: 'bar' },
+          headers: {
+            'content-type': 'application/json',
+            authorization: 'Bearer token 123',
+          },
+        })
+      })
     }
 
     await requestHandler(headersRequest, mockedReply, handler)
@@ -144,13 +152,15 @@ describe('Tests AWS Lambda to Fastify request transformation and handling', () =
     vi.spyOn(mockedReply, 'header')
 
     const handler: Handler = async () => {
-      return {
-        body: {},
-        headers: {},
-        multiValueHeaders: {
-          'content-type': ['application/json', 'text/html'],
-        },
-      }
+      return new Promise((resolve) => {
+        resolve({
+          body: {},
+          headers: {},
+          multiValueHeaders: {
+            'content-type': ['application/json', 'text/html'],
+          },
+        })
+      })
     }
 
     await requestHandler(headersRequest, mockedReply, handler)

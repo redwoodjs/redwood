@@ -290,7 +290,7 @@ describe('rscRoutesAutoLoader', () => {
     `)
   })
 
-  it('should throw for duplicate page import names', async () => {
+  it('should throw for duplicate page import names', () => {
     vi.mocked(processPagesDir).mockReturnValue(pagesWithDuplicate)
 
     const getOutput = async () => {

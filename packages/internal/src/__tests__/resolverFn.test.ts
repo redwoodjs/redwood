@@ -72,7 +72,7 @@ describe('ResovlerFn types', () => {
     `)
   })
 
-  it('ResolverFn uses non-optional function args in strict mode', async () => {
+  it('ResolverFn uses non-optional function args in strict mode', () => {
     // Prertend project is strict mode
     mockedTSConfigs = {
       api: {

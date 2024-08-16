@@ -22,7 +22,7 @@ class FakeClassMw implements MiddlewareClass {
     this.value = value
   }
 
-  async invoke(_req: MiddlewareRequest, res: MiddlewareResponse) {
+  invoke(_req: MiddlewareRequest, res: MiddlewareResponse) {
     res.body = 'MW initialized with ' + this.value
     res.headers.set('class-mw-value', this.value.toString())
     return res

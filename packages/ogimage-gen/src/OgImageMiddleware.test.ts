@@ -139,7 +139,7 @@ describe('OgImageMiddleware', () => {
     expect(result).toEqual(passthroughRes)
   })
 
-  test('getOgComponentPath should return the correct OG image file path', async () => {
+  test('getOgComponentPath should return the correct OG image file path', () => {
     const commonRouteInfo = {
       name: 'contact',
       bundle: 'assets/ContactPage-DjZx8IRT.js',
