@@ -36,22 +36,13 @@ import { REDWOOD_FRAMEWORK_PATH } from '../actionsLib.mjs'
  * @param {ExecInProject} execInProject
  * @returns {Promise<void>}
  */
-export async function main(
-  rscProjectPath,
-  core,
-  exec,
-  execInProject
-) {
+export async function main(rscProjectPath, core, exec, execInProject) {
   core.setOutput('rsc-project-path', rscProjectPath)
 
   console.log('rwPath', REDWOOD_FRAMEWORK_PATH)
   console.log('rscProjectPath', rscProjectPath)
 
-  await setUpRscProject(
-    rscProjectPath,
-    exec,
-    execInProject,
-  )
+  await setUpRscProject(rscProjectPath, exec, execInProject)
 }
 
 /**
@@ -60,14 +51,10 @@ export async function main(
  * @param {ExecInProject} execInProject
  * @returns {Promise<void>}
  */
-async function setUpRscProject(
-  rscProjectPath,
-  exec,
-  execInProject,
-) {
+async function setUpRscProject(rscProjectPath, exec, execInProject) {
   const rwBinPath = path.join(
     REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/index.js'
+    'packages/cli/dist/index.js',
   )
 
   console.log(`Creating project at ${rscProjectPath}`)
