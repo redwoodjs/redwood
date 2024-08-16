@@ -16,7 +16,17 @@
       },
       "default": {
         "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.cjs"
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./dist/store": {
+      "import": {
+        "types": "./dist/store.d.ts",
+        "default": "./dist/store.js"
+      },
+      "default": {
+        "types": "./dist/cjs/store.d.ts",
+        "default": "./dist/cjs/store.js"
       }
     }
   },

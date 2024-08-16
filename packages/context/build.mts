@@ -15,9 +15,6 @@ await build({
   buildOptions: {
     ...defaultBuildOptions,
     outdir: 'dist/cjs',
-    outExtension: {
-      '.js': '.cjs',
-    },
   },
 })
 
