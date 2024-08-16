@@ -11,7 +11,7 @@ async function run() {
 
   if (!version) {
     console.error(
-      'You have to provide a version.\nUsage ./update-package-versions <version>'
+      'You have to provide a version.\nUsage ./update-package-versions <version>',
     )
     process.exitCode = 1
     return
@@ -40,7 +40,7 @@ async function run() {
   console.log('Updating CRWA template...')
   const tsTemplatePath = path.join(
     cwd,
-    'packages/create-redwood-app/templates/ts'
+    'packages/create-redwood-app/templates/ts',
   )
   updateRWJSPkgsVersion(tsTemplatePath, version)
   updateRWJSPkgsVersion(path.join(tsTemplatePath, 'api'), version)
@@ -49,7 +49,7 @@ async function run() {
 
   const jsTemplatePath = path.join(
     cwd,
-    'packages/create-redwood-app/templates/js'
+    'packages/create-redwood-app/templates/js',
   )
   updateRWJSPkgsVersion(jsTemplatePath, version)
   updateRWJSPkgsVersion(path.join(jsTemplatePath, 'api'), version)

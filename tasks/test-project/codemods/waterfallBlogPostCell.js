@@ -40,7 +40,7 @@ export default (file, api) => {
 
   const componentImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('AuthorCell'))],
-    j.stringLiteral('src/components/AuthorCell')
+    j.stringLiteral('src/components/AuthorCell'),
   )
 
   root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)
@@ -56,7 +56,7 @@ export default (file, api) => {
       const { node } = nodePath
       node.init.quasi = j.templateLiteral(
         [j.templateElement({ raw: query, cooked: query }, true)],
-        []
+        [],
       )
       return node
     })

@@ -84,12 +84,12 @@ export default (file, api) => {
       j.importSpecifier(j.identifier('NavLink'), j.identifier('NavLink')),
       j.importSpecifier(j.identifier('routes'), j.identifier('routes')),
     ],
-    j.stringLiteral('@redwoodjs/router')
+    j.stringLiteral('@redwoodjs/router'),
   )
 
   const authImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useAuth'), j.identifier('useAuth'))],
-    j.stringLiteral('src/auth')
+    j.stringLiteral('src/auth'),
   )
 
   root.find(j.VariableDeclaration).insertBefore(routerImport)

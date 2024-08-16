@@ -67,7 +67,7 @@ function batchLines(lines) {
       .split('\n')
 
     const name = line.match(
-      /^\.\/node_modules\/(?<package>.+)\/node_modules$/
+      /^\.\/node_modules\/(?<package>.+)\/node_modules$/,
     )[1]
     obj[name] = await batchDepLines(depLines)
 
@@ -82,7 +82,7 @@ function batchDepLines(depLines) {
     const version = (await $`cat ${depLine} | jq -r .version`).stdout.trim()
 
     const name = depLine.match(
-      /[^\.]+\/node_modules\/(?<package>.+)\/package.json$/
+      /[^\.]+\/node_modules\/(?<package>.+)\/package.json$/,
     )[1]
     obj[name] = version
 
