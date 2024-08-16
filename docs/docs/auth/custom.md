@@ -71,7 +71,7 @@ We'll take all the work you have to do reading docs for granted here and cut to 
 import { NhostClient } from '@nhost/nhost-js'
 
 const client = new NhostClient({
-  backendUrl: '...'
+  backendUrl: '...',
 })
 ```
 
@@ -105,7 +105,7 @@ import { NhostClient } from '@nhost/nhost-js'
 // ...
 
 const client = new NhostClient({
-  backendUrl: process.env.NHOST_BACKEND_URL
+  backendUrl: process.env.NHOST_BACKEND_URL,
 })
 ```
 
@@ -283,10 +283,16 @@ const HomePage = () => {
       {/* MetaTags, h1, paragraphs, etc. */}
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
-      <button onClick={() => signUp({
-        // email: 'your.email@email.com',
-        // password: 'super secret password',
-      })}>sign up</button>
+      <button
+        onClick={() =>
+          signUp({
+            // email: 'your.email@email.com',
+            // password: 'super secret password',
+          })
+        }
+      >
+        sign up
+      </button>
     </>
   )
 }

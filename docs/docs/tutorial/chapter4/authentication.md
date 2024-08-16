@@ -85,8 +85,8 @@ Having the admin at a different path is great, but nothing is stopping someone f
 
 Redwood includes two authentication paths out of the box:
 
-* Self-hosted, where user credentials are stored in your own database
-* Third-party hosted, where user credentials are stored with the third party
+- Self-hosted, where user credentials are stored in your own database
+- Third-party hosted, where user credentials are stored with the third party
 
 In both cases you end up with an authenticated user that you can access in both the web and api sides of your app.
 
@@ -99,19 +99,19 @@ Redwood includes [integrations](../../authentication.md) for several of the most
 - [Supabase](https://supabase.io/docs/guides/auth)
 - [SuperTokens](https://supertokens.com)
 
-As for our blog, we're going to use self-hosted authentication (named *dbAuth* in Redwood) since it's the simplest to get started with and doesn't involve any third party signups.
+As for our blog, we're going to use self-hosted authentication (named _dbAuth_ in Redwood) since it's the simplest to get started with and doesn't involve any third party signups.
 
 :::info Authentication vs. Authorization
 
 There are two terms which contain a lot of letters, starting with an "A" and ending in "ation" (which means you could rhyme them if you wanted to) that become involved in most discussions about login:
 
-* Authentication
-* Authorization
+- Authentication
+- Authorization
 
 Here is how Redwood uses these terms:
 
-* **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
-* **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
+- **Authentication** deals with determining whether someone is who they say they are, generally by "logging in" with an email and password, or a third party provider like Auth0.
+- **Authorization** is whether a user (who has usually already been authenticated) is allowed to do something they want to do. This generally involves some combination of roles and permission checking before allowing access to a URL or feature of your site.
 
 This section of the tutorial focuses on **Authentication** only. See [chapter 7 of the tutorial](../chapter7/rbac.md) to learn about Authorization in Redwood.
 
@@ -176,10 +176,10 @@ model User {
 
 This gives us a user with a name and email, as well as four fields that dbAuth will control:
 
-* **hashedPassword**: stores the result of combining the user's password with a `salt` and then [hashed](https://searchsqlserver.techtarget.com/definition/hashing)
-* **salt**: a unique string that combines with the hashedPassword to prevent [rainbow table attacks](https://dev.to/salothom/rainbow-tables-why-to-add-salt-45l9)
-* **resetToken**: if the user forgets their password, dbAuth inserts a token in here that must be present when the user returns to reset their password
-* **resetTokenExpiresAt**: a timestamp after which the `resetToken` will be considered expired and no longer valid (the user will need to fill out the forgot password form again)
+- **hashedPassword**: stores the result of combining the user's password with a `salt` and then [hashed](https://searchsqlserver.techtarget.com/definition/hashing)
+- **salt**: a unique string that combines with the hashedPassword to prevent [rainbow table attacks](https://dev.to/salothom/rainbow-tables-why-to-add-salt-45l9)
+- **resetToken**: if the user forgets their password, dbAuth inserts a token in here that must be present when the user returns to reset their password
+- **resetTokenExpiresAt**: a timestamp after which the `resetToken` will be considered expired and no longer valid (the user will need to fill out the forgot password form again)
 
 Let's create the user model by migrating the database, naming it something like "create user":
 
@@ -286,7 +286,7 @@ Try going back to [http://localhost:8910/admin/posts](http://localhost:8910/admi
 
 Well, we couldn't get to the admin pages, but we also can't see our blog posts any more. Do you know why we're seeing the same message here that we saw in the posts admin page?
 
-It's because the `posts` query in `posts.sdl.{js,ts}` is used by both the homepage *and* the posts admin page. Since it has the `@requireAuth` directive, it's locked down and can only be accessed when logged in. But we *do* want people that aren't logged in to be able to view the posts on the homepage!
+It's because the `posts` query in `posts.sdl.{js,ts}` is used by both the homepage _and_ the posts admin page. Since it has the `@requireAuth` directive, it's locked down and can only be accessed when logged in. But we _do_ want people that aren't logged in to be able to view the posts on the homepage!
 
 Now that our admin pages are behind a `<PrivateSet>` route, what if we set the `posts` query to be `@skipAuth` instead? Let's try:
 
@@ -454,7 +454,7 @@ Cross your fingers and reload!
 
 ![image](https://user-images.githubusercontent.com/300/146463959-c59c8721-484f-45de-a663-e6ab3b2591dc.png)
 
-We're back in business! Once you add authentication into your app you'll probably run into several situations like this where you need to go back and forth, re-allowing access to some pages or queries that inadvertently got locked down by default. Remember, Redwood is secure by default—we'd rather you accidentally expose too *little* of your app than too *much*!
+We're back in business! Once you add authentication into your app you'll probably run into several situations like this where you need to go back and forth, re-allowing access to some pages or queries that inadvertently got locked down by default. Remember, Redwood is secure by default—we'd rather you accidentally expose too _little_ of your app than too _much_!
 
 Now that our pages are behind login, let's actually create a login page so that we can see them again.
 
@@ -462,7 +462,7 @@ Now that our pages are behind login, let's actually create a login page so that 
 
 Ahh, good eye. While posts don't currently expose any particularly secret information, what if we eventually add a field like `publishStatus` where you could mark a post as `draft` so that it doesn't show on the homepage. But, if you knew enough about GraphQL, you could easily request all posts in the database and be able to read all the drafts!
 
-It would be more future-proof to create a *new* endpoint for public display of posts, something like `publicPosts` and `publicPost` that will have built-in logic to only ever return a minimal amount of data and leave the default `posts` and `post` queries returning all the data for a post, something that only the admin will have access to. (Or do the opposite: keep `posts` and `post` as public and create new `adminPosts` and `adminPost` endpoints that can contain sensitive information.)
+It would be more future-proof to create a _new_ endpoint for public display of posts, something like `publicPosts` and `publicPost` that will have built-in logic to only ever return a minimal amount of data and leave the default `posts` and `post` queries returning all the data for a post, something that only the admin will have access to. (Or do the opposite: keep `posts` and `post` as public and create new `adminPosts` and `adminPost` endpoints that can contain sensitive information.)
 
 :::
 
@@ -473,9 +473,10 @@ Yet another generator is here for you, this time one that will create pages for 
 ```bash
 yarn rw g dbAuth
 ```
+
 :::warning
 
-In the dbAuth setup steps you will see the option for "Querying WebAuthn addition..." For now, either press enter to keep the default as 'false' or type 'no'. WebAuthn works, and is great, but we do not want to add it as part of the tutorial.  
+In the dbAuth setup steps you will see the option for "Querying WebAuthn addition..." For now, either press enter to keep the default as 'false' or type 'no'. WebAuthn works, and is great, but we do not want to add it as part of the tutorial.
 
 :::
 
@@ -594,9 +595,9 @@ export default BlogLayout
 
 As you can probably tell by the names:
 
-* **isAuthenticated**: a boolean as to whether or not a user is logged in
-* **currentUser**: any details the app has on that user (more on this in a moment)
-* **logOut**: removes the user's session and logs them out
+- **isAuthenticated**: a boolean as to whether or not a user is logged in
+- **currentUser**: any details the app has on that user (more on this in a moment)
+- **logOut**: removes the user's session and logs them out
 
 At the top right of the page, let's show the email address of the user (if they're logged in) as well as a link to log out. If they're not logged in, let's show a link to do just that:
 
@@ -780,6 +781,7 @@ export const requireAuth = ({ roles } = {}) => {
   }
 }
 ```
+
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
@@ -845,6 +847,7 @@ export const requireAuth = ({ roles }: { roles?: AllowedRoles } = {}) => {
   }
 }
 ```
+
 </TabItem>
 </Tabs>
 
@@ -858,7 +861,7 @@ export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
     // highlight-next-line
-    select: { id: true, email: true},
+    select: { id: true, email: true },
   })
 }
 ```
@@ -871,7 +874,7 @@ export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
     // highlight-next-line
-    select: { id: true, email: true},
+    select: { id: true, email: true },
   })
 }
 ```
@@ -899,6 +902,6 @@ Head over to the Redwood docs to read more about [self-hosted](../../auth/dbauth
 
 ## One More Thing
 
-Remember the GraphQL Playground exercise at the end of [Creating a Contact](../chapter3/saving-data.md#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a *new* contact should still work just fine (because we're using `@skipAuth` on that mutation).
+Remember the GraphQL Playground exercise at the end of [Creating a Contact](../chapter3/saving-data.md#creating-a-contact)? Try to run that again now that authentication is in place and you should get that error we've been talking about because of the `@requireAuth` directive! But, creating a _new_ contact should still work just fine (because we're using `@skipAuth` on that mutation).
 
 However, simulating a logged-in user through the GraphQL Playground is no picnic. But, we're working on improving the experience!

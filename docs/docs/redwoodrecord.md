@@ -25,11 +25,11 @@ Before you can use RedwoodRecord you need to create classes for each database ta
                     └────────────┘      └────────────┘
 ```
 
-In database-speak we say that these tables have *one-to-many* relationships between them when moving from left to right in the diagram above: one User can have many Posts associated to it, and a Post can have many Comments. The "one" is denoted with a `•` on the arrow above and a `<` denotes the "many."
+In database-speak we say that these tables have _one-to-many_ relationships between them when moving from left to right in the diagram above: one User can have many Posts associated to it, and a Post can have many Comments. The "one" is denoted with a `•` on the arrow above and a `<` denotes the "many."
 
-You can leave it at that, as saying one-to-many explains both sides of the relationship, but it's sometimes convenient to refer to the relation in the "opposite" direction. Reading the diagram from right to left we could say that a comment *belongs to* a post (it has a foreign key `postId` that points to Post via `Comment.postId` → `Post.id`) and a Post belongs to a User (`Post.userId` → `User.id`)
+You can leave it at that, as saying one-to-many explains both sides of the relationship, but it's sometimes convenient to refer to the relation in the "opposite" direction. Reading the diagram from right to left we could say that a comment _belongs to_ a post (it has a foreign key `postId` that points to Post via `Comment.postId` → `Post.id`) and a Post belongs to a User (`Post.userId` → `User.id`)
 
-There are also *many-to-many* relationships, such as a Product and Category—a Product can have many different Categories, and a Category will have many different Products connected to it:
+There are also _many-to-many_ relationships, such as a Product and Category—a Product can have many different Categories, and a Category will have many different Products connected to it:
 
 ```
 ┌───────────┐       ┌────────────┐
@@ -41,7 +41,7 @@ There are also *many-to-many* relationships, such as a Product and Category—a 
 └───────────┘       └────────────┘
 ```
 
-These tables don't have any foreign keys (`productId` or `categoryId`) so how do they keep track of each other? Generally you'll create a *join table* between the two that references each other's foreign key:
+These tables don't have any foreign keys (`productId` or `categoryId`) so how do they keep track of each other? Generally you'll create a _join table_ between the two that references each other's foreign key:
 
 ```
 ┌───────────┐      ┌───────────────────┐       ┌────────────┐
@@ -58,18 +58,21 @@ Now we're back to one-to-many relationships. In Prisma this join table is create
 If you want to create the join table yourself and potentially store additional data there (like a timestamp of when the product was categorized) then this is simply a one-to-many relationship on both sides: a Product has many ProductCategories and a Category has many ProductCategories. Prisma refers to this as an [explicitly many-to-many](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#explicit-many-to-many-relations) relationship.
 
 > TODO: We'll be adding logic soon that will let you get to the categories from a product record (and vice versa) in explicit many-to-manys without having to manually go through ProductCategory. From this:
+>
 > ```
 > const product = await Product.find(1)
 > const productCategories = await product.productCategories.all()
 > const categories = productCategories.map(async (pc) => await pc.categories.all()).flat()
 > ```
+>
 > To this:
+>
 > ```
 > const product = await Product.find(1)
 > const categories = await product.categories.all()
 > ```
 
-The only other terminology to keep in mind are the terms *model* and *record*. A *model* is the name for the class that represents one database table. The example above has three models: User, Post and Comment. Prisma also calls each database-table declaration in their `schema.prisma` declaration file a "model", but when we refer to a "model" in this doc it will mean the class that extends `RedwoodRecord`. A *record* is a single instance of our model that now represents a single row of data in the database.
+The only other terminology to keep in mind are the terms _model_ and _record_. A _model_ is the name for the class that represents one database table. The example above has three models: User, Post and Comment. Prisma also calls each database-table declaration in their `schema.prisma` declaration file a "model", but when we refer to a "model" in this doc it will mean the class that extends `RedwoodRecord`. A _record_ is a single instance of our model that now represents a single row of data in the database.
 
 So: I use the User model to find a given user in the database, and, assuming they are found, I now have a single user record (an instance of the User model).
 
@@ -86,7 +89,7 @@ First you'll need to create a model to represent the database table you want to 
 ```jsx title="api/src/models/User.js"
 import { RedwoodRecord } from '@redwoodjs/record'
 
-export default class User extends RedwoodRecord { }
+export default class User extends RedwoodRecord {}
 ```
 
 Now we need to parse the Prisma schema, store it as a cached JSON file, and create an `index.js` file with a couple of config settings:
@@ -142,8 +145,8 @@ When a record cannot be saved to the database, either because of database errors
 ```jsx
 const user = User.build({ name: 'Rob Cameron' })
 await user.save() // => false
-user.hasError()   // => true
-user.errors       // => { base: [], email: ['must not be null'] }
+user.hasError() // => true
+user.errors // => { base: [], email: ['must not be null'] }
 user.errors.email // => ['must not be null']
 ```
 
@@ -155,7 +158,7 @@ You can preemptively check for errors before attempting to modify the record, bu
 
 ```jsx
 const user = User.build({ name: 'Rob Cameron' })
-user.isValid    // => false
+user.isValid // => false
 user.errors.email // => ['must be formatted like an email address']
 ```
 
@@ -167,7 +170,7 @@ Records can be checked for valid data before saving to the database by using the
 export default class User extends RedwoodRecord {
   static validates = {
     email: { presence: true, email: true },
-    username: { length: { min: 2, max: 50 } }
+    username: { length: { min: 2, max: 50 } },
   }
 }
 
@@ -250,7 +253,10 @@ The first argument is the data that would be given to Prisma's `create()` functi
 
 ```jsx
 await User.create({ name: 'Tom Preston-Werner' })
-await User.create({ firstName: 'Rob', email: 'rob@redwoodjs.com' }, { select: ['email'] })
+await User.create(
+  { firstName: 'Rob', email: 'rob@redwoodjs.com' },
+  { select: ['email'] }
+)
 ```
 
 #### save()
@@ -313,7 +319,7 @@ await user.destroy({ throw: true })
 
 ### Relationships
 
-As shown in [Background and Terminology](#background-and-terminology) above, RedwoodRecord provides a way to get data from related models. For example, to get the posts belonging to a user via what we call a *relation proxy*:
+As shown in [Background and Terminology](#background-and-terminology) above, RedwoodRecord provides a way to get data from related models. For example, to get the posts belonging to a user via what we call a _relation proxy_:
 
 ```jsx
 const user = await User.find(123)
@@ -330,7 +336,7 @@ post.userId // => 123
 
 #### One-to-many
 
-The *many* records are accessible through the relation proxy:
+The _many_ records are accessible through the relation proxy:
 
 ```jsx
 const user = await User.find(123)
@@ -339,7 +345,6 @@ const comments = await post.comments.all()
 ```
 
 You can also create a record:
-
 
 ```jsx
 const user = await User.find(123)
@@ -376,7 +381,9 @@ Product -> one-to-many -> ProductCategories -> belongs-to -> Category
 ```jsx
 const product = await Product.find(123)
 const productCategories = await product.productCategories.all()
-const categories = await Promise.all(productCategories.map(async (pc) => await pc.category))
+const categories = await Promise.all(
+  productCategories.map(async (pc) => await pc.category)
+)
 ```
 
 If you wanted to create a new record this way, you would need to create the join table record after having already created/retrieved the records on either side of the relation:
@@ -410,7 +417,7 @@ Or make sure that a user has transferred ownership of some data before closing t
 ```jsx
 export default class User extends RedwoodRecord {
   static beforeDestroy = async (user) => {
-    if (await user.teams.count() !== 0) {
+    if ((await user.teams.count()) !== 0) {
       throw new Error('Please transfer ownership of your teams first')
     }
   }

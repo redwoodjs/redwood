@@ -12,26 +12,24 @@ So it's worth repeating that you don't have to do any of this, because we config
 Regardless, there'll probably come a time when you have to configure Vite. All the Vite configuration for your web side sits in `web/vite.config.{js,ts}`, and can be configured the same as any other Vite project. Let's take a peek!
 
 ```js
-import dns from 'dns';
-import { defineConfig } from 'vite';
-import redwood from '@redwoodjs/vite';
+import dns from 'dns'
+import { defineConfig } from 'vite'
+import redwood from '@redwoodjs/vite'
 
-dns.setDefaultResultOrder('verbatim');
+dns.setDefaultResultOrder('verbatim')
 
 const viteConfig = {
   plugins: [
     // 👇 this is the RedwoodJS Vite plugin, that houses all the default configuration
-    redwood()
+    redwood(),
     // ... add any custom Vite plugins you would like here
   ],
   // You can override built in configuration like server, optimizeDeps, etc. here
-};
-export default defineConfig(viteConfig);
-
+}
+export default defineConfig(viteConfig)
 ```
 
 Checkout Vite's docs on [configuration](https://vitejs.dev/config/)
-
 
 ### Sass and Tailwind CSS
 

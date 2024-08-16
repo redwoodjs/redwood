@@ -10,6 +10,7 @@
 If you've already installed Node.js on your machine, uninstall Node.js before installing nvm. This will prevent any conflicts between the Node.js and nvm.
 
 ### If you're on a Mac
+
 You can uninstall by running the following command in your terminal:
 
 ```bash
@@ -17,6 +18,7 @@ brew uninstall --force node
 ```
 
 Once that's finished, run the following command to remove unused folders and dependencies:
+
 ```bash
 brew cleanup
 ```
@@ -28,9 +30,10 @@ brew cleanup
 - In the search box under **Apps & Features** section, search for **Nodejs**
 - Click on **Nodejs** and click on **Uninstall**
 - We recommend restarting your machine, even if you're not prompted to do so
-:::
+  :::
 
 ### If you're on a Mac
+
 You can install `nvm` using [Homebrew](https://brew.sh/):
 
 ```bash
@@ -38,6 +41,7 @@ brew install nvm
 ```
 
 ### If you're on Windows
+
 Reference the [nvm-windows](https://github.com/coreybutler/nvm-windows) repo.
 
 - Download the [latest installer](https://github.com/coreybutler/nvm-windows/releases) (nvm-setup.zip)
@@ -116,4 +120,3 @@ nvm alias default <<version number>>
 ```bash
 nvm uninstall <<version number>>
 ```
-

@@ -77,7 +77,7 @@ From now on we'll use the shorter `rw` alias instead of the full `redwood` argum
 
 You'll be prompted to give this migration a name. Something that describes what it does is ideal, so how about "create post" (without the quotes, of course). This is for your own benefit—neither Redwood nor Prisma care about the migration's name, it's just a reference when looking through old migrations and trying to find when you created or modified something specific.
 
-After the command completes you'll see a new subdirectory created under `api/db/migrations` that has a timestamp and the name you gave the migration. It will contain a single file named `migration.sql` that contains the SQL necessary to bring the database structure up-to-date with whatever `schema.prisma` looked like at the time the migration was created. So, you always have a single `schema.prisma` file that describes what the database structure should look like right *now* and the migrations trace the history of the changes that took place to get to the current state. It's kind of like version control for your database structure, which can be pretty handy.
+After the command completes you'll see a new subdirectory created under `api/db/migrations` that has a timestamp and the name you gave the migration. It will contain a single file named `migration.sql` that contains the SQL necessary to bring the database structure up-to-date with whatever `schema.prisma` looked like at the time the migration was created. So, you always have a single `schema.prisma` file that describes what the database structure should look like right _now_ and the migrations trace the history of the changes that took place to get to the current state. It's kind of like version control for your database structure, which can be pretty handy.
 
 In addition to creating the migration file, the above command will also execute the SQL against the database, which "applies" the migration. The final result is a new database table called `Post` with the fields we defined above.
 
@@ -103,7 +103,7 @@ Click on "Post" and you'll see an empty database table. Let's have our app start
 
 We haven't decided on the look and feel of our site yet, but wouldn't it be amazing if we could play around with posts without having to build a bunch of pages that we'll probably throw away once the design team gets back to us? As you can imagine, we wouldn't have thrown around this scenario unless Redwood had a solution!
 
-Let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on posts so we can not only verify that we've got the right fields in the database, but that it will let us get some sample posts in there so we can start laying out our pages and see real content. Redwood has a *generator* for just this occasion:
+Let's generate everything we need to perform all the CRUD (Create, Retrieve, Update, Delete) actions on posts so we can not only verify that we've got the right fields in the database, but that it will let us get some sample posts in there so we can start laying out our pages and see real content. Redwood has a _generator_ for just this occasion:
 
 ```bash
 yarn rw g scaffold post

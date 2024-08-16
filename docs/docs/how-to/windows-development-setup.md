@@ -27,7 +27,8 @@ Redwood uses the LTS version of Node. To install, run the following commands ins
 
 ```bash
 $ nvm install lts --latest-npm
-// installs latest LTS and npm; e.g. 16.13.1 for the following examples
+// installs latest LTS and npm
+e.g. 16.13.1 for the following examples
 $ nvm use 16.13.1
 ```
 
@@ -36,10 +37,10 @@ $ nvm use 16.13.1
 Now you have both Node and npm installed! Redwood also uses yarn, which you can now install using npm:
 
 ```bash
- npm install -g yarn
+npm install -g yarn
 ```
 
-*Example of Node.js, npm, and Yarn installation steps*
+_Example of Node.js, npm, and Yarn installation steps_
 
 ![4-install_yarn.png](https://user-images.githubusercontent.com/18013532/146685297-b361ebea-7229-4d8c-bc90-472773d06816.png)
 

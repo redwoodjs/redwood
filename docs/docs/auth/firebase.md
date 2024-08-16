@@ -59,10 +59,16 @@ const HomePage = () => {
       {/* MetaTags, h1, paragraphs, etc. */}
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
-      <button onClick={() => signUp({
-        // email: 'your.email@email.com',
-        // password: 'super secret password',
-      })}>sign up</button>
+      <button
+        onClick={() =>
+          signUp({
+            // email: 'your.email@email.com',
+            // password: 'super secret password',
+          })
+        }
+      >
+        sign up
+      </button>
     </>
   )
 }
