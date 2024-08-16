@@ -66,7 +66,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       const eventHeaders = new Headers(request.headers as HeadersInit)
       const requestCorsHeaders = new Headers(corsHeaders)
 
-      if (cors && cors.origin) {
+      if (cors?.origin) {
         const requestOrigin = eventHeaders.get('origin')
         if (typeof cors.origin === 'string') {
           requestCorsHeaders.set('access-control-allow-origin', cors.origin)

@@ -95,7 +95,7 @@ describe('groupByRoutePatterns', () => {
       exampleRequest,
       new MiddlewareResponse(),
     )
-    expect((firstOutput || {}).body).toBe('MW initialized with 1')
+    expect(firstOutput?.body).toBe('MW initialized with 1')
 
     const secondOutput = await output['/second-path'][0]?.(
       exampleRequest,

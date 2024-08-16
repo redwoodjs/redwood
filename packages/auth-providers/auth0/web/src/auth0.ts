@@ -35,10 +35,9 @@ function createAuthImplementation(auth0Client: Auth0Client) {
         global?.location?.search?.includes('state=')
       ) {
         const { appState } = await auth0Client.handleRedirectCallback()
-        const url =
-          appState && appState.targetUrl
-            ? appState.targetUrl
-            : window.location.pathname
+        const url = appState?.targetUrl
+          ? appState.targetUrl
+          : window.location.pathname
         global?.location?.assign(url)
       }
     },

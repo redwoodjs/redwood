@@ -131,7 +131,7 @@ export const getAuthenticationContext = async ({
   // There can be cases, such as with Supabase where its auth client sets the cookie and Bearer token
   // but the project is not using cookie auth with an auth-provider cookie set
   // So, cookie/ssr auth needs both the token and the auth-provider in cookies
-  if (cookieHeader && cookieHeader.type) {
+  if (cookieHeader?.type) {
     token = cookieHeader.rawCookie
     type = cookieHeader.type
     schema = 'cookie'

@@ -665,10 +665,7 @@ export class DbAuthHandler<
       dbUser,
     )
 
-    if (
-      handlerUser == null ||
-      handlerUser[this.options.authFields.id] == null
-    ) {
+    if (handlerUser?.[this.options.authFields.id] == null) {
       throw new DbAuthError.NoUserIdError()
     }
 
@@ -813,7 +810,7 @@ export class DbAuthHandler<
       throw new DbAuthError.WebAuthnError('Missing Id in request')
     }
 
-    if (!webAuthnOptions || !webAuthnOptions.enabled) {
+    if (!webAuthnOptions?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -899,7 +896,7 @@ export class DbAuthHandler<
       '@simplewebauthn/server'
     )
 
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!this.options.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -1013,7 +1010,7 @@ export class DbAuthHandler<
       '@simplewebauthn/server'
     )
 
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!this.options.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
