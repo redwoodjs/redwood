@@ -1,3 +1,5 @@
+import { describe, beforeAll, afterAll, it, expect } from 'vitest'
+
 import { configureGraphiQLPlayground } from '../graphiql'
 
 describe('configureGraphiQLPlayground', () => {

@@ -1,15 +1,19 @@
 import { useEngine } from '@envelop/core'
 import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
+import { vi, describe, beforeEach, it, expect } from 'vitest'
+
+import type apiPackage from '@redwoodjs/api'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
 const authDecoder = async (token: string) => ({ token })
 
-jest.mock('@redwoodjs/api', () => {
+vi.mock('@redwoodjs/api', async (importOriginal) => {
+  const originalApi = await importOriginal<typeof apiPackage>()
   return {
-    ...jest.requireActual('@redwoodjs/api'),
+    ...originalApi,
     getAuthenticationContext: jest.fn().mockResolvedValue([
       { sub: '1', email: 'ba@zin.ga' },
       {

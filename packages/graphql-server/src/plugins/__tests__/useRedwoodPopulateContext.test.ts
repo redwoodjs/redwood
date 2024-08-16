@@ -1,6 +1,7 @@
 import { useEngine } from '@envelop/core'
 import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
+import { describe, expect, it, beforeEach, vi } from 'vitest'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
@@ -21,7 +22,7 @@ describe('Populates context', () => {
   })
 
   it('Should extend context based on output of function', async () => {
-    const populateContextSpy = jest.fn(() => {
+    const populateContextSpy = vi.fn(() => {
       return {
         bazinga: true,
       }
@@ -44,7 +45,7 @@ describe('Populates context', () => {
   })
 
   it('Should extend context with an object, if one is provided', async () => {
-    const populateContextSpy = jest.fn(() => {
+    const populateContextSpy = vi.fn(() => {
       return {
         bazinga: true,
       }

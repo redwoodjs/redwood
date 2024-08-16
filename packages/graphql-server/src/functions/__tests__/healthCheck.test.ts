@@ -1,11 +1,12 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { vi, describe, it, expect } from 'vitest'
 
 import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
 
-jest.mock('../../makeMergedSchema', () => {
-  const { makeExecutableSchema } = require('@graphql-tools/schema')
+vi.mock('../../makeMergedSchema', async () => {
+  const { makeExecutableSchema } = await import('@graphql-tools/schema')
 
   // Return executable schema
   return {
@@ -32,7 +33,7 @@ jest.mock('../../makeMergedSchema', () => {
   }
 })
 
-jest.mock('../../directives/makeDirectives', () => {
+vi.mock('../../directives/makeDirectives', () => {
   return {
     makeDirectivesForPlugin: () => [],
   }
