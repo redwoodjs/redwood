@@ -62,7 +62,7 @@ jobs:
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:
-          title: "🦜 Canary Packages"
+          title: '🦜 Canary Packages'
           status: ${{ needs.publish-canary.result }}
           version: ${{ needs.publish-canary.outputs.version }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

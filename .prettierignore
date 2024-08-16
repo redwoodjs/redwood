@@ -23,5 +23,4 @@ packages/create-redwood-rsc-app
 
 # TODO(jgmw): Re-enable these in managable chunks
 tasks
-.github
 packages/create-redwood-app/tests/e2e_prompts*
