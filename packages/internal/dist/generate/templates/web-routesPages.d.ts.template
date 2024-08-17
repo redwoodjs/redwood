@@ -1,0 +1,13 @@
+${pages
+  .map(({ importName, importPath }) => {
+    return `import ${importName}Type from '${importPath}'`
+  })
+  .join('\n')}
+
+declare global {
+${pages.map(({ importName }) => {
+  return `  const ${importName}: typeof ${importName}Type`
+}).join('\n')}
+}
+
+//# sourceMappingURL=web-routesPages.d.ts.map

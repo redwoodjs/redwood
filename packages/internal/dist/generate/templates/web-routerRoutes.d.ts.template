@@ -1,0 +1,20 @@
+import { RouteParams, QueryParams } from '@redwoodjs/router'
+
+declare module '@redwoodjs/router' {
+  interface AvailableRoutes {
+    // Only "<Route />" components with a "name" and "path" prop will be populated here.
+${routes.map(
+  ({ props: { name, path }}) => {
+    return `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"`
+  }
+).join('\n')}
+  }
+
+  export function useRoutePaths(): Record<keyof AvailableRoutes, string>
+  export function useRoutePath(routeName: keyof AvailableRoutes): string
+
+  /** Gets the name of the current route (as defined in your Routes file) */
+  export function useRouteName(): keyof AvailableRoutes | undefined
+}
+
+//# sourceMappingURL=web-routerRoutes.d.ts.map

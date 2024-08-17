@@ -1,0 +1,1 @@
+{"version":3,"file":"possibleTypes.d.ts","sourceRoot":"","sources":["../../src/generate/possibleTypes.ts"],"names":[],"mappings":"AAYA,KAAK,mBAAmB,GAAG;IACzB,kBAAkB,EAAE,MAAM,EAAE,CAAA;IAC5B,MAAM,EAAE;QAAE,OAAO,EAAE,MAAM,CAAC;QAAC,KAAK,EAAE,OAAO,CAAA;KAAE,EAAE,CAAA;CAC9C,CAAA;AAED;;;;;;;;;;;;;;;;;;;;;;;;;IAyBI;AACJ,eAAO,MAAM,qBAAqB,QAAa,OAAO,CAAC,mBAAmB,CAyEzE,CAAA"}

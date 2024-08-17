@@ -1,0 +1,13 @@
+import * as Cell from './${name}'
+import type { CellProps } from '@redwoodjs/web'
+import type { ${queryResultType}, ${queryVariablesType} } from 'types/graphql'
+
+type SuccessType = typeof Cell.Success
+
+export * from './${name}'
+
+type CellInputs = CellProps<SuccessType, ${queryResultType}, typeof Cell, ${queryVariablesType}>
+
+export default function (props: CellInputs): ReturnType<SuccessType>
+
+//# sourceMappingURL=index.d.ts.map

@@ -1,0 +1,130 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Generates GraphQL schema 1`] = `
+"directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+directive @skipAuth on FIELD_DEFINITION
+
+scalar BigInt
+
+scalar Byte
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+type Mutation {
+  createTodo(body: String!): Todo
+  renameTodo(body: String!, id: Int!): Todo
+  updateTodoStatus(id: Int!, status: String!): Todo
+}
+
+"""About the Redwood queries."""
+type Query {
+  currentUser: JSON
+
+  """Fetches the Redwood root schema."""
+  redwood: Redwood
+  todos: [Todo]
+  todosCount: Int!
+}
+
+"""
+The RedwoodJS Root Schema
+
+Defines details about RedwoodJS such as the current user and version information.
+"""
+type Redwood {
+  """The current user."""
+  currentUser: JSON
+
+  """The version of Prisma."""
+  prismaVersion: String
+
+  """The version of Redwood."""
+  version: String
+}
+
+scalar Time
+
+type Todo {
+  body: String!
+  id: Int!
+  status: String!
+}"
+`;
+
+exports[`Includes live query directive if serverful and realtime  1`] = `
+""""
+Instruction for establishing a live connection that is updated once the underlying data changes.
+"""
+directive @live(
+  """Whether the query should be live or not."""
+  if: Boolean = true
+
+  """
+  Propose a desired throttle interval ot the server in order to receive updates to at most once per "throttle" milliseconds. The server must not accept this value.
+  """
+  throttle: Int
+) on QUERY
+
+directive @requireAuth(roles: [String]) on FIELD_DEFINITION
+
+directive @skipAuth on FIELD_DEFINITION
+
+scalar BigInt
+
+scalar Byte
+
+scalar Date
+
+scalar DateTime
+
+scalar JSON
+
+scalar JSONObject
+
+type Mutation {
+  createTodo(body: String!): Todo
+  renameTodo(body: String!, id: Int!): Todo
+  updateTodoStatus(id: Int!, status: String!): Todo
+}
+
+"""About the Redwood queries."""
+type Query {
+  currentUser: JSON
+
+  """Fetches the Redwood root schema."""
+  redwood: Redwood
+  todos: [Todo]
+  todosCount: Int!
+}
+
+"""
+The RedwoodJS Root Schema
+
+Defines details about RedwoodJS such as the current user and version information.
+"""
+type Redwood {
+  """The current user."""
+  currentUser: JSON
+
+  """The version of Prisma."""
+  prismaVersion: String
+
+  """The version of Redwood."""
+  version: String
+}
+
+scalar Time
+
+type Todo {
+  body: String!
+  id: Int!
+  status: String!
+}"
+`;

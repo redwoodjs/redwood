@@ -1,0 +1,28 @@
+import '@redwoodjs/api'
+import '@redwoodjs/auth'
+
+import { getCurrentUser } from '../../../api/src/lib/auth'
+
+export type InferredCurrentUser = Awaited<ReturnType<typeof getCurrentUser>>
+
+type UndefinedRoles = {
+  /**
+   * ⚠️ Heads-Up: This is undefined unless roles key is returned from {@link getCurrentUser()}
+   *
+   * You may take a look at https://redwoodjs.com/docs/tutorial/chapter7/rbac for a tutorial on
+   * how to add fully-fledged RBAC (Role-based Access Control) to your database model.
+   */
+  roles?: unknown | unknown[]
+}
+
+type Overwrite<T, U> = Omit<T, keyof U> & U
+
+declare module '@redwoodjs/context' {
+  interface GlobalContext {
+    currentUser?: Overwrite<UndefinedRoles, InferredCurrentUser>
+  }
+}
+
+declare module '@redwoodjs/auth' {
+  interface CurrentUser extends InferredCurrentUser {}
+}

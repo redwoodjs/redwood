@@ -1,0 +1,7 @@
+// Import other mocking function globals
+import '@redwoodjs/testing'
+import { InferredCurrentUser } from './all-currentUser'
+
+declare global {
+  const mockCurrentUser: (currentUser: InferredCurrentUser) => void
+}
