@@ -8012,7 +8012,6 @@ __metadata:
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
     "@babel/cli": "npm:7.24.8"
-    "@babel/runtime-corejs3": "npm:7.25.0"
     "@redwoodjs/cli": "workspace:*"
     "@redwoodjs/eslint-config": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -8022,7 +8021,6 @@ __metadata:
     "@redwoodjs/web-server": "workspace:*"
     "@types/lodash": "npm:4.17.7"
     babel-loader: "npm:^9.1.3"
-    core-js: "npm:3.38.0"
     graphql-tag: "npm:2.12.6"
     lodash: "npm:4.17.21"
     mini-css-extract-plugin: "npm:2.9.0"
