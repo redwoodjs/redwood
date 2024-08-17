@@ -8,6 +8,48 @@
   },
   "license": "MIT",
   "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./dist/dev": {
+      "types": "./dist/dev.d.ts",
+      "default": "./dist/dev.js"
+    },
+    "./dist/files": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/files.js": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/gql": {
+      "types": "./dist/gql.d.ts",
+      "default": "./dist/gql.js"
+    },
+    "./dist/routes.js": {
+      "types": "./dist/routes.d.ts",
+      "default": "./dist/routes.js"
+    },
+    "./dist/ts2js": {
+      "types": "./dist/ts2js.d.ts",
+      "default": "./dist/ts2js.js"
+    },
+    "./dist/validateSchema": {
+      "types": "./dist/validateSchema.d.ts",
+      "default": "./dist/validateSchema.js"
+    },
+    "./dist/build/api": {
+      "types": "./dist/build/api.d.ts",
+      "default": "./dist/build/api.js"
+    },
+    "./dist/generate/generate": {
+      "types": "./dist/generate/generate.d.ts",
+      "default": "./dist/generate/generate.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
