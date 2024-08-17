@@ -115,6 +115,9 @@ export async function copyAssets({
     try {
       await fs.mkdirp(path.dirname(distPathname))
       await fs.copyFile(pathname, distPathname)
+      console.log(
+        `Copied asset into dist: ${path.relative(distDirPath, distPathname)}`,
+      )
     } catch (error) {
       console.error(
         `Couldn't copy ${pathname} to ${distPathname}. ` +
