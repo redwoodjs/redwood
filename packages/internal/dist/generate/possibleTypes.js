@@ -1,63 +1,59 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard").default;
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var possibleTypes_exports = {};
+__export(possibleTypes_exports, {
+  generatePossibleTypes: () => generatePossibleTypes
 });
-exports.generatePossibleTypes = void 0;
-require("core-js/modules/es.array.push.js");
-var _fs = _interopRequireDefault(require("fs"));
-var _path = _interopRequireDefault(require("path"));
-var fragmentMatcher = _interopRequireWildcard(require("@graphql-codegen/fragment-matcher"));
-var _graphqlFileLoader = require("@graphql-tools/graphql-file-loader");
-var _load = require("@graphql-tools/load");
-var _prettier = require("prettier");
-var _projectConfig = require("@redwoodjs/project-config");
-var _graphqlCodeGen = require("./graphqlCodeGen");
-/**
- * Generate possible types from fragments and union types
- *
- * In order to use fragments with unions and interfaces in Apollo Client,
- * you need to tell the client how to discriminate between the different
- * types that implement or belong to a supertype.
- *
- * You pass a possibleTypes option to the InMemoryCache constructor
- * to specify these relationships in your schema.
- *
- * This object maps the name of an interface or union type (the supertype)
- * to the types that implement or belong to it (the subtypes).
- *
- * For example:
- *
- * ```ts
- * possibleTypes: {
- *  Character: ["Jedi", "Droid"],
- *  Test: ["PassingTest", "FailingTest", "SkippedTest"],
- *  Snake: ["Viper", "Python"],
- *  Groceries: ['Fruit', 'Vegetable'],
- * },
- * ```
- *
- * @see https://www.apollographql.com/docs/react/data/fragments/#using-fragments-with-unions-and-interfaces
- **/
+module.exports = __toCommonJS(possibleTypes_exports);
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+var fragmentMatcher = __toESM(require("@graphql-codegen/fragment-matcher"));
+var import_graphql_file_loader = require("@graphql-tools/graphql-file-loader");
+var import_load = require("@graphql-tools/load");
+var import_prettier = require("prettier");
+var import_project_config = require("@redwoodjs/project-config");
+var import_graphqlCodeGen = require("./graphqlCodeGen");
 const generatePossibleTypes = async () => {
-  const config = (0, _projectConfig.getConfig)();
+  const config = (0, import_project_config.getConfig)();
   if (!config.graphql.fragments) {
     return {
       possibleTypesFiles: [],
       errors: []
     };
   }
-  const filename = _path.default.join((0, _projectConfig.getPaths)().web.graphql, 'possibleTypes.ts');
-  const options = (0, _graphqlCodeGen.getLoadDocumentsOptions)(filename);
-  const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}';
+  const filename = import_path.default.join((0, import_project_config.getPaths)().web.graphql, "possibleTypes.ts");
+  const options = (0, import_graphqlCodeGen.getLoadDocumentsOptions)(filename);
+  const documentsGlob = "./web/src/**/!(*.d).{ts,tsx,js,jsx}";
   let documents;
   try {
-    documents = await (0, _load.loadDocuments)([documentsGlob], options);
+    documents = await (0, import_load.loadDocuments)([documentsGlob], options);
   } catch {
-    // No GraphQL documents present, no need to try to generate possibleTypes
     return {
       possibleTypesFiles: [],
       errors: []
@@ -70,32 +66,32 @@ const generatePossibleTypes = async () => {
     const info = {
       outputFile: filename
     };
-    const schema = (0, _load.loadSchemaSync)((0, _projectConfig.getPaths)().generated.schema, {
-      loaders: [new _graphqlFileLoader.GraphQLFileLoader()],
+    const schema = (0, import_load.loadSchemaSync)((0, import_project_config.getPaths)().generated.schema, {
+      loaders: [new import_graphql_file_loader.GraphQLFileLoader()],
       sort: true
     });
-    const possibleTypes = await fragmentMatcher.plugin(schema, documents, pluginConfig, info);
+    const possibleTypes = await fragmentMatcher.plugin(
+      schema,
+      documents,
+      pluginConfig,
+      info
+    );
     files.push(filename);
-    const output = await (0, _prettier.format)(possibleTypes.toString(), {
-      trailingComma: 'es5',
+    const output = await (0, import_prettier.format)(possibleTypes.toString(), {
+      trailingComma: "es5",
       bracketSpacing: true,
       tabWidth: 2,
       semi: false,
       singleQuote: true,
-      arrowParens: 'always',
-      parser: 'typescript'
+      arrowParens: "always",
+      parser: "typescript"
     });
-    _fs.default.mkdirSync(_path.default.dirname(filename), {
-      recursive: true
-    });
-    _fs.default.writeFileSync(filename, output);
-    return {
-      possibleTypesFiles: [filename],
-      errors
-    };
+    import_fs.default.mkdirSync(import_path.default.dirname(filename), { recursive: true });
+    import_fs.default.writeFileSync(filename, output);
+    return { possibleTypesFiles: [filename], errors };
   } catch (e) {
     errors.push({
-      message: 'Error: Could not generate GraphQL possible types (web)',
+      message: "Error: Could not generate GraphQL possible types (web)",
       error: e
     });
     return {
@@ -104,4 +100,7 @@ const generatePossibleTypes = async () => {
     };
   }
 };
-exports.generatePossibleTypes = generatePossibleTypes;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  generatePossibleTypes
+});

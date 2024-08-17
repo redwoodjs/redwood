@@ -1,74 +1,94 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var api_exports = {};
+__export(api_exports, {
+  buildApi: () => buildApi,
+  cleanApiBuild: () => cleanApiBuild,
+  rebuildApi: () => rebuildApi,
+  transpileApi: () => transpileApi
 });
-exports.transpileApi = exports.rebuildApi = exports.cleanApiBuild = exports.buildApi = void 0;
-var _esbuild = require("esbuild");
-var _fsExtra = _interopRequireDefault(require("fs-extra"));
-var _babelConfig = require("@redwoodjs/babel-config");
-var _projectConfig = require("@redwoodjs/project-config");
-var _files = require("../files");
+module.exports = __toCommonJS(api_exports);
+var import_esbuild = require("esbuild");
+var import_fs_extra = __toESM(require("fs-extra"));
+var import_babel_config = require("@redwoodjs/babel-config");
+var import_project_config = require("@redwoodjs/project-config");
+var import_files = require("../files");
 let BUILD_CTX = null;
 const buildApi = async () => {
-  // Reset the build context for rebuilding
-  // No need to wait for promise to resolve
   BUILD_CTX?.dispose();
   BUILD_CTX = null;
-  return transpileApi((0, _files.findApiFiles)());
+  return transpileApi((0, import_files.findApiFiles)());
 };
-exports.buildApi = buildApi;
 const rebuildApi = async () => {
-  const apiFiles = (0, _files.findApiFiles)();
+  const apiFiles = (0, import_files.findApiFiles)();
   if (!BUILD_CTX) {
-    BUILD_CTX = await (0, _esbuild.context)(getEsbuildOptions(apiFiles));
+    BUILD_CTX = await (0, import_esbuild.context)(getEsbuildOptions(apiFiles));
   }
   return BUILD_CTX.rebuild();
 };
-exports.rebuildApi = rebuildApi;
 const cleanApiBuild = async () => {
-  const rwjsPaths = (0, _projectConfig.getPaths)();
-  return _fsExtra.default.remove(rwjsPaths.api.dist);
+  const rwjsPaths = (0, import_project_config.getPaths)();
+  return import_fs_extra.default.remove(rwjsPaths.api.dist);
 };
-exports.cleanApiBuild = cleanApiBuild;
 const runRwBabelTransformsPlugin = {
-  name: 'rw-esbuild-babel-transform',
-  setup(build) {
-    const rwjsConfig = (0, _projectConfig.getConfig)();
-    build.onLoad({
-      filter: /\.(js|ts|tsx|jsx)$/
-    }, async args => {
-      // @TODO Implement LRU cache? Unsure how much of a performance benefit its going to be
-      // Generate a CRC of file contents, then save it to LRU cache with a limit
-      // without LRU cache, the memory usage can become unbound
-      const transformedCode = await (0, _babelConfig.transformWithBabel)(args.path, (0, _babelConfig.getApiSideBabelPlugins)({
-        openTelemetry: rwjsConfig.experimental.opentelemetry.enabled && rwjsConfig.experimental.opentelemetry.wrapApi,
-        projectIsEsm: (0, _projectConfig.projectSideIsEsm)('api')
-      }));
+  name: "rw-esbuild-babel-transform",
+  setup(build2) {
+    const rwjsConfig = (0, import_project_config.getConfig)();
+    build2.onLoad({ filter: /\.(js|ts|tsx|jsx)$/ }, async (args) => {
+      const transformedCode = await (0, import_babel_config.transformWithBabel)(
+        args.path,
+        (0, import_babel_config.getApiSideBabelPlugins)({
+          openTelemetry: rwjsConfig.experimental.opentelemetry.enabled && rwjsConfig.experimental.opentelemetry.wrapApi,
+          projectIsEsm: (0, import_project_config.projectSideIsEsm)("api")
+        })
+      );
       if (transformedCode?.code) {
         return {
           contents: transformedCode.code,
-          loader: 'js'
+          loader: "js"
         };
       }
       throw new Error(`Could not transform file: ${args.path}`);
     });
   }
 };
-const transpileApi = async files => {
-  return (0, _esbuild.build)(getEsbuildOptions(files));
+const transpileApi = async (files) => {
+  return (0, import_esbuild.build)(getEsbuildOptions(files));
 };
-exports.transpileApi = transpileApi;
 function getEsbuildOptions(files) {
-  const rwjsPaths = (0, _projectConfig.getPaths)();
-  const format = (0, _projectConfig.projectSideIsEsm)('api') ? 'esm' : 'cjs';
+  const rwjsPaths = (0, import_project_config.getPaths)();
+  const format = (0, import_project_config.projectSideIsEsm)("api") ? "esm" : "cjs";
   return {
     absWorkingDir: rwjsPaths.api.base,
     entryPoints: files,
-    platform: 'node',
-    target: 'node20',
+    platform: "node",
+    target: "node20",
     format,
     allowOverwrite: true,
     bundle: false,
@@ -80,3 +100,10 @@ function getEsbuildOptions(files) {
     sourcemap: true
   };
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  buildApi,
+  cleanApiBuild,
+  rebuildApi,
+  transpileApi
+});

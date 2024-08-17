@@ -1,46 +1,55 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var clientPreset_exports = {};
+__export(clientPreset_exports, {
+  generateClientPreset: () => generateClientPreset,
+  shouldGenerateTrustedDocuments: () => shouldGenerateTrustedDocuments
 });
-exports.shouldGenerateTrustedDocuments = exports.generateClientPreset = void 0;
-require("core-js/modules/es.array.push.js");
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _cli = require("@graphql-codegen/cli");
-var _clientPreset = require("@graphql-codegen/client-preset");
-var _projectConfig = require("@redwoodjs/project-config");
-var _trustedDocuments = require("./trustedDocuments");
+module.exports = __toCommonJS(clientPreset_exports);
+var import_cli = require("@graphql-codegen/cli");
+var import_client_preset = require("@graphql-codegen/client-preset");
+var import_project_config = require("@redwoodjs/project-config");
+var import_trustedDocuments = require("./trustedDocuments");
 const shouldGenerateTrustedDocuments = () => {
-  const config = (0, _projectConfig.getConfig)();
+  const config = (0, import_project_config.getConfig)();
   return config.graphql.trustedDocuments;
 };
-exports.shouldGenerateTrustedDocuments = shouldGenerateTrustedDocuments;
 const generateClientPreset = async () => {
   let generatedFiles = [];
   let clientPresetFiles = [];
   const errors = [];
   if (!shouldGenerateTrustedDocuments()) {
-    return {
-      clientPresetFiles,
-      trustedDocumentsStoreFile: [],
-      errors
-    };
+    return { clientPresetFiles, trustedDocumentsStoreFile: [], errors };
   }
-  const documentsGlob = `${(0, _projectConfig.getPaths)().web.src}/**/!(*.d).{ts,tsx,js,jsx}`;
+  const documentsGlob = `${(0, import_project_config.getPaths)().web.src}/**/!(*.d).{ts,tsx,js,jsx}`;
   const config = {
-    schema: (0, _projectConfig.getPaths)().generated.schema,
+    schema: (0, import_project_config.getPaths)().generated.schema,
     documents: documentsGlob,
     silent: true,
     // Plays nicely with cli task output
     generates: {
-      [`${(0, _projectConfig.getPaths)().web.src}/graphql/`]: {
-        preset: 'client',
+      [`${(0, import_project_config.getPaths)().web.src}/graphql/`]: {
+        preset: "client",
         presetConfig: {
           persistedDocuments: true
         },
-        documentTransforms: [_clientPreset.addTypenameSelectionDocumentTransform],
+        documentTransforms: [import_client_preset.addTypenameSelectionDocumentTransform],
         config: {
           // DO NOT USE documentMode: 'string',
         }
@@ -48,10 +57,10 @@ const generateClientPreset = async () => {
     }
   };
   try {
-    generatedFiles = await (0, _cli.generate)(config, true);
-    clientPresetFiles = (0, _map.default)(generatedFiles).call(generatedFiles, f => f.filename);
-    const trustedDocumentsStoreFile = await (0, _trustedDocuments.trustedDocumentsStore)(generatedFiles);
-    (0, _trustedDocuments.replaceGqlTagWithTrustedDocumentGraphql)(generatedFiles);
+    generatedFiles = await (0, import_cli.generate)(config, true);
+    clientPresetFiles = generatedFiles.map((f) => f.filename);
+    const trustedDocumentsStoreFile = await (0, import_trustedDocuments.trustedDocumentsStore)(generatedFiles);
+    (0, import_trustedDocuments.replaceGqlTagWithTrustedDocumentGraphql)(generatedFiles);
     return {
       clientPresetFiles,
       trustedDocumentsStoreFile,
@@ -59,7 +68,7 @@ const generateClientPreset = async () => {
     };
   } catch (e) {
     errors.push({
-      message: 'Error: Could not generate GraphQL client preset',
+      message: "Error: Could not generate GraphQL client preset",
       error: e
     });
     return {
@@ -69,4 +78,8 @@ const generateClientPreset = async () => {
     };
   }
 };
-exports.generateClientPreset = generateClientPreset;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  generateClientPreset,
+  shouldGenerateTrustedDocuments
+});

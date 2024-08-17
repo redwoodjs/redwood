@@ -1,31 +1,43 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var gql_exports = {};
+__export(gql_exports, {
+  listQueryTypeFieldsInProject: () => listQueryTypeFieldsInProject,
+  parseDocumentAST: () => parseDocumentAST,
+  parseGqlQueryToAst: () => parseGqlQueryToAst
 });
-exports.parseGqlQueryToAst = exports.parseDocumentAST = exports.listQueryTypeFieldsInProject = void 0;
-require("core-js/modules/es.array.push.js");
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/keys"));
-var _codeFileLoader = require("@graphql-tools/code-file-loader");
-var _load = require("@graphql-tools/load");
-var _graphql = require("graphql");
-var _graphqlServer = require("@redwoodjs/graphql-server");
-var _projectConfig = require("@redwoodjs/project-config");
-const parseGqlQueryToAst = gqlQuery => {
-  const ast = (0, _graphql.parse)(gqlQuery);
+module.exports = __toCommonJS(gql_exports);
+var import_code_file_loader = require("@graphql-tools/code-file-loader");
+var import_load = require("@graphql-tools/load");
+var import_graphql = require("graphql");
+var import_graphql_server = require("@redwoodjs/graphql-server");
+var import_project_config = require("@redwoodjs/project-config");
+const parseGqlQueryToAst = (gqlQuery) => {
+  const ast = (0, import_graphql.parse)(gqlQuery);
   return parseDocumentAST(ast);
 };
-exports.parseGqlQueryToAst = parseGqlQueryToAst;
-const parseDocumentAST = document => {
+const parseDocumentAST = (document) => {
   const operations = [];
-  (0, _graphql.visit)(document, {
+  (0, import_graphql.visit)(document, {
     OperationDefinition(node) {
-      var _context;
       const fields = [];
-      (0, _forEach.default)(_context = node.selectionSet.selections).call(_context, field => {
+      node.selectionSet.selections.forEach((field) => {
         fields.push(getFields(field));
       });
       operations.push({
@@ -37,25 +49,22 @@ const parseDocumentAST = document => {
   });
   return operations;
 };
-exports.parseDocumentAST = parseDocumentAST;
-const getFields = field => {
-  // base
+const getFields = (field) => {
   if (!field.selectionSet) {
     return field.name.value;
   } else {
     const obj = {
       [field.name.value]: []
     };
-    const lookAtFieldNode = node => {
-      node.selectionSet?.selections.forEach(subField => {
+    const lookAtFieldNode = (node) => {
+      node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
-          case _graphql.Kind.FIELD:
+          case import_graphql.Kind.FIELD:
             obj[field.name.value].push(getFields(subField));
             break;
-          case _graphql.Kind.FRAGMENT_SPREAD:
-            // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
+          case import_graphql.Kind.FRAGMENT_SPREAD:
             break;
-          case _graphql.Kind.INLINE_FRAGMENT:
+          case import_graphql.Kind.INLINE_FRAGMENT:
             lookAtFieldNode(subField);
         }
       });
@@ -67,28 +76,33 @@ const getFields = field => {
 const listQueryTypeFieldsInProject = async () => {
   try {
     const schemaPointerMap = {
-      [(0, _graphql.print)(_graphqlServer.rootSchema.schema)]: {},
-      'graphql/**/*.sdl.{js,ts}': {},
-      'directives/**/*.{js,ts}': {},
-      'subscriptions/**/*.{js,ts}': {}
+      [(0, import_graphql.print)(import_graphql_server.rootSchema.schema)]: {},
+      "graphql/**/*.sdl.{js,ts}": {},
+      "directives/**/*.{js,ts}": {},
+      "subscriptions/**/*.{js,ts}": {}
     };
-    const mergedSchema = await (0, _load.loadSchema)(schemaPointerMap, {
-      loaders: [new _codeFileLoader.CodeFileLoader({
-        noRequire: true,
-        pluckConfig: {
-          globalGqlIdentifierName: 'gql'
-        }
-      })],
-      cwd: (0, _projectConfig.getPaths)().api.src,
+    const mergedSchema = await (0, import_load.loadSchema)(schemaPointerMap, {
+      loaders: [
+        new import_code_file_loader.CodeFileLoader({
+          noRequire: true,
+          pluckConfig: {
+            globalGqlIdentifierName: "gql"
+          }
+        })
+      ],
+      cwd: (0, import_project_config.getPaths)().api.src,
       assumeValidSDL: true
     });
     const queryTypeFields = mergedSchema.getQueryType()?.getFields();
-
-    // Return empty array if no schema found
-    return (0, _keys.default)(queryTypeFields ?? {});
+    return Object.keys(queryTypeFields ?? {});
   } catch (e) {
     console.error(e);
     return [];
   }
 };
-exports.listQueryTypeFieldsInProject = listQueryTypeFieldsInProject;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  listQueryTypeFieldsInProject,
+  parseDocumentAST,
+  parseGqlQueryToAst
+});

@@ -1,50 +1,37 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-_Object$defineProperty(exports, "RwTypeScriptResolversVisitor", {
-  enumerable: true,
-  get: function () {
-    return _visitor.RwTypeScriptResolversVisitor;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var rw_typescript_resolvers_exports = {};
+__export(rw_typescript_resolvers_exports, {
+  RwTypeScriptResolversVisitor: () => import_visitor.RwTypeScriptResolversVisitor,
+  TypeScriptResolversPluginConfig: () => import_typescript_resolvers.TypeScriptResolversPluginConfig,
+  plugin: () => plugin
 });
-_Object$defineProperty(exports, "TypeScriptResolversPluginConfig", {
-  enumerable: true,
-  get: function () {
-    return _typescriptResolvers.TypeScriptResolversPluginConfig;
-  }
-});
-exports.plugin = void 0;
-var _indexOf = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/index-of"));
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _findIndex = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find-index"));
-var _slice = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/slice"));
-require("core-js/modules/es.array.push.js");
-var _pluginHelpers = require("@graphql-codegen/plugin-helpers");
-var _typescriptResolvers = require("@graphql-codegen/typescript-resolvers");
-var _visitor = require("./visitor");
+module.exports = __toCommonJS(rw_typescript_resolvers_exports);
+var import_plugin_helpers = require("@graphql-codegen/plugin-helpers");
+var import_typescript_resolvers = require("@graphql-codegen/typescript-resolvers");
+var import_visitor = require("./visitor");
 const plugin = (schema, _documents, config) => {
-  var _context, _context2;
-  // This is the key change compared to the standard typescript-resolver
-  // plugin implementation - we use our own Visitor here.
-  const visitor = new _visitor.RwTypeScriptResolversVisitor(config, schema);
-
-  // runs visitor
-  const visitorResult = (0, _pluginHelpers.oldVisit)((0, _pluginHelpers.getCachedDocumentNodeFromSchema)(schema), {
+  const visitor = new import_visitor.RwTypeScriptResolversVisitor(config, schema);
+  const visitorResult = (0, import_plugin_helpers.oldVisit)((0, import_plugin_helpers.getCachedDocumentNodeFromSchema)(schema), {
     leave: visitor
   });
-
-  // `content` here is the output of the original plugin, including the
-  // original visitor
-  const {
-    prepend,
-    content
-  } = (0, _typescriptResolvers.plugin)(schema, [], config);
-
-  // A few types needed for our own RW-specific solution
+  const { prepend, content } = (0, import_typescript_resolvers.plugin)(schema, [], config);
   prepend.push(`export type OptArgsResolverFn<TResult, TParent = {}, TContext = {}, TArgs = {}> = (
       args?: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
@@ -54,39 +41,27 @@ const plugin = (schema, _documents, config) => {
       args: TArgs,
       obj: { root: TParent; context: TContext; info: GraphQLResolveInfo }
     ) => TResult | Promise<TResult>`);
-
-  // `content` is constructed like this:
-  //   content: [
-  //     header,
-  //     resolversTypeMapping,
-  //     resolversParentTypeMapping,
-  //                                          <--- `visitorResultStart` below
-  //     ...visitorResult.definitions.filter(
-  //       (d: unknown) => typeof d === 'string'
-  //     ),
-  //                                          <--- `visitorResultEnd` below
-  //     getRootResolver(),
-  //     getAllDirectiveResolvers(),
-  //   ].join('\n'),
-  // We want to replace `visitorResult` with our own result.
-  // We assume that the original visitorResult begins with the same text as our
-  // `visitorResult`. We use this to find where we should start replacing content
-  // We then execute `getRootResolver()` to know what that looks like, and find
-  // the first line of that output. This is where we'll end our replacement.
-  // Then we just replace whatever is between those two things with our own
-  // result
-
-  const splitContent = content.split('\n');
-  const visitorResultStart = (0, _indexOf.default)(splitContent).call(splitContent, (0, _filter.default)(_context = visitorResult.definitions).call(_context, d => typeof d === 'string')[0].split('\n')[0]);
-  const splitRootResolver = visitor.getRootResolver().split('\n');
-  const visitorResultEnd = (0, _findIndex.default)(splitContent).call(splitContent, (line, index) => line === splitRootResolver[0] && splitContent[index + 1] === splitRootResolver[1]);
-
-  // Building up `content` with the original visitor content replaced by our
-  // visitor content
-  const newContent = [...(0, _slice.default)(splitContent).call(splitContent, 0, visitorResultStart), ...(0, _filter.default)(_context2 = visitorResult.definitions).call(_context2, d => typeof d === 'string'), ...(0, _slice.default)(splitContent).call(splitContent, visitorResultEnd)];
+  const splitContent = content.split("\n");
+  const visitorResultStart = splitContent.indexOf(
+    visitorResult.definitions.filter((d) => typeof d === "string")[0].split("\n")[0]
+  );
+  const splitRootResolver = visitor.getRootResolver().split("\n");
+  const visitorResultEnd = splitContent.findIndex(
+    (line, index) => line === splitRootResolver[0] && splitContent[index + 1] === splitRootResolver[1]
+  );
+  const newContent = [
+    ...splitContent.slice(0, visitorResultStart),
+    ...visitorResult.definitions.filter((d) => typeof d === "string"),
+    ...splitContent.slice(visitorResultEnd)
+  ];
   return {
     prepend,
-    content: newContent.join('\n')
+    content: newContent.join("\n")
   };
 };
-exports.plugin = plugin;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  RwTypeScriptResolversVisitor,
+  TypeScriptResolversPluginConfig,
+  plugin
+});

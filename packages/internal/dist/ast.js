@@ -1,57 +1,80 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var ast_exports = {};
+__export(ast_exports, {
+  fileToAst: () => fileToAst,
+  getCellGqlQuery: () => getCellGqlQuery,
+  getDefaultExportLocation: () => getDefaultExportLocation,
+  getGqlQueries: () => getGqlQueries,
+  getNamedExports: () => getNamedExports,
+  hasDefaultExport: () => hasDefaultExport
 });
-exports.hasDefaultExport = exports.getNamedExports = exports.getGqlQueries = exports.getDefaultExportLocation = exports.getCellGqlQuery = exports.fileToAst = void 0;
-require("core-js/modules/es.array.push.js");
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
-var _fs = _interopRequireDefault(require("fs"));
-var _path = _interopRequireDefault(require("path"));
-var _core = require("@babel/core");
-var _parser = require("@babel/parser");
-var _traverse = _interopRequireDefault(require("@babel/traverse"));
-var _chalk = _interopRequireDefault(require("chalk"));
-var _projectConfig = require("@redwoodjs/project-config");
-var _files = require("./files");
-const fileToAst = filePath => {
-  var _context;
-  const code = _fs.default.readFileSync(filePath, 'utf-8');
-
-  // use jsx plugin for web files, because in JS, the .jsx extension is not used
-  const isJsxFile = _path.default.extname(filePath).match(/[jt]sx$/) || (0, _files.isFileInsideFolder)(filePath, (0, _projectConfig.getPaths)().web.base);
-  const plugins = (0, _filter.default)(_context = ['typescript', 'nullishCoalescingOperator', 'objectRestSpread', isJsxFile && 'jsx']).call(_context, Boolean);
+module.exports = __toCommonJS(ast_exports);
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+var import_core = require("@babel/core");
+var import_parser = require("@babel/parser");
+var import_traverse = __toESM(require("@babel/traverse"));
+var import_chalk = __toESM(require("chalk"));
+var import_project_config = require("@redwoodjs/project-config");
+var import_files = require("./files");
+const fileToAst = (filePath) => {
+  const code = import_fs.default.readFileSync(filePath, "utf-8");
+  const isJsxFile = import_path.default.extname(filePath).match(/[jt]sx$/) || (0, import_files.isFileInsideFolder)(filePath, (0, import_project_config.getPaths)().web.base);
+  const plugins = [
+    "typescript",
+    "nullishCoalescingOperator",
+    "objectRestSpread",
+    isJsxFile && "jsx"
+  ].filter(Boolean);
   try {
-    return (0, _parser.parse)(code, {
-      sourceType: 'module',
+    return (0, import_parser.parse)(code, {
+      sourceType: "module",
       plugins
     });
   } catch (e) {
-    console.error(_chalk.default.red(`Error parsing: ${filePath}`));
+    console.error(import_chalk.default.red(`Error parsing: ${filePath}`));
     console.error(e);
-    throw new Error(e?.message); // we throw, so typescript doesn't complain about returning
+    throw new Error(e?.message);
   }
 };
-exports.fileToAst = fileToAst;
-/**
- * get all the named exports in a given piece of code.
- */
-const getNamedExports = ast => {
+const getNamedExports = (ast) => {
   const namedExports = [];
-  (0, _traverse.default)(ast, {
-    ExportNamedDeclaration(path) {
-      // Re-exports from other modules
-      // Eg: export { a, b } from './module'
-      const specifiers = path.node?.specifiers;
+  (0, import_traverse.default)(ast, {
+    ExportNamedDeclaration(path2) {
+      const specifiers = path2.node?.specifiers;
       if (specifiers.length) {
         for (const s of specifiers) {
           const id = s.exported;
           namedExports.push({
             name: id.name,
-            type: 're-export',
+            type: "re-export",
             location: {
               line: id.loc?.start.line ?? 1,
               column: id.loc?.start.column ?? 0
@@ -60,33 +83,33 @@ const getNamedExports = ast => {
         }
         return;
       }
-      const declaration = path.node.declaration;
+      const declaration = path2.node.declaration;
       if (!declaration) {
         return;
       }
-      if (declaration.type === 'VariableDeclaration') {
+      if (declaration.type === "VariableDeclaration") {
         const id = declaration.declarations[0].id;
         namedExports.push({
           name: id.name,
-          type: 'variable',
+          type: "variable",
           location: {
             line: id.loc?.start.line ?? 1,
             column: id.loc?.start.column ?? 0
           }
         });
-      } else if (declaration.type === 'FunctionDeclaration') {
+      } else if (declaration.type === "FunctionDeclaration") {
         namedExports.push({
           name: declaration?.id?.name,
-          type: 'function',
+          type: "function",
           location: {
             line: declaration?.id?.loc?.start.line ?? 1,
             column: declaration?.id?.loc?.start.column ?? 0
           }
         });
-      } else if (declaration.type === 'ClassDeclaration') {
+      } else if (declaration.type === "ClassDeclaration") {
         namedExports.push({
           name: declaration?.id?.name,
-          type: 'class',
+          type: "class",
           location: {
             line: declaration?.id?.loc?.start.line ?? 1,
             column: declaration?.id?.loc?.start.column ?? 0
@@ -97,34 +120,25 @@ const getNamedExports = ast => {
   });
   return namedExports;
 };
-
-/**
- * get all the gql queries from the supplied code
- */
-exports.getNamedExports = getNamedExports;
-const getGqlQueries = ast => {
+const getGqlQueries = (ast) => {
   const gqlQueries = [];
-  (0, _traverse.default)(ast, {
-    TaggedTemplateExpression(path) {
-      const gqlTag = path.node.tag;
-      if (gqlTag.type === 'Identifier' && gqlTag.name === 'gql') {
-        gqlQueries.push(path.node.quasi.quasis[0].value.raw);
+  (0, import_traverse.default)(ast, {
+    TaggedTemplateExpression(path2) {
+      const gqlTag = path2.node.tag;
+      if (gqlTag.type === "Identifier" && gqlTag.name === "gql") {
+        gqlQueries.push(path2.node.quasi.quasis[0].value.raw);
       }
     }
   });
   return gqlQueries;
 };
-exports.getGqlQueries = getGqlQueries;
-const getCellGqlQuery = ast => {
-  let cellQuery = undefined;
-  (0, _traverse.default)(ast, {
-    ExportNamedDeclaration({
-      node
-    }) {
-      if (node.exportKind === 'value' && _core.types.isVariableDeclaration(node.declaration)) {
-        var _context2;
-        const exportedQueryNode = (0, _find.default)(_context2 = node.declaration.declarations).call(_context2, d => {
-          return _core.types.isIdentifier(d.id) && d.id.name === 'QUERY' && _core.types.isTaggedTemplateExpression(d.init);
+const getCellGqlQuery = (ast) => {
+  let cellQuery = void 0;
+  (0, import_traverse.default)(ast, {
+    ExportNamedDeclaration({ node }) {
+      if (node.exportKind === "value" && import_core.types.isVariableDeclaration(node.declaration)) {
+        const exportedQueryNode = node.declaration.declarations.find((d) => {
+          return import_core.types.isIdentifier(d.id) && d.id.name === "QUERY" && import_core.types.isTaggedTemplateExpression(d.init);
         });
         if (exportedQueryNode) {
           const templateExpression = exportedQueryNode.init;
@@ -136,10 +150,9 @@ const getCellGqlQuery = ast => {
   });
   return cellQuery;
 };
-exports.getCellGqlQuery = getCellGqlQuery;
-const hasDefaultExport = ast => {
+const hasDefaultExport = (ast) => {
   let exported = false;
-  (0, _traverse.default)(ast, {
+  (0, import_traverse.default)(ast, {
     ExportDefaultDeclaration() {
       exported = true;
       return;
@@ -147,30 +160,21 @@ const hasDefaultExport = ast => {
   });
   return exported;
 };
-exports.hasDefaultExport = hasDefaultExport;
-const getDefaultExportLocation = ast => {
-  // Get the default export
+const getDefaultExportLocation = (ast) => {
   let defaultExport;
-  (0, _traverse.default)(ast, {
-    ExportDefaultDeclaration(path) {
-      defaultExport = path.node;
+  (0, import_traverse.default)(ast, {
+    ExportDefaultDeclaration(path2) {
+      defaultExport = path2.node;
     }
   });
   if (!defaultExport) {
     return null;
   }
-
-  // Handle the case were we're exporting a variable declared elsewhere
-  // as we will want to find the location of that declaration instead
-  if (_core.types.isIdentifier(defaultExport.declaration) && _core.types.isFile(ast)) {
-    var _context3;
-    // Directly search the program body for the declaration of the identifier
-    // to avoid picking up other identifiers with the same name in the file
+  if (import_core.types.isIdentifier(defaultExport.declaration) && import_core.types.isFile(ast)) {
     const exportedName = defaultExport.declaration.name;
-    const declaration = (0, _find.default)(_context3 = ast.program.body).call(_context3, node => {
-      var _context4;
-      return _core.types.isVariableDeclaration(node) && (0, _find.default)(_context4 = node.declarations).call(_context4, d => {
-        return _core.types.isVariableDeclarator(d) && _core.types.isIdentifier(d.id) && d.id.name === exportedName;
+    const declaration = ast.program.body.find((node) => {
+      return import_core.types.isVariableDeclaration(node) && node.declarations.find((d) => {
+        return import_core.types.isVariableDeclarator(d) && import_core.types.isIdentifier(d.id) && d.id.name === exportedName;
       });
     });
     return {
@@ -183,4 +187,12 @@ const getDefaultExportLocation = ast => {
     column: defaultExport.loc?.start.column ?? 0
   };
 };
-exports.getDefaultExportLocation = getDefaultExportLocation;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  fileToAst,
+  getCellGqlQuery,
+  getDefaultExportLocation,
+  getGqlQueries,
+  getNamedExports,
+  hasDefaultExport
+});

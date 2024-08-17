@@ -1,56 +1,69 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard").default;
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var graphqlCodeGen_exports = {};
+__export(graphqlCodeGen_exports, {
+  generateTypeDefGraphQLApi: () => generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb: () => generateTypeDefGraphQLWeb,
+  getLoadDocumentsOptions: () => getLoadDocumentsOptions,
+  getResolverFnType: () => getResolverFnType
 });
-exports.generateTypeDefGraphQLWeb = exports.generateTypeDefGraphQLApi = void 0;
-exports.getLoadDocumentsOptions = getLoadDocumentsOptions;
-exports.getResolverFnType = void 0;
-require("core-js/modules/es.array.push.js");
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/concat"));
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/keys"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/values"));
-var _reduce = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/reduce"));
-var _fs = _interopRequireDefault(require("fs"));
-var _path = _interopRequireDefault(require("path"));
-var addPlugin = _interopRequireWildcard(require("@graphql-codegen/add"));
-var _cli = require("@graphql-codegen/cli");
-var _core = require("@graphql-codegen/core");
-var typescriptPlugin = _interopRequireWildcard(require("@graphql-codegen/typescript"));
-var typescriptOperations = _interopRequireWildcard(require("@graphql-codegen/typescript-operations"));
-var _codeFileLoader = require("@graphql-tools/code-file-loader");
-var _graphqlFileLoader = require("@graphql-tools/graphql-file-loader");
-var _load = require("@graphql-tools/load");
-var _execa = _interopRequireDefault(require("execa"));
-var _graphql = require("graphql");
-var _projectConfig = require("@redwoodjs/project-config");
-var _project = require("../project");
-var rwTypescriptResolvers = _interopRequireWildcard(require("./plugins/rw-typescript-resolvers"));
-var CodegenSide = /*#__PURE__*/function (CodegenSide) {
-  CodegenSide[CodegenSide["API"] = 0] = "API";
-  CodegenSide[CodegenSide["WEB"] = 1] = "WEB";
-  return CodegenSide;
-}(CodegenSide || {});
+module.exports = __toCommonJS(graphqlCodeGen_exports);
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+var addPlugin = __toESM(require("@graphql-codegen/add"));
+var import_cli = require("@graphql-codegen/cli");
+var import_core = require("@graphql-codegen/core");
+var typescriptPlugin = __toESM(require("@graphql-codegen/typescript"));
+var typescriptOperations = __toESM(require("@graphql-codegen/typescript-operations"));
+var import_code_file_loader = require("@graphql-tools/code-file-loader");
+var import_graphql_file_loader = require("@graphql-tools/graphql-file-loader");
+var import_load = require("@graphql-tools/load");
+var import_execa = __toESM(require("execa"));
+var import_graphql = require("graphql");
+var import_project_config = require("@redwoodjs/project-config");
+var import_project = require("../project");
+var rwTypescriptResolvers = __toESM(require("./plugins/rw-typescript-resolvers"));
+var CodegenSide = /* @__PURE__ */ ((CodegenSide2) => {
+  CodegenSide2[CodegenSide2["API"] = 0] = "API";
+  CodegenSide2[CodegenSide2["WEB"] = 1] = "WEB";
+  return CodegenSide2;
+})(CodegenSide || {});
 const generateTypeDefGraphQLApi = async () => {
-  var _context;
-  const config = (0, _projectConfig.getConfig)();
+  const config = (0, import_project_config.getConfig)();
   const errors = [];
   if (config.experimental.useSDLCodeGenForGraphQLTypes) {
-    const paths = (0, _projectConfig.getPaths)();
-    const sdlCodegen = await import('@sdl-codegen/node');
+    const paths = (0, import_project_config.getPaths)();
+    const sdlCodegen = await import("@sdl-codegen/node");
     const dtsFiles = [];
     try {
-      const output = sdlCodegen.runFullCodegen('redwood', {
-        paths
-      });
-      (0, _concat.default)(dtsFiles).call(dtsFiles, output.paths);
+      const output = sdlCodegen.runFullCodegen("redwood", { paths });
+      dtsFiles.concat(output.paths);
     } catch (e) {
       if (e instanceof Error) {
         errors.push({
@@ -64,35 +77,48 @@ const generateTypeDefGraphQLApi = async () => {
       errors
     };
   }
-  const filename = _path.default.join((0, _projectConfig.getPaths)().api.types, 'graphql.d.ts');
+  const filename = import_path.default.join((0, import_project_config.getPaths)().api.types, "graphql.d.ts");
   const prismaModels = await getPrismaModels();
-  const prismaImports = (0, _map.default)(_context = (0, _keys.default)(prismaModels)).call(_context, key => {
+  const prismaImports = Object.keys(prismaModels).map((key) => {
     return `${key} as Prisma${key}`;
   });
-  const extraPlugins = [{
-    name: 'add',
-    options: {
-      content: ['import { Prisma } from "@prisma/client"', "import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'", `import { ${prismaImports.join(', ')} } from '@prisma/client'`],
-      placement: 'prepend'
+  const extraPlugins = [
+    {
+      name: "add",
+      options: {
+        content: [
+          'import { Prisma } from "@prisma/client"',
+          "import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'",
+          `import { ${prismaImports.join(", ")} } from '@prisma/client'`
+        ],
+        placement: "prepend"
+      },
+      codegenPlugin: addPlugin
     },
-    codegenPlugin: addPlugin
-  }, {
-    name: 'print-mapped-models',
-    options: {},
-    codegenPlugin: printMappedModelsPlugin
-  }, {
-    name: 'typescript-resolvers',
-    options: {},
-    codegenPlugin: rwTypescriptResolvers
-  }];
+    {
+      name: "print-mapped-models",
+      options: {},
+      codegenPlugin: printMappedModelsPlugin
+    },
+    {
+      name: "typescript-resolvers",
+      options: {},
+      codegenPlugin: rwTypescriptResolvers
+    }
+  ];
   try {
     return {
-      typeDefFiles: await runCodegenGraphQL([], extraPlugins, filename, CodegenSide.API),
+      typeDefFiles: await runCodegenGraphQL(
+        [],
+        extraPlugins,
+        filename,
+        0 /* API */
+      ),
       errors
     };
   } catch (e) {
     errors.push({
-      message: 'Error: Could not generate GraphQL type definitions (api)',
+      message: "Error: Could not generate GraphQL type definitions (api)",
       error: e
     });
     return {
@@ -101,42 +127,48 @@ const generateTypeDefGraphQLApi = async () => {
     };
   }
 };
-exports.generateTypeDefGraphQLApi = generateTypeDefGraphQLApi;
 const generateTypeDefGraphQLWeb = async () => {
-  const filename = _path.default.join((0, _projectConfig.getPaths)().web.types, 'graphql.d.ts');
+  const filename = import_path.default.join((0, import_project_config.getPaths)().web.types, "graphql.d.ts");
   const options = getLoadDocumentsOptions(filename);
-  const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}';
+  const documentsGlob = "./web/src/**/!(*.d).{ts,tsx,js,jsx}";
   let documents;
   try {
-    documents = await (0, _load.loadDocuments)([documentsGlob], options);
+    documents = await (0, import_load.loadDocuments)([documentsGlob], options);
   } catch {
-    // No GraphQL documents present, no need to try to run codegen
     return {
       typeDefFiles: [],
       errors: []
     };
   }
-  const extraPlugins = [{
-    name: 'add',
-    options: {
-      content: 'import { Prisma } from "@prisma/client"',
-      placement: 'prepend'
+  const extraPlugins = [
+    {
+      name: "add",
+      options: {
+        content: 'import { Prisma } from "@prisma/client"',
+        placement: "prepend"
+      },
+      codegenPlugin: addPlugin
     },
-    codegenPlugin: addPlugin
-  }, {
-    name: 'typescript-operations',
-    options: {},
-    codegenPlugin: typescriptOperations
-  }];
+    {
+      name: "typescript-operations",
+      options: {},
+      codegenPlugin: typescriptOperations
+    }
+  ];
   const errors = [];
   try {
     return {
-      typeDefFiles: await runCodegenGraphQL(documents, extraPlugins, filename, CodegenSide.WEB),
+      typeDefFiles: await runCodegenGraphQL(
+        documents,
+        extraPlugins,
+        filename,
+        1 /* WEB */
+      ),
       errors
     };
   } catch (e) {
     errors.push({
-      message: 'Error: Could not generate GraphQL type definitions (web)',
+      message: "Error: Could not generate GraphQL type definitions (web)",
       error: e
     });
     return {
@@ -145,112 +177,73 @@ const generateTypeDefGraphQLWeb = async () => {
     };
   }
 };
-
-/**
- * This is the function used internally by generateTypeDefGraphQLApi and generateTypeDefGraphQLWeb
- * And contains the base configuration for generating gql types with codegen
- *
- * Named a little differently to make it easier to spot
- */
-exports.generateTypeDefGraphQLWeb = generateTypeDefGraphQLWeb;
 async function runCodegenGraphQL(documents, extraPlugins, filename, side) {
-  const userCodegenConfig = await (0, _cli.loadCodegenConfig)({
-    configFilePath: (0, _projectConfig.getPaths)().base
+  const userCodegenConfig = await (0, import_cli.loadCodegenConfig)({
+    configFilePath: (0, import_project_config.getPaths)().base
   });
-
-  // Merge in user codegen config with the rw built-in one
   const mergedConfig = {
-    ...(await getPluginConfig(side)),
+    ...await getPluginConfig(side),
     ...userCodegenConfig?.config?.config
   };
   const options = getCodegenOptions(documents, mergedConfig, extraPlugins);
-  const output = await (0, _core.codegen)(options);
-  _fs.default.mkdirSync(_path.default.dirname(filename), {
-    recursive: true
-  });
-  _fs.default.writeFileSync(filename, output);
+  const output = await (0, import_core.codegen)(options);
+  import_fs.default.mkdirSync(import_path.default.dirname(filename), { recursive: true });
+  import_fs.default.writeFileSync(filename, output);
   return [filename];
 }
 function getLoadDocumentsOptions(filename) {
   const loadTypedefsConfig = {
-    cwd: (0, _projectConfig.getPaths)().base,
-    ignore: [_path.default.join(process.cwd(), filename)],
-    loaders: [new _codeFileLoader.CodeFileLoader()],
+    cwd: (0, import_project_config.getPaths)().base,
+    ignore: [import_path.default.join(process.cwd(), filename)],
+    loaders: [new import_code_file_loader.CodeFileLoader()],
     sort: true
   };
   return loadTypedefsConfig;
 }
 async function getPrismaClient(hasGenerated = false) {
-  const {
-    default: localPrisma
-  } = await import('@prisma/client');
-
-  // @ts-expect-error I believe this type will only exist if the prisma client has been generated
+  const { default: localPrisma } = await import("@prisma/client");
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
-      return {
-        ModelName: {}
-      };
+      return { ModelName: {} };
     } else {
-      var _context2;
-      _execa.default.sync('yarn rw prisma generate', {
-        shell: true
-      });
-
-      // Purge Prisma Client from node's require cache, so that the newly
-      // generated client gets picked up by any script that uses it
-      (0, _forEach.default)(_context2 = (0, _keys.default)(require.cache)).call(_context2, key => {
-        if ((0, _includes.default)(key).call(key, '/node_modules/@prisma/client/') || (0, _includes.default)(key).call(key, '/node_modules/.prisma/client/')) {
+      import_execa.default.sync("yarn rw prisma generate", { shell: true });
+      Object.keys(require.cache).forEach((key) => {
+        if (key.includes("/node_modules/@prisma/client/") || key.includes("/node_modules/.prisma/client/")) {
           delete require.cache[key];
         }
       });
       return getPrismaClient(true);
     }
   }
-
-  // @ts-expect-error See above, the generated client should contain a ModelName property that
-  // satisfies Record<string, string>
   return localPrisma;
 }
 async function getPrismaModels() {
-  // Extract the models from the prisma client and use those to
-  // set up internal redirects for the return values in resolvers.
   const localPrisma = await getPrismaClient();
   const prismaModels = localPrisma.ModelName;
-
-  // This isn't really something you'd put in the GraphQL API, so
-  // we can skip the model.
   if (prismaModels.RW_DataMigration) {
     delete prismaModels.RW_DataMigration;
   }
   return prismaModels;
 }
 async function getPluginConfig(side) {
-  var _context3;
   const prismaModels = await getPrismaModels();
-  (0, _forEach.default)(_context3 = (0, _keys.default)(prismaModels)).call(_context3, key => {
-    /** creates an object like this
-     * {
-     *  Post: MergePrismaWithSdlTypes<PrismaPost, MakeRelationsOptional<Post, AllMappedModels>, AllMappedModels>>
-     *  ...
-     * }
-     */
+  Object.keys(prismaModels).forEach((key) => {
     prismaModels[key] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`;
   });
   const pluginConfig = {
     makeResolverTypeCallable: true,
-    namingConvention: 'keep',
+    namingConvention: "keep",
     // to allow camelCased query names
     scalars: {
       // We need these, otherwise these scalars are mapped to any
-      BigInt: 'number',
+      BigInt: "number",
       // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
-      DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      JSON: 'Prisma.JsonValue',
-      JSONObject: 'Prisma.JsonObject',
-      Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Byte: 'Buffer'
+      DateTime: side === 1 /* WEB */ ? "string" : "Date | string",
+      Date: side === 1 /* WEB */ ? "string" : "Date | string",
+      JSON: "Prisma.JsonValue",
+      JSONObject: "Prisma.JsonObject",
+      Time: side === 1 /* WEB */ ? "string" : "Date | string",
+      Byte: "Buffer"
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
@@ -269,9 +262,8 @@ async function getPluginConfig(side) {
   return pluginConfig;
 }
 const getResolverFnType = () => {
-  const tsConfig = (0, _project.getTsConfigs)();
+  const tsConfig = (0, import_project.getTsConfigs)();
   if (tsConfig.api?.compilerOptions?.strict) {
-    // In strict mode, bring a world of pain to the tests
     return `(
       args: TArgs,
       obj?: { root: TParent; context: TContext; info: GraphQLResolveInfo }
@@ -283,51 +275,36 @@ const getResolverFnType = () => {
     ) => TResult | Promise<TResult>`;
   }
 };
-exports.getResolverFnType = getResolverFnType;
-/**
- * Codgen plugin that just lists all the SDL models that are also mapped Prisma models
- * We use a plugin, because its possible to have Prisma models that do not have an SDL model
- * so we can't just list all the Prisma models, even if they're included in the mappers object.
- *
- * Example:
- * type AllMappedModels = MaybeOrArrayOfMaybe<Post | User>
- *
- * Note that the types are SDL types, not Prisma types.
- * We do not include SDL-only types in this list.
- */
 const printMappedModelsPlugin = {
   plugin: (schema, _documents, config) => {
-    var _context4, _context5, _context6;
-    // this way we can make sure relation types are not required
-    const sdlTypesWhichAreMapped = (0, _map.default)(_context4 = (0, _filter.default)(_context5 = (0, _filter.default)(_context6 = (0, _values.default)(schema.getTypeMap())).call(_context6, type => {
-      return type.astNode?.kind === _graphql.Kind.OBJECT_TYPE_DEFINITION;
-    })).call(_context5, objectDefType => {
+    const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap()).filter((type) => {
+      return type.astNode?.kind === import_graphql.Kind.OBJECT_TYPE_DEFINITION;
+    }).filter((objectDefType) => {
       const modelName = objectDefType.astNode?.name.value;
-      return modelName && modelName in config.mappers // Only keep the mapped Prisma models
-      ;
-    })).call(_context4, objectDefType => objectDefType.astNode?.name.value);
-    return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(' | ')}>`;
+      return modelName && modelName in config.mappers;
+    }).map((objectDefType) => objectDefType.astNode?.name.value);
+    return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];
+type AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
+      " | "
+    )}>`;
   }
 };
 function getCodegenOptions(documents, config, extraPlugins) {
-  const plugins = [{
-    typescript: {
-      enumsAsTypes: true
-    }
-  }, ...(0, _map.default)(extraPlugins).call(extraPlugins, plugin => ({
-    [plugin.name]: plugin.options
-  }))];
+  const plugins = [
+    { typescript: { enumsAsTypes: true } },
+    ...extraPlugins.map((plugin) => ({ [plugin.name]: plugin.options }))
+  ];
   const pluginMap = {
     typescript: typescriptPlugin,
-    ...(0, _reduce.default)(extraPlugins).call(extraPlugins, (acc, cur) => ({
-      ...acc,
-      [cur.name]: cur.codegenPlugin
-    }), {})
+    ...extraPlugins.reduce(
+      (acc, cur) => ({ ...acc, [cur.name]: cur.codegenPlugin }),
+      {}
+    )
   };
   const options = {
     // The typescript plugin returns a string instead of writing to a file, so
     // `filename` is not used
-    filename: '',
+    filename: "",
     // `schemaAst` is used instead of `schema` if `schemaAst` is defined, and
     // `schema` isn't. In the source for GenerateOptions they have this
     // comment:
@@ -335,9 +312,9 @@ function getCodegenOptions(documents, config, extraPlugins) {
     //   version
     // When that happens we'll have have to remove our `schema` line, and
     // rename `schemaAst` to `schema`
-    schema: undefined,
-    schemaAst: (0, _load.loadSchemaSync)((0, _projectConfig.getPaths)().generated.schema, {
-      loaders: [new _graphqlFileLoader.GraphQLFileLoader()],
+    schema: void 0,
+    schemaAst: (0, import_load.loadSchemaSync)((0, import_project_config.getPaths)().generated.schema, {
+      loaders: [new import_graphql_file_loader.GraphQLFileLoader()],
       sort: true
     }),
     documents,
@@ -348,3 +325,10 @@ function getCodegenOptions(documents, config, extraPlugins) {
   };
   return options;
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  generateTypeDefGraphQLApi,
+  generateTypeDefGraphQLWeb,
+  getLoadDocumentsOptions,
+  getResolverFnType
+});

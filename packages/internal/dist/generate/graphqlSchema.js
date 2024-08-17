@@ -1,47 +1,61 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard").default;
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var graphqlSchema_exports = {};
+__export(graphqlSchema_exports, {
+  generateGraphQLSchema: () => generateGraphQLSchema
 });
-exports.generateGraphQLSchema = void 0;
-require("core-js/modules/es.array.push.js");
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/keys"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _fs = _interopRequireDefault(require("fs"));
-var _core = require("@graphql-codegen/core");
-var schemaAstPlugin = _interopRequireWildcard(require("@graphql-codegen/schema-ast"));
-var _codeFileLoader = require("@graphql-tools/code-file-loader");
-var _load = require("@graphql-tools/load");
-var _internals = require("@prisma/internals");
-var _chalk = _interopRequireDefault(require("chalk"));
-var _graphql = require("graphql");
-var _terminalLink = _interopRequireDefault(require("terminal-link"));
-var _graphqlServer = require("@redwoodjs/graphql-server");
-var _projectConfig = require("@redwoodjs/project-config");
+module.exports = __toCommonJS(graphqlSchema_exports);
+var import_fs = __toESM(require("fs"));
+var import_core = require("@graphql-codegen/core");
+var schemaAstPlugin = __toESM(require("@graphql-codegen/schema-ast"));
+var import_code_file_loader = require("@graphql-tools/code-file-loader");
+var import_load = require("@graphql-tools/load");
+var import_internals = require("@prisma/internals");
+var import_chalk = __toESM(require("chalk"));
+var import_graphql = require("graphql");
+var import_terminal_link = __toESM(require("terminal-link"));
+var import_graphql_server = require("@redwoodjs/graphql-server");
+var import_project_config = require("@redwoodjs/project-config");
 const generateGraphQLSchema = async () => {
-  const redwoodProjectPaths = (0, _projectConfig.getPaths)();
+  const redwoodProjectPaths = (0, import_project_config.getPaths)();
   const schemaPointerMap = {
-    [(0, _graphql.print)(_graphqlServer.rootSchema.schema)]: {},
-    'graphql/**/*.sdl.{js,ts}': {},
-    'directives/**/*.{js,ts}': {},
-    'subscriptions/**/*.{js,ts}': {}
+    [(0, import_graphql.print)(import_graphql_server.rootSchema.schema)]: {},
+    "graphql/**/*.sdl.{js,ts}": {},
+    "directives/**/*.{js,ts}": {},
+    "subscriptions/**/*.{js,ts}": {}
   };
-
-  // If we're serverful and the user is using realtime, we need to include the live directive for realtime support.
-  // Note the `ERR_  prefix in`ERR_MODULE_NOT_FOUND`. Since we're using `await import`,
-  // if the package (here, `@redwoodjs/realtime`) can't be found, it throws this error, with the prefix.
-  // Whereas `require('@redwoodjs/realtime')` would throw `MODULE_NOT_FOUND`.
-  if ((0, _projectConfig.resolveFile)(`${(0, _projectConfig.getPaths)().api.src}/server`)) {
+  if ((0, import_project_config.resolveFile)(`${(0, import_project_config.getPaths)().api.src}/server`)) {
     try {
-      const {
-        liveDirectiveTypeDefs
-      } = await import('@redwoodjs/realtime');
+      const { liveDirectiveTypeDefs } = await import("@redwoodjs/realtime");
       schemaPointerMap[liveDirectiveTypeDefs] = {};
     } catch (error) {
-      if (error.code !== 'ERR_MODULE_NOT_FOUND') {
+      if (error.code !== "ERR_MODULE_NOT_FOUND") {
         throw error;
       }
     }
@@ -52,48 +66,62 @@ const generateGraphQLSchema = async () => {
     convertExtensions: true,
     includeSources: true,
     cwd: redwoodProjectPaths.api.src,
-    schema: (0, _keys.default)(schemaPointerMap),
+    schema: Object.keys(schemaPointerMap),
     generates: {
       [redwoodProjectPaths.generated.schema]: {
-        plugins: ['schema-ast']
+        plugins: ["schema-ast"]
       }
     },
     silent: false,
     errorsOnly: false,
     pluginContext: {},
-    loaders: [new _codeFileLoader.CodeFileLoader()]
+    loaders: [new import_code_file_loader.CodeFileLoader()]
   };
   let loadedSchema;
   const errors = [];
   try {
-    loadedSchema = await (0, _load.loadSchema)(schemaPointerMap, loadSchemaConfig);
+    loadedSchema = await (0, import_load.loadSchema)(schemaPointerMap, loadSchemaConfig);
   } catch (e) {
     if (e instanceof Error) {
       const match = e.message.match(/Unknown type: "(\w+)"/);
       const name = match?.[1];
-      const schemaPrisma = (await (0, _internals.getSchema)(redwoodProjectPaths.api.dbSchema)).toString();
+      const schemaPrisma = (await (0, import_internals.getSchema)(redwoodProjectPaths.api.dbSchema)).toString();
       const errorObject = {
         message: `Schema loading failed. ${e.message}`,
         error: e
       };
       errors.push(errorObject);
-      if (name && (0, _includes.default)(schemaPrisma).call(schemaPrisma, `model ${name}`)) {
-        // Not all SDLs need to be backed by a DB model, but if they are we can
-        // provide a more helpful error message
-
-        errorObject.message = [errorObject.message, '', `  ${_chalk.default.bgYellow(` ${_chalk.default.black.bold('Heads up')} `)}`, '', _chalk.default.yellow(`  It looks like you have a ${name} model in your Prisma schema.`), _chalk.default.yellow(`  If it's part of a relation, you may have to generate SDL or scaffolding for ${name} too.`), _chalk.default.yellow(`  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for ${name} now.`), '', _chalk.default.yellow(`  See the ${(0, _terminalLink.default)('Troubleshooting Generators', 'https://redwoodjs.com/docs/schema-relations#troubleshooting-generators')} section in our docs for more help.`)].join('\n');
+      if (name && schemaPrisma.includes(`model ${name}`)) {
+        errorObject.message = [
+          errorObject.message,
+          "",
+          `  ${import_chalk.default.bgYellow(` ${import_chalk.default.black.bold("Heads up")} `)}`,
+          "",
+          import_chalk.default.yellow(
+            `  It looks like you have a ${name} model in your Prisma schema.`
+          ),
+          import_chalk.default.yellow(
+            `  If it's part of a relation, you may have to generate SDL or scaffolding for ${name} too.`
+          ),
+          import_chalk.default.yellow(
+            `  So, if you haven't done that yet, ignore this error message and run the SDL or scaffold generator for ${name} now.`
+          ),
+          "",
+          import_chalk.default.yellow(
+            `  See the ${(0, import_terminal_link.default)(
+              "Troubleshooting Generators",
+              "https://redwoodjs.com/docs/schema-relations#troubleshooting-generators"
+            )} section in our docs for more help.`
+          )
+        ].join("\n");
       }
     }
   }
   const options = {
     config: {},
     // no extra config needed for merged schema file generation
-    plugins: [{
-      'schema-ast': {}
-    }],
-    pluginMap: {
-      'schema-ast': schemaAstPlugin
-    },
+    plugins: [{ "schema-ast": {} }],
+    pluginMap: { "schema-ast": schemaAstPlugin },
     schema: {},
     schemaAst: loadedSchema,
     filename: redwoodProjectPaths.generated.schema,
@@ -101,12 +129,9 @@ const generateGraphQLSchema = async () => {
   };
   if (loadedSchema) {
     try {
-      const schema = await (0, _core.codegen)(options);
-      _fs.default.writeFileSync(redwoodProjectPaths.generated.schema, schema);
-      return {
-        schemaPath: redwoodProjectPaths.generated.schema,
-        errors
-      };
+      const schema = await (0, import_core.codegen)(options);
+      import_fs.default.writeFileSync(redwoodProjectPaths.generated.schema, schema);
+      return { schemaPath: redwoodProjectPaths.generated.schema, errors };
     } catch (e) {
       errors.push({
         message: `GraphQL Schema codegen failed`,
@@ -114,9 +139,9 @@ const generateGraphQLSchema = async () => {
       });
     }
   }
-  return {
-    schemaPath: '',
-    errors
-  };
+  return { schemaPath: "", errors };
 };
-exports.generateGraphQLSchema = generateGraphQLSchema;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  generateGraphQLSchema
+});

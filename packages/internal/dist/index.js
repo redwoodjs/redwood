@@ -1,119 +1,49 @@
 "use strict";
-
-var _context, _context2, _context3, _context4, _context5, _context6, _context7;
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/for-each");
-var _Object$keys = require("@babel/runtime-corejs3/core-js/object/keys");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-var _exportNames = {
-  generate: true,
-  buildApi: true,
-  listQueryTypeFieldsInProject: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-_Object$defineProperty(exports, "buildApi", {
-  enumerable: true,
-  get: function () {
-    return _api.buildApi;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var src_exports = {};
+__export(src_exports, {
+  buildApi: () => import_api.buildApi,
+  generate: () => import_generate.generate,
+  listQueryTypeFieldsInProject: () => import_gql.listQueryTypeFieldsInProject
 });
-_Object$defineProperty(exports, "generate", {
-  enumerable: true,
-  get: function () {
-    return _generate.generate;
-  }
+module.exports = __toCommonJS(src_exports);
+__reExport(src_exports, require("@redwoodjs/project-config"), module.exports);
+__reExport(src_exports, require("./ts2js"), module.exports);
+__reExport(src_exports, require("./dev"), module.exports);
+__reExport(src_exports, require("./routes"), module.exports);
+__reExport(src_exports, require("./files"), module.exports);
+var import_generate = require("./generate/generate");
+var import_api = require("./build/api");
+__reExport(src_exports, require("./validateSchema"), module.exports);
+__reExport(src_exports, require("@redwoodjs/babel-config"), module.exports);
+var import_gql = require("./gql");
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  buildApi,
+  generate,
+  listQueryTypeFieldsInProject,
+  ...require("@redwoodjs/project-config"),
+  ...require("./ts2js"),
+  ...require("./dev"),
+  ...require("./routes"),
+  ...require("./files"),
+  ...require("./validateSchema"),
+  ...require("@redwoodjs/babel-config")
 });
-_Object$defineProperty(exports, "listQueryTypeFieldsInProject", {
-  enumerable: true,
-  get: function () {
-    return _gql.listQueryTypeFieldsInProject;
-  }
-});
-var _projectConfig = require("@redwoodjs/project-config");
-_forEachInstanceProperty(_context = _Object$keys(_projectConfig)).call(_context, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _projectConfig[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _projectConfig[key];
-    }
-  });
-});
-var _ts2js = require("./ts2js");
-_forEachInstanceProperty(_context2 = _Object$keys(_ts2js)).call(_context2, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _ts2js[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _ts2js[key];
-    }
-  });
-});
-var _dev = require("./dev");
-_forEachInstanceProperty(_context3 = _Object$keys(_dev)).call(_context3, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _dev[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _dev[key];
-    }
-  });
-});
-var _routes = require("./routes");
-_forEachInstanceProperty(_context4 = _Object$keys(_routes)).call(_context4, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _routes[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _routes[key];
-    }
-  });
-});
-var _files = require("./files");
-_forEachInstanceProperty(_context5 = _Object$keys(_files)).call(_context5, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _files[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _files[key];
-    }
-  });
-});
-var _generate = require("./generate/generate");
-var _api = require("./build/api");
-var _validateSchema = require("./validateSchema");
-_forEachInstanceProperty(_context6 = _Object$keys(_validateSchema)).call(_context6, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _validateSchema[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _validateSchema[key];
-    }
-  });
-});
-var _babelConfig = require("@redwoodjs/babel-config");
-_forEachInstanceProperty(_context7 = _Object$keys(_babelConfig)).call(_context7, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _babelConfig[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _babelConfig[key];
-    }
-  });
-});
-var _gql = require("./gql");

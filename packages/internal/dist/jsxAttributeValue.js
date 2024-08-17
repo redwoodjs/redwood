@@ -1,127 +1,129 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var jsxAttributeValue_exports = {};
+__export(jsxAttributeValue_exports, {
+  getJsxAttributeValue: () => getJsxAttributeValue
 });
-exports.getJsxAttributeValue = void 0;
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _reduce = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/reduce"));
-var _sort = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/sort"));
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/concat"));
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck This function was adapted from: https://github.com/gglnx/simplified-jsx-to-json/blob/master/index.js#L13
-const getJsxAttributeValue = expression => {
-  // If the expression is null, this is an implicitly "true" prop, such as readOnly
+module.exports = __toCommonJS(jsxAttributeValue_exports);
+const getJsxAttributeValue = (expression) => {
   if (expression === null) {
     return true;
   }
-  if (expression.type === 'StringLiteral') {
+  if (expression.type === "StringLiteral") {
     return expression.value;
   }
-  if (expression.type === 'JSXExpressionContainer') {
+  if (expression.type === "JSXExpressionContainer") {
     return getJsxAttributeValue(expression.expression);
   }
-  if (expression.type === 'ArrayExpression') {
-    var _context;
-    return (0, _map.default)(_context = expression.elements).call(_context, element => getJsxAttributeValue(element));
+  if (expression.type === "ArrayExpression") {
+    return expression.elements.map((element) => getJsxAttributeValue(element));
   }
-  if (expression.type === 'TemplateLiteral') {
-    var _context2, _context3, _context4;
-    const expressions = (0, _map.default)(_context2 = expression.expressions).call(_context2, element => ({
+  if (expression.type === "TemplateLiteral") {
+    const expressions = expression.expressions.map((element) => ({
       ...element,
       value: {
         raw: element.value,
         cooked: getJsxAttributeValue(element)
       }
     }));
-    return (0, _reduce.default)(_context3 = (0, _sort.default)(_context4 = (0, _concat.default)(expressions).call(expressions, expression.quasis)).call(_context4, (elementA, elementB) => elementA.start - elementB.start)).call(_context3, (string, element) => `${string}${element.value.cooked.toString()}`, '');
+    return expressions.concat(expression.quasis).sort((elementA, elementB) => elementA.start - elementB.start).reduce(
+      (string, element) => `${string}${element.value.cooked.toString()}`,
+      ""
+    );
   }
-  if (expression.type === 'ObjectExpression') {
-    var _context5, _context6, _context7;
-    const entries = (0, _reduce.default)(_context5 = (0, _filter.default)(_context6 = (0, _map.default)(_context7 = expression.properties).call(_context7, property => {
+  if (expression.type === "ObjectExpression") {
+    const entries = expression.properties.map((property) => {
       const key = getJsxAttributeValue(property.key);
       const value = getJsxAttributeValue(property.value);
-      if (key === undefined || value === undefined) {
+      if (key === void 0 || value === void 0) {
         return null;
       }
-      return {
-        key,
-        value
-      };
-    })).call(_context6, property => property)).call(_context5, (properties, property) => {
-      return {
-        ...properties,
-        [property.key]: property.value
-      };
+      return { key, value };
+    }).filter((property) => property).reduce((properties, property) => {
+      return { ...properties, [property.key]: property.value };
     }, {});
     return entries;
   }
-  if (expression.type === 'Identifier') {
+  if (expression.type === "Identifier") {
     return expression.name;
   }
-  if (expression.type === 'BinaryExpression') {
+  if (expression.type === "BinaryExpression") {
     switch (expression.operator) {
-      case '+':
+      case "+":
         return getJsxAttributeValue(expression.left) + getJsxAttributeValue(expression.right);
-      case '-':
+      case "-":
         return getJsxAttributeValue(expression.left) - getJsxAttributeValue(expression.right);
-      case '*':
+      case "*":
         return getJsxAttributeValue(expression.left) * getJsxAttributeValue(expression.right);
-      case '**':
+      case "**":
         return getJsxAttributeValue(expression.left) ** getJsxAttributeValue(expression.right);
-      case '/':
+      case "/":
         return getJsxAttributeValue(expression.left) / getJsxAttributeValue(expression.right);
-      case '%':
+      case "%":
         return getJsxAttributeValue(expression.left) % getJsxAttributeValue(expression.right);
-      case '==':
+      case "==":
         return getJsxAttributeValue(expression.left) == getJsxAttributeValue(expression.right);
-      case '===':
+      case "===":
         return getJsxAttributeValue(expression.left) === getJsxAttributeValue(expression.right);
-      case '!=':
+      case "!=":
         return getJsxAttributeValue(expression.left) != getJsxAttributeValue(expression.right);
-      case '!==':
+      case "!==":
         return getJsxAttributeValue(expression.left) !== getJsxAttributeValue(expression.right);
-      case '<':
+      case "<":
         return getJsxAttributeValue(expression.left) < getJsxAttributeValue(expression.right);
-      case '<=':
+      case "<=":
         return getJsxAttributeValue(expression.left) <= getJsxAttributeValue(expression.right);
-      case '>':
+      case ">":
         return getJsxAttributeValue(expression.left) > getJsxAttributeValue(expression.right);
-      case '>=':
+      case ">=":
         return getJsxAttributeValue(expression.left) >= getJsxAttributeValue(expression.right);
-      case '<<':
+      case "<<":
         return getJsxAttributeValue(expression.left) << getJsxAttributeValue(expression.right);
-      case '>>':
+      case ">>":
         return getJsxAttributeValue(expression.left) >> getJsxAttributeValue(expression.right);
-      case '>>>':
+      case ">>>":
         return getJsxAttributeValue(expression.left) >>> getJsxAttributeValue(expression.right);
-      case '|':
+      case "|":
         return getJsxAttributeValue(expression.left) | getJsxAttributeValue(expression.right);
-      case '&':
+      case "&":
         return getJsxAttributeValue(expression.left) & getJsxAttributeValue(expression.right);
-      case '^':
+      case "^":
         return getJsxAttributeValue(expression.left) ^ getJsxAttributeValue(expression.right);
       default:
         return `BinaryExpression with "${expression.operator}" is not supported`;
     }
   }
-  if (expression.type === 'UnaryExpression') {
+  if (expression.type === "UnaryExpression") {
     switch (expression.operator) {
-      case '+':
+      case "+":
         return +getJsxAttributeValue(expression.argument);
-      case '-':
+      case "-":
         return -getJsxAttributeValue(expression.argument);
-      case '~':
+      case "~":
         return ~getJsxAttributeValue(expression.argument);
       default:
         return `UnaryExpression with "${expression.operator}" is not supported`;
     }
   }
-
-  // Unsupported type
   return `${expression.type} is not supported`;
 };
-exports.getJsxAttributeValue = getJsxAttributeValue;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getJsxAttributeValue
+});

@@ -1,66 +1,70 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var jsx_exports = {};
+__export(jsx_exports, {
+  getJsxElements: () => getJsxElements
 });
-exports.getJsxElements = void 0;
-require("core-js/modules/es.array.push.js");
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/concat"));
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _traverse = _interopRequireDefault(require("@babel/traverse"));
-var _jsxAttributeValue = require("./jsxAttributeValue");
-/**
- * Extract JSX elements, children and props from static code.
- */
+module.exports = __toCommonJS(jsx_exports);
+var import_traverse = __toESM(require("@babel/traverse"));
+var import_jsxAttributeValue = require("./jsxAttributeValue");
 const getJsxElements = (ast, name) => {
   let elements = [];
-  (0, _traverse.default)(ast, {
+  (0, import_traverse.default)(ast, {
     JSXIdentifier(path) {
-      if (path.node.name === name && path.parentPath.type === 'JSXOpeningElement') {
-        if (path?.parentPath?.parentPath?.type === 'JSXElement') {
+      if (path.node.name === name && path.parentPath.type === "JSXOpeningElement") {
+        if (path?.parentPath?.parentPath?.type === "JSXElement") {
           const element = reduceJsxElement([], path.parentPath.parentPath.node);
-          elements = (0, _concat.default)(elements).call(elements, element);
+          elements = elements.concat(element);
         }
       }
     }
   });
   return elements;
 };
-
-/**
- * Extract attributes (props) from a JSX element.
- */
-exports.getJsxElements = getJsxElements;
-const getJsxAttributes = jsxElement => {
-  var _context;
-  return (0, _filter.default)(_context = jsxElement.openingElement.attributes).call(_context, ({
-    type
-  }) => type === 'JSXAttribute');
+const getJsxAttributes = (jsxElement) => {
+  return jsxElement.openingElement.attributes.filter(
+    ({ type }) => type === "JSXAttribute"
+  );
 };
-
-/**
- * Extract and format props (attributes) from a JSX element.
- */
-const getJsxProps = jsxElement => {
+const getJsxProps = (jsxElement) => {
   const attributes = getJsxAttributes(jsxElement);
   const props = {};
   for (const a of attributes) {
-    if (typeof a.name.name === 'string') {
-      props[a.name.name] = (0, _jsxAttributeValue.getJsxAttributeValue)(a.value);
+    if (typeof a.name.name === "string") {
+      props[a.name.name] = (0, import_jsxAttributeValue.getJsxAttributeValue)(a.value);
     }
   }
   return props;
 };
-
-/**
- * Traverse a JSX element tree and place it into a simple JSON format.
- */
 const reduceJsxElement = (oldNode, currentNode) => {
   let element = {
-    name: '',
+    name: "",
     props: {},
     children: [],
     location: {
@@ -68,9 +72,9 @@ const reduceJsxElement = (oldNode, currentNode) => {
       column: 0
     }
   };
-  if (currentNode.type === 'JSXElement') {
+  if (currentNode.type === "JSXElement") {
     const props = getJsxProps(currentNode);
-    if (currentNode.openingElement.name.type === 'JSXIdentifier') {
+    if (currentNode.openingElement.name.type === "JSXIdentifier") {
       element = {
         name: currentNode.openingElement.name.name,
         props,
@@ -83,9 +87,14 @@ const reduceJsxElement = (oldNode, currentNode) => {
       oldNode.push(element);
     }
   }
-  if ('children' in currentNode) {
-    var _context2;
-    (0, _forEach.default)(_context2 = currentNode.children).call(_context2, node => oldNode.length > 0 ? reduceJsxElement(element.children, node) : reduceJsxElement(oldNode, node));
+  if ("children" in currentNode) {
+    currentNode.children.forEach(
+      (node) => oldNode.length > 0 ? reduceJsxElement(element.children, node) : reduceJsxElement(oldNode, node)
+    );
   }
   return oldNode;
 };
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getJsxElements
+});
