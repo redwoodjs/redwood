@@ -20,12 +20,6 @@
     "./dist/setupHandler": {
       "types": "./dist/setupHandler.d.ts",
       "default": "./dist/setupHandler.js"
-    },
-    "./dist/templates/web/": {
-      "default": "./dist/templates/web/"
-    },
-    "./dist/templates/api/lib/": {
-      "default": "./dist/templates/api/lib/"
     }
   },
   "main": "./dist/index.js",
