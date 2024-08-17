@@ -1,18 +1,17 @@
 import path from 'node:path'
 
-import '../../lib/mockTelemetry'
-
 import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest'
 
+import '../../lib/mockTelemetry'
 import { handler } from '../execHandler'
 
-vi.mock('envinfo', () => ({ default: { run: () => '' } }))
 vi.mock('@redwoodjs/project-config', () => ({
   getPaths: () => ({
     scripts: path.join('redwood-app', 'scripts'),
   }),
   resolveFile: (path: string) => path,
 }))
+
 vi.mock('@redwoodjs/internal/dist/files', () => ({
   findScripts: () => {
     const scriptsPath = path.join('redwood-app', 'scripts')
@@ -24,19 +23,6 @@ vi.mock('@redwoodjs/internal/dist/files', () => ({
       path.join(scriptsPath, 'normalScript.ts'),
       path.join(scriptsPath, 'secondNormalScript.ts'),
     ]
-  },
-}))
-
-const mockRedwoodToml = {
-  fileContents: '',
-}
-
-// Before rw tests run, api/ and web/ `jest.config.js` is confirmed via existsSync()
-vi.mock('node:fs', async () => ({
-  default: {
-    readFileSync: () => {
-      return mockRedwoodToml.fileContents
-    },
   },
 }))
 
