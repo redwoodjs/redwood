@@ -1,92 +1,107 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.throwSupabaseSettingsError = exports.messageForSupabaseSettingsError = exports.authDecoder = void 0;
-var _ssr = require("@supabase/ssr");
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-var _api = require("@redwoodjs/api");
-const ERROR_MESSAGE = `Your project's URL, Key and Secret are required to create a Supabase client!\n\nCheck your Supabase project's API settings to find these values\n\nhttps://supabase.com/dashboard/project/_/settings/api`;
-const messageForSupabaseSettingsError = envar => {
-  return `Your project's ${envar} envar is not set. ${ERROR_MESSAGE.replace(/\n/g, ' ')}`;
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-exports.messageForSupabaseSettingsError = messageForSupabaseSettingsError;
-const throwSupabaseSettingsError = envar => {
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var decoder_exports = {};
+__export(decoder_exports, {
+  authDecoder: () => authDecoder,
+  messageForSupabaseSettingsError: () => messageForSupabaseSettingsError,
+  throwSupabaseSettingsError: () => throwSupabaseSettingsError
+});
+module.exports = __toCommonJS(decoder_exports);
+var import_ssr = require("@supabase/ssr");
+var import_jsonwebtoken = __toESM(require("jsonwebtoken"));
+var import_api = require("@redwoodjs/api");
+const ERROR_MESSAGE = `Your project's URL, Key and Secret are required to create a Supabase client!
+
+Check your Supabase project's API settings to find these values
+
+https://supabase.com/dashboard/project/_/settings/api`;
+const messageForSupabaseSettingsError = (envar) => {
+  return `Your project's ${envar} envar is not set. ${ERROR_MESSAGE.replace(/\n/g, " ")}`;
+};
+const throwSupabaseSettingsError = (envar) => {
   throw new Error(messageForSupabaseSettingsError(envar));
 };
-
-/**
- * Creates Supabase Server Client used to get the session cookie (only)
- * from a given collection of auth cookies
- */
-exports.throwSupabaseSettingsError = throwSupabaseSettingsError;
-const createSupabaseServerClient = authCookies => {
+const createSupabaseServerClient = (authCookies) => {
   if (!process.env.SUPABASE_URL) {
-    throwSupabaseSettingsError('SUPABASE_URL');
+    throwSupabaseSettingsError("SUPABASE_URL");
   }
   if (!process.env.SUPABASE_KEY) {
-    throwSupabaseSettingsError('SUPABASE_KEY');
+    throwSupabaseSettingsError("SUPABASE_KEY");
   }
-  return (0, _ssr.createServerClient)(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '', {
-    cookies: {
-      get(name) {
-        return authCookies?.parsedCookie?.[name];
+  return (0, import_ssr.createServerClient)(
+    process.env.SUPABASE_URL || "",
+    process.env.SUPABASE_KEY || "",
+    {
+      cookies: {
+        get(name) {
+          return authCookies?.parsedCookie?.[name];
+        }
       }
     }
-  });
+  );
 };
-
-/**
- * Get the Supabase access token from the cookie using the Supabase SDK and session
- */
-const getSupabaseAccessTokenFromCookie = async authCookies => {
+const getSupabaseAccessTokenFromCookie = async (authCookies) => {
   const supabase = createSupabaseServerClient(authCookies);
-  const {
-    data,
-    error
-  } = await supabase.auth.getSession();
+  const { data, error } = await supabase.auth.getSession();
   if (!error) {
-    const {
-      session
-    } = data;
+    const { session } = data;
     if (session) {
       return await session.access_token;
     }
-    throw new Error('No Supabase session found');
+    throw new Error("No Supabase session found");
   } else {
     console.error(error);
     throw error;
   }
 };
-
-/**
- * Decodes a Supabase JWT with Bearer token or uses createServerClient verify an authenticated cookie header request
- */
-const authDecoder = async (token, type, {
-  event
-}) => {
+const authDecoder = async (token, type, { event }) => {
   if (!process.env.SUPABASE_JWT_SECRET) {
-    throwSupabaseSettingsError('SUPABASE_JWT_SECRET');
+    throwSupabaseSettingsError("SUPABASE_JWT_SECRET");
   }
   const secret = process.env.SUPABASE_JWT_SECRET;
-  if (type !== 'supabase') {
+  if (type !== "supabase") {
     return null;
   }
-  const authCookies = (0, _api.parseAuthorizationCookie)(event);
-
-  // If we have a Supabase auth-provider cookie, then use the SDK to get the access token
-  // Otherwise, use the Bearer token provided in the Authorization header
-  if (authCookies?.type === 'supabase') {
+  const authCookies = (0, import_api.parseAuthorizationCookie)(event);
+  if (authCookies?.type === "supabase") {
     token = await getSupabaseAccessTokenFromCookie(authCookies);
   }
   try {
-    return _jsonwebtoken.default.verify(token, secret);
+    return import_jsonwebtoken.default.verify(token, secret);
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-exports.authDecoder = authDecoder;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  authDecoder,
+  messageForSupabaseSettingsError,
+  throwSupabaseSettingsError
+});
