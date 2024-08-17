@@ -1,34 +1,46 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var decoder_exports = {};
+__export(decoder_exports, {
+  authDecoder: () => authDecoder,
+  createAuthDecoder: () => createAuthDecoder
 });
-exports.createAuthDecoder = exports.authDecoder = void 0;
-var _shared = require("./shared");
-const createAuthDecoder = cookieNameOption => {
+module.exports = __toCommonJS(decoder_exports);
+var import_shared = require("./shared");
+const createAuthDecoder = (cookieNameOption) => {
   return async (_token, type, req) => {
-    if (type !== 'dbAuth') {
+    if (type !== "dbAuth") {
       return null;
     }
-    const session = (0, _shared.dbAuthSession)(req.event, cookieNameOption);
-
-    // We no longer compare the session id with the bearer token
+    const session = (0, import_shared.dbAuthSession)(req.event, cookieNameOption);
     return session;
   };
 };
-
-/** @deprecated use `createAuthDecoder` */
-exports.createAuthDecoder = createAuthDecoder;
 const authDecoder = async (_authHeaderValue, type, req) => {
-  if (type !== 'dbAuth') {
+  if (type !== "dbAuth") {
     return null;
   }
-
-  // Passing `undefined` as the second argument to `dbAuthSession` will make
-  // it fall back to the default cookie name `session`, making it backwards
-  // compatible with existing RW apps.
-  const session = (0, _shared.dbAuthSession)(req.event, undefined);
+  const session = (0, import_shared.dbAuthSession)(req.event, void 0);
   return session;
 };
-exports.authDecoder = authDecoder;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  authDecoder,
+  createAuthDecoder
+});

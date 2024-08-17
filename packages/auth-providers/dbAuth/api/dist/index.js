@@ -1,58 +1,38 @@
 "use strict";
-
-var _context, _context2;
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/for-each");
-var _Object$keys = require("@babel/runtime-corejs3/core-js/object/keys");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-var _exportNames = {
-  PasswordValidationError: true,
-  authDecoder: true,
-  createAuthDecoder: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-_Object$defineProperty(exports, "PasswordValidationError", {
-  enumerable: true,
-  get: function () {
-    return _errors.PasswordValidationError;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var src_exports = {};
+__export(src_exports, {
+  PasswordValidationError: () => import_errors.PasswordValidationError,
+  authDecoder: () => import_decoder.authDecoder,
+  createAuthDecoder: () => import_decoder.createAuthDecoder
 });
-_Object$defineProperty(exports, "authDecoder", {
-  enumerable: true,
-  get: function () {
-    return _decoder.authDecoder;
-  }
+module.exports = __toCommonJS(src_exports);
+__reExport(src_exports, require("./DbAuthHandler"), module.exports);
+var import_errors = require("./errors");
+__reExport(src_exports, require("./shared"), module.exports);
+var import_decoder = require("./decoder");
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  PasswordValidationError,
+  authDecoder,
+  createAuthDecoder,
+  ...require("./DbAuthHandler"),
+  ...require("./shared")
 });
-_Object$defineProperty(exports, "createAuthDecoder", {
-  enumerable: true,
-  get: function () {
-    return _decoder.createAuthDecoder;
-  }
-});
-var _DbAuthHandler = require("./DbAuthHandler");
-_forEachInstanceProperty(_context = _Object$keys(_DbAuthHandler)).call(_context, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _DbAuthHandler[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _DbAuthHandler[key];
-    }
-  });
-});
-var _errors = require("./errors");
-var _shared = require("./shared");
-_forEachInstanceProperty(_context2 = _Object$keys(_shared)).call(_context2, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _shared[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _shared[key];
-    }
-  });
-});
-var _decoder = require("./decoder");
