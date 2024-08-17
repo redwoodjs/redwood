@@ -7654,12 +7654,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-setup@workspace:packages/auth-providers/supabase/setup"
   dependencies:
-    "@babel/cli": "npm:7.24.8"
-    "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.25.0"
+    "@arethetypeswrong/cli": "npm:0.15.4"
     "@redwoodjs/cli-helpers": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
-    core-js: "npm:3.38.0"
+    concurrently: "npm:8.2.2"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
   languageName: unknown
   linkType: soft
