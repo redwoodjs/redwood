@@ -1,66 +1,80 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var decoder_exports = {};
+__export(decoder_exports, {
+  authDecoder: () => authDecoder,
+  clerkAuthDecoder: () => clerkAuthDecoder
 });
-exports.clerkAuthDecoder = exports.authDecoder = void 0;
-var _startsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/starts-with"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/promise"));
-/**
- * @deprecated This function will be removed; it uses a rate-limited API. Use `clerkAuthDecoder` instead.
- */
+module.exports = __toCommonJS(decoder_exports);
 const authDecoder = async (token, type) => {
-  if (type !== 'clerk') {
+  if (type !== "clerk") {
     return null;
   }
-  const {
-    users,
-    verifyToken
-  } = await import('@clerk/clerk-sdk-node');
+  const { users, verifyToken } = await import("@clerk/clerk-sdk-node");
   try {
-    const issuer = iss => (0, _startsWith.default)(iss).call(iss, 'https://clerk.') || (0, _includes.default)(iss).call(iss, '.clerk.accounts');
+    const issuer = (iss) => iss.startsWith("https://clerk.") || iss.includes(".clerk.accounts");
     const jwtPayload = await verifyToken(token, {
       issuer,
-      apiUrl: process.env.CLERK_API_URL || 'https://api.clerk.dev',
+      apiUrl: process.env.CLERK_API_URL || "https://api.clerk.dev",
       jwtKey: process.env.CLERK_JWT_KEY,
       apiKey: process.env.CLERK_API_KEY,
       secretKey: process.env.CLERK_SECRET_KEY
     });
     if (!jwtPayload.sub) {
-      return _promise.default.reject(new Error('Session invalid'));
+      return Promise.reject(new Error("Session invalid"));
     }
     const user = await users.getUser(jwtPayload.sub);
     return {
       ...user,
-      roles: user.publicMetadata['roles'] ?? []
+      roles: user.publicMetadata["roles"] ?? []
     };
   } catch (error) {
     console.error(error);
-    return _promise.default.reject(error);
+    return Promise.reject(error);
   }
 };
-exports.authDecoder = authDecoder;
 const clerkAuthDecoder = async (token, type) => {
-  if (type !== 'clerk') {
+  if (type !== "clerk") {
     return null;
   }
-  const {
-    verifyToken
-  } = await import('@clerk/clerk-sdk-node');
+  const { verifyToken } = await import("@clerk/clerk-sdk-node");
   try {
-    const issuer = iss => (0, _startsWith.default)(iss).call(iss, 'https://clerk.') || (0, _includes.default)(iss).call(iss, '.clerk.accounts');
+    const issuer = (iss) => iss.startsWith("https://clerk.") || iss.includes(".clerk.accounts");
     const jwtPayload = await verifyToken(token, {
       issuer,
-      apiUrl: process.env.CLERK_API_URL || 'https://api.clerk.dev',
+      apiUrl: process.env.CLERK_API_URL || "https://api.clerk.dev",
       jwtKey: process.env.CLERK_JWT_KEY,
       apiKey: process.env.CLERK_API_KEY,
       secretKey: process.env.CLERK_SECRET_KEY
     });
     if (!jwtPayload.sub) {
-      return _promise.default.reject(new Error('Session invalid'));
+      return Promise.reject(new Error("Session invalid"));
     }
     return {
       ...jwtPayload,
@@ -68,7 +82,11 @@ const clerkAuthDecoder = async (token, type) => {
     };
   } catch (error) {
     console.error(error);
-    return _promise.default.reject(error);
+    return Promise.reject(error);
   }
 };
-exports.clerkAuthDecoder = clerkAuthDecoder;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  authDecoder,
+  clerkAuthDecoder
+});
