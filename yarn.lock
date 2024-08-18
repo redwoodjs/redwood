@@ -8012,20 +8012,21 @@ __metadata:
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
     "@babel/cli": "npm:7.24.8"
-    "@babel/runtime-corejs3": "npm:7.25.0"
     "@redwoodjs/cli": "workspace:*"
     "@redwoodjs/eslint-config": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/testing": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
     "@types/lodash": "npm:4.17.7"
-    core-js: "npm:3.38.0"
     graphql-tag: "npm:2.12.6"
     lodash: "npm:4.17.21"
     nodemon: "npm:3.1.4"
+    publint: "npm:0.2.10"
     react-refresh: "npm:0.14.0"
     rimraf: "npm:6.0.1"
+    tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
   bin:
     cross-env: ./dist/bins/cross-env.js
