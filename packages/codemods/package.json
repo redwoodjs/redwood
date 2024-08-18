@@ -8,15 +8,16 @@
     "directory": "packages/codemods"
   },
   "license": "MIT",
+  "type": "commonjs",
   "bin": "./dist/codemods.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.ts\" --ignore \"src/**/__tests__/**\" --ignore \"src/**/__testfixtures__/**\"",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-codemods.tgz",
     "build:watch": "nodemon --watch src --ignore dist --exec \"yarn build\"",
+    "check:package": "yarn publint",
     "generate:codemod": "yarn node ./tasks/generateCodemod/generateCodemod.mjs",
     "prepublishOnly": "yarn build",
     "test": "vitest run",
@@ -48,12 +49,15 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
     "@types/jscodeshift": "0.11.11",
     "@types/yargs": "17.0.33",
     "fs-extra": "11.2.0",
+    "publint": "0.2.10",
     "tempy": "1.0.1",
+    "tsx": "4.17.0",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
