@@ -8,6 +8,7 @@
     "directory": "packages/core"
   },
   "license": "MIT",
+  "type": "module",
   "bin": {
     "cross-env": "./dist/bins/cross-env.js",
     "eslint": "./dist/bins/eslint.js",
@@ -29,14 +30,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-core.tgz",
+    "check:package": "yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
     "@babel/cli": "7.24.8",
-    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
@@ -44,7 +44,6 @@
     "@redwoodjs/testing": "workspace:*",
     "@redwoodjs/web-server": "workspace:*",
     "babel-loader": "^9.1.3",
-    "core-js": "3.38.0",
     "graphql-tag": "2.12.6",
     "lodash": "4.17.21",
     "mini-css-extract-plugin": "2.9.0",
@@ -57,7 +56,10 @@
     "url-loader": "4.1.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.17.7"
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/lodash": "4.17.7",
+    "publint": "0.2.10",
+    "tsx": "4.17.0"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

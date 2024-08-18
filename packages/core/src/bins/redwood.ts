@@ -17,13 +17,14 @@
  * - https://yarnpkg.com/advanced/rulebook#packages-should-only-ever-require-what-they-formally-list-in-their-dependencies
  * - https://yarnpkg.com/advanced/rulebook#modules-shouldnt-hardcode-node_modules-paths-to-access-other-modules
  */
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
 // You can think about the argument we're passing to `createRequire` as being kinda like setting the `cwd`:
 //
 // > It's using the path/URL to resolve relative paths (e.g.: createRequire('/foo/bar')('./baz') may load /foo/baz/index.js)
 //
 // See https://github.com/nodejs/node/issues/40567#issuecomment-949825461.
+const require = createRequire(import.meta.url)
 const requireFromCli = createRequire(
   require.resolve('@redwoodjs/cli/package.json'),
 )
