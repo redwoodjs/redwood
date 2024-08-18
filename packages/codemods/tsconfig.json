@@ -3,7 +3,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "emitDeclarationOnly": false,
-    "noEmit": true
+    "noEmit": true,
+    "module": "Node16",
+    "moduleResolution": "Node16"
   },
   "include": ["src", "./testUtils.d.ts"],
   "exclude": ["**/__testfixtures__"]
