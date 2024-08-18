@@ -3,7 +3,7 @@ import { attw } from '../attw.js'
 async function main() {
   const cwd = process.argv[2]
   if (!cwd) {
-    console.error('Usage: rw-attw <path-to-package>')
+    console.error('Usage: rw-fwtools-attw <path-to-package>')
     process.exit(1)
   }
 
