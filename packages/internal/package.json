@@ -13,6 +13,7 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./package.json": "./package.json",
     "./dist/dev": {
       "types": "./dist/dev.d.ts",
       "default": "./dist/dev.js"
