@@ -31,3 +31,5 @@ packages/create-redwood-app/create-redwood-app.tgz
 
 .nx/cache
 .nx/workspace-data
+
+!packages/codemods/dist
