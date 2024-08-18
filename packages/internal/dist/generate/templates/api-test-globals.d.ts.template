@@ -1,5 +1,0 @@
-import type { CurrentUser } from '@redwoodjs/auth'
-
-declare global {
-  const mockCurrentUser: (currentUser: CurrentUser) => void
-}

@@ -1,7 +1,0 @@
-import type { GlobalContext } from "@redwoodjs/context"
-
-export {}
-
-declare global {
-  const context: GlobalContext
-}
