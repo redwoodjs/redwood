@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import path from 'node:path'
 
 import { $ } from 'zx'
+$.verbose = true
 
 interface Problem {
   kind: string
@@ -21,13 +22,15 @@ export async function attw({ cwd }: Options): Promise<Problem[]> {
   const pathToAttw = require.resolve('@arethetypeswrong/cli/package.json')
   const attwPackageJson = require(pathToAttw)
   const relativeBinPath = attwPackageJson.bin.attw
-  const attwBinPath = path.resolve(path.dirname(pathToAttw), relativeBinPath)
+  const attwBinPath = path.normalize(
+    path.resolve(path.dirname(pathToAttw), relativeBinPath),
+  )
 
   // Run attw via it's CLI
   await $({
     nothrow: true,
     cwd,
-  })`yarn node ${attwBinPath} -P -f json > .attw.json`
+  })`node ${attwBinPath} -P -f json > .attw.json`
 
   // Read the resulting JSON file
   const output = await $`cat .attw.json`
