@@ -8,6 +8,25 @@
   },
   "license": "MIT",
   "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./cache": {
+      "types": "./dist/cache/index.d.ts",
+      "default": "./dist/cache/index.js"
+    },
+    "./logger": {
+      "types": "./dist/logger/index.d.ts",
+      "default": "./dist/logger/index.js"
+    },
+    "./webhooks": {
+      "types": "./dist/webhooks/index.d.ts",
+      "default": "./dist/webhooks/index.js"
+    }
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
@@ -17,17 +36,14 @@
     "tsc": "./dist/bins/tsc.js"
   },
   "files": [
-    "dist",
-    "cache",
-    "logger",
-    "webhooks"
+    "dist"
   ],
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-api.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "check:attw": "yarn attw -P",
+    "check:attw": "yarn rw-fwtools-attw",
     "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -44,7 +60,6 @@
     "title-case": "3.0.3"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/aws-lambda": "8.10.143",
     "@types/jsonwebtoken": "9.0.6",
