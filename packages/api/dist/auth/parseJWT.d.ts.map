@@ -1,1 +1,0 @@
-{"version":3,"file":"parseJWT.d.ts","sourceRoot":"","sources":["../../src/auth/parseJWT.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,OAAO,GAAG,MAAM,CAAC,MAAM,EAAE,OAAO,CAAC,GAAG,IAAI,CAAA;AA8DpD,eAAO,MAAM,QAAQ,UAAW;IAC9B,OAAO,EAAE,OAAO,CAAA;IAChB,SAAS,CAAC,EAAE,MAAM,CAAA;CACnB,KAAG,GAKH,CAAA"}
