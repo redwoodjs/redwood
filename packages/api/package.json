@@ -8,6 +8,25 @@
   },
   "license": "MIT",
   "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./cache": {
+      "types": "./dist/cache/index.d.ts",
+      "default": "./dist/cache/index.js"
+    },
+    "./logger": {
+      "types": "./dist/logger/index.d.ts",
+      "default": "./dist/logger/index.js"
+    },
+    "./webhooks": {
+      "types": "./dist/webhooks/index.d.ts",
+      "default": "./dist/webhooks/index.js"
+    }
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
@@ -17,10 +36,7 @@
     "tsc": "./dist/bins/tsc.js"
   },
   "files": [
-    "dist",
-    "cache",
-    "logger",
-    "webhooks"
+    "dist"
   ],
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
