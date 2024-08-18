@@ -1,82 +1,92 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var cells_exports = {};
+__export(cells_exports, {
+  fileToAst: () => fileToAst,
+  findCells: () => findCells,
+  getCellGqlQuery: () => getCellGqlQuery,
+  getNamedExports: () => getNamedExports,
+  hasDefaultExport: () => hasDefaultExport,
+  isCellFile: () => isCellFile,
+  isFileInsideFolder: () => isFileInsideFolder,
+  parseDocumentAST: () => parseDocumentAST,
+  parseGqlQueryToAst: () => parseGqlQueryToAst
 });
-exports.parseGqlQueryToAst = exports.parseDocumentAST = exports.isFileInsideFolder = exports.isCellFile = exports.hasDefaultExport = exports.getNamedExports = exports.getCellGqlQuery = exports.findCells = exports.fileToAst = void 0;
-require("core-js/modules/es.array.push.js");
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _endsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/ends-with"));
-var _findIndex = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find-index"));
-var _startsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/starts-with"));
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _fs = _interopRequireDefault(require("fs"));
-var _path = _interopRequireDefault(require("path"));
-var _core = require("@babel/core");
-var _parser = require("@babel/parser");
-var _traverse = _interopRequireDefault(require("@babel/traverse"));
-var _fastGlob = _interopRequireDefault(require("fast-glob"));
-var _graphql = require("graphql");
-var _projectConfig = require("@redwoodjs/project-config");
-const findCells = (cwd = (0, _projectConfig.getPaths)().web.src) => {
-  const modules = _fastGlob.default.sync('**/*Cell.{js,jsx,ts,tsx}', {
+module.exports = __toCommonJS(cells_exports);
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+var import_core = require("@babel/core");
+var import_parser = require("@babel/parser");
+var import_traverse = __toESM(require("@babel/traverse"));
+var import_fast_glob = __toESM(require("fast-glob"));
+var import_graphql = require("graphql");
+var import_project_config = require("@redwoodjs/project-config");
+const findCells = (cwd = (0, import_project_config.getPaths)().web.src) => {
+  const modules = import_fast_glob.default.sync("**/*Cell.{js,jsx,ts,tsx}", {
     cwd,
     absolute: true,
-    ignore: ['node_modules']
+    ignore: ["node_modules"]
   });
-  return (0, _filter.default)(modules).call(modules, isCellFile);
+  return modules.filter(isCellFile);
 };
-exports.findCells = findCells;
-const isCellFile = p => {
-  const {
-    dir,
-    name
-  } = _path.default.parse(p);
-
-  // If the path isn't on the web side it cannot be a cell
-  if (!isFileInsideFolder(p, (0, _projectConfig.getPaths)().web.src)) {
+const isCellFile = (p) => {
+  const { dir, name } = import_path.default.parse(p);
+  if (!isFileInsideFolder(p, (0, import_project_config.getPaths)().web.src)) {
     return false;
   }
-
-  // A Cell must be a directory named module.
-  if (!(0, _endsWith.default)(dir).call(dir, name)) {
+  if (!dir.endsWith(name)) {
     return false;
   }
   const ast = fileToAst(p);
-
-  // A Cell should not have a default export.
   if (hasDefaultExport(ast)) {
     return false;
   }
-
-  // A Cell must export QUERY and Success.
-  const exports = getNamedExports(ast);
-  const exportedQUERY = (0, _findIndex.default)(exports).call(exports, v => v.name === 'QUERY') !== -1;
-  const exportedSuccess = (0, _findIndex.default)(exports).call(exports, v => v.name === 'Success') !== -1;
+  const exports2 = getNamedExports(ast);
+  const exportedQUERY = exports2.findIndex((v) => v.name === "QUERY") !== -1;
+  const exportedSuccess = exports2.findIndex((v) => v.name === "Success") !== -1;
   if (!exportedQUERY && !exportedSuccess) {
     return false;
   }
   return true;
 };
-exports.isCellFile = isCellFile;
 const isFileInsideFolder = (filePath, folderPath) => {
-  const {
-    dir
-  } = _path.default.parse(filePath);
-  const relativePathFromFolder = _path.default.relative(folderPath, dir);
-  if (!relativePathFromFolder || (0, _startsWith.default)(relativePathFromFolder).call(relativePathFromFolder, '..') || _path.default.isAbsolute(relativePathFromFolder)) {
+  const { dir } = import_path.default.parse(filePath);
+  const relativePathFromFolder = import_path.default.relative(folderPath, dir);
+  if (!relativePathFromFolder || relativePathFromFolder.startsWith("..") || import_path.default.isAbsolute(relativePathFromFolder)) {
     return false;
   } else {
     return true;
   }
 };
-exports.isFileInsideFolder = isFileInsideFolder;
-const hasDefaultExport = ast => {
+const hasDefaultExport = (ast) => {
   let exported = false;
-  (0, _traverse.default)(ast, {
+  (0, import_traverse.default)(ast, {
     ExportDefaultDeclaration() {
       exported = true;
       return;
@@ -84,79 +94,72 @@ const hasDefaultExport = ast => {
   });
   return exported;
 };
-exports.hasDefaultExport = hasDefaultExport;
-const getNamedExports = ast => {
+const getNamedExports = (ast) => {
   const namedExports = [];
-  (0, _traverse.default)(ast, {
-    ExportNamedDeclaration(path) {
-      // Re-exports from other modules
-      // Eg: export { a, b } from './module'
-      const specifiers = path.node?.specifiers;
+  (0, import_traverse.default)(ast, {
+    ExportNamedDeclaration(path2) {
+      const specifiers = path2.node?.specifiers;
       if (specifiers.length) {
         for (const s of specifiers) {
           const id = s.exported;
           namedExports.push({
             name: id.name,
-            type: 're-export'
+            type: "re-export"
           });
         }
         return;
       }
-      const declaration = path.node.declaration;
+      const declaration = path2.node.declaration;
       if (!declaration) {
         return;
       }
-      if (declaration.type === 'VariableDeclaration') {
+      if (declaration.type === "VariableDeclaration") {
         const id = declaration.declarations[0].id;
         namedExports.push({
           name: id.name,
-          type: 'variable'
+          type: "variable"
         });
-      } else if (declaration.type === 'FunctionDeclaration') {
+      } else if (declaration.type === "FunctionDeclaration") {
         namedExports.push({
           name: declaration?.id?.name,
-          type: 'function'
+          type: "function"
         });
-      } else if (declaration.type === 'ClassDeclaration') {
+      } else if (declaration.type === "ClassDeclaration") {
         namedExports.push({
           name: declaration?.id?.name,
-          type: 'class'
+          type: "class"
         });
       }
     }
   });
   return namedExports;
 };
-exports.getNamedExports = getNamedExports;
-const fileToAst = filePath => {
-  var _context;
-  const code = _fs.default.readFileSync(filePath, 'utf-8');
-
-  // use jsx plugin for web files, because in JS, the .jsx extension is not used
-  const isJsxFile = _path.default.extname(filePath).match(/[jt]sx$/) || isFileInsideFolder(filePath, (0, _projectConfig.getPaths)().web.base);
-  const plugins = (0, _filter.default)(_context = ['typescript', 'nullishCoalescingOperator', 'objectRestSpread', isJsxFile && 'jsx']).call(_context, Boolean);
+const fileToAst = (filePath) => {
+  const code = import_fs.default.readFileSync(filePath, "utf-8");
+  const isJsxFile = import_path.default.extname(filePath).match(/[jt]sx$/) || isFileInsideFolder(filePath, (0, import_project_config.getPaths)().web.base);
+  const plugins = [
+    "typescript",
+    "nullishCoalescingOperator",
+    "objectRestSpread",
+    isJsxFile && "jsx"
+  ].filter(Boolean);
   try {
-    return (0, _parser.parse)(code, {
-      sourceType: 'module',
+    return (0, import_parser.parse)(code, {
+      sourceType: "module",
       plugins
     });
   } catch (e) {
-    // console.error(chalk.red(`Error parsing: ${filePath}`))
     console.error(e);
-    throw new Error(e?.message); // we throw, so typescript doesn't complain about returning
+    throw new Error(e?.message);
   }
 };
-exports.fileToAst = fileToAst;
-const getCellGqlQuery = ast => {
-  let cellQuery = undefined;
-  (0, _traverse.default)(ast, {
-    ExportNamedDeclaration({
-      node
-    }) {
-      if (node.exportKind === 'value' && _core.types.isVariableDeclaration(node.declaration)) {
-        var _context2;
-        const exportedQueryNode = (0, _find.default)(_context2 = node.declaration.declarations).call(_context2, d => {
-          return _core.types.isIdentifier(d.id) && d.id.name === 'QUERY' && _core.types.isTaggedTemplateExpression(d.init);
+const getCellGqlQuery = (ast) => {
+  let cellQuery = void 0;
+  (0, import_traverse.default)(ast, {
+    ExportNamedDeclaration({ node }) {
+      if (node.exportKind === "value" && import_core.types.isVariableDeclaration(node.declaration)) {
+        const exportedQueryNode = node.declaration.declarations.find((d) => {
+          return import_core.types.isIdentifier(d.id) && d.id.name === "QUERY" && import_core.types.isTaggedTemplateExpression(d.init);
         });
         if (exportedQueryNode) {
           const templateExpression = exportedQueryNode.init;
@@ -168,19 +171,16 @@ const getCellGqlQuery = ast => {
   });
   return cellQuery;
 };
-exports.getCellGqlQuery = getCellGqlQuery;
-const parseGqlQueryToAst = gqlQuery => {
-  const ast = (0, _graphql.parse)(gqlQuery);
+const parseGqlQueryToAst = (gqlQuery) => {
+  const ast = (0, import_graphql.parse)(gqlQuery);
   return parseDocumentAST(ast);
 };
-exports.parseGqlQueryToAst = parseGqlQueryToAst;
-const parseDocumentAST = document => {
+const parseDocumentAST = (document) => {
   const operations = [];
-  (0, _graphql.visit)(document, {
+  (0, import_graphql.visit)(document, {
     OperationDefinition(node) {
-      var _context3;
       const fields = [];
-      (0, _forEach.default)(_context3 = node.selectionSet.selections).call(_context3, field => {
+      node.selectionSet.selections.forEach((field) => {
         fields.push(getFields(field));
       });
       operations.push({
@@ -192,25 +192,22 @@ const parseDocumentAST = document => {
   });
   return operations;
 };
-exports.parseDocumentAST = parseDocumentAST;
-const getFields = field => {
-  // base
+const getFields = (field) => {
   if (!field.selectionSet) {
     return field.name.value;
   } else {
     const obj = {
       [field.name.value]: []
     };
-    const lookAtFieldNode = node => {
-      node.selectionSet?.selections.forEach(subField => {
+    const lookAtFieldNode = (node) => {
+      node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
-          case _graphql.Kind.FIELD:
+          case import_graphql.Kind.FIELD:
             obj[field.name.value].push(getFields(subField));
             break;
-          case _graphql.Kind.FRAGMENT_SPREAD:
-            // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
+          case import_graphql.Kind.FRAGMENT_SPREAD:
             break;
-          case _graphql.Kind.INLINE_FRAGMENT:
+          case import_graphql.Kind.INLINE_FRAGMENT:
             lookAtFieldNode(subField);
         }
       });
@@ -219,3 +216,15 @@ const getFields = field => {
     return obj;
   }
 };
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  fileToAst,
+  findCells,
+  getCellGqlQuery,
+  getNamedExports,
+  hasDefaultExport,
+  isCellFile,
+  isFileInsideFolder,
+  parseDocumentAST,
+  parseGqlQueryToAst
+});

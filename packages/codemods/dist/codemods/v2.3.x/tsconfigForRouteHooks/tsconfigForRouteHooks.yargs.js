@@ -1,22 +1,51 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var tsconfigForRouteHooks_yargs_exports = {};
+__export(tsconfigForRouteHooks_yargs_exports, {
+  command: () => command,
+  description: () => description,
+  handler: () => handler
 });
-exports.handler = exports.description = exports.command = void 0;
-var _tasuku = _interopRequireDefault(require("tasuku"));
-var _tsconfigForRouteHooks = _interopRequireDefault(require("./tsconfigForRouteHooks"));
-const command = exports.command = 'tsconfig-for-route-hooks';
-const description = exports.description = '(v2.3.x->v2.3.x) Allow $api imports in *.routesHooks.ts files';
+module.exports = __toCommonJS(tsconfigForRouteHooks_yargs_exports);
+var import_tasuku = __toESM(require("tasuku"));
+var import_tsconfigForRouteHooks = __toESM(require("./tsconfigForRouteHooks"));
+const command = "tsconfig-for-route-hooks";
+const description = "(v2.3.x->v2.3.x) Allow $api imports in *.routesHooks.ts files";
 const handler = () => {
-  // @ts-expect-error ignore, old codemod
-  (0, _tasuku.default)('Tsconfig For Route Hooks', async ({
-    setOutput
-  }) => {
-    (0, _tsconfigForRouteHooks.default)();
-    setOutput('All done! Run `yarn rw lint --fix` to prettify your code');
+  (0, import_tasuku.default)("Tsconfig For Route Hooks", async ({ setOutput }) => {
+    (0, import_tsconfigForRouteHooks.default)();
+    setOutput("All done! Run `yarn rw lint --fix` to prettify your code");
   });
 };
-exports.handler = handler;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  command,
+  description,
+  handler
+});

@@ -1,41 +1,48 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var updateAuth0ToV2_exports = {};
+__export(updateAuth0ToV2_exports, {
+  default: () => transform
 });
-exports.default = transform;
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
+module.exports = __toCommonJS(updateAuth0ToV2_exports);
 function transform(file, api) {
   const j = api.jscodeshift;
   const ast = j(file.source);
-  const paths = (0, _find.default)(ast).call(ast, j.ObjectProperty, node => {
-    var _context;
-    return (0, _includes.default)(_context = ['redirect_uri', 'audience']).call(_context, node.key.name);
+  const paths = ast.find(j.ObjectProperty, (node) => {
+    return ["redirect_uri", "audience"].includes(node.key.name);
   });
   let nodes = paths.nodes();
-  nodes = (0, _map.default)(nodes).call(nodes, node => {
-    const {
-      comments: _comments,
-      ...rest
-    } = node;
+  nodes = nodes.map((node) => {
+    const { comments: _comments, ...rest } = node;
     return rest;
   });
   paths.remove();
-  (0, _find.default)(ast).call(ast, j.ObjectProperty, {
-    key: {
-      name: 'client_id'
-    }
-  }).insertAfter(j.objectProperty(j.identifier('authorizationParams'), j.objectExpression(nodes)));
-  (0, _find.default)(ast).call(ast, j.Identifier, {
-    name: 'client_id'
-  }).replaceWith('clientId');
+  ast.find(j.ObjectProperty, { key: { name: "client_id" } }).insertAfter(
+    j.objectProperty(
+      j.identifier("authorizationParams"),
+      j.objectExpression(nodes)
+    )
+  );
+  ast.find(j.Identifier, { name: "client_id" }).replaceWith("clientId");
   return ast.toSource({
     trailingComma: true,
-    quote: 'single',
-    lineTerminator: '\n'
+    quote: "single",
+    lineTerminator: "\n"
   });
 }

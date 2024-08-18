@@ -1,22 +1,59 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.handler = exports.description = exports.command = void 0;
-var _tasuku = _interopRequireDefault(require("tasuku"));
-var _detectEmptyCells = require("./detectEmptyCells");
-const command = exports.command = 'detect-empty-cells';
-const description = exports.description = '(v4.x.x->v5.x.x) Detects Cells susceptible to the new Empty behavior';
-const handler = () => {
-  (0, _tasuku.default)('Detecting Cells susceptible to the new Empty behavior', async taskContext => {
-    try {
-      await (0, _detectEmptyCells.detectEmptyCells)(taskContext);
-    } catch (e) {
-      taskContext.setError('Failed to detect cells susceptible to the new Empty behavior in your project \n' + e?.message);
-    }
-  });
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-exports.handler = handler;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var detectEmptyCells_yargs_exports = {};
+__export(detectEmptyCells_yargs_exports, {
+  command: () => command,
+  description: () => description,
+  handler: () => handler
+});
+module.exports = __toCommonJS(detectEmptyCells_yargs_exports);
+var import_tasuku = __toESM(require("tasuku"));
+var import_detectEmptyCells = require("./detectEmptyCells");
+const command = "detect-empty-cells";
+const description = "(v4.x.x->v5.x.x) Detects Cells susceptible to the new Empty behavior";
+const handler = () => {
+  (0, import_tasuku.default)(
+    "Detecting Cells susceptible to the new Empty behavior",
+    async (taskContext) => {
+      try {
+        await (0, import_detectEmptyCells.detectEmptyCells)(taskContext);
+      } catch (e) {
+        taskContext.setError(
+          "Failed to detect cells susceptible to the new Empty behavior in your project \n" + e?.message
+        );
+      }
+    }
+  );
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  command,
+  description,
+  handler
+});

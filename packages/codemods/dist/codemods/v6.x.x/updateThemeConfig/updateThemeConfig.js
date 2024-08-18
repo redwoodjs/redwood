@@ -1,53 +1,50 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var updateThemeConfig_exports = {};
+__export(updateThemeConfig_exports, {
+  default: () => transform
 });
-exports.default = transform;
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
+module.exports = __toCommonJS(updateThemeConfig_exports);
 function transform(file, api) {
-  var _context;
   const j = api.jscodeshift;
   const root = j(file.source);
-
-  // Find all module.exports assignments
-  (0, _forEach.default)(_context = (0, _find.default)(root).call(root, j.AssignmentExpression, {
+  root.find(j.AssignmentExpression, {
     left: {
-      type: 'MemberExpression',
-      object: {
-        type: 'Identifier',
-        name: 'module'
-      },
-      property: {
-        type: 'Identifier',
-        name: 'exports'
-      }
+      type: "MemberExpression",
+      object: { type: "Identifier", name: "module" },
+      property: { type: "Identifier", name: "exports" }
     }
-  })).call(_context, path => {
+  }).forEach((path) => {
     const configObject = path.value.right;
-    let themeObjectName = 'theme';
+    let themeObjectName = "theme";
     if (j.Identifier.check(configObject)) {
-      // If it already is an identifier, reuse it
-      // modules.exports = theme -> export default theme
-      // Note that export default statement is added outside this if statement
       themeObjectName = configObject.name;
-
-      // Remove module.exports assignment
       j(path).remove();
     } else {
-      // Create const declaration with the exported object
-      const declaration = j.variableDeclaration('const', [j.variableDeclarator(j.identifier(themeObjectName), configObject)]);
-
-      // Replace module.exports assignment with the const declaration
-      // module.exports = {...} -> const theme = {...}
+      const declaration = j.variableDeclaration("const", [
+        j.variableDeclarator(j.identifier(themeObjectName), configObject)
+      ]);
       j(path).replaceWith(declaration);
     }
-
-    // Add export default statement
-    const exportDefaultStatement = j.exportDefaultDeclaration(j.identifier(themeObjectName));
+    const exportDefaultStatement = j.exportDefaultDeclaration(
+      j.identifier(themeObjectName)
+    );
     j(path.parentPath).insertAfter(exportDefaultStatement);
   });
   return root.toSource();

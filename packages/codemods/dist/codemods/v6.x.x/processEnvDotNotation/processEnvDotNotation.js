@@ -1,34 +1,42 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var processEnvDotNotation_exports = {};
+__export(processEnvDotNotation_exports, {
+  default: () => transform
 });
-exports.default = transform;
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
+module.exports = __toCommonJS(processEnvDotNotation_exports);
 function transform(file, api) {
-  var _context;
   const j = api.jscodeshift;
   const root = j(file.source);
-  (0, _forEach.default)(_context = (0, _find.default)(root).call(root, j.MemberExpression, {
+  root.find(j.MemberExpression, {
     object: {
-      type: 'MemberExpression',
-      object: {
-        name: 'process'
-      },
-      property: {
-        name: 'env'
-      }
+      type: "MemberExpression",
+      object: { name: "process" },
+      property: { name: "env" }
     }
-  })).call(_context, path => {
+  }).forEach((path) => {
     const envVarName = path.value.property;
-
-    // Only apply the codemod if process.env['bbb']
-    // where bbb is the string literal. Otherwise it catches process.env.bbb too
     if (j.StringLiteral.check(envVarName)) {
-      const dotNotation = j.memberExpression(j.memberExpression(j.identifier('process'), j.identifier('env')), j.identifier(envVarName.value));
+      const dotNotation = j.memberExpression(
+        j.memberExpression(j.identifier("process"), j.identifier("env")),
+        j.identifier(envVarName.value)
+      );
       j(path).replaceWith(dotNotation);
     }
   });

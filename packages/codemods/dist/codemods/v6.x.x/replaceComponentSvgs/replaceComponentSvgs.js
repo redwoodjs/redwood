@@ -1,149 +1,154 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var replaceComponentSvgs_exports = {};
+__export(replaceComponentSvgs_exports, {
+  default: () => transform
 });
-exports.default = transform;
-require("core-js/modules/es.array.push.js");
-var _endsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/ends-with"));
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _startsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/starts-with"));
-var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/promise"));
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _promises = _interopRequireDefault(require("fs/promises"));
-var _path = _interopRequireDefault(require("path"));
-var _core = require("@svgr/core");
-var _pascalcase = _interopRequireDefault(require("pascalcase"));
-var _projectConfig = require("@redwoodjs/project-config");
-/**
- * @param svgFilePath Full path to the existing svg file
- * @param outputPath Full path to the output file
- * @param componentName Name of the React component to generate inside the output file
- * @param typescript Whether to generate TypeScript code
- */
+module.exports = __toCommonJS(replaceComponentSvgs_exports);
+var import_promises = __toESM(require("fs/promises"));
+var import_path = __toESM(require("path"));
+var import_core = require("@svgr/core");
+var import_pascalcase = __toESM(require("pascalcase"));
+var import_project_config = require("@redwoodjs/project-config");
 async function convertSvgToReactComponent(svgFilePath, outputPath, componentName, typescript) {
-  const svgContents = await _promises.default.readFile(svgFilePath, 'utf-8');
-  const jsCode = await (0, _core.transform)(svgContents, {
-    jsxRuntime: 'automatic',
-    plugins: ['@svgr/plugin-jsx'],
-    typescript
-  }, {
-    componentName: componentName
-  });
-  await _promises.default.writeFile(outputPath, jsCode);
+  const svgContents = await import_promises.default.readFile(svgFilePath, "utf-8");
+  const jsCode = await (0, import_core.transform)(
+    svgContents,
+    {
+      jsxRuntime: "automatic",
+      plugins: ["@svgr/plugin-jsx"],
+      typescript
+    },
+    {
+      componentName
+    }
+  );
+  await import_promises.default.writeFile(outputPath, jsCode);
   console.log();
   console.log(`SVG converted to React component: ${outputPath}`);
 }
 async function transform(file, api) {
-  var _context, _context2, _context3;
   const j = api.jscodeshift;
   const root = j(file.source);
-
-  // If the input file is TypeScript, we'll generate TypeScript SVG components
-  const isTS = (0, _endsWith.default)(_context = file.path).call(_context, '.tsx');
-
-  // Find all import declarations with "*.svg" import
-  const svgImports = (0, _filter.default)(_context2 = (0, _find.default)(root).call(root, j.ImportDeclaration)).call(_context2, path => {
-    const importPath = path.node.source.value;
-    return (0, _endsWith.default)(importPath).call(importPath, '.svg');
+  const isTS = file.path.endsWith(".tsx");
+  const svgImports = root.find(j.ImportDeclaration).filter((path2) => {
+    const importPath = path2.node.source.value;
+    return importPath.endsWith(".svg");
   });
-
-  // This is if you directly export from svg:
-  // e.g. export { default as X } from './X.svg'
-  const svgNamedExports = (0, _filter.default)(_context3 = (0, _find.default)(root).call(root, j.ExportNamedDeclaration)).call(_context3, path => {
-    var _context4;
-    const source = path.value.source;
-    return Boolean(source && typeof source.value === 'string' && (0, _endsWith.default)(_context4 = source.value).call(_context4, '.svg'));
+  const svgNamedExports = root.find(j.ExportNamedDeclaration).filter((path2) => {
+    const source = path2.value.source;
+    return Boolean(
+      source && typeof source.value === "string" && source.value.endsWith(".svg")
+    );
   });
   const svgsToConvert = [];
-  const importOrExportStatementsWithSvg = [...svgImports.paths(), ...svgNamedExports.paths()];
-  // Process each import declaration
-  (0, _forEach.default)(importOrExportStatementsWithSvg).call(importOrExportStatementsWithSvg, declaration => {
+  const importOrExportStatementsWithSvg = [
+    ...svgImports.paths(),
+    ...svgNamedExports.paths()
+  ];
+  importOrExportStatementsWithSvg.forEach((declaration) => {
     const specifiers = declaration.node.specifiers;
-
-    // Process each import specifier
-    specifiers?.forEach(specifier => {
-      var _context5;
-      // The name of the improted SVG, assigned based on whether you are
-      // importing or exporting directly
-      let svgName = '';
-      if (specifier.type === 'ExportSpecifier') {
+    specifiers?.forEach((specifier) => {
+      let svgName = "";
+      if (specifier.type === "ExportSpecifier") {
         svgName = specifier.exported.name;
-      } else if (specifier.type === 'ImportDefaultSpecifier') {
+      } else if (specifier.type === "ImportDefaultSpecifier") {
         if (!specifier.local) {
-          // Un-freaking-likely, skip if it happens
           return;
         }
         svgName = specifier.local.name;
       }
       const sourcePath = declaration.node.source?.value;
       if (!sourcePath) {
-        // Note sure how this is possible.... but TS tells me to do this
-        // I guess because most export statements don't have a source?
         return;
       }
-      const currentFolder = _path.default.dirname(file.path);
-      let pathToSvgFile = _path.default.resolve(currentFolder, sourcePath);
-      if ((0, _startsWith.default)(sourcePath).call(sourcePath, 'src/')) {
-        pathToSvgFile = sourcePath.replace('src/', (0, _projectConfig.getPaths)().web.src + '/');
+      const currentFolder = import_path.default.dirname(file.path);
+      let pathToSvgFile = import_path.default.resolve(currentFolder, sourcePath);
+      if (sourcePath.startsWith("src/")) {
+        pathToSvgFile = sourcePath.replace("src/", (0, import_project_config.getPaths)().web.src + "/");
       }
-
-      // Find the JSX elements that use the default import specifier
-      // e,g, <MySvg />
       const svgsUsedAsComponent = root.findJSXElements(svgName);
-
-      // Used as a render prop
-      // <Component icon={MySvg} />
-      const svgsUsedAsRenderProp = (0, _find.default)(root).call(root, j.JSXExpressionContainer, {
+      const svgsUsedAsRenderProp = root.find(j.JSXExpressionContainer, {
         expression: {
-          type: 'Identifier',
+          type: "Identifier",
           name: svgName
         }
       });
-
-      // a) exported from another file e.g. export { default as MySvg } from './X.svg'
-      // b) imported from another file e.g. import MySvg from './X.svg', then exported export { MySvg }
-      const svgsReexported = (0, _filter.default)(_context5 = (0, _find.default)(root).call(root, j.ExportSpecifier)).call(_context5, path => {
-        return path.value.local?.name === svgName || path.value.exported.name === svgName;
+      const svgsReexported = root.find(j.ExportSpecifier).filter((path2) => {
+        return path2.value.local?.name === svgName || path2.value.exported.name === svgName;
       });
-
-      // Concat all of them, and loop over once
-      const selectedSvgs = [...svgsUsedAsComponent.paths(), ...svgsUsedAsRenderProp.paths(), ...svgsReexported.paths()];
-      (0, _forEach.default)(selectedSvgs).call(selectedSvgs, () => {
+      const selectedSvgs = [
+        ...svgsUsedAsComponent.paths(),
+        ...svgsUsedAsRenderProp.paths(),
+        ...svgsReexported.paths()
+      ];
+      selectedSvgs.forEach(() => {
         svgsToConvert.push({
           filePath: pathToSvgFile,
-          importSourcePath: declaration.node.source // imports are all strings in this case
+          importSourcePath: declaration.node.source
+          // imports are all strings in this case
         });
       });
     });
   });
   if (svgsToConvert.length > 0) {
-    // if there are any svgs used as components, or render props, convert the svg to a react component
-    await _promise.default.all((0, _map.default)(svgsToConvert).call(svgsToConvert, async svg => {
-      const svgFileNameWithoutExtension = _path.default.basename(svg.filePath, _path.default.extname(svg.filePath));
-      const componentName = (0, _pascalcase.default)(svgFileNameWithoutExtension);
-      const newFileName = `${componentName}SVG`;
-
-      // The absolute path to the new file
-      const outputPath = _path.default.join(_path.default.dirname(svg.filePath), `${newFileName}.${isTS ? 'tsx' : 'jsx'}`);
-      try {
-        await convertSvgToReactComponent(svg.filePath, outputPath, componentName, isTS);
-      } catch (error) {
-        console.error(`Error converting ${svg.filePath} to React component: ${error.message}`);
-
-        // Don't proceed if SVGr fails
-        return;
-      }
-
-      // If SVGr is successful, change the import path
-      // '../../bazinga.svg' -> '../../BazingaSVG'
-      // Use extname, incase ext casing does not match
-      svg.importSourcePath.value = svg.importSourcePath.value.replace(`${svgFileNameWithoutExtension}${_path.default.extname(svg.filePath)}`, newFileName);
-    }));
+    await Promise.all(
+      svgsToConvert.map(async (svg) => {
+        const svgFileNameWithoutExtension = import_path.default.basename(
+          svg.filePath,
+          import_path.default.extname(svg.filePath)
+        );
+        const componentName = (0, import_pascalcase.default)(svgFileNameWithoutExtension);
+        const newFileName = `${componentName}SVG`;
+        const outputPath = import_path.default.join(
+          import_path.default.dirname(svg.filePath),
+          `${newFileName}.${isTS ? "tsx" : "jsx"}`
+        );
+        try {
+          await convertSvgToReactComponent(
+            svg.filePath,
+            outputPath,
+            componentName,
+            isTS
+          );
+        } catch (error) {
+          console.error(
+            `Error converting ${svg.filePath} to React component: ${error.message}`
+          );
+          return;
+        }
+        svg.importSourcePath.value = svg.importSourcePath.value.replace(
+          `${svgFileNameWithoutExtension}${import_path.default.extname(svg.filePath)}`,
+          newFileName
+        );
+      })
+    );
   }
   return root.toSource();
 }

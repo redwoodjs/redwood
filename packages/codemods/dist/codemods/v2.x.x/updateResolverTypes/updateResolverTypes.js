@@ -1,68 +1,74 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = transform;
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/find"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _jscodeshift = require("jscodeshift");
-const isTypeReference = typeAnnotation => _jscodeshift.TSTypeReference.check(typeAnnotation);
-const getTypeName = node => {
-  return _jscodeshift.Identifier.check(node.typeName) ? node.typeName.name : null;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-const isWrappedInPartial = node => {
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var updateResolverTypes_exports = {};
+__export(updateResolverTypes_exports, {
+  default: () => transform
+});
+module.exports = __toCommonJS(updateResolverTypes_exports);
+var import_jscodeshift = require("jscodeshift");
+const isTypeReference = (typeAnnotation) => import_jscodeshift.TSTypeReference.check(typeAnnotation);
+const getTypeName = (node) => {
+  return import_jscodeshift.Identifier.check(node.typeName) ? node.typeName.name : null;
+};
+const isWrappedInPartial = (node) => {
   const typeAnnotation = node.typeAnnotation;
-  return isTypeReference(typeAnnotation) && getTypeName(typeAnnotation) === 'Partial';
+  return isTypeReference(typeAnnotation) && getTypeName(typeAnnotation) === "Partial";
 };
 function transform(file, api) {
-  var _context3;
   const j = api.jscodeshift;
   const ast = j(file.source);
-  const findImportFromGqlTypes = importName => {
-    var _context;
-    return (0, _find.default)(_context = (0, _find.default)(ast).call(ast, j.ImportDeclaration, {
-      source: {
-        value: 'types/graphql'
-      }
-    })).call(_context, j.ImportSpecifier, {
-      imported: {
-        name: importName
-      }
+  const findImportFromGqlTypes = (importName) => {
+    return ast.find(j.ImportDeclaration, {
+      source: { value: "types/graphql" }
+    }).find(j.ImportSpecifier, { imported: { name: importName } });
+  };
+  const addToGqlTypesImports = (importName) => {
+    ast.find(j.ImportDeclaration, {
+      source: { value: "types/graphql" }
+    }).forEach((importStatement) => {
+      importStatement.node.specifiers?.push(
+        j.importSpecifier(j.identifier(importName))
+      );
     });
   };
-  const addToGqlTypesImports = importName => {
-    var _context2;
-    (0, _forEach.default)(_context2 = (0, _find.default)(ast).call(ast, j.ImportDeclaration, {
-      source: {
-        value: 'types/graphql'
-      }
-    })).call(_context2, importStatement => {
-      importStatement.node.specifiers?.push(j.importSpecifier(j.identifier(importName)));
-    });
-  };
-  (0, _forEach.default)(_context3 = (0, _find.default)(ast).call(ast, j.TSTypeAnnotation)).call(_context3, path => {
+  ast.find(j.TSTypeAnnotation).forEach((path) => {
     const typeAnnotationNode = path.node;
     if (
-    // If it's a MutationResolvers['x'] or QueryResolvers['x']
-    j.TSIndexedAccessType.check(typeAnnotationNode.typeAnnotation)) {
+      // If it's a MutationResolvers['x'] or QueryResolvers['x']
+      j.TSIndexedAccessType.check(typeAnnotationNode.typeAnnotation)
+    ) {
       return;
     }
     if (!isWrappedInPartial(typeAnnotationNode) && isTypeReference(typeAnnotationNode.typeAnnotation)) {
       const originalTypeName = getTypeName(typeAnnotationNode.typeAnnotation);
-      if (!originalTypeName || !(0, _includes.default)(originalTypeName).call(originalTypeName, 'Resolvers') || findImportFromGqlTypes(originalTypeName).length === 0 ||
-      // check if it was imported from types/graphql
-      (0, _includes.default)(originalTypeName).call(originalTypeName, 'RelationResolvers') // check if it's already a RelationResolver
-      ) {
-        // Skip other type annotations!
+      if (!originalTypeName || !originalTypeName.includes("Resolvers") || findImportFromGqlTypes(originalTypeName).length === 0 || // check if it was imported from types/graphql
+      originalTypeName.includes("RelationResolvers")) {
         return;
       }
-      const newTypeName = originalTypeName.replace('Resolvers', 'RelationResolvers');
+      const newTypeName = originalTypeName.replace(
+        "Resolvers",
+        "RelationResolvers"
+      );
       console.log(`Converting ${originalTypeName} to ${newTypeName}....`);
-      path.replace(j.tsTypeAnnotation(j.tsTypeReference(j.identifier(newTypeName))));
+      path.replace(
+        j.tsTypeAnnotation(j.tsTypeReference(j.identifier(newTypeName)))
+      );
       findImportFromGqlTypes(originalTypeName)?.remove();
       addToGqlTypesImports(newTypeName);
     }

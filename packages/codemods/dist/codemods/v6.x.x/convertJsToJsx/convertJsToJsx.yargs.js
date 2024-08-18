@@ -1,27 +1,59 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var convertJsToJsx_yargs_exports = {};
+__export(convertJsToJsx_yargs_exports, {
+  command: () => command,
+  description: () => description,
+  handler: () => handler
 });
-exports.handler = exports.description = exports.command = void 0;
-var _path = _interopRequireDefault(require("path"));
-var _fastGlob = _interopRequireDefault(require("fast-glob"));
-var _tasuku = _interopRequireDefault(require("tasuku"));
-var _runTransform = _interopRequireDefault(require("../../../lib/runTransform"));
-const command = exports.command = 'convert-js-to-jsx';
-const description = exports.description = '(v5.x.x->v6.x.x) Converts web components from .js to .jsx';
+module.exports = __toCommonJS(convertJsToJsx_yargs_exports);
+var import_path = __toESM(require("path"));
+var import_fast_glob = __toESM(require("fast-glob"));
+var import_tasuku = __toESM(require("tasuku"));
+var import_runTransform = __toESM(require("../../../lib/runTransform"));
+const command = "convert-js-to-jsx";
+const description = "(v5.x.x->v6.x.x) Converts web components from .js to .jsx";
 const handler = () => {
-  (0, _tasuku.default)('Convert Js To Jsx', async ({
-    setOutput
-  }) => {
-    await (0, _runTransform.default)({
-      transformPath: _path.default.join(__dirname, 'convertJsToJsx.js'),
+  (0, import_tasuku.default)("Convert Js To Jsx", async ({ setOutput }) => {
+    await (0, import_runTransform.default)({
+      transformPath: import_path.default.join(__dirname, "convertJsToJsx.js"),
       // All files in web/src that are .js
-      targetPaths: _fastGlob.default.sync('web/src/**/*.js')
+      targetPaths: import_fast_glob.default.sync("web/src/**/*.js")
     });
-    setOutput('All done! Your file contents have not been changed just the extension.');
+    setOutput(
+      "All done! Your file contents have not been changed just the extension."
+    );
   });
 };
-exports.handler = handler;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  command,
+  description,
+  handler
+});

@@ -1,38 +1,67 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var list_yargs_exports = {};
+__export(list_yargs_exports, {
+  aliases: () => aliases,
+  builder: () => builder,
+  command: () => command,
+  description: () => description,
+  handler: () => handler
 });
-exports.handler = exports.description = exports.command = exports.builder = exports.aliases = void 0;
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/filter"));
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/for-each"));
-var _fs = _interopRequireDefault(require("fs"));
-var _path = _interopRequireDefault(require("path"));
-var _yargsParser = require("yargs-parser");
-const command = exports.command = 'list <rwVersion>';
-const description = exports.description = 'List available codemods for a specific version';
-const aliases = exports.aliases = ['ls'];
-const builder = yargs => {
-  var _context;
-  yargs.positional('rwVersion', {
-    type: 'string',
+module.exports = __toCommonJS(list_yargs_exports);
+var import_fs = __toESM(require("fs"));
+var import_path = __toESM(require("path"));
+var import_yargs_parser = require("yargs-parser");
+const command = "list <rwVersion>";
+const description = "List available codemods for a specific version";
+const aliases = ["ls"];
+const builder = (yargs) => {
+  yargs.positional("rwVersion", {
+    type: "string",
     required: true,
-    choices: (0, _filter.default)(_context = _fs.default.readdirSync(__dirname)).call(_context, file => !_fs.default.statSync(_path.default.join(__dirname, file)).isFile()) // Only list the folders
+    choices: import_fs.default.readdirSync(__dirname).filter((file) => !import_fs.default.statSync(import_path.default.join(__dirname, file)).isFile())
+    // Only list the folders
   });
 };
-exports.builder = builder;
-const handler = ({
-  rwVersion
-}) => {
-  console.log('Listing codemods for', rwVersion);
+const handler = ({ rwVersion }) => {
+  console.log("Listing codemods for", rwVersion);
   console.log();
-  const modsForVersion = _fs.default.readdirSync(_path.default.join(__dirname, rwVersion));
-  (0, _forEach.default)(modsForVersion).call(modsForVersion, codemod => {
-    // Use decamelize to match the usual yargs names,
-    // instead of having to load the .yargs files
-    console.log(`- npx @redwoodjs/codemods ${(0, _yargsParser.decamelize)(codemod)}`);
+  const modsForVersion = import_fs.default.readdirSync(import_path.default.join(__dirname, rwVersion));
+  modsForVersion.forEach((codemod) => {
+    console.log(`- npx @redwoodjs/codemods ${(0, import_yargs_parser.decamelize)(codemod)}`);
   });
 };
-exports.handler = handler;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  aliases,
+  builder,
+  command,
+  description,
+  handler
+});
