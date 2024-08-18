@@ -1,5 +1,5 @@
-import { execSync } from 'node:child_process'
-import fs from 'node:fs/promises'
+import { spawnSync } from 'node:child_process'
+import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 
@@ -21,18 +21,25 @@ export async function attw(): Promise<Problem[]> {
     path.resolve(path.dirname(pathToAttw), relativeBinPath),
   )
 
-  // Run attw via it's CLI
-  const outputFile = '.attw.json'
+  // Run attw via it's CLI and save the output to a file
+  const outputFileName = '.attw.json'
+  const outputFile = fs.openSync(outputFileName, 'w')
   try {
-    execSync(`node ${attwBinPath} -P -f json > ${outputFile}`)
+    spawnSync('node', [attwBinPath, '-P', '-f', 'json'], {
+      encoding: 'utf8',
+      stdio: ['ignore', outputFile, outputFile],
+    })
   } catch {
     // We don't care about non-zero exit codes
   }
+  fs.closeSync(outputFile)
 
   // Read the resulting JSON file
-  const output = await fs.readFile(outputFile, 'utf8')
-  await fs.unlink(outputFile)
-  const json = JSON.parse(output)
+  const content = fs.readFileSync(outputFileName, {
+    encoding: 'utf8',
+  })
+  fs.unlinkSync(outputFileName)
+  const json = JSON.parse(content)
 
   // If no errors were found then return early
   if (!json.analysis.problems || json.analysis.problems.length === 0) {
