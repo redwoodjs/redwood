@@ -1,8 +1,7 @@
+import { execSync } from 'node:child_process'
+import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
-
-import { $ } from 'zx'
-$.verbose = true
 
 interface Problem {
   kind: string
@@ -10,11 +9,7 @@ interface Problem {
   resolutionKind?: string
 }
 
-interface Options {
-  cwd: string
-}
-
-export async function attw({ cwd }: Options): Promise<Problem[]> {
+export async function attw(): Promise<Problem[]> {
   // We can't rely on directly running the attw binary because it's not
   // a direct dependency of the package that will ultimately use this.
   // Instead, we have to do a little work to find the attw binary and run it.
@@ -27,15 +22,17 @@ export async function attw({ cwd }: Options): Promise<Problem[]> {
   )
 
   // Run attw via it's CLI
-  await $({
-    nothrow: true,
-    cwd,
-  })`node ${attwBinPath} -P -f json > .attw.json`
+  const outputFile = '.attw.json'
+  try {
+    execSync(`node ${attwBinPath} -P -f json > ${outputFile}`)
+  } catch {
+    // We don't care about non-zero exit codes
+  }
 
   // Read the resulting JSON file
-  const output = await $`cat .attw.json`
-  await $`rm .attw.json`
-  const json = JSON.parse(output.stdout)
+  const output = await fs.readFile(outputFile, 'utf8')
+  await fs.unlink(outputFile)
+  const json = JSON.parse(output)
 
   // If no errors were found then return early
   if (!json.analysis.problems || json.analysis.problems.length === 0) {

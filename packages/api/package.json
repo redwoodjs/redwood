@@ -43,7 +43,7 @@
     "build:pack": "yarn pack -o redwoodjs-api.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "check:attw": "yarn rw-fwtools-attw $(pwd)",
+    "check:attw": "yarn rw-fwtools-attw",
     "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
