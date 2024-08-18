@@ -1,42 +1,58 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var RedisClient_exports = {};
+__export(RedisClient_exports, {
+  default: () => RedisClient
 });
-exports.default = void 0;
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/json/stringify"));
-require("core-js/modules/esnext.json.parse.js");
-var _BaseClient = _interopRequireDefault(require("./BaseClient"));
-class RedisClient extends _BaseClient.default {
+module.exports = __toCommonJS(RedisClient_exports);
+var import_BaseClient = __toESM(require("./BaseClient"));
+class RedisClient extends import_BaseClient.default {
+  client;
+  logger;
+  redisOptions;
   constructor(options) {
-    const {
-      logger,
-      ...redisOptions
-    } = options;
+    const { logger, ...redisOptions } = options;
     super();
-    this.client = void 0;
-    this.logger = void 0;
-    this.redisOptions = void 0;
     this.logger = logger;
     this.redisOptions = redisOptions;
   }
   async connect() {
-    // async import to make sure Redis isn't imported for MemCache
-    const {
-      createClient
-    } = await import('redis');
-
-    // NOTE: type in redis client does not match the return type of createClient
+    const { createClient } = await import("redis");
     this.client = createClient(this.redisOptions);
-    this.client.on('error', err => this.logger?.error(err) || console.error(err));
+    this.client.on(
+      "error",
+      (err) => this.logger?.error(err) || console.error(err)
+    );
     await this.client.connect();
   }
-
   // @NOTE: disconnect intentionally not implemented for Redis
   // Because node-redis recovers gracefully from connection loss
-
   async get(key) {
     if (!this.client) {
       await this.connect();
@@ -52,15 +68,12 @@ class RedisClient extends _BaseClient.default {
     if (options.expires) {
       setOptions.EX = options.expires;
     }
-    return this.client?.set(key, (0, _stringify.default)(value), setOptions);
+    return this.client?.set(key, JSON.stringify(value), setOptions);
   }
   async del(key) {
     if (!this.client) {
       await this.connect();
     }
-
-    // Redis client returns 0 or 1, so convert to true/false manually
-    return !!(await this.client?.del([key]));
+    return !!await this.client?.del([key]);
   }
 }
-exports.default = RedisClient;

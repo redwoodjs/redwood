@@ -1,98 +1,86 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var jwtVerifier_exports = {};
+__export(jwtVerifier_exports, {
+  default: () => jwtVerifier_default,
+  jwtVerifier: () => jwtVerifier,
+  verifySignature: () => verifySignature
 });
-exports.verifySignature = exports.jwtVerifier = exports.default = void 0;
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-var _common = require("./common");
-/**
- *
- * createSignature
- *
- */
+module.exports = __toCommonJS(jwtVerifier_exports);
+var import_jsonwebtoken = __toESM(require("jsonwebtoken"));
+var import_common = require("./common");
 const createSignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET,
+  secret = import_common.DEFAULT_WEBHOOK_SECRET,
   options
 }) => {
   try {
-    const signOptions = options?.issuer ? {
-      issuer: options?.issuer
-    } : undefined;
-    return _jsonwebtoken.default.sign(payload, secret, {
-      ...signOptions
-    });
+    const signOptions = options?.issuer ? { issuer: options?.issuer } : void 0;
+    return import_jsonwebtoken.default.sign(payload, secret, { ...signOptions });
   } catch (error) {
-    throw new _common.WebhookSignError(error.message);
+    throw new import_common.WebhookSignError(error.message);
   }
 };
-
-/**
- *
- * verifySignature
- *
- */
 const verifySignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET,
+  secret = import_common.DEFAULT_WEBHOOK_SECRET,
   signature,
   options
 }) => {
   try {
-    if (payload === undefined || payload?.length === 0) {
-      console.warn('Missing payload');
+    if (payload === void 0 || payload?.length === 0) {
+      console.warn("Missing payload");
     }
     if (options?.issuer) {
-      _jsonwebtoken.default.verify(signature, secret, {
-        issuer: options?.issuer
-      });
+      import_jsonwebtoken.default.verify(signature, secret, { issuer: options?.issuer });
     } else {
-      _jsonwebtoken.default.verify(signature, secret);
+      import_jsonwebtoken.default.verify(signature, secret);
     }
     return true;
   } catch {
-    throw new _common.WebhookVerificationError();
+    throw new import_common.WebhookVerificationError();
   }
 };
-
-/**
- *
- * JWT Payload Verifier
- *
- * Based on Netlify's webhook payload verification
- * @see: https://docs.netlify.com/site-deploys/notifications/#payload-signature
- *
- */
-exports.verifySignature = verifySignature;
-const jwtVerifier = options => {
+const jwtVerifier = (options) => {
   return {
-    sign: ({
-      payload,
-      secret
-    }) => {
-      return createSignature({
-        payload,
-        secret,
-        options
-      });
+    sign: ({ payload, secret }) => {
+      return createSignature({ payload, secret, options });
     },
-    verify: ({
-      payload,
-      secret,
-      signature
-    }) => {
-      return verifySignature({
-        payload,
-        secret,
-        signature,
-        options
-      });
+    verify: ({ payload, secret, signature }) => {
+      return verifySignature({ payload, secret, signature, options });
     },
-    type: 'jwtVerifier'
+    type: "jwtVerifier"
   };
 };
-exports.jwtVerifier = jwtVerifier;
-var _default = exports.default = jwtVerifier;
+var jwtVerifier_default = jwtVerifier;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  jwtVerifier,
+  verifySignature
+});

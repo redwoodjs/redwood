@@ -1,36 +1,40 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var secretKeyVerifier_exports = {};
+__export(secretKeyVerifier_exports, {
+  default: () => secretKeyVerifier_default
 });
-exports.default = void 0;
-var _common = require("./common");
-/**
- *
- * Secret Key Verifier
- *
- * Use when the payload is not signed, but rather authorized via a known secret key
- *
- */
-const secretKeyVerifier = _options => {
+module.exports = __toCommonJS(secretKeyVerifier_exports);
+var import_common = require("./common");
+const secretKeyVerifier = (_options) => {
   return {
-    sign: ({
-      secret
-    }) => {
+    sign: ({ secret }) => {
       return secret;
     },
-    verify: ({
-      signature,
-      secret = _common.DEFAULT_WEBHOOK_SECRET
-    }) => {
+    verify: ({ signature, secret = import_common.DEFAULT_WEBHOOK_SECRET }) => {
       const verified = signature === secret;
       if (!verified) {
-        throw new _common.WebhookVerificationError();
+        throw new import_common.WebhookVerificationError();
       }
       return verified;
     },
-    type: 'secretKeyVerifier'
+    type: "secretKeyVerifier"
   };
 };
-var _default = exports.default = secretKeyVerifier;
+var secretKeyVerifier_default = secretKeyVerifier;

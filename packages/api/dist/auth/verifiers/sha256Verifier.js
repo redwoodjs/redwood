@@ -1,98 +1,85 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var sha256Verifier_exports = {};
+__export(sha256Verifier_exports, {
+  default: () => sha256Verifier_default,
+  verifySignature: () => verifySignature
 });
-exports.verifySignature = exports.default = void 0;
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/json/stringify"));
-var _crypto = require("crypto");
-var _common = require("./common");
+module.exports = __toCommonJS(sha256Verifier_exports);
+var import_crypto = require("crypto");
+var import_common = require("./common");
 function toNormalizedJsonString(payload) {
-  return (0, _stringify.default)(payload).replace(/[^\\]\\u[\da-f]{4}/g, s => {
+  return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {
     return s.substr(0, 3) + s.substr(3).toUpperCase();
   });
 }
-
-/**
- *
- * createSignature
- *
- */
 const createSignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET
+  secret = import_common.DEFAULT_WEBHOOK_SECRET
 }) => {
-  const algorithm = 'sha256';
-  const hmac = (0, _crypto.createHmac)(algorithm, secret);
-  payload = typeof payload === 'string' ? payload : toNormalizedJsonString(payload);
-  const digest = Buffer.from(algorithm + '=' + hmac.update(payload).digest('hex'), 'utf8');
+  const algorithm = "sha256";
+  const hmac = (0, import_crypto.createHmac)(algorithm, secret);
+  payload = typeof payload === "string" ? payload : toNormalizedJsonString(payload);
+  const digest = Buffer.from(
+    algorithm + "=" + hmac.update(payload).digest("hex"),
+    "utf8"
+  );
   return digest.toString();
 };
-
-/**
- *
- * verifySignature
- *
- */
 const verifySignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET,
+  secret = import_common.DEFAULT_WEBHOOK_SECRET,
   signature
 }) => {
   try {
-    const algorithm = signature.split('=')[0];
-    const webhookSignature = Buffer.from(signature || '', 'utf8');
-    const hmac = (0, _crypto.createHmac)(algorithm, secret);
-    payload = typeof payload === 'string' ? payload : toNormalizedJsonString(payload);
-    const digest = Buffer.from(algorithm + '=' + hmac.update(payload).digest('hex'), 'utf8');
-
-    // constant time comparison to prevent timing attacks
-    // https://stackoverflow.com/a/31096242/206879
-    // https://en.wikipedia.org/wiki/Timing_attack
-    const verified = webhookSignature.length === digest.length && (0, _crypto.timingSafeEqual)(digest, webhookSignature);
+    const algorithm = signature.split("=")[0];
+    const webhookSignature = Buffer.from(signature || "", "utf8");
+    const hmac = (0, import_crypto.createHmac)(algorithm, secret);
+    payload = typeof payload === "string" ? payload : toNormalizedJsonString(payload);
+    const digest = Buffer.from(
+      algorithm + "=" + hmac.update(payload).digest("hex"),
+      "utf8"
+    );
+    const verified = webhookSignature.length === digest.length && (0, import_crypto.timingSafeEqual)(digest, webhookSignature);
     if (verified) {
       return verified;
     }
-    throw new _common.WebhookVerificationError();
+    throw new import_common.WebhookVerificationError();
   } catch (error) {
-    throw new _common.WebhookVerificationError(`${_common.VERIFICATION_ERROR_MESSAGE}: ${error.message}`);
+    throw new import_common.WebhookVerificationError(
+      `${import_common.VERIFICATION_ERROR_MESSAGE}: ${error.message}`
+    );
   }
 };
-
-/**
- *
- * SHA256 HMAC Payload Verifier
- *
- * Based on GitHub's webhook payload verification
- * @see https://docs.github.com/en/developers/webhooks-and-events/securing-your-webhooks
- *
- */
-exports.verifySignature = verifySignature;
-const sha256Verifier = _options => {
+const sha256Verifier = (_options) => {
   return {
-    sign: ({
-      payload,
-      secret
-    }) => {
-      return createSignature({
-        payload,
-        secret
-      });
+    sign: ({ payload, secret }) => {
+      return createSignature({ payload, secret });
     },
-    verify: ({
-      payload,
-      secret,
-      signature
-    }) => {
-      return verifySignature({
-        payload,
-        secret,
-        signature
-      });
+    verify: ({ payload, secret, signature }) => {
+      return verifySignature({ payload, secret, signature });
     },
-    type: 'sha256Verifier'
+    type: "sha256Verifier"
   };
 };
-var _default = exports.default = sha256Verifier;
+var sha256Verifier_default = sha256Verifier;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  verifySignature
+});

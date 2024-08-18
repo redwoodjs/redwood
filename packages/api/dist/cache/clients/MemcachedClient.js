@@ -1,27 +1,48 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var MemcachedClient_exports = {};
+__export(MemcachedClient_exports, {
+  default: () => MemcachedClient
 });
-exports.default = void 0;
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/json/stringify"));
-require("core-js/modules/esnext.json.parse.js");
-var _BaseClient = _interopRequireDefault(require("./BaseClient"));
-class MemcachedClient extends _BaseClient.default {
+module.exports = __toCommonJS(MemcachedClient_exports);
+var import_BaseClient = __toESM(require("./BaseClient"));
+class MemcachedClient extends import_BaseClient.default {
+  client;
+  servers;
+  options;
   constructor(servers, options) {
     super();
-    this.client = void 0;
-    this.servers = void 0;
-    this.options = void 0;
     this.servers = servers;
     this.options = options;
   }
   async connect() {
-    const {
-      Client: MemCachedClient
-    } = await import('memjs');
+    const { Client: MemCachedClient } = await import("memjs");
     this.client = MemCachedClient.create(this.servers, this.options);
   }
   async disconnect() {
@@ -43,15 +64,12 @@ class MemcachedClient extends _BaseClient.default {
     if (!this.client) {
       await this.connect();
     }
-    return this.client?.set(key, (0, _stringify.default)(value), options);
+    return this.client?.set(key, JSON.stringify(value), options);
   }
   async del(key) {
     if (!this.client) {
       await this.connect();
     }
-
-    // memcached returns true/false natively
     return this.client?.delete(key);
   }
 }
-exports.default = MemcachedClient;

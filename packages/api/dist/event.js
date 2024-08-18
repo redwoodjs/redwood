@@ -1,16 +1,34 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var event_exports = {};
+__export(event_exports, {
+  getEventHeader: () => getEventHeader
 });
-exports.getEventHeader = void 0;
-var _transforms = require("./transforms");
-// Extracts the header from an event, handling lower and upper case header names.
+module.exports = __toCommonJS(event_exports);
+var import_transforms = require("./transforms");
 const getEventHeader = (event, headerName) => {
-  if ((0, _transforms.isFetchApiRequest)(event)) {
+  if ((0, import_transforms.isFetchApiRequest)(event)) {
     return event.headers.get(headerName);
   }
   return event.headers[headerName] || event.headers[headerName.toLowerCase()];
 };
-exports.getEventHeader = getEventHeader;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  getEventHeader
+});

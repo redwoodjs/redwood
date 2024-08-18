@@ -1,37 +1,38 @@
 "use strict";
-
-var _context;
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/for-each");
-var _Object$keys = require("@babel/runtime-corejs3/core-js/object/keys");
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-var _exportNames = {
-  createVerifier: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-exports.createVerifier = void 0;
-var _common = require("./common");
-_forEachInstanceProperty(_context = _Object$keys(_common)).call(_context, function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _common[key]) return;
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _common[key];
-    }
-  });
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var verifiers_exports = {};
+__export(verifiers_exports, {
+  createVerifier: () => createVerifier
 });
-/**
- * @param {SupportedVerifierTypes} type - What verification type methods used to sign and verify signatures
- * @param {VerifyOptions} options - Options used to verify the signature based on verifiers requirements
- */
+module.exports = __toCommonJS(verifiers_exports);
+var import_common = require("./common");
+__reExport(verifiers_exports, require("./common"), module.exports);
 const createVerifier = (type, options) => {
   if (options) {
-    return _common.verifierLookup[type](options);
+    return import_common.verifierLookup[type](options);
   } else {
-    return _common.verifierLookup[type]();
+    return import_common.verifierLookup[type]();
   }
 };
-exports.createVerifier = createVerifier;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  createVerifier,
+  ...require("./common")
+});

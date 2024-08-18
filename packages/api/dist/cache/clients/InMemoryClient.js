@@ -1,27 +1,44 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var InMemoryClient_exports = {};
+__export(InMemoryClient_exports, {
+  default: () => InMemoryClient
 });
-exports.default = void 0;
-require("core-js/modules/esnext.json.parse.js");
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/values"));
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/json/stringify"));
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/entries"));
-var _BaseClient = _interopRequireDefault(require("./BaseClient"));
-// Simple in-memory cache client for testing. NOT RECOMMENDED FOR PRODUCTION
-
-class InMemoryClient extends _BaseClient.default {
+module.exports = __toCommonJS(InMemoryClient_exports);
+var import_BaseClient = __toESM(require("./BaseClient"));
+class InMemoryClient extends import_BaseClient.default {
+  storage;
   // initialize with pre-cached data if needed
   constructor(data = {}) {
     super();
-    this.storage = void 0;
     this.storage = data;
   }
-
   /**
    * Special function for testing, only available in InMemoryClient
    *
@@ -29,15 +46,17 @@ class InMemoryClient extends _BaseClient.default {
    *
    */
   get contents() {
-    var _context;
-    return (0, _map.default)(_context = (0, _values.default)(this.storage)).call(_context, cacheObj => JSON.parse(cacheObj.value));
+    return Object.values(this.storage).map(
+      (cacheObj) => JSON.parse(cacheObj.value)
+    );
   }
-
   // Not needed for InMemoryClient
-  async disconnect() {}
-  async connect() {}
+  async disconnect() {
+  }
+  async connect() {
+  }
   async get(key) {
-    const now = new Date();
+    const now = /* @__PURE__ */ new Date();
     if (this.storage[key] && this.storage[key].expires > now.getTime()) {
       return JSON.parse(this.storage[key].value);
     } else {
@@ -45,15 +64,11 @@ class InMemoryClient extends _BaseClient.default {
       return null;
     }
   }
-
   // stores expiration dates as epoch
   async set(key, value, options = {}) {
-    const now = new Date();
-    now.setSeconds(now.getSeconds() + (options?.expires || 315360000));
-    const data = {
-      expires: now.getTime(),
-      value: (0, _stringify.default)(value)
-    };
+    const now = /* @__PURE__ */ new Date();
+    now.setSeconds(now.getSeconds() + (options?.expires || 31536e4));
+    const data = { expires: now.getTime(), value: JSON.stringify(value) };
     this.storage[key] = data;
     return true;
   }
@@ -65,7 +80,6 @@ class InMemoryClient extends _BaseClient.default {
       return false;
     }
   }
-
   /**
    * Special functions for testing, only available in InMemoryClient
    */
@@ -73,8 +87,8 @@ class InMemoryClient extends _BaseClient.default {
     this.storage = {};
   }
   cacheKeyForValue(value) {
-    for (const [cacheKey, cacheObj] of (0, _entries.default)(this.storage)) {
-      if (cacheObj.value === (0, _stringify.default)(value)) {
+    for (const [cacheKey, cacheObj] of Object.entries(this.storage)) {
+      if (cacheObj.value === JSON.stringify(value)) {
         return cacheKey;
       }
     }
@@ -84,4 +98,3 @@ class InMemoryClient extends _BaseClient.default {
     return !!this.cacheKeyForValue(value);
   }
 }
-exports.default = InMemoryClient;

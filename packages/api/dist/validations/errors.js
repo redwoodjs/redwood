@@ -1,34 +1,75 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var errors_exports = {};
+__export(errors_exports, {
+  AbsenceValidationError: () => AbsenceValidationError,
+  AcceptanceValidationError: () => AcceptanceValidationError,
+  BetweenLengthValidationError: () => BetweenLengthValidationError,
+  CustomValidationError: () => CustomValidationError,
+  EmailValidationError: () => EmailValidationError,
+  EqualLengthValidationError: () => EqualLengthValidationError,
+  EqualNumericalityValidationError: () => EqualNumericalityValidationError,
+  EvenNumericalityValidationError: () => EvenNumericalityValidationError,
+  ExclusionValidationError: () => ExclusionValidationError,
+  FormatValidationError: () => FormatValidationError,
+  GreaterThanNumericalityValidationError: () => GreaterThanNumericalityValidationError,
+  GreaterThanOrEqualNumericalityValidationError: () => GreaterThanOrEqualNumericalityValidationError,
+  InclusionValidationError: () => InclusionValidationError,
+  IntegerNumericalityValidationError: () => IntegerNumericalityValidationError,
+  LessThanNumericalityValidationError: () => LessThanNumericalityValidationError,
+  LessThanOrEqualNumericalityValidationError: () => LessThanOrEqualNumericalityValidationError,
+  MaxLengthValidationError: () => MaxLengthValidationError,
+  MinLengthValidationError: () => MinLengthValidationError,
+  NegativeNumericalityValidationError: () => NegativeNumericalityValidationError,
+  OddNumericalityValidationError: () => OddNumericalityValidationError,
+  OtherThanNumericalityValidationError: () => OtherThanNumericalityValidationError,
+  PositiveNumericalityValidationError: () => PositiveNumericalityValidationError,
+  PresenceValidationError: () => PresenceValidationError,
+  ServiceValidationError: () => ServiceValidationError,
+  TypeNumericalityValidationError: () => TypeNumericalityValidationError,
+  UniquenessValidationError: () => UniquenessValidationError
 });
-exports.UniquenessValidationError = exports.TypeNumericalityValidationError = exports.ServiceValidationError = exports.PresenceValidationError = exports.PositiveNumericalityValidationError = exports.OtherThanNumericalityValidationError = exports.OddNumericalityValidationError = exports.NegativeNumericalityValidationError = exports.MinLengthValidationError = exports.MaxLengthValidationError = exports.LessThanOrEqualNumericalityValidationError = exports.LessThanNumericalityValidationError = exports.IntegerNumericalityValidationError = exports.InclusionValidationError = exports.GreaterThanOrEqualNumericalityValidationError = exports.GreaterThanNumericalityValidationError = exports.FormatValidationError = exports.ExclusionValidationError = exports.EvenNumericalityValidationError = exports.EqualNumericalityValidationError = exports.EqualLengthValidationError = exports.EmailValidationError = exports.CustomValidationError = exports.BetweenLengthValidationError = exports.AcceptanceValidationError = exports.AbsenceValidationError = void 0;
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/entries"));
-var _replaceAll = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/replace-all"));
-var _setPrototypeOf = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/set-prototype-of"));
-var _assign = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/assign"));
-var _humanizeString = _interopRequireDefault(require("humanize-string"));
-var _titleCase = require("title-case");
-var _errors = require("../errors");
-class ServiceValidationError extends _errors.RedwoodError {
+module.exports = __toCommonJS(errors_exports);
+var import_humanize_string = __toESM(require("humanize-string"));
+var import_title_case = require("title-case");
+var import_errors = require("../errors");
+class ServiceValidationError extends import_errors.RedwoodError {
   constructor(message, substitutions = {}) {
     let errorMessage = message;
     let extensions = {};
-
-    // in the main error message, replace instances of a string like
-    // `{max}` with any substituted values that are titlecased and humanized
-    for (const [key, value] of (0, _entries.default)(substitutions)) {
-      errorMessage = (0, _replaceAll.default)(errorMessage).call(errorMessage, `\${${key}}`, (0, _titleCase.titleCase)((0, _humanizeString.default)(String(value))));
-
-      // this mimics the Apollo Server use of error codes and extensions needed
-      // for the web side FormError handlings to show the message at the field level
-      // with an UserInputError (aka 'BAD_USER_INPUT" code) style error
-      // @see: https://www.apollographql.com/docs/apollo-server/data/errors/#including-custom-error-details
+    for (const [key, value] of Object.entries(substitutions)) {
+      errorMessage = errorMessage.replaceAll(
+        `\${${key}}`,
+        (0, import_title_case.titleCase)((0, import_humanize_string.default)(String(value)))
+      );
       extensions = {
-        code: 'BAD_USER_INPUT',
+        code: "BAD_USER_INPUT",
         properties: {
           messages: {
             [String(value)]: [errorMessage]
@@ -37,262 +78,221 @@ class ServiceValidationError extends _errors.RedwoodError {
       };
     }
     super(errorMessage, extensions);
-    this.name = 'ServiceValidationError';
-    (0, _setPrototypeOf.default)(this, ServiceValidationError.prototype);
+    this.name = "ServiceValidationError";
+    Object.setPrototypeOf(this, ServiceValidationError.prototype);
   }
 }
-exports.ServiceValidationError = ServiceValidationError;
 class AbsenceValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} is not absent', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'AbsenceValidationError';
-    (0, _setPrototypeOf.default)(this, AbsenceValidationError.prototype);
+  constructor(name, message = "${name} is not absent", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "AbsenceValidationError";
+    Object.setPrototypeOf(this, AbsenceValidationError.prototype);
   }
 }
-exports.AbsenceValidationError = AbsenceValidationError;
 class AcceptanceValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be accepted', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'AcceptanceValidationError';
-    (0, _setPrototypeOf.default)(this, AcceptanceValidationError.prototype);
+  constructor(name, message = "${name} must be accepted", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "AcceptanceValidationError";
+    Object.setPrototypeOf(this, AcceptanceValidationError.prototype);
   }
 }
-exports.AcceptanceValidationError = AcceptanceValidationError;
 class EmailValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be formatted like an email address', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'EmailValidationError';
-    (0, _setPrototypeOf.default)(this, EmailValidationError.prototype);
+  constructor(name, message = "${name} must be formatted like an email address", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "EmailValidationError";
+    Object.setPrototypeOf(this, EmailValidationError.prototype);
   }
 }
-exports.EmailValidationError = EmailValidationError;
 class ExclusionValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} is reserved', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'ExclusionValidationError';
-    (0, _setPrototypeOf.default)(this, ExclusionValidationError.prototype);
+  constructor(name, message = "${name} is reserved", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "ExclusionValidationError";
+    Object.setPrototypeOf(this, ExclusionValidationError.prototype);
   }
 }
-exports.ExclusionValidationError = ExclusionValidationError;
 class FormatValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} is not formatted correctly', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'FormatValidationError';
-    (0, _setPrototypeOf.default)(this, FormatValidationError.prototype);
+  constructor(name, message = "${name} is not formatted correctly", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "FormatValidationError";
+    Object.setPrototypeOf(this, FormatValidationError.prototype);
   }
 }
-exports.FormatValidationError = FormatValidationError;
 class InclusionValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} is reserved', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'InclusionValidationError';
-    (0, _setPrototypeOf.default)(this, InclusionValidationError.prototype);
+  constructor(name, message = "${name} is reserved", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "InclusionValidationError";
+    Object.setPrototypeOf(this, InclusionValidationError.prototype);
   }
 }
-exports.InclusionValidationError = InclusionValidationError;
 class MinLengthValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must have at least ${min} characters', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'MinLengthValidationError';
-    (0, _setPrototypeOf.default)(this, MinLengthValidationError.prototype);
+  constructor(name, message = "${name} must have at least ${min} characters", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "MinLengthValidationError";
+    Object.setPrototypeOf(this, MinLengthValidationError.prototype);
   }
 }
-exports.MinLengthValidationError = MinLengthValidationError;
 class MaxLengthValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must have no more than ${max} characters', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'MaxLengthValidationError';
-    (0, _setPrototypeOf.default)(this, MaxLengthValidationError.prototype);
+  constructor(name, message = "${name} must have no more than ${max} characters", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "MaxLengthValidationError";
+    Object.setPrototypeOf(this, MaxLengthValidationError.prototype);
   }
 }
-exports.MaxLengthValidationError = MaxLengthValidationError;
 class EqualLengthValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must have exactly ${equal} characters', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'EqualLengthValidationError';
-    (0, _setPrototypeOf.default)(this, EqualLengthValidationError.prototype);
+  constructor(name, message = "${name} must have exactly ${equal} characters", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "EqualLengthValidationError";
+    Object.setPrototypeOf(this, EqualLengthValidationError.prototype);
   }
 }
-exports.EqualLengthValidationError = EqualLengthValidationError;
 class BetweenLengthValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be between ${min} and ${max} characters', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'BetweenLengthValidationError';
-    (0, _setPrototypeOf.default)(this, BetweenLengthValidationError.prototype);
+  constructor(name, message = "${name} must be between ${min} and ${max} characters", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "BetweenLengthValidationError";
+    Object.setPrototypeOf(this, BetweenLengthValidationError.prototype);
   }
 }
-exports.BetweenLengthValidationError = BetweenLengthValidationError;
 class PresenceValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be present', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'PresenceValidationError';
-    (0, _setPrototypeOf.default)(this, PresenceValidationError.prototype);
+  constructor(name, message = "${name} must be present", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "PresenceValidationError";
+    Object.setPrototypeOf(this, PresenceValidationError.prototype);
   }
 }
-exports.PresenceValidationError = PresenceValidationError;
 class TypeNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must by a number', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'TypeNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, TypeNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must by a number", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "TypeNumericalityValidationError";
+    Object.setPrototypeOf(this, TypeNumericalityValidationError.prototype);
   }
 }
-exports.TypeNumericalityValidationError = TypeNumericalityValidationError;
 class IntegerNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be an integer', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'IntegerNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, IntegerNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be an integer", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "IntegerNumericalityValidationError";
+    Object.setPrototypeOf(this, IntegerNumericalityValidationError.prototype);
   }
 }
-exports.IntegerNumericalityValidationError = IntegerNumericalityValidationError;
 class LessThanNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be less than ${lessThan}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'LessThanNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, LessThanNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be less than ${lessThan}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "LessThanNumericalityValidationError";
+    Object.setPrototypeOf(this, LessThanNumericalityValidationError.prototype);
   }
 }
-exports.LessThanNumericalityValidationError = LessThanNumericalityValidationError;
 class LessThanOrEqualNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be less than or equal to ${lessThanOrEqual}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'LessThanOrEqualNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, LessThanOrEqualNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be less than or equal to ${lessThanOrEqual}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "LessThanOrEqualNumericalityValidationError";
+    Object.setPrototypeOf(
+      this,
+      LessThanOrEqualNumericalityValidationError.prototype
+    );
   }
 }
-exports.LessThanOrEqualNumericalityValidationError = LessThanOrEqualNumericalityValidationError;
 class GreaterThanNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be greater than ${greaterThan}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'GreaterThanNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, GreaterThanNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be greater than ${greaterThan}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "GreaterThanNumericalityValidationError";
+    Object.setPrototypeOf(
+      this,
+      GreaterThanNumericalityValidationError.prototype
+    );
   }
 }
-exports.GreaterThanNumericalityValidationError = GreaterThanNumericalityValidationError;
 class GreaterThanOrEqualNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be greater than or equal to ${greaterThanOrEqual}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'GreaterThanOrEqualNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, GreaterThanOrEqualNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be greater than or equal to ${greaterThanOrEqual}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "GreaterThanOrEqualNumericalityValidationError";
+    Object.setPrototypeOf(
+      this,
+      GreaterThanOrEqualNumericalityValidationError.prototype
+    );
   }
 }
-exports.GreaterThanOrEqualNumericalityValidationError = GreaterThanOrEqualNumericalityValidationError;
 class EqualNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must equal ${equal}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'EqualNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, EqualNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must equal ${equal}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "EqualNumericalityValidationError";
+    Object.setPrototypeOf(this, EqualNumericalityValidationError.prototype);
   }
 }
-exports.EqualNumericalityValidationError = EqualNumericalityValidationError;
 class OtherThanNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must not equal ${otherThan}', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'OtherThanNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, OtherThanNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must not equal ${otherThan}", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "OtherThanNumericalityValidationError";
+    Object.setPrototypeOf(this, OtherThanNumericalityValidationError.prototype);
   }
 }
-exports.OtherThanNumericalityValidationError = OtherThanNumericalityValidationError;
 class EvenNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be even', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'EvenNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, EvenNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be even", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "EvenNumericalityValidationError";
+    Object.setPrototypeOf(this, EvenNumericalityValidationError.prototype);
   }
 }
-exports.EvenNumericalityValidationError = EvenNumericalityValidationError;
 class OddNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be odd', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'OddNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, OddNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be odd", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "OddNumericalityValidationError";
+    Object.setPrototypeOf(this, OddNumericalityValidationError.prototype);
   }
 }
-exports.OddNumericalityValidationError = OddNumericalityValidationError;
 class PositiveNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be positive', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'PositiveNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, PositiveNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be positive", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "PositiveNumericalityValidationError";
+    Object.setPrototypeOf(this, PositiveNumericalityValidationError.prototype);
   }
 }
-exports.PositiveNumericalityValidationError = PositiveNumericalityValidationError;
 class NegativeNumericalityValidationError extends ServiceValidationError {
-  constructor(name, message = '${name} must be negative', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'NegativeNumericalityValidationError';
-    (0, _setPrototypeOf.default)(this, NegativeNumericalityValidationError.prototype);
+  constructor(name, message = "${name} must be negative", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "NegativeNumericalityValidationError";
+    Object.setPrototypeOf(this, NegativeNumericalityValidationError.prototype);
   }
 }
-exports.NegativeNumericalityValidationError = NegativeNumericalityValidationError;
 class CustomValidationError extends ServiceValidationError {
-  constructor(name,
-  // Since CustomValidationError is derived from either a raised error or a string, the message is always passed.
-  // but for the sake of consistency, we'll keep the message optional.
-  message = '', substitutions = {}) {
-    super(message, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'CustomValidationError';
-    (0, _setPrototypeOf.default)(this, CustomValidationError.prototype);
+  constructor(name, message = "", substitutions = {}) {
+    super(message, Object.assign(substitutions, { name }));
+    this.name = "CustomValidationError";
+    Object.setPrototypeOf(this, CustomValidationError.prototype);
   }
 }
-exports.CustomValidationError = CustomValidationError;
 class UniquenessValidationError extends ServiceValidationError {
   constructor(name, message, substitutions = {}) {
     const errorMessage = message ? message : `${name} must be unique`;
-    super(errorMessage, (0, _assign.default)(substitutions, {
-      name
-    }));
-    this.name = 'UniquenessValidationError';
-    (0, _setPrototypeOf.default)(this, UniquenessValidationError.prototype);
+    super(errorMessage, Object.assign(substitutions, { name }));
+    this.name = "UniquenessValidationError";
+    Object.setPrototypeOf(this, UniquenessValidationError.prototype);
   }
 }
-exports.UniquenessValidationError = UniquenessValidationError;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  AbsenceValidationError,
+  AcceptanceValidationError,
+  BetweenLengthValidationError,
+  CustomValidationError,
+  EmailValidationError,
+  EqualLengthValidationError,
+  EqualNumericalityValidationError,
+  EvenNumericalityValidationError,
+  ExclusionValidationError,
+  FormatValidationError,
+  GreaterThanNumericalityValidationError,
+  GreaterThanOrEqualNumericalityValidationError,
+  InclusionValidationError,
+  IntegerNumericalityValidationError,
+  LessThanNumericalityValidationError,
+  LessThanOrEqualNumericalityValidationError,
+  MaxLengthValidationError,
+  MinLengthValidationError,
+  NegativeNumericalityValidationError,
+  OddNumericalityValidationError,
+  OtherThanNumericalityValidationError,
+  PositiveNumericalityValidationError,
+  PresenceValidationError,
+  ServiceValidationError,
+  TypeNumericalityValidationError,
+  UniquenessValidationError
+});

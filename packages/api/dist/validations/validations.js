@@ -1,29 +1,42 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard").default;
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var validations_exports = {};
+__export(validations_exports, {
+  validate: () => validate,
+  validateUniqueness: () => validateUniqueness,
+  validateWith: () => validateWith,
+  validateWithSync: () => validateWithSync
 });
-exports.validate = validate;
-exports.validateUniqueness = validateUniqueness;
-exports.validateWithSync = exports.validateWith = void 0;
-require("core-js/modules/es.array.push.js");
-var _assign = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/assign"));
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/includes"));
-var _isInteger = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/number/is-integer"));
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/object/entries"));
-var _isArray = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/array/is-array"));
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/map"));
-var _client = require("@prisma/client");
-var _pascalcase = _interopRequireDefault(require("pascalcase"));
-var ValidationErrors = _interopRequireWildcard(require("./errors"));
-// Handles validating values in services
-
-// We extend ValidationRecipe to get its method's documentation.
-// Adding docs below will completely overwrite ValidationRecipe's.
-
+module.exports = __toCommonJS(validations_exports);
+var import_client = require("@prisma/client");
+var import_pascalcase = __toESM(require("pascalcase"));
+var ValidationErrors = __toESM(require("./errors"));
 const VALIDATORS = {
   // Requires that the given value is `null` or `undefined`
   //
@@ -32,16 +45,14 @@ const VALIDATORS = {
   // { absence: true }
   // { absence: { allowEmptyString: true, message: '...' } }
   absence: (value, name, options) => {
-    const absenceOptions = {
-      allowEmptyString: false
-    };
-    (0, _assign.default)(absenceOptions, options);
-    if (value === '') {
+    const absenceOptions = { allowEmptyString: false };
+    Object.assign(absenceOptions, options);
+    if (value === "") {
       if (!absenceOptions.allowEmptyString) {
-        validationError('absence', name, options);
+        validationError("absence", name, options);
       }
     } else if (value != null) {
-      validationError('absence', name, options);
+      validationError("absence", name, options);
     }
   },
   // Requires that the given field be `true` and nothing else, unless an array
@@ -51,13 +62,13 @@ const VALIDATORS = {
   // { acceptance: { in: ['true','1'], message: '...' } }
   acceptance: (value, name, options) => {
     let acceptedValues;
-    if (typeof options === 'object') {
+    if (typeof options === "object") {
       acceptedValues = options.in || [];
     } else {
       acceptedValues = [true];
     }
-    if (!(0, _includes.default)(acceptedValues).call(acceptedValues, value)) {
-      validationError('acceptance', name, options);
+    if (!acceptedValues.includes(value)) {
+      validationError("acceptance", name, options);
     }
   },
   // Requires that the given value be formatted like an email address. Uses a
@@ -70,7 +81,7 @@ const VALIDATORS = {
   email: (value, name, options) => {
     const pattern = /^[^@\s]+@[^.\s]+\.[^\s]+$/;
     if (!pattern.test(String(value))) {
-      validationError('email', name, options);
+      validationError("email", name, options);
     }
   },
   // Requires that the given value NOT be in the list of possible values
@@ -79,8 +90,8 @@ const VALIDATORS = {
   // { exclusion: { in: ['foo','bar'], message: '...' } }
   exclusion: (value, name, options) => {
     const [exclusionList, val] = prepareExclusionInclusion(value, options);
-    if ((0, _includes.default)(exclusionList).call(exclusionList, val)) {
-      validationError('exclusion', name, options);
+    if (exclusionList.includes(val)) {
+      validationError("exclusion", name, options);
     }
   },
   // Requires that the given value match a regular expression
@@ -90,10 +101,13 @@ const VALIDATORS = {
   format: (value, name, options) => {
     const pattern = options instanceof RegExp ? options : options.pattern;
     if (pattern == null) {
-      throw new ValidationErrors.FormatValidationError(name, 'No pattern for format validation');
+      throw new ValidationErrors.FormatValidationError(
+        name,
+        "No pattern for format validation"
+      );
     }
     if (!pattern.test(String(value))) {
-      validationError('format', name, options);
+      validationError("format", name, options);
     }
   },
   // Requires that the given value be in the list of possible values
@@ -102,8 +116,8 @@ const VALIDATORS = {
   // { inclusion: { in: ['foo','bar'], message: '...' } }
   inclusion: (value, name, options) => {
     const [inclusionList, val] = prepareExclusionInclusion(value, options);
-    if (!(0, _includes.default)(inclusionList).call(inclusionList, val)) {
-      validationError('inclusion', name, options);
+    if (!inclusionList.includes(val)) {
+      validationError("inclusion", name, options);
     }
   },
   // Requires that the given string be a certain length:
@@ -119,22 +133,16 @@ const VALIDATORS = {
   length: (value, name, options) => {
     const len = String(value).length;
     if (options.min && len < options.min) {
-      validationError('minLength', name, options, {
-        min: options.min
-      });
+      validationError("minLength", name, options, { min: options.min });
     }
     if (options.max && len > options.max) {
-      validationError('maxLength', name, options, {
-        max: options.max
-      });
+      validationError("maxLength", name, options, { max: options.max });
     }
     if (options.equal && len !== options.equal) {
-      validationError('equalLength', name, options, {
-        equal: options.equal
-      });
+      validationError("equalLength", name, options, { equal: options.equal });
     }
     if (options.between && (len < options.between[0] || len > options.between[1])) {
-      validationError('betweenLength', name, options, {
+      validationError("betweenLength", name, options, {
         min: options.between[0],
         max: options.between[1]
       });
@@ -158,58 +166,56 @@ const VALIDATORS = {
   // { numericality: { integer: true } }
   // { numericality: { greaterThan: 3.5, message: '...' } }
   numericality: (value, name, options) => {
-    if (typeof value !== 'number') {
-      validationError('typeNumericality', name, options);
+    if (typeof value !== "number") {
+      validationError("typeNumericality", name, options);
     }
-
-    // if there are no options, all we can do is check that value is a number
-    if (typeof options === 'boolean') {
+    if (typeof options === "boolean") {
       return;
     } else {
-      if (options.integer && !(0, _isInteger.default)(value)) {
-        validationError('integerNumericality', name, options);
+      if (options.integer && !Number.isInteger(value)) {
+        validationError("integerNumericality", name, options);
       }
       if (options.lessThan != null && value >= options.lessThan) {
-        validationError('lessThanNumericality', name, options, {
+        validationError("lessThanNumericality", name, options, {
           lessThan: options.lessThan
         });
       }
       if (options.lessThanOrEqual != null && value > options.lessThanOrEqual) {
-        validationError('lessThanOrEqualNumericality', name, options, {
+        validationError("lessThanOrEqualNumericality", name, options, {
           lessThanOrEqual: options.lessThanOrEqual
         });
       }
       if (options.greaterThan != null && value <= options.greaterThan) {
-        validationError('greaterThanNumericality', name, options, {
+        validationError("greaterThanNumericality", name, options, {
           greaterThan: options.greaterThan
         });
       }
       if (options.greaterThanOrEqual != null && value < options.greaterThanOrEqual) {
-        validationError('greaterThanOrEqualNumericality', name, options, {
+        validationError("greaterThanOrEqualNumericality", name, options, {
           greaterThanOrEqual: options.greaterThanOrEqual
         });
       }
       if (options.equal != null && value !== options.equal) {
-        validationError('equalNumericality', name, options, {
+        validationError("equalNumericality", name, options, {
           equal: options.equal
         });
       }
       if (options.otherThan != null && value === options.otherThan) {
-        validationError('otherThanNumericality', name, options, {
+        validationError("otherThanNumericality", name, options, {
           otherThan: options.otherThan
         });
       }
       if (options.even && value % 2 !== 0) {
-        validationError('evenNumericality', name, options);
+        validationError("evenNumericality", name, options);
       }
       if (options.odd && value % 2 !== 1) {
-        validationError('oddNumericality', name, options);
+        validationError("oddNumericality", name, options);
       }
       if (options.positive && value <= 0) {
-        validationError('positiveNumericality', name, options);
+        validationError("positiveNumericality", name, options);
       }
       if (options.negative && value >= 0) {
-        validationError('negativeNumericality', name, options);
+        validationError("negativeNumericality", name, options);
       }
     }
   },
@@ -231,9 +237,9 @@ const VALIDATORS = {
       allowUndefined: false,
       allowEmptyString: true
     };
-    (0, _assign.default)(presenceOptions, options);
-    if (!presenceOptions.allowNull && value === null || !presenceOptions.allowUndefined && value === undefined || !presenceOptions.allowEmptyString && value === '') {
-      validationError('presence', name, options);
+    Object.assign(presenceOptions, options);
+    if (!presenceOptions.allowNull && value === null || !presenceOptions.allowUndefined && value === void 0 || !presenceOptions.allowEmptyString && value === "") {
+      validationError("presence", name, options);
     }
   },
   custom: (_value, name, options) => {
@@ -241,71 +247,50 @@ const VALIDATORS = {
       options.with();
     } catch (e) {
       const message = options.message || e.message || e;
-      validationError('custom', name, {
-        message
-      });
+      validationError("custom", name, { message });
     }
   }
 };
-
-// Turns the keys of an object into a comma-delimited string
-//
-// { email: 'rob@redwood.com', name: 'Rob' } => 'email, name'
-const fieldsToString = fields => {
+const fieldsToString = (fields) => {
   const output = [];
-  for (const [key, _value] of (0, _entries.default)(fields)) {
+  for (const [key, _value] of Object.entries(fields)) {
     output.push(key);
   }
-  return output.join(', ');
+  return output.join(", ");
 };
-
-// Throws the requisite error message for a failed validation
 const validationError = (type, name, options, substitutions = {}) => {
-  const errorClassName = `${(0, _pascalcase.default)(type)}ValidationError`;
+  const errorClassName = `${(0, import_pascalcase.default)(
+    type
+  )}ValidationError`;
   const ErrorClass = ValidationErrors[errorClassName];
-  const errorMessage = typeof options === 'object' ? options.message : undefined;
+  const errorMessage = typeof options === "object" ? options.message : void 0;
   throw new ErrorClass(name, errorMessage, substitutions);
 };
-
-// Generate the final list and value used for exclusion/inclusion by taking
-// case-sensitivity into consideration. The returned array and value then
-// can simply be used with Array.includes to perform exclusion/inclusion checks.
 const prepareExclusionInclusion = (value, options) => {
-  const inputList = (0, _isArray.default)(options) && options || options.in || [];
-
-  // default case sensitivity to true
-  const caseSensitive = (0, _isArray.default)(options) ? true : options.caseSensitive ?? true;
-  return caseSensitive ? [inputList, value] : [(0, _map.default)(inputList).call(inputList, s => s.toLowerCase()), value.toLowerCase()];
+  const inputList = Array.isArray(options) && options || options.in || [];
+  const caseSensitive = Array.isArray(options) ? true : options.caseSensitive ?? true;
+  return caseSensitive ? [inputList, value] : [
+    inputList.map((s) => s.toLowerCase()),
+    value.toLowerCase()
+  ];
 };
-
-// Main validation function, `directives` decides which actual validators
-// above to use
-//
-// validate('firstName', 'Rob', { presence: true, length: { min: 2 } })
-
 function validate(value, labelOrRecipe, recipe) {
   let label, validationRecipe;
-  if (typeof labelOrRecipe === 'object') {
-    label = '';
+  if (typeof labelOrRecipe === "object") {
+    label = "";
     validationRecipe = labelOrRecipe;
   } else {
     label = labelOrRecipe;
     validationRecipe = recipe;
   }
-  for (const [validator, options] of (0, _entries.default)(validationRecipe)) {
-    if (typeof options === 'undefined') {
+  for (const [validator, options] of Object.entries(validationRecipe)) {
+    if (typeof options === "undefined") {
       continue;
     }
     VALIDATORS[validator](value, label, options);
   }
 }
-
-// Run a custom validation function which should either throw or return nothing.
-// Why not just write your own function? Because GraphQL will swallow it and
-// just send "Something went wrong" back to the client. This captures any custom
-// error you throw and turns it into a ServiceValidationError which will show
-// the actual error message.
-const validateWithSync = func => {
+const validateWithSync = (func) => {
   try {
     func();
   } catch (e) {
@@ -313,10 +298,7 @@ const validateWithSync = func => {
     throw new ValidationErrors.ServiceValidationError(message);
   }
 };
-
-// Async version is the default
-exports.validateWithSync = validateWithSync;
-const validateWith = async func => {
+const validateWith = async (func) => {
   try {
     await func();
   } catch (e) {
@@ -324,76 +306,23 @@ const validateWith = async func => {
     throw new ValidationErrors.ServiceValidationError(message);
   }
 };
-
-// Wraps `callback` in a transaction to guarantee that `field` is not found in
-// the database and that the `callback` is executed before someone else gets a
-// chance to create the same value.
-//
-// In the case of updating an existing record, a uniqueness check will fail
-// (because the existing record itself will be returned from the database). In
-// this case you can provide a `$self` key with the `where` object to exclude
-// the current record.
-//
-// There is an optional `$scope` key which contains additional the `where`
-// clauses to include when checking whether the field is unique. So rather than
-// a product name having to be unique across the entire database, you could
-// check that it is only unique among a subset of records with the same
-// `companyId`.
-//
-// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { message: '...'}, (db) => {
-//   return db.create(data: { email })
-// })
-//
-// return validateUniqueness('user', {
-//   email: 'rob@redwoodjs.com',
-//   $self: { id: 123 }
-// }, (db) => {
-//   return db.create(data: { email })
-// })
-//
-// return validateUniqueness('user', {
-//   email: 'rob@redwoodjs.com',
-//   $scope: { companyId: input.companyId }
-// }, (db) => {
-//   return db.create(data: { email })
-// })
-//
-// const myCustomDb = new PrismaClient({
-//   log: emitLogLevels(['info', 'warn', 'error']),
-//   datasources: {
-//     db: {
-//       url: process.env.DATABASE_URL,
-//     },
-//   },
-// })
-// return validateUniqueness('user', { email: 'rob@redwoodjs.com' }, { prismaClient: myCustomDb}, (db) => {
-//   return db.create(data: { email })
-// })
-exports.validateWith = validateWith;
 async function validateUniqueness(model, fields, optionsOrCallback, callback) {
-  const {
-    $self,
-    $scope,
-    ...rest
-  } = fields;
+  const { $self, $scope, ...rest } = fields;
   let options = {};
   let validCallback;
   let db = null;
-  if (typeof optionsOrCallback === 'function') {
+  if (typeof optionsOrCallback === "function") {
     validCallback = optionsOrCallback;
   } else {
     options = optionsOrCallback;
     validCallback = callback;
   }
   if (options.db) {
-    const {
-      db: customDb,
-      ...restOptions
-    } = options;
+    const { db: customDb, ...restOptions } = options;
     options = restOptions;
     db = customDb;
   } else {
-    db = new _client.PrismaClient();
+    db = new import_client.PrismaClient();
   }
   const where = {
     AND: [rest],
@@ -405,13 +334,18 @@ async function validateUniqueness(model, fields, optionsOrCallback, callback) {
   if ($self) {
     where.NOT.push($self);
   }
-  return await db.$transaction(async tx => {
-    const found = await tx[model].findFirst({
-      where
-    });
+  return await db.$transaction(async (tx) => {
+    const found = await tx[model].findFirst({ where });
     if (found) {
-      validationError('uniqueness', fieldsToString(fields), options);
+      validationError("uniqueness", fieldsToString(fields), options);
     }
     return validCallback(tx);
   });
 }
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  validate,
+  validateUniqueness,
+  validateWith,
+  validateWithSync
+});

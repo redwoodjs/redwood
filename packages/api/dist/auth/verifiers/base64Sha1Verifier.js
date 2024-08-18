@@ -1,84 +1,77 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var base64Sha1Verifier_exports = {};
+__export(base64Sha1Verifier_exports, {
+  default: () => base64Sha1Verifier_default,
+  verifySignature: () => verifySignature
 });
-exports.verifySignature = exports.default = void 0;
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/json/stringify"));
-var _slice = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/instance/slice"));
-var _crypto = require("crypto");
-var _common = require("./common");
+module.exports = __toCommonJS(base64Sha1Verifier_exports);
+var import_crypto = require("crypto");
+var import_common = require("./common");
 function toNormalizedJsonString(payload) {
-  return (0, _stringify.default)(payload).replace(/[^\\]\\u[\da-f]{4}/g, s => {
-    return (0, _slice.default)(s).call(s, 0, 3) + (0, _slice.default)(s).call(s, 3).toUpperCase();
+  return JSON.stringify(payload).replace(/[^\\]\\u[\da-f]{4}/g, (s) => {
+    return s.slice(0, 3) + s.slice(3).toUpperCase();
   });
 }
 const createSignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET
+  secret = import_common.DEFAULT_WEBHOOK_SECRET
 }) => {
-  const algorithm = 'sha1';
-  const hmac = (0, _crypto.createHmac)(algorithm, Buffer.from(secret, 'base64'));
-  payload = typeof payload === 'string' ? payload : toNormalizedJsonString(payload);
+  const algorithm = "sha1";
+  const hmac = (0, import_crypto.createHmac)(algorithm, Buffer.from(secret, "base64"));
+  payload = typeof payload === "string" ? payload : toNormalizedJsonString(payload);
   const digest = hmac.update(payload).digest();
-  return digest.toString('base64');
+  return digest.toString("base64");
 };
 const verifySignature = ({
   payload,
-  secret = _common.DEFAULT_WEBHOOK_SECRET,
+  secret = import_common.DEFAULT_WEBHOOK_SECRET,
   signature
 }) => {
   try {
-    const webhookSignature = Buffer.from(signature || '', 'base64');
-    const hmac = (0, _crypto.createHmac)('sha1', Buffer.from(secret, 'base64'));
-    payload = typeof payload === 'string' ? payload : toNormalizedJsonString(payload);
+    const webhookSignature = Buffer.from(signature || "", "base64");
+    const hmac = (0, import_crypto.createHmac)("sha1", Buffer.from(secret, "base64"));
+    payload = typeof payload === "string" ? payload : toNormalizedJsonString(payload);
     const digest = hmac.update(payload).digest();
-
-    // constant time comparison to prevent timing attacks
-    // https://stackoverflow.com/a/31096242/206879
-    // https://en.wikipedia.org/wiki/Timing_attack
-    if (webhookSignature.length === digest.length && (0, _crypto.timingSafeEqual)(digest, webhookSignature)) {
+    if (webhookSignature.length === digest.length && (0, import_crypto.timingSafeEqual)(digest, webhookSignature)) {
       return true;
     }
-    throw new _common.WebhookVerificationError();
+    throw new import_common.WebhookVerificationError();
   } catch (error) {
-    throw new _common.WebhookVerificationError(`${_common.VERIFICATION_ERROR_MESSAGE}: ${error.message}`);
+    throw new import_common.WebhookVerificationError(
+      `${import_common.VERIFICATION_ERROR_MESSAGE}: ${error.message}`
+    );
   }
 };
-
-/**
- * Base64 SHA1 HMAC Payload Verifier
- *
- * Based on Svix's webhook payload verification, but using SHA1 instead
- * @see https://docs.svix.com/receiving/verifying-payloads/how-manual
- * @see https://github.com/svix/svix-webhooks/blob/main/javascript/src/index.ts
- */
-exports.verifySignature = verifySignature;
-const base64Sha1Verifier = _options => {
+const base64Sha1Verifier = (_options) => {
   return {
-    sign: ({
-      payload,
-      secret
-    }) => {
-      return createSignature({
-        payload,
-        secret
-      });
+    sign: ({ payload, secret }) => {
+      return createSignature({ payload, secret });
     },
-    verify: ({
-      payload,
-      secret,
-      signature
-    }) => {
-      return verifySignature({
-        payload,
-        secret,
-        signature
-      });
+    verify: ({ payload, secret, signature }) => {
+      return verifySignature({ payload, secret, signature });
     },
-    type: 'base64Sha1Verifier'
+    type: "base64Sha1Verifier"
   };
 };
-var _default = exports.default = base64Sha1Verifier;
+var base64Sha1Verifier_default = base64Sha1Verifier;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  verifySignature
+});

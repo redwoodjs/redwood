@@ -1,43 +1,65 @@
 "use strict";
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault").default;
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.verifierLookup = exports.WebhookVerificationError = exports.WebhookSignError = exports.VERIFICATION_SIGN_MESSAGE = exports.VERIFICATION_ERROR_MESSAGE = exports.DEFAULT_WEBHOOK_SECRET = exports.DEFAULT_TOLERANCE = void 0;
-var _base64Sha1Verifier = _interopRequireDefault(require("./base64Sha1Verifier"));
-var _base64Sha256Verifier = _interopRequireDefault(require("./base64Sha256Verifier"));
-var _jwtVerifier = _interopRequireDefault(require("./jwtVerifier"));
-var _secretKeyVerifier = _interopRequireDefault(require("./secretKeyVerifier"));
-var _sha1Verifier = _interopRequireDefault(require("./sha1Verifier"));
-var _sha256Verifier = _interopRequireDefault(require("./sha256Verifier"));
-var _skipVerifier = _interopRequireDefault(require("./skipVerifier"));
-var _timestampSchemeVerifier = _interopRequireDefault(require("./timestampSchemeVerifier"));
-const verifierLookup = exports.verifierLookup = {
-  skipVerifier: _skipVerifier.default,
-  secretKeyVerifier: _secretKeyVerifier.default,
-  sha1Verifier: _sha1Verifier.default,
-  sha256Verifier: _sha256Verifier.default,
-  base64Sha1Verifier: _base64Sha1Verifier.default,
-  base64Sha256Verifier: _base64Sha256Verifier.default,
-  timestampSchemeVerifier: _timestampSchemeVerifier.default,
-  jwtVerifier: _jwtVerifier.default
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
-const DEFAULT_WEBHOOK_SECRET = exports.DEFAULT_WEBHOOK_SECRET = process.env.WEBHOOK_SECRET ?? '';
-const VERIFICATION_ERROR_MESSAGE = exports.VERIFICATION_ERROR_MESSAGE = "You don't have access to invoke this function.";
-const VERIFICATION_SIGN_MESSAGE = exports.VERIFICATION_SIGN_MESSAGE = 'Unable to sign payload';
-const FIVE_MINUTES = 5 * 60_000;
-
-/**
- * @const {number} DEFAULT_TOLERANCE - Five minutes
- */
-const DEFAULT_TOLERANCE = exports.DEFAULT_TOLERANCE = FIVE_MINUTES;
-
-/**
- * Class representing a WebhookError
- * @extends Error
- */
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var common_exports = {};
+__export(common_exports, {
+  DEFAULT_TOLERANCE: () => DEFAULT_TOLERANCE,
+  DEFAULT_WEBHOOK_SECRET: () => DEFAULT_WEBHOOK_SECRET,
+  VERIFICATION_ERROR_MESSAGE: () => VERIFICATION_ERROR_MESSAGE,
+  VERIFICATION_SIGN_MESSAGE: () => VERIFICATION_SIGN_MESSAGE,
+  WebhookSignError: () => WebhookSignError,
+  WebhookVerificationError: () => WebhookVerificationError,
+  verifierLookup: () => verifierLookup
+});
+module.exports = __toCommonJS(common_exports);
+var import_base64Sha1Verifier = __toESM(require("./base64Sha1Verifier"));
+var import_base64Sha256Verifier = __toESM(require("./base64Sha256Verifier"));
+var import_jwtVerifier = __toESM(require("./jwtVerifier"));
+var import_secretKeyVerifier = __toESM(require("./secretKeyVerifier"));
+var import_sha1Verifier = __toESM(require("./sha1Verifier"));
+var import_sha256Verifier = __toESM(require("./sha256Verifier"));
+var import_skipVerifier = __toESM(require("./skipVerifier"));
+var import_timestampSchemeVerifier = __toESM(require("./timestampSchemeVerifier"));
+const verifierLookup = {
+  skipVerifier: import_skipVerifier.default,
+  secretKeyVerifier: import_secretKeyVerifier.default,
+  sha1Verifier: import_sha1Verifier.default,
+  sha256Verifier: import_sha256Verifier.default,
+  base64Sha1Verifier: import_base64Sha1Verifier.default,
+  base64Sha256Verifier: import_base64Sha256Verifier.default,
+  timestampSchemeVerifier: import_timestampSchemeVerifier.default,
+  jwtVerifier: import_jwtVerifier.default
+};
+const DEFAULT_WEBHOOK_SECRET = process.env.WEBHOOK_SECRET ?? "";
+const VERIFICATION_ERROR_MESSAGE = "You don't have access to invoke this function.";
+const VERIFICATION_SIGN_MESSAGE = "Unable to sign payload";
+const FIVE_MINUTES = 5 * 6e4;
+const DEFAULT_TOLERANCE = FIVE_MINUTES;
 class WebhookError extends Error {
   /**
    * Create a WebhookError.
@@ -47,11 +69,6 @@ class WebhookError extends Error {
     super(message);
   }
 }
-
-/**
- * Class representing a WebhookVerificationError
- * @extends WebhookError
- */
 class WebhookVerificationError extends WebhookError {
   /**
    * Create a WebhookVerificationError.
@@ -61,12 +78,6 @@ class WebhookVerificationError extends WebhookError {
     super(message || VERIFICATION_ERROR_MESSAGE);
   }
 }
-
-/**
- * Class representing a WebhookSignError
- * @extends WebhookError
- */
-exports.WebhookVerificationError = WebhookVerificationError;
 class WebhookSignError extends WebhookError {
   /**
    * Create a WebhookSignError.
@@ -76,28 +87,13 @@ class WebhookSignError extends WebhookError {
     super(message || VERIFICATION_SIGN_MESSAGE);
   }
 }
-
-/**
- * VerifyOptions
- *
- * Used when verifying a signature based on the verifier's requirements
- *
- * @param {string} signatureHeader - Optional Header that contains the signature
- * to verify. Will default to DEFAULT_WEBHOOK_SIGNATURE_HEADER
- * @param {(signature: string) => string} signatureTransformer - Optional
- * function that receives the signature from the headers and returns a new
- * signature to use in the Verifier
- * @param {number} currentTimestampOverride - Optional timestamp to use as the
- * "current" timestamp, in msec
- * @param {number} eventTimestamp - Optional timestamp to use as the event
- * timestamp, in msec. If this is provided the webhook verification will fail
- * if the eventTimestamp is too far from the current time (or the time passed
- * as the `currentTimestampOverride` option)
- * @param {number} tolerance - Optional tolerance in msec
- * @param {string} issuer - Options JWT issuer for JWTVerifier
- */
-
-/**
- * WebhookVerifier is the interface for all verifiers
- */
-exports.WebhookSignError = WebhookSignError;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  DEFAULT_TOLERANCE,
+  DEFAULT_WEBHOOK_SECRET,
+  VERIFICATION_ERROR_MESSAGE,
+  VERIFICATION_SIGN_MESSAGE,
+  WebhookSignError,
+  WebhookVerificationError,
+  verifierLookup
+});
