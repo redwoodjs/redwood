@@ -141,7 +141,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // becomes http://localhost:8910/about?foo=bar
     const fullUrl = getFullUrlForFlightRequest(req, props)
 
-    const pipeable = await renderRsc({
+    const pipeable = renderRsc({
       rscId,
       props,
       rsfId,
