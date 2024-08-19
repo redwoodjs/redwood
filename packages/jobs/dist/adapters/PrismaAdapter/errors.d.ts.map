@@ -1,1 +1,0 @@
-{"version":3,"file":"errors.d.ts","sourceRoot":"","sources":["../../../src/adapters/PrismaAdapter/errors.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,eAAe,EAAE,MAAM,cAAc,CAAA;AAG9C,qBAAa,cAAe,SAAQ,eAAe;gBACrC,IAAI,EAAE,MAAM;CAGzB"}

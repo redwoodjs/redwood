@@ -8331,7 +8331,10 @@ __metadata:
   resolution: "@redwoodjs/jobs@workspace:packages/jobs"
   dependencies:
     "@prisma/client": "npm:5.18.0"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
+    concurrently: "npm:8.2.2"
+    publint: "npm:0.2.10"
     tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
