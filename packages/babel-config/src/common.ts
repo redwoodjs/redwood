@@ -124,7 +124,7 @@ export const parseTypeScriptConfigFiles = () => {
 }
 
 type CompilerOptionsForPaths = {
-  compilerOptions: { baseUrl: string; paths: string }
+  compilerOptions: { baseUrl: string; paths: Record<string, string[]> }
 }
 /**
  * Extracts and formats the paths from the [ts|js]config.json file
