@@ -341,7 +341,7 @@ export const getAppRouteHook = (forProd = false) => {
  */
 export const processPagesDir = (
   webPagesDir: string = getPaths().web.pages,
-): Array<PagesDependency> => {
+): PagesDependency[] => {
   const pagePaths = fg.sync('**/*Page.{js,jsx,ts,tsx}', {
     cwd: webPagesDir,
     ignore: ['node_modules'],

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createMiddlewareRouter } from './register'
 
-vi.mock('@redwoodjs/project-config', async () => {
+vi.mock('@redwoodjs/project-config', () => {
   const mockWin32Paths = {
     web: {
       base: 'C:\\proj\\web',

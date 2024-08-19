@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { rscAnalyzePlugin } from '../vite-plugin-rsc-analyze.js'
 
-const foundFiles: Array<string> = []
+const foundFiles: string[] = []
 
 function callback(id: string) {
   foundFiles.push(id)
@@ -59,7 +59,7 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    pluginTransform(code, 'test.tsx')
+    await pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')
@@ -94,7 +94,7 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    pluginTransform(code, 'test.tsx')
+    await pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')
@@ -130,7 +130,7 @@ describe('vite-plugin-rsc-analyze', () => {
       export default ServerDelayForm;
       `
 
-    pluginTransform(code, 'test.tsx')
+    await pluginTransform(code, 'test.tsx')
 
     expect(foundFiles).toHaveLength(1)
     expect(foundFiles[0]).toEqual('test.tsx')

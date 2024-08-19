@@ -18,34 +18,34 @@ const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 
 interface SensitiveArgPositions {
   exec: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly: Array<string>
+    redactWith: string[]
+    allowOnly: string[]
   }
   g: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    redactWith: string[]
+    allowOnly?: string[]
   }
   generate: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    redactWith: string[]
+    allowOnly?: string[]
   }
   prisma: {
     positions?: never
-    options: Array<string>
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    options: string[]
+    redactWith: string[]
+    allowOnly?: string[]
   }
   lint: {
-    positions?: Array<number>
+    positions?: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly: Array<string>
+    redactWith: string[]
+    allowOnly: string[]
   }
 }
 
@@ -138,7 +138,7 @@ export const sanitizeArgv = (
     if (sensitiveCommand.positions) {
       sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !/--/.test(args[pos])) {
+        if (args[pos] && !args[pos].includes('--')) {
           args[pos] = sensitiveCommand.redactWith[index]
         }
       })

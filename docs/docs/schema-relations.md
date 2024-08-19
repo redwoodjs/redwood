@@ -45,7 +45,7 @@ These relationships can be [implicit](https://www.prisma.io/docs/concepts/compon
 
 CRUD (Create, Retrieve, Update, Delete) actions in Redwood currently require a single, unique field in order to retrieve, update or delete a record. This field must be denoted with Prisma's [`@id`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#id) attribute, marking it as the tables's primary key. This field is guaranteed to be unique and so can be used to find a specific record.
 
-Prisma's implicit many-to-many relationships create a table _without_ a single field marked with the `@id` attribute. Instead, it uses a similar attribute: [`@@id`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#id-1) to define a *multi-field ID*. This multi-field ID will become the tables's primary key. The diagram above shows the result of letting Prisma create an implicit relationship.
+Prisma's implicit many-to-many relationships create a table _without_ a single field marked with the `@id` attribute. Instead, it uses a similar attribute: [`@@id`](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#id-1) to define a _multi-field ID_. This multi-field ID will become the tables's primary key. The diagram above shows the result of letting Prisma create an implicit relationship.
 
 Since there's no single `@id` field in implicit many-to-many relationships, you can't use the SDL generator with the `--crud` flag. Likewise, you can't use the scaffold generator, which uses the SDL generator (with `--crud`) behind the scenes.
 
@@ -131,11 +131,11 @@ yarn rw g sdl Book
 Here's how the output from the command starts:
 
 ```bash
- ✔ Generating SDL files...
-    ✔ Successfully wrote file `./api/src/graphql/books.sdl.js`
-    ✔ Successfully wrote file `./api/src/services/books/books.scenarios.js`
-    ✔ Successfully wrote file `./api/src/services/books/books.test.js`
-    ✔ Successfully wrote file `./api/src/services/books/books.js`
+✔ Generating SDL files...
+✔ Successfully wrote file $(./api/src/graphql/books.sdl.js)
+✔ Successfully wrote file $(./api/src/services/books/books.scenarios.js)
+✔ Successfully wrote file $(./api/src/services/books/books.test.js)
+✔ Successfully wrote file $(./api/src/services/books/books.js)
 ```
 
 Looks like it's working so far. The SDL and service files generated!
@@ -213,10 +213,10 @@ yarn rw g sdl Shelf --force --no-tests
 [Self-relations](https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#one-to-many-self-relations) are useful for modeling parent-child relationships where the parent and child are the "same type of thing".
 For example, in a business, everyone is an employee with a role and possibly someone to directly report to:
 
-* President—no direct report (for the purposes of this example)
-* Director—reports to the President
-* Manager—reports to a Director
-* Employee—reports to a Manager, but has no direct reports
+- President—no direct report (for the purposes of this example)
+- Director—reports to the President
+- Manager—reports to a Director
+- Employee—reports to a Manager, but has no direct reports
 
 Let's use a self-relation to model this in our Prisma schema:
 

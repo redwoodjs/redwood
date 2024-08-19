@@ -18,7 +18,6 @@ While you may be tempted to use the [Netlify CLI](https://cli.netlify.com) comma
 
 The main reason for this is that these Netlify CLI commands simply build and deploy -- they build your project locally and then push the dist folder. That means that when building a RedwoodJS project, the [Prisma client is generated with binaries matching the operating system at build time](https://cli.netlify.com/commands/link) -- and not the [OS compatible](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options) with running functions on Netlify. Your Prisma client engine may be `darwin` for OSX or `windows` for Windows, but it needs to be `debian-openssl-1.1.x` or `rhel-openssl-1.1.x`. If the client is incompatible, your functions will fail.
 
-
 Therefore, **please follow the [Tutorial Deployment section](tutorial/chapter4/deployment.md)** to sync your GitHub (or other compatible source control service) repository with Netlify andalllow their build and deploy system to manage deployments.
 :::
 

@@ -68,17 +68,17 @@ test('RBAC: Should not be able to delete contact as non-admin user', async ({
   await expect(
     page
       .locator('.rw-scaffold')
-      .locator("text=You don't have permission to do that")
+      .locator("text=You don't have permission to do that"),
   ).toBeTruthy()
 
   // @NOTE we do this because the scaffold content is actually on the page,
   // This is the only way we validate if its actually showing visually
   await expect(
-    page.locator('.rw-scaffold').locator('text=Contact deleted')
+    page.locator('.rw-scaffold').locator('text=Contact deleted'),
   ).toBeHidden()
 
   await expect(
-    await page.locator('text=charlie@chimichanga.com').count()
+    await page.locator('text=charlie@chimichanga.com').count(),
   ).toBeGreaterThan(0)
 })
 
@@ -86,7 +86,7 @@ test('RBAC: Admin user should be able to delete contacts', async ({ page }) => {
   fs.writeFileSync(
     path.join(
       process.env.REDWOOD_TEST_PROJECT_PATH as string,
-      'scripts/makeAdmin.ts'
+      'scripts/makeAdmin.ts',
     ),
     `\
 import { db } from 'api/src/lib/db'
@@ -102,7 +102,7 @@ export default async ({ args }) => {
   })
 
   console.log(await db.user.findMany())
-}`
+}`,
   )
 
   console.log(`Giving ${adminEmail} ADMIN role....`)
@@ -134,11 +134,11 @@ export default async ({ args }) => {
   await page.locator('text=Delete').first().click()
 
   await expect(
-    page.locator('.rw-scaffold').locator('text=Contact deleted')
+    page.locator('.rw-scaffold').locator('text=Contact deleted'),
   ).toBeVisible()
 
   await expect(await page.locator('text=charlie@chimichanga.com').count()).toBe(
-    contactCountBefore - 1
+    contactCountBefore - 1,
   )
 })
 

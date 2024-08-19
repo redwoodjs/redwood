@@ -23,37 +23,37 @@ version `v6.5.1`:
 
 ```json5
 {
-  "hoistedNodeModules": {
+  hoistedNodeModules: {
     // ...
-    "@redwoodjs/internal": {
-      "source-map": "0.7.4"
+    '@redwoodjs/internal': {
+      'source-map': '0.7.4',
     },
-    "@redwoodjs/cli": {
-      "decamelize": "5.0.1"
+    '@redwoodjs/cli': {
+      decamelize: '5.0.1',
     },
-    "@redwoodjs/testing": {
-      "@types/node": "18.18.9"
+    '@redwoodjs/testing': {
+      '@types/node': '18.18.9',
     },
-    "@redwoodjs/api": {
-      "@whatwg-node/fetch": "0.9.14"
+    '@redwoodjs/api': {
+      '@whatwg-node/fetch': '0.9.14',
     },
-    "@redwoodjs/telemetry": {
-      "@whatwg-node/fetch": "0.9.14"
+    '@redwoodjs/telemetry': {
+      '@whatwg-node/fetch': '0.9.14',
     },
-    "@redwoodjs/prerender": {
-      "@whatwg-node/fetch": "0.9.14"
+    '@redwoodjs/prerender': {
+      '@whatwg-node/fetch': '0.9.14',
     },
-    "@redwoodjs/structure": {
-      "lru-cache": "7.18.3"
+    '@redwoodjs/structure': {
+      'lru-cache': '7.18.3',
     },
-    "@redwoodjs/graphql-server": {
-      "@graphql-tools/utils": "10.0.11",
-      "@graphql-tools/utils/cjs": "null",
-      "@graphql-tools/schema": "10.0.2",
-      "@graphql-tools/schema/cjs": "null"
+    '@redwoodjs/graphql-server': {
+      '@graphql-tools/utils': '10.0.11',
+      '@graphql-tools/utils/cjs': 'null',
+      '@graphql-tools/schema': '10.0.2',
+      '@graphql-tools/schema/cjs': 'null',
     },
     // ...
-  }
+  },
 }
 ```
 

@@ -43,6 +43,7 @@ export class RWService extends FileNode {
    */
 
   @lazy() get funcs() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
     return iter(function* () {
       // export const foo = () => {}

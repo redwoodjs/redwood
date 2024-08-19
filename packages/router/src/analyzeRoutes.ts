@@ -26,7 +26,7 @@ export type GeneratedRoutesMap = {
   ) => string
 }
 
-export type Wrappers = Array<(props: any) => ReactNode>
+export type Wrappers = ((props: any) => ReactNode)[]
 
 interface Set {
   id: string
@@ -51,7 +51,7 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  sets: Array<Set>
+  sets: Set[]
 }
 
 interface AnalyzeRoutesOptions {
@@ -72,7 +72,7 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    sets?: Array<Set>
+    sets?: Set[]
   }
 
   // Assign ids to all sets found.
@@ -236,7 +236,7 @@ export function analyzeRoutes(
   }
 }
 
-function createSetId(nextSetId: number, previousSets: Array<Set>) {
+function createSetId(nextSetId: number, previousSets: Set[]) {
   const firstLevel = previousSets.length === 0
 
   if (firstLevel) {

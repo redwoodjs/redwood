@@ -41,7 +41,7 @@ afterAll(async () => {
 })
 
 describe('redwoodFastifyAPI', () => {
-  it('configures the `@fastify/url-data` and `fastify-raw-body` plugins', async () => {
+  it('configures the `@fastify/url-data` and `fastify-raw-body` plugins', () => {
     const plugins = fastifyInstance.printPlugins()
 
     expect(plugins.includes('@fastify/url-data')).toEqual(true)
@@ -62,7 +62,7 @@ describe('redwoodFastifyAPI', () => {
   //
   // We can use `printRoutes` with a method for debugging, but not without one.
   // See https://fastify.dev/docs/latest/Reference/Server#printroutes
-  it('builds a tree of routes for GET and POST', async () => {
+  it('builds a tree of routes for GET and POST', () => {
     expect(fastifyInstance.printRoutes({ method: 'GET' }))
       .toMatchInlineSnapshot(`
       "└── /

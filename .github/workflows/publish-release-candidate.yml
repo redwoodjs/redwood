@@ -107,7 +107,7 @@ jobs:
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:
-          title: "🏎 RC Packages"
+          title: '🏎 RC Packages'
           status: ${{ needs.publish-release-candidate.result }}
           version: ${{ needs.publish-release-candidate.outputs.version }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

@@ -28,12 +28,13 @@ yarn rw storybook
 ```
 
 If this is your first time running Storybook:
-  - The Redwood CLI will install Storybook, the framework package, and all related dependencies.
-  - The Redwood CLI will create the following config files for you:
-    - `web/.storybook/main.ts`
-      - This is the primary [Storybook configuration file](https://storybook.js.org/docs/configure). Note that it references our framework package, [`storybook-framework-redwoodjs-vite`](https://www.npmjs.com/package/storybook-framework-redwoodjs-vite).
-    - `web/.storybook/preview-body.html`
-      - This is required to change the `id` of the root div to `redwood-app`, which is what the entry file used by Vite requires.
+
+- The Redwood CLI will install Storybook, the framework package, and all related dependencies.
+- The Redwood CLI will create the following config files for you:
+  - `web/.storybook/main.ts`
+    - This is the primary [Storybook configuration file](https://storybook.js.org/docs/configure). Note that it references our framework package, [`storybook-framework-redwoodjs-vite`](https://www.npmjs.com/package/storybook-framework-redwoodjs-vite).
+  - `web/.storybook/preview-body.html`
+    - This is required to change the `id` of the root div to `redwood-app`, which is what the entry file used by Vite requires.
 
 Once Storybook is all set up, it'll spin up on localhost port `7910` and open your browser.
 

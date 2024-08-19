@@ -1,6 +1,7 @@
 ---
 sidebar_label: Supabase
 ---
+
 # Supabase Authentication
 
 To get started, run the setup command:
@@ -53,7 +54,6 @@ After you sign up, head to your inbox: there should be a confirmation email from
 Click the link, then head back to your app.
 Once you refresh the page, you should see `{"isAuthenticated":true}` on the page.
 
-
 Let's make sure: if this is a brand new project, generate a home page.
 
 There we'll try to sign up by destructuring `signUp` from the `useAuth` hook (import that from `'src/auth'`). We'll also destructure and display `isAuthenticated` to see if it worked:
@@ -69,10 +69,16 @@ const HomePage = () => {
       {/* MetaTags, h1, paragraphs, etc. */}
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
-      <button onClick={() => signUp({
-        email: 'your.email@email.com',
-        password: 'super secret password',
-      })}>sign up</button>
+      <button
+        onClick={() =>
+          signUp({
+            email: 'your.email@email.com',
+            password: 'super secret password',
+          })
+        }
+      >
+        sign up
+      </button>
     </>
   )
 }
@@ -126,14 +132,14 @@ Creates a new user with additional user metadata.
 const { signUp } = useAuth()
 
 await signUp({
-email: 'example@email.com',
+  email: 'example@email.com',
   password: 'example-password',
   options: {
     data: {
       first_name: 'John',
       age: 27,
-    }
-  }
+    },
+  },
 })
 ```
 
@@ -145,11 +151,11 @@ Creates a new user with a redirect URL.
 const { signUp } = useAuth()
 
 await signUp({
-email: 'example@email.com',
+  email: 'example@email.com',
   password: 'example-password',
   options: {
-    emailRedirectTo: 'https://example.com/welcome'
-  }
+    emailRedirectTo: 'https://example.com/welcome',
+  },
 })
 ```
 
@@ -157,7 +163,7 @@ email: 'example@email.com',
 
 Log in an existing user with an email and password or phone and password.
 
-* Requires either an email and password or a phone number and password.
+- Requires either an email and password or a phone number and password.
 
 ```ts
 const { logIn } = useAuth()
@@ -173,9 +179,9 @@ await logIn({
 
 Log in a user using magiclink or a one-time password (OTP).
 
-* Requires either an email or phone number.
+- Requires either an email or phone number.
 
-* This method is used for passwordless sign-ins where a OTP is sent to the user's email or phone number.
+- This method is used for passwordless sign-ins where a OTP is sent to the user's email or phone number.
 
 ```ts
 const { logIn } = useAuth()
@@ -184,8 +190,8 @@ await logIn({
   authMethod: 'otp',
   email: 'example@email.com',
   options: {
-    emailRedirectTo: 'https://example.com/welcome'
-  }
+    emailRedirectTo: 'https://example.com/welcome',
+  },
 })
 ```
 
@@ -193,9 +199,9 @@ await logIn({
 
 Log in an existing user via a third-party provider.
 
-* This method is used for signing in using a third-party provider.
+- This method is used for signing in using a third-party provider.
 
-* Supabase supports many different [third-party providers](https://supabase.com/docs/guides/auth#providers).
+- Supabase supports many different [third-party providers](https://supabase.com/docs/guides/auth#providers).
 
 ```ts
 const { logIn } = useAuth()
@@ -270,10 +276,9 @@ logOut()
 
 Log in a user given a User supplied OTP received via mobile.
 
-* The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
+- The verifyOtp method takes in different verification types. If a phone number is used, the type can either be sms or phone_change. If an email address is used, the type can be one of the following: signup, magiclink, recovery, invite or email_change.
 
-* The verification type used should be determined based on the corresponding auth method called before verifyOtp to sign up / sign-in a user.
-
+- The verification type used should be determined based on the corresponding auth method called before verifyOtp to sign up / sign-in a user.
 
 The RedwoodJS auth provider doesn't expose the `veriftyOtp` method from the Supabase SDK directly.
 
@@ -285,7 +290,7 @@ So, in order to use the `verifyOtp` method, you would:
 const { client } = useAuth()
 
 useEffect(() => {
-  const { data, error } = await client.verifyOtp({ phone, token, type: 'sms'})
+  const { data, error } = await client.verifyOtp({ phone, token, type: 'sms' })
 }, [client])
 ```
 
@@ -317,13 +322,15 @@ useEffect(() => {
 
 Receive a notification every time an auth event happens.
 
-* Types of auth events: `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED`, `USER_UPDATED`, `PASSWORD_RECOVERY`
+- Types of auth events: `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED`, `USER_UPDATED`, `PASSWORD_RECOVERY`
 
 ```ts
 const { client } = useAuth()
 
 useEffect(() => {
-  const { data: { subscription } } = client.onAuthStateChange((event, session) => {
+  const {
+    data: { subscription },
+  } = client.onAuthStateChange((event, session) => {
     console.log(event, session)
   })
 

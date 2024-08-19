@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+import { getAsyncStoreInstance } from './store.js'
 
-import { getAsyncStoreInstance } from './store'
-
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GlobalContext extends Record<string, unknown> {}
 
 export const createContextProxy = (target: GlobalContext) => {

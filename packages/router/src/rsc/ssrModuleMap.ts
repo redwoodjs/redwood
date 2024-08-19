@@ -9,7 +9,7 @@ type ClientReferenceManifestEntry = ImportManifestEntry
 type ImportManifestEntry = {
   id: string
   // chunks is a double indexed array of chunkId / chunkFilename pairs
-  chunks: Array<string>
+  chunks: string[]
   name: string
 }
 

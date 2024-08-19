@@ -2,14 +2,12 @@ import type { Stall } from 'types/graphql'
 
 import { registerFragment } from '@redwoodjs/web/apollo'
 
-const { useRegisteredFragment } = registerFragment(
-  gql`
-    fragment Stall_info on Stall {
-      id
-      name
-    }
-  `
-)
+const { useRegisteredFragment } = registerFragment(gql`
+  fragment Stall_info on Stall {
+    id
+    name
+  }
+`)
 
 const StallInfo = ({ id }: { id: string }) => {
   const { data, complete } = useRegisteredFragment<Stall>(id)

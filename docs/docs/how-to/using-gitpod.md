@@ -1,9 +1,11 @@
 # Using GitPod
 
 ## What is GitPod?
+
 GitPod is a cloud development environment with all the necessary tools and dependencies, allowing you to focus on building your RedwoodJS application without worrying about the setup. Get started quickly and efficiently by launching RedwoodJS inside GitPod!
 
 ## Getting Started
+
 Click on the Open in GitPod button:
 
 [![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/starter)
@@ -38,13 +40,13 @@ Once everything is up and running, you can click on the Ports tab:
 You can click on the address or the globe icon to open that particular port in a new tab.
 
 - Port 5432 is the database. So, if you click on that port, you'll probably see a "Port 5432 Not Found" error, but it is working!
-![GitPod on Port 5432](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-5432.png)
+  ![GitPod on Port 5432](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-5432.png)
 
 - Port 8910 is your frontend
-![Port 8910 frontend](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-8910.png)
+  ![Port 8910 frontend](https://github.com/redwoodjs/starter/raw/main/images/gitpod-port-8910.png)
 
 - Port 8911 is your backend and will show you a list of all available functions. If you add `/graphql` to the end of the URL, you should see the GraphQL Playground
-![Port 8911 GraphQL Playground](https://github.com/redwoodjs/starter/raw/main/images/gitpod-graphql.png)
+  ![Port 8911 GraphQL Playground](https://github.com/redwoodjs/starter/raw/main/images/gitpod-graphql.png)
 
 ## How to Use GitPod
 

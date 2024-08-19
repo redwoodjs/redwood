@@ -23,6 +23,7 @@ export const writeTemplate = (
 }
 
 const templatized = (template: string, vars = {}) => {
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval
   const handler = new Function(
     'vars',
     [

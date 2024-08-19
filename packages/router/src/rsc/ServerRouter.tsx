@@ -93,7 +93,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   let redirectPath: string | undefined = undefined
 
   if (redirect) {
-    if (redirect[0] === '/') {
+    if (redirect.startsWith('/')) {
       redirectPath = replaceParams(redirect, allParams)
     } else {
       const redirectRouteObject = Object.values(pathRouteMap).find(
@@ -174,7 +174,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
 
 interface WrappedPageProps {
   routeLoaderElement: ReactNode
-  sets: Array<{
+  sets: {
     id: string
     wrappers: Wrappers
     isPrivate: boolean
@@ -182,7 +182,7 @@ interface WrappedPageProps {
       private?: boolean
       [key: string]: unknown
     }
-  }>
+  }[]
 }
 
 /**

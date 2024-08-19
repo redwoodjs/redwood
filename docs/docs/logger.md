@@ -52,7 +52,10 @@ logger.trace(`>> items service -> About to save item ${item.name}`)
 logger.info(`Saving item ${item.name}`)
 logger.debug({ item }, `Item ${item.name} detail`)
 logger.warn(item, `Item ${item.id} is missing a name`)
-logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values`)
+logger.warn(
+  { missing: { name: item.name } },
+  `Item ${item.id} is missing values`
+)
 logger.error(error, `Failed to save item`)
 ```
 
@@ -178,7 +181,7 @@ Output:
 
 ```bash
 11:00:28 🌲 Hello RedwoodJS
-✨  Done in 0.14s.
+✨ Done in 0.14s.
 ```
 
 #### Usage
@@ -311,7 +314,10 @@ Since you can log metadata information alongside your message as seen in:
 ```jsx
 logger.debug({ item }, `Item ${item.name} detail`)
 logger.warn(item, `Item ${item.id} is missing a name`)
-logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values`)
+logger.warn(
+  { missing: { name: item.name } },
+  `Item ${item.id} is missing values`
+)
 logger.error(error, `Failed to save item`)
 ```
 

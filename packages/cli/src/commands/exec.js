@@ -19,6 +19,12 @@ export const builder = (yargs) => {
       default: false,
       description: 'List available scripts',
     })
+    .option('silent', {
+      alias: 's',
+      type: 'boolean',
+      default: false,
+      description: "Silence Redwood's output, leaving only the script output",
+    })
     .strict(false)
     .epilogue(
       `Also see the ${terminalLink(

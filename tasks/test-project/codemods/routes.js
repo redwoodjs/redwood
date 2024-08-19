@@ -7,12 +7,12 @@ export default (file, api) => {
 
   const blogImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogLayout'))],
-    j.stringLiteral('src/layouts/BlogLayout')
+    j.stringLiteral('src/layouts/BlogLayout'),
   )
 
   const homePageImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('HomePage'))],
-    j.stringLiteral('src/pages/HomePage')
+    j.stringLiteral('src/pages/HomePage'),
   )
 
   root
@@ -42,11 +42,11 @@ export default (file, api) => {
           j.jsxOpeningElement(j.jsxIdentifier('Set'), [
             j.jsxAttribute(
               j.jsxIdentifier('wrap'),
-              j.jsxExpressionContainer(j.identifier('BlogLayout'))
+              j.jsxExpressionContainer(j.identifier('BlogLayout')),
             ),
           ]),
           j.jsxClosingElement(j.jsxIdentifier('Set')),
-          [...node.children]
+          [...node.children],
         ),
       ]
 
@@ -60,7 +60,7 @@ export default (file, api) => {
       j.filters.JSXElement.hasAttributes({
         name: 'profile',
         path: '/profile',
-      })
+      }),
     )
     .at(0)
     .replaceWith((nodePath) => {
@@ -70,11 +70,11 @@ export default (file, api) => {
         j.jsxOpeningElement(j.jsxIdentifier('Private'), [
           j.jsxAttribute(
             j.jsxIdentifier('unauthenticated'),
-            j.literal('login')
+            j.literal('login'),
           ),
         ]),
         j.jsxClosingElement(j.jsxIdentifier('Private')),
-        [node]
+        [node],
       )
 
       return privateSetWrapped

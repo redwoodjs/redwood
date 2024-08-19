@@ -67,7 +67,7 @@ export class RWRoute extends BaseNode {
     }
     if (tsm.Node.isJsxAttribute(a)) {
       const init = a.getInitializer()
-      if (tsm.Node.isStringLiteral(init!)) {
+      if (tsm.Node.isStringLiteral(init)) {
         return init.getLiteralValue()
       }
     }
@@ -94,7 +94,7 @@ export class RWRoute extends BaseNode {
 
       // Handle string literals
       if (tsm.Node.isStringLiteral(init)) {
-        let literalValue = init.getLiteralValue()
+        const literalValue = init.getLiteralValue()
 
         // Check if the string looks like an array with single quotes
         if (literalValue.startsWith('[') && literalValue.endsWith(']')) {
@@ -189,9 +189,9 @@ export class RWRoute extends BaseNode {
     }
     if (tsm.Node.isJsxAttribute(a)) {
       const init = a.getInitializer()
-      if (tsm.Node.isJsxExpression(init!)) {
+      if (tsm.Node.isJsxExpression(init)) {
         const expr = init.getExpression()
-        if (tsm.Node.isIdentifier(expr!)) {
+        if (tsm.Node.isIdentifier(expr)) {
           return expr
         }
       }
@@ -236,7 +236,7 @@ export class RWRoute extends BaseNode {
     }
     if (tsm.Node.isJsxAttribute(a)) {
       const init = a.getInitializer()
-      if (tsm.Node.isStringLiteral(init!)) {
+      if (tsm.Node.isStringLiteral(init)) {
         return init
       }
     }
@@ -269,7 +269,7 @@ export class RWRoute extends BaseNode {
     }
     if (this.isPrivate && this.isNotFound) {
       yield err(
-        this.jsxNode!,
+        this.jsxNode,
         "The 'Not Found' page cannot be within a <PrivateSet> or a <Private> tag",
       )
     }
@@ -369,7 +369,7 @@ export class RWRoute extends BaseNode {
         // If it is explicitly set to true
         // e.g. <Route prerender={true} />
         return tsm.Node.isTrueLiteral(init.getExpression())
-      } else if (tsm.Node.isStringLiteral(init!)) {
+      } else if (tsm.Node.isStringLiteral(init)) {
         // If its using the incorrect string form, we're accepting it as true
         // e.g. <Route prerender="true" />
         const literalValue = init.getLiteralValue()
@@ -387,7 +387,7 @@ export class RWRoute extends BaseNode {
     }
     if (tsm.Node.isJsxAttribute(a)) {
       const init = a.getInitializer()
-      if (tsm.Node.isStringLiteral(init!)) {
+      if (tsm.Node.isStringLiteral(init)) {
         return init.getLiteralValue()
       }
     }

@@ -1,6 +1,5 @@
 {
   "name": "storybook-framework-redwoodjs-vite",
-  "type": "module",
   "version": "7.0.0",
   "description": "Storybook for RedwoodJS with Vite",
   "keywords": [
@@ -18,6 +17,7 @@
     "directory": "packages/storybook"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -44,8 +44,8 @@
   ],
   "scripts": {
     "build": "tsx build.ts && yarn build:types",
-    "build:types": "tsc --build --verbose",
-    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
+    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz",
+    "build:types": "tsc --build --verbose"
   },
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
@@ -62,7 +62,7 @@
     "@types/node": "20.14.15",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vite": "5.4.0"
+    "vite": "5.4.1"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",

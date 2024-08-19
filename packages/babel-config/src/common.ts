@@ -63,7 +63,7 @@ if (!RUNTIME_CORE_JS_VERSION) {
   )
 }
 
-export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
+export const getCommonPlugins = (): [string, PluginOptions][] => {
   return [
     ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
@@ -124,7 +124,7 @@ export const parseTypeScriptConfigFiles = () => {
 }
 
 type CompilerOptionsForPaths = {
-  compilerOptions: { baseUrl: string; paths: string }
+  compilerOptions: { baseUrl: string; paths: Record<string, string[]> }
 }
 /**
  * Extracts and formats the paths from the [ts|js]config.json file
@@ -162,10 +162,7 @@ export const getPathsFromTypeScriptConfig = (
       continue
     }
     const aliasKey = key.replace('/*', '')
-    const aliasValue = path.join(
-      absoluteBase,
-      (value as string)[0].replace('/*', ''),
-    )
+    const aliasValue = path.join(absoluteBase, value[0].replace('/*', ''))
 
     pathsObj[aliasKey] = aliasValue
   }

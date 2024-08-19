@@ -15,6 +15,7 @@ yarn rw setup docker
 ```
 
 The setup commands does several things:
+
 - writes four files: `Dockerfile`, `.dockerignore`, `docker-compose.dev.yml`, and `docker-compose.prod.yml`
 - adds the `@redwoodjs/api-server` and `@redwoodjs/web-server` packages to the api and web sides respectively
 - edits the `browser.open` setting in the `redwood.toml` (right now, if it's set to `true`, it'll break the dev server when running the `docker-compose.dev.yml`)
@@ -52,7 +53,7 @@ root@...:/home/node/app# yarn rw prisma migrate dev
 The docker setup command assumes that you are using Postgres as your database provider and sets up a local Postgres database for you. You may have to switch from SQLite to Postgres if you have not done so and want to continue with the default setup.
 :::
 
-:::important 
+:::important
 If you are using a [Server File](#using-the-server-file) then you should [change the command](#command) that runs the `api_serve` service.
 :::
 
@@ -131,7 +132,7 @@ COPY --chown=node:node yarn.lock .
 
 Here we copy the minimum set of files that the `yarn install` step needs.
 The order isn't completely arbitrary—it tries to maximize [Docker's layer caching](https://docs.docker.com/build/cache/).
-We expect `yarn.lock` to change more than the `package.json`s and the `package.json`s  to change more than `.yarnrc.yml`.
+We expect `yarn.lock` to change more than the `package.json`s and the `package.json`s to change more than `.yarnrc.yml`.
 That said, it's hard to argue that these files couldn't be arranged differently, or that the `COPY` instructions couldn't be combined.
 The important thing is that they're all here, before the `yarn install` step:
 
@@ -275,18 +276,15 @@ ENV NODE_ENV=production
 CMD [ "node_modules/.bin/rw-server", "api" ]
 ```
 
-:::important 
+:::important
 If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
 
 Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
 :::
 
-
 Note that the Redwood CLI isn't available anymore because it is a dev dependency.
 To access the server bin, we have to find its path in `node_modules`.
 Though this is somewhat discouraged in modern yarn, since we're using the `node-modules` node linker, it's in `node_modules/.bin`.
-
-
 
 ### The `web_build` stage
 
@@ -370,7 +368,7 @@ Lastly, note that we use the shell form of `CMD` here for its variable expansion
 
 The `console` stage is an optional stage for debugging:
 
-```Dockerfile
+````Dockerfile
 FROM base as console
 
 # To add more packages:
@@ -387,7 +385,7 @@ FROM base as console
 COPY --chown=node:node api api
 COPY --chown=node:node web web
 COPY --chown=node:node scripts scripts
-```
+````
 
 The console stage completes the base stage by copying in the rest of your Redwood app.
 But then it pretty much leaves you to your own devices.
@@ -529,13 +527,11 @@ yarn node api/dist/server.js
 
 You can't run the server file directly with Node.js; it has to be built first:
 
-
 ```
 yarn rw build api
 ```
 
-The api serve stage in the Dockerfile pulls from the api build stage, so things are already in the right order there. Similarly, for `yarn rw dev`, the dev server will build and reload the server file for you. 
-
+The api serve stage in the Dockerfile pulls from the api build stage, so things are already in the right order there. Similarly, for `yarn rw dev`, the dev server will build and reload the server file for you.
 
 ### Command
 
@@ -548,7 +544,7 @@ That means you will swap the `CMD` instruction in the api server stage:
 + CMD [ "api/dist/server.js" ]
 ```
 
-:::important 
+:::important
 If you are using a [Server File](#using-the-server-file) then you must change the command that runs the `api_serve` service to `./api/dist/server.js` as shown above.
 
 Not updating the command will not completely configure the GraphQL Server and not setup [Redwood Realtime](./realtime.md), if you are using that.
@@ -559,6 +555,7 @@ Not updating the command will not completely configure the GraphQL Server and no
 There are three ways you may wish to configure the server.
 
 #### Underlying Fastify server
+
 First, you can configure how the underlying Fastify server is instantiated via the`fastifyServerOptions` passed to the `createServer` function:
 
 ```ts title="api/src/server.ts"
@@ -567,7 +564,7 @@ const server = await createServer({
   // highlight-start
   fastifyServerOptions: {
     // ...
-  }
+  },
   // highlight-end
 })
 ```
@@ -575,6 +572,7 @@ const server = await createServer({
 For the complete list of options, see [Fastify's documentation](https://fastify.dev/docs/latest/Reference/Server/#factory).
 
 #### Configure the redwood API plugin
+
 Second, you may want to alter the behavior of redwood's API plugin itself. To do this we provide a `configureApiServer(server)` option where you can do anything you wish to the fastify instance before the API plugin is registered. Two examples are given below.
 
 ##### Example: Compressing Payloads and Rate Limiting
@@ -601,14 +599,13 @@ const server = await createServer({
       threshold: 1024,
       encodings: ['deflate', 'gzip'],
     })
-    
+
     await server.register(import('@fastify/rate-limit'), {
       max: 100,
       timeWindow: '5 minutes',
     })
-  }
+  },
 })
-
 ```
 
 ##### Example: File Uploads
@@ -625,7 +622,7 @@ If you try to POST file content to the api server such as images or PDFs, you ma
 ```
 
 This's because Fastify [only supports `application/json` and `text/plain` content types natively](https://www.fastify.io/docs/latest/Reference/ContentTypeParser/).
-While Redwood configures the api server to also accept `application/x-www-form-urlencoded` and  `multipart/form-data`, if you want to support other content or MIME types (likes images or PDFs), you'll need to configure them here in the server file.
+While Redwood configures the api server to also accept `application/x-www-form-urlencoded` and `multipart/form-data`, if you want to support other content or MIME types (likes images or PDFs), you'll need to configure them here in the server file.
 
 You can use Fastify's `addContentTypeParser` function to allow uploads of the content types your application needs.
 For example, to support image file uploads you'd tell Fastify to allow `/^image\/.*/` content types:
@@ -633,13 +630,13 @@ For example, to support image file uploads you'd tell Fastify to allow `/^image\
 ```ts title="api/src/server.ts"
 const server = await createServer({
   logger,
-  configureApiServer(server){
+  configureApiServer(server) {
     server.addContentTypeParser(/^image\/.*/, (_req, payload, done) => {
       payload.on('end', () => {
         done()
       })
     })
-  }
+  },
 })
 ```
 
@@ -648,6 +645,7 @@ The regular expression (`/^image\/.*/`) above allows all image content or MIME t
 Now, when you POST those content types to a function served by the api server, you can access the file content on `event.body`.
 
 #### Additional Fastify plugins
+
 Finally, you can register additional Fastify plugins on the server instance:
 
 ```ts title="api/src/server.ts"
@@ -657,11 +655,11 @@ const server = await createServer({
 
 // highlight-next-line
 server.register(myFastifyPlugin)
-``` 
+```
 
 :::note Fastify encapsulation
 
-Fastify is built around the concept of [encapsulation](https://fastify.dev/docs/latest/Reference/Encapsulation/). It is important to note that redwood's API plugin cannot be mutated after it is registered, see [here](https://fastify.dev/docs/latest/Reference/Plugins/#asyncawait). This is why you must use the `configureApiServer` option to do as shown above. 
+Fastify is built around the concept of [encapsulation](https://fastify.dev/docs/latest/Reference/Encapsulation/). It is important to note that redwood's API plugin cannot be mutated after it is registered, see [here](https://fastify.dev/docs/latest/Reference/Plugins/#asyncawait). This is why you must use the `configureApiServer` option to do as shown above.
 
 :::
 
@@ -678,25 +676,25 @@ It takes the same arguments as `listen`, except for host and port. It computes t
 
 1. `--apiHost` or `--apiPort` flags:
 
-  ```
-  yarn node api/dist/server.js --apiHost 0.0.0.0 --apiPort 8913
-  ```
+```
+yarn node api/dist/server.js --apiHost 0.0.0.0 --apiPort 8913
+```
 
 2. `REDWOOD_API_HOST` or `REDWOOD_API_PORT` env vars:
 
-  ```
-  export REDWOOD_API_HOST='0.0.0.0'
-  export REDWOOD_API_PORT='8913'
-  yarn node api/dist/server.js
-  ```
+```
+export REDWOOD_API_HOST='0.0.0.0'
+export REDWOOD_API_PORT='8913'
+yarn node api/dist/server.js
+```
 
 3. `[api].host` and `[api].port` in `redwood.toml`:
 
-  ```toml title="redwood.toml"
-  [api]
-    host = '0.0.0.0'
-    port = 8913
-  ```
+```toml title="redwood.toml"
+[api]
+  host = '0.0.0.0'
+  port = 8913
+```
 
 If you'd rather not have `createServer` parsing `process.argv`, you can disable it via `parseArgv`:
 

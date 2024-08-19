@@ -151,7 +151,7 @@ function getFirebaseAuth(customProviderHooks?: {
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
-    firebaseMockClient as FirebaseClient,
+    firebaseMockClient,
     customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {

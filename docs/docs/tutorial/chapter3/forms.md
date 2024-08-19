@@ -148,9 +148,19 @@ import BlogLayout from 'src/layouts/BlogLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
+      <Set
+        wrap={ScaffoldLayout}
+        title="Posts"
+        titleTo="posts"
+        buttonLabel="New Post"
+        buttonTo="newPost"
+      >
         <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
-        <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
+        <Route
+          path="/posts/{id:Int}/edit"
+          page={PostEditPostPage}
+          name="editPost"
+        />
         <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
         <Route path="/posts" page={PostPostsPage} name="posts" />
       </Set>
@@ -216,7 +226,6 @@ const ContactPage = () => {
   return (
     <>
       <Metadata title="Contact" description="Contact page" />
-
       // highlight-next-line
       <Form></Form>
     </>
@@ -401,7 +410,6 @@ const ContactPage = () => {
   return (
     <>
       <Metadata title="Contact" description="Contact page" />
-
       // highlight-next-line
       <Form onSubmit={onSubmit}>
         <TextField name="input" />
@@ -466,7 +474,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 // highlight-end
 
@@ -559,7 +567,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -581,15 +589,12 @@ const ContactPage = () => {
         // highlight-next-line
         <label htmlFor="name">Name</label>
         <TextField name="name" />
-
         // highlight-next-line
         <label htmlFor="email">Email</label>
         <TextField name="email" />
-
         // highlight-next-line
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -644,15 +649,12 @@ return (
     <label htmlFor="name">Name</label>
     // highlight-next-line
     <TextField name="name" required />
-
     <label htmlFor="email">Email</label>
     // highlight-next-line
     <TextField name="email" required />
-
     <label htmlFor="message">Message</label>
     // highlight-next-line
     <TextAreaField name="message" required />
-
     <Submit>Save</Submit>
   </Form>
 )
@@ -699,15 +701,12 @@ return (
     <label htmlFor="name">Name</label>
     // highlight-next-line
     <TextField name="name" validation={{ required: true }} />
-
     <label htmlFor="email">Email</label>
     // highlight-next-line
     <TextField name="email" validation={{ required: true }} />
-
     <label htmlFor="message">Message</label>
     // highlight-next-line
     <TextAreaField name="message" validation={{ required: true }} />
-
     <Submit>Save</Submit>
   </Form>
 )
@@ -805,17 +804,14 @@ const ContactPage = () => {
         <TextField name="name" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="name" />
-
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="email" />
-
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="message" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -892,7 +888,7 @@ import {
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -915,17 +911,14 @@ const ContactPage = () => {
         <TextField name="name" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="name" className="error" />
-
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="email" className="error" />
-
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="message" className="error" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -1187,7 +1180,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="name" className="error" />
-
         // highlight-start
         <Label name="email" errorClassName="error">
           Email
@@ -1199,7 +1191,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="email" className="error" />
-
         // highlight-start
         <Label name="message" errorClassName="error">
           Message
@@ -1211,7 +1202,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="message" className="error" />
-
         <Submit>Save</Submit>
       </Form>
     </>

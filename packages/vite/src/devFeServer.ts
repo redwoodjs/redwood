@@ -145,7 +145,7 @@ async function createServer() {
   const routeHandler = await createReactStreamingHandler(
     {
       routes,
-      clientEntryPath: rwPaths.web.entryClient as string,
+      clientEntryPath: rwPaths.web.entryClient,
       getStylesheetLinks: (route) => {
         // In dev route is a RouteSpec, with additional properties
         return getCssLinks({ rwPaths, route: route as RouteSpec, vite })
@@ -163,7 +163,7 @@ async function createServer() {
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
-  return await app.listen(port)
+  return app.listen(port)
 }
 
 let devApp = createServer()
@@ -194,7 +194,7 @@ function getCssLinks({
   vite: ViteDevServer
 }) {
   const appAndRouteModules = componentsModules(
-    [rwPaths.web.app, route && route.filePath].filter(Boolean) as string[],
+    [rwPaths.web.app, route?.filePath].filter(Boolean) as string[],
     vite,
   )
 

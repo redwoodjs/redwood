@@ -79,7 +79,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
       if (declaration.type === 'VariableDeclaration') {
         const id = declaration.declarations[0].id as types.Identifier
         namedExports.push({
-          name: id.name as string,
+          name: id.name,
           type: 'variable',
           location: {
             line: id.loc?.start.line ?? 1,

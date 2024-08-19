@@ -1,5 +1,7 @@
 import { writeFileSync } from 'node:fs'
 
+import * as esbuild from 'esbuild'
+
 import {
   build,
   defaultBuildOptions,
@@ -17,7 +19,11 @@ import {
  */
 await build({
   entryPointOptions: {
-    ignore: [...defaultIgnorePatterns, 'src/__typetests__/**'], //, 'src/entry/**'],
+    ignore: [
+      ...defaultIgnorePatterns,
+      'src/__typetests__/**',
+      'src/bundled/**', // <-- ⭐
+    ],
   },
   buildOptions: {
     ...defaultBuildOptions,
@@ -40,6 +46,19 @@ await build({
     format: 'esm',
     packages: 'external',
   },
+})
+
+// Workaround for apollo-client-upload being ESM-only
+// In ESM version of rwjs/web, we don't actually bundle it, we just reexport.
+// In the CJS version (see ⭐ above), we bundle it below.
+// This only ever gets used during prerender, so bundle size is not a concern.
+await esbuild.build({
+  entryPoints: ['src/bundled/*'],
+  outdir: 'dist/cjs/bundled',
+  format: 'cjs',
+  bundle: true,
+  logLevel: 'info',
+  tsconfig: 'tsconfig.build.json',
 })
 
 // Place a package.json file with `type: commonjs` in the dist/cjs folder so

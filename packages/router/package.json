@@ -1,19 +1,13 @@
 {
   "name": "@redwoodjs/router",
   "version": "7.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/router"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "skip-nav.css"
-  ],
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -76,6 +70,12 @@
       "import": "./dist/*.js"
     }
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "skip-nav.css"
+  ],
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
@@ -104,7 +104,7 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-dom": "19.0.0-rc-8269d55d-20240802",
     "tstyche": "2.1.1",

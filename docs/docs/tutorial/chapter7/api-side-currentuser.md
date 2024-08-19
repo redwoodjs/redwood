@@ -144,7 +144,7 @@ Now run `yarn rw prisma migrate reset` and and...you'll get a different error. B
 
 :::
 
-We've got an error here because running a database `reset` doesn't also apply pending migrations. So we're trying to set a `userId` where one doesn't exist in the database (it does exist in Prisma generated client libs though, so it thinks that there *should* be one, even if it doesn't exist in the database yet).
+We've got an error here because running a database `reset` doesn't also apply pending migrations. So we're trying to set a `userId` where one doesn't exist in the database (it does exist in Prisma generated client libs though, so it thinks that there _should_ be one, even if it doesn't exist in the database yet).
 
 It may feel like we're stuck, but note that the database did reset successfully, it's just the seed that failed. So now let's migrate the database to add the new `userId` to `Post`, and then re-run the seed to populate the database, naming it something like "add userId to post":
 
@@ -200,7 +200,7 @@ To enable this we'll need to make two modifications on the api side:
 
 :::info What about the mutations?
 
-We did *not* add `user` or `userId` to the `CreatePostInput` or `UpdatePostInput` types. Although we want to set a user on each newly created post, we don't want just anyone to do that via a GraphQL call! You could easily create or edit a post and assign it to someone else by just modifying the GraphQL payload. We'll save assigning the user to just the service, so it can't be manipulated by the outside world.
+We did _not_ add `user` or `userId` to the `CreatePostInput` or `UpdatePostInput` types. Although we want to set a user on each newly created post, we don't want just anyone to do that via a GraphQL call! You could easily create or edit a post and assign it to someone else by just modifying the GraphQL payload. We'll save assigning the user to just the service, so it can't be manipulated by the outside world.
 
 :::
 
@@ -270,8 +270,7 @@ We could also write this resolver as follows:
 
 ```javascript
 export const Post = {
-  user: (_obj, { root }) =>
-    db.user.findFirst({ where: { id: root.userId } }),
+  user: (_obj, { root }) => db.user.findFirst({ where: { id: root.userId } }),
 }
 ```
 
@@ -279,7 +278,7 @@ Note that if you keep the relation resolver above, but also included a `user` pr
 
 :::info Prisma and the N+1 Problem
 
-If you have any experience with database design and retrieval you may have noticed this method presents a less than ideal solution: for every post that's found, you need to perform an *additional* query just to get the user data associated with that `post`, also known as the [N+1 problem](https://medium.com/the-marcy-lab-school/what-is-the-n-1-problem-in-graphql-dd4921cb3c1a). This is just due to the nature of GraphQL queries: each resolver function really only knows about its own parent object, nothing about potential children.
+If you have any experience with database design and retrieval you may have noticed this method presents a less than ideal solution: for every post that's found, you need to perform an _additional_ query just to get the user data associated with that `post`, also known as the [N+1 problem](https://medium.com/the-marcy-lab-school/what-is-the-n-1-problem-in-graphql-dd4921cb3c1a). This is just due to the nature of GraphQL queries: each resolver function really only knows about its own parent object, nothing about potential children.
 
 There have been several attempts to work around this issue. A simple one that includes no extra dependencies is to remove this field resolver and simply include `user` data along with any `post` you retrieve from the database:
 
@@ -288,8 +287,8 @@ export const post = ({ id }) => {
   return db.post.findUnique({
     where: { id },
     include: {
-      user: true
-    }
+      user: true,
+    },
   })
 }
 ```
@@ -395,13 +394,13 @@ Depending on whether you started from the Redwood Tutorial repo or not, you may 
 
 ## Accessing `currentUser` on the API side
 
-There's a magical variable named `context` that's available within any of your service functions. It contains the context in which the service function is being called. One property available on this context is the user that's logged in (*if* someone is logged in). It's the same `currentUser` that is available on the web side:
+There's a magical variable named `context` that's available within any of your service functions. It contains the context in which the service function is being called. One property available on this context is the user that's logged in (_if_ someone is logged in). It's the same `currentUser` that is available on the web side:
 
 ```javascript title="api/src/service/posts/posts.js"
 export const createPost = ({ input }) => {
   return db.post.create({
     // highlight-next-line
-    data: { ...input, userId: context.currentUser.id }
+    data: { ...input, userId: context.currentUser.id },
   })
 }
 ```
@@ -465,7 +464,7 @@ export const Post = {
 
 :::info Prisma's `findUnique()` vs. `findFirst()`
 
-Note that we switched from `findUnique()` to `findFirst()` here. Prisma's `findUnique()` requires that any attributes in the `where` clause have unique indexes, which `id` does, but `userId` does not. So we need to switch to the `findFirst()` function which allows you to put whatever you want in the `where`, which may return more than one record, but Prisma will only return the first of that set. In this case we know there'll always only be one, because we're selecting by `id` *in addition* to `userId`.
+Note that we switched from `findUnique()` to `findFirst()` here. Prisma's `findUnique()` requires that any attributes in the `where` clause have unique indexes, which `id` does, but `userId` does not. So we need to switch to the `findFirst()` function which allows you to put whatever you want in the `where`, which may return more than one record, but Prisma will only return the first of that set. In this case we know there'll always only be one, because we're selecting by `id` _in addition_ to `userId`.
 
 :::
 
@@ -473,7 +472,7 @@ These changes make sure that a user can only see a list of their own posts, or t
 
 What about `updatePost` and `deletePost`? They aren't limited to just the `currentUser`, which would let anyone update or delete a post if they made a manual GraphQL call! That's not good. We'll deal with those [a little later](#update-and-delete).
 
-But there's a problem with the updates we just made: doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is *not* logged in goes to the homepage? ERROR.
+But there's a problem with the updates we just made: doesn't the homepage also use the `posts` service to display all the articles for the homepage? This code update would limit the homepage to only showing a logged in user's own posts and no one else! And what happens if someone who is _not_ logged in goes to the homepage? ERROR.
 
 How can we return one list of posts in the admin, and a different list of posts for the homepage?
 
@@ -481,7 +480,7 @@ How can we return one list of posts in the admin, and a different list of posts 
 
 We could go down the road of adding variables in the GraphQL queries, along with checks in the existing `posts` service, that return a different list of posts whether you're on the homepage or in the admin. But this complexity adds a lot of surface area to test and some fragility if someone goes in there in the future—they have to be very careful not to add a new condition or negate an existing one and accidentally expose your admin functionality to exploits.
 
-What if we created *new* GraphQL queries for the admin views of posts? They would have automatic security checks thanks to `@requireAdmin`, no custom code required. These new queries will be used in the admin posts pages, and the original, simple `posts` service will be used for the homepage and article detail page.
+What if we created _new_ GraphQL queries for the admin views of posts? They would have automatic security checks thanks to `@requireAdmin`, no custom code required. These new queries will be used in the admin posts pages, and the original, simple `posts` service will be used for the homepage and article detail page.
 
 There are several steps we'll need to complete:
 
@@ -512,7 +511,8 @@ export const schema = gql`
 
   type Mutation {
     createPost(input: CreatePostInput!): Post! @requireAuth(roles: ["admin"])
-    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth(roles: ["admin"])
+    updatePost(id: Int!, input: UpdatePostInput!): Post!
+      @requireAuth(roles: ["admin"])
     deletePost(id: Int!): Post! @requireAuth(roles: ["admin"])
   }
 `
@@ -757,25 +757,24 @@ export const deletePost = async ({ id }) => {
     where: { id },
   })
 }
-
 ```
 
 ## Wrapping Up
 
 Whew! Let's try several different scenarios (this is the kind of thing that the QA team lives for), making sure everything is working as expected:
 
-* A logged out user *should* see all posts on the homepage
-* A logged out user *should* be able to see the detail for a single post
-* A logged out user *should not* be able to go to /admin/posts
-* A logged out user *should not* see moderation controls next to comments
-* A logged in admin user *should* see all articles on the homepage (not just their own)
-* A logged in admin user *should* be able to go to /admin/posts
-* A logged in admin user *should* be able to create a new post
-* A logged in admin user *should not* be able to see anyone else's posts in /admin/posts
-* A logged in admin user *should not* see moderation controls next to comments (unless you modified that behavior at the end of the last page)
-* A logged in moderator user *should* see moderation controls next to comments
-* A logged in moderator user *should not* be able to access /admin/posts
+- A logged out user _should_ see all posts on the homepage
+- A logged out user _should_ be able to see the detail for a single post
+- A logged out user _should not_ be able to go to /admin/posts
+- A logged out user _should not_ see moderation controls next to comments
+- A logged in admin user _should_ see all articles on the homepage (not just their own)
+- A logged in admin user _should_ be able to go to /admin/posts
+- A logged in admin user _should_ be able to create a new post
+- A logged in admin user _should not_ be able to see anyone else's posts in /admin/posts
+- A logged in admin user _should not_ see moderation controls next to comments (unless you modified that behavior at the end of the last page)
+- A logged in moderator user _should_ see moderation controls next to comments
+- A logged in moderator user _should not_ be able to access /admin/posts
 
-In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create `adminPosts.scenarios.js` and `adminPosts.test.js` files to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](/docs/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependent on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with *reasonable* test coverage) features!
+In fact, you could write some new tests to make sure this functionality doesn't mistakenly change in the future. The quickest would probably be to create `adminPosts.scenarios.js` and `adminPosts.test.js` files to go with the new service and verify that you are only returned the posts owned by a given user. You can [mock currentUser](/docs/testing#mockcurrentuser-on-the-api-side) to simulate someone being logged in or not, with different roles. You could add tests for the Cells we modified above, but the data they get is dependent on what's returned from the service, so as long as you have the service itself covered you should be okay. The 100% coverage folks would argue otherwise, but while they're still busy writing tests we're out cruising in our new yacht thanks to all the revenue from our newly launched (with _reasonable_ test coverage) features!
 
 Did it work? Great! Did something go wrong? Can someone see too much, or too little? Double check that all of your GraphQL queries are updated and you've saved changes in all the opened files.
