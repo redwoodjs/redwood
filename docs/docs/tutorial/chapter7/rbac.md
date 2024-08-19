@@ -1,6 +1,6 @@
 # Role-Based Access Control (RBAC)
 
-Imagine a few weeks in the future of our blog when every post hits the front page of the New York Times and we're getting hundreds of comments a day. We can't be expected to come up with quality content each day *and* moderate the endless stream of (mostly well-meaning) comments! We're going to need help. Let's hire a comment moderator to remove obvious spam and any comments that don't heap praise on our writing ability. You know, to help make the internet a better place.
+Imagine a few weeks in the future of our blog when every post hits the front page of the New York Times and we're getting hundreds of comments a day. We can't be expected to come up with quality content each day _and_ moderate the endless stream of (mostly well-meaning) comments! We're going to need help. Let's hire a comment moderator to remove obvious spam and any comments that don't heap praise on our writing ability. You know, to help make the internet a better place.
 
 We already have a login system for our blog, but right now it's all-or-nothing: you either get access to create blog posts, or you don't. In this case our comment moderator(s) will need logins so that we know who they are, but we're not going to let them create new blog posts. We need some kind of role that we can give to our two kinds of users so we can distinguish them from one another.
 
@@ -25,7 +25,6 @@ model User {
 ```
 
 Next we'll (try) to migrate the database:
-
 
 ```bash
 yarn rw prisma migrate dev
@@ -117,7 +116,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
       return currentUserRoles?.some((allowedRole) => roles === allowedRole)
     }
   }
- ```
+```
 
 This is because we now know that the type of `currentUser.roles` is a `string` based on the type being returned from Prisma. So you can safely remove the block of code where it's checking if roles is an array:
 
@@ -183,9 +182,19 @@ The easiest way to prevent access to an entire URL is via the Router. The `<Priv
 ```tsx title="web/src/Routes.tsx"
 // highlight-next-line
 <PrivateSet unauthenticated="home" roles="admin">
-  <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
+  <Set
+    wrap={ScaffoldLayout}
+    title="Posts"
+    titleTo="posts"
+    buttonLabel="New Post"
+    buttonTo="newPost"
+  >
     <Route path="/admin/posts/new" page={PostNewPostPage} name="newPost" />
-    <Route path="/admin/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
+    <Route
+      path="/admin/posts/{id:Int}/edit"
+      page={PostEditPostPage}
+      name="editPost"
+    />
     <Route path="/admin/posts/{id:Int}" page={PostPostPage} name="post" />
     <Route path="/admin/posts" page={PostPostsPage} name="posts" />
   </Set>
@@ -246,12 +255,12 @@ Let's create a new user that will represent the comment moderator. Since this is
 
 :::tip The Plus Trick
 
-The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of *valid* email addresses—they all come to your regular inbox!
+The Plus Trick is a very handy feature of the email standard known as a "boxname", the idea being that you may have other incoming boxes besides one just named "Inbox" and by adding `+something` to your email address you can specify which box the mail should be sorted into. They don't appear to be in common use these days, but they are ridiculously helpful for us developers when we're constantly needing new email addresses for testing: it gives us an infinite number of _valid_ email addresses—they all come to your regular inbox!
 
 Just append +something to your email address before the @:
 
-* `jane.doe+testing@example.com` will go to `jane.doe@example.com`
-* `dom+20210909@example.com` will go to `dom@example.com`
+- `jane.doe+testing@example.com` will go to `jane.doe@example.com`
+- `dom+20210909@example.com` will go to `dom@example.com`
 
 Note that not all providers support this plus-based syntax, but the major ones (Gmail, Yahoo, Microsoft, Apple) do. If you find that you're not receiving emails at your own domain, you may want to create a free account at one of these providers just to use for testing.
 
@@ -266,13 +275,17 @@ If you disabled the new user signup as suggested at the end of the first part of
 ```javascript
 const CryptoJS = require('crypto-js')
 const salt = CryptoJS.lib.WordArray.random(128 / 8).toString()
-const hashedPassword = CryptoJS.PBKDF2('password', salt, { keySize: 256 / 32 }).toString()
-db.user.create({ data: { email: 'moderator@moderator.com', hashedPassword, salt } })
+const hashedPassword = CryptoJS.PBKDF2('password', salt, {
+  keySize: 256 / 32,
+}).toString()
+db.user.create({
+  data: { email: 'moderator@moderator.com', hashedPassword, salt },
+})
 ```
 
 :::
 
-Now if you log out as the admin and log in as the moderator you should *not* have access to the posts admin.
+Now if you log out as the admin and log in as the moderator you should _not_ have access to the posts admin.
 
 ### Restrict Access in a Component
 

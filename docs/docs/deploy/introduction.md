@@ -12,6 +12,7 @@ Redwood is designed for both serverless and traditional infrastructure deploymen
 4. the hosting provider deploys the built Web static assets to a CDN and the API code to a serverless backend (e.g. AWS Lambdas)
 
 Currently, these are the officially supported deploy targets:
+
 - Baremetal (physical server that you have SSH access to)
 - [Coherence](https://www.withcoherence.com/)
 - [Flightcontrol.dev](https://www.flightcontrol.dev?ref=redwood)
@@ -22,12 +23,12 @@ Currently, these are the officially supported deploy targets:
 - [Vercel.com](https://vercel.com)
 
 Redwood has a CLI generator that adds the code and configuration required by the specified provider (see the [CLI Doc](cli-commands.md#deploy-config) for more information):
+
 ```shell
 yarn rw setup deploy <provider>
 ```
 
 There are examples of deploying Redwood on other providers such as Google Cloud and direct to AWS. You can find more information by searching the [GitHub Issues](https://github.com/redwoodjs/redwood/issues) and [Forums](https://community.redwoodjs.com).
-
 
 ## General Deployment Setup
 

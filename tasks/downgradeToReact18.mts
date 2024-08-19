@@ -44,7 +44,7 @@ async function parsePackageJsonFiles(packageJsonFilePaths: string[]) {
 }
 
 async function downgradeReactVersion(packageJsonArray: PackageJson[]) {
-  const targetReactVersion = "18.3.1"
+  const targetReactVersion = '18.3.1'
   for (const packageJson of packageJsonArray) {
     if (packageJson.dependencies?.react?.startsWith('19.')) {
       packageJson.dependencies.react = targetReactVersion

@@ -1,4 +1,3 @@
-
 # Afterword
 
 You made it! Get yourself some ice cream or a slice of pie: you definitely deserve it.

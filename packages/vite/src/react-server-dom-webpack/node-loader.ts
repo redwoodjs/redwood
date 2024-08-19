@@ -351,7 +351,7 @@ async function transformClientModule(
     ([_key, value]) => value === url,
   )
 
-  if (!entryRecord || !entryRecord[0]) {
+  if (!entryRecord?.[0]) {
     throw new Error('Entry not found for ' + url)
   }
 

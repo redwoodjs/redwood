@@ -162,10 +162,7 @@ export const getPathsFromTypeScriptConfig = (
       continue
     }
     const aliasKey = key.replace('/*', '')
-    const aliasValue = path.join(
-      absoluteBase,
-      (value as string)[0].replace('/*', ''),
-    )
+    const aliasValue = path.join(absoluteBase, value[0].replace('/*', ''))
 
     pathsObj[aliasKey] = aliasValue
   }

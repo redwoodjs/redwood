@@ -29,6 +29,7 @@ import {
 } from '@apollo/client/react/hooks/hooks.cjs'
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
 import { fetch as crossFetch } from '@whatwg-node/fetch'
+import { Kind, OperationTypeNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
@@ -48,6 +49,7 @@ import {
 } from './fragmentRegistry.js'
 import * as SSELinkExports from './sseLink.js'
 import { useCache } from './useCache.js'
+
 // Not sure why we need to import it this way for legacy builds to work
 const { SSELink } = SSELinkExports
 
@@ -236,8 +238,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
             const definition = getMainDefinition(query)
 
             return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
+              definition.kind === Kind.OPERATION_DEFINITION &&
+              definition.operation === OperationTypeNode.SUBSCRIPTION
             )
           },
           new SSELink({

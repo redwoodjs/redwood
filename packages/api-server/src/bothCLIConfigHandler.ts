@@ -33,7 +33,7 @@ export async function handler(options: BothParsedOptions) {
     },
   })
 
-  const apiFastify = await await createApiServer({
+  const apiFastify = await createApiServer({
     apiRootPath: options.apiRootPath,
   })
 

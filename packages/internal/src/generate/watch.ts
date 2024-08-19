@@ -101,7 +101,7 @@ watcher
         chalk.dim.italic(Date.now() - start + ' ms'),
       )
 
-    if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
+    if (absPath.includes('Cell') && isCellFile(absPath)) {
       await generateTypeDefGraphQLWeb()
       await generateClientPreset()
       if (eventName === 'unlink') {
@@ -114,7 +114,7 @@ watcher
       generateTypeDefRouterRoutes()
       routesWarningMessage = warningForDuplicateRoutes()
       finished('Routes')
-    } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
+    } else if (absPath.includes('Page') && isPageFile(absPath)) {
       generateTypeDefRouterPages()
       finished('Page')
     } else if (isDirectoryNamedModuleFile(absPath)) {

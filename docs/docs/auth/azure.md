@@ -94,9 +94,7 @@ const HomePage = () => {
       {/* MetaTags, h1, paragraphs, etc. */}
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
-      <button onClick={signUp}>
-        Sign Up
-      </button>
+      <button onClick={signUp}>Sign Up</button>
     </>
   )
 }
@@ -155,7 +153,7 @@ AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
 And don't forget to add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the `includeEnvironmentVariables` array in `redwood.toml`.
-(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side. But more importantly, it's sensitive—do *not* include it in the web side.)
+(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side. But more importantly, it's sensitive—do _not_ include it in the web side.)
 
 #### Update `activeDirectoryClient` instance
 
@@ -170,7 +168,7 @@ const azureActiveDirectoryClient = new PublicClientApplication({
     postLogoutRedirectUri:
       process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
     // highlight-next-line
-    knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+    knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY],
   },
 })
 ```
@@ -178,5 +176,6 @@ const azureActiveDirectoryClient = new PublicClientApplication({
 Now you can call the `logIn` and `logOut` functions from `useAuth()`, and everything should just work.
 
 Here's a few more links to relevant documentation for reference:
+
 - [Overview of tokens in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview)
 - [Working with MSAL.js and Azure AD B2C](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md)

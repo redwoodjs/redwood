@@ -471,7 +471,7 @@ Great. Now we can modify our service accordingly:
 ```js {4-23} title="api/src/services/image/image.ts"
 import * as Filestack from 'filestack-js'
 
-export const deleteImage = async({ id }) => {
+export const deleteImage = async ({ id }) => {
   const client = Filestack.init(process.env.REDWOOD_ENV_FILESTACK_API_KEY)
 
   const image = await db.image.findUnique({ where: { id } })
@@ -491,7 +491,7 @@ export const deleteImage = async({ id }) => {
 
   await client.remove(handle, security)
 
-  return db.image.delete({ where: { id } } )
+  return db.image.delete({ where: { id } })
 }
 ```
 

@@ -52,11 +52,11 @@ jobs:
         uses: ./.github/actions/set-up-job
         with:
           set-up-yarn-cache: false
-          yarn-install-directory: ./tasks/check
+          yarn-install-directory: .
           build: false
 
       - name: ✅ Check constraints, dependencies, and package.json's
-        uses: ./tasks/check
+        run: yarn check
 
   check-skip:
     needs: detect-changes
@@ -166,7 +166,7 @@ jobs:
           wait-on: 'http://[::1]:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/e2e/01-tutorial/*.cy.js
+            cypress/e2e/01-tutorial/*.cy.js
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -505,7 +505,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
+      REDWOOD_REDIRECT_TELEMETRY: 'http://127.0.0.1:48619' # Random port
 
     steps:
       - uses: actions/checkout@v4

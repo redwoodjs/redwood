@@ -75,13 +75,7 @@ export default CommentForm
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/CommentForm/CommentForm.tsx"
-import {
-  Form,
-  Label,
-  TextField,
-  TextAreaField,
-  Submit,
-} from '@redwoodjs/forms'
+import { Form, Label, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
 const CommentForm = () => {
   return (
@@ -109,9 +103,7 @@ const CommentForm = () => {
           validation={{ required: true }}
         />
 
-        <Submit
-          className="block mt-4 bg-blue-500 text-white text-xs font-semibold uppercase tracking-wide rounded px-3 py-2 disabled:opacity-50"
-        >
+        <Submit className="block mt-4 bg-blue-500 text-white text-xs font-semibold uppercase tracking-wide rounded px-3 py-2 disabled:opacity-50">
           Submit
         </Submit>
       </Form>
@@ -500,7 +492,7 @@ const Article = ({ article, summary = false }) => {
           <div className="mt-12">
             <CommentsCell />
           </div>
-        // highlight-next-line
+          // highlight-next-line
         </div>
       )}
     </article>
@@ -529,7 +521,7 @@ What happened here? Notice towards the end of the error message: `Field "postId"
 
 We manually mocked the GraphQL response in the story, and our mock always returns a correct response, regardless of the input!
 
-There's always a tradeoff when creating mock data—it greatly simplifies testing by not having to rely on the entire GraphQL stack, but that means if you want it to be as accurate as the real thing you basically need to *re-write the real thing in your mock*. In this case, leaving out the `postId` was a one-time fix so it's probably not worth going through the work of creating a story/mock/test that simulates what would happen if we left it off.
+There's always a tradeoff when creating mock data—it greatly simplifies testing by not having to rely on the entire GraphQL stack, but that means if you want it to be as accurate as the real thing you basically need to _re-write the real thing in your mock_. In this case, leaving out the `postId` was a one-time fix so it's probably not worth going through the work of creating a story/mock/test that simulates what would happen if we left it off.
 
 But, if `CommentForm` ended up being a component that was re-used throughout your application, or the code itself will go through a lot of churn because other developers will constantly be making changes to it, it might be worth investing the time to make sure the interface (the props passed to it and the expected return) are exactly what you want them to be.
 
@@ -1126,7 +1118,7 @@ So it looks like we're just about done here! Try going back to the homepage and 
 
 All posts have the same comments! **WHAT HAVE WE DONE??**
 
-Remember our foreshadowing callout a few pages back, wondering if our `comments()` service which only returns *all* comments could come back to bite us? It finally has: when we get the comments for a post we're not actually getting them for only that post. We're ignoring the `postId` completely and just returning *all* comments in the database! Turns out the old axiom is true: computers only do exactly what you tell them to do.
+Remember our foreshadowing callout a few pages back, wondering if our `comments()` service which only returns _all_ comments could come back to bite us? It finally has: when we get the comments for a post we're not actually getting them for only that post. We're ignoring the `postId` completely and just returning _all_ comments in the database! Turns out the old axiom is true: computers only do exactly what you tell them to do.
 
 Let's fix it!
 
@@ -1304,7 +1296,7 @@ scenario('returns all comments', async (scenario: StandardScenario) => {
 </TabItem>
 </Tabs>
 
-When the test suite runs everything will still pass. JavaScript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning *some* comments? How about the number of comments expected to be returned?
+When the test suite runs everything will still pass. JavaScript won't care if you're passing an argument all of a sudden (although if you were using Typescript you will actually get an error at this point!). In TDD you generally want to get your test to fail before adding code to the thing you're testing which will then cause the test to pass. What's something in this test that will be different once we're only returning _some_ comments? How about the number of comments expected to be returned?
 
 Let's take a look at the scenario we're using (remember, it's `standard()` by default):
 
@@ -1434,7 +1426,7 @@ describe('comments', () => {
 </TabItem>
 </Tabs>
 
-So we're first getting the result from the services, all the comments for a given `postId`. Then we pull the *actual* post from the database and include its comments. Then we expect that the number of comments returned from the service is the same as the number of comments actually attached to the post in the database. Now the test fails and you can see why in the output:
+So we're first getting the result from the services, all the comments for a given `postId`. Then we pull the _actual_ post from the database and include its comments. Then we expect that the number of comments returned from the service is the same as the number of comments actually attached to the post in the database. Now the test fails and you can see why in the output:
 
 ```bash
  FAIL   api  api/src/services/comments/comments.test.js

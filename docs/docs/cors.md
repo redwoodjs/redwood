@@ -19,7 +19,7 @@ This will become obvious when you point your browser to your site and see none o
 
 Dealing with CORS can complicate your app and make it harder to deploy to new hosts, run in different environments, etc. Is there a way to avoid CORS altogether?
 
-Yes! If you can add a proxy between your web and api sides, all requests will *appear* to be going to and from the same domain (the web side, even though behind the scenes they are forwarded somewhere else). This functionality is included automatically with hosts like [Netlify](https://docs.netlify.com/routing/redirects/rewrites-proxies/#proxy-to-another-service) or [Vercel](https://vercel.com/docs/cli#project-configuration/rewrites). With a host like [Render](https://render-web.onrender.com/docs/deploy-redwood#deployment) you can enable a proxy with a simple config option. Most providers should provide this functionality through a combination of provider-specific config and/or web server configuration.
+Yes! If you can add a proxy between your web and api sides, all requests will _appear_ to be going to and from the same domain (the web side, even though behind the scenes they are forwarded somewhere else). This functionality is included automatically with hosts like [Netlify](https://docs.netlify.com/routing/redirects/rewrites-proxies/#proxy-to-another-service) or [Vercel](https://vercel.com/docs/cli#project-configuration/rewrites). With a host like [Render](https://render-web.onrender.com/docs/deploy-redwood#deployment) you can enable a proxy with a simple config option. Most providers should provide this functionality through a combination of provider-specific config and/or web server configuration.
 
 ## GraphQL Config
 
@@ -40,7 +40,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-Note that the `origin` needs to be a complete URL including the scheme (`https`). This is the domain that requests are allowed to come *from*. In this example we assume the web side is served from `https://www.example.com`. If you have multiple servers that should be allowed to access the api, you can pass an array of them instead:
+Note that the `origin` needs to be a complete URL including the scheme (`https`). This is the domain that requests are allowed to come _from_. In this example we assume the web side is served from `https://www.example.com`. If you have multiple servers that should be allowed to access the api, you can pass an array of them instead:
 
 ```jsx
 cors: {
@@ -56,11 +56,11 @@ The following config only applies if you're using [dbAuth](authentication.md#sel
 
 You'll need to configure several things:
 
-* Add CORS config for GraphQL
-* Add CORS config for the auth function
-* Cookie config for the auth function
-* Allow sending of credentials in GraphQL XHR requests
-* Allow sending of credentials in auth function requests
+- Add CORS config for GraphQL
+- Add CORS config for the auth function
+- Cookie config for the auth function
+- Allow sending of credentials in GraphQL XHR requests
+- Allow sending of credentials in auth function requests
 
 Here's how you configure each of these:
 
@@ -84,7 +84,7 @@ export const handler = createGraphQLHandler({
 })
 ```
 
-`origin` is the domain(s) that requests come *from* (the web side).
+`origin` is the domain(s) that requests come _from_ (the web side).
 
 ### Auth CORS Config
 
@@ -119,7 +119,7 @@ const authHandler = new DbAuthHandler(event, context, {
 })
 ```
 
-Just like the GraphQL config, `origin` is the domain(s) that requests come *from* (the web side).
+Just like the GraphQL config, `origin` is the domain(s) that requests come _from_ (the web side).
 
 ### Cookie Config
 
@@ -209,7 +209,7 @@ Forwarding      http://fb6d701c44b5.ngrok.io -> http://localhost:8911
 Forwarding      https://fb6d701c44b5.ngrok.io -> http://localhost:8911
 ```
 
-Note the two different domains. Copy the `https` domain from the api side because we'll need it in a moment. Even if the Redwood dev server isn't running you can leave these tunnels running, and when the dev server *does* start, they'll just start on those domains again.
+Note the two different domains. Copy the `https` domain from the api side because we'll need it in a moment. Even if the Redwood dev server isn't running you can leave these tunnels running, and when the dev server _does_ start, they'll just start on those domains again.
 
 ### `redwood.toml` Config
 
@@ -255,7 +255,7 @@ Where you get this domain from will depend on how you expose your app to the out
 You'll need to apply an option when starting the dev server to tell it to accept requests from any host, not just `localhost`:
 
 ```bash
-> yarn rw dev --fwd="--allowed-hosts all"
+rw > yarn dev --fwd="--allowed-hosts all"
 ```
 
 ### Wrapping Up

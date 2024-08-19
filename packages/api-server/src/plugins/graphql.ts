@@ -7,7 +7,6 @@ import type {
   FastifyRequest,
 } from 'fastify'
 import fastifyRawBody from 'fastify-raw-body'
-import type { Plugin } from 'graphql-yoga'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
@@ -68,8 +67,8 @@ export async function redwoodFastifyGraphQLServer(
     if (graphqlOptions?.realtime) {
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
-      const originalExtraPlugins: Plugin<any>[] =
-        graphqlOptions.extraPlugins ?? []
+      const originalExtraPlugins = graphqlOptions.extraPlugins ?? []
+      // @ts-expect-error TODO(jgmw): Fix this type issue introduced after switching to Node16 module resolution
       originalExtraPlugins.push(useRedwoodRealtime(graphqlOptions.realtime))
       graphqlOptions.extraPlugins = originalExtraPlugins
 

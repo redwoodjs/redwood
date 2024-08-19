@@ -121,7 +121,7 @@ Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object 
 ### allowedUserFields
 
 ```javascript
-allowedUserFields: ["id", "email"]
+allowedUserFields: ['id', 'email']
 ```
 
 Most of the auth handlers accept a `user` argument that you can reference in the body of the function. These handlers also sometimes return that `user` object. As a security measure, `allowedUserFields` defines the only properties that will be available in that object so that sensitive data isn't accidentally leaked by these handlers to the client.
@@ -223,13 +223,16 @@ If the password is valid, return `true`. Otherwise, throw the `PasswordValidatio
 ```javascript
 signup: {
   passwordValidation: (password) => {
-
     if (password.length < 8) {
-      throw new PasswordValidationError('Password must be at least 8 characters')
+      throw new PasswordValidationError(
+        'Password must be at least 8 characters'
+      )
     }
 
     if (!password.match(/[A-Z]/)) {
-      throw new PasswordValidationError('Password must contain at least one capital letter')
+      throw new PasswordValidationError(
+        'Password must contain at least one capital letter'
+      )
     }
 
     return true
@@ -299,13 +302,13 @@ login: {
 
 By default no setting is required. This is because each db has its own rules for enabling this feature. To enable please see the table below and pick the correct 'userMatchString' for your db of choice.
 
-| DB | Default  | usernameMatchString  | notes |
-|---|---|---|---|
-| Postgres  | 'default'  | 'insensitive'  | |
-| MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
-| MongoDB  | 'default'  | 'insensitive'  |
-| SQLite | N/A  | N/A  | [Not Supported] Insensitive checks can only be defined at a per column level |
-| Microsoft SQL Server | 'case-insensitive' | N/A | turned on by default so no setting required |
+| DB                   | Default            | usernameMatchString | notes                                                                        |
+| -------------------- | ------------------ | ------------------- | ---------------------------------------------------------------------------- |
+| Postgres             | 'default'          | 'insensitive'       |                                                                              |
+| MySQL                | 'case-insensitive' | N/A                 | turned on by default so no setting required                                  |
+| MongoDB              | 'default'          | 'insensitive'       |
+| SQLite               | N/A                | N/A                 | [Not Supported] Insensitive checks can only be defined at a per column level |
+| Microsoft SQL Server | 'case-insensitive' | N/A                 | turned on by default so no setting required                                  |
 
 ### Cookie config
 
@@ -440,13 +443,13 @@ In both cases, actual scanning and matching of devices is handled by the operati
 
 WebAuthn is supported in the following browsers (as of July 2022):
 
-| OS      | Browser | Authenticator |
-| ------- | ------- | ------------- |
-| macOS   | Firefox | Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
+| OS      | Browser | Authenticator                                                  |
+| ------- | ------- | -------------------------------------------------------------- |
+| macOS   | Firefox | Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey           |
 | macOS   | Chrome  | Touch ID, Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
 | iOS     | All     | Face ID, Touch ID, Yubikey Security Key NFC (NFC), Yubikey 5Ci |
-| Android | Chrome  | Fingerprint Scanner, caBLE |
-| Android | Firefox | Screen PIN |
+| Android | Chrome  | Fingerprint Scanner, caBLE                                     |
+| Android | Firefox | Screen PIN                                                     |
 
 ### Configuration
 
@@ -528,7 +531,6 @@ import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
-
   // assorted handler config here...
 
   const authHandler = new DbAuthHandler(event, context, {

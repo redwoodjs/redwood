@@ -40,7 +40,7 @@ export async function rscBuildEntriesMappings(
       serverBuildOutput.find(
         (item) =>
           'moduleIds' in item &&
-          item.moduleIds.includes(clientEntryFiles[name] as string),
+          item.moduleIds.includes(clientEntryFiles[name]),
       )?.fileName
 
     if (entryFile) {
@@ -68,7 +68,7 @@ export async function rscBuildEntriesMappings(
       serverBuildOutput.find(
         (item) =>
           'moduleIds' in item &&
-          item.moduleIds.includes(clientEntryFiles[name] as string),
+          item.moduleIds.includes(clientEntryFiles[name]),
       )?.fileName
 
     if (entryFile) {

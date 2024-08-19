@@ -66,8 +66,8 @@ model Comment {
 
 Most of these lines look very similar to what we've already seen, but this is the first instance of a [relation](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-schema/relations) between two models. `Comment` gets two entries to denote this relationship:
 
-* `post` which has a type of `Post` and a special `@relation` keyword that tells Prisma how to connect a `Comment` to a `Post`. In this case the field `postId` references the field `id` in `Post`
-* `postId` is just a regular `Int` column which contains the `id` of the `Post` that this comment is referencing
+- `post` which has a type of `Post` and a special `@relation` keyword that tells Prisma how to connect a `Comment` to a `Post`. In this case the field `postId` references the field `id` in `Post`
+- `postId` is just a regular `Int` column which contains the `id` of the `Post` that this comment is referencing
 
 This gives us a classic database model:
 
@@ -86,13 +86,13 @@ This gives us a classic database model:
 Note that there is no real database column named `post` in `Comment`—this is special syntax for Prisma to know how to connect the models together and for you to reference that connection. When you query for a `Comment` using Prisma you can get access to the attached `Post` using that name:
 
 ```javascript
-db.comment.findUnique({ where: { id: 1 }}).post()
+db.comment.findUnique({ where: { id: 1 } }).post()
 ```
 
 Prisma also added a convenience `comments` field to `Post` which gives us the same capability in reverse:
 
 ```javascript
-db.post.findUnique({ where: { id: 1 }}).comments()
+db.post.findUnique({ where: { id: 1 } }).comments()
 ```
 
 ### Running the Migration
@@ -107,7 +107,7 @@ When prompted, give this one a name something like "create comment".
 
 :::tip
 
-You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is *started*, not while it's running, so you'll need to restart it to test against the new database structure.
+You'll need to restart the test suite runner at this point if it's still running. You can do a Ctrl-C or just press `q`. Redwood creates a second, test database for you to run your tests against (it is at `.redwood/test.db` by default). The database migrations are run against that test database whenever the test suite is _started_, not while it's running, so you'll need to restart it to test against the new database structure.
 
 :::
 
@@ -330,7 +330,7 @@ query CommentsQuery {
 
 :::info
 
-Have you noticed that something may be amiss? The `comments()` function returns *all* comments, and all comments only. Could this come back to bite us?
+Have you noticed that something may be amiss? The `comments()` function returns _all_ comments, and all comments only. Could this come back to bite us?
 
 Hmmm...
 
@@ -557,7 +557,7 @@ What is this `scenario()` function? That's made available by Redwood that mostly
 
 Yes, all things being equal it would be great to not have these tests depend on a piece of software outside of our control.
 
-However, the difference here is that in a service almost all of the logic you write will depend on moving data in and out of a database and it's much simpler to just let that code run and *really* access the database, rather than trying to mock and intercept each and every possible call that Prisma could make.
+However, the difference here is that in a service almost all of the logic you write will depend on moving data in and out of a database and it's much simpler to just let that code run and _really_ access the database, rather than trying to mock and intercept each and every possible call that Prisma could make.
 
 Not to mention that Prisma itself is currently under development and implementations could change at any time. Trying to keep pace with those changes and constantly keep mocks in sync would be a nightmare!
 
@@ -630,11 +630,11 @@ The exported scenario here is named "standard." Remember when we worked on compo
 
 The nested structure of a scenario is defined like this:
 
-* **comment**: the name of the model this data is for
-  * **one, two**: a friendly name given to the scenario data which you can reference in your tests
-    * **data**: contains the actual data that will be put in the database
-      * **name, body, post**: fields that correspond to the schema. In this case a **Comment** requires that it be related to a **Post**, so the scenario has a `post` key and values as well (using Prisma's [nested create syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#nested-writes))
-    * **select, include**: optionally, to customize the object to `select` or `include` related fields [using Prisma's syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#create-a-related-record)
+- **comment**: the name of the model this data is for
+  - **one, two**: a friendly name given to the scenario data which you can reference in your tests
+    - **data**: contains the actual data that will be put in the database
+      - **name, body, post**: fields that correspond to the schema. In this case a **Comment** requires that it be related to a **Post**, so the scenario has a `post` key and values as well (using Prisma's [nested create syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#nested-writes))
+    - **select, include**: optionally, to customize the object to `select` or `include` related fields [using Prisma's syntax](https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#create-a-related-record)
 
 When you receive the `scenario` argument in your test, the `data` key gets unwrapped so that you can reference fields like `scenario.comment.one.name`.
 
@@ -660,10 +660,10 @@ export const standard = defineScenario({
         post: {
           create: {
             title: 'Redwood Leaves',
-            body: 'The quick brown fox jumped over the lazy dog.'
-          }
-        }
-      }
+            body: 'The quick brown fox jumped over the lazy dog.',
+          },
+        },
+      },
     },
     john: {
       data: {
@@ -672,13 +672,13 @@ export const standard = defineScenario({
         post: {
           create: {
             title: 'Root Systems',
-            body: 'The five boxing wizards jump quickly.'
-          }
-        }
-      }
-    }
+            body: 'The five boxing wizards jump quickly.',
+          },
+        },
+      },
+    },
     // highlight-end
-  }
+  },
 })
 ```
 
@@ -698,10 +698,10 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
         post: {
           create: {
             title: 'Redwood Leaves',
-            body: 'The quick brown fox jumped over the lazy dog.'
-          }
-        }
-      }
+            body: 'The quick brown fox jumped over the lazy dog.',
+          },
+        },
+      },
     },
     john: {
       data: {
@@ -711,12 +711,12 @@ export const standard = defineScenario<Prisma.CommentCreateArgs>({
           create: {
             title: 'Root Systems',
             body: 'The five boxing wizards jump quickly.',
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
     // highlight-end
-  }
+  },
 })
 ```
 
@@ -746,9 +746,9 @@ export const postOnly = defineScenario({
       data: {
         title: 'Bark',
         body: "A tree's bark is worse than its bite",
-      }
-    }
-  }
+      },
+    },
+  },
 })
 // highlight-end
 ```
@@ -770,9 +770,9 @@ export const postOnly = defineScenario<Prisma.PostCreateArgs>({
       data: {
         title: 'Bark',
         body: "A tree's bark is worse than its bite",
-      }
-    }
-  }
+      },
+    },
+  },
 })
 // highlight-end
 
@@ -893,12 +893,13 @@ interface CreateCommentArgs {
   input: Prisma.CommentCreateInput | Prisma.CommentUncheckedCreateInput
 }
 ```
+
 in case we wanted to allow both ways – which Prisma generally allows, however [it doesn't allow to pick and mix](https://stackoverflow.com/a/69169106/1246547) within the same input.
 </ShowForTs>
 
 :::
 
-We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the JavaScript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right *now*, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
+We'll test that all the fields we give to the `createComment()` function are actually created in the database, and for good measure just make sure that `createdAt` is set to a non-null value. We could test that the actual timestamp is correct, but that involves freezing the JavaScript Date object so that no matter how long the test takes, you can still compare the value to `new Date` which is right _now_, down to the millisecond. While possible, it's beyond the scope of our easy, breezy tutorial since it gets [very gnarly](https://codewithhugo.com/mocking-the-current-date-in-jest-tests/)!
 
 :::info What's up with the names for scenario data? `posts.bark`? Really?
 
@@ -924,9 +925,9 @@ Maybe a [mnemonic](https://www.mnemonicgenerator.com/?words=M%20W%20S%20A) would
 
 **M**ocks : **W**eb :: **S**cenarios : **A**PI:
 
-* Mysterious Weasels Scratched Armor
-* Minesweepers Wrecked Subliminal Attorneys
-* Martian Warriors Squeezed Apricots
+- Mysterious Weasels Scratched Armor
+- Minesweepers Wrecked Subliminal Attorneys
+- Martian Warriors Squeezed Apricots
 
 Maybe not...
 

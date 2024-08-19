@@ -30,21 +30,26 @@ Let's go over an example.
 Let's say we want to add the styling library [emotion](https://emotion.sh), which requires adding a Babel plugin.
 
 1. Create a `babel.config.js` file in `web`:
+
 ```shell
 touch web/babel.config.js
 ```
+
 <br />
 
 2. Add the `@emotion/babel-plugin` as a dependency:
+
 ```shell
 yarn workspace web add --dev @emotion/babel-plugin
 ```
+
 <br />
 
 3. Add the plugin to `web/babel.config.js`:
+
 ```jsx title="web/babel.config.js"
 module.exports = {
-  plugins: ["@emotion"] // 👈 add the emotion plugin
+  plugins: ['@emotion'], // 👈 add the emotion plugin
 }
 
 // ℹ️ Notice how we don't need the `extends` property
@@ -107,9 +112,11 @@ You can customize the types that Redwood generates from your project too! This i
 ## Debug configurations
 
 ### Dev Server
+
 The `yarn rw dev` command is configured by default to open a browser and a debugger on the port `18911` and your redwood app ships with several default configurations to debug with VSCode.
 
 #### Customizing the configuration
+
 **a) Using the redwood.toml**
 
 Add/change the `debugPort` or `open` under your api settings
@@ -133,20 +140,28 @@ You can also pass a flag when you launch your dev servers, for example:
 ```bash
 yarn rw dev --debugPort 75028
 ```
+
 The flag passed in the CLI will always take precedence over your setting in the `redwood.toml`
 
 Just remember to also change the port you are attaching to in your `./vscode/launch.json`
 
 ### API and Web Debuggers
+
 Simply run your dev server, then attach the debugger from the "run and debug" panel. Quick demo below:
 
-<ReactPlayer width='100%' height='100%' controls url='https://user-images.githubusercontent.com/1521877/159887978-95075ccd-d10c-403c-90cc-a5b944c429e3.mp4' />
+<ReactPlayer
+  width="100%"
+  height="100%"
+  controls
+  url="https://user-images.githubusercontent.com/1521877/159887978-95075ccd-d10c-403c-90cc-a5b944c429e3.mp4"
+/>
 
 ### Compound Debugger
+
 The compound configuration is a combination of the dev, api and web configurations.
 It allows you to start all debugging configurations at once, facilitating simultaneous debugging of server and client-side code.
 
-<br/>
+<br />
 
 > **ℹ️ Tip: Can't see the debug configurations?** In VSCode
 >
@@ -215,6 +230,7 @@ tab—that would be managed via `.gitignore`.
 This setting works independently of the ones above and so it needs to be added
 separately. It's important to note that files or folders matched by this
 setting will no longer immediately appear (or disappear):
+
 - from existing search results (but as soon as you search again or change the search term, they'll be discovered)
 - in your "Source Control" tab, unless you hit the "Refresh" button
 

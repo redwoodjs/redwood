@@ -4,7 +4,7 @@
  * @param {string[]} changedFiles The list of files which git has listed as changed
  * @returns {boolean} True if there are changes, false if not
  */
-export function ssrChanged(changedFiles){
+export function ssrChanged(changedFiles) {
   for (const changedFile of changedFiles) {
     if (
       changedFile.startsWith('tasks/smoke-tests/streaming-ssr') ||

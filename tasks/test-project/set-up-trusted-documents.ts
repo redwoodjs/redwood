@@ -24,7 +24,7 @@ async function runCommand() {
   await exec(
     'yarn rw setup graphql trusted-documents',
     [],
-    getExecaOptions(OUTPUT_PROJECT_PATH)
+    getExecaOptions(OUTPUT_PROJECT_PATH),
   )
 
   const redwoodTomlPath = path.join(OUTPUT_PROJECT_PATH, 'redwood.toml')
@@ -36,7 +36,7 @@ async function runCommand() {
 
   if (!redwoodTomlContent.includes('trustedDocuments = true')) {
     console.error(
-      'Failed to set up trusted-documents in fragments test-project'
+      'Failed to set up trusted-documents in fragments test-project',
     )
     console.error('trustedDocuments = true not set in redwood.toml')
     console.error()
@@ -50,14 +50,14 @@ async function runCommand() {
 
   const graphqlHandlerPath = path.join(
     OUTPUT_PROJECT_PATH,
-    'api/src/functions/graphql.ts'
+    'api/src/functions/graphql.ts',
   )
   const graphqlHandlerContent = fs.readFileSync(graphqlHandlerPath, 'utf-8')
   const storeImport = "import { store } from 'src/lib/trustedDocumentsStore'"
 
   if (!graphqlHandlerContent.includes(storeImport)) {
     console.error(
-      'Failed to set up trusted-documents in fragments test-project'
+      'Failed to set up trusted-documents in fragments test-project',
     )
     console.error('`store` is not imported in the graphql handler')
     console.error()
@@ -67,10 +67,10 @@ async function runCommand() {
 
   if (!graphqlHandlerContent.includes('trustedDocuments: {')) {
     console.error(
-      'Failed to set up trusted-documents in fragments test-project'
+      'Failed to set up trusted-documents in fragments test-project',
     )
     console.error(
-      'The trustedDocuments store is not used in the graphql handler'
+      'The trustedDocuments store is not used in the graphql handler',
     )
     console.error()
     console.error('Please run this command locally to make sure it works')

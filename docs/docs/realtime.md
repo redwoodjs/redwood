@@ -20,10 +20,10 @@ Redwood's GraphQL server uses the [GraphQL over Server-Sent Events](https://gith
 
 Advantages of SSE over WebSockets include:
 
-* Transported over simple HTTP instead of a custom protocol
-* Built in support for re-connection and event-id
-* Simpler protocol
-* No trouble with corporate firewalls doing packet inspection
+- Transported over simple HTTP instead of a custom protocol
+- Built in support for re-connection and event-id
+- Simpler protocol
+- No trouble with corporate firewalls doing packet inspection
 
 ### Subscriptions and Live Queries
 
@@ -89,19 +89,19 @@ Regardless of the implementation chosen, **a stateful server and store are neede
 
 To setup realtime in an existing Redwood project, run the following commands:
 
-* `yarn rw setup server-file`
-* `yarn rw setup realtime`
+- `yarn rw setup server-file`
+- `yarn rw setup realtime`
 
 You'll get:
 
-* `api/server.ts` where you can configure your Fastify server
-* `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
-* Usage examples for live queries, subscriptions, defer, and stream. You'll get sdl, services/subscriptions for each
-* The [`auction` live query](#auction-live-query-example) example
-* The [`countdown timer` subscription](#countdown-timer-example) example
-* The [`chat` subscription](#chatnew-message-example) examples
-* The [`alphabet` stream](#alphabet-stream-example) example
-* The [`slow and fast` field defer](#slow-and-fast-field-defer-example) example
+- `api/server.ts` where you can configure your Fastify server
+- `api/lib/realtime.ts` where you consume your subscriptions and configure realtime with an in-memory or Redis store
+- Usage examples for live queries, subscriptions, defer, and stream. You'll get sdl, services/subscriptions for each
+- The [`auction` live query](#auction-live-query-example) example
+- The [`countdown timer` subscription](#countdown-timer-example) example
+- The [`chat` subscription](#chatnew-message-example) examples
+- The [`alphabet` stream](#alphabet-stream-example) example
+- The [`slow and fast` field defer](#slow-and-fast-field-defer-example) example
 
 :::note
 There is no UI set up for these examples. You can find information on how to try them out using the GraphiQL playground.
@@ -181,22 +181,24 @@ export const realtime: RedwoodRealtimeOptions = {
 
 By setting up realtime, the GraphQL server adds two helpers on the context:
 
-* pubSub
-* liveQueryStory
+- pubSub
+- liveQueryStory
 
 With `context.pubSub` you can subscribe to and publish messages via `context.pubSub.publish('the-topic', id, id2)`.
 
 With `context.liveQueryStore.` you can `context.liveQueryStore.invalidate(key)` where your key may be a reference or schema coordinate:
 
 ##### Reference
+
 Where the query is: `auction(id: ID!): Auction @requireAuth`:
 
-* `"Auction:123"`
+- `"Auction:123"`
 
 ##### Schema Coordinate
+
 When the query is: `auctions: [Auction!]! @requireAuth`:
 
-* `"Query.auctions"`
+- `"Query.auctions"`
 
 ## Subscriptions
 
@@ -497,16 +499,14 @@ Content-Length: 17
 When deciding on how to offer realtime data updates, you’ll want to consider:
 
 - How frequently do your users require information updates?
-    - Determine the value of "real-time" versus "near real-time" to your users. Do they need to know in less than 1-2 seconds, or is 10, 30, or 60 seconds acceptable for them to receive updates?
-    - Consider the criticality of the data update. Is it low, such as a change in shipment status, or higher, such as a change in stock price for an investment app?
-    - Consider the cost of maintaining connections and tracking updates across your user base. Is the infrastructure cost justifiable?
-    - If you don't require "real" real-time, consider polling for data updates on a reasonable interval. According to Apollo, [in most cases](https://www.apollographql.com/docs/react/data/subscriptions/), your client should not use subscriptions to stay up to date with your backend. Instead, you should poll intermittently with queries or re-execute queries on demand when a user performs a relevant action, such as clicking a button.
+  - Determine the value of "real-time" versus "near real-time" to your users. Do they need to know in less than 1-2 seconds, or is 10, 30, or 60 seconds acceptable for them to receive updates?
+  - Consider the criticality of the data update. Is it low, such as a change in shipment status, or higher, such as a change in stock price for an investment app?
+  - Consider the cost of maintaining connections and tracking updates across your user base. Is the infrastructure cost justifiable?
+  - If you don't require "real" real-time, consider polling for data updates on a reasonable interval. According to Apollo, [in most cases](https://www.apollographql.com/docs/react/data/subscriptions/), your client should not use subscriptions to stay up to date with your backend. Instead, you should poll intermittently with queries or re-execute queries on demand when a user performs a relevant action, such as clicking a button.
 - How are you deploying? Serverless or serverful?
-    - Real-time options depend on your deployment method.
-    - If you are using a serverless architecture, your application cannot maintain a stateful connection to your users' applications. Therefore, it's not easy to "push," "publish," or "stream" data updates to the web client.
-        - In this case, you may need to look for third-party solutions that manage the infrastructure to maintain such stateful connections to your web client, such as [Supabase Realtime](https://supabase.com/realtime), [SendBird](https://sendbird.com/), [Pusher](https://pusher.com/), or consider creating your own [AWS SNS-based](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) functionality.
-
-
+  - Real-time options depend on your deployment method.
+  - If you are using a serverless architecture, your application cannot maintain a stateful connection to your users' applications. Therefore, it's not easy to "push," "publish," or "stream" data updates to the web client.
+    - In this case, you may need to look for third-party solutions that manage the infrastructure to maintain such stateful connections to your web client, such as [Supabase Realtime](https://supabase.com/realtime), [SendBird](https://sendbird.com/), [Pusher](https://pusher.com/), or consider creating your own [AWS SNS-based](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) functionality.
 
 ## Showcase Demos
 
@@ -533,6 +533,7 @@ Options:
   -r roomId       Specify the room ID (1-4) for sending chat messages.
   -n num_messages Specify the number of chat messages to send. If not provided, the script will run with a random number of messages.
 ```
+
 #### Test
 
 ```ts
@@ -556,7 +557,7 @@ Options:
  *   }
  * }
  */
- ```
+```
 
 ### Auction Bids (Live Query)
 
@@ -565,9 +566,9 @@ Bid on a fancy pair of new sneaks!
 When a bid is made, the auction updates via a Live Query due to the invalidation of the auction key.
 
 ```ts
-  const key = `Auction:${auctionId}`
-  context.liveQueryStore.invalidate(key)
-  ```
+const key = `Auction:${auctionId}`
+context.liveQueryStore.invalidate(key)
+```
 
 #### Simulate
 
@@ -579,7 +580,7 @@ Options:
   -a <auctionId>  Specify the auction ID (1-5) for which to send bids (optional).
   -n <num_bids>   Specify the number of bids to send (optional).
   -h, --help      Display this help message.
-  ```
+```
 
 #### Test
 
@@ -649,7 +650,6 @@ The story should be told in a quality, style and feeling of the given Adjective.
 The story should be no longer than 3 paragraphs.
 
 Format the story using Markdown.`
-
 ```
 
 The story updates on each stream content delta via a `newStory` subscription topic event.

@@ -71,7 +71,7 @@ const FormError = ({
       'properties'
     ] as RwGqlErrorProperties
 
-    const propertyMessages = properties && properties['messages']
+    const propertyMessages = properties?.['messages']
 
     if (propertyMessages) {
       for (const e in propertyMessages) {

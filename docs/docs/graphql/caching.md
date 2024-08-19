@@ -16,7 +16,8 @@ Please refer to Apollo's documentation for complete information about [Caching i
 import { useCache } from '@redwoodjs/web/apollo'
 
 const CacheExample = () => {
-  const { cache, evict, extract, identify, modify, resetStore, clearStore } = useCache()
+  const { cache, evict, extract, identify, modify, resetStore, clearStore } =
+    useCache()
 
   // ...
 }
@@ -52,7 +53,7 @@ const CacheExample = () => {
   evict({ id: 'Post:123' })
 
   // You can also remove a single field from a cached object by providing the name of the field to remove
-  evict({ id: 'Post:123', fieldName: 'title' });
+  evict({ id: 'Post:123', fieldName: 'title' })
 }
 ```
 
@@ -89,7 +90,6 @@ const CacheExample = () => {
   console.log(id)
 }
 ```
-
 
 #### modify
 
@@ -232,8 +232,6 @@ export const handler = createGraphQLHandler({
 
 ### In-Memory vs External Caching
 
-
-By default, the response cache stores all the cached query results in memory. That means if you have deployed to a serverless hosting platform, the cache only lives per-request. 
+By default, the response cache stores all the cached query results in memory. That means if you have deployed to a serverless hosting platform, the cache only lives per-request.
 
 In this case you would want to use an [External Cache](https://the-guild.dev/graphql/yoga-server/docs/features/response-caching#external-cache) like Redis.
-

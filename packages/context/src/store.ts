@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from 'async_hooks'
 
-import type { GlobalContext } from './context'
+import type { GlobalContext } from './context.js'
 
 let CONTEXT_STORAGE: AsyncLocalStorage<Map<string, GlobalContext>>
 
@@ -13,5 +13,5 @@ export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
     CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
   }
-  return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
+  return CONTEXT_STORAGE
 }

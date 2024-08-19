@@ -203,9 +203,7 @@ To protect private routes for access by multiple roles:
 A route is permitted when authenticated and user has **any** of the provided roles such as `"admin"` or `["admin", "editor", "publisher"]`.
 :::
 
-
 Redwood uses the `useAuth` hook under the hood to determine if the user is authenticated. Read more about authentication in Redwood [here](tutorial/chapter4/authentication.md).
-
 
 ## Link and named route functions
 
@@ -332,7 +330,7 @@ values.
 
 ```jsx
 const match = useMatch('/product/{category}/{id}', {
-  routeParams: { category: 'shirts' }
+  routeParams: { category: 'shirts' },
 })
 ```
 
@@ -565,18 +563,21 @@ Example output:
 
 Use this hook when you only want the path for a single route. By default it
 will give you the path for the current route
+
 ```jsx
 // returns "/about" if you're currently on https://example.org/about
-const aboutPath = useRoutePath() 
+const aboutPath = useRoutePath()
 ```
 
 You can also pass in the name of a route and get the path for that route
+
 ```jsx
 // returns "/about"
 const aboutPath = useRoutePath('about')
 ```
 
 Note that the above is the same as
+
 ```jsx
 const routePaths = useRoutePaths()
 // returns "/about"
@@ -639,7 +640,7 @@ import { useBlocker } from '@redwoodjs/router'
 import { useForm } from '@redwoodjs/forms'
 
 const SomeForm = () => {
-  const form = useForm<FormInput>() 
+  const form = useForm<FormInput>()
   const blocker = useBlocker({ when: form.formState.isDirty })
 
   return (
@@ -672,7 +673,7 @@ import { Redirect, routes } from '@redwoodjs/router'
 const SomePage = () => <Redirect to={routes.home()} />
 ```
 
-In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to *replace* the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to _replace_ the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
 
 ## Code-splitting
 
@@ -837,7 +838,7 @@ export default RedwoodDevFatalErrorPage ||
       </div>
     </div>
   ))
-  ```
+```
 
 Note that if you're copy-pasting this example, it uses [Tailwind CSS](https://tailwindcss.com), so you'll have to set that up first. See the [setup ui](./cli-commands.md#setup-ui) CLI command to add it to your project.
 

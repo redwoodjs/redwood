@@ -18,7 +18,7 @@ Enable strict mode by setting `strict` to true in `web/tsconfig.json` and `api/t
     "noEmit": true,
     "allowJs": true,
     // highlight-next-line
-    "strict": true,
+    "strict": true
     // ...
   }
   // ...
@@ -49,9 +49,9 @@ For most cases however, you probably want to convert nulls to undefined - one wa
 
 ```ts title="api/src/services/users.ts"
 // highlight-next-line
-import { removeNulls } from "@redwoodjs/api"
+import { removeNulls } from '@redwoodjs/api'
 
-export const updateUser: MutationResolvers["updateUser"] = ({ id, input }) => {
+export const updateUser: MutationResolvers['updateUser'] = ({ id, input }) => {
   return db.user.update({
     // highlight-next-line
     data: removeNulls(input),
@@ -107,7 +107,6 @@ export const Post: PostRelationResolvers = {
   },
 }
 ```
-
 
 :::tip An optimization tip
 
@@ -167,7 +166,7 @@ If your `getCurrentUser` doesn't return `roles`, and you don't use this function
 
 #### B. Roles on current user is a string
 
-Alternatively, if  you define the roles as a string, you can remove the code that does checks against Arrays
+Alternatively, if you define the roles as a string, you can remove the code that does checks against Arrays
 
 ```diff title="api/src/lib/auth.ts"
 export const hasRole = (roles: AllowedRoles): boolean => {
@@ -236,6 +235,7 @@ export const hasRole = (roles: AllowedRoles): boolean => {
   return false
 }
 ```
+
 </details>
 
 ### `getCurrentUser` in `api/src/lib/auth.ts`
@@ -250,15 +250,15 @@ import type { AuthContextPayload } from '@redwoodjs/api'
 
 // Example 1: typing directly
 export const getCurrentUser: CurrentUserFunc = async (
-  decoded: { id: string, name: string },
-  { token, type }: { token: string, type: string },
+  decoded: { id: string; name: string },
+  { token, type }: { token: string; type: string }
 ) => {
   // ...
 }
 
 // Example 2: Using AuthContextPayload
 export const getCurrentUser: CurrentUserFunc = async (
-  decoded: { id: string, name: string },
+  decoded: { id: string; name: string },
   { token, type }: AuthContextPayload[1],
   { event, context }: AuthContextPayload[2]
 ) => {

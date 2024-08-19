@@ -144,8 +144,8 @@ export const CarIcon = (props: SVGProps) => {
 
 If you needed to convert a whole library of SVGs into stylable (or animatable!) components, one easy way would be to use the [SVGR cli](https://react-svgr.com/docs/cli/)
 
-
 ## Custom fonts
+
 There are many different ways to peel this potato – it's all a search away – but if you're using the CSS `@font-face` rule, we have a quick tip for you:
 
 1. Place your fonts in the public folder, so it gets carried across
@@ -154,15 +154,15 @@ There are many different ways to peel this potato – it's all a search away –
 ```shell
 web/
 ├── src
-  ├── App.tsx
-  ├── entry.client.tsx
-  ├── index.css
-  ├── ...
+├── App.tsx
+├── entry.client.tsx
+├── index.css
+├── ...
 ├── public
-│   ├── favicon.png
-│   ├── fonts
+│ ├── favicon.png
+│ ├── fonts
 // highlight-next-line
-│   │   └── RedwoodNeue.woff2
+│ │ └── RedwoodNeue.woff2
 ```
 
 ```css
