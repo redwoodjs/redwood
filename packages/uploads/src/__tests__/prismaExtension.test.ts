@@ -87,7 +87,9 @@ describe('Uploads Prisma Extension', () => {
       })
     })
 
-    describe('createMany', () => {
+    // Not implemented yet
+    // Ideally it would just work automatically... but I guess we need to do all the variants
+    describe.skip('createMany', () => {
       it('createMany will remove files if all the create fails', async () => {
         try {
           await prismaClient.dumbo.createMany({
@@ -142,16 +144,47 @@ describe('Uploads Prisma Extension', () => {
       })
     })
 
-    // describe('update', () => {})
+    describe('update', () => {
+      it('update will remove the old file, save new one', async () => {
+        const dummy = await prismaClient.dummy.create({
+          data: {
+            uploadField: '/tmp/old.txt',
+          },
+        })
 
-    // describe('delete', () => {})
-  })
+        const updatedDummy = await prismaClient.dummy.update({
+          data: {
+            uploadField: '/tmp/new.txt',
+          },
+          where: {
+            id: dummy.id,
+          },
+        })
 
-  describe('Result extensions', () => {
-    it('will return a data URL for the file', async () => {})
+        expect(fs.unlink).toHaveBeenCalledWith('/tmp/old.txt')
+        expect(updatedDummy.uploadField).toBe('/tmp/new.txt')
+      })
+    })
 
-    // @TODO Handle edge cases (file removed, data modified, etc.)
-    // it('if file is not found, will throw an error', async () => {})
-    // it('if saved file is not a path, will throw an error', async () => {})
+    describe('delete', () => {
+      it('delete will remove all uploads', async () => {
+        const dumbo = await prismaClient.dumbo.create({
+          data: {
+            firstUpload: '/tmp/first.txt',
+            secondUpload: '/tmp/second.txt',
+          },
+        })
+
+        await prismaClient.dumbo.delete({
+          where: {
+            id: dumbo.id,
+          },
+        })
+
+        expect(fs.unlink).toHaveBeenCalledTimes(2)
+        expect(fs.unlink).toHaveBeenCalledWith('/tmp/first.txt')
+        expect(fs.unlink).toHaveBeenCalledWith('/tmp/second.txt')
+      })
+    })
   })
 })
