@@ -1,1 +1,0 @@
-{"version":3,"file":"rscFetchForClientRouter.d.ts","sourceRoot":"","sources":["../../../src/rsc/rscFetchForClientRouter.tsx"],"names":[],"mappings":"AASA,MAAM,WAAW,aAAc,SAAQ,MAAM,CAAC,MAAM,EAAE,OAAO,CAAC;IAC5D,QAAQ,EAAE;QACR,QAAQ,EAAE,MAAM,CAAA;QAChB,MAAM,EAAE,MAAM,CAAA;KACf,CAAA;CACF;AAED,wBAAgB,QAAQ,CAAC,KAAK,EAAE,MAAM,EAAE,KAAK,EAAE,aAAa,oGA2D3D"}

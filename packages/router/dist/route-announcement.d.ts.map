@@ -1,1 +1,0 @@
-{"version":3,"file":"route-announcement.d.ts","sourceRoot":"","sources":["../src/route-announcement.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAA;AAEzB;;;;GAIG;AACH,QAAA,MAAM,iBAAiB,EAAE,KAAK,CAAC,EAAE,CAAC,sBAAsB,CA0BvD,CAAA;AAED,MAAM,WAAW,sBAAsB;IACrC,QAAQ,EAAE,KAAK,CAAC,SAAS,CAAA;IACzB,cAAc,CAAC,EAAE,OAAO,CAAA;CACzB;AAED,eAAe,iBAAiB,CAAA"}

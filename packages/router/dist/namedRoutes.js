@@ -1,4 +1,0 @@
-const namedRoutes = {};
-export {
-  namedRoutes
-};
