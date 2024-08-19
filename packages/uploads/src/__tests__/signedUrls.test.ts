@@ -6,11 +6,13 @@ import {
   afterEach,
   vi,
   it,
+  test,
 } from 'vitest'
 
 import {
   EXPIRES_IN,
   generateSignature,
+  getSignedDetailsFromUrl,
   validateSignature,
 } from '../lib/signedUrls.js'
 
@@ -123,11 +125,18 @@ describe('Expired signature', () => {
   })
 })
 
-// Some utility function to make tests more readable
-function diffInMinsFromNow(time: number) {
-  return Math.abs(time - Date.now()) / 60000
-}
+test('Parses details related to signatures from a url string', () => {
+  const url =
+    'https://example.com/signedFile?file=/path/to/hello.txt&s=s1gnatur3&expires=123123'
 
+  const { file, signature, expires } = getSignedDetailsFromUrl(url)
+
+  expect(file).toBe('/path/to/hello.txt')
+  expect(signature).toBe('s1gnatur3')
+  expect(expires).toBe(123123)
+})
+
+// Util functions to make the tests more readable
 function diffInDaysFromNow(time: number) {
   return Math.abs(time - Date.now()) / 86400000
 }
