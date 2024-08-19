@@ -7,6 +7,7 @@ import type * as runtime from '@prisma/client/runtime/library'
 // import { PrismaClient } from './__tests__/prisma-client/index.js'
 // import { Prisma } from './__tests__/prisma-client/index.js'
 import { fileToDataUri } from './fileSave.utils.js'
+import { generateSignedQueryParams } from './lib/signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
@@ -45,6 +46,12 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           modelData: Record<string, unknown>,
         ) => <T>(this: T) => Promise<T>
       }
+      withSignedUrl: {
+        needs: Record<string, boolean>
+        compute: (
+          modelData: Record<string, unknown>,
+        ) => <T>(this: T) => Promise<T>
+      }
     }
   }
 
@@ -62,9 +69,8 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   ) {
     // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
     // Ideally there's a better way to do this
-    const record = await (
-      prismaInstance[model as ModelNames] as any
-    ).findFirstOrThrow(args)
+    const record =
+      await prismaInstance[model as ModelNames].findFirstOrThrow(args)
 
     // Delete the file from the file system
     fields.forEach(async (field) => {
@@ -152,6 +158,27 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
               // modelData is of type unknown at this point
               ...(modelData as any),
               ...base64UploadFields,
+            }
+          }
+        },
+      },
+      withSignedUrl: {
+        needs,
+        compute(modelData) {
+          return (expiresIn?: number) => {
+            const signedUrlFields: Record<keyof typeof needs, string> = {}
+
+            for (const field of uploadFields) {
+              signedUrlFields[field] = generateSignedQueryParams('/HARDCODED', {
+                filePath: modelData[field] as string,
+                expiresIn: expiresIn,
+              })
+            }
+
+            return {
+              // modelData is of type unknown at this point
+              ...(modelData as any),
+              ...signedUrlFields,
             }
           }
         },
