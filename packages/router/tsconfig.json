@@ -2,8 +2,8 @@
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "isolatedModules": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "moduleResolution": "Node16",
+    "module": "Node16",
     "outDir": "dist",
     "typeRoots": [
       "../../node_modules/@types",

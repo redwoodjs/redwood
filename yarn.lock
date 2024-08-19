@@ -8218,6 +8218,7 @@ __metadata:
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
     tsx: "npm:4.17.0"
+    type-fest: "npm:4.24.0"
     typescript: "npm:5.5.4"
     zx: "npm:8.1.4"
   bin:
