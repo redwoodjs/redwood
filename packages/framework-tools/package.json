@@ -14,10 +14,6 @@
       "types": "./dist/buildDefaults.d.ts",
       "default": "./dist/buildDefaults.js"
     },
-    "./cjsTypes": {
-      "types": "./dist/cjsTypes.d.ts",
-      "default": "./dist/cjsTypes.js"
-    },
     "./generateTypes": {
       "types": "./dist/generateTypes.d.ts",
       "default": "./dist/generateTypes.js"
