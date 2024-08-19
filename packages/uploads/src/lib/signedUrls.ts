@@ -82,22 +82,22 @@ export const getSignedDetailsFromUrl = (url: string) => {
 
 type SigningParms = { filePath: string; expiresIn?: number }
 
-export const getSignedUriString = (
+export const generateSignedQueryParams = (
   endpoint: string,
   { filePath, expiresIn }: SigningParms,
 ) => {
   const { signature, expires } = generateSignature(filePath, expiresIn)
 
   // This way you can pass in a path with params already
-  const signedUrl = new URL(endpoint)
-  signedUrl.searchParams.set('s', signature)
+  const params = new URLSearchParams()
+  params.set('s', signature)
   if (expires) {
-    signedUrl.searchParams.set('expires', expires.toString())
+    params.set('expires', expires.toString())
   }
 
-  signedUrl.searchParams.set('path', filePath)
+  params.set('path', filePath)
 
-  return signedUrl.toString()
+  return `${endpoint}?${params.toString()}`
 }
 
 export const EXPIRES_IN = {

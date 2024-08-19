@@ -12,6 +12,7 @@ import {
 import {
   EXPIRES_IN,
   generateSignature,
+  generateSignedQueryParams,
   getSignedDetailsFromUrl,
   validateSignature,
 } from '../lib/signedUrls.js'
@@ -134,6 +135,18 @@ test('Parses details related to signatures from a url string', () => {
   expect(file).toBe('/path/to/hello.txt')
   expect(signature).toBe('s1gnatur3')
   expect(expires).toBe(123123)
+})
+
+test('Generates a signed url', () => {
+  const signedQueryParams = generateSignedQueryParams('/files/bazinga', {
+    filePath: '/path/to/hello.txt',
+    expiresIn: EXPIRES_IN.days(1),
+  })
+
+  expect(signedQueryParams).toContain('/files/bazinga?s=')
+  expect(signedQueryParams).toContain('s=')
+  expect(signedQueryParams).toContain('expires=')
+  expect(signedQueryParams).toContain('path=') // The actual file path
 })
 
 // Util functions to make the tests more readable

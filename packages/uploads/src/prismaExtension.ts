@@ -141,11 +141,10 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         compute(modelData) {
           return async () => {
             const base64UploadFields: Record<keyof typeof needs, string> = {}
-            type ModelField = keyof typeof modelData
 
             for await (const field of uploadFields) {
               base64UploadFields[field] = await fileToDataUri(
-                modelData[field as ModelField] as string,
+                modelData[field] as string,
               )
             }
 
@@ -174,7 +173,6 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     for await (const field of uploadFields) {
       const uploadLocation = args.data?.[field] as string
       if (uploadLocation) {
-        console.log('Removing file >>>', uploadLocation)
         await storageAdapter.remove(uploadLocation)
       }
     }
