@@ -6,6 +6,9 @@
  * }
  */
 
+import mime from 'mime-types'
+import { ulid } from 'ulid'
+
 export type AdapterResult = {
   location: string
 }
@@ -27,6 +30,17 @@ export abstract class StorageAdapter {
 
   getAdapterOptions() {
     return this.adapterOpts
+  }
+
+  generateFileNameWithExtension(
+    saveOpts: SaveOptionsOverride | undefined,
+    file: File,
+  ) {
+    const fileName = saveOpts?.fileName || ulid()
+    const extension = mime.extension(file.type)
+      ? `.${mime.extension(file.type)}`
+      : ''
+    return `${fileName}${extension}`
   }
 
   abstract save(
