@@ -195,7 +195,7 @@ export function createRscRequestHandler(
         // In the component, getting location would otherwise be at the rw-rsc URL
         const fullUrl = getFullUrlForFlightRequest(req, props)
 
-        const pipeable = await renderRsc({
+        const pipeable = renderRsc({
           rscId,
           props,
           rsfId,

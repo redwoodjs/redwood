@@ -163,7 +163,7 @@ async function createServer() {
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
-  return await app.listen(port)
+  return app.listen(port)
 }
 
 let devApp = createServer()

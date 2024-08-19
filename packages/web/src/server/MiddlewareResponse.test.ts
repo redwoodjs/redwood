@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest'
 import {
   MiddlewareResponse,
   MiddlewareShortCircuit,
-} from './MiddlewareResponse'
+} from './MiddlewareResponse.js'
 
 describe('MiddlewareResponse', () => {
   test('constructor', () => {
@@ -119,7 +119,7 @@ describe('MiddlewareResponse', () => {
       ).toStrictEqual('Nope')
 
       expect(
-        await shortCircuitError.mwResponse.toResponse().statusText,
+        shortCircuitError.mwResponse.toResponse().statusText,
       ).toStrictEqual('Hold your horses!')
     }
 

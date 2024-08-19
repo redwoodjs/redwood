@@ -24,7 +24,7 @@ describe('Router scroll reset', () => {
     render(<TestRouter />)
 
     // Make sure we're starting on the home route
-    await screen.getByText('Page 1')
+    screen.getByText('Page 1')
   })
 
   afterEach(async () => {
@@ -41,7 +41,7 @@ describe('Router scroll reset', () => {
       ),
     )
 
-    await screen.getByText('Page 2')
+    screen.getByText('Page 2')
 
     expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
@@ -56,7 +56,7 @@ describe('Router scroll reset', () => {
       ),
     )
 
-    await screen.getByText('Page 2')
+    screen.getByText('Page 2')
 
     expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
@@ -72,20 +72,20 @@ describe('Router scroll reset', () => {
       ),
     )
 
-    await screen.getByText('Page 1')
+    screen.getByText('Page 1')
 
     expect(globalThis.scrollTo).toHaveBeenCalledTimes(1)
   })
 
   it('does NOT reset on hash change', async () => {
-    await screen.getByText('Page 1')
+    screen.getByText('Page 1')
 
     act(() =>
       // Stay on page 1, but change the hash
       navigate(`#route=66`, { replace: true }),
     )
 
-    await screen.getByText('Page 1')
+    screen.getByText('Page 1')
 
     expect(globalThis.scrollTo).not.toHaveBeenCalled()
   })
