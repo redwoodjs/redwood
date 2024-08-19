@@ -1,16 +1,28 @@
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
+import {
+  generateTypesCjs,
+  generateTypesEsm,
+  insertCommonJsPackageJson,
+} from '@redwoodjs/framework-tools/generateTypes'
 
-// CJS build
+// ESM build and type generation
 await build({
   buildOptions: {
     ...defaultBuildOptions,
+    format: 'esm',
   },
 })
+await generateTypesEsm()
 
-// ESM build
-// await build({
-//   buildOptions: {
-//     ...defaultBuildOptions,
-//     format: 'esm',
-//   },
-// })
+// CJS build, type generation, and package.json insert
+await build({
+  buildOptions: {
+    ...defaultBuildOptions,
+    outdir: 'dist/cjs',
+  },
+})
+await generateTypesCjs()
+await insertCommonJsPackageJson({
+  buildFileUrl: import.meta.url,
+  cjsDir: 'dist/cjs',
+})

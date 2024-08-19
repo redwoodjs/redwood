@@ -7,7 +7,21 @@
     "directory": "packages/jobs"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "rw-jobs": "./dist/bins/rw-jobs.js",
@@ -17,17 +31,23 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-jobs.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
+    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn rw-fwtools-attw",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
     "@prisma/client": "5.18.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
+    "concurrently": "8.2.2",
+    "publint": "0.2.10",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
