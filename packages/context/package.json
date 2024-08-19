@@ -37,9 +37,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-context.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
+    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "check:attw": "yarn attw -P",
     "check:package": "concurrently npm:check:attw yarn:publint",
