@@ -1,0 +1,4 @@
+const namedRoutes = {};
+export {
+  namedRoutes
+};

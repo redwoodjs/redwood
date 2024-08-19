@@ -1,0 +1,74 @@
+"use client";
+import React from "react";
+import { createNamedContext } from "./createNamedContext.js";
+import { gHistory } from "./history.js";
+const LocationContext = createNamedContext("Location");
+class LocationProvider extends React.Component {
+  // When prerendering, there might be more than one level of location
+  // providers. Use the values from the one above.
+  // (this is basically the class component version of `useLocation()`)
+  static contextType = LocationContext;
+  HISTORY_LISTENER_ID = void 0;
+  state = {
+    context: this.getContext()
+  };
+  getContext() {
+    let windowLocation;
+    if (typeof window !== "undefined") {
+      const { pathname } = window.location;
+      switch (this.props.trailingSlashes) {
+        case "never":
+          if (pathname.endsWith("/")) {
+            window.history.replaceState(
+              {},
+              "",
+              pathname.substr(0, pathname.length - 1)
+            );
+          }
+          break;
+        case "always":
+          if (!pathname.endsWith("/")) {
+            window.history.replaceState({}, "", pathname + "/");
+          }
+          break;
+        default:
+          break;
+      }
+      windowLocation = new URL(window.location.href);
+    }
+    return this.props.location || this.context || windowLocation;
+  }
+  // componentDidMount() is not called during server rendering (aka SSR and
+  // prerendering)
+  componentDidMount() {
+    this.HISTORY_LISTENER_ID = gHistory.listen(() => {
+      const context = this.getContext();
+      this.setState((lastState) => {
+        if (context?.pathname !== lastState?.context?.pathname || context?.search !== lastState?.context?.search) {
+          globalThis?.scrollTo(0, 0);
+        }
+        return { context };
+      });
+    });
+  }
+  componentWillUnmount() {
+    if (this.HISTORY_LISTENER_ID) {
+      gHistory.remove(this.HISTORY_LISTENER_ID);
+    }
+  }
+  render() {
+    return /* @__PURE__ */ React.createElement(LocationContext.Provider, { value: this.state.context }, this.props.children);
+  }
+}
+const useLocation = () => {
+  const location = React.useContext(LocationContext);
+  if (location === void 0) {
+    throw new Error("useLocation must be used within a LocationProvider");
+  }
+  return location;
+};
+export {
+  LocationContext,
+  LocationProvider,
+  useLocation
+};
