@@ -9,13 +9,13 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "bin": {
     "rw-jobs": "./dist/bins/rw-jobs.js",
     "rw-jobs-worker": "./dist/bins/rw-jobs-worker.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-jobs.tgz",

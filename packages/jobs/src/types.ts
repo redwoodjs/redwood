@@ -25,7 +25,10 @@ export type PossibleBaseJob = BaseJob | undefined
 
 export type Adapters = Record<string, BaseAdapter>
 
-export interface WorkerConfig<TAdapters extends Adapters, TQueues extends string[]> {
+export interface WorkerConfig<
+  TAdapters extends Adapters,
+  TQueues extends string[],
+> {
   /**
    * The name of the adapter to use for this worker. This must be one of the keys
    * in the `adapters` object when you created the `JobManager`.
