@@ -325,262 +325,157 @@ The rest of this doc describes more advanced usage, like:
 - Manually workers without the job runner monitoring them
 - And more!
 
-## Job Configuration
+## Configuration
 
-Let's take a closer look at `api/src/lib/jobs.js`:
+### JobManager Config
+
+Let's take a closer look at the `jobs` export in `api/src/lib/jobs.js`:
 
 ```js
-import { PrismaAdapter, RedwoodJob } from '@redwoodjs/jobs'
-import { db } from 'src/lib/db'
-import { logger } from 'src/lib/logger'
-
-export const adapter = new PrismaAdapter({ db, logger })
-
-RedwoodJob.config({ adapter, logger })
-
-export const jobs = {}
+export const jobs = new JobManager({
+  adapters: {
+    prisma: new PrismaAdapter({ db, logger }),
+  },
+  queues: ['default'],
+  logger,
+  workers: [
+    {
+      adapter: 'prisma',
+      logger,
+      queue: '*',
+      count: 1,
+      maxAttempts: 24,
+      maxRuntime: 14_400,
+      deleteFailedJobs: false,
+      sleepDelay: 5,
+    },
+  ],
+})
 ```
 
-### Exporting an `adapter`
+The object passed here contains all of the configuration for the Background Job system. Let's take a quick look at the four top-level properties and then we'll get into more details in the subsections to follow.
+
+#### `adapters`
+
+This is the list of adapters that are available to handle storing and retreiving your jobs to and from the storage system. You could list more than one adapter here and then have multiple schedulers. Most folks will probably stick with a single one.
+
+#### `queues`
+
+An array of available queue names that jobs can be placed in. By default, a single queue named "default" is listed here, and will also be the default queue for generated jobs. To denote the named queue that a worker will look at, there is a matching `queue` property on the `workers` config below.
+
+#### `logger`
+
+The logger object for all internal logging of the job system itself. You can use this same logger in the `perform()` function of your job (by referencing `jobs.logger`) and then all of your log message will be aggregated together.
+
+#### `workers`
+
+This is an array of objects, each defining a "group" of workers. When will you need more than one group? If you need workers to work on different queues, or use different adapters. Read more about this in the [Job Workers](#job-workers) section.
+
+### Adapter Config
+
+Adapters are added as key/value pairs to the `adapters` object given to the `JobManager` upon initialization. The key of the property (like `prisma` in the example below) is the name you'll use in your scheduler when you tell it which adapter to use to schedule your jobs. Adapters accept an object of options when they are initialized.
+
+#### PrismaAdapter
 
 ```js
-export const adapter = new PrismaAdapter({ db, logger })
-```
-
-This is the adapter that the job runner itself will use to run your jobs if you don't override the adapter in the job itself. In most cases this will be the same for all jobs, but just be aware that you can use different adapters for different jobs if you really want! Exporting an `adapter` in this file is required for the job runner to start.
-
-### Configuring All Jobs with `RedwoodJob.config`
-
-```js
-RedwoodJob.config({ adapter, logger })
-```
-
-This is the global config for all jobs. You can override these values in individual jobs, but if you don't want to this saves you a lot of extra code configuring individual jobs over and over again with the same adapter, logger, etc.
-
-Jobs will inherit a default queue name of `"default"` and a priority of `50`.
-
-Config can be given the following options:
-
-- `adapter`: **[required]** The adapter to use for scheduling your job.
-- `logger`: Made available as `this.logger` within your job for logging whatever you'd like during the `perform()` step. This defaults to `console`.
-
-### Exporting `jobs`
-
-```js
-export const jobs = {}
-```
-
-We've found a nice convention is to export instances of all of your jobs here. Then you only have a single import to use in other places when you want to schedule a job:
-
-```js
-// api/src/lib/jobs.js
-export const jobs = {
-  sendWelcomeEmailJob: new SendWelcomeEmailJob(),
-  // highlight-next-line
-  productBackorderJob: new ProductBackorderJob(),
-  inventoryReportGenJob: new InventoryReportGenJob(),
-}
-
-// api/src/services/products/products.js
-import { jobs } from 'api/src/lib/jobs'
-
-export const updateProduct = async ({ id, input }) => {
-  const product = await db.product.update({ where: { id }, data: input })
-  // highlight-next-line
-  await jobs.productBackorderJob.performLater()
-  return product
-}
-```
-
-It _is_ possible to skip this export altogther and import and schedule individual jobs manually:
-
-```js
-// api/src/services/products/products.js
-import { ProductBackorderJob } from 'api/src/jobs/ProductBackorderJob'
-
-export const updateProduct = async ({ id, input }) => {
-  const product = await db.product.update({ where: { id }, data: input })
-  await ProductBackorderJob.performLater()
-  return product
-}
-```
-
-HOWEVER, this will lead to unexpected behavior if you're not aware of the following:
-
-:::danger
-
-If you don't export a `jobs` object and then `import` it when you want to schedule a job, the `Redwood.config()` line will never be executed and your jobs will not receive a default configuration! This means you'll need to either:
-
-- Invoke `RedwoodJob.config()` somewhere before scheduling your job
-- Manually set the adapter/logger/etc. in each of your jobs.
-
-We'll see examples of configuring the individual jobs with an adapter and logger below.
-
-:::
-
-## Job Configuration
-
-All jobs have some default configuration set for you if don't do anything different:
-
-- `queue` : jobs can be in named queues and have dedicated workers that only pull jobs from that queue. This lets you scale not only your entire job runner independently of the rest of your app, but scale the individual queues as well. By default, all jobs will go in a queue named "default" if you don't override it.
-- `priority` : within a single queue you can jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. The default priority is `50`. A lower number is _higher_ in priority than a lower number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`.
-- `logger` : jobs will log to the console if you don't tell them otherwise. The logger exported from `api/src/lib/logger.js` works well the job runner, so we recommend using that by setting it in `RedwoodJob.config()` or on a per-job basis.
-- `adapter` : the adapter to use to store this jobs. There is no default adapter set for jobs, so you'll need to set this in `RedwoodJob.config()` or on a per-job basis.
-
-If you don't do anything special, a job will inherit the adapter and logger you set with the call to `RedwoodJob.config()`. However, you can override these settings on a per-job basis. You don't have to set all of them, you can use them in any combination you want:
-
-```js
-import { RedwoodJob, PrismaAdapter } from '@redwoodjs/jobs'
-import { db } from 'api/src/lib/db'
-import { emailLogger } from 'api/src/lib/logger'
-
-export const class SendWelcomeEmailJob extends RedwoodJob {
-  // highlight-start
-  static adapter = new PrismaAdapter({ db })
-  static logger = emailLogger()
-  static queue = 'email'
-  static priority = '1'
-  // highlight-end
-
-  perform(userId) => {
-    // ... send email ...
-  }
-}
-```
-
-## Adapter Configuration
-
-Adapters accept an object of options when they are initialized.
-
-### PrismaAdapter
-
-```js
-import { db } from 'api/src/lib/db'
-
-const adapter = new PrismaAdapter({
-  db,
-  model: 'BackgroundJob',
-  logger: console,
+export const jobs = new JobManager({
+  adapters: {
+    // highlight-next-line
+    prisma: new PrismaAdapter({ db, model: 'BackgroundJob', logger }),
+  },
+  // remaining config...
 })
 ```
 
 - `db`: **[required]** an instance of `PrismaClient` that the adapter will use to store, find and update the status of jobs. In most cases this will be the `db` variable exported from `api/src/lib/db.js`. This must be set in order for the adapter to be initialized!
-- `model`: the name of the model that was created to store jobs. This defaults to `BackgroundJob`
-- `logger`: events that occur within the adapter will be logged using this. This defaults to `console` but the `logger` exported from `api/src/lib/logger` works great, too.
+- `model`: the name of the model that was created to store jobs. This defaults to `BackgroundJob`.
+- `logger`: events that occur within the adapter will be logged using this. This defaults to `console` but the `logger` exported from `api/src/lib/logger` works great.
 
-## Job Scheduling
+### Scheduler Config
 
-The interface to schedule a job is fairly flexible: use the pattern you like best! By default the generators will assume you want to use the [Instance Invocation](#instance-invocation) pattern, but maybe the [Class Invocation](#class-invocation) speaks to your soul!
-
-### Instance Invocation
-
-Using this pattern you instantiate the job first, set any options, then schedule it:
+When you create an instance of the scheduler you can pass it a couple of options:
 
 ```js
-import { SendWelcomeEmailJob } from 'api/src/jobs/SendWelcomeEmailJob`
-
-const job = new SendWelcomeEmailJob()
-job.set({ wait: 300 }).performLater()
+export const later = jobs.createScheduler({
+  adapter: 'prisma',
+})
 ```
 
-You can also set options when you create the instance. For example, if _every_ invocation of this job should wait 5 minutes, no need to `set()` that each time, just initialize it with that option:
+- `adapter` : **[required]** the name of the adapter this scheudler will use to schedule jobs. Must be one of the keys that you gave to the `adapters` option on the JobManager itself.
+- `logger` : the logger to use when scheduling jobs. If not provided, defaults to the `logger` set on the JobManager.
+
+#### Scheduling Options
+
+When using the scheduler to scheduled a job you can pass options in an optional third argument:
 
 ```js
-// api/src/lib/jobs.js
-export const jobs = {
-  // highlight-next-line
-  sendWelcomeEmail: new SendWelcomeEmailJob({ wait: 300 }),
-}
-
-// api/src/services/users/users.js
-export const createUser = async ({ input }) => {
-  const user = await db.user.create({ data: input })
-  // highlight-next-line
-  await jobs.sendWelcomeEmail.performLater()
-  return user
-}
+later(SampleJob, [user.id], { wait: 300 })
 ```
-
-`set()` will merge together with any options set when initialized, so you can, for example, override those settings on a one-off basis:
-
-```js
-// api/src/lib/jobs.js
-export const jobs = {
-  // highlight-next-line
-  sendWelcomeEmail: new SendWelcomeEmailJob({ wait: 300 }), // 5 minutes
-}
-
-// api/src/services/users/users.js
-export const createUser = async ({ input }) => {
-  const user = await db.user.create({ data: input })
-  // highlight-next-line
-  await jobs.sendWelcomeEmail.set({ wait: 3600 }).performLater() // 1 hour
-  return user
-}
-```
-
-You can also do the setting separate from the scheduling:
-
-```js
-const job = new SendWelcomeEmailJob()
-job.set({ wait: 300 })
-// do something else...
-job.performLater()
-```
-
-Once you have your instance you can inspect the options set on it:
-
-```js
-const job = new SendWelcomeEmail()
-// set by RedwoodJob.config or static properies
-job.adapter // => PrismaAdapter instance
-jog.logger // => logger instance
-
-// set via `set()` or provided during job instantiaion
-job.queue // => 'default'
-job.priority // => 50
-job.wait // => 300
-job.waitUntil // => null
-
-// computed internally
-job.runAt // => 2025-07-27 12:35:00 UTC
-//    ^ the actual computed Date of now + `wait`
-```
-
-:::info
-
-You can't set these values directly, that's done through `set()`. Also, you can never set `runAt`, that's computed internally. If you want your job to run at a specific time you can use the `waitUntil` option, See [Scheduling Options](#scheduling-options) below.
-
-:::
-
-### Class Invocation
-
-You can schedule a job directly, without instantiating it first:
-
-```js
-import { AnnualReportGenerationJob } from 'api/src/jobs/AnnualReportGenerationJob'
-
-AnnualReportGenerationJob.performLater()
-// or
-AnnualReportGenerationJob.set({
-  waitUntil: new Date(2025, 0, 1),
-}).performLater()
-```
-
-Using this syntax comes with a caveat: since no `RedwoodJob.config()` was called you would need to configure the `adapter` and `logger` directly on `AnnualReportGenerationJob` via static properties (unless you were sure that `RedwoodJob.config()` was called somewhere before this code executes). See the note at the end of the [Exporting jobs](#exporting-jobs) section explaining this limitation.
-
-### Scheduling Options
-
-You can pass several options in a `set()` call on your instance or class:
 
 - `wait`: number of seconds to wait before the job will run
 - `waitUntil`: a specific `Date` in the future to run at
-- `queue`: the named queue to put this job in (overrides any `static queue` set on the job itself)
-- `priority`: the priority to give this job (overrides any `static priority` set on the job itself)
 
-## Job Runner
+### Job Config
 
-The job runner actually executes your jobs. The runners will ask the adapter to find a job to work on. The adapter will mark the job as locked (the process name and a timestamp is set on the job) and then the worker will instantiate the job class and call `perform()` on it, passing in any args that were given to `performLater()`
+There are two configuration options you can define in the object that describes your job:
+
+```js
+import { jobs } from 'src/lib/jobs'
+
+export const SendWelcomeEmailJob = jobs.createJob({
+  // highlight-start
+  queue: 'email',
+  priority: 1,
+  // hightlightend
+  perform: async (userId) => {
+    // job details...
+  },
+})
+```
+
+- `queue` : **[required]** the name of the queue that this job will be placed in. Must be one of the strings you assigned to `queues` array when you set up the `JobManager`.
+- `priority` : within a single queue you can have jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. The default priority is `50`. A lower number is _higher_ in priority than a lower number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`.
+
+### Worker Config
+
+This is the largest section of the `JobManager` config object. This options tell the workers how to behave when looking for and executing jobs.
+
+```js
+export const jobs = new JobManager({
+  // .. more config
+  workers: [
+    {
+      adapter: 'prisma',
+      logger,
+      queue: '*',
+      count: 1,
+      maxAttempts: 24,
+      maxRuntime: 14_400,
+      deleteFailedJobs: true,
+      deleteFailedJobs: false,
+      sleepDelay: 5,
+    },
+  ],
+
+```
+
+This is an array of objects. Each object represents the config for a single "group" of workers. By default, there is only one worker group. It uses the `PrismaAdapter` and will look for jobs in all queues. If you want to start fine tuning your workers by working with different adapters, or only working on some named queues, you can add additional members to this array, each with a unique set of options.
+
+- `adapter` : **[required]** the name of the adapter this worker group will use. Must be one of the keys that you gave to the `adapters` option on the `JobManager` itself.
+- `logger` : the logger to use when working on jobs. If not provided, defaults to the `logger` set on the `JobManager`. You can use this logger in the `perform()` function of your job by accessing `jobs.logger`
+- queue : **[required]** the named queue(s) in which this worker group will watch for jobs. There is a reserved `'*'` value you can use which means "all queues." This can be an array of queues as well: `['default', 'email']` for example.
+- `count` : **required** the number of workers to start using this config.
+- `maxAttempts`: the maximum number of times to retry a job before giving up. Retries are handled with an exponential backoff in retry time, equal to the number of previous attempts \*\* 4. After this number, a job is considered "failed" and will not be re-attempted. Default: `24`
+- `maxRuntime` : the maximum amount of time, in seconds, to try running a job before another worker will pick it up and try again. It's up to you to make sure your job doesn't run for longer than this amount of time! Default: 14,400 seconds (4 hours)
+- `deleteFailedJobs` : when a job has failed (maximum number of retries has occured) you can keep the job in the database, or delete it. Default: `false`
+- `deleteSuccessfulobs` : when a job has succeeded, you can keep the job in the database, or delete it. It's generally assumed that your jobs _will_ succeed so it usually makes sense to clear them out and keep the queue lean. Default: `true`
+- `sleepDelay` : the amount of time, in seconds, to check the queue for another job to run. Too low and you'll be thrashing your storage system looking for jobs, too high and you start to have a long delay before any job is run. Default: `5`
+
+See the next section for advanced usage examples, like multiple worker groups.
+
+## Job Workers
+
+A job worker actually executes your jobs. The workers will ask the adapter to find a job to work on. The adapter will mark the job as locked (the process name and a timestamp is set on the job) and then the worker will call `perform()` on your job, passing in any args that were given to `performLater()`. The behavior of what happens when the job succeeds or fails depends on the config options you set in the `JobManager`. By default, successful jobs are removed from storage and failed jobs and kept around so you can diagnose what happened.
 
 The runner has several modes it can start in depending on how you want it to behave.
 
@@ -610,7 +505,13 @@ yarn rw jobs workoff
 
 As soon as there are no more jobs to be executed (either the store is empty, or they are scheduled in the future) the process will automatically exit.
 
-By default this worker will work on all queues, but if you only wanted it to work on a specific one even in dev, check out the `-n` flag described in the [Multiple Workers](#multiple-workers) section below.
+### Clearing the Job Queue
+
+You can remove all jobs from storage with:
+
+```bash
+yarn rw jobs clear
+```
 
 ### Production Modes
 
@@ -636,49 +537,76 @@ yarn rw jobs restart
 
 ### Multiple Workers
 
-You can start more than one worker with the `-n` flag:
+With the default configuration options generated with the `yarn rw setup jobs` command, you'll have one worker group. If you simply want more workers that use the same `adapter` and `queue` settings, just increase the `count`:
 
-```bash
-yarn rw jobs start -n 4
+```js
+export const jobs = new JobManager({
+  adapters: {
+    prisma: new PrismaAdapter({ db, logger }),
+  },
+  queues: ['default'],
+  logger,
+  workers: [
+    {
+      adapter: 'prisma',
+      logger,
+      queue: '*',
+      // highlight-next-line
+      count: 5,
+      maxAttempts: 24,
+      maxRuntime: 14_400,
+      deleteFailedJobs: false,
+      sleepDelay: 5,
+    },
+  ],
+})
 ```
 
-That starts 4 workers watching all queues. To only watch a certain queue, you can combine the queue name with the number that should start, separated by a `:`:
+Now you have 5 workers. If you want to have separate workers working on separate queues, create another worker config object with a different queue name:
 
-```bash
-yarn rw jobs start -n email:2
+```js
+export const jobs = new JobManager({
+  adapters: {
+    prisma: new PrismaAdapter({ db, logger }),
+  },
+  queues: ['default'],
+  logger,
+  workers: [
+    {
+      adapter: 'prisma',
+      logger,
+      // highlight-start
+      queue: 'default',
+      // highlight-end
+      count: 1,
+      maxAttempts: 24,
+      maxRuntime: 14_400,
+      deleteFailedJobs: false,
+      sleepDelay: 5,
+    },
+    {
+      adapter: 'prisma',
+      logger,
+      // highlight-start
+      queue: 'email',
+      count: 1,
+      maxAttempts: 1,
+      maxRuntime: 30,
+      deleteFailedJobs: true,
+      // highlight-end
+      sleepDelay: 5,
+    },
+  ],
+})
 ```
 
-That starts 2 workers that only watch the `email` queue. To have multiple workers watching separate named queues, separate those with commas:
+Here, we have 2 workers working on the "default" queue and 1 worker looking at the "email" queue (which will only try a job once, only wait 30 seconds for it to finish, and delete the job if it fails). You can also have different worker groups using different adapters. For example, you may have store and work on some jobs in your database using the `PrismaAdapter` and some jobs/workers using a `RedisAdapter`.
 
-```bash
-yarn rw jobs start -n default:2,email:4
-```
+:::info
 
-That starts 2 workers watching the `default` queue and 4 watching `email`.
+We don't currently provide a `RedisAdapter` but plan to add one soon!
 
-If you want to combine named queues and all queues, leave off the name:
-
-```bash
-yarn rw jobs start -n :2,email:4
-```
-
-2 workers watching all queues and another 4 dedicated to only `email`.
-
-### Stopping Multiple Workers
-
-Make sure you pass the same `-n` flag to the `stop` process as the `start` so it knows which ones to stop. The same with the `restart` command.
-
-### Monitoring the Workers
-
-In production you'll want to hook the workers up to a process monitor since, just like with any other process, they could die unexpectedly.
-
-### Clear
-
-You can remove all jobs from storage with:
-
-```bash
-yarn rw jobs clear
-```
+:::
 
 ## Deployment
 
@@ -687,8 +615,6 @@ For many use cases you may simply be able to rely on the job runner to start you
 ```bash
 yarn rw jobs start
 ```
-
-See the options available in [Job Runner > Production Modes](#production-modes) for additional flags.
 
 When you deploy new code you'll want to restart your runners to make sure they get the latest soruce files:
 
@@ -702,34 +628,32 @@ For maximum reliability you should take a look at the [Advanced Job Workers](#ad
 
 :::info
 
-Of course if you have a process monitor system watching your workers you'll to use the process monitor's version of the restart command each time you deploy!
+Of course if you have a process monitor system watching your workers you'll to use the process monitor's version of the `restart` command each time you deploy!
 
 :::
 
 ## Advanced Job Workers
 
-In the cases above, all workers will use the same `adapter`, `logger` and `workerConfig` exported from your jobs config file at `api/src/lib/jobs.js`. However, it's possible to have workers running completely different configurations. To do this, you'll need to start the worker directly, instead of having the build-in job runner start them for you.
+As noted above, although the workers are started and detached using the `yarn rw jobs start` command, there is nothing to monitor those workers to make sure they keep running. To do that, you'll want to start the workers yourself (or have your process monitor start them) using command line flags.
 
-To start the worker yourself you'll run the `yarn rw-jobs-worker` command. As an example, to start a worker with the same configruation options that `yarn rw jobs work` would use, you'd run the following command:
+You can do this with the `yarn rw-jobs-worker` command. To start a single worker, using the first `workers` config object, would run:
 
 ```bash
-yarn rw-jobs-worker --id=0 --maxAttempts=24 --maxRuntime=14400 --sleepDelay 5 --adapter=adapter --logger=logger
+yarn rw-jobs-worker --index=0 --id=0
 ```
-
-The job runner sets the `--maxAttempts`, `--maxRuntime` and `--sleepDelay` flags based on the values in the `workerConfig` variable. The `--adapter` and `--logger` flags denote the name of the exported variables that the worker should load in order to set itself up to run jobs.
 
 ### Flags
 
-- `--id` : a number identifier that's set as part of the process name. For example starting a worker with \* `--id=0` and then inspecting your process list will show one running named `rw-job-worker.0`
-- `--queue` : the named queue for the worker to focus on. Leaving this flag off defaults to watching all queues. This will also effect the process title name. Setting `--queue=email` would lead to process named \* `rw-job-worker.email.0` (assuming `--id=0`)
-- `--workoff` : if this flag is present then the worker will terminate itself after the queue it is watching is empty
-- `--clear` : if this flag is present the worker will call the `clear()` function on the adapter (which should remove all jobs in storage) and then exit
-- `--maxAttempts` : The max number of times to retry a job before considering it failed, and will not be retried. Defaults to `24`.
-- `--maxRuntime` : The max amount of time, in seconds, a job should run before being eligible to be picked up by another worker instead, effectively starting over. Defaults to `14400` which is 4 hours.
-- `--sleepDelay` : How long to wait, in seconds, before querying the adapter for another available job to run. Careful not to DDoS your job storage system by setting this too low!
-- `--deleteFailedJobs` : If `maxAttempts` is reached, what to do with the job. Defaults to `false` meaning the job will remain in the queue, but the workers will not pick it up to work on again. Useful for debugging why a job may have failed.
-- `--adapter` : The name of the variable exported from `api/src/lib/jobs.js` to use as the adapter for this worker instance. Defalts to `adapter`. The worker will error on startup if this variable is not exported by your jobs config file.
-- `--logger` : The name of the variable exported from `api/src/lib/jobs.js` to us as the logger for this worker instance. Defaults to `logger` but will fall back to `console` if no `logger` is exported.
+- `--index` : a number that represents the index of the `workers` config option you passed to the `JobManager`. Setting this to `0`, for example, uses the first object in the array to set all config options for the worker.
+- `--id` : a number identifier that's set as part of the process name. For example, starting a worker with `--id=0` and then inspecting your process list will show one running named `rw-job-worker.queue-name.0`. Using `yarn rw-jobs-worker` only ever starts a single instance, so if your config had a `count` of `2` you'd need to run the command twice, one with `--id=0` and a second time with `--id=1`.
+- `--workoff` : a boolean that will execute all currently available jobs and then cause the worker to exit. Defaults to `false`
+- `--clear` : a boolean that will remove all jobs from the queue. Defaults to `false`
+
+Your process monitor can now restart the processes automatically if they crash.
+
+### What Happens if a Worker Crashes?
+
+If a worker crashes because of circumstances outside of our control, the job will remained locked in the storage system since the worker couldn't finish work and clean it up itself. In this case, the job will be picked up again after `maxRuntime` has expired—a new worker will pick it up and re-lock using it's own indentification.
 
 ## Creating Your Own Adapter
 
@@ -737,11 +661,12 @@ We'd love the community to contribue adapters for Redwood Job! Take a look at th
 
 The general gist of the required functions:
 
-- `find()` should find a job to be run, lock it and return it (minimum return of and object containing `handler` and `args` properties)
-- `schedule()` accepts `handler`, `args`, `runAt`, `queue` and `priority` and should store the job
-- `success()` accepts the same job object returned from `find()` and does whatever success means (delete the job from the queue, most likely)
-- `failure()` accepts the same job object returned from `find()` and does whatever failure means (unlock the job and reschedule a time for it to run again in the future, or give up if `maxAttempts` is reached)
-- `clear()` remove all jobs from the queue (mostly used in development)
+- `find()` should find a job to be run, lock it and return it (minimum return of an object containing `id`, `name`, `path`, and `args` properties)
+- `schedule()` accepts `name`, `path`, `args`, `runAt`, `queue` and `priority` and should store the job
+- `success()` accepts the same job object returned from `find()` and the `deleteSuccessfulJobs` boolean Does whatever success means to you (remove the job from storage, perhaps)
+- `error()` accepts the same job object returned from `find()` and an error instance. Does whatever failure means to you (unlock the job and reschedule a time for it to run again in the future, or give up if `maxAttempts` is reached)
+- `failure()` is called when the job has reached `maxAttempts` and accepts the job object and the `deleteFailedJobs` boolean.
+- `clear()` remove all jobs from the queue (mostly used in development).
 
 ## The Future
 
