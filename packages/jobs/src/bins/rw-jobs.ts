@@ -13,9 +13,7 @@ import { setTimeout } from 'node:timers'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-// @ts-expect-error - doesn't understand dual CJS/ESM export
-import * as cliHelperLoadEnv from '@redwoodjs/cli-helpers/loadEnvFiles'
-const { loadEnvFiles } = cliHelperLoadEnv
+import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
 import { loadJobsManager } from '../loaders'
