@@ -2,12 +2,12 @@
 
 // Coordinates the worker processes: running attached in [work] mode or
 // detaching in [start] mode.
-import console from 'node:console'
-import process from 'node:process'
 
 import type { ChildProcess } from 'node:child_process'
 import { fork, exec } from 'node:child_process'
+import console from 'node:console'
 import path from 'node:path'
+import process from 'node:process'
 import { setTimeout } from 'node:timers'
 
 import { hideBin } from 'yargs/helpers'
@@ -21,7 +21,7 @@ import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
 import { loadJobsManager } from '../loaders'
 import type { Adapters, BasicLogger, WorkerConfig } from '../types'
 
-export type NumWorkersConfig = Array<[number, number]>
+export type NumWorkersConfig = [number, number][]
 
 loadEnvFiles()
 
@@ -171,7 +171,7 @@ const signalSetup = ({
   workers,
   logger,
 }: {
-  workers: Array<ChildProcess>
+  workers: ChildProcess[]
   logger: BasicLogger
 }) => {
   // Keep track of how many times the user has pressed ctrl-c
@@ -191,7 +191,11 @@ const signalSetup = ({
     logger.info(message)
 
     workers.forEach((worker) => {
-      sigtermCount > 1 ? worker.kill('SIGTERM') : worker.kill('SIGINT')
+      if (sigtermCount > 1) {
+        worker.kill('SIGTERM')
+      } else {
+        worker.kill('SIGINT')
+      }
     })
   })
 }

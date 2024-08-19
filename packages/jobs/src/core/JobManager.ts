@@ -9,9 +9,9 @@ import type {
   ScheduleJobOptions,
   WorkerConfig,
 } from '../types'
-import type { WorkerOptions } from './Worker'
 
 import { Scheduler } from './Scheduler'
+import type { WorkerOptions } from './Worker'
 import { Worker } from './Worker'
 
 export interface CreateWorkerArgs {

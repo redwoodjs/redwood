@@ -13,11 +13,8 @@ import yargs from 'yargs/yargs'
 import * as cliHelperLoadEnv from '@redwoodjs/cli-helpers/loadEnvFiles'
 const { loadEnvFiles } = cliHelperLoadEnv
 
-import {
-  DEFAULT_LOGGER,
-  PROCESS_TITLE_PREFIX,
-} from '../consts'
-import { Worker } from '../core/Worker'
+import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
+import type { Worker } from '../core/Worker'
 import { WorkerConfigIndexNotFoundError } from '../errors'
 import { loadJobsManager } from '../loaders'
 import type { BasicLogger } from '../types'
@@ -37,7 +34,8 @@ const parseArgs = (argv: string[]) => {
     })
     .option('id', {
       type: 'number',
-      description: 'The worker count id to identify this worker. ie: if you had `count: 2` in your worker config, you would have two workers with ids 0 and 1',
+      description:
+        'The worker count id to identify this worker. ie: if you had `count: 2` in your worker config, you would have two workers with ids 0 and 1',
       default: 0,
     })
     .option('workoff', {

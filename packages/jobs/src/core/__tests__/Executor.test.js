@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
+import { DEFAULT_LOGGER } from '../../consts'
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
 
 import { mockLogger } from './mocks'
-import { DEFAULT_LOGGER } from '../../consts'
 
 const mocks = vi.hoisted(() => {
   return {

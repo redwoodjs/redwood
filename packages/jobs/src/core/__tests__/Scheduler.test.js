@@ -1,7 +1,7 @@
-import { describe, expect, vi, it, afterEach, beforeEach } from 'vitest'
+import { describe, expect, vi, it, beforeEach } from 'vitest'
 
-import { Scheduler } from '../Scheduler'
 import * as errors from '../../errors'
+import { Scheduler } from '../Scheduler'
 
 import { mockAdapter, mockLogger } from './mocks'
 

@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
+import { DEFAULT_LOGGER } from '../../consts'
 import * as errors from '../../errors'
 import { Executor } from '../Executor'
 import { Worker } from '../Worker'
 
 import { mockLogger } from './mocks'
-import { DEFAULT_LOGGER } from '../../consts'
 
 // don't execute any code inside Executor, just spy on whether functions are
 // called
