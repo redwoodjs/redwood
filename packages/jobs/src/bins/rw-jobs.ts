@@ -38,12 +38,12 @@ const parseArgs = (argv: string[]) => {
     .command('clear', 'Clear the job queue')
     .demandCommand(1, 'You must specify a mode to start in')
     .example(
-      '$0 start -n 2',
-      'Start the job runner with 2 workers in daemon mode',
+      '$0 work',
+      'Start the job workers using the job config and work on jobs until manually stopped',
     )
     .example(
-      '$0 start -n default:2,email:1',
-      'Start the job runner in daemon mode with 2 workers for the "default" queue and 1 for the "email" queue',
+      '$0 start',
+      'Start the job workers using the job config and detach, running in daemon mode',
     )
     .help().argv
 
