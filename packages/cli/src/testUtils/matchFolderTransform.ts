@@ -123,7 +123,7 @@ export const matchFolderTransform: MatchFolderTransformFunction = async (
     const actualPath = path.join(tempDir, transformedFile)
     const expectedPath = path.join(fixtureOutputDir, transformedFile)
 
-    await expect(actualPath).toMatchFileContents(expectedPath, {
+    expect(actualPath).toMatchFileContents(expectedPath, {
       removeWhitespace,
     })
   }
