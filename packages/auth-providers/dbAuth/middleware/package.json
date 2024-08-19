@@ -47,7 +47,7 @@
     "@redwoodjs/graphql-server": "workspace:*",
     "@types/aws-lambda": "8.10.143",
     "concurrently": "8.2.2",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.17.0",
     "typescript": "5.5.4",

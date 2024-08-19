@@ -26,7 +26,7 @@ import {
 `@redwoodjs/forms` exports the following components:
 
 | Component         | Description                                                                                                                                        |
-|:------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
+| :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `<Form>`          | Surrounds all components, providing form and error contexts                                                                                        |
 | `<FormError>`     | Displays error messages from the server. Typically placed at the top of your form                                                                  |
 | `<Label>`         | Used in place of the HTML `<label>` tag. Accepts error-styling props                                                                               |
@@ -75,7 +75,7 @@ Besides `name`, all other props passed to these components are forwarded to the 
 Here's a table for reference:
 
 | Prop             | Description                                                                                                                                                                                                     |
-|:-----------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`           | The name of the field. React Hook Form uses it a key to hook it up with everything else                                                                                                                         |
 | `validation`     | All your validation logic. Accepts all of React Hook Form's [`register` options](https://react-hook-form.com/api/useform/register), plus the Redwood-exclusive coercion helpers `valueAsBoolean`, `valueAsJSON` |
 | `errorClassName` | The class name to apply if there's an error                                                                                                                                                                     |
@@ -145,7 +145,7 @@ const ContactPage = () => {
 Any form you want Redwood to validate and style in the presence errors should be surrounded by this tag.
 
 | Prop          | Description                                                                                                                                                    |
-|:--------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `config`      | Accepts an object containing options for React Hook Form's [`useForm` hook](https://react-hook-form.com/api/useform)                                           |
 | `formMethods` | The functions returned from `useForm`. You only need to use this prop if you need to access to one of the functions that `useForm` returns (see example below) |
 | `onSubmit`    | Accepts a function to be called if validation succeeds. Called with an object containing name-value pairs of all the fields in your form                       |
@@ -233,13 +233,9 @@ Instead it'll throw an error and bubble it back up to the top (via the `error` o
 
 ```html
 <div>
-  <p>
-    Can't create new contact:
-  </p>
+  <p>Can't create new contact:</p>
   <ul>
-    <li>
-      email is not formatted like an email address
-    </li>
+    <li>email is not formatted like an email address</li>
   </ul>
 </div>
 ```
@@ -251,7 +247,7 @@ Renders an HTML `<label>` tag with different `className` and `style` props depen
 This tag can be self-closing, in which case the `name` becomes the text of the label:
 
 ```html
-<Label name="name" className="input" errorClassName="input error" />
+<label name="name" className="input" errorClassName="input error" />
 
 <!-- Renders: <label for="name" class="input">name</label> -->
 ```
@@ -259,7 +255,9 @@ This tag can be self-closing, in which case the `name` becomes the text of the l
 It can also have standard separate open/close tags and take text inside, in which case that text is the text of the rendered `<label>`:
 
 ```html
-<Label name="name" className="input" errorClassName="input error">Your Name</Label>
+<label name="name" className="input" errorClassName="input error"
+  >Your Name</label
+>
 
 <!-- Renders: <label for="name" class="input">Your Name</label> -->
 ```
@@ -267,7 +265,7 @@ It can also have standard separate open/close tags and take text inside, in whic
 All props are passed to the underlying `<label>` tag besides the ones listed below:
 
 | Prop             | Description                                                                                                                               |
-|:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`           | The name of the field that this label is associated with. This should be the same as the `name` prop on the input field this label is for |
 | `errorClassName` | The `className` that's used if the field with the same `name` has a validation error                                                      |
 | `errorStyle`     | The `style` that's used if the field with the same `name` has a validation error                                                          |
@@ -284,7 +282,7 @@ Certain input fields handle coercion automatically, but you can always override 
 The input fields that coerce automatically are:
 
 | Field                  | Default coercion |
-|:-----------------------|:-----------------|
+| :--------------------- | :--------------- |
 | `<CheckboxField>`      | `valueAsBoolean` |
 | `<NumberField>`        | `valueAsNumber`  |
 | `<DateField>`          | `valueAsDate`    |
@@ -303,36 +301,39 @@ Redwood provides a flexible treatment of empty input field value. Appropriate tr
 
 The treatment of empty field values is governed by the following:
 
- 1. If `setValueAs` is specified by the user, the specified function will determine the behavior of empty fields.
- 2.  If the `emptyAs` prop is set, then the `emptyAs` prop will determine the field value on an empty condition. See below for `emptyAs` prop values.
- 3. If the `validation = { required: true }` prop is set, an empty field will return null.  However,
-    the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
-    would not satisfy the `required` validation.
- 4. If the field is an `Id` field, that is its name ends in "Id", then an empty field will return `null`. A `null` value is the most appropriate value for most database relation fields.
-    For scenarios where another value is required for empty cases, utilize the `emptyAs` prop.
- 5. If none of the above cases apply, the field value will be set as follows for empty field scenarios:
-     - DateFields &rarr; null
-     - NumberFields &rarr; NaN
-     - TextFields with valueAsNumber set &rarr; NaN
-     - SelectFields with valueAsNumber set &rarr; NaN
-     - SelectFields without valueAsNumber set &rarr; '' (empty string)
-     - TextFields with valueAsJSON set &rarr; null
-     - TextFields and comparable &rarr; '' (empty string)
+1. If `setValueAs` is specified by the user, the specified function will determine the behavior of empty fields.
+2. If the `emptyAs` prop is set, then the `emptyAs` prop will determine the field value on an empty condition. See below for `emptyAs` prop values.
+3. If the `validation = { required: true }` prop is set, an empty field will return null. However,
+   the validation provided by react-hook-forms should engage and prevent submission of the form as an empty value
+   would not satisfy the `required` validation.
+4. If the field is an `Id` field, that is its name ends in "Id", then an empty field will return `null`. A `null` value is the most appropriate value for most database relation fields.
+   For scenarios where another value is required for empty cases, utilize the `emptyAs` prop.
+5. If none of the above cases apply, the field value will be set as follows for empty field scenarios:
+   - DateFields &rarr; null
+   - NumberFields &rarr; NaN
+   - TextFields with valueAsNumber set &rarr; NaN
+   - SelectFields with valueAsNumber set &rarr; NaN
+   - SelectFields without valueAsNumber set &rarr; '' (empty string)
+   - TextFields with valueAsJSON set &rarr; null
+   - TextFields and comparable &rarr; '' (empty string)
 
 ### emptyAs prop
 
 The `emptyAs` prop allows the user to override the default value for an input field if the field is empty. Provided that a `setValueAs` prop is not specified, Redwood will allow you to override the default empty value returned.
 The possible values for `emptyAs` are:
+
 - `null`
 - `'undefined'`
 - `0`
 - `''` (empty string)
 
 For example:
+
 ```
 <NumberField name="quantity" emptyAs="undefined" />
 <NumberField name="score" emptyAs={null} />
 ```
+
 will return `undefined` if the field is empty.
 
 ### Custom Input Fields
@@ -543,6 +544,6 @@ Renders a `<span>` containing a validation error message if the field with the s
 
 ```html
 <FieldError name="name" className="error-message">
-
-<!-- Renders: <span class="error-message">name is required</span> -->
+  <!-- Renders: <span class="error-message">name is required</span> --></FieldError
+>
 ```

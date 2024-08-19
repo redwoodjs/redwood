@@ -16,32 +16,42 @@ export const testContext: TestContext = {
   // Casting here because `beforeAll` below sets this and this file runs before all tests.
   // Working around it being possibly undefined muddies the code in the tests.
   // Also can't just call `getConfig()` because RWJS_CWD hasn't been set yet
-  projectConfig: {} as ReturnType<typeof getConfig>
+  projectConfig: {} as ReturnType<typeof getConfig>,
 }
 
 const __dirname = fileURLToPath(new URL('./', import.meta.url))
 // @redwoodjs/cli (yarn rw)
 export const rw = path.resolve(__dirname, '../../packages/cli/dist/index.js')
 // @redwoodjs/api-server (yarn rw-server)
-export const rwServer = path.resolve(__dirname, '../../packages/api-server/dist/bin.js')
+export const rwServer = path.resolve(
+  __dirname,
+  '../../packages/api-server/dist/bin.js',
+)
 // @redwoodjs/web-server (yarn rw-web-server)
-export const rwWebServer = path.resolve(__dirname, '../../packages/web-server/dist/bin.js')
+export const rwWebServer = path.resolve(
+  __dirname,
+  '../../packages/web-server/dist/bin.js',
+)
 
 let original_RWJS_CWD
 beforeAll(() => {
   original_RWJS_CWD = process.env.RWJS_CWD
-  const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/redwood-app', import.meta.url))
+  const FIXTURE_PATH = fileURLToPath(
+    new URL('./fixtures/redwood-app', import.meta.url),
+  )
   process.env.RWJS_CWD = FIXTURE_PATH
   testContext.projectConfig = getConfig()
 
   // When running `yarn vitest run` to run all the test suites, log the bin paths only once.
   if (!globalThis.loggedBinPaths) {
-    console.log([
-      'These tests use the following commands to run the server:',
-      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rw} serve`,
-      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwServer}`,
-      `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwWebServer}`,
-    ].join('\n'))
+    console.log(
+      [
+        'These tests use the following commands to run the server:',
+        `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rw} serve`,
+        `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwServer}`,
+        `• RWJS_CWD=${process.env.RWJS_CWD} yarn node ${rwWebServer}`,
+      ].join('\n'),
+    )
     globalThis.loggedBinPaths = true
   }
 })
@@ -64,7 +74,7 @@ afterEach(async () => {
 })
 
 export function sleep(time = 1_000) {
-  return new Promise(resolve => setTimeout(resolve, time));
+  return new Promise((resolve) => setTimeout(resolve, time))
 }
 
 interface TestOptions {
@@ -106,8 +116,8 @@ export async function test({
   expect(webBody).toEqual(
     fs.readFileSync(
       path.join(__dirname, './fixtures/redwood-app/web/dist/about.html'),
-      'utf-8'
-    )
+      'utf-8',
+    ),
   )
 
   apiHost ??= '::'
@@ -128,7 +138,9 @@ export async function test({
   expect(apiRes.status).toEqual(200)
   expect(apiBody).toEqual({ data: 'hello function' })
 
-  const apiProxyRes = await fetch(`http://${webHost}:${webPort}${testContext.projectConfig.web.apiUrl}/hello`)
+  const apiProxyRes = await fetch(
+    `http://${webHost}:${webPort}${testContext.projectConfig.web.apiUrl}/hello`,
+  )
   const apiProxyBody = await apiProxyRes.json()
 
   expect(apiProxyRes.status).toEqual(200)

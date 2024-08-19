@@ -1,5 +1,6 @@
 import { basename } from 'path'
 
+import { Kind } from 'graphql'
 import { parse as parseGraphQL } from 'graphql/language/parser'
 import * as tsm from 'ts-morph'
 
@@ -59,7 +60,7 @@ export class RWSDL extends FileNode {
       } //?
       const ast = parseGraphQL(self.schemaString)
       for (const def of ast.definitions) {
-        if (def.kind === 'ObjectTypeDefinition') {
+        if (def.kind === Kind.OBJECT_TYPE_DEFINITION) {
           if (def.name.value === 'Query' || def.name.value === 'Mutation') {
             for (const field of def.fields ?? []) {
               yield new RWSDLField(def, field, self)

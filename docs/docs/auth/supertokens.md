@@ -51,6 +51,7 @@ SUPERTOKENS_API_KEY=your-api-key # The value can be omitted when self-hosting Su
 ```
 
 ## Social login setup
+
 The following environment variables have to be set up (depending on the social login options):
 
 ```bash
@@ -78,7 +79,6 @@ includeEnvironmentVariables = [
   'SUPERTOKENS_APP_NAME'
 ]
 ```
-
 
 # Page setup
 

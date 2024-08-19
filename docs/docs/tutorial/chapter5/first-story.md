@@ -80,7 +80,6 @@ export default Article
 </TabItem>
 </Tabs>
 
-
 We'll pass an additional `summary` prop to the component to let it know if it should show just the summary or the whole thing. We default it to `false` to preserve the existing behavior—always showing the full body.
 
 Now in the Storybook story let's create a `summary` story that uses the `Article` component the same way that `generated` does, but adds the new `summary` prop. We'll take the content of the sample post and put that in a constant that both stories will use. We'll also rename `generated` to `full` to make it clear what's different between the two:

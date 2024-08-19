@@ -34,8 +34,7 @@ export const getFocus = () => {
   )?.[0]
 
   if (
-    !routeFocus ||
-    !routeFocus.children.length ||
+    !routeFocus?.children.length ||
     (routeFocus.children[0] as HTMLElement).tabIndex < 0
   ) {
     return null

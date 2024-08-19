@@ -138,7 +138,7 @@ export const sanitizeArgv = (
     if (sensitiveCommand.positions) {
       sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !/--/.test(args[pos])) {
+        if (args[pos] && !args[pos].includes('--')) {
           args[pos] = sensitiveCommand.redactWith[index]
         }
       })

@@ -4,11 +4,12 @@ description: Deploy serverless in an instant with Vercel
 
 # Deploy to Vercel
 
->The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
+> The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
 
 ## Vercel tl;dr Deploy
 
 If you simply want to experience the Vercel deployment process without a database and/or adding custom code, you can do the following:
+
 1. create a new redwood project: `yarn create redwood-app ./vercel-deploy`
 2. after your "vercel-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub, BitBucket, or GitLab
 3. run the command `yarn rw setup deploy vercel` and commit and push changes
@@ -29,6 +30,7 @@ Complete the following two steps. Then save, commit, and push your changes.
 ### Step 1. Serverless Functions Path
 
 Run the following CLI Command:
+
 ```shell
 yarn rw setup deploy vercel
 ```
@@ -50,6 +52,7 @@ yarn rw deploy vercel --prisma=false --data-migrate=false
 :::
 
 ### Vercel Initial Setup and Configuration
+
 Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
 
 Then select the "Continue" button within the "From Git Repository" section:
@@ -60,6 +63,7 @@ Next, select the provider where your repo is hosted: GitHub, GitLab, or Bitbucke
 You'll then need to provide permissions for Vercel to access the repo on your hosting provider.
 
 ### Import and Deploy your Project
+
 Vercel will recognize your repo as a Redwood project and take care of most configuration heavy lifting. You should see the following options and, most importantly, the "Framework Preset" showing RedwoodJS.
 
 <img src="https://user-images.githubusercontent.com/2951/90486275-9337cc80-e0ed-11ea-9af3-fd9613c1256b.png" />
@@ -121,13 +125,13 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     }),
   }
 }
-
 ```
 
 :::tip important
 Since Redwood has it's own handling of the api directory, the Vercel flavored api directory is disabled. Therefore you don't use the "functions" config in `vercel.json` with Redwood.
 
 Also, be sure to use Node version 20.x or greater or set the `runtime` in the function config:
+
 ```ts
 export const config = {
   runtime: 'nodejs20.x',

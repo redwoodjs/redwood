@@ -2,7 +2,7 @@ import type { NodePath, PluginObj, PluginPass, types } from '@babel/core'
 
 // This extracts the options passed to the graphql function and stores them in an exported variable so they can be imported elsewhere.
 
-const exportVariableName = '__rw_graphqlOptions' as const
+const exportVariableName = '__rw_graphqlOptions'
 
 function optionsConstNode(
   t: typeof types,

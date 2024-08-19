@@ -93,7 +93,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   let redirectPath: string | undefined = undefined
 
   if (redirect) {
-    if (redirect[0] === '/') {
+    if (redirect.startsWith('/')) {
       redirectPath = replaceParams(redirect, allParams)
     } else {
       const redirectRouteObject = Object.values(pathRouteMap).find(

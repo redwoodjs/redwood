@@ -13,16 +13,13 @@ import {
   REDWOOD_FRAMEWORK_PATH,
 } from '../actionsLib.mjs'
 
-const TEST_PROJECT_PATH = path.join(
-  path.dirname(process.cwd()),
-  'test-project'
-)
+const TEST_PROJECT_PATH = path.join(path.dirname(process.cwd()), 'test-project')
 
 core.setOutput('test-project-path', TEST_PROJECT_PATH)
 
 const canary = core.getInput('canary') === 'true'
 console.log({
-  canary
+  canary,
 })
 
 console.log()
@@ -32,7 +29,7 @@ console.log()
  */
 async function main() {
   await setUpTestProject({
-    canary: true
+    canary: true,
   })
 }
 
@@ -44,14 +41,16 @@ async function setUpTestProject({ canary }) {
   const TEST_PROJECT_FIXTURE_PATH = path.join(
     REDWOOD_FRAMEWORK_PATH,
     '__fixtures__',
-    'test-project'
+    'test-project',
   )
 
   console.log(`Creating project at ${TEST_PROJECT_PATH}`)
   console.log()
   await fs.copy(TEST_PROJECT_FIXTURE_PATH, TEST_PROJECT_PATH)
 
-  await execInFramework('yarn project:tarsync --verbose', { env: { RWJS_CWD: TEST_PROJECT_PATH } })
+  await execInFramework('yarn project:tarsync --verbose', {
+    env: { RWJS_CWD: TEST_PROJECT_PATH },
+  })
 
   if (canary) {
     console.log(`Upgrading project to canary`)
@@ -69,20 +68,17 @@ const execInProject = createExecWithEnvInCwd(TEST_PROJECT_PATH)
  */
 async function sharedTasks() {
   console.log('Generating dbAuth secret')
-  const { stdout } = await execInProject(
-    'yarn rw g secret --raw',
-    { silent: true }
-  )
+  const { stdout } = await execInProject('yarn rw g secret --raw', {
+    silent: true,
+  })
   fs.appendFileSync(
     path.join(TEST_PROJECT_PATH, '.env'),
-    `SESSION_SECRET='${stdout}'`
+    `SESSION_SECRET='${stdout}'`,
   )
   console.log()
 
   console.log('Running prisma migrate reset')
-  await execInProject(
-    'yarn rw prisma migrate reset --force',
-  )
+  await execInProject('yarn rw prisma migrate reset --force')
 }
 
 main()

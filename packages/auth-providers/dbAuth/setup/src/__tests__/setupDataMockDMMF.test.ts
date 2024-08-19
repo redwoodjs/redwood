@@ -54,7 +54,7 @@ jest.mock('@redwoodjs/cli-helpers', () => {
         }
 
         for (const task of args.extraTasks) {
-          if (task && task.task) {
+          if (task?.task) {
             await task.task(ctx, undefined)
           }
         }

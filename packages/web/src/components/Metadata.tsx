@@ -36,7 +36,7 @@ const propToMetaTag = (
     // plain text
     const attributes = {
       [options['attr']]: parentKey,
-      content: parentValue as string,
+      content: parentValue,
     }
     return <meta {...attributes} />
   }

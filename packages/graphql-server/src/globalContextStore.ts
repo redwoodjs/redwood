@@ -13,5 +13,5 @@ export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
     CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
   }
-  return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
+  return CONTEXT_STORAGE
 }

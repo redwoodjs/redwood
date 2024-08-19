@@ -47,7 +47,7 @@ const processRenderRscStream = async (
 
     pipeable.on('end', () => {
       const resultBuffer = Buffer.concat(chunks)
-      const resultString = resultBuffer.toString('utf-8') as string
+      const resultString = resultBuffer.toString('utf-8')
       resolve(resultString)
     })
 
@@ -141,7 +141,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // becomes http://localhost:8910/about?foo=bar
     const fullUrl = getFullUrlForFlightRequest(req, props)
 
-    const pipeable = await renderRsc({
+    const pipeable = renderRsc({
       rscId,
       props,
       rsfId,

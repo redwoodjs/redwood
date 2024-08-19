@@ -85,7 +85,7 @@ function getSuperTokensAuth(customProviderHooks?: {
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
-    superTokensMockClient as SuperTokensAuth,
+    superTokensMockClient,
     customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {

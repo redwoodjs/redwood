@@ -73,7 +73,7 @@ function createAuthImplementation(netlifyIdentity: NetlifyIdentity) {
         // The client refresh function only actually refreshes token
         // when it's been expired. Don't panic
         await netlifyIdentity.refresh()
-        const user = await netlifyIdentity.currentUser()
+        const user = netlifyIdentity.currentUser()
         return user?.token?.access_token || null
       } catch {
         return null

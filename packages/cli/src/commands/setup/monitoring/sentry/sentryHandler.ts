@@ -66,11 +66,11 @@ export const handler = async ({ force }: Args) => {
           .split('\n')
 
         const handlerIndex = contentLines.findLastIndex((line) =>
-          /^export const handler = createGraphQLHandler\({/.test(line),
+          line.startsWith('export const handler = createGraphQLHandler({'),
         )
 
         const pluginsIndex = contentLines.findLastIndex((line) =>
-          /extraPlugins:/.test(line),
+          line.includes('extraPlugins:'),
         )
 
         if (handlerIndex === -1 || pluginsIndex !== -1) {
@@ -119,7 +119,7 @@ export const handler = async ({ force }: Args) => {
         )
 
         const boundaryOpenIndex = contentLines.findLastIndex((line) =>
-          /<FatalErrorBoundary page={FatalErrorPage}>/.test(line),
+          line.includes('<FatalErrorBoundary page={FatalErrorPage}>'),
         )
         contentLines.splice(
           boundaryOpenIndex,
@@ -128,7 +128,7 @@ export const handler = async ({ force }: Args) => {
         )
 
         const boundaryCloseIndex = contentLines.findLastIndex((line) =>
-          /<\/FatalErrorBoundary>/.test(line),
+          line.includes('</FatalErrorBoundary>'),
         )
         contentLines.splice(boundaryCloseIndex, 1, '</Sentry.ErrorBoundary>')
 

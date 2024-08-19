@@ -4,16 +4,17 @@ description: Deploy to AWS with Serverless Framework
 
 # Deploy to AWS with Serverless Framework
 
->⚠️ **Deprecated**
->As of Redwood v5, we are deprecating this deploy setup as an "officially" supported provider. This means:
->- For projects already using this deploy provider, there will be NO change at this time
->- Both the associated `setup` and `deploy` commands will remain in the framework as is; when setup is run, there will be a “deprecation” message
->- We will no longer run CI/CD on the Serverless-AWS deployments, which means we are no longer guaranteeing this deploy works with each new version
->- We are exploring better options to deploy directly to AWS Lambdas; the current deploy commands will not be removed until we find a replacement
+> ⚠️ **Deprecated**
+> As of Redwood v5, we are deprecating this deploy setup as an "officially" supported provider. This means:
 >
->For more details (e.g. why?) and current status, see the Forum post ["Deprecating support for Serverless Framework Deployments to AWS Lambdas"](https://community.redwoodjs.com/t/deprecating-support-for-serverless-framework-deployments-to-aws-lambdas/4755/10)
+> - For projects already using this deploy provider, there will be NO change at this time
+> - Both the associated `setup` and `deploy` commands will remain in the framework as is; when setup is run, there will be a “deprecation” message
+> - We will no longer run CI/CD on the Serverless-AWS deployments, which means we are no longer guaranteeing this deploy works with each new version
+> - We are exploring better options to deploy directly to AWS Lambdas; the current deploy commands will not be removed until we find a replacement
+>
+> For more details (e.g. why?) and current status, see the Forum post ["Deprecating support for Serverless Framework Deployments to AWS Lambdas"](https://community.redwoodjs.com/t/deprecating-support-for-serverless-framework-deployments-to-aws-lambdas/4755/10)
 
->The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
+> The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
 
 Yes, the name is confusing, but Serverless provides a very interesting option—deploy to your own cloud service account and skip the middleman entirely! By default, Serverless just orchestrates starting up services in your cloud provider of choice and pushing your code up to them. Any bill you receive is from your hosting provider (although many offer a generous free tier). You can optionally use the [Serverless Dashboard](https://www.serverless.com/dashboard/) to monitor your deploys and setup CI/CD to automatically deploy when pushing to your repo of choice. If you don't setup CI/CD you actually deploy from your development machine (or another designated machine you've setup to do the deployment).
 
@@ -64,7 +65,6 @@ Once that command completes you should see a message including the URL of your s
 
 From now on you can simply run `yarn rw deploy serverless` when you're ready to deploy (which will also be much faster).
 
-
 :::info
 Remember, if you add or generate new serverless functions (or endpoints), you'll need to update the configuration in your serverless.yml in `./api/serverless.yml`.
 
@@ -88,7 +88,7 @@ There are even more places you can get environment variables from, check out Ser
 
 To integrate your site into the Serverless Dashboard, there are two ways:
 
-1. Run `yarn serverless login` and a browser *should* open asking you to allow permission. However, in our experience, this command will fail nearly 50% of the time complaining about an invalid URL. If it *does* work you can then run `yarn serverless` in both the `api` and `web` directories to link to them an existing app in the Dashboard, or you'll be prompted to create a new one. Future deploys will now be monitored on the Dashboard.
+1. Run `yarn serverless login` and a browser _should_ open asking you to allow permission. However, in our experience, this command will fail nearly 50% of the time complaining about an invalid URL. If it _does_ work you can then run `yarn serverless` in both the `api` and `web` directories to link to them an existing app in the Dashboard, or you'll be prompted to create a new one. Future deploys will now be monitored on the Dashboard.
 2. You can manually add the `org` and `app` lines in `api/serverless.yml` and `web/serverless.yml`. You'll see example ones commented out near the top of the file.
 
 ## Environments Besides Production

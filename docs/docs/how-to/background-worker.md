@@ -83,10 +83,9 @@ export const signUp = async ({ input }) => {
 
   // The, send our task to the Faktory server
   const client = await faktory.connect()
-  await client.job('postSignupTask', { ...taskArgs, }).push()
+  await client.job('postSignupTask', { ...taskArgs }).push()
   await client.close()
 }
-
 ```
 
 That's it—we're done!

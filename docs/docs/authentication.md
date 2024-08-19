@@ -128,7 +128,6 @@ const Routes = () => {
     <Router>
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
-
       // highlight-next-line
       <PrivateSet unauthenticated="login">
         <Route path="/admin" page={AdminPage} name="admin" />
@@ -150,16 +149,13 @@ const Routes = () => {
       <Route path="/" page={HomePage} name="home" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/forbidden" page={ForbiddenPage} name="forbidden" />
-
       <PrivateSet unauthenticated="login">
         <Route path="/secret-page" page={SecretPage} name="secret" />
       </PrivateSet>
-
       // highlight-next-line
       <PrivateSet unauthenticated="forbidden" roles="admin">
         <Route path="/admin" page={AdminPage} name="admin" />
       </PrivateSet>
-
       // highlight-next-line
       <PrivateSet unauthenticated="forbidden" roles={['author', 'editor']}>
         <Route path="/posts" page={PostsPage} name="posts" />
@@ -187,7 +183,6 @@ export const handler = createGraphQLHandler({
   getCurrentUser,
   // ...
 })
-
 ```
 
 If you're using one of Redwood's official integrations, `authDecoder` comes from the corresponding integration package (in auth0's case, `@redwoodjs/auth-auth0-api`):

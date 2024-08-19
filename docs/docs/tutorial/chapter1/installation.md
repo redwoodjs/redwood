@@ -2,7 +2,6 @@
 
 We'll use yarn ([yarn](https://yarnpkg.com/getting-started/install) is a requirement) to create the basic structure of our app:
 
-
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
@@ -50,6 +49,6 @@ git add .
 git commit -m 'First commit'
 ```
 
-[git](https://git-scm.com/) is another of those concepts we assume you know, but you *can* complete the tutorial without it. Well, almost: you won't be able to deploy! At the end we'll be deploying to a provider that requires your codebase to be hosted in either [GitHub](https://github.com) or [GitLab](https://gitlab.com).
+[git](https://git-scm.com/) is another of those concepts we assume you know, but you _can_ complete the tutorial without it. Well, almost: you won't be able to deploy! At the end we'll be deploying to a provider that requires your codebase to be hosted in either [GitHub](https://github.com) or [GitLab](https://gitlab.com).
 
 If you're not worried about deployment for now, you can go ahead and complete the tutorial without using `git` at all.
