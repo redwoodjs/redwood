@@ -1,6 +1,6 @@
 # Background Jobs
 
-No one likes waiting in line. This is especially true of your website: users don't want to wait for things to load that don't directly impact the task they're trying to accomplish. For example, sending a "welcome" email when a new user signs up. The process of sending the email could as long or longer than the sum total of everything else that happens during that request. Why make the user wait for it? As long as they eventually get the email, everything is good.
+No one likes waiting in line. This is especially true of your website: users don't want to wait for things to load that don't directly impact the task they're trying to accomplish. For example, sending a "welcome" email when a new user signs up. The process of sending the email could take as long or longer than the sum total of everything else that happens during that request. Why make the user wait for it? As long as they eventually get the email, everything is good.
 
 ## Concepts
 
@@ -26,13 +26,15 @@ The job is completely self-contained and has everything it needs to perform its 
 - delay for an amount of time before running
 - run at a specific datetime in the future
 
-**Storage** is necessary so that your jobs are decoupled from your running application. With the included `PrismaAdapter` jobs are stored in your database. This allows you to scale everything independently: the api server (which is scheduling jobs), the database (which is storing the jobs ready to be run), and the job workers (which are executing the jobs).
+**Storage** is necessary so that your jobs are decoupled from your running application. The job system interfaces with storage via an **adapter**. With the included `PrismaAdapter`, jobs are stored in your database. This allows you to scale everything independently: the api server (which is scheduling jobs), the database (which is storing the jobs ready to be run), and the job workers (which are executing the jobs).
 
-**Execution** is handled by a job worker, which takes a job from storage, executes it, and then does something with the result, whether it was a success or failure.
+**Execution** is handled by a **job worker**, which takes a job from storage, executes it, and then does something with the result, whether it was a success or failure.
 
 :::info Job execution time is never guaranteed
 
-When scheduling a job, you're really saying "this is the earliest possible time I want this job to run": based on what other jobs are in the queue, and how busy the workers are, they may not get a chance to execute this one particiular job for an indeterminate amount of time. The only thing that's guaranteed is that it won't run any _earlier_ than the time you specify.
+When scheduling a job, you're really saying "this is the earliest possible time I want this job to run": based on what other jobs are in the queue, and how busy the workers are, they may not get a chance to execute this one particiular job for an indeterminate amount of time.
+
+The only thing that's guaranteed is that a job won't run any _earlier_ than the time you specify.
 
 :::
 
@@ -49,7 +51,7 @@ yarn rw setup jobs
 yarn rw prisma migrate dev
 ```
 
-This created `api/src/lib/jobs.js` (or `.ts`) with a sample config. You can leave this as is for now.
+This created `api/src/lib/jobs.js` (or `.ts`) with a sensible default config. You can leave this as is for now.
 
 ### Create a Job
 
@@ -78,9 +80,10 @@ You'll most likely be scheduling work as the result of one of your service funct
 
 ```js title="api/src/services/users/users.js"
 import { db } from 'src/lib/db'
-// highlight-next-line
+// highlight-start
 import { later } from 'src/lib/jobs'
 import { SampleJob } from 'src/jobs/SampleJob'
+// highlight-end
 
 export const createUser = ({ input }) => {
   const user = await db.user.create({ data: input })
@@ -90,9 +93,7 @@ export const createUser = ({ input }) => {
 }
 ```
 
-The second argument is an array of all the arguments your job should receive. The job itself defines them as normal, named arguments (like `userId`), but when you schedule you wrap them in an array (like `[user.id]`).
-
-The third argument is an optional object that defines a couple of options. In this case, the number of seconds to `wait` before this job will be run (60 seconds).
+The first argument is the job itself, the second argument is an array of all the arguments your job should receive. The job itself defines them as normal, named arguments (like `userId`), but when you schedule you wrap them in an array (like `[user.id]`). The third argument is an optional object that provides a couple of options. In this case, the number of seconds to `wait` before this job will be run (60 seconds).
 
 If you check your database you'll see your job is now listed in the `BackgroundJob` table:
 
@@ -108,7 +109,7 @@ yarn rw jobs work
 
 This process will stay attached to the terminal and show you debug log output as it looks for jobs to run. Note that since we scheduled our job to wait 60 seconds before running, the runner will not find a job to work on right away (unless it's already been a minute since you scheduled it!).
 
-That's the basics of jobs! Keep reading to get the details, including how you to run your job runners in production.
+That's the basics of jobs! Keep reading to get a more detailed walkthrough, followed by the API docs listing all the various options. We'll wrap up with a discussion of using jobs in a production environment.
 
 ## In-Depth Start
 
@@ -128,7 +129,26 @@ This will add a new model to your Prisma schema, and create a configuration file
 yarn rw prisma migrate dev
 ```
 
-Let's look at the config file. Comments have been removed for brevity:
+This added the following model:
+
+```prisma
+model BackgroundJob {
+  id        Int       @id @default(autoincrement())
+  attempts  Int       @default(0)
+  handler   String
+  queue     String
+  priority  Int
+  runAt     DateTime?
+  lockedAt  DateTime?
+  lockedBy  String?
+  lastError String?
+  failedAt  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+```
+
+Let's look at the config file that was generated. Comments have been removed for brevity:
 
 ```js
 import { PrismaAdapter, JobManager } from '@redwoodjs/jobs'
@@ -161,9 +181,9 @@ export const later = jobs.createScheduler({
 })
 ```
 
-Two variables are exported: one is an instance of the `JobManager` called `jobs` on which you'll call functions to create jobs. The other is `later` which is an instance of the `Scheduler`, which is responsible for getting your job into the storage system (out of the box this will be the database thanks to the `PrismaAdapter`).
+Two variables are exported: one is an instance of the `JobManager` called `jobs` on which you'll call functions to create jobs and schedulers. The other is `later` which is an instance of the `Scheduler`, which is responsible for getting your job into the storage system (out of the box this will be the database thanks to the `PrismaAdapter`).
 
-We'll go into more detail on this file later (see [Job Configuration](#job-configuration)), but what's there now is fine to get started creating a job.
+We'll go into more detail on this file later (see [JobManager Config](#jobmanager-config)), but what's there now is fine to get started creating a job.
 
 ### Creating New Jobs
 
@@ -173,11 +193,7 @@ We have a generator that creates a job in `api/src/jobs`:
 yarn rw g job SendWelcomeEmail
 ```
 
-Jobs are defined as a plain object and given to the `createJob()` function (which is called on the `jobs` export in the config file above).
-
-At a minimum, a job must contain the name of the `queue` the job should be saved to, and a function named `perform()` which contains the logic for your job. You can add additional properties to the object to support the task your job is performing, but `perform()` is what's invoked by the job worker that we'll see later.
-
-An example `SendWelcomeEmailJob` may look something like:
+Jobs are defined as a plain object and given to the `createJob()` function (which is called on the `jobs` export in the config file above). An example `SendWelcomeEmailJob` may look something like:
 
 ```js
 import { db } from 'src/lib/db'
@@ -195,7 +211,9 @@ export const SendWelcomeEmailJob = jobs.createJob({
 })
 ```
 
-Note that `perform()` can take any arguments you want, but it's a best practice to keep them as simple as possible. With the `PrismaAdapter` the arguments are stored in the database, so the list of arguments must be serializable to and from a string of JSON.
+At a minimum, a job must contain the name of the `queue` the job should be saved to, and a function named `perform()` which contains the logic for your job. You can add additional properties to the object to support the task your job is performing, but `perform()` is what's invoked by the job worker that we'll see later.
+
+Note that `perform()` can take any argument(s)s you want (or none at all), but it's a best practice to keep them as simple as possible. With the `PrismaAdapter` the arguments are stored in the database, so the list of arguments must be serializable to and from a string of JSON.
 
 :::info Keeping Arguments Simple
 
@@ -218,8 +236,10 @@ export const later = jobs.createScheduler({
 You call this function, passing the job, job arguments, and an optional options object when you want to schedule a job. Let's see how we'd schedule our welcome email to go out when a new user is created:
 
 ```js
-// highlight-next-line
+// highlight-start
+import { later } from 'src/lib/jobs'
 import { SendWelcomeEmailJob } from 'src/jobs/SendWelcomeEmailJob'
+// highlight-end
 
 export const createUser = async ({ input }) {
   const user = await db.user.create({ data: input })
@@ -247,7 +267,7 @@ later(MilleniumAnnouncementJob, [user.id], {
 
 As noted in the [Concepts](#concepts) section, a job is never _guaranteed_ to run at an exact time. The worker could be busy working on other jobs and can't get to yours just yet.
 
-If you absolutely, positively need your job to run right _now_ you can call your job's `perform` function directly in your code:
+If you absolutely, positively need your job to run right _now_ (with the knowledge that the user will be waiting for it to complete) you can call your job's `perform` function directly in your code:
 
 ```js
 await SampleEmailJob.perform(user.id)
@@ -274,13 +294,13 @@ If we were to query the `BackgroundJob` table after the job has been scheduled y
 }
 ```
 
-The `handler` field contains the name of the job, file path to find it, and the arguments its `perform()` function will receive.
-
 :::info
 
 Because we're using the `PrismaAdapter` here all jobs are stored in the database, but if you were using a different storage mechanism via a different adapter you would have to query those in a manner specific to that adapter's backend.
 
 :::
+
+The `handler` column contains the name of the job, file path to find it, and the arguments its `perform()` function will receive. Where did the `name` and `path` come from? We have a babel plugin that adds them to your job when they are built.
 
 ### Executing Jobs
 
@@ -290,13 +310,15 @@ In development you can start a job worker via the **job runner** from the comman
 yarn rw jobs work
 ```
 
-The runner is a sort of overseer that doesn't do any work itself, but spawns workers to actually execute the jobs. When starting in `work` mode a single worker will spin up and stay attached to the terminal and update you on the status of what it's doing:
+The runner is a sort of overseer that doesn't do any work itself, but spawns workers to actually execute the jobs. When starting in `work` mode your `workers` config will be used to start the workers and they will stay attached to the terminal, updating you on the status of what they're doing:
 
 ![image](/img/background-jobs/jobs-terminal.png)
 
 It checks the `BackgroundJob` table every few seconds for a new job and, if it finds one, locks it so that no other workers can have it, then calls your `perform()` function, passing it the arguments you gave when you scheduled it.
 
 If the job succeeds then by default it's removed the database (using the `PrismaAdapter`, other adapters behavior may vary). If the job fails, the job is un-locked in the database, the `runAt` is set to an incremental backoff time in the future, and `lastError` is updated with the error that occurred. The job will now be picked up in the future once the `runAt` time has passed and it'll try again.
+
+To stop the runner (and the workers it started), press `Ctrl-C` (or send `SIGINT`). The workers will gracefully shut down, waiting for their work to complete before exiting. If you don't wait to wait, hit `Ctrl-C` again (or send `SIGTERM`),
 
 There are a couple of additional modes that `rw jobs` can run in:
 
@@ -326,6 +348,8 @@ The rest of this doc describes more advanced usage, like:
 - And more!
 
 ## Configuration
+
+There are a bunch of ways to customize your jobs and the workers.
 
 ### JobManager Config
 
@@ -365,7 +389,7 @@ An array of available queue names that jobs can be placed in. By default, a sing
 
 #### `logger`
 
-The logger object for all internal logging of the job system itself. You can use this same logger in the `perform()` function of your job (by referencing `jobs.logger`) and then all of your log message will be aggregated together.
+The logger object for all internal logging of the job system itself and will fall back to `console` if you don't set it.
 
 #### `workers`
 
