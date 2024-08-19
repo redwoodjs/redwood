@@ -653,7 +653,7 @@ We don't need to make any changes to the "public" views (like `ArticleCell` and 
 
 Okay, let's take care of `updatePost` and `deletePost` now. Why couldn't we just do this?
 
-```javascript title="api/src/services/adminPosts/adminPosts.js
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 export const updatePost = ({ id, input }) => {
   return db.post.update({
     data: input,
@@ -667,7 +667,7 @@ Because like `findUnique()`, Prisma only wants to update records based on fields
 
 We could select the record first, make sure the user owns it, and only then let the `update()` commence:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 // highlight-next-line
 import { ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -689,7 +689,7 @@ We're using the `adminPost()` service function, rather than making another call 
 
 This works, but we'll need to do the same thing in `deletePost`. Let's extract that check for the post existence into a function:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 // highlight-start
 const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
@@ -713,7 +713,7 @@ export const updatePost = async ({ id, input }) => {
 
 Simple! Our final `adminPosts` service ends up looking like:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
