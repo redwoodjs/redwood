@@ -15,24 +15,23 @@ export type StandardScenario = ScenarioData<unknown>
 exports[`Single word default files > creates a single word function file > Test snapshot 1`] = `
 "import { SampleJob } from './SampleJob'
 
-describe('Sample', () => {
+describe('SampleJob', () => {
   it('should not throw any errors', async () => {
-    const job = new SampleJob()
-
-    await expect(job.perform()).resolves.not.toThrow()
+    await expect(SampleJob.perform()).resolves.not.toThrow()
   })
 })
 "
 `;
 
 exports[`Single word default files > creates a single word function file 1`] = `
-"import { RedwoodJob } from '@redwoodjs/jobs'
+"import { jobs } from 'src/lib/jobs'
 
-export class SampleJob extends RedwoodJob {
-  async perform() {
-    // job implementation here
-  }
-}
+export const SampleJob = jobs.createJob({
+  queue: 'default',
+  perform: async () => {
+    jobs.logger.info('SampleJob is performing...')
+  },
+})
 "
 `;
 

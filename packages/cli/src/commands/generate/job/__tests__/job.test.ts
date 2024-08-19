@@ -14,6 +14,7 @@ type WordFilesType = { [key: string]: string }
 describe('Single word default files', async () => {
   const files: WordFilesType = await jobGenerator.files({
     name: 'Sample',
+    queueName: 'default',
     tests: true,
     typescript: true,
   })
@@ -47,6 +48,7 @@ describe('multi-word files', () => {
   it('creates a multi word function file', async () => {
     const multiWordDefaultFiles = await jobGenerator.files({
       name: 'send-mail',
+      queueName: 'default',
       tests: false,
       typescript: true,
     })
@@ -64,6 +66,7 @@ describe('multi-word files', () => {
 describe('generation of js files', async () => {
   const jsFiles: WordFilesType = await jobGenerator.files({
     name: 'Sample',
+    queueName: 'default',
     tests: true,
     typescript: false,
   })
