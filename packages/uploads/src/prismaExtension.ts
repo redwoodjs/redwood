@@ -1,11 +1,8 @@
 import { PrismaClient } from '@prisma/client'
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
+import { Prisma as PrismaExtension } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 
-// local imports
-// import { PrismaClient } from './__tests__/prisma-client/index.js'
-// import type { Prisma } from './__tests__/prisma-client/index.js'
-// import type * as PrismaAll from './__tests__/prisma-client/index.js'
 import { fileToDataUri } from './fileSave.utils.js'
 import { generateSignedQueryParams } from './lib/signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
@@ -94,6 +91,11 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   for (const modelName in config) {
     // Guaranteed to have modelConfig, we're looping over config 🙄
     const modelConfig = config[modelName]
+
+    if (!modelConfig) {
+      continue
+    }
+
     const uploadFields = (
       Array.isArray(modelConfig.fields)
         ? modelConfig.fields
@@ -197,7 +199,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     }
   }
 
-  return Prisma.defineExtension((client) => {
+  return PrismaExtension.defineExtension((client) => {
     return client.$extends({
       name: 'redwood-upload-prisma-plugin',
       query: queryExtends,

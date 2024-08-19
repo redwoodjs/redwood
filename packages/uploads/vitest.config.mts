@@ -1,9 +1,10 @@
-import { defineConfig, configDefaults } from 'vitest/config'
-import { fileURLToPath } from 'url';
-import path from 'path';
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { defineConfig, configDefaults } from 'vitest/config'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   test: {
@@ -13,9 +14,12 @@ export default defineConfig({
     },
     globalSetup: ['vitest.setup.mts'],
     alias: {
-      // We alias prisma client, so that it doesn't interfere with other packages in the mono repo
+      // We alias prisma client, otherwise you'll get "prisma client not initialized"
+      '@prisma/client/extension': path.resolve(
+        __dirname,
+        '../../node_modules/@prisma/client/extension.js',
+      ),
       '@prisma/client': path.resolve(__dirname, 'src/__tests__/prisma-client'),
     },
   },
-
 })

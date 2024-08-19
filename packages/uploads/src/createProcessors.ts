@@ -47,11 +47,15 @@ export const createUploadProcessors = (
   Object.keys(uploadConfig).forEach((model) => {
     const modelKey = model as keyof typeof uploadConfig
 
-    const currentModelUploadFields = Array.isArray(
-      uploadConfig[modelKey].fields,
-    )
-      ? uploadConfig[modelKey].fields
-      : [uploadConfig[modelKey].fields]
+    const currentModelConfig = uploadConfig[modelKey]
+
+    if (!currentModelConfig) {
+      return
+    }
+
+    const currentModelUploadFields = Array.isArray(currentModelConfig.fields)
+      ? currentModelConfig.fields
+      : [currentModelConfig.fields]
 
     const capitalCaseModel = `${model.charAt(0).toUpperCase() + model.slice(1)}`
     const processorKey = `process${capitalCaseModel}Uploads` as keyof Processors
