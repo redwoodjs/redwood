@@ -8184,9 +8184,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/forms@workspace:packages/forms"
   dependencies:
-    "@babel/cli": "npm:7.24.8"
-    "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.25.0"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@testing-library/dom": "npm:9.3.4"
     "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
@@ -8194,13 +8192,15 @@ __metadata:
     "@types/pascalcase": "npm:1.0.3"
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
-    core-js: "npm:3.38.0"
+    concurrently: "npm:8.2.2"
     graphql: "npm:16.9.0"
     nodemon: "npm:3.1.4"
     pascalcase: "npm:1.0.0"
+    publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
     react-dom: "npm:19.0.0-rc-8269d55d-20240802"
     react-hook-form: "npm:7.52.2"
+    tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   peerDependencies:

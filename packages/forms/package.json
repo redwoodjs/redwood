@@ -7,31 +7,38 @@
     "directory": "packages/forms"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-forms.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn rw-fwtools-attw node16",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.25.0",
-    "core-js": "3.38.0",
     "graphql": "16.9.0",
     "pascalcase": "1.0.0",
     "react-hook-form": "7.52.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.8",
-    "@babel/core": "^7.22.20",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/dom": "9.3.4",
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
@@ -39,9 +46,12 @@
     "@types/pascalcase": "1.0.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
+    "concurrently": "8.2.2",
     "nodemon": "3.1.4",
+    "publint": "0.2.10",
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-dom": "19.0.0-rc-8269d55d-20240802",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

@@ -13,22 +13,29 @@ import { $ } from 'zx'
  * file back to its original state after the types have been generated - even if an error occurs.
  */
 export async function generateTypesCjs() {
-  await $`cp package.json package.json.bak`
-
   const packageJson: PackageJson = JSON.parse(
     readFileSync('./package.json', 'utf-8'),
   )
-  packageJson.type = 'commonjs'
-  writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
+
+  const isCommonJs = packageJson.type === 'commonjs'
+  const typeGenerateScript = isCommonJs ? 'types' : 'types-cjs'
+
+  if (!isCommonJs) {
+    await $`cp package.json package.json.bak`
+    packageJson.type = 'commonjs'
+    writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
+  }
 
   try {
-    await $`yarn build:types-cjs`
+    await $`yarn build:${typeGenerateScript}`.verbose(true)
   } catch (e: any) {
     console.error('---- Error building CJS types ----')
     process.exitCode = e.exitCode
     throw new Error(e)
   } finally {
-    await $`mv package.json.bak package.json`
+    if (!isCommonJs) {
+      await $`mv package.json.bak package.json`
+    }
   }
 }
 
@@ -37,7 +44,7 @@ export async function generateTypesCjs() {
  */
 export async function generateTypesEsm() {
   try {
-    await $`yarn build:types`
+    await $`yarn build:types`.verbose(true)
   } catch (e: any) {
     console.error('---- Error building ESM types ----')
     process.exitCode = e.exitCode

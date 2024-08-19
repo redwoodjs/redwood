@@ -9,7 +9,18 @@ interface Problem {
   resolutionKind?: string
 }
 
-export async function attw(): Promise<Problem[]> {
+interface Collection {
+  ignored: Problem[]
+  failed: Problem[]
+}
+
+export enum AttwMode {
+  All = 'all',
+  Bundler = 'bundler',
+  Node16 = 'node16',
+}
+
+export async function attw({ mode }: { mode: AttwMode }): Promise<Collection> {
   // We can't rely on directly running the attw binary because it's not
   // a direct dependency of the package that will ultimately use this.
   // Instead, we have to do a little work to find the attw binary and run it.
@@ -41,15 +52,41 @@ export async function attw(): Promise<Problem[]> {
   fs.unlinkSync(outputFileName)
   const json = JSON.parse(content)
 
-  // If no errors were found then return early
-  if (!json.analysis.problems || json.analysis.problems.length === 0) {
-    return []
+  const collection: Collection = {
+    ignored: [],
+    failed: [],
   }
 
-  // We don't care about node10 errors
-  const problems: Problem[] = json.analysis.problems.filter(
-    (problem: Problem) => problem.resolutionKind !== 'node10',
-  )
+  // If no errors were found then return early
+  if (!json.analysis.problems || json.analysis.problems.length === 0) {
+    return collection
+  }
 
-  return problems
+  // We filter out errors based on the mode
+  for (const problem of json.analysis.problems) {
+    switch (mode) {
+      // For all we just add all problems
+      case AttwMode.All:
+        collection.failed.push(problem)
+        break
+      // For bundler we only add bundler problems
+      case AttwMode.Bundler:
+        if (problem.resolutionKind === 'bundler') {
+          collection.failed.push(problem)
+        } else {
+          collection.ignored.push(problem)
+        }
+        break
+      // For node16 we only ignore node10 problems
+      case AttwMode.Node16:
+        if (problem.resolutionKind === 'node10') {
+          collection.ignored.push(problem)
+        } else {
+          collection.failed.push(problem)
+        }
+        break
+    }
+  }
+
+  return collection
 }
