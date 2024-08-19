@@ -11,11 +11,11 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
-import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
-import type { Worker } from '../core/Worker'
-import { WorkerConfigIndexNotFoundError } from '../errors'
-import { loadJobsManager } from '../loaders'
-import type { BasicLogger } from '../types'
+import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
+import type { Worker } from '../core/Worker.js'
+import { WorkerConfigIndexNotFoundError } from '../errors.js'
+import { loadJobsManager } from '../loaders.js'
+import type { BasicLogger } from '../types.js'
 
 loadEnvFiles()
 

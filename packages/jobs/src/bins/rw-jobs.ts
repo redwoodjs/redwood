@@ -15,9 +15,9 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
-import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts'
-import { loadJobsManager } from '../loaders'
-import type { Adapters, BasicLogger, WorkerConfig } from '../types'
+import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
+import { loadJobsManager } from '../loaders.js'
+import type { Adapters, BasicLogger, WorkerConfig } from '../types.js'
 
 export type NumWorkersConfig = [number, number][]
 

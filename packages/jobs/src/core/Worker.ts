@@ -2,7 +2,7 @@
 
 import { setTimeout } from 'node:timers'
 
-import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter'
+import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter.js'
 import {
   DEFAULT_DELETE_FAILED_JOBS,
   DEFAULT_DELETE_SUCCESSFUL_JOBS,
@@ -10,11 +10,11 @@ import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_MAX_RUNTIME,
   DEFAULT_SLEEP_DELAY,
-} from '../consts'
-import { AdapterRequiredError, QueuesRequiredError } from '../errors'
-import type { BasicLogger } from '../types'
+} from '../consts.js'
+import { AdapterRequiredError, QueuesRequiredError } from '../errors.js'
+import type { BasicLogger } from '../types.js'
 
-import { Executor } from './Executor'
+import { Executor } from './Executor.js'
 
 export interface WorkerOptions {
   // required

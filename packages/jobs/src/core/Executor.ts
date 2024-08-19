@@ -1,15 +1,15 @@
 // Used by the job runner to execute a job and track success or failure
 
-import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter'
+import type { BaseAdapter } from '../adapters/BaseAdapter/BaseAdapter.js'
 import {
   DEFAULT_MAX_ATTEMPTS,
   DEFAULT_DELETE_FAILED_JOBS,
   DEFAULT_DELETE_SUCCESSFUL_JOBS,
   DEFAULT_LOGGER,
-} from '../consts'
-import { AdapterRequiredError, JobRequiredError } from '../errors'
-import { loadJob } from '../loaders'
-import type { BaseJob, BasicLogger } from '../types'
+} from '../consts.js'
+import { AdapterRequiredError, JobRequiredError } from '../errors.js'
+import { loadJob } from '../loaders.js'
+import type { BaseJob, BasicLogger } from '../types.js'
 
 interface Options {
   adapter: BaseAdapter

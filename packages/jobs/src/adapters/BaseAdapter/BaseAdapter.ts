@@ -1,5 +1,5 @@
-import { DEFAULT_LOGGER } from '../../consts'
-import type { BaseJob, BasicLogger, PossibleBaseJob } from '../../types'
+import { DEFAULT_LOGGER } from '../../consts.js'
+import type { BaseJob, BasicLogger, PossibleBaseJob } from '../../types.js'
 
 // Arguments sent to an adapter to schedule a job
 export interface SchedulePayload {

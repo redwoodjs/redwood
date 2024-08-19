@@ -1,19 +1,19 @@
 import type {
   BaseAdapter,
   SchedulePayload,
-} from '../adapters/BaseAdapter/BaseAdapter'
+} from '../adapters/BaseAdapter/BaseAdapter.js'
 import {
   DEFAULT_LOGGER,
   DEFAULT_PRIORITY,
   DEFAULT_WAIT,
   DEFAULT_WAIT_UNTIL,
-} from '../consts'
+} from '../consts.js'
 import {
   AdapterNotConfiguredError,
   QueueNotDefinedError,
   SchedulingError,
-} from '../errors'
-import type { BasicLogger, Job, ScheduleJobOptions } from '../types'
+} from '../errors.js'
+import type { BasicLogger, Job, ScheduleJobOptions } from '../types.js'
 
 interface SchedulerConfig<TAdapter extends BaseAdapter> {
   adapter: TAdapter

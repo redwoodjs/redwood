@@ -3,10 +3,15 @@ import path from 'node:path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { JobManager } from './core/JobManager'
-import { JobsLibNotFoundError, JobNotFoundError } from './errors'
-import type { Adapters, BasicLogger, Job, JobComputedProperties } from './types'
-import { makeFilePath } from './util'
+import type { JobManager } from './core/JobManager.js'
+import { JobsLibNotFoundError, JobNotFoundError } from './errors.js'
+import type {
+  Adapters,
+  BasicLogger,
+  Job,
+  JobComputedProperties,
+} from './types.js'
+import { makeFilePath } from './util.js'
 
 /**
  * Loads the job manager from the users project

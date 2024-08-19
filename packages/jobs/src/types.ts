@@ -2,7 +2,7 @@
 // debug messages. RedwoodJob will fallback to use `console` if no
 // logger is passed in to RedwoodJob or any adapter. Luckily both Redwood's
 
-import type { BaseAdapter } from './adapters/BaseAdapter/BaseAdapter'
+import type { BaseAdapter } from './adapters/BaseAdapter/BaseAdapter.js'
 
 // Redwood's logger and the standard console logger conform to this shape.
 export interface BasicLogger {

@@ -1,4 +1,4 @@
-import { AdapterNotFoundError } from '../errors'
+import { AdapterNotFoundError } from '../errors.js'
 import type {
   Adapters,
   BasicLogger,
@@ -8,11 +8,11 @@ import type {
   JobManagerConfig,
   ScheduleJobOptions,
   WorkerConfig,
-} from '../types'
+} from '../types.js'
 
-import { Scheduler } from './Scheduler'
-import type { WorkerOptions } from './Worker'
-import { Worker } from './Worker'
+import { Scheduler } from './Scheduler.js'
+import type { WorkerOptions } from './Worker.js'
+import { Worker } from './Worker.js'
 
 export interface CreateWorkerArgs {
   index: number

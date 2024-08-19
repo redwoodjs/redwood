@@ -1,8 +1,8 @@
 import type { PrismaClient } from '@prisma/client'
 import { camelCase } from 'change-case'
 
-import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../../consts'
-import type { BaseJob } from '../../types'
+import { DEFAULT_MAX_RUNTIME, DEFAULT_MODEL_NAME } from '../../consts.js'
+import type { BaseJob } from '../../types.js'
 import type {
   BaseAdapterOptions,
   SchedulePayload,
@@ -10,10 +10,10 @@ import type {
   SuccessOptions,
   ErrorOptions,
   FailureOptions,
-} from '../BaseAdapter/BaseAdapter'
-import { BaseAdapter } from '../BaseAdapter/BaseAdapter'
+} from '../BaseAdapter/BaseAdapter.js'
+import { BaseAdapter } from '../BaseAdapter/BaseAdapter.js'
 
-import { ModelNameError } from './errors'
+import { ModelNameError } from './errors.js'
 
 export interface PrismaJob extends BaseJob {
   id: number
