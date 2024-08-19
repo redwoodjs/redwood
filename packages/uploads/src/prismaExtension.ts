@@ -14,7 +14,7 @@ type FilterOutDollarPrefixed<T> = T extends `$${string}`
     : T
 
 // Filter out $on, $connect, etc.
-type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
+export type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
 
 type PrismaModelFields<MName extends ModelNames> = keyof Prisma.Result<
   PrismaClient[MName],

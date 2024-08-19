@@ -1,6 +1,5 @@
 import { ulid } from 'ulid'
 
-import type { UploadsConfig } from './prismaExtension.js'
 import type { SaveOptionsOverride, StorageAdapter } from './StorageAdapter.js'
 
 // Assumes you pass in the graphql type
@@ -25,14 +24,16 @@ export const createFileListProcessor = (storage: StorageAdapter) => {
 This creates a processor for each model in the uploads config (i.e. tied to a model in the prisma schema)
 The processor will only handle single file uploads, not file lists.
 */
-export const createUploadProcessors = (
-  uploadConfig: UploadsConfig,
+export const createUploadProcessors = <
+  TUploadConfig extends Record<string, any>,
+>(
+  uploadConfig: TUploadConfig,
   storage: StorageAdapter,
 ) => {
-  type modelNamesInUploadConfig = keyof typeof uploadConfig
+  type modelNamesInUploadConfig = keyof TUploadConfig
 
   type uploadProcessorNames =
-    `process${Capitalize<modelNamesInUploadConfig>}Uploads`
+    `process${Capitalize<string & modelNamesInUploadConfig>}Uploads`
 
   type Processors = {
     [K in uploadProcessorNames]: <T extends Record<string, any>>(
