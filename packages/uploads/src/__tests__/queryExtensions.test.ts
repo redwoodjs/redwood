@@ -7,7 +7,7 @@ import type { UploadsConfig } from '../prismaExtension.js'
 import { setupUploads } from '../setup.js'
 
 // @MARK: use the local prisma client in the test
-import { PrismaClient } from './prisma-client'
+import { PrismaClient } from './prisma-client/index.js'
 
 vi.mock('node:fs/promises', () => ({
   default: {
@@ -91,11 +91,13 @@ describe('Query extensions', () => {
             {
               firstUpload: '/one/first.txt',
               secondUpload: '/one/second.txt',
+              // @ts-expect-error Intentional bro
               id: 'break',
             },
             {
               firstUpload: '/two/first.txt',
               secondUpload: '/two/second.txt',
+              // @ts-expect-error Intentional bro
               id: 'break2',
             },
           ],
@@ -123,6 +125,7 @@ describe('Query extensions', () => {
             {
               firstUpload: '/two/first.txt',
               secondUpload: '/two/second.txt',
+              // @ts-expect-error Intentional bro
               id: 'break2',
             },
           ],

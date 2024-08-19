@@ -5,7 +5,7 @@ import type { UploadsConfig } from '../prismaExtension.js'
 import { setupUploads } from '../setup.js'
 
 // @MARK: use the local prisma client in the test
-import { PrismaClient } from './prisma-client'
+import { PrismaClient } from './prisma-client/index.js'
 
 describe('Result extensions', () => {
   const uploadConfig: UploadsConfig = {
@@ -38,11 +38,30 @@ describe('Result extensions', () => {
         },
       })
 
-      const signedUrlDumbo = await dumbo.withSignedUrl(1000)
+      const signedUrlDumbo = await dumbo.withSignedUrl()
       expect(signedUrlDumbo.firstUpload).toContain('path=%2Fdumbo%2Ffirst.txt')
       expect(signedUrlDumbo.secondUpload).toContain(
         'path=%2Fdumbo%2Fsecond.txt',
       )
+    })
+
+    it('laskdng', async () => {
+      const customClient = new PrismaClient().$extends({
+        result: {
+          dumbo: {
+            helloJosh: {
+              compute() {
+                return () => {
+                  return 'hello josh'
+                }
+              },
+            },
+          },
+        },
+      })
+
+      const dumbo = await customClient.dumbo.findFirst({ where: { id: 1 } })
+      dumbo?.helloJosh()
     })
   })
 })
