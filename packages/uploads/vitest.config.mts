@@ -15,6 +15,7 @@ export default defineConfig({
     globalSetup: ['vitest.setup.mts'],
     alias: {
       // We alias prisma client, otherwise you'll get "prisma client not initialized"
+      // Important to have the subpath first here
       '@prisma/client/extension': path.resolve(
         __dirname,
         '../../node_modules/@prisma/client/extension.js',
