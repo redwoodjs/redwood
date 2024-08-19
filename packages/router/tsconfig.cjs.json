@@ -2,6 +2,6 @@
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "outDir": "dist/cjs",
-    "tsBuildInfoFile": "./tsconfig.types-cjs.tsbuildinfo"
+    "tsBuildInfoFile": "./tsconfig.cjs.tsbuildinfo"
   }
 }
