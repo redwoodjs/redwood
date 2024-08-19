@@ -2,10 +2,10 @@ import { PrismaClient } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import type * as runtime from '@prisma/client/runtime/library'
 
-// @TODO(TS): UploadsConfig behaves differently here.. probably
-// the prisma-override not quite there yet?
+// local imports
 // import { PrismaClient } from './__tests__/prisma-client/index.js'
-// import { Prisma } from './__tests__/prisma-client/index.js'
+// import type { Prisma } from './__tests__/prisma-client/index.js'
+// import type * as PrismaAll from './__tests__/prisma-client/index.js'
 import { fileToDataUri } from './fileSave.utils.js'
 import { generateSignedQueryParams } from './lib/signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
@@ -19,16 +19,24 @@ type FilterOutDollarPrefixed<T> = T extends `$${string}`
 // Filter out $on, $connect, etc.
 type ModelNames = FilterOutDollarPrefixed<keyof PrismaClient>
 
-export type UploadConfigForModel = {
-  // @TODO(TS): I want the fields here to be the fields of the model
-  fields: string[] | string
+type PrismaModelFields<MName extends ModelNames> = keyof Prisma.Result<
+  PrismaClient[MName],
+  any,
+  'findFirstOrThrow'
+>
+
+export type UploadConfigForModel<TPrismaModelName extends ModelNames> = {
+  fields:
+    | PrismaModelFields<TPrismaModelName>
+    | PrismaModelFields<TPrismaModelName>[]
   savePath?: ((args: unknown) => string) | string
   fileName?: (args: unknown) => string
   onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
-export type UploadsConfig<MName extends string | number | symbol = ModelNames> =
-  Record<MName, UploadConfigForModel>
+export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
+  [K in MNames]?: UploadConfigForModel<K>
+}
 
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
@@ -70,6 +78,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
     // Ideally there's a better way to do this
     const record =
+      // @ts-expect-error laskndglkn
       await prismaInstance[model as ModelNames].findFirstOrThrow(args)
 
     // Delete the file from the file system
@@ -84,10 +93,12 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   const resultExtends = {} as ResultExtends
   for (const modelName in config) {
     // Guaranteed to have modelConfig, we're looping over config 🙄
-    const modelConfig = config[modelName as MNames] as UploadConfigForModel
-    const uploadFields = Array.isArray(modelConfig.fields)
-      ? modelConfig.fields
-      : [modelConfig.fields]
+    const modelConfig = config[modelName]
+    const uploadFields = (
+      Array.isArray(modelConfig.fields)
+        ? modelConfig.fields
+        : [modelConfig.fields]
+    ) as string[]
 
     queryExtends[modelName] = {
       async create({ query, args }) {
