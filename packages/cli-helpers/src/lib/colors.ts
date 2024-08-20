@@ -18,5 +18,5 @@ export const colors = {
   tip: chalk.green,
   important: chalk.magenta,
   caution: chalk.red,
-  link: chalk.hex('#e8e8e8'),
+  link: chalk.underline,
 }
