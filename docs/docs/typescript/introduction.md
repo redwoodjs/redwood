@@ -140,13 +140,14 @@ const config = {
   rootDir: '../',
   preset: '@redwoodjs/testing/config/jest/web',
   moduleNameMapper: {
-    '^@startRW/(.*)$': '<rootDir>/web/src/components/admin/$1',
+    '^@adminUI/(.*)$':
+      '<rootDir>/web/src/components/modules/admin/common/ui/$1',
   },
 }
 
 module.exports = config
 ```
 
-::info
-There are 3 `jest.config.js` files within a Redwood project. There's one inside the `web` directory, one inside th `api` directory, and one at the root of the project. Since the alias I created is used within the `web` directory, I added the `moduleNameMapper` to the `jest.config.js` file within the `web` directory.
-::
+:::info
+There are 3 `jest.config.js` files within a Redwood project. There's one inside the `web` directory, one inside the `api` directory, and one at the root of the project. Since the alias I created is used within the `web` directory, I added the `moduleNameMapper` to the `jest.config.js` file within the `web` directory.
+:::
