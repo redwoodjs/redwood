@@ -186,7 +186,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             const signedUrlFields: Record<keyof typeof needs, string> = {}
 
             for (const field of uploadFields) {
-              if (!signedUrlFields[field]) {
+              if (!modelData[field]) {
                 continue
               }
 

@@ -3,8 +3,8 @@ import fs from 'node:fs/promises'
 import { describe, it, vi, expect, beforeEach } from 'vitest'
 
 import { FileSystemStorage } from '../FileSystemStorage.js'
-import type { UploadsConfig } from '../prismaExtension.js'
 import { setupUploads } from '../index.js'
+import type { UploadsConfig } from '../prismaExtension.js'
 
 // @MARK: use the local prisma client in the test
 import { PrismaClient } from './prisma-client/index.js'
@@ -19,6 +19,13 @@ vi.mock('node:fs/promises', () => ({
     copyFile: vi.fn(),
   },
 }))
+
+// For creation of FS adapter
+vi.mock('node:fs', () => ({
+  existsSync: vi.fn(() => true),
+  mkdirSync: vi.fn(),
+}))
+
 describe('Query extensions', () => {
   const uploadConfig: UploadsConfig = {
     dummy: {
