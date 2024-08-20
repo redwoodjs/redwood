@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 
+import { UrlSigner } from '../lib/signedUrls.js'
 import { MemoryStorage } from '../MemoryStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 import { setupUploads } from '../setup.js'
@@ -36,10 +37,10 @@ describe('Result extensions', () => {
     new MemoryStorage({
       baseDir: '/tmp',
     }),
-    {
+    new UrlSigner({
       endpoint: '/signed-url',
       secret: 'my-sekret',
-    },
+    }),
   )
 
   const prismaClient = new PrismaClient().$extends(prismaExtension)

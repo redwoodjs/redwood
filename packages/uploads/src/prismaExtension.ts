@@ -5,8 +5,7 @@ import type * as runtime from '@prisma/client/runtime/library'
 
 
 import { fileToDataUri } from './fileSave.utils.js'
-import type { SignedUrlSettings } from './lib/signedUrls.js'
-import { UrlSigner } from './lib/signedUrls.js'
+import type { UrlSigner } from './lib/signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
@@ -37,16 +36,11 @@ export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
   storageAdapter: StorageAdapter,
-  signedUrlSettings?: SignedUrlSettings,
+  urlSigner?: UrlSigner,
 ) => {
   // @TODO I think we can use Prisma.getExtensionContext(this)
   // instead of creating a new PrismaClient instance
   const prismaInstance = new PrismaClient()
-
-  let signedUrlGenerator: UrlSigner
-  if (signedUrlSettings) {
-    signedUrlGenerator = new UrlSigner(signedUrlSettings)
-  }
 
   type ResultExtends = {
     [K in MNames]: {
@@ -184,7 +178,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs,
         compute(modelData) {
           return (expiresIn?: number) => {
-            if (!signedUrlGenerator) {
+            if (!urlSigner) {
               throw new Error(
                 'Please supply signed url settings in setupUpload()',
               )
@@ -192,7 +186,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             const signedUrlFields: Record<keyof typeof needs, string> = {}
 
             for (const field of uploadFields) {
-              signedUrlFields[field] = signedUrlGenerator.generateSignedUrl(
+              signedUrlFields[field] = urlSigner.generateSignedUrl(
                 modelData[field] as string,
                 expiresIn,
               )
