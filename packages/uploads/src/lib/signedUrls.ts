@@ -20,19 +20,25 @@ export class UrlSigner {
       : `${getConfig().web.apiUrl}${endpoint}`
   }
 
-  generateSignature(filePath: string, expiresInMs?: number) {
+  generateSignature({
+    filePath,
+    expiresInMs,
+  }: {
+    filePath: string
+    expiresInMs?: number
+  }) {
     if (!this.secret) {
       throw new Error('Please configure the secret')
     }
 
     if (expiresInMs) {
-      const expires = Date.now() + expiresInMs
+      const expiry = Date.now() + expiresInMs
       const signature = crypto
         .createHmac('sha256', this.secret)
-        .update(`${filePath}:${expires}`)
+        .update(`${filePath}:${expiry}`)
         .digest('hex')
 
-      return { expires, signature }
+      return { expiry, signature }
     } else {
       // Does not expire
       const signature = crypto
@@ -42,7 +48,7 @@ export class UrlSigner {
 
       return {
         signature,
-        expires: undefined,
+        expiry: undefined,
       }
     }
   }
@@ -53,27 +59,27 @@ export class UrlSigner {
   validateSignature({
     signature,
     filePath,
-    expires,
+    expiry,
   }: {
     filePath: string
     signature: string
-    expires?: number
+    expiry?: number
   }) {
     if (!this.secret) {
       throw new Error('Please configure the secret')
     }
 
-    if (expires) {
+    if (expiry) {
       // No need to validate if the signature has expired
-      if (Date.now() > expires) {
+      if (Date.now() > expiry) {
         throw new Error('Signature has expired')
       }
     }
 
-    const validSignature = expires
+    const validSignature = expiry
       ? crypto
           .createHmac('sha256', this.secret)
-          .update(`${filePath}:${expires}`)
+          .update(`${filePath}:${expiry}`)
           .digest('hex')
       : crypto
           .createHmac('sha256', this.secret)
@@ -86,7 +92,10 @@ export class UrlSigner {
   }
 
   generateSignedUrl(filePath: string, expiresIn?: number) {
-    const { signature, expires } = this.generateSignature(filePath, expiresIn)
+    const { signature, expiry: expires } = this.generateSignature({
+      filePath,
+      expiresInMs: expiresIn,
+    })
 
     // This way you can pass in a path with params already
     const params = new URLSearchParams()

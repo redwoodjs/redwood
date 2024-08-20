@@ -1,32 +1,23 @@
-import {
-  beforeAll,
-  describe,
-  expect,
-  beforeEach,
-  afterEach,
-  vi,
-  it,
-  test,
-} from 'vitest'
+import { describe, expect, beforeEach, afterEach, vi, it, test } from 'vitest'
 
 import {
   EXPIRES_IN,
-  generateSignature,
-  generateSignedQueryParams,
+  UrlSigner,
   getSignedDetailsFromUrl,
-  validateSignature,
 } from '../lib/signedUrls.js'
 
-describe('Signed URLs', () => {
-  beforeAll(() => {
-    process.env.RW_UPLOADS_SECRET = 'bazinga'
-  })
+const signer = new UrlSigner({
+  // Doing this means we don't need to mock getConfig
+  endpoint: 'https://myapiside.com/access-signed-file',
+  secret: 'bazinga-3-32-151',
+})
 
+describe('UrlSigner', () => {
   it('Can creates a signature', () => {
-    const { signature, expires } = generateSignature(
-      '/tmp/myfile.txt',
-      EXPIRES_IN.days(5),
-    )
+    const { signature, expiry: expires } = signer.generateSignature({
+      filePath: '/tmp/myfile.txt',
+      expiresInMs: EXPIRES_IN.days(5),
+    })
 
     expect(signature).toBeDefined()
 
@@ -34,67 +25,68 @@ describe('Signed URLs', () => {
   })
 
   it('throws with correct error when wrong expires passed', () => {
-    const { signature, expires } = generateSignature(
-      '/tmp/myfile.txt',
-      EXPIRES_IN.days(1),
-    )
+    const { signature, expiry: expires } = signer.generateSignature({
+      filePath: '/tmp/myfile.txt',
+      expiresInMs: EXPIRES_IN.days(1),
+    })
 
     expect(() =>
-      validateSignature({
+      signer.validateSignature({
         filePath: '/tmp/myfile.txt',
         signature,
-        expires,
+        expiry: expires,
       }),
     ).not.toThrow()
 
     expect(() =>
-      validateSignature({
+      signer.validateSignature({
         filePath: '/tmp/myfile.txt',
         signature,
-        expires: 12512351,
+        expiry: 12512351,
       }),
     ).toThrowError('Signature has expired')
   })
 
   it('Throws an invalid signature when signature is wrong', () => {
-    const { signature, expires } = generateSignature(
-      '/tmp/myfile.txt',
-      EXPIRES_IN.days(1),
-    )
+    const { signature, expiry } = signer.generateSignature({
+      filePath: '/tmp/myfile.txt',
+      expiresInMs: EXPIRES_IN.days(1),
+    })
 
     expect(() =>
-      validateSignature({
+      signer.validateSignature({
         filePath: '/tmp/myfile.txt',
         signature,
-        expires,
+        expiry,
       }),
     ).not.toThrow()
 
     expect(() =>
-      validateSignature({
+      signer.validateSignature({
         filePath: '/tmp/myfile.txt',
         signature: 'im-the-wrong-signature',
-        expires,
+        expiry,
       }),
     ).toThrowError('Invalid signature')
   })
 
   it('Throws an invalid signature when file path is wrong', () => {
-    const { signature, expires } = generateSignature(
-      '/tmp/myfile.txt',
-      EXPIRES_IN.days(20),
-    )
+    const { signature, expiry } = signer.generateSignature({
+      filePath: '/tmp/myfile.txt',
+      expiresInMs: EXPIRES_IN.days(20),
+    })
     expect(() =>
-      validateSignature({
+      signer.validateSignature({
         filePath: '/tmp/some-other-file.txt',
         signature,
-        expires,
+        expiry,
       }),
     ).toThrowError('Invalid signature')
   })
 })
 
 describe('Expired signature', () => {
+  // Seprate, so we can mock the times
   beforeEach(() => {
     vi.useFakeTimers()
   })
@@ -105,16 +97,16 @@ describe('Expired signature', () => {
 
   it('throws an error when the signature has expired', () => {
     const filePath = '/bazinga/kittens.png'
-    const { signature, expires } = generateSignature(
+    const { signature, expiry } = signer.generateSignature({
       filePath,
-      EXPIRES_IN.minutes(15),
-    )
+      expiresInMs: EXPIRES_IN.minutes(15),
+    })
 
     const validation = () =>
-      validateSignature({
+      signer.validateSignature({
         filePath,
         signature,
-        expires,
+        expiry,
       })
 
     expect(validation).not.toThrow()
@@ -138,15 +130,15 @@ test('Parses details related to signatures from a url string', () => {
 })
 
 test('Generates a signed url', () => {
-  const signedQueryParams = generateSignedQueryParams('/files/bazinga', {
-    filePath: '/path/to/hello.txt',
-    expiresIn: EXPIRES_IN.days(1),
-  })
+  const signedUrl = signer.generateSignedUrl(
+    '/files/bazinga',
+    EXPIRES_IN.days(1),
+  )
 
-  expect(signedQueryParams).toContain('/files/bazinga?s=')
-  expect(signedQueryParams).toContain('s=')
-  expect(signedQueryParams).toContain('expires=')
-  expect(signedQueryParams).toContain('path=') // The actual file path
+  expect(signedUrl).toContain('https://myapiside.com/access-signed-file?s=')
+  expect(signedUrl).toMatch(/s=.*/)
+  expect(signedUrl).toMatch(/expires=[0-9]+/)
+  expect(signedUrl).toContain(`path=${encodeURIComponent('/files/bazinga')}`) // The actual file path
 })
 
 // Util functions to make the tests more readable
