@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-// import * as worker from '../worker'
-
 describe('worker', () => {
+  // TODO: Consider adding tests
   it('placeholder', () => {
     expect(true).toBeTruthy()
   })

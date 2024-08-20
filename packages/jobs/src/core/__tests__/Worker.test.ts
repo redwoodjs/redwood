@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, vi, it } from 'vitest'
 
-import { DEFAULT_LOGGER } from '../../consts'
-import * as errors from '../../errors'
-import { Executor } from '../Executor'
-import { Worker } from '../Worker'
+import { DEFAULT_LOGGER } from '../../consts.js'
+import * as errors from '../../errors.js'
+import { Executor } from '../Executor.js'
+import { Worker } from '../Worker.js'
 
-import { mockLogger } from './mocks'
+import { mockLogger } from './mocks.js'
 
 // don't execute any code inside Executor, just spy on whether functions are
 // called

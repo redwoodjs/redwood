@@ -1,10 +1,10 @@
 import type { PrismaClient } from '@prisma/client'
 import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
-import { DEFAULT_MODEL_NAME } from '../../../consts'
-import { mockLogger } from '../../../core/__tests__/mocks'
-import * as errors from '../errors'
-import { PrismaAdapter } from '../PrismaAdapter'
+import { DEFAULT_MODEL_NAME } from '../../../consts.js'
+import { mockLogger } from '../../../core/__tests__/mocks.js'
+import * as errors from '../errors.js'
+import { PrismaAdapter } from '../PrismaAdapter.js'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 

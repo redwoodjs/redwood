@@ -1,9 +1,9 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest'
 
-import * as errors from '../../errors'
-import { Scheduler } from '../Scheduler'
+import * as errors from '../../errors.js'
+import { Scheduler } from '../Scheduler.js'
 
-import { mockAdapter, mockLogger } from './mocks'
+import { mockAdapter, mockLogger } from './mocks.js'
 
 vi.useFakeTimers()
 

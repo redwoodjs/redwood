@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import path from 'node:path'
 
-import { buildNumWorkers, startWorkers } from '../rw-jobs'
-import { mockLogger } from '../../core/__tests__/mocks'
+import { mockLogger } from '../../core/__tests__/mocks.js'
+import { buildNumWorkers, startWorkers } from '../rw-jobs.js'
 
 vi.mock('@redwoodjs/cli-helpers/loadEnvFiles', () => {
   return {

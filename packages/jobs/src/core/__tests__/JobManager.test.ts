@@ -1,9 +1,9 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest'
 
-import { JobManager } from '../JobManager'
-import { Scheduler } from '../Scheduler'
+import { JobManager } from '../JobManager.js'
+import { Scheduler } from '../Scheduler.js'
 
-import { mockAdapter, mockLogger } from './mocks'
+import { mockAdapter, mockLogger } from './mocks.js'
 
 vi.mock('../Scheduler')
 

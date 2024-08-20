@@ -1,8 +1,8 @@
-import { describe, expect, vi, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-import { BaseAdapter } from '../BaseAdapter'
-import type { BaseAdapterOptions } from '../BaseAdapter'
-import { mockLogger } from '../../../core/__tests__/mocks'
+import { mockLogger } from '../../../core/__tests__/mocks.js'
+import { BaseAdapter } from '../BaseAdapter.js'
+import type { BaseAdapterOptions } from '../BaseAdapter.js'
 
 interface TestAdapterOptions extends BaseAdapterOptions {
   foo: string
