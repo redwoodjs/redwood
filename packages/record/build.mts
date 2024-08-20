@@ -1,6 +1,5 @@
-import { writeFileSync } from 'node:fs'
-
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
+import { insertCommonJsPackageJson } from '@redwoodjs/framework-tools/generateTypes'
 
 // ESM build
 await build({
@@ -17,7 +16,6 @@ await build({
     outdir: 'dist/cjs',
   },
 })
-
-// Place a package.json file with `type: commonjs` in the 'dist/cjs' folder so that
-// all files are considered CommonJS modules.
-writeFileSync('dist/cjs/package.json', JSON.stringify({ type: 'commonjs' }))
+await insertCommonJsPackageJson({
+  buildFileUrl: import.meta.url,
+})
