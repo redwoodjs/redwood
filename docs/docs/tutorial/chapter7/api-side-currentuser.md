@@ -681,7 +681,7 @@ export const updatePost = async ({ id, input }) => {
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
-// highlight-end
+  // highlight-end
 }
 ```
 

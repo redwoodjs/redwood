@@ -16,6 +16,8 @@ test.beforeAll(async ({ browser }) => {
   await page.getByLabel('Username').fill(testUser.email)
   await page.getByLabel('Password').fill(testUser.password)
 
+  await page.waitForTimeout(300)
+
   await page.getByRole('button', { name: 'Sign Up' }).click()
 
   // Wait for either...
@@ -172,9 +174,24 @@ test("'use client' cell navigation", async ({ page }) => {
 })
 
 test('Server Cell', async ({ page }) => {
-  await page.goto('/user-examples/1')
+  await page.goto('/user-examples')
 
-  const h1 = await page.locator('h1').innerHTML()
+  let h1 = await page.locator('h1').innerHTML()
+  expect(h1).toMatch(/UserExamples - userExamples/)
+
+  await expect(page.getByText('Email')).toBeVisible()
+  await expect(page.getByText('jackie@example.com')).toBeVisible()
+
+  const row = page
+    .locator('tr')
+    .filter({ hasText: 'jackie@example.com' })
+    .first()
+  const showLink = row.locator('a').filter({ hasText: 'SHOW' }).first()
+  await showLink.click()
+
+  page.waitForURL(/\/user-examples\/\d/)
+
+  h1 = await page.locator('h1').innerHTML()
   expect(h1).toMatch(/UserExamples - userExamples/)
 
   await expect(page.getByText('Email')).toBeVisible()
