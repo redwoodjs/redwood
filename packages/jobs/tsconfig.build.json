@@ -1,10 +1,12 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "moduleResolution": "Node16",
-    "module": "Node16"
+    "module": "Node16",
+    "tsBuildInfoFile": "./tsconfig.build.tsbuildinfo"
   },
-  "include": ["."],
-  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__tests__/fixtures"],
+  "include": ["src"],
   "references": [{ "path": "../cli-helpers" }, { "path": "../project-config" }]
 }
