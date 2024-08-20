@@ -14,7 +14,11 @@ If we want the email to be send asynchonously, we can shuttle that process off i
 
 The user's response is returned much quicker, and the email is sent by another process, literally running in the background. All of the logic around sending the email is packaged up as a **job** and a **job worker** is responsible for executing it.
 
-The job is completely self-contained and has everything it needs to perform its task. There are three components to the background job system in Redwood:
+Each job is completely self-contained and has everything it needs to perform its own task.
+
+### Overview
+
+There are three components to the background job system in Redwood:
 
 1. Scheduling
 2. Storage
@@ -38,9 +42,21 @@ The only thing that's guaranteed is that a job won't run any _earlier_ than the 
 
 :::
 
+### Queues
+
+Jobs are organized by a named **queue**. This is simply a string and has no special significance, other than letting you group jobs. Why group them? So that you can potentially have workers with different configruations working on them. Let's say you send a lot of emails, and you find that among all your other jobs, emails are starting to be noticeably delayed when sending. You can start assigning those jobs to the "email" queue and create a new worker group that _only_ focuses on jobs in that queue so that they're sent in a more timely manner.
+
+Jobs are sorted by **priority** before being selected to be worked on. Lower numbers mean higher priority:
+
+![image](/img/background-jobs/jobs-queues.png)
+
+You can also increase the number of workers in a group. If we bumped the group working on the "default" queue to 2 and started our new "email" group with 1 worker, once those workers started we would see them working on the following jobs:
+
+![image](/img/background-jobs/jobs-workers.png)
+
 ## Quick Start
 
-We'll get into more detail later, but if you just to get up and running quickly, here we go.
+Start here if you want to get up and running with jobs as quickly as possible and worry about the details later.
 
 ### Setup
 
@@ -94,10 +110,6 @@ export const createUser = ({ input }) => {
 ```
 
 The first argument is the job itself, the second argument is an array of all the arguments your job should receive. The job itself defines them as normal, named arguments (like `userId`), but when you schedule you wrap them in an array (like `[user.id]`). The third argument is an optional object that provides a couple of options. In this case, the number of seconds to `wait` before this job will be run (60 seconds).
-
-If you check your database you'll see your job is now listed in the `BackgroundJob` table:
-
-![image](/img/background-jobs/jobs-db.png)
 
 ### Executing a Job
 
@@ -275,23 +287,27 @@ await SampleEmailJob.perform(user.id)
 
 :::
 
-If we were to query the `BackgroundJob` table after the job has been scheduled you'd see a new row:
+If we were to query the `BackgroundJob` table after the job has been scheduled you'd see a new row. We can use the Redwood Console to query the table from the command line:
 
 ```js
-{
-  id: 132,
-  attempts: 0,
-  handler: '{"name":"SendWelcomeEmailJob",path:"SendWelcomeEmailJob/SendWelcomeEmailJob","args":[335]}',
-  queue: 'default',
-  priority: 50,
-  runAt: 2024-07-12T22:27:51.085Z,
-  lockedAt: null,
-  lockedBy: null,
-  lastError: null,
-  failedAt: null,
-  createdAt: 2024-07-12T22:27:51.125Z,
-  updatedAt: 2024-07-12T22:27:51.125Z
-}
+% yarn rw console
+> db.backgroundJob.findMany()
+[
+  {
+    id: 1,
+    attempts: 0,
+    handler: '{"name":"SendWelcomeEmailJob",path:"SendWelcomeEmailJob/SendWelcomeEmailJob","args":[335]}',
+    queue: 'default',
+    priority: 50,
+    runAt: 2024-07-12T22:27:51.085Z,
+    lockedAt: null,
+    lockedBy: null,
+    lastError: null,
+    failedAt: null,
+    createdAt: 2024-07-12T22:27:51.125Z,
+    updatedAt: 2024-07-12T22:27:51.125Z
+  }
+]
 ```
 
 :::info
@@ -301,6 +317,12 @@ Because we're using the `PrismaAdapter` here all jobs are stored in the database
 :::
 
 The `handler` column contains the name of the job, file path to find it, and the arguments its `perform()` function will receive. Where did the `name` and `path` come from? We have a babel plugin that adds them to your job when they are built.
+
+:::warning Jobs Must Be Built
+
+Jobs are run from the `api/dist` directory, which will exist only after running `yarn rw build api` or `yarn rw dev`. If you are working on a job in development, you're probably running `yarn rw dev` anyway. But just be aware that if the dev server is _not_ running then any changes to your job will not be reflected unless you run `yarn rw build api` (or start the dev server) to compile your job into `api/dist`.
+
+:::
 
 ### Executing Jobs
 
@@ -426,11 +448,11 @@ export const later = jobs.createScheduler({
 ```
 
 - `adapter` : **[required]** the name of the adapter this scheudler will use to schedule jobs. Must be one of the keys that you gave to the `adapters` option on the JobManager itself.
-- `logger` : the logger to use when scheduling jobs. If not provided, defaults to the `logger` set on the JobManager.
+- `logger` : the logger to use for this instance of the scheduler. If not provided, defaults to the `logger` set on the `JobManager`.
 
 #### Scheduling Options
 
-When using the scheduler to scheduled a job you can pass options in an optional third argument:
+When using the scheduler to schedule a job you can pass options in an optional third argument:
 
 ```js
 later(SampleJob, [user.id], { wait: 300 })
@@ -438,6 +460,8 @@ later(SampleJob, [user.id], { wait: 300 })
 
 - `wait`: number of seconds to wait before the job will run
 - `waitUntil`: a specific `Date` in the future to run at
+
+If you don't pass any options then the job will be defaulted to run as soon as possible, ie: `new Date()`
 
 ### Job Config
 
@@ -450,7 +474,7 @@ export const SendWelcomeEmailJob = jobs.createJob({
   // highlight-start
   queue: 'email',
   priority: 1,
-  // hightlightend
+  // highlight-end
   perform: async (userId) => {
     // job details...
   },
@@ -458,11 +482,11 @@ export const SendWelcomeEmailJob = jobs.createJob({
 ```
 
 - `queue` : **[required]** the name of the queue that this job will be placed in. Must be one of the strings you assigned to `queues` array when you set up the `JobManager`.
-- `priority` : within a single queue you can have jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. The default priority is `50`. A lower number is _higher_ in priority than a lower number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`.
+- `priority` : within a queue you can have jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. A lower number is _higher_ in priority than a lower number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`. If you don't override it here, the default priority is `50`.
 
 ### Worker Config
 
-This is the largest section of the `JobManager` config object. This options tell the workers how to behave when looking for and executing jobs.
+This is the largest section of the `JobManager` config object. This options array tell the workers how to behave when looking for and executing jobs.
 
 ```js
 export const jobs = new JobManager({
@@ -488,18 +512,18 @@ This is an array of objects. Each object represents the config for a single "gro
 - `adapter` : **[required]** the name of the adapter this worker group will use. Must be one of the keys that you gave to the `adapters` option on the `JobManager` itself.
 - `logger` : the logger to use when working on jobs. If not provided, defaults to the `logger` set on the `JobManager`. You can use this logger in the `perform()` function of your job by accessing `jobs.logger`
 - queue : **[required]** the named queue(s) in which this worker group will watch for jobs. There is a reserved `'*'` value you can use which means "all queues." This can be an array of queues as well: `['default', 'email']` for example.
-- `count` : **required** the number of workers to start using this config.
-- `maxAttempts`: the maximum number of times to retry a job before giving up. Retries are handled with an exponential backoff in retry time, equal to the number of previous attempts \*\* 4. After this number, a job is considered "failed" and will not be re-attempted. Default: `24`
-- `maxRuntime` : the maximum amount of time, in seconds, to try running a job before another worker will pick it up and try again. It's up to you to make sure your job doesn't run for longer than this amount of time! Default: 14,400 seconds (4 hours)
-- `deleteFailedJobs` : when a job has failed (maximum number of retries has occured) you can keep the job in the database, or delete it. Default: `false`
-- `deleteSuccessfulobs` : when a job has succeeded, you can keep the job in the database, or delete it. It's generally assumed that your jobs _will_ succeed so it usually makes sense to clear them out and keep the queue lean. Default: `true`
-- `sleepDelay` : the amount of time, in seconds, to check the queue for another job to run. Too low and you'll be thrashing your storage system looking for jobs, too high and you start to have a long delay before any job is run. Default: `5`
+- `count` : **[required]** the number of workers to start with this config.
+- `maxAttempts`: the maximum number of times to retry a job before giving up. A job that throws an error will be set to retry in the future with an exponential backoff in time equal to the number of previous attempts \*\* 4. After this number, a job is considered "failed" and will not be re-attempted. Default: `24`.
+- `maxRuntime` : the maximum amount of time, in seconds, to try running a job before another worker will pick it up and try again. It's up to you to make sure your job doesn't run for longer than this amount of time! Default: `14_400` (4 hours).
+- `deleteFailedJobs` : when a job has failed (maximum number of retries has occured) you can keep the job in the database, or delete it. Default: `false`.
+- `deleteSuccessfulobs` : when a job has succeeded, you can keep the job in the database, or delete it. It's generally assumed that your jobs _will_ succeed so it usually makes sense to clear them out and keep the queue lean. Default: `true`.
+- `sleepDelay` : the amount of time, in seconds, to check the queue for another job to run. Too low and you'll be thrashing your storage system looking for jobs, too high and you start to have a long delay before any job is run. Default: `5`.
 
 See the next section for advanced usage examples, like multiple worker groups.
 
 ## Job Workers
 
-A job worker actually executes your jobs. The workers will ask the adapter to find a job to work on. The adapter will mark the job as locked (the process name and a timestamp is set on the job) and then the worker will call `perform()` on your job, passing in any args that were given to `performLater()`. The behavior of what happens when the job succeeds or fails depends on the config options you set in the `JobManager`. By default, successful jobs are removed from storage and failed jobs and kept around so you can diagnose what happened.
+A job worker actually executes your jobs. The workers will ask the adapter to find a job to work on. The adapter will mark the job as locked (the process name and a timestamp is set on the job) and then the worker will call `perform()` on your job, passing in any args that were given when you scheduled it. The behavior of what happens when the job succeeds or fails depends on the config options you set in the `JobManager`. By default, successful jobs are removed from storage and failed jobs and kept around so you can diagnose what happened.
 
 The runner has several modes it can start in depending on how you want it to behave.
 
@@ -511,7 +535,7 @@ These modes are ideal when you're creating a job and want to be sure it runs cor
 yarn rw jobs work
 ```
 
-This process will stay attached the console and continually look for new jobs and execute them as they are found. The log level is set to `debug` by default so you'll see everything. Pressing Ctrl-C to cancel the process (sending SIGINT) will start a graceful shutdown: the workers will complete any work they're in the middle of before exiting. To cancel immediately, hit Ctrl-C again (or send SIGTERM) and they'll stop in the middle of what they're doing. Note that this could leave locked jobs in the database, but they will be picked back up again if a new worker starts with the same name as the one that locked the process. They'll also be picked up automatically after `maxRuntime` has expired, even if they are still locked.
+This process will stay attached the console and continually look for new jobs and execute them as they are found. The log level is set to `debug` by default so you'll see everything. Pressing `Ctrl-C` to cancel the process (sending `SIGINT`) will start a graceful shutdown: the workers will complete any work they're in the middle of before exiting. To cancel immediately, hit `Ctrl-C` again (or send `SIGTERM`) and they'll stop in the middle of what they're doing. Note that this could leave locked jobs in the database, but they will be picked back up again if a new worker starts with the same name as the one that locked the process. They'll also be picked up automatically after `maxRuntime` has expired, even if they are still locked.
 
 :::caution Long running jobs
 
@@ -545,15 +569,15 @@ In production you'll want your job workers running forever in the background. Fo
 yarn rw jobs start
 ```
 
-That will start a single worker, watching all queues, and then detatch it from the console. If you care about the output of that worker then you'll want to have configured a logger that writes to the filesystem or sends to a third party log aggregator.
+That will start a number of workers determined by the `workers` config on the `JobManager` and then detatch them from the console. If you care about the output of that worker then you'll want to have configured a logger that writes to the filesystem or sends to a third party log aggregator.
 
-To stop the worker:
+To stop the workers:
 
 ```bash
 yarn rw jobs stop
 ```
 
-Or to restart on that's already running:
+Or to restart any that are already running:
 
 ```bash
 yarn rw jobs restart
@@ -561,7 +585,7 @@ yarn rw jobs restart
 
 ### Multiple Workers
 
-With the default configuration options generated with the `yarn rw setup jobs` command, you'll have one worker group. If you simply want more workers that use the same `adapter` and `queue` settings, just increase the `count`:
+With the default configuration options generated with the `yarn rw setup jobs` command you'll have one worker group. If you simply want more workers that use the same `adapter` and `queue` settings, increase the `count`:
 
 ```js
 export const jobs = new JobManager({
@@ -624,11 +648,21 @@ export const jobs = new JobManager({
 })
 ```
 
-Here, we have 2 workers working on the "default" queue and 1 worker looking at the "email" queue (which will only try a job once, only wait 30 seconds for it to finish, and delete the job if it fails). You can also have different worker groups using different adapters. For example, you may have store and work on some jobs in your database using the `PrismaAdapter` and some jobs/workers using a `RedisAdapter`.
+Here, we have 2 workers working on the "default" queue and 1 worker looking at the "email" queue (which will only try a job once, wait 30 seconds for it to finish, and delete the job if it fails). You can also have different worker groups using different adapters. For example, you may have store and work on some jobs in your database using the `PrismaAdapter` and some jobs/workers using a `RedisAdapter`.
 
 :::info
 
-We don't currently provide a `RedisAdapter` but plan to add one soon!
+We don't currently provide a `RedisAdapter` but plan to add one soon! You'll want to create additional schedulers to use any other adapters as well:
+
+```js
+export const prismaLater = jobs.createScheduler({
+  adapter: 'prisma',
+})
+
+export const redisLater = jobs.createScheduler({
+  adapter: 'redis',
+})
+```
 
 :::
 
@@ -660,24 +694,30 @@ Of course if you have a process monitor system watching your workers you'll to u
 
 As noted above, although the workers are started and detached using the `yarn rw jobs start` command, there is nothing to monitor those workers to make sure they keep running. To do that, you'll want to start the workers yourself (or have your process monitor start them) using command line flags.
 
-You can do this with the `yarn rw-jobs-worker` command. To start a single worker, using the first `workers` config object, would run:
+You can do this with the `yarn rw-jobs-worker` command. The flags passed to the script tell it which worker group config to use to start itself, and which `id` to give this worker (if you're running more than one). To start a single worker, using the first `workers` config object, you would run:
 
 ```bash
 yarn rw-jobs-worker --index=0 --id=0
 ```
 
+:::info
+
+The job runner started with `yarn rw jobs start` runs this same command behind the scenes for you, keeping it attached or detatched depending on if you start in `work` or `start` mode!
+
+:::
+
 ### Flags
 
-- `--index` : a number that represents the index of the `workers` config option you passed to the `JobManager`. Setting this to `0`, for example, uses the first object in the array to set all config options for the worker.
-- `--id` : a number identifier that's set as part of the process name. For example, starting a worker with `--id=0` and then inspecting your process list will show one running named `rw-job-worker.queue-name.0`. Using `yarn rw-jobs-worker` only ever starts a single instance, so if your config had a `count` of `2` you'd need to run the command twice, one with `--id=0` and a second time with `--id=1`.
+- `--index` : a number that represents the index of the `workers` config array you passed to the `JobManager`. Setting this to `0`, for example, uses the first object in the array to set all config options for the worker.
+- `--id` : a number identifier that's set as part of the process name. Starting a worker with `--id=0` and then inspecting your process list will show one running named `rw-job-worker.queue-name.0`. Using `yarn rw-jobs-worker` only ever starts a single instance, so if your config had a `count` of `2` you'd need to run the command twice, once with `--id=0` and a second time with `--id=1`.
 - `--workoff` : a boolean that will execute all currently available jobs and then cause the worker to exit. Defaults to `false`
-- `--clear` : a boolean that will remove all jobs from the queue. Defaults to `false`
+- `--clear` : a boolean that starts a worker to remove all jobs from all queues. Defaults to `false`
 
-Your process monitor can now restart the processes automatically if they crash.
+Your process monitor can now restart the workers automatically if they crash since the monitor using the worker script itself and not the wrapping job runner.
 
 ### What Happens if a Worker Crashes?
 
-If a worker crashes because of circumstances outside of our control, the job will remained locked in the storage system since the worker couldn't finish work and clean it up itself. In this case, the job will be picked up again after `maxRuntime` has expired—a new worker will pick it up and re-lock using it's own indentification.
+If a worker crashes because of circumstances outside of your control the job will remained locked in the storage system: the worker couldn't finish work and clean up after itself. When this happens, the job will be picked up again immediately if a new worker starts with the same process title, otherwise when `maxRuntime` has passed it's eliglbe for any worker to pick up and re-lock.
 
 ## Creating Your Own Adapter
 
@@ -685,11 +725,11 @@ We'd love the community to contribue adapters for Redwood Job! Take a look at th
 
 The general gist of the required functions:
 
-- `find()` should find a job to be run, lock it and return it (minimum return of an object containing `id`, `name`, `path`, and `args` properties)
+- `find()` should find a job to be run, lock it and return it (minimum return of an object containing `id`, `name`, `path`, `args` and `attempts` properties)
 - `schedule()` accepts `name`, `path`, `args`, `runAt`, `queue` and `priority` and should store the job
-- `success()` accepts the same job object returned from `find()` and the `deleteSuccessfulJobs` boolean Does whatever success means to you (remove the job from storage, perhaps)
-- `error()` accepts the same job object returned from `find()` and an error instance. Does whatever failure means to you (unlock the job and reschedule a time for it to run again in the future, or give up if `maxAttempts` is reached)
-- `failure()` is called when the job has reached `maxAttempts` and accepts the job object and the `deleteFailedJobs` boolean.
+- `success()` accepts the same job object returned from `find()` and a `deleteJob` boolean for whether the job should be deleted upon success.
+- `error()` accepts the same job object returned from `find()` and an error instance. Does whatever failure means to you (like unlock the job and reschedule a time for it to run again in the future)
+- `failure()` is called when the job has reached `maxAttempts`. Accepts the job object and a `deleteJob` boolean that says whether the job should be deleted.
 - `clear()` remove all jobs from the queue (mostly used in development).
 
 ## The Future
