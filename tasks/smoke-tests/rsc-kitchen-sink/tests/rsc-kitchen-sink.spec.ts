@@ -173,7 +173,7 @@ test("'use client' cell navigation", async ({ page }) => {
   page.close()
 })
 
-test.only('Server Cell', async ({ page }) => {
+test('Server Cell', async ({ page }) => {
   await page.goto('/user-examples/1')
 
   const h1 = await page.locator('h1').innerHTML()
