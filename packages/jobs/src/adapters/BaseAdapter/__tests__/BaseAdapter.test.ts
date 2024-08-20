@@ -2,14 +2,7 @@ import { describe, expect, vi, it } from 'vitest'
 
 import { BaseAdapter } from '../BaseAdapter'
 import type { BaseAdapterOptions } from '../BaseAdapter'
-
-const mockLogger = {
-  log: vi.fn(() => {}),
-  info: vi.fn(() => {}),
-  debug: vi.fn(() => {}),
-  warn: vi.fn(() => {}),
-  error: vi.fn(() => {}),
-}
+import { mockLogger } from '../../../core/__tests__/mocks'
 
 interface TestAdapterOptions extends BaseAdapterOptions {
   foo: string

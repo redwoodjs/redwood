@@ -2,19 +2,13 @@ import type { PrismaClient } from '@prisma/client'
 import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest'
 
 import { DEFAULT_MODEL_NAME } from '../../../consts'
+import { mockLogger } from '../../../core/__tests__/mocks'
 import * as errors from '../errors'
 import { PrismaAdapter } from '../PrismaAdapter'
 
 vi.useFakeTimers().setSystemTime(new Date('2024-01-01'))
 
 let mockDb: PrismaClient
-
-const mockLogger = {
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-}
 
 beforeEach(() => {
   mockDb = {
