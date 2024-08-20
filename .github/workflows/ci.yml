@@ -69,7 +69,7 @@ jobs:
       - run: echo "Skipped"
 
   build-lint-test:
-    needs: check
+    needs: detect-changes
 
     strategy:
       matrix:
@@ -95,31 +95,20 @@ jobs:
 
       - name: 🥡 Check packaging and attw
         run: yarn check:package
+        if: needs.detect-changes.outputs.code == 'true'
 
       - name: 🌡 Test Types
         run: yarn test:types
+        if: needs.detect-changes.outputs.code == 'true'
 
       - name: Get number of CPU cores
-        if: always()
+        if: needs.detect-changes.outputs.code == 'true'
         id: cpu-cores
         uses: SimenB/github-actions-cpu-cores@v2
 
       - name: 🧪 Test
         run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
-
-  build-lint-test-skip:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.code == 'false'
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - run: echo "Skipped"
+        if: needs.detect-changes.outputs.code == 'true'
 
   tutorial-e2e:
     needs: check
