@@ -1,10 +1,11 @@
 # Playwright
 
-[Playwright](https://playwright.dev/) is a great tool for end-to-end testing. 
+[Playwright](https://playwright.dev/) is a great tool for end-to-end testing.
 
 Ideally, you continue to use Jest tests for writing unit tests for all your components, cells, layouts, and pages. Then, you can use Playwright to write end-to-end tests to test how everything integrates and works together.
 
 ## Installation
+
 ### 1. Within the Terminal, run:
 
 ```sh
@@ -14,7 +15,6 @@ yarn create playwright
 :::info
 You can find additional information about [installing Playwright on their documentation.](https://playwright.dev/docs/intro)
 :::
-
 
 Then, the install command will prompt you with a few questions:
 
@@ -31,7 +31,6 @@ Then, the install command will prompt you with a few questions:
 RedwoodJS has 3 `package.json` files. One inside the `api` directory, one inside the `web` directory, and one inside the root of your project. This script lives in the `package.json` file within the root of your project.
 ::
 
-
 ```json
 "scripts": {
   "test:e2e": "npx playwright test -c ./playwright.config.ts --trace on --workers 1 --reporter=list"
@@ -40,10 +39,10 @@ RedwoodJS has 3 `package.json` files. One inside the `api` directory, one inside
 
 This script utilizes several flags:
 
-| Flag | Description |
-| --- | --- |
-| `--trace on` |  |
-| `--workers 1` | Disables parallelization |
+| Flag              | Description                      |
+| ----------------- | -------------------------------- |
+| `--trace on`      |                                  |
+| `--workers 1`     | Disables parallelization         |
 | `--reporter=list` | Command line report output style |
 
 To run playwright, you can use:
@@ -52,9 +51,9 @@ To run playwright, you can use:
 yarn test:e2e
 ```
 
-::info
+:::info
 When running the test, I'm _not_ using `yarn rw`, simply `yar test:e2e`
-::
+:::
 
 ![/img/playwright/running-tests.png]()
 
@@ -88,7 +87,6 @@ npx playwright test --headed
 
 By default, Playwright launches browsers in headless mode.
 
-::info
+:::info
 On Linux agents, headed execution requires [Xvfb](https://en.wikipedia.org/wiki/Xvfb) to be installed.
-::
-
+:::
