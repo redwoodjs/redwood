@@ -17,7 +17,7 @@ export const jobs = new JobManager({
     {
       adapter: 'prisma',
       logger,
-      queue: '*',
+      queue: '*', // watch all queues
       count: 1,
       maxAttempts: 24,
       maxRuntime: 14_400,
