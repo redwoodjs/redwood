@@ -3,8 +3,10 @@ import type { Prisma } from '@prisma/client'
 import { Prisma as PrismaExtension } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 
+
 import { fileToDataUri } from './fileSave.utils.js'
-import { generateSignedQueryParams } from './lib/signedUrls.js'
+import type { SignedUrlSettings } from './lib/signedUrls.js'
+import { UrlSigner } from './lib/signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
@@ -26,9 +28,6 @@ export type UploadConfigForModel<TPrismaModelName extends ModelNames> = {
   fields:
     | PrismaModelFields<TPrismaModelName>
     | PrismaModelFields<TPrismaModelName>[]
-  savePath?: ((args: unknown) => string) | string
-  fileName?: (args: unknown) => string
-  onFileSaved?: (filePath: string) => void | Promise<void>
 }
 
 export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
@@ -38,10 +37,16 @@ export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
   storageAdapter: StorageAdapter,
+  signedUrlSettings?: SignedUrlSettings,
 ) => {
   // @TODO I think we can use Prisma.getExtensionContext(this)
   // instead of creating a new PrismaClient instance
   const prismaInstance = new PrismaClient()
+
+  let signedUrlGenerator: UrlSigner
+  if (signedUrlSettings) {
+    signedUrlGenerator = new UrlSigner(signedUrlSettings)
+  }
 
   type ResultExtends = {
     [K in MNames]: {
@@ -55,7 +60,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs: Record<string, boolean>
         compute: (
           modelData: Record<string, unknown>,
-        ) => <T>(this: T) => Promise<T>
+        ) => <T>(this: T, expiresIn?: number) => Promise<T>
       }
     }
   }
@@ -179,13 +184,18 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs,
         compute(modelData) {
           return (expiresIn?: number) => {
+            if (!signedUrlGenerator) {
+              throw new Error(
+                'Please supply signed url settings in setupUpload()',
+              )
+            }
             const signedUrlFields: Record<keyof typeof needs, string> = {}
 
             for (const field of uploadFields) {
-              signedUrlFields[field] = generateSignedQueryParams('/HARDCODED', {
-                filePath: modelData[field] as string,
-                expiresIn: expiresIn,
-              })
+              signedUrlFields[field] = signedUrlGenerator.generateSignedUrl(
+                modelData[field] as string,
+                expiresIn,
+              )
             }
 
             return {

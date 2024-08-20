@@ -1,4 +1,4 @@
-import { describe, it, beforeAll, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 import { MemoryStorage } from '../MemoryStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
@@ -6,6 +6,20 @@ import { setupUploads } from '../setup.js'
 
 // @MARK: use the local prisma client in the test
 import { PrismaClient } from './prisma-client/index.js'
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = (await importOriginal()) as any
+  return {
+    ...originalProjectConfig,
+    getConfig: () => {
+      return {
+        web: {
+          apiUrl: '/.redwood/functions',
+        },
+      }
+    },
+  }
+})
 
 describe('Result extensions', () => {
   const uploadConfig: UploadsConfig = {
@@ -22,14 +36,15 @@ describe('Result extensions', () => {
     new MemoryStorage({
       baseDir: '/tmp',
     }),
+    {
+      endpoint: '/signed-url',
+      secret: 'my-sekret',
+    },
   )
 
   const prismaClient = new PrismaClient().$extends(prismaExtension)
 
   describe('withSignedUrl', () => {
-    beforeAll(() => {
-      process.env.RW_UPLOADS_SECRET = 'gasdg'
-    })
     it('Generates signed urls for each upload field', async () => {
       const dumbo = await prismaClient.dumbo.create({
         data: {
@@ -38,30 +53,14 @@ describe('Result extensions', () => {
         },
       })
 
-      const signedUrlDumbo = await dumbo.withSignedUrl()
+      const signedUrlDumbo = await dumbo.withSignedUrl(254)
+      expect(signedUrlDumbo.firstUpload).toContain(
+        '/.redwood/functions/signed-url',
+      )
       expect(signedUrlDumbo.firstUpload).toContain('path=%2Fdumbo%2Ffirst.txt')
       expect(signedUrlDumbo.secondUpload).toContain(
         'path=%2Fdumbo%2Fsecond.txt',
       )
-    })
-
-    it('laskdng', async () => {
-      const customClient = new PrismaClient().$extends({
-        result: {
-          dumbo: {
-            helloJosh: {
-              compute() {
-                return () => {
-                  return 'hello josh'
-                }
-              },
-            },
-          },
-        },
-      })
-
-      const dumbo = await customClient.dumbo.findFirst({ where: { id: 1 } })
-      dumbo?.helloJosh()
     })
   })
 })

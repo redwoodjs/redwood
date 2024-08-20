@@ -1,72 +1,103 @@
 import crypto from 'node:crypto'
 
-export const generateSignature = (filePath: string, expiresInMs?: number) => {
-  if (!process.env.RW_UPLOADS_SECRET) {
-    throw new Error(
-      'Please configure RW_UPLOADS_SECRET in your environment variables',
-    )
-  }
+import { getConfig } from '@redwoodjs/project-config'
 
-  if (expiresInMs) {
-    const expires = Date.now() + expiresInMs
-    const signature = crypto
-      .createHmac('sha256', process.env.RW_UPLOADS_SECRET)
-      .update(`${filePath}:${expires}`)
-      .digest('hex')
-
-    return { expires, signature }
-  } else {
-    // Does not expire
-    const signature = crypto
-      .createHmac('sha256', process.env.RW_UPLOADS_SECRET)
-      .update(filePath)
-      .digest('hex')
-
-    return {
-      signature,
-      expires: undefined,
-    }
-  }
+export type SignedUrlSettings = {
+  endpoint: string // The path to the signed url endpoint, or a full url (include http(s)://)
+  secret: string // The secret to sign the urls with
 }
 
-/**
- * The signature and expires have to be extracted from the URL
- */
-export const validateSignature = ({
-  signature,
-  filePath,
-  expires,
-}: {
-  filePath: string
-  signature: string
-  expires?: number
-}) => {
-  // Note, expires not the same as expiresIn
-  if (!process.env.RW_UPLOADS_SECRET) {
-    throw new Error(
-      'Please configure RW_UPLOADS_SECRET in your environment variables',
-    )
+export class UrlSigner {
+  private secret: string
+  private endpoint: string
+
+  constructor({ secret, endpoint }: SignedUrlSettings) {
+    this.secret = secret
+    this.endpoint = endpoint
+
+    this.endpoint = endpoint.startsWith('http')
+      ? endpoint
+      : `${getConfig().web.apiUrl}${endpoint}`
   }
 
-  if (expires) {
-    // No need to validate if the signature has expired
-    if (Date.now() > expires) {
-      throw new Error('Signature has expired')
+  generateSignature(filePath: string, expiresInMs?: number) {
+    if (!this.secret) {
+      throw new Error('Please configure the secret')
+    }
+
+    if (expiresInMs) {
+      const expires = Date.now() + expiresInMs
+      const signature = crypto
+        .createHmac('sha256', this.secret)
+        .update(`${filePath}:${expires}`)
+        .digest('hex')
+
+      return { expires, signature }
+    } else {
+      // Does not expire
+      const signature = crypto
+        .createHmac('sha256', this.secret)
+        .update(filePath)
+        .digest('hex')
+
+      return {
+        signature,
+        expires: undefined,
+      }
     }
   }
 
-  const validSignature = expires
-    ? crypto
-        .createHmac('sha256', process.env.RW_UPLOADS_SECRET)
-        .update(`${filePath}:${expires}`)
-        .digest('hex')
-    : crypto
-        .createHmac('sha256', process.env.RW_UPLOADS_SECRET)
-        .update(`${filePath}`)
-        .digest('hex')
+  /**
+   * The signature and expires have to be extracted from the URL
+   */
+  validateSignature({
+    signature,
+    filePath,
+    expires,
+  }: {
+    filePath: string
+    signature: string
+    expires?: number
+  }) {
+    if (!this.secret) {
+      throw new Error('Please configure the secret')
+    }
 
-  if (validSignature !== signature) {
-    throw new Error('Invalid signature')
+    if (expires) {
+      // No need to validate if the signature has expired
+      if (Date.now() > expires) {
+        throw new Error('Signature has expired')
+      }
+    }
+
+    const validSignature = expires
+      ? crypto
+          .createHmac('sha256', this.secret)
+          .update(`${filePath}:${expires}`)
+          .digest('hex')
+      : crypto
+          .createHmac('sha256', this.secret)
+          .update(`${filePath}`)
+          .digest('hex')
+
+    if (validSignature !== signature) {
+      throw new Error('Invalid signature')
+    }
+  }
+
+  generateSignedUrl(filePath: string, expiresIn?: number) {
+    const { signature, expires } = this.generateSignature(filePath, expiresIn)
+
+    // This way you can pass in a path with params already
+    const params = new URLSearchParams()
+    params.set('s', signature)
+    if (expires) {
+      params.set('expires', expires.toString())
+    }
+
+    params.set('path', filePath)
+
+    return `${this.endpoint}?${params.toString()}`
   }
 }
 
@@ -78,26 +109,6 @@ export const getSignedDetailsFromUrl = (url: string) => {
     file: urlObj.searchParams.get('file'),
     signature: urlObj.searchParams.get('s'),
   }
-}
-
-type SigningParms = { filePath: string; expiresIn?: number }
-
-export const generateSignedQueryParams = (
-  endpoint: string,
-  { filePath, expiresIn }: SigningParms,
-) => {
-  const { signature, expires } = generateSignature(filePath, expiresIn)
-
-  // This way you can pass in a path with params already
-  const params = new URLSearchParams()
-  params.set('s', signature)
-  if (expires) {
-    params.set('expires', expires.toString())
-  }
-
-  params.set('path', filePath)
-
-  return `${endpoint}?${params.toString()}`
 }
 
 export const EXPIRES_IN = {
