@@ -48,10 +48,12 @@ describe('Create processors', () => {
       /\/memory_store_basedir\/dumbo-*.*\.txt/,
     )
 
-    const firstContents = await memStore.read(result.firstUpload)
+    const { contents: firstContents } = await memStore.read(result.firstUpload)
     expect(firstContents.toString()).toBe('Meaow')
 
-    const secondContents = await memStore.read(result.secondUpload)
+    const { contents: secondContents } = await memStore.read(
+      result.secondUpload,
+    )
     expect(secondContents.toString()).toBe('Woof')
   })
 

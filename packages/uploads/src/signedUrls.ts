@@ -7,6 +7,11 @@ export type SignedUrlSettings = {
   secret: string // The secret to sign the urls with
 }
 
+export type SignatureValidationArgs = {
+  path: string
+  s: string
+  expiry?: number | string
+}
 export class UrlSigner {
   private secret: string
   private endpoint: string
@@ -57,42 +62,67 @@ export class UrlSigner {
    * The signature and expires have to be extracted from the URL
    */
   validateSignature({
-    signature,
-    filePath,
+    s: signature,
+    path: filePath, // In the URL we call it path
     expiry,
-  }: {
-    filePath: string
-    signature: string
-    expiry?: number
-  }) {
+  }: SignatureValidationArgs) {
     if (!this.secret) {
       throw new Error('Please configure the secret')
     }
 
     if (expiry) {
-      // No need to validate if the signature has expired
-      if (Date.now() > expiry) {
+      // No need to validate if the signature has expired,
+      // but make sure its a number!
+      if (Date.now() > +expiry) {
         throw new Error('Signature has expired')
       }
     }
 
+    // Decoded filePath
+    const decodedFilePath = decodeURIComponent(filePath)
+
     const validSignature = expiry
       ? crypto
           .createHmac('sha256', this.secret)
-          .update(`${filePath}:${expiry}`)
+          .update(`${decodedFilePath}:${expiry}`)
           .digest('hex')
       : crypto
           .createHmac('sha256', this.secret)
-          .update(`${filePath}`)
+          .update(`${decodedFilePath}`)
           .digest('hex')
 
     if (validSignature !== signature) {
       throw new Error('Invalid signature')
     }
+
+    return decodedFilePath
+  }
+
+  validateSignedUrl(fullPathWithQueryParametersOrUrl: string) {
+    const url = new URL(
+      fullPathWithQueryParametersOrUrl,
+      // We don't care about the host, but just need to create a URL object
+      // to parse search params
+      fullPathWithQueryParametersOrUrl.startsWith('http')
+        ? undefined
+        : 'http://localhost',
+    )
+
+    const path = url.searchParams.get('path') as string
+
+    this.validateSignature({
+      // Note the signature is called 's' in the URL
+      s: url.searchParams.get('s') as string,
+      expiry: url.searchParams.get('expiry') as string,
+      path,
+    })
+
+    // Return the decoded path
+    return decodeURIComponent(path)
   }
 
   generateSignedUrl(filePath: string, expiresIn?: number) {
-    const { signature, expiry: expires } = this.generateSignature({
+    const { signature, expiry } = this.generateSignature({
       filePath,
       expiresInMs: expiresIn,
     })
@@ -100,8 +130,8 @@ export class UrlSigner {
     // This way you can pass in a path with params already
     const params = new URLSearchParams()
     params.set('s', signature)
-    if (expires) {
-      params.set('expires', expires.toString())
+    if (expiry) {
+      params.set('expiry', expiry.toString())
     }
 
     params.set('path', filePath)

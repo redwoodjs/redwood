@@ -2,6 +2,8 @@ import { existsSync, mkdirSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+import mime from 'mime-types'
+
 import type { SaveOptionsOverride } from './StorageAdapter.js'
 import { StorageAdapter } from './StorageAdapter.js'
 
@@ -27,6 +29,13 @@ export class FileSystemStorage
 
     await fs.writeFile(location, Buffer.from(nodeBuffer))
     return { location }
+  }
+
+  async read(filePath: string) {
+    return {
+      contents: await fs.readFile(filePath),
+      type: mime.lookup(filePath),
+    }
   }
 
   async remove(filePath: string) {

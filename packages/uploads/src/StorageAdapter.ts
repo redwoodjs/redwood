@@ -48,5 +48,8 @@ export abstract class StorageAdapter {
     saveOpts?: SaveOptionsOverride,
   ): Promise<AdapterResult>
   abstract remove(fileLocation: AdapterResult['location']): Promise<void>
-  // abstract replace(fileId: string, file: File): Promise<AdapterResult>
+  abstract read(fileLocation: AdapterResult['location']): Promise<{
+    contents: Buffer | string
+    type: ReturnType<typeof mime.lookup>
+  }>
 }

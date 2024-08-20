@@ -1,5 +1,6 @@
 import path from 'node:path'
 
+import mime from 'mime-types'
 
 import { StorageAdapter } from './StorageAdapter.js'
 import type { SaveOptionsOverride } from './StorageAdapter.js'
@@ -27,9 +28,11 @@ export class MemoryStorage extends StorageAdapter implements StorageAdapter {
     delete this.store[filePath]
   }
 
-  // Not sure about read method... should it be in the base class?
   async read(filePath: string) {
-    return this.store[filePath]
+    return {
+      contents: this.store[filePath],
+      type: mime.lookup(filePath),
+    }
   }
 
   async clear() {
