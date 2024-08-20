@@ -2,9 +2,9 @@ import {
   createFileListProcessor,
   createUploadProcessors,
 } from './createProcessors.js'
-import type { UrlSigner } from './lib/signedUrls.js'
 import type { ModelNames, UploadsConfig } from './prismaExtension.js'
 import { createUploadsExtension } from './prismaExtension.js'
+import type { UrlSigner } from './signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
 export const setupUploads = <MNames extends ModelNames>(
@@ -31,3 +31,5 @@ export const setupUploads = <MNames extends ModelNames>(
     fileListProcessor,
   }
 }
+
+export type { ModelNames, UploadsConfig } from './prismaExtension.js'

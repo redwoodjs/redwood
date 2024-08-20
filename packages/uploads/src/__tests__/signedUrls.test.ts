@@ -4,7 +4,7 @@ import {
   EXPIRES_IN,
   UrlSigner,
   getSignedDetailsFromUrl,
-} from '../lib/signedUrls.js'
+} from '../signedUrls.js'
 
 const signer = new UrlSigner({
   // Doing this means we don't need to mock getConfig

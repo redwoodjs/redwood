@@ -4,7 +4,7 @@ import { describe, it, vi, expect, beforeEach } from 'vitest'
 
 import { FileSystemStorage } from '../FileSystemStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
-import { setupUploads } from '../setup.js'
+import { setupUploads } from '../index.js'
 
 // @MARK: use the local prisma client in the test
 import { PrismaClient } from './prisma-client/index.js'

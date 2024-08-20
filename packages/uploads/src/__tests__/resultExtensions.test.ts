@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 
-import { UrlSigner } from '../lib/signedUrls.js'
+import { setupUploads } from '../index.js'
 import { MemoryStorage } from '../MemoryStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
-import { setupUploads } from '../setup.js'
+import { UrlSigner } from '../signedUrls.js'
 
 // @MARK: use the local prisma client in the test
 import { PrismaClient } from './prisma-client/index.js'

@@ -5,7 +5,7 @@ import type * as runtime from '@prisma/client/runtime/library'
 
 
 import { fileToDataUri } from './fileSave.utils.js'
-import type { UrlSigner } from './lib/signedUrls.js'
+import type { UrlSigner } from './signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
@@ -186,6 +186,10 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             const signedUrlFields: Record<keyof typeof needs, string> = {}
 
             for (const field of uploadFields) {
+              if (!signedUrlFields[field]) {
+                continue
+              }
+
               signedUrlFields[field] = urlSigner.generateSignedUrl(
                 modelData[field] as string,
                 expiresIn,

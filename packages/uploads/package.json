@@ -1,15 +1,36 @@
 {
   "name": "@redwoodjs/uploads",
-  "type": "module",
   "version": "7.0.0",
-  "types": "dist/prismaExtension.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/uploads"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./FileSystemStorage": {
+      "require": "./dist/cjs/FileSystemStorage.js",
+      "import": "./dist/FileSystemStorage.js"
+    },
+    "./MemoryStorage": {
+      "require": "./dist/cjs/MemoryStorage.js",
+      "import": "./dist/MemoryStorage.js"
+    },
+    "./signedUrl": {
+      "require": "./dist/cjs/signedUrls.js",
+      "import": "./dist/signedUrls.js"
+    },
     "./prisma": {
       "require": {
         "types": "./dist/cjs/prismaExtension.d.ts",
@@ -21,6 +42,7 @@
       }
     }
   },
+  "types": "dist/prismaExtension.d.ts",
   "files": [
     "dist",
     "prisma"
