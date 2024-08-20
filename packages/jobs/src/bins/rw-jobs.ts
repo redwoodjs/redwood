@@ -75,7 +75,7 @@ const parseArgs = (argv: string[]) => {
 //   [0, 1], // first array element, second worker
 //   [1, 0], // second array element, first worker
 // ]
-const buildNumWorkers = (config: any) => {
+export const buildNumWorkers = (config: any) => {
   const workers: NumWorkersConfig = []
 
   config.map((worker: any, index: number) => {
@@ -87,7 +87,7 @@ const buildNumWorkers = (config: any) => {
   return workers
 }
 
-const startWorkers = ({
+export const startWorkers = ({
   numWorkers,
   detach = false,
   workoff = false,
