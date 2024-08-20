@@ -71,9 +71,9 @@ const parseArgs = (argv: string[]) => {
 // The output would be:
 //
 // [
-//   [0, 0], // first array, first worker
-//   [0, 1], // first array, second worker
-//   [1, 0], // second array, first worker
+//   [0, 0], // first array element, first worker
+//   [0, 1], // first array element, second worker
+//   [1, 0], // second array element, first worker
 // ]
 const buildNumWorkers = (config: any) => {
   const workers: NumWorkersConfig = []
@@ -269,6 +269,12 @@ const main = async () => {
         logger,
       })
       return process.exit(0)
+    case 'stop':
+      return await stopWorkers({
+        numWorkers,
+        signal: 'SIGINT',
+        logger,
+      })
     case 'restart':
       await stopWorkers({ numWorkers, signal: 'SIGINT', logger })
       startWorkers({
@@ -292,12 +298,6 @@ const main = async () => {
           workoff: true,
           logger,
         }),
-        logger,
-      })
-    case 'stop':
-      return await stopWorkers({
-        numWorkers,
-        signal: 'SIGINT',
         logger,
       })
     case 'clear':
