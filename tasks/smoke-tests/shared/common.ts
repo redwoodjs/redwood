@@ -95,6 +95,8 @@ export const loginAsTestUser = async ({
   await page.getByLabel('Username').fill(email)
   await page.getByLabel('Password').fill(password)
 
+  await page.waitForTimeout(300)
+
   await page.getByRole('button', { name: 'Login' }).click()
 
   await page.waitForURL(redirectUrl)

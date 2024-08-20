@@ -85,6 +85,48 @@ export async function build({
   }
 }
 
+export function buildCjs() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.cjs.json',
+      outdir: 'dist/cjs',
+    },
+  })
+}
+
+export function buildEsm() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.build.json',
+      format: 'esm',
+    },
+  })
+}
+
+export function buildExternalCjs() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.cjs.json',
+      outdir: 'dist/cjs',
+      packages: 'external',
+    },
+  })
+}
+
+export function buildExternalEsm() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.build.json',
+      format: 'esm',
+      packages: 'external',
+    },
+  })
+}
+
 interface CopyAssetsOptions {
   buildFileUrl: string
   patterns: string[]

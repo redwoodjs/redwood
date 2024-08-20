@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { defaultGetRoles } from '../defaultGetRoles'
+import { defaultGetRoles } from '../defaultGetRoles.js'
 
 describe('dbAuth: defaultGetRoles', () => {
   it('returns an empty array if no roles are present', () => {
