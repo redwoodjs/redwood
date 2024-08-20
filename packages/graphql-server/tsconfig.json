@@ -7,5 +7,8 @@
     "moduleResolution": "Node16"
   },
   "include": ["ambient.d.ts", "src/**/*"],
-  "references": [{ "path": "../api" }, { "path": "../context" }]
+  "references": [
+    { "path": "../api" },
+    { "path": "../context/tsconfig.build.json" }
+  ]
 }
