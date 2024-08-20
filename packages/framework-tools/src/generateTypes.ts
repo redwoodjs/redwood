@@ -57,10 +57,10 @@ export async function generateTypesEsm() {
  */
 export async function insertCommonJsPackageJson({
   buildFileUrl,
-  cjsDir,
+  cjsDir = 'dist/cjs',
 }: {
   buildFileUrl: string
-  cjsDir: string
+  cjsDir?: string
 }) {
   const packageDir = path.dirname(fileURLToPath(buildFileUrl))
   const packageJsonPath = path.join(packageDir, cjsDir, 'package.json')

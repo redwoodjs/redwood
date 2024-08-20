@@ -11,7 +11,4 @@ await generateTypesEsm()
 await buildExternalCjs()
 await generateTypesCjs()
 
-await insertCommonJsPackageJson({
-  buildFileUrl: import.meta.url,
-  cjsDir: 'dist/cjs',
-})
+await insertCommonJsPackageJson({ buildFileUrl: import.meta.url })
