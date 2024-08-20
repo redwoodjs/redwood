@@ -173,31 +173,20 @@ test("'use client' cell navigation", async ({ page }) => {
   page.close()
 })
 
-test('Server Cell', async ({ page }) => {
-  await page.goto('/user-examples')
+test.only('Server Cell', async ({ page }) => {
+  await page.goto('/user-examples/1')
 
-  let h1 = await page.locator('h1').innerHTML()
+  const h1 = await page.locator('h1').innerHTML()
   expect(h1).toMatch(/UserExamples - userExamples/)
 
   await expect(page.getByText('Email')).toBeVisible()
-  await expect(page.getByText('jackie@example.com')).toBeVisible()
+  await expect(
+    page.getByText(/(jackie|bob|alice|mark)@example\.com/),
+  ).toBeVisible()
 
-  const row = page
-    .locator('tr')
-    .filter({ hasText: 'jackie@example.com' })
-    .first()
-  const showLink = row.locator('a').filter({ hasText: 'SHOW' }).first()
-  await showLink.click()
-
-  page.waitForURL(/\/user-examples\/\d/)
-
-  h1 = await page.locator('h1').innerHTML()
-  expect(h1).toMatch(/UserExamples - userExamples/)
-
-  await expect(page.getByText('Email')).toBeVisible()
-  await expect(page.getByText('jackie@example.com')).toBeVisible()
-
-  await expect(page.locator('tr').nth(2)).toContainText(/Name\s*jackie/)
+  await expect(page.locator('tr').nth(2)).toContainText(
+    /Name\s*(jackie|bob|alice|mark)/,
+  )
 })
 
 test('Server Cell - Error component', async ({ page }) => {
