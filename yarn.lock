@@ -8516,14 +8516,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/record@workspace:packages/record"
   dependencies:
-    "@babel/cli": "npm:7.24.8"
-    "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.25.0"
     "@prisma/client": "npm:5.18.0"
     "@prisma/internals": "npm:5.18.0"
+    "@redwoodjs/api": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
-    core-js: "npm:3.38.0"
+    camelcase: "npm:6.3.0"
     esbuild: "npm:0.23.0"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.17.0"
     vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
