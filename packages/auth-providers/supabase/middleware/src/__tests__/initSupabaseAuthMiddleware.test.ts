@@ -10,8 +10,9 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/web/middleware'
 
-import initSupabaseAuthMiddleware from '../index'
-import type { SupabaseAuthMiddlewareOptions } from '../index'
+import initSupabaseAuthMiddleware from '../index.js'
+import type { SupabaseAuthMiddlewareOptions } from '../index.js'
+
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',
