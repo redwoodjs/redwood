@@ -1,12 +1,9 @@
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import type { StorageAdapter } from './StorageAdapter.js'
 
-import mime from 'mime-types'
+export async function fileToDataUri(filePath: string, storage: StorageAdapter) {
+  const { contents, type: mimeType } = await storage.read(filePath)
 
-export async function fileToDataUri(filePath: string) {
-  const base64Data = await fs.readFile(filePath, 'base64')
-  const ext = path.extname(filePath)
-  const mimeType = mime.lookup(ext)
+  const base64Data = Buffer.from(contents).toString('base64')
 
   return `data:${mimeType};base64,${base64Data}`
 }
