@@ -172,7 +172,7 @@ export const jobs = new JobManager({
   adapters: {
     prisma: new PrismaAdapter({ db, logger }),
   },
-  queues: ['default'] as const,
+  queues: ['default'],
   logger,
   workers: [
     {
@@ -339,9 +339,9 @@ The runner is a sort of overseer that doesn't do any work itself, but spawns wor
 
 It checks the `BackgroundJob` table every few seconds for a new job and, if it finds one, locks it so that no other workers can have it, then calls your `perform()` function, passing it the arguments you gave when you scheduled it.
 
-If the job succeeds then by default it's removed the database (using the `PrismaAdapter`, other adapters behavior may vary). If the job fails, the job is un-locked in the database, the `runAt` is set to an incremental backoff time in the future, and `lastError` is updated with the error that occurred. The job will now be picked up in the future once the `runAt` time has passed and it'll try again.
+If the job succeeds then by default it's removed from the database (using the `PrismaAdapter`, other adapters behavior may vary). If the job fails, the job is un-locked in the database, the `runAt` is set to an incremental backoff time in the future, and `lastError` is updated with the error that occurred. The job will now be picked up in the future once the `runAt` time has passed and it'll try again.
 
-To stop the runner (and the workers it started), press `Ctrl-C` (or send `SIGINT`). The workers will gracefully shut down, waiting for their work to complete before exiting. If you don't wait to wait, hit `Ctrl-C` again (or send `SIGTERM`),
+To stop the runner (and the workers it started), press `Ctrl-C` (or send `SIGINT`). The workers will gracefully shut down, waiting for their work to complete before exiting. If you don't wait to wait, hit `Ctrl-C` again (or send `SIGTERM`).
 
 There are a couple of additional modes that `rw jobs` can run in:
 
