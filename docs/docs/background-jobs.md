@@ -216,7 +216,7 @@ export const SendWelcomeEmailJob = jobs.createJob({
   queue: 'default',
   perform: async (userId) => {
     const user = await db.user.findUnique({ where: { id: userId } })
-    mailer.send(WelcomeEmail({ user }), {
+    await mailer.send(WelcomeEmail({ user }), {
       to: user.email,
       subject: `Welcome to the site!`,
     })
