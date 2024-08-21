@@ -17,7 +17,12 @@ import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
 import { loadJobsManager } from '../loaders.js'
-import type { Adapters, BasicLogger, WorkerConfig } from '../types.js'
+import type {
+  Adapters,
+  BasicLogger,
+  WorkerConfig,
+  QueueNames,
+} from '../types.js'
 
 export type NumWorkersConfig = [number, number][]
 
@@ -269,7 +274,7 @@ const main = async () => {
     process.exit(1)
   }
 
-  const workerConfig: WorkerConfig<Adapters, string[]>[] = jobsConfig.workers
+  const workerConfig: WorkerConfig<Adapters, QueueNames>[] = jobsConfig.workers
   const numWorkers = buildNumWorkers(workerConfig)
   const logger = jobsConfig.logger ?? DEFAULT_LOGGER
 

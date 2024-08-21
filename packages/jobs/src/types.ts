@@ -29,9 +29,11 @@ export type PossibleBaseJob = BaseJob | undefined
 
 export type Adapters = Record<string, BaseAdapter>
 
+export type QueueNames = readonly [string, ...string[]]
+
 export interface WorkerConfig<
   TAdapters extends Adapters,
-  TQueues extends string[],
+  TQueues extends QueueNames,
 > {
   /**
    * The name of the adapter to use for this worker. This must be one of the keys
@@ -95,7 +97,7 @@ export interface WorkerConfig<
 
 export interface JobManagerConfig<
   TAdapters extends Adapters,
-  TQueues extends string[],
+  TQueues extends QueueNames,
   TLogger extends BasicLogger,
 > {
   /**
@@ -138,7 +140,7 @@ export interface CreateSchedulerConfig<TAdapters extends Adapters> {
 }
 
 export interface JobDefinition<
-  TQueues extends string[],
+  TQueues extends QueueNames,
   TArgs extends unknown[] = [],
 > {
   /**
@@ -176,7 +178,7 @@ export type JobComputedProperties = {
 }
 
 export type Job<
-  TQueues extends string[],
+  TQueues extends QueueNames,
   TArgs extends unknown[] = [],
 > = JobDefinition<TQueues, TArgs> & JobComputedProperties
 

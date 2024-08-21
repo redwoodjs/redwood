@@ -6,6 +6,7 @@ import type {
   Job,
   JobDefinition,
   JobManagerConfig,
+  QueueNames,
   ScheduleJobOptions,
   WorkerConfig,
 } from '../types.js'
@@ -22,7 +23,7 @@ export interface CreateWorkerArgs {
 
 export class JobManager<
   TAdapters extends Adapters,
-  TQueues extends string[],
+  TQueues extends QueueNames,
   TLogger extends BasicLogger,
 > {
   adapters: TAdapters
