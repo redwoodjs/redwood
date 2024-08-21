@@ -31,7 +31,15 @@ export class JobManager<
   logger: TLogger
   workers: WorkerConfig<TAdapters, TQueues>[]
 
-  constructor(config: JobManagerConfig<TAdapters, TQueues, TLogger>) {
+  constructor(
+    config: JobManagerConfig<
+      TAdapters,
+      // This ensures that TQueues is never a string[]. It should be an array
+      // of string literals (constructed by using `as const`)
+      TQueues extends string[] ? never : TQueues,
+      TLogger
+    >,
+  ) {
     this.adapters = config.adapters
     this.queues = config.queues
     this.logger = config.logger

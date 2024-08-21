@@ -116,6 +116,11 @@ export interface JobManagerConfig<
   /**
    * An array of all of queue names that jobs can be scheduled on to. Workers can
    * be configured to work on a selection of these queues.
+   *
+   * This should be an array of string literals.
+   * If you're using TypeScript, you can use `as const`, like in
+   * `['default', 'critical', 'low'] as const` to construct an array of string
+   * literals
    */
   queues: TQueues
 
