@@ -17,7 +17,6 @@ export function loadEnvFiles() {
   loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  // job worker coordinator
   const { loadEnvFiles } = Parser.default(hideBin(process.argv), {
     array: ['load-env-files'],
     default: {
