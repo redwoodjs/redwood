@@ -1,30 +1,33 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest'
 
+import type { Job, JobDefinition } from '../../types.js'
 import { JobManager } from '../JobManager.js'
 import { Scheduler } from '../Scheduler.js'
 
-import { mockAdapter, mockLogger } from './mocks.js'
+import { MockAdapter, mockLogger } from './mocks.js'
 
 vi.mock('../Scheduler')
 
 describe('constructor', () => {
-  let manager, workers
+  const mockAdapter = new MockAdapter()
+  const adapters = { mock: mockAdapter }
+  const queues = ['queue']
+  const logger = mockLogger
+  const workers = [
+    {
+      adapter: 'mock' as const,
+      queue: '*',
+      count: 1,
+    },
+  ]
+
+  let manager: JobManager<typeof adapters, typeof queues, typeof logger>
 
   beforeEach(() => {
-    workers = [
-      {
-        adapter: 'mock',
-        queue: '*',
-        count: 1,
-      },
-    ]
-
     manager = new JobManager({
-      adapters: {
-        mock: mockAdapter,
-      },
-      queues: ['queue'],
-      logger: mockLogger,
+      adapters,
+      queues,
+      logger,
       workers,
     })
   })
@@ -34,11 +37,11 @@ describe('constructor', () => {
   })
 
   it('saves queues', () => {
-    expect(manager.queues).toEqual(['queue'])
+    expect(manager.queues).toEqual(queues)
   })
 
   it('saves logger', () => {
-    expect(manager.logger).toEqual(mockLogger)
+    expect(manager.logger).toEqual(logger)
   })
 
   it('saves workers', () => {
@@ -50,6 +53,8 @@ describe('createScheduler()', () => {
   beforeEach(() => {
     vi.resetAllMocks()
   })
+
+  const mockAdapter = new MockAdapter()
 
   it('returns a function', () => {
     const manager = new JobManager({
@@ -103,11 +108,17 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: [],
+      queues: ['default'],
       logger: mockLogger,
       workers: [],
     })
-    const mockJob = { perform: () => {} }
+    const mockJob: Job<string[], unknown[]> = {
+      queue: 'default',
+      name: 'mockJob',
+      path: 'mockJob/mockJob',
+
+      perform: vi.fn(),
+    }
     const mockArgs = ['foo']
     const mockOptions = { wait: 300 }
     const scheduler = manager.createScheduler({ adapter: 'mock' })
@@ -126,11 +137,14 @@ describe('createJob()', () => {
   it('returns the same job description that was passed in', () => {
     const manager = new JobManager({
       adapters: {},
-      queues: [],
+      queues: ['default'],
       logger: mockLogger,
       workers: [],
     })
-    const jobDefinition = { perform: () => {} }
+    const jobDefinition: JobDefinition<string[], unknown[]> = {
+      queue: 'default',
+      perform: vi.fn(),
+    }
 
     const job = manager.createJob(jobDefinition)
 
