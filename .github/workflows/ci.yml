@@ -68,8 +68,24 @@ jobs:
     steps:
       - run: echo "Skipped"
 
+  formatting-check:
+    name: 📝 Check formatting (prettier)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          set-up-yarn-cache: false
+          yarn-install-directory: .
+          build: false
+
+      - name: 📝 Check formatting (prettier)
+        run: yarn format:check
+
   build-lint-test:
-    needs: detect-changes
+    needs: check
 
     strategy:
       matrix:
@@ -90,25 +106,33 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
-      - name: 📝 Check formatting (prettier)
-        run: yarn format:check
-
       - name: 🥡 Check packaging and attw
         run: yarn check:package
-        if: needs.detect-changes.outputs.code == 'true'
 
       - name: 🌡 Test Types
         run: yarn test:types
-        if: needs.detect-changes.outputs.code == 'true'
 
       - name: Get number of CPU cores
-        if: needs.detect-changes.outputs.code == 'true'
+        if: always()
         id: cpu-cores
         uses: SimenB/github-actions-cpu-cores@v2
 
       - name: 🧪 Test
         run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
-        if: needs.detect-changes.outputs.code == 'true'
+
+  build-lint-test-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'false'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "Skipped"
 
   tutorial-e2e:
     needs: check
