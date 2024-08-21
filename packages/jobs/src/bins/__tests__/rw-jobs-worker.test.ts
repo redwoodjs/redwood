@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { MockAdapter, mockLogger } from '../../core/__tests__/mocks.js'
 import { JobManager } from '../../core/JobManager.js'
 import { Worker } from '../../core/Worker.js'
-import { getWorker, setProcessTitle } from '../rw-jobs-worker.js'
+import { getWorker, processTitle } from '../rw-jobs-worker.js'
 
 vi.mock('@redwoodjs/cli-helpers/loadEnvFiles', () => {
   return {
@@ -23,17 +23,17 @@ vi.mock('../../loaders.js', () => {
   }
 })
 
-describe('setProcessTitle', () => {
+describe('processTitle', () => {
   it('sets the process title for a single queue', () => {
-    setProcessTitle({ id: 1, queues: 'default' })
+    const title = processTitle({ id: 1, queues: 'default' })
 
-    expect(process.title).toEqual('rw-jobs-worker.default.1')
+    expect(title).toEqual('rw-jobs-worker.default.1')
   })
 
   it('sets the process title for an array of queues', () => {
-    setProcessTitle({ id: 1, queues: ['default', 'email'] })
+    const title = processTitle({ id: 1, queues: ['default', 'email'] })
 
-    expect(process.title).toEqual('rw-jobs-worker.default-email.1')
+    expect(title).toEqual('rw-jobs-worker.default-email.1')
   })
 })
 
@@ -64,6 +64,7 @@ describe('getWorker', () => {
 
     const worker = await getWorker({
       index: 0,
+      id: 0,
       workoff: false,
       clear: false,
     })
@@ -95,10 +96,16 @@ describe('getWorker', () => {
 
     await getWorker({
       index: 0,
+      id: 0,
       workoff: false,
       clear: false,
     })
 
-    expect(spy).toHaveBeenCalledWith({ index: 0, workoff: false, clear: false })
+    expect(spy).toHaveBeenCalledWith({
+      index: 0,
+      workoff: false,
+      clear: false,
+      processName: 'rw-jobs-worker.*.0',
+    })
   })
 })

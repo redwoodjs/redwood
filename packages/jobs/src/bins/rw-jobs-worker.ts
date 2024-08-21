@@ -47,14 +47,14 @@ const parseArgs = (argv: string[]) => {
     .help().argv
 }
 
-export const setProcessTitle = ({
+export const processTitle = ({
   id,
   queues,
 }: {
   id: number
   queues: string | string[]
 }) => {
-  process.title = `${PROCESS_TITLE_PREFIX}.${[queues].flat().join('-')}.${id}`
+  return `${PROCESS_TITLE_PREFIX}.${[queues].flat().join('-')}.${id}`
 }
 
 const setupSignals = ({ worker }: { worker: Worker }) => {
@@ -81,10 +81,12 @@ const setupSignals = ({ worker }: { worker: Worker }) => {
 
 export const getWorker = async ({
   index,
+  id,
   clear,
   workoff,
 }: {
   index: number
+  id: number
   clear: boolean
   workoff: boolean
 }) => {
@@ -102,15 +104,20 @@ export const getWorker = async ({
     throw new WorkerConfigIndexNotFoundError(index)
   }
 
-  return manager.createWorker({ index, clear, workoff })
+  return manager.createWorker({
+    index,
+    clear,
+    workoff,
+    processName: processTitle({ id, queues: workerConfig.queue }),
+  })
 }
 
 const main = async () => {
   const { index, id, clear, workoff } = await parseArgs(process.argv)
 
-  const worker = await getWorker({ index, clear, workoff })
+  const worker = await getWorker({ index, id, clear, workoff })
 
-  setProcessTitle({ id, queues: worker.queues })
+  process.title = processTitle({ id, queues: worker.queues })
 
   worker.run().then(() => {
     worker.logger.info(`[${process.title}] Worker finished, shutting down.`)
