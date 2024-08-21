@@ -140,9 +140,9 @@ export interface JobDefinition<
   TArgs extends unknown[] = [],
 > {
   /**
-   * The name of the queue that this job should always be scheduled on. This defaults
-   * to the queue that the scheduler was created with, but can be overridden when
-   * scheduling a job.
+   * The name of the queue that this job should always be scheduled on. This
+   * must be one of the values in the `queues` array when you created the
+   * `JobManager`.
    */
   queue: TQueues[number]
 
