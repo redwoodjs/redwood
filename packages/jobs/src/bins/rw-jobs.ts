@@ -26,7 +26,13 @@ loadEnvFiles()
 process.title = 'rw-jobs'
 
 const parseArgs = (argv: string[]) => {
-  const parsed: Record<string, any> = yargs(hideBin(argv))
+  const commandString = hideBin(argv)
+
+  if (commandString.length === 1 && commandString[0] === 'jobs') {
+    commandString.shift()
+  }
+
+  const parsed: Record<string, any> = yargs(commandString)
     .usage(
       'Starts the RedwoodJob runner to process background jobs\n\nUsage: $0 <command> [options]',
     )
