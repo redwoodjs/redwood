@@ -323,7 +323,6 @@ validate(input.usPhone, 'US Phone Number', {
 
 * `message`: a custom error message if validation fails
 
-
 ```jsx
 validate(input.usPhone, {
   format: {
@@ -616,6 +615,7 @@ validate(input.value, 'Value', {
   }
 })
 ```
+
 ### validateWithSync()
 
 `validateWith()` is simply given a function to execute. This function should throw with a message if there is a problem, otherwise do nothing.
@@ -712,6 +712,7 @@ const createUser = (input) => {
 ```
 
 You can provide the PrismaClient to be used for the transaction and callback.
+
 ```jsx
 import { db } from 'src/lib/db'
 
@@ -770,7 +771,7 @@ Why use a cache? If you have an expensive or time-consuming process in your serv
 
 :::info What about GraphQL caching?
 
-You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. Using Envelop plugins you can add a response cache _after_ your services (resolver functions in the context of GraphQL) run - with a global configuration.
+You could also cache data at the [GraphQL layer](https://community.redwoodjs.com/t/guide-power-of-graphql-caching/2624) which has some of the same benefits. Using Envelop plugins you can add a response cache *after* your services (resolver functions in the context of GraphQL) run - with a global configuration.
 
 However, by placing the cache one level "lower," at the service level, you get the benefit of caching even when one service calls another internally, or when a service is called via another serverless function, and finer grained control of what you're caching.
 
@@ -795,7 +796,12 @@ export const updatePost = async ({ id, input }) => {
     where: { id },
   })
   // highlight-next-line
-  await cacheClient.MSET(`post-${id}`, JSON.stringify(post), `blogpost-${id}`, JSON.stringify(post))
+  await cacheClient.MSET(
+    `post-${id}`,
+    JSON.stringify(post),
+    `blogpost-${id}`,
+    JSON.stringify(post)
+  )
 
   return post
 }
@@ -830,7 +836,7 @@ What if we add a "type" into the cache key, so we know what type of thing we're 
 One solution would be to put all of the data that we care about changing into the key, like: `product-41442-${description}`. The problem here is that keys can only be so long (in Memcached it's 250 bytes). Another option could be to hash the entire product object and use that as the key (this can encompass the `product` part of the key as well as the ID itself, since *any* data in the object being different will result in a new hash):
 
 ```js
-import { md5 } from "blueimp-md5"
+import { md5 } from 'blueimp-md5'
 
 cache(md5(JSON.stringify(product)), () => {
   // ...
@@ -850,6 +856,7 @@ cache(product, () => {
   // ...
 })
 ```
+
 :::
 
 One drawback to this key is in potentially responding to *too many* data changes, even ones we don't care about caching. Imagine that a product has a `views` field that tracks how many times it has been viewed in the browser. This number will be changing all the time, but if we don't display that count to the user then we're constantly re-creating the cache for the product even though no data the user will see is changing. There's no way to tell Prisma "set the `updatedAt` when the record changes, but not if the `views` column changes." This cache key is too variable. One solution would be to move the `views` column to another table with a `productId` pointing back to this record. Now the `product` is back to just containing data we care about caching.
@@ -873,7 +880,7 @@ How does that last one work? We get a list of all the keys and then apply a hash
 ```javascript
 const product = db.product.findUnique({ where: { id } })
 const columns = Object.keys(product) // ['id', 'name', 'sku', ...]
-const hash = md5(columns.join(','))  // "e4d7f1b4ed2e42d15898f4b27b019da4"
+const hash = md5(columns.join(',')) // "e4d7f1b4ed2e42d15898f4b27b019da4"
 
 cache(`v1-product-${hash}-${id}-${updatedAt}`, () => {
   // ...
@@ -889,9 +896,13 @@ Note that this has the side effect of having to select at least one record from 
 You can skirt these issues about what data is changing and what to include or not include in the key by just setting an expiration time on this cache entry. You may decide that if a change is made to a product, it's okay if users don't see the change for, say, an hour. In this case just set the expiration time to 3600 seconds and it will automatically be re-built, whether something changed in the record or not:
 
 ```js
-cache(`product-${id}`, () => {
-  // ...
-}, { expires: 3600 })
+cache(
+  `product-${id}`,
+  () => {
+    // ...
+  },
+  { expires: 3600 }
+)
 ```
 
 This leads to your product cache being rebuilt every hour, even though you haven't made any changes that are of consequence to the user. But that may be we worth the tradeoff versus rebuilding the cache when *no* useful data has changed (like the `views` column being updated).
@@ -981,7 +992,7 @@ The second usage of the logger argument:
 ```js
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
-  timeout: 500
+  timeout: 500,
 })
 ```
 
@@ -1002,17 +1013,21 @@ Use this function when you want to cache some data, optionally including a numbe
 
 ```js
 // cache forever
-const post = ({ id }) => {
+const posts = () => {
   return cache(`posts`, () => {
     return db.post.findMany()
   })
 }
 
 // cache for 1 hour
-const post = ({ id }) => {
-  return cache(`posts`, () => {
-    return db.post.findMany()
-  }, { expires: 3600 })
+const posts = () => {
+  return cache(
+    `posts`,
+    () => {
+      return db.post.findMany()
+    },
+    { expires: 3600 }
+  )
 }
 ```
 
@@ -1021,15 +1036,15 @@ Note that a key can be a string or an array:
 ```js
 const post = ({ id }) => {
   return cache(`posts-${id}-${updatedAt.getTime()}`, () => {
-    return db.post.findMany()
+    return db.post.findUnique({ where: { id } })
   })
 }
 
 // or
 
 const post = ({ id }) => {
-  return cache(['posts', id,  updatedAt.getTime()], () => {
-    return db.post.findMany()
+  return cache(['posts', id, updatedAt.getTime()], () => {
+    return db.post.findUnique({ where: { id } })
   })
 }
 ```
@@ -1057,7 +1072,7 @@ The above is the simplest usage example. If you need to pass a `where`, or any o
 ```js
 const post = ({ id }) => {
   return cacheFindMany(`users`, db.user, {
-    conditions: { where: { roles: 'admin' } }
+    conditions: { where: { roles: 'admin' } },
   })
 }
 ```
@@ -1080,12 +1095,10 @@ If you also want to pass an `expires` option, do it in the same object as `condi
 
 ```js
 const post = ({ id }) => {
-  return cacheFindMany(
-    `users`, db.user, {
-      conditions: { where: { roles: 'admin' } },
-      expires: 86400
-    }
-  )
+  return cacheFindMany(`users`, db.user, {
+    conditions: { where: { roles: 'admin' } },
+    expires: 86400,
+  })
 }
 ```
 
@@ -1114,7 +1127,7 @@ const updateUser = async ({ id, input }) => {
 })
 ```
 
-:::caution
+:::warning
 
 When explicitly deleting cache keys like this you could find yourself going down a rabbit hole. What if there is another service somewhere that also updates user? Or another service that updates an organization, as well as all of its underlying child users at the same time? You'll need to be sure to call `deleteCacheKey()` in these places as well. As a general guideline, it's better to come up with a cache key that encapsulates any triggers for when the data has changed (like the `updatedAt` timestamp, which will change no matter who updates the user, anywhere in your codebase).
 
@@ -1122,8 +1135,8 @@ Scenarios like this are what people are talking about when they say that caching
 
 :::
 
-
 ### Testing what you cache
+
 We wouldn't just give you all of these caching APIs and not show you how to test it right? You'll find all the details in the [Caching section in the testing doc](testing.md#testing-caching).
 
 ### Creating Your Own Client
