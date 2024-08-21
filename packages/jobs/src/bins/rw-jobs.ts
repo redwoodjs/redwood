@@ -34,7 +34,7 @@ const parseArgs = (argv: string[]) => {
 
   const parsed: Record<string, any> = yargs(commandString)
     .usage(
-      'Starts the RedwoodJob runner to process background jobs\n\nUsage: $0 <command> [options]',
+      'Starts the RedwoodJob runner to process background jobs\n\nUsage: rw jobs <command> [options]',
     )
     .command('work', 'Start a worker and process jobs')
     .command('workoff', 'Start a worker and exit after all jobs processed')
@@ -44,14 +44,20 @@ const parseArgs = (argv: string[]) => {
     .command('clear', 'Clear the job queue')
     .demandCommand(1, 'You must specify a mode to start in')
     .example(
-      '$0 work',
+      'rw jobs work',
       'Start the job workers using the job config and work on jobs until manually stopped',
     )
     .example(
-      '$0 start',
+      'rw jobs start',
       'Start the job workers using the job config and detach, running in daemon mode',
     )
-    .help().argv
+    .help()
+    .parse(commandString, (_err: any, _argv: any, output: any) => {
+      if (output) {
+        const newOutput = output.replaceAll('rw-jobs.js', 'rw jobs')
+        console.log(newOutput)
+      }
+    })
 
   return { command: parsed._[0] }
 }
