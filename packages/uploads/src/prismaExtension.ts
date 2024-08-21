@@ -74,13 +74,20 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
     // Ideally there's a better way to do this
     const record =
-      // @ts-expect-error laskndglkn
+      // @TODO not sure how to resolve this error
+      // @ts-expect-error Complaning because findFirstOrThrow args is a union type
       await prismaInstance[model as ModelNames].findFirstOrThrow(args)
 
     // Delete the file from the file system
     fields.forEach(async (field) => {
       const filePath = record[field]
-      await storageAdapter.remove(filePath)
+      if (filePath) {
+        try {
+          await storageAdapter.remove(filePath)
+        } catch {
+          // Swallow the error, we don't want to stop the delete operation
+        }
+      }
     })
   }
 

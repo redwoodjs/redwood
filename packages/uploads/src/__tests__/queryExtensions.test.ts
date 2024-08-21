@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 
+import type { MockedFunction } from 'vitest'
 import { describe, it, vi, expect, beforeEach } from 'vitest'
 
 import { FileSystemStorage } from '../FileSystemStorage.js'
@@ -168,6 +169,10 @@ describe('Query extensions', () => {
       expect(fs.unlink).toHaveBeenCalledWith('/tmp/old.txt')
       expect(updatedDummy.uploadField).toBe('/tmp/new.txt')
     })
+
+    it('should not delete the file if the update fails', async () => {})
+
+    it('should not delete files from other fields', async () => {})
   })
 
   describe('delete', () => {
@@ -188,6 +193,30 @@ describe('Query extensions', () => {
       expect(fs.unlink).toHaveBeenCalledTimes(2)
       expect(fs.unlink).toHaveBeenCalledWith('/tmp/first.txt')
       expect(fs.unlink).toHaveBeenCalledWith('/tmp/second.txt')
+    })
+
+    it('Should handle if a bad path is provided', async () => {
+      ;(fs.unlink as MockedFunction<typeof fs.unlink>).mockRejectedValueOnce(
+        new Error('unlink error'),
+      )
+
+      const invalidPathDumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '',
+          secondUpload: 'im-a-invalid-path',
+        },
+      })
+
+      const deletePromise = prismaClient.dumbo.delete({
+        where: {
+          id: invalidPathDumbo.id,
+        },
+      })
+
+      await expect(deletePromise).resolves.not.toThrow()
+
+      expect(fs.unlink).toHaveBeenCalledOnce()
+      expect(fs.unlink).toHaveBeenCalledWith('im-a-invalid-path')
     })
   })
 })
