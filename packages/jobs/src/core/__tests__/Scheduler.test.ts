@@ -1,13 +1,20 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest'
 
+import {
+  DEFAULT_PRIORITY,
+  DEFAULT_WAIT,
+  DEFAULT_WAIT_UNTIL,
+} from '../../consts.js'
 import * as errors from '../../errors.js'
 import { Scheduler } from '../Scheduler.js'
 
-import { mockAdapter, mockLogger } from './mocks.js'
+import { MockAdapter, mockLogger } from './mocks.js'
 
 vi.useFakeTimers()
 
 describe('constructor', () => {
+  const mockAdapter = new MockAdapter()
+
   it('saves adapter', () => {
     const scheduler = new Scheduler({
       adapter: mockAdapter,
@@ -28,6 +35,8 @@ describe('constructor', () => {
 })
 
 describe('computeRunAt()', () => {
+  const mockAdapter = new MockAdapter()
+
   it('returns a Date `wait` seconds in the future if `wait` set', () => {
     const scheduler = new Scheduler({
       adapter: mockAdapter,
@@ -35,9 +44,9 @@ describe('computeRunAt()', () => {
     })
     const wait = 10
 
-    expect(scheduler.computeRunAt({ wait })).toEqual(
-      new Date(Date.now() + wait * 1000),
-    )
+    expect(
+      scheduler.computeRunAt({ wait, waitUntil: DEFAULT_WAIT_UNTIL }),
+    ).toEqual(new Date(Date.now() + wait * 1000))
   })
 
   it('returns the `waitUntil` Date, if set', () => {
@@ -47,7 +56,9 @@ describe('computeRunAt()', () => {
     })
     const waitUntil = new Date(2030, 0, 1, 12, 34, 56)
 
-    expect(scheduler.computeRunAt({ waitUntil })).toEqual(waitUntil)
+    expect(scheduler.computeRunAt({ wait: DEFAULT_WAIT, waitUntil })).toEqual(
+      waitUntil,
+    )
   })
 
   it('falls back to now', () => {
@@ -56,26 +67,34 @@ describe('computeRunAt()', () => {
       logger: mockLogger,
     })
 
-    expect(scheduler.computeRunAt({ wait: 0 })).toEqual(new Date())
-    expect(scheduler.computeRunAt({ waitUntil: null })).toEqual(new Date())
+    expect(
+      scheduler.computeRunAt({ wait: 0, waitUntil: DEFAULT_WAIT_UNTIL }),
+    ).toEqual(new Date())
+    expect(
+      scheduler.computeRunAt({ wait: DEFAULT_WAIT, waitUntil: null }),
+    ).toEqual(new Date())
   })
 })
 
 describe('buildPayload()', () => {
+  const mockAdapter = new MockAdapter()
+
   it('returns a payload object', () => {
     const scheduler = new Scheduler({
       adapter: mockAdapter,
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
-      priority: 25,
+      priority: 25 as const,
+
+      perform: vi.fn(),
     }
     const args = [{ foo: 'bar' }]
-    const options = { priority: 25 }
-    const payload = scheduler.buildPayload(job, args, options)
+    const payload = scheduler.buildPayload(job, args)
 
     expect(payload.name).toEqual(job.name)
     expect(payload.path).toEqual(job.path)
@@ -91,14 +110,16 @@ describe('buildPayload()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
-      priority: 25,
+
+      perform: vi.fn(),
     }
     const payload = scheduler.buildPayload(job)
 
-    expect(payload.priority).toEqual(job.priority)
+    expect(payload.priority).toEqual(DEFAULT_PRIORITY)
   })
 
   it('takes into account a `wait` time', () => {
@@ -107,10 +128,13 @@ describe('buildPayload()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
-      priority: 25,
+      priority: 25 as const,
+
+      perform: vi.fn(),
     }
     const options = { wait: 10 }
     const payload = scheduler.buildPayload(job, [], options)
@@ -124,10 +148,13 @@ describe('buildPayload()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
-      priority: 25,
+      priority: 25 as const,
+
+      perform: vi.fn(),
     }
     const options = { waitUntil: new Date(2030, 0, 1, 12, 34, 56) }
     const payload = scheduler.buildPayload(job, [], options)
@@ -141,11 +168,15 @@ describe('buildPayload()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
-      priority: 25,
+      priority: 25 as const,
+
+      perform: vi.fn(),
     }
 
+    // @ts-expect-error testing error case
     expect(() => scheduler.buildPayload(job)).toThrow(
       errors.QueueNotDefinedError,
     )
@@ -153,6 +184,8 @@ describe('buildPayload()', () => {
 })
 
 describe('schedule()', () => {
+  const mockAdapter = new MockAdapter()
+
   beforeEach(() => {
     vi.resetAllMocks()
   })
@@ -163,12 +196,17 @@ describe('schedule()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
+
+      perform: vi.fn(),
     }
     const args = [{ foo: 'bar' }]
-    const options = {}
+    const options = {
+      wait: 10,
+    }
 
     await scheduler.schedule({ job, jobArgs: args, jobOptions: options })
 
@@ -190,12 +228,17 @@ describe('schedule()', () => {
       logger: mockLogger,
     })
     const job = {
+      id: 1,
       name: 'JobName',
       path: 'JobPath/JobPath',
       queue: 'default',
+
+      perform: vi.fn(),
     }
     const args = [{ foo: 'bar' }]
-    const options = {}
+    const options = {
+      wait: 10,
+    }
 
     await expect(
       scheduler.schedule({ job, jobArgs: args, jobOptions: options }),
