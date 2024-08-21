@@ -14,16 +14,14 @@
 /.nx
 
 # Ignore create-redwood-app (we don't want to mismatch between framework and project)
-packages/create-redwood-app
+/packages/create-redwood-app/templates
+/packages/create-redwood-app/tests/**/*.sh
 
 # Ignore create-redwood-rsc-app (it has it's own config)
-packages/create-redwood-rsc-app
+/packages/create-redwood-rsc-app
 
 # TODO(jgmw): Is this too broad?
 # Ignore test fixtures
 **/__testfixtures__
 **/__tests__/fixtures
 **/__tests__/__fixtures__
-
-# TODO(jgmw): Re-enable these in managable chunks
-packages/create-redwood-app/tests/e2e_prompts*

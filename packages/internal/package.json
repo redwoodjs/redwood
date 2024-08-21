@@ -7,6 +7,50 @@
     "directory": "packages/internal"
   },
   "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/dev": {
+      "types": "./dist/dev.d.ts",
+      "default": "./dist/dev.js"
+    },
+    "./dist/files": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/files.js": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/gql": {
+      "types": "./dist/gql.d.ts",
+      "default": "./dist/gql.js"
+    },
+    "./dist/routes.js": {
+      "types": "./dist/routes.d.ts",
+      "default": "./dist/routes.js"
+    },
+    "./dist/ts2js": {
+      "types": "./dist/ts2js.d.ts",
+      "default": "./dist/ts2js.js"
+    },
+    "./dist/validateSchema": {
+      "types": "./dist/validateSchema.d.ts",
+      "default": "./dist/validateSchema.js"
+    },
+    "./dist/build/api": {
+      "types": "./dist/build/api.d.ts",
+      "default": "./dist/build/api.js"
+    },
+    "./dist/generate/generate": {
+      "types": "./dist/generate/generate.d.ts",
+      "default": "./dist/generate/generate.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -17,12 +61,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:pack": "yarn pack -o redwoodjs-internal.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -70,9 +115,12 @@
     "typescript": "5.5.4"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.8",
+    "@arethetypeswrong/cli": "0.15.4",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
+    "concurrently": "8.2.2",
     "graphql-tag": "2.12.6",
+    "publint": "0.2.10",
     "tsx": "4.17.0",
     "vitest": "2.0.5"
   },

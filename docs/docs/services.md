@@ -1036,14 +1036,14 @@ Use this function when you want to cache some data, optionally including a numbe
 
 ```js
 // cache forever
-const post = ({ id }) => {
+const posts = () => {
   return cache(`posts`, () => {
     return db.post.findMany()
   })
 }
 
 // cache for 1 hour
-const post = ({ id }) => {
+const posts = () => {
   return cache(
     `posts`,
     () => {
@@ -1059,7 +1059,7 @@ Note that a key can be a string or an array:
 ```js
 const post = ({ id }) => {
   return cache(`posts-${id}-${updatedAt.getTime()}`, () => {
-    return db.post.findMany()
+    return db.post.findUnique({ where: { id } })
   })
 }
 
@@ -1067,7 +1067,7 @@ const post = ({ id }) => {
 
 const post = ({ id }) => {
   return cache(['posts', id, updatedAt.getTime()], () => {
-    return db.post.findMany()
+    return db.post.findUnique({ where: { id } })
   })
 }
 ```

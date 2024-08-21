@@ -10,19 +10,34 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/cjs/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./loadEnvFiles": {
-      "types": "./dist/lib/loadEnvFiles.d.ts",
-      "import": "./dist/lib/loadEnvFiles.js",
-      "default": "./dist/cjs/lib/loadEnvFiles.js"
+      "import": {
+        "types": "./dist/lib/loadEnvFiles.d.ts",
+        "default": "./dist/lib/loadEnvFiles.js"
+      },
+      "default": {
+        "types": "./dist/cjs/lib/loadEnvFiles.d.ts",
+        "default": "./dist/cjs/lib/loadEnvFiles.js"
+      }
     },
     "./dist/lib/loadEnvFiles.js": {
-      "types": "./dist/lib/loadEnvFiles.d.ts",
-      "import": "./dist/lib/loadEnvFiles.js",
-      "default": "./dist/cjs/lib/loadEnvFiles.js"
+      "import": {
+        "types": "./dist/lib/loadEnvFiles.d.ts",
+        "default": "./dist/lib/loadEnvFiles.js"
+      },
+      "default": {
+        "types": "./dist/cjs/lib/loadEnvFiles.d.ts",
+        "default": "./dist/cjs/lib/loadEnvFiles.js"
+      }
     }
   },
   "types": "./dist/index.d.ts",
@@ -32,7 +47,7 @@
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-cli-helpers.tgz",
-    "build:types": "tsc --build --verbose tsconfig.build.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",

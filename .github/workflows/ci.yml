@@ -68,6 +68,22 @@ jobs:
     steps:
       - run: echo "Skipped"
 
+  formatting-check:
+    name: 📝 Check formatting (prettier)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          set-up-yarn-cache: false
+          yarn-install-directory: .
+          build: false
+
+      - name: 📝 Check formatting (prettier)
+        run: yarn format:check
+
   build-lint-test:
     needs: check
 
@@ -89,9 +105,6 @@ jobs:
 
       - name: 🔎 Lint
         run: yarn lint
-
-      - name: 📝 Check formatting (prettier)
-        run: yarn format:check
 
       - name: 🥡 Check packaging and attw
         run: yarn check:package

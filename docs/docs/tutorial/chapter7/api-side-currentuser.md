@@ -480,7 +480,7 @@ How can we return one list of posts in the admin, and a different list of posts 
 
 We could go down the road of adding variables in the GraphQL queries, along with checks in the existing `posts` service, that return a different list of posts whether you're on the homepage or in the admin. But this complexity adds a lot of surface area to test and some fragility if someone goes in there in the future—they have to be very careful not to add a new condition or negate an existing one and accidentally expose your admin functionality to exploits.
 
-What if we created _new_ GraphQL queries for the admin views of posts? They would have automatic security checks thanks to `@requireAdmin`, no custom code required. These new queries will be used in the admin posts pages, and the original, simple `posts` service will be used for the homepage and article detail page.
+What if we created _new_ GraphQL queries for the admin views of posts? They would have automatic security checks thanks to `@requireAuth`, no custom code required. These new queries will be used in the admin posts pages, and the original, simple `posts` service will be used for the homepage and article detail page.
 
 There are several steps we'll need to complete:
 
@@ -653,7 +653,7 @@ We don't need to make any changes to the "public" views (like `ArticleCell` and 
 
 Okay, let's take care of `updatePost` and `deletePost` now. Why couldn't we just do this?
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 export const updatePost = ({ id, input }) => {
   return db.post.update({
     data: input,
@@ -667,7 +667,7 @@ Because like `findUnique()`, Prisma only wants to update records based on fields
 
 We could select the record first, make sure the user owns it, and only then let the `update()` commence:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 // highlight-next-line
 import { ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -681,6 +681,7 @@ export const updatePost = async ({ id, input }) => {
   } else {
     throw new ForbiddenError("You don't have access to this post")
   }
+  // highlight-end
 }
 ```
 
@@ -688,7 +689,7 @@ We're using the `adminPost()` service function, rather than making another call 
 
 This works, but we'll need to do the same thing in `deletePost`. Let's extract that check for the post existence into a function:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 // highlight-start
 const verifyOwnership = async ({ id }) => {
   if (await adminPost({ id })) {
@@ -712,7 +713,7 @@ export const updatePost = async ({ id, input }) => {
 
 Simple! Our final `adminPosts` service ends up looking like:
 
-```javascript
+```javascript title="api/src/services/adminPosts/adminPosts.js"
 import { ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { db } from 'src/lib/db'
