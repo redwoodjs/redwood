@@ -26,15 +26,15 @@ const parseArgs = (argv: string[]) => {
     )
     .option('index', {
       type: 'number',
+      required: true,
       description:
         'The index of the `workers` array from the exported `jobs` config to use to configure this worker',
-      default: 0,
     })
     .option('id', {
       type: 'number',
+      required: true,
       description:
         'The worker count id to identify this worker. ie: if you had `count: 2` in your worker config, you would have two workers with ids 0 and 1',
-      default: 0,
     })
     .option('workoff', {
       type: 'boolean',
