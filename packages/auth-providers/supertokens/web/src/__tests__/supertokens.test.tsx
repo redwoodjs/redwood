@@ -7,8 +7,8 @@ import type {
   SuperTokensUser,
   SessionRecipe,
   SuperTokensAuth,
-} from '../supertokens'
-import { createAuth } from '../supertokens'
+} from '../supertokens.js'
+import { createAuth } from '../supertokens.js'
 
 const user: SuperTokensUser = {
   userId: 'unique_user_id',

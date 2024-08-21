@@ -1,1 +1,1 @@
-export { createAuth } from './supertokens'
+export { createAuth } from './supertokens.js'
