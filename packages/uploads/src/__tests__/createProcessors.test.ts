@@ -139,4 +139,10 @@ describe('FileList processing', () => {
     expect(result[0]).toMatch(/\/bazinga_not_mem_store\/.*\.png/)
     expect(result[1]).toMatch(/\/bazinga_not_mem_store\/.*\.jpeg/)
   })
+
+  it('Should handle empty FileLists', async () => {
+    const promise = fileListProcessor()
+
+    await expect(promise).resolves.not.toThrow()
+  })
 })

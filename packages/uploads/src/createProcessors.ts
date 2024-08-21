@@ -8,7 +8,7 @@ type MakeFilesString<T> = {
 }
 
 export const createFileListProcessor = (storage: StorageAdapter) => {
-  return async (files: File[], pathOverrideOnly?: { path?: string }) => {
+  return async (files: File[] = [], pathOverrideOnly?: { path?: string }) => {
     const locations = await Promise.all(
       files.map(async (file) => {
         const { location } = await storage.save(file, pathOverrideOnly)
