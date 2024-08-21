@@ -2,9 +2,10 @@ import { beforeEach, describe, expect, vi, it } from 'vitest'
 
 import { DEFAULT_LOGGER } from '../../consts.js'
 import * as errors from '../../errors.js'
+import type { BaseJob } from '../../types.js'
 import { Executor } from '../Executor.js'
 
-import { mockLogger } from './mocks.js'
+import { MockAdapter, mockLogger } from './mocks.js'
 
 const mocks = vi.hoisted(() => {
   return {
@@ -19,50 +20,65 @@ vi.mock('../../loaders', () => {
 })
 
 describe('constructor', () => {
-  it('saves options', () => {
-    const options = { adapter: 'adapter', job: 'job' }
-    const exector = new Executor(options)
+  const mockAdapter = new MockAdapter()
+  const mockJob: BaseJob = {
+    id: 1,
+    name: 'mockJob',
+    path: 'mockJob/mockJob',
+    args: [],
+    attempts: 0,
+  }
 
-    expect(exector.options).toEqual(expect.objectContaining(options))
+  it('saves options', () => {
+    const options = { adapter: mockAdapter, job: mockJob }
+    const executor = new Executor(options)
+
+    expect(executor.options).toEqual(expect.objectContaining(options))
   })
 
   it('extracts adapter from options to variable', () => {
-    const options = { adapter: 'adapter', job: 'job' }
-    const exector = new Executor(options)
+    const options = { adapter: mockAdapter, job: mockJob }
+    const executor = new Executor(options)
 
-    expect(exector.adapter).toEqual('adapter')
+    expect(executor.adapter).toEqual(mockAdapter)
   })
 
   it('extracts job from options to variable', () => {
-    const options = { adapter: 'adapter', job: 'job' }
-    const exector = new Executor(options)
+    const options = { adapter: mockAdapter, job: mockJob }
+    const executor = new Executor(options)
 
-    expect(exector.job).toEqual('job')
+    expect(executor.job).toEqual(mockJob)
   })
 
   it('extracts logger from options to variable', () => {
-    const options = { adapter: 'adapter', job: 'job', logger: { foo: 'bar' } }
-    const exector = new Executor(options)
+    const options = {
+      adapter: mockAdapter,
+      job: mockJob,
+      logger: mockLogger,
+    }
+    const executor = new Executor(options)
 
-    expect(exector.logger).toEqual({ foo: 'bar' })
+    expect(executor.logger).toEqual(mockLogger)
   })
 
   it('defaults logger if not provided', () => {
-    const options = { adapter: 'adapter', job: 'job' }
-    const exector = new Executor(options)
+    const options = { adapter: mockAdapter, job: mockJob }
+    const executor = new Executor(options)
 
-    expect(exector.logger).toEqual(DEFAULT_LOGGER)
+    expect(executor.logger).toEqual(DEFAULT_LOGGER)
   })
 
   it('throws AdapterRequiredError if adapter is not provided', () => {
-    const options = { job: 'job' }
+    const options = { job: mockJob }
 
+    // @ts-expect-error testing error case
     expect(() => new Executor(options)).toThrow(errors.AdapterRequiredError)
   })
 
   it('throws JobRequiredError if job is not provided', () => {
-    const options = { adapter: 'adapter' }
+    const options = { adapter: mockAdapter }
 
+    // @ts-expect-error testing error case
     expect(() => new Executor(options)).toThrow(errors.JobRequiredError)
   })
 })
@@ -73,45 +89,56 @@ describe('perform', () => {
   })
 
   it('invokes the `perform` method on the job class', async () => {
-    const mockAdapter = { success: vi.fn() }
+    const mockAdapter = new MockAdapter()
+    const mockJob = {
+      id: 1,
+      name: 'TestJob',
+      path: 'TestJob/TestJob',
+      args: ['foo'],
+      attempts: 0,
+
+      perform: vi.fn(),
+    }
+
     const options = {
       adapter: mockAdapter,
       logger: mockLogger,
-      job: { id: 1, name: 'TestJob', path: 'TestJob/TestJob', args: ['foo'] },
+      job: mockJob,
     }
     const executor = new Executor(options)
-    const job = { id: 1 }
 
-    // mock the job
-    const mockJob = { perform: vi.fn() }
-    // spy on the perform method
-    const performSpy = vi.spyOn(mockJob, 'perform')
     // mock the `loadJob` loader to return the job mock
     mocks.loadJob.mockImplementation(() => mockJob)
 
-    await executor.perform(job)
+    await executor.perform()
 
-    expect(performSpy).toHaveBeenCalledWith('foo')
+    expect(mockJob.perform).toHaveBeenCalledWith('foo')
   })
 
   it('invokes the `success` method on the adapter when job successful', async () => {
-    const mockAdapter = { success: vi.fn() }
+    const mockAdapter = new MockAdapter()
+    const mockJob = {
+      id: 1,
+      name: 'TestJob',
+      path: 'TestJob/TestJob',
+      args: ['foo'],
+      attempts: 0,
+
+      perform: vi.fn(),
+    }
     const options = {
       adapter: mockAdapter,
       logger: mockLogger,
-      job: { id: 1, name: 'TestJob', path: 'TestJob/TestJob', args: ['foo'] },
+      job: mockJob,
     }
     const executor = new Executor(options)
-    const job = { id: 1 }
 
-    // mock the job
-    const mockJob = { perform: vi.fn() }
     // spy on the success function of the adapter
     const adapterSpy = vi.spyOn(mockAdapter, 'success')
     // mock the `loadJob` loader to return the job mock
     mocks.loadJob.mockImplementation(() => mockJob)
 
-    await executor.perform(job)
+    await executor.perform()
 
     expect(adapterSpy).toHaveBeenCalledWith({
       job: options.job,
@@ -120,38 +147,36 @@ describe('perform', () => {
   })
 
   it('invokes the `failure` method on the adapter when job fails', async () => {
-    const mockAdapter = { error: vi.fn() }
+    const mockAdapter = new MockAdapter()
+    const mockError = new Error('mock error in the job perform method')
+    const mockJob = {
+      id: 1,
+      name: 'TestJob',
+      path: 'TestJob/TestJob',
+      args: ['foo'],
+      attempts: 0,
+
+      perform: vi.fn(() => {
+        throw mockError
+      }),
+    }
     const options = {
       adapter: mockAdapter,
       logger: mockLogger,
-      job: {
-        id: 1,
-        name: 'TestJob',
-        path: 'TestJob/TestJob',
-        args: ['foo'],
-        attempts: 0,
-      },
+      job: mockJob,
     }
     const executor = new Executor(options)
-    const job = { id: 1 }
 
-    const error = new Error()
-    // mock the job
-    const mockJob = {
-      perform: vi.fn(() => {
-        throw error
-      }),
-    }
     // spy on the success function of the adapter
     const adapterSpy = vi.spyOn(mockAdapter, 'error')
     // mock the `loadJob` loader to return the job mock
     mocks.loadJob.mockImplementation(() => mockJob)
 
-    await executor.perform(job)
+    await executor.perform()
 
     expect(adapterSpy).toHaveBeenCalledWith({
       job: options.job,
-      error,
+      error: mockError,
     })
   })
 })
