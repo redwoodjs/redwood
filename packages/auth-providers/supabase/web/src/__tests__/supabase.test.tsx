@@ -4,13 +4,13 @@ import { vi, it, describe, beforeAll, beforeEach, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../supabase'
+import { createAuth } from '../supabase.js'
 
 import {
   mockSupabaseAuthClient,
   loggedInUser,
   adminUser,
-} from './mockSupabaseAuthClient'
+} from './mockSupabaseAuthClient.js'
 
 const supabaseMockClient = {
   auth: mockSupabaseAuthClient,
