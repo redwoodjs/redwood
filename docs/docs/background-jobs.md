@@ -6,11 +6,11 @@ No one likes waiting in line. This is especially true of your website: users don
 
 A typical create-user flow could look something like this:
 
-![image](/img/background-jobs/jobs-before.png)
+![jobs-before](/img/background-jobs/jobs-before.png)
 
-If we want the email to be send asynchonously, we can shuttle that process off into a **background job**:
+If we want the email to be send asynchronously, we can shuttle that process off into a **background job**:
 
-![image](/img/background-jobs/jobs-after.png)
+![jobs-after](/img/background-jobs/jobs-after.png)
 
 The user's response is returned much quicker, and the email is sent by another process, literally running in the background. All of the logic around sending the email is packaged up as a **job** and a **job worker** is responsible for executing it.
 
@@ -36,7 +36,7 @@ There are three components to the background job system in Redwood:
 
 :::info Job execution time is never guaranteed
 
-When scheduling a job, you're really saying "this is the earliest possible time I want this job to run": based on what other jobs are in the queue, and how busy the workers are, they may not get a chance to execute this one particiular job for an indeterminate amount of time.
+When scheduling a job, you're really saying "this is the earliest possible time I want this job to run": based on what other jobs are in the queue, and how busy the workers are, they may not get a chance to execute this one particular job for an indeterminate amount of time.
 
 The only thing that's guaranteed is that a job won't run any _earlier_ than the time you specify.
 
@@ -44,15 +44,15 @@ The only thing that's guaranteed is that a job won't run any _earlier_ than the 
 
 ### Queues
 
-Jobs are organized by a named **queue**. This is simply a string and has no special significance, other than letting you group jobs. Why group them? So that you can potentially have workers with different configruations working on them. Let's say you send a lot of emails, and you find that among all your other jobs, emails are starting to be noticeably delayed when sending. You can start assigning those jobs to the "email" queue and create a new worker group that _only_ focuses on jobs in that queue so that they're sent in a more timely manner.
+Jobs are organized by a named **queue**. This is simply a string and has no special significance, other than letting you group jobs. Why group them? So that you can potentially have workers with different configurations working on them. Let's say you send a lot of emails, and you find that among all your other jobs, emails are starting to be noticeably delayed when sending. You can start assigning those jobs to the "email" queue and create a new worker group that _only_ focuses on jobs in that queue so that they're sent in a more timely manner.
 
 Jobs are sorted by **priority** before being selected to be worked on. Lower numbers mean higher priority:
 
-![image](/img/background-jobs/jobs-queues.png)
+![job-queues](/img/background-jobs/jobs-queues.png)
 
 You can also increase the number of workers in a group. If we bumped the group working on the "default" queue to 2 and started our new "email" group with 1 worker, once those workers started we would see them working on the following jobs:
 
-![image](/img/background-jobs/jobs-workers.png)
+![job-workers](/img/background-jobs/jobs-workers.png)
 
 ## Quick Start
 
@@ -85,8 +85,8 @@ export const SampleJob = jobs.createJob({
   // highlight-start
   perform: async (userId) => {
     jobs.logger.info(`Received user id ${userId}`)
-    // highlight-end
   },
+  // highlight-end
 })
 ```
 
@@ -101,7 +101,7 @@ import { later } from 'src/lib/jobs'
 import { SampleJob } from 'src/jobs/SampleJob'
 // highlight-end
 
-export const createUser = ({ input }) => {
+export const createUser = async ({ input }) => {
   const user = await db.user.create({ data: input })
   // highlight-next-line
   await later(SampleJob, [user.id], { wait: 60 })
@@ -209,6 +209,7 @@ Jobs are defined as a plain object and given to the `createJob()` function (whic
 
 ```js
 import { db } from 'src/lib/db'
+import { mailer } from 'src/lib/mailer'
 import { jobs } from 'src/lib/jobs'
 
 export const SendWelcomeEmailJob = jobs.createJob({
@@ -225,7 +226,7 @@ export const SendWelcomeEmailJob = jobs.createJob({
 
 At a minimum, a job must contain the name of the `queue` the job should be saved to, and a function named `perform()` which contains the logic for your job. You can add additional properties to the object to support the task your job is performing, but `perform()` is what's invoked by the job worker that we'll see later.
 
-Note that `perform()` can take any argument(s)s you want (or none at all), but it's a best practice to keep them as simple as possible. With the `PrismaAdapter` the arguments are stored in the database, so the list of arguments must be serializable to and from a string of JSON.
+Note that `perform()` can take any argument(s) you want (or none at all), but it's a best practice to keep them as simple as possible. With the `PrismaAdapter` the arguments are stored in the database, so the list of arguments must be serializable to and from a string of JSON.
 
 :::info Keeping Arguments Simple
 
@@ -270,7 +271,7 @@ later(SendWelcomeEmailJob, [user.id], { wait: 300 })
 Or run it at a specific datetime:
 
 ```js
-later(MilleniumAnnouncementJob, [user.id], {
+later(MillenniumAnnouncementJob, [user.id], {
   waitUntil: new Date(3000, 0, 1, 0, 0, 0),
 })
 ```
@@ -403,7 +404,7 @@ The object passed here contains all of the configuration for the Background Job 
 
 #### `adapters`
 
-This is the list of adapters that are available to handle storing and retreiving your jobs to and from the storage system. You could list more than one adapter here and then have multiple schedulers. Most folks will probably stick with a single one.
+This is the list of adapters that are available to handle storing and retrieving your jobs to and from the storage system. You could list more than one adapter here and then have multiple schedulers. Most folks will probably stick with a single one.
 
 #### `queues`
 
@@ -447,7 +448,7 @@ export const later = jobs.createScheduler({
 })
 ```
 
-- `adapter` : **[required]** the name of the adapter this scheudler will use to schedule jobs. Must be one of the keys that you gave to the `adapters` option on the JobManager itself.
+- `adapter` : **[required]** the name of the adapter this scheduler will use to schedule jobs. Must be one of the keys that you gave to the `adapters` option on the JobManager itself.
 - `logger` : the logger to use for this instance of the scheduler. If not provided, defaults to the `logger` set on the `JobManager`.
 
 #### Scheduling Options
@@ -482,7 +483,7 @@ export const SendWelcomeEmailJob = jobs.createJob({
 ```
 
 - `queue` : **[required]** the name of the queue that this job will be placed in. Must be one of the strings you assigned to `queues` array when you set up the `JobManager`.
-- `priority` : within a queue you can have jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. A lower number is _higher_ in priority than a lower number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`. If you don't override it here, the default priority is `50`.
+- `priority` : within a queue you can have jobs that are more or less important. The workers will pull jobs off the queue with a higher priority before working on ones with a lower priority. A lower number is _higher_ in priority than a higher number. ie. the workers will work on a job with a priority of `1` before they work on one with a priority of `100`. If you don't override it here, the default priority is `50`.
 
 ### Worker Config
 
@@ -515,8 +516,8 @@ This is an array of objects. Each object represents the config for a single "gro
 - `count` : **[required]** the number of workers to start with this config.
 - `maxAttempts`: the maximum number of times to retry a job before giving up. A job that throws an error will be set to retry in the future with an exponential backoff in time equal to the number of previous attempts \*\* 4. After this number, a job is considered "failed" and will not be re-attempted. Default: `24`.
 - `maxRuntime` : the maximum amount of time, in seconds, to try running a job before another worker will pick it up and try again. It's up to you to make sure your job doesn't run for longer than this amount of time! Default: `14_400` (4 hours).
-- `deleteFailedJobs` : when a job has failed (maximum number of retries has occured) you can keep the job in the database, or delete it. Default: `false`.
-- `deleteSuccessfulobs` : when a job has succeeded, you can keep the job in the database, or delete it. It's generally assumed that your jobs _will_ succeed so it usually makes sense to clear them out and keep the queue lean. Default: `true`.
+- `deleteFailedJobs` : when a job has failed (maximum number of retries has occurred) you can keep the job in the database, or delete it. Default: `false`.
+- `deleteSuccessfulJobs` : when a job has succeeded, you can keep the job in the database, or delete it. It's generally assumed that your jobs _will_ succeed so it usually makes sense to clear them out and keep the queue lean. Default: `true`.
 - `sleepDelay` : the amount of time, in seconds, to check the queue for another job to run. Too low and you'll be thrashing your storage system looking for jobs, too high and you start to have a long delay before any job is run. Default: `5`.
 
 See the next section for advanced usage examples, like multiple worker groups.
@@ -545,7 +546,7 @@ The only way to guarantee a job will completely stop no matter what is for your 
 
 :::
 
-To work on whatever outstanding jobs there are and then automaticaly exit use the `workoff` mode:
+To work on whatever outstanding jobs there are and then automatically exit use the `workoff` mode:
 
 ```bash
 yarn rw jobs workoff
@@ -569,7 +570,7 @@ In production you'll want your job workers running forever in the background. Fo
 yarn rw jobs start
 ```
 
-That will start a number of workers determined by the `workers` config on the `JobManager` and then detatch them from the console. If you care about the output of that worker then you'll want to have configured a logger that writes to the filesystem or sends to a third party log aggregator.
+That will start a number of workers determined by the `workers` config on the `JobManager` and then detach them from the console. If you care about the output of that worker then you'll want to have configured a logger that writes to the filesystem or sends to a third party log aggregator.
 
 To stop the workers:
 
@@ -674,7 +675,7 @@ For many use cases you may simply be able to rely on the job runner to start you
 yarn rw jobs start
 ```
 
-When you deploy new code you'll want to restart your runners to make sure they get the latest soruce files:
+When you deploy new code you'll want to restart your runners to make sure they get the latest source files:
 
 ```bash
 yarn rw jobs restart
@@ -702,7 +703,7 @@ yarn rw-jobs-worker --index=0 --id=0
 
 :::info
 
-The job runner started with `yarn rw jobs start` runs this same command behind the scenes for you, keeping it attached or detatched depending on if you start in `work` or `start` mode!
+The job runner started with `yarn rw jobs start` runs this same command behind the scenes for you, keeping it attached or detached depending on if you start in `work` or `start` mode!
 
 :::
 
@@ -717,11 +718,11 @@ Your process monitor can now restart the workers automatically if they crash sin
 
 ### What Happens if a Worker Crashes?
 
-If a worker crashes because of circumstances outside of your control the job will remained locked in the storage system: the worker couldn't finish work and clean up after itself. When this happens, the job will be picked up again immediately if a new worker starts with the same process title, otherwise when `maxRuntime` has passed it's eliglbe for any worker to pick up and re-lock.
+If a worker crashes because of circumstances outside of your control the job will remained locked in the storage system: the worker couldn't finish work and clean up after itself. When this happens, the job will be picked up again immediately if a new worker starts with the same process title, otherwise when `maxRuntime` has passed it's eligible for any worker to pick up and re-lock.
 
 ## Creating Your Own Adapter
 
-We'd love the community to contribue adapters for Redwood Job! Take a look at the source for `BaseAdapter` for what's absolutely required, and then the source for `PrismaAdapter` to see a concrete implementation.
+We'd love the community to contribute adapters for Redwood Job! Take a look at the source for `BaseAdapter` for what's absolutely required, and then the source for `PrismaAdapter` to see a concrete implementation.
 
 The general gist of the required functions:
 
@@ -740,4 +741,4 @@ There's still more to add to background jobs! Our current TODO list:
 - RW Studio integration: monitor the state of your outstanding jobs
 - Baremetal integration: if jobs are enabled, monitor the workers with pm2
 - Recurring jobs
-- Livecycle hooks: `beforePerform()`, `afterPerform()`, `afterSuccess()`, `afterFailure()`
+- Lifecycle hooks: `beforePerform()`, `afterPerform()`, `afterSuccess()`, `afterFailure()`
