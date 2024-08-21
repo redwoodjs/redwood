@@ -130,8 +130,10 @@ export class Worker {
 
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
-    // maximum wait time. Do an `undefined` check here so we can set to 0
-    this.sleepDelay = this.options.sleepDelay * 1000
+    // maximum wait time.
+    // To handle both 0 and `undefined` we do the `?? DEFAULT_OPTIONS` thing
+    this.sleepDelay =
+      (this.options.sleepDelay ?? DEFAULT_OPTIONS.sleepDelay) * 1000
 
     // Set to `false` and the work loop will quit when the current job is done
     // running (regardless of how many outstanding jobs there are to be worked

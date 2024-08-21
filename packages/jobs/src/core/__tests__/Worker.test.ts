@@ -173,6 +173,19 @@ describe('constructor', () => {
     expect(worker.sleepDelay).toEqual(0)
   })
 
+  it("uses default sleepDelay if it's undefined", () => {
+    const options = {
+      adapter: new MockAdapter(),
+      logger: mockLogger,
+      queues: ['*'],
+      processName: 'mockProcessName',
+      sleepDelay: undefined,
+    }
+    const worker = new Worker(options)
+
+    expect(worker.sleepDelay).toEqual(5_000)
+  })
+
   it('sets forever', () => {
     const options = {
       adapter: new MockAdapter(),
