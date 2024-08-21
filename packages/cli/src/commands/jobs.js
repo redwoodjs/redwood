@@ -6,7 +6,9 @@ export const builder = (yargs) => {
   // Disable yargs parsing of commands and options because it's forwarded
   // to rw-jobs
   yargs
-    .demandCommand(1)
+    .strictOptions(false)
+    .strictCommands(false)
+    .strict(false)
     .parserConfiguration({
       'camel-case-expansion': false,
     })
