@@ -18,20 +18,48 @@ import { Executor } from './Executor.js'
 
 export interface WorkerOptions {
   // required
+
   adapter: BaseAdapter
+  /** Used to set the `lockedBy` field in the database */
   processName: string
+  /** If not given a queue name then will work on jobs in any queue */
   queues: string[]
+
   // optional
+
   logger?: BasicLogger
+  /** If true, will clear the queue of all jobs and then exit */
   clear?: boolean
+  /** The maximum number of times to retry a failed job */
   maxAttempts?: number
+  /** The maximum amount of time to let a job run in seconds */
   maxRuntime?: number
+  /** Whether to keep succeeded jobs in the database */
   deleteSuccessfulJobs?: boolean
+  /** Whether to keep failed jobs in the database after reaching maxAttempts */
   deleteFailedJobs?: boolean
+  /**
+   * The amount of time to wait in milliseconds between checking for jobs.
+   * The time it took to run a job is subtracted from this time, so this is a
+   * maximum wait time.
+   *
+   * @default 5 seconds
+   */
   sleepDelay?: number
+  /**
+   * Set to `false` and the work loop will quit when the current job is done
+   * running (regardless of how many outstanding jobs there are to be worked
+   * on). The worker process will set this to `false` as soon as the user hits
+   * ctrl-c so any current job will complete before exiting.
+   */
   workoff?: boolean
-  // Makes testing much easier: we can set to false to NOT run in an infinite
-  // loop by default during tests
+
+  // For testing
+
+  /**
+   * Mainly used to make testing much easier: we can set to false to NOT run in
+   * an infinite loop by default during tests
+   */
   forever?: boolean
 }
 
@@ -159,8 +187,9 @@ export class Worker {
       })
 
       if (job) {
-        // TODO add timeout handling if runs for more than `this.maxRuntime`
-        // will need to run Executor in a separate process with a timeout
+        // TODO add timeout handling if a job runs for more than
+        // `this.maxRuntime`. Will need to run Executor in a separate process
+        // with a timeout for this to work
         await new Executor({
           adapter: this.adapter,
           logger: this.logger,

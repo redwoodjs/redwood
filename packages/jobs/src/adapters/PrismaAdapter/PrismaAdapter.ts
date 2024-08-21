@@ -101,9 +101,6 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
    * The act of locking a job is dependant on the DB server, so we'll run some
    * raw SQL to do it in each case—Prisma doesn't provide enough flexibility
    * in their generated code to do this in a DB-agnostic way.
-   *
-   * TODO: there may be more optimized versions of the locking queries in
-   * Postgres and MySQL
    */
   override async find({
     processName,
@@ -158,6 +155,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
     }
 
     // Actually query the DB
+    // TODO: there may be more optimized versions of the locking queries in
+    // Postgres and MySQL
     const job = await this.accessor.findFirst({
       select: { id: true, attempts: true },
       where: whereWithQueue,
@@ -167,8 +166,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
 
     if (job) {
       // If one was found, try to lock it by updating the record with the
-      // same WHERE clause as above (if another locked in the meantime it won't
-      // find any record to update)
+      // same WHERE clause as above (if another locked it in the meantime it
+      // won't find any record to update)
       const whereWithQueueAndId = Object.assign(whereWithQueue, {
         AND: [...whereWithQueue.AND, { id: job.id }],
       })
@@ -191,8 +190,8 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       }
     }
 
-    // If we get here then there were either no jobs, or the one we found
-    // was locked by another worker
+    // If we get here then there were either no jobs, or the one we found was
+    // locked by another worker
     return undefined
   }
 
@@ -224,12 +223,10 @@ export class PrismaAdapter extends BaseAdapter<PrismaAdapterOptions> {
       lockedAt: null,
       lockedBy: null,
       lastError: `${error.message}\n\n${error.stack}`,
-      runAt: null,
+      runAt: new Date(
+        new Date().getTime() + this.backoffMilliseconds(job.attempts),
+      ),
     }
-
-    data.runAt = new Date(
-      new Date().getTime() + this.backoffMilliseconds(job.attempts),
-    )
 
     await this.accessor.update({
       where: { id: job.id },

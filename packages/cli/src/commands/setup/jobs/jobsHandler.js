@@ -95,7 +95,7 @@ const tasks = async ({ force }) => {
             fs.mkdirSync(getPaths().api.jobs)
           } catch (e) {
             // ignore directory already existing
-            if (!e.message.match('file already exists')) {
+            if (!/file already exists/.test(e.message)) {
               throw new Error(e)
             }
           }
