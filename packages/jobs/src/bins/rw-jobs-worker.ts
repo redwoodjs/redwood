@@ -47,7 +47,7 @@ const parseArgs = (argv: string[]) => {
     .help().argv
 }
 
-export const processTitle = ({
+export const processName = ({
   id,
   queues,
 }: {
@@ -108,7 +108,7 @@ export const getWorker = async ({
     index,
     clear,
     workoff,
-    processName: processTitle({ id, queues: workerConfig.queue }),
+    processName: processName({ id, queues: workerConfig.queue }),
   })
 }
 
@@ -117,7 +117,7 @@ const main = async () => {
 
   const worker = await getWorker({ index, id, clear, workoff })
 
-  process.title = processTitle({ id, queues: worker.queues })
+  process.title = processName({ id, queues: worker.queues })
 
   worker.run().then(() => {
     worker.logger.info(`[${process.title}] Worker finished, shutting down.`)
