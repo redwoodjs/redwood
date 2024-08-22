@@ -12,7 +12,7 @@ import { OutputManager, Stage } from './output.mjs'
 
 export async function tarsync(
   { projectPath, verbose }: Omit<Options, 'watch'>,
-  triggedBy: string,
+  triggeredBy: string,
 ) {
   const isTTY = process.stdout.isTTY
   const verboseOutput = verbose || !isTTY
@@ -22,7 +22,7 @@ export async function tarsync(
     disabled: verboseOutput,
   })
   outputManager.start({
-    triggeredBy: triggedBy ?? 'CLI invocation',
+    triggeredBy,
   })
 
   cd(FRAMEWORK_PATH)
