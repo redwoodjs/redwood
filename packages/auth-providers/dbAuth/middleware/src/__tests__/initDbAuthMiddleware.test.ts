@@ -8,9 +8,10 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/web/middleware'
 
-import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState'
-import type { DbAuthMiddlewareOptions } from '../index'
-import { initDbAuthMiddleware } from '../index'
+import { middlewareDefaultAuthProviderState } from '../../../../../auth/dist/AuthProvider/AuthProviderState.js'
+import type { DbAuthMiddlewareOptions } from '../index.js'
+import { initDbAuthMiddleware } from '../index.js'
+
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',
@@ -39,6 +40,8 @@ beforeAll(() => {
               mockedSession: 'this_is_the_only_correct_session',
             }
           }
+
+          return undefined
         }),
       },
     }

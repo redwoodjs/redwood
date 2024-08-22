@@ -7,32 +7,39 @@
     "directory": "packages/record"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/cjs/index.js"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-record.tgz",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "datamodel:parse": "node src/scripts/parse.js",
+    "check:package": "yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.25.0",
     "@prisma/client": "5.18.0",
+    "@redwoodjs/api": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
-    "core-js": "3.38.0"
+    "camelcase": "6.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.8",
-    "@babel/core": "^7.22.20",
     "@prisma/internals": "5.18.0",
+    "@redwoodjs/framework-tools": "workspace:*",
     "esbuild": "0.23.0",
+    "publint": "0.2.10",
+    "tsx": "4.17.0",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

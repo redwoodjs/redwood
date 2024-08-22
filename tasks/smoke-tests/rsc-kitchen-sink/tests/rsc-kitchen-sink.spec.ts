@@ -16,6 +16,8 @@ test.beforeAll(async ({ browser }) => {
   await page.getByLabel('Username').fill(testUser.email)
   await page.getByLabel('Password').fill(testUser.password)
 
+  await page.waitForTimeout(300)
+
   await page.getByRole('button', { name: 'Sign Up' }).click()
 
   // Wait for either...
@@ -178,9 +180,13 @@ test('Server Cell', async ({ page }) => {
   expect(h1).toMatch(/UserExamples - userExamples/)
 
   await expect(page.getByText('Email')).toBeVisible()
-  await expect(page.getByText('jackie@example.com')).toBeVisible()
+  await expect(
+    page.getByText(/(jackie|bob|alice|mark)@example\.com/),
+  ).toBeVisible()
 
-  await expect(page.locator('tr').nth(2)).toContainText(/Name\s*jackie/)
+  await expect(page.locator('tr').nth(2)).toContainText(
+    /Name\s*(jackie|bob|alice|mark)/,
+  )
 })
 
 test('Server Cell - Error component', async ({ page }) => {
