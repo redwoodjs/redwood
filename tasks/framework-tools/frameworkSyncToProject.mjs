@@ -235,7 +235,19 @@ async function main() {
   process.on('SIGINT', closeWatcher)
   process.on('exit', closeWatcher)
 
+  let lastSyncEndedAt = 0
   watcher.on('all', async (event, filePath) => {
+    // We ignore changes that happen to package.json files that could have occurred
+    // as a result of the project syncing process. We do this by ignoring changes to
+    // those files that are registered within a short period after the sync process
+    // has ended - because events are being emitted only after the process has ended.
+    if (
+      Date.now() - lastSyncEndedAt < 8_000 &&
+      filePath.endsWith('package.json')
+    ) {
+      return
+    }
+
     logStatus(`${event}: ${filePath}`)
 
     if (filePath.endsWith('package.json')) {
@@ -285,6 +297,7 @@ async function main() {
 
     logStatus(`Done, and waiting for changes...`)
     console.log(separator)
+    lastSyncEndedAt = Date.now()
   })
 }
 
