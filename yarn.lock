@@ -7227,6 +7227,7 @@ __metadata:
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/fastify-web": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
     "@types/aws-lambda": "npm:8.10.143"
@@ -8083,6 +8084,7 @@ __metadata:
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
     "@babel/cli": "npm:7.24.8"
+    "@redwoodjs/api-server": "workspace:*"
     "@redwoodjs/cli": "workspace:*"
     "@redwoodjs/eslint-config": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -8248,6 +8250,7 @@ __metadata:
     "@opentelemetry/api": "npm:1.8.0"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/context": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/realtime": "workspace:*"
     "@types/aws-lambda": "npm:8.10.143"
