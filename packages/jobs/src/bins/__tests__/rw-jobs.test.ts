@@ -22,13 +22,40 @@ vi.mock('node:child_process', () => {
 })
 
 describe('buildNumWorkers()', () => {
-  it('turns an array of counts config into an array of arrays', () => {
+  it('turns a single worker config into an array of arrays', () => {
+    const config = [
+      {
+        count: 1,
+      },
+    ]
+
+    const result = buildNumWorkers(config)
+
+    expect(result).toEqual([[0, 0]])
+  })
+
+  it('turns a single worker config with more than 1 count an array of arrays', () => {
+    const config = [
+      {
+        count: 2,
+      },
+    ]
+
+    const result = buildNumWorkers(config)
+
+    expect(result).toEqual([
+      [0, 0],
+      [0, 1],
+    ])
+  })
+
+  it('turns multiple worker configs into an array of arrays', () => {
     const config = [
       {
         count: 2,
       },
       {
-        count: 1,
+        count: 3,
       },
     ]
 
@@ -38,6 +65,8 @@ describe('buildNumWorkers()', () => {
       [0, 0],
       [0, 1],
       [1, 0],
+      [1, 1],
+      [1, 2],
     ])
   })
 })
@@ -55,6 +84,7 @@ describe('startWorkers()', () => {
 
     startWorkers({ numWorkers: [[0, 0]], logger: mockLogger })
 
+    // single worker only
     expect(mocks.fork).toHaveBeenCalledWith(
       expect.stringContaining('rw-jobs-worker.js'),
       ['--index', '0', '--id', '0'],
@@ -79,11 +109,13 @@ describe('startWorkers()', () => {
       logger: mockLogger,
     })
 
+    // first worker
     expect(mocks.fork).toHaveBeenCalledWith(
       expect.stringContaining('rw-jobs-worker.js'),
       ['--index', '0', '--id', '0'],
       expect.any(Object),
     )
+    // second worker
     expect(mocks.fork).toHaveBeenCalledWith(
       expect.stringContaining('rw-jobs-worker.js'),
       ['--index', '0', '--id', '1'],
