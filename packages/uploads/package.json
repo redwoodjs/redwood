@@ -42,13 +42,12 @@
       }
     }
   },
-  "types": "dist/prismaExtension.d.ts",
   "files": [
     "dist",
     "prisma"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && run build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-uploads.tgz",
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
