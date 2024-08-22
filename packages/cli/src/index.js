@@ -20,6 +20,7 @@ import * as execCommand from './commands/exec'
 import * as experimentalCommand from './commands/experimental'
 import * as generateCommand from './commands/generate'
 import * as infoCommand from './commands/info'
+import * as jobsCommand from './commands/jobs'
 import * as lintCommand from './commands/lint'
 import * as prerenderCommand from './commands/prerender'
 import * as prismaCommand from './commands/prisma'
@@ -210,6 +211,7 @@ async function runYargs() {
     .command(experimentalCommand)
     .command(generateCommand)
     .command(infoCommand)
+    .command(jobsCommand)
     .command(lintCommand)
     .command(prerenderCommand)
     .command(prismaCommand)

@@ -4,7 +4,7 @@ import { vi, expect, it, beforeAll, beforeEach, describe } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../netlify'
+import { createAuth } from '../netlify.js'
 
 type NetlifyIdentity = typeof NetlifyIdentityNS
 type User = NetlifyIdentityNS.User

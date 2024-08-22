@@ -9,7 +9,7 @@ import { vi, expect, describe, it, beforeAll, beforeEach } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../clerk'
+import { createAuth } from '../clerk.js'
 
 const user: Partial<UserResource> = {
   id: 'unique_user_id',

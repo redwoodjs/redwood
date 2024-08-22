@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "allowJs": true
+  },
+  "include": ["./src/**/*", "ambient.d.ts"],
+  "references": [
+    { "path": "../babel-config" },
+    { "path": "../project-config" },
+    { "path": "../router/tsconfig.build.json" },
+    { "path": "../structure" },
+    { "path": "../web/tsconfig.build.json" },
+    { "path": "../framework-tools" }
+  ]
+}
