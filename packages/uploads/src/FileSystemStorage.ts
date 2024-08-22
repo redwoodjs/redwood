@@ -14,7 +14,7 @@ export class FileSystemStorage
   constructor(opts: { baseDir: string }) {
     super(opts)
     if (!existsSync(opts.baseDir)) {
-      console.log('Creating baseDir', opts.baseDir)
+      console.log('Creating baseDir >', opts.baseDir)
       mkdirSync(opts.baseDir, { recursive: true })
     }
   }

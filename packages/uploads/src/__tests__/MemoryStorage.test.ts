@@ -1,13 +1,9 @@
-import { beforeEach, describe, expect, test } from 'vitest'
+import { describe, expect, test } from 'vitest'
 
 import { MemoryStorage } from '../MemoryStorage.js'
 
 describe('MemoryStorage', () => {
-  let storage: MemoryStorage
-
-  beforeEach(() => {
-    storage = new MemoryStorage({ baseDir: 'uploads' })
-  })
+  const storage = new MemoryStorage({ baseDir: 'uploads' })
 
   test('save should store a file in memory', async () => {
     const file = new File(['test content'], 'test.txt', { type: 'text/plain' })
