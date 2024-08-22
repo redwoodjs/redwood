@@ -60,22 +60,20 @@
   },
   "dependencies": {
     "@redwoodjs/project-config": "workspace:*",
-    "fs-extra": "11.2.0",
     "mime-types": "2.1.35",
     "ulid": "2.3.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@prisma/client": "5.18.0",
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/fs-extra": "11.0.4",
     "@types/mime-types": "2.1.4",
     "concurrently": "8.2.2",
     "esbuild": "0.23.0",
-    "publint": "0.2.9",
-    "tsx": "4.16.2",
+    "publint": "0.2.10",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
