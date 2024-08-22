@@ -170,9 +170,13 @@ describe('Query extensions', () => {
       expect(updatedDummy.uploadField).toBe('/tmp/new.txt')
     })
 
-    it('should not delete the file if the update fails', async () => {})
+    it('should not delete the file if the update fails', async () => {
+      throw new Error('Not implemented yet')
+    })
 
-    it('should not delete files from other fields', async () => {})
+    it('should not delete files from other fields', async () => {
+      throw new Error('Not implemented yet')
+    })
   })
 
   describe('delete', () => {

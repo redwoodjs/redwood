@@ -4,7 +4,7 @@ import { Prisma as PrismaExtension } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 
 
-import { fileToDataUri } from './fileSave.utils.js'
+import { fileToDataUri } from './fileHandling.js'
 import type { UrlSigner } from './signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
 
@@ -170,6 +170,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             for await (const field of uploadFields) {
               base64UploadFields[field] = await fileToDataUri(
                 modelData[field] as string,
+                storageAdapter,
               )
             }
 
