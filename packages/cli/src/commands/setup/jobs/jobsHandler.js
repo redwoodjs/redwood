@@ -106,10 +106,10 @@ const tasks = async ({ force }) => {
           ${c.success('\nBackground jobs configured!\n')}
 
           ${!modelExists ? 'Migrate your database to finish setting up jobs:\n' : ''}
-          ${!modelExists ? c.warning('\n\u00A0\u00A0yarn rw prisma migrate dev\n') : ''}
+          ${!modelExists ? c.highlight('\n\u00A0\u00A0yarn rw prisma migrate dev\n') : ''}
 
-          Generate jobs with: ${c.warning('yarn rw g job <name>')}
-          Execute jobs with:  ${c.warning('yarn rw jobs work\n')}
+          Generate jobs with: ${c.highlight('yarn rw g job <name>')}
+          Execute jobs with:  ${c.highlight('yarn rw jobs work\n')}
 
           Check out the docs for more info:
           ${c.link('https://docs.redwoodjs.com/docs/background-jobs')}
