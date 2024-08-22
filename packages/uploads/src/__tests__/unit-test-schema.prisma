@@ -17,6 +17,7 @@ model Dumbo {
   id Int @id @default(autoincrement())
   firstUpload String
   secondUpload String
+  message String?
 }
 
 model NoUploadFields {

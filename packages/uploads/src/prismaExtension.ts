@@ -3,7 +3,6 @@ import type { Prisma } from '@prisma/client'
 import { Prisma as PrismaExtension } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 
-
 import { fileToDataUri } from './fileHandling.js'
 import type { UrlSigner } from './signedUrls.js'
 import type { StorageAdapter } from './StorageAdapter.js'
@@ -59,38 +58,6 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     }
   }
 
-  async function deleteUpload<T extends runtime.JsArgs>(
-    {
-      model,
-      args,
-      fields,
-    }: {
-      model: string
-      args: T
-      fields: string[]
-    },
-    storageAdapter: StorageAdapter,
-  ) {
-    // With strict mode you cannot call findFirstOrThrow with the same args, because it is a union type
-    // Ideally there's a better way to do this
-    const record =
-      // @TODO not sure how to resolve this error
-      // @ts-expect-error Complaning because findFirstOrThrow args is a union type
-      await prismaInstance[model as ModelNames].findFirstOrThrow(args)
-
-    // Delete the file from the file system
-    fields.forEach(async (field) => {
-      const filePath = record[field]
-      if (filePath) {
-        try {
-          await storageAdapter.remove(filePath)
-        } catch {
-          // Swallow the error, we don't want to stop the delete operation
-        }
-      }
-    })
-  }
-
   const queryExtends: runtime.ExtensionArgs['query'] = {}
 
   const resultExtends = {} as ResultExtends
@@ -115,43 +82,64 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           return result
         } catch (e) {
           // If the create fails, we need to delete the uploaded files
-          await removeUploadedFiles(uploadFields, args)
+          await removeUploadedFiles(
+            uploadFields,
+            args.data as Record<string, string>,
+          )
           throw e
         }
       },
       async update({ query, model, args }) {
-        await deleteUpload(
-          {
-            model,
-            args: {
-              // The update args contains data, which we don't need to supply to delete
-              where: args.where,
-            },
-            fields: uploadFields,
-          },
-          storageAdapter,
+        // Check if any of the uploadFields are present in args.data
+        // We only want to process fields that are being updated
+        const uploadFieldsToUpdate = uploadFields.filter(
+          (field) =>
+            // All of this non-sense is to make typescript happy. I'm not sure how data could be anything but an object
+            typeof args.data === 'object' &&
+            args.data !== null &&
+            field in args.data,
         )
 
-        // Same as create 👇
-        try {
-          const result = await query(args)
-          return result
-        } catch (e) {
-          // If the create fails, we need to delete the uploaded files
-          await removeUploadedFiles(uploadFields, args)
-          throw e
+        // If no upload fields are present, proceed with the original query
+        // avoid overhead of extra lookups
+        if (uploadFieldsToUpdate.length == 0) {
+          return query(args)
+        } else {
+          const originalRecord = await prismaInstance[
+            model as ModelNames
+            // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
+          ].findFirstOrThrow({
+            where: args.where,
+            // @TODO: should we select here to reduce the amount of data we're handling
+          })
+
+          // Similar, but not same as create
+          try {
+            const result = await query(args)
+
+            // **After** we've updated the record, we need to delete the old file.
+            await removeUploadedFiles(uploadFieldsToUpdate, originalRecord)
+
+            return result
+          } catch (e) {
+            // If the update fails, we need to delete the newly uploaded files
+            // but not the ones that already exist!
+            await removeUploadedFiles(
+              uploadFieldsToUpdate,
+              args.data as Record<string, string>,
+            )
+            throw e
+          }
         }
       },
 
       async delete({ model, query, args }) {
-        await deleteUpload(
-          {
-            model,
-            args,
-            fields: uploadFields,
-          },
-          storageAdapter,
-        )
+        /** Delete args are the same as findFirst, essentially a where clause */
+        const record =
+          // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
+          await prismaInstance[model as ModelNames].findFirstOrThrow(args)
+
+        await removeUploadedFiles(uploadFields, record)
 
         return query(args)
       },
@@ -225,11 +213,23 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
 
   // @TODO(TS): According to TS, data could be a non-object...
   // Setting args to JsArgs causes errors. This could be a legit issue
-  async function removeUploadedFiles(uploadFields: string[], args: any) {
-    for await (const field of uploadFields) {
-      const uploadLocation = args.data?.[field] as string
+  async function removeUploadedFiles(
+    fieldsToDelete: string[],
+    data: Record<string, string>,
+  ) {
+    if (!data) {
+      console.warn('Empty data object passed to removeUploadedFiles')
+      return
+    }
+
+    for await (const field of fieldsToDelete) {
+      const uploadLocation = data?.[field]
       if (uploadLocation) {
-        await storageAdapter.remove(uploadLocation)
+        try {
+          await storageAdapter.remove(uploadLocation)
+        } catch {
+          // Swallow the error, we don't want to stop the delete operation
+        }
       }
     }
   }

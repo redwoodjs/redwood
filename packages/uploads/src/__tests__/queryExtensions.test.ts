@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises'
 
 import type { MockedFunction } from 'vitest'
-import { describe, it, vi, expect, beforeEach } from 'vitest'
+import { describe, it, vi, expect, beforeEach, beforeAll } from 'vitest'
 
 import { FileSystemStorage } from '../FileSystemStorage.js'
 import { setupUploads } from '../index.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
 // @MARK: use the local prisma client in the test
+import type { Dumbo, Dummy } from './prisma-client/index.js'
 import { PrismaClient } from './prisma-client/index.js'
 
 vi.mock('node:fs/promises', () => ({
@@ -99,13 +100,13 @@ describe('Query extensions', () => {
             {
               firstUpload: '/one/first.txt',
               secondUpload: '/one/second.txt',
-              // @ts-expect-error Intentional bro
+              // @ts-expect-error Intentional
               id: 'break',
             },
             {
               firstUpload: '/two/first.txt',
               secondUpload: '/two/second.txt',
-              // @ts-expect-error Intentional bro
+              // @ts-expect-error Intentional
               id: 'break2',
             },
           ],
@@ -133,7 +134,7 @@ describe('Query extensions', () => {
             {
               firstUpload: '/two/first.txt',
               secondUpload: '/two/second.txt',
-              // @ts-expect-error Intentional bro
+              // @ts-expect-error Intentional
               id: 'break2',
             },
           ],
@@ -150,19 +151,34 @@ describe('Query extensions', () => {
   })
 
   describe('update', () => {
-    it('update will remove the old file, save new one', async () => {
-      const dummy = await prismaClient.dummy.create({
+    let ogDummy: Dummy
+    let ogDumbo: Dumbo
+    beforeAll(async () => {
+      ogDummy = await prismaClient.dummy.create({
         data: {
           uploadField: '/tmp/old.txt',
         },
       })
 
+      ogDumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/tmp/oldFirst.txt',
+          secondUpload: '/tmp/oldSecond.txt',
+        },
+      })
+    })
+
+    beforeEach(() => {
+      vi.resetAllMocks()
+    })
+
+    it('update will remove the old file, save new one', async () => {
       const updatedDummy = await prismaClient.dummy.update({
         data: {
           uploadField: '/tmp/new.txt',
         },
         where: {
-          id: dummy.id,
+          id: ogDummy.id,
         },
       })
 
@@ -171,11 +187,51 @@ describe('Query extensions', () => {
     })
 
     it('should not delete the file if the update fails', async () => {
-      throw new Error('Not implemented yet')
+      const failedUpdatePromise = prismaClient.dummy.update({
+        data: {
+          // @ts-expect-error Intentional
+          id: 'this-is-the-incorrect-type',
+        },
+        where: {
+          id: ogDummy.id,
+        },
+      })
+
+      // Id is invalid, so the update should fail
+      await expect(failedUpdatePromise).rejects.toThrowError()
+
+      // The old one should NOT be deleted
+      expect(fs.unlink).not.toHaveBeenCalled()
     })
 
-    it('should not delete files from other fields', async () => {
-      throw new Error('Not implemented yet')
+    it.only('should only delete old files from the fields that are being updated', async () => {
+      const updatedDumbo = await prismaClient.dumbo.update({
+        data: {
+          firstUpload: '/tmp/newFirst.txt',
+        },
+        where: {
+          id: ogDumbo.id,
+        },
+      })
+
+      expect(updatedDumbo.firstUpload).toBe('/tmp/newFirst.txt')
+      expect(updatedDumbo.secondUpload).toBe('/tmp/oldSecond.txt')
+      expect(fs.unlink).toHaveBeenCalledOnce()
+      expect(fs.unlink).toHaveBeenCalledWith('/tmp/oldFirst.txt')
+    })
+
+    it('should not delete files on update of non-upload fields', async () => {
+      // In this case, we're only updating the message field
+      await prismaClient.dumbo.update({
+        data: {
+          message: 'Hello world',
+        },
+        where: {
+          id: ogDumbo.id,
+        },
+      })
+
+      expect(fs.unlink).not.toHaveBeenCalled()
     })
   })
 
