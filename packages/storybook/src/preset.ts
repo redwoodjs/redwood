@@ -33,7 +33,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
   // Needs to run before the react plugin, so add to the front
   plugins.unshift(
     reactDocgen({
-      include: /\.(mjs|tsx?|jsx?)$/,
+      include: /\.(tsx?|jsx?)$/,
     }),
   )
 
