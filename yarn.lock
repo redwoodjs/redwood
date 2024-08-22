@@ -8340,6 +8340,7 @@ __metadata:
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
     tsx: "npm:4.17.0"
+    type-fest: "npm:4.24.0"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   bin:

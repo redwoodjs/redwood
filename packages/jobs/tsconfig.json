@@ -6,5 +6,9 @@
   },
   "include": ["."],
   "exclude": ["dist", "node_modules", "**/__mocks__", "**/__tests__/fixtures"],
-  "references": [{ "path": "../cli-helpers" }, { "path": "../project-config" }]
+  "references": [
+    { "path": "../cli-helpers" },
+    { "path": "../framework-tools" },
+    { "path": "../project-config" }
+  ]
 }

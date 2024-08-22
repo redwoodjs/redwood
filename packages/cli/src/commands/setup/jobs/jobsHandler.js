@@ -45,10 +45,10 @@ const addDatabaseModel = () => {
 const tasks = async ({ force }) => {
   const modelExists = (await getModelNames()).includes('BackgroundJob')
 
+  const packageJsonPath = path.join(getPaths().base, 'package.json')
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
   const redwoodVersion =
-    require(path.join(getPaths().base, 'package.json')).devDependencies[
-      '@redwoodjs/core'
-    ] ?? 'latest'
+    packageJson.devDependencies?.['@redwoodjs/core'] ?? 'latest'
   const jobsPackage = `@redwoodjs/jobs@${redwoodVersion}`
 
   return new Listr(
@@ -91,14 +91,7 @@ const tasks = async ({ force }) => {
       {
         title: 'Creating jobs dir at api/src/jobs...',
         task: () => {
-          try {
-            fs.mkdirSync(getPaths().api.jobs)
-          } catch (e) {
-            // ignore directory already existing
-            if (!e.message.match('file already exists')) {
-              throw new Error(e)
-            }
-          }
+          fs.mkdirSync(getPaths().api.jobs, { recursive: true })
           writeFile(path.join(getPaths().api.jobs, '.keep'), '', {
             overwriteExisting: force,
           })
@@ -113,10 +106,10 @@ const tasks = async ({ force }) => {
           ${c.success('\nBackground jobs configured!\n')}
 
           ${!modelExists ? 'Migrate your database to finish setting up jobs:\n' : ''}
-          ${!modelExists ? c.warning('\n\u00A0\u00A0yarn rw prisma migrate dev\n') : ''}
+          ${!modelExists ? c.important('\n\u00A0\u00A0yarn rw prisma migrate dev\n') : ''}
 
-          Generate jobs with: ${c.warning('yarn rw g job <name>')}
-          Execute jobs with:  ${c.warning('yarn rw jobs work\n')}
+          Generate jobs with: ${c.info('yarn rw g job <name>')}
+          Execute jobs with:  ${c.info('yarn rw jobs work\n')}
 
           Check out the docs for more info:
           ${c.link('https://docs.redwoodjs.com/docs/background-jobs')}
@@ -135,6 +128,6 @@ export const handler = async ({ force }) => {
   try {
     await t.run()
   } catch (e) {
-    console.log(c.error(e.message))
+    console.error(c.error(e.message))
   }
 }

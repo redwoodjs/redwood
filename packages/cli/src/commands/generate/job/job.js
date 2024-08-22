@@ -16,8 +16,8 @@ import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { validateName, templateForComponentFile } from '../helpers'
 
-// Makes sure the name ends up looking like: `WelcomeNotice` even if the user
-// called it `welcome-notice` or `welcomeNoticeJob` or anything else
+// Try to make the name end up looking like: `WelcomeNotice` even if the user
+// called it `welcome-notice` or `welcomeNoticeJob` or something like that
 const normalizeName = (name) => {
   return changeCase.pascalCase(name).replace(/Job$/, '')
 }
@@ -107,7 +107,8 @@ export const description = 'Generate a Background Job'
 // This could be built using createYargsForComponentGeneration;
 // however, functions shouldn't have a `stories` option. createYargs...
 // should be reversed to provide `yargsDefaults` as the default configuration
-// and accept a configuration such as its CURRENT default to append onto a command.
+// and accept a configuration such as its CURRENT default to append onto a
+// command.
 export const builder = (yargs) => {
   yargs
     .positional('name', {
@@ -137,7 +138,8 @@ export const builder = (yargs) => {
       )}`,
     )
 
-  // Add default options, includes '--typescript', '--javascript', '--force', ...
+  // Add default options. This includes '--typescript', '--javascript',
+  // '--force', ...
   Object.entries(yargsDefaults).forEach(([option, config]) => {
     yargs.option(option, config)
   })
@@ -156,7 +158,7 @@ export const handler = async ({ name, force, ...rest }) => {
 
   let queueName = 'default'
 
-  // Attempt to read the first queue in the users job config file
+  // Attempt to read the first queue in the user's job config file
   try {
     const jobsManagerFile = getPaths().api.distJobsConfig
     const jobManager = await import(pathToFileURL(jobsManagerFile).href)
@@ -170,9 +172,8 @@ export const handler = async ({ name, force, ...rest }) => {
       {
         title: 'Generating job files...',
         task: async () => {
-          return writeFilesTask(await files({ name, queueName, ...rest }), {
-            overwriteExisting: force,
-          })
+          const jobFiles = await files({ name, queueName, ...rest })
+          return writeFilesTask(jobFiles, { overwriteExisting: force })
         },
       },
       {

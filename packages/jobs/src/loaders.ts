@@ -10,6 +10,7 @@ import type {
   BasicLogger,
   Job,
   JobComputedProperties,
+  QueueNames,
 } from './types.js'
 import { makeFilePath } from './util.js'
 
@@ -19,7 +20,7 @@ import { makeFilePath } from './util.js'
  * @returns JobManager
  */
 export const loadJobsManager = async (): Promise<
-  JobManager<Adapters, string[], BasicLogger>
+  JobManager<Adapters, QueueNames, BasicLogger>
 > => {
   // Confirm the specific lib/jobs.ts file exists
   const jobsConfigPath = getPaths().api.distJobsConfig
@@ -43,7 +44,7 @@ export const loadJobsManager = async (): Promise<
 export const loadJob = async ({
   name: jobName,
   path: jobPath,
-}: JobComputedProperties): Promise<Job<string[], unknown[]>> => {
+}: JobComputedProperties): Promise<Job<QueueNames, unknown[]>> => {
   // Confirm the specific job file exists
   const completeJobPath = path.join(getPaths().api.distJobs, jobPath) + '.js'
 

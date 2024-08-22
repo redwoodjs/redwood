@@ -31,7 +31,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx ./build.mts",
+    "build": "tsx ./build.ts",
     "build:pack": "yarn pack -o redwoodjs-jobs.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
@@ -44,7 +44,8 @@
   },
   "dependencies": {
     "@redwoodjs/cli-helpers": "workspace:*",
-    "@redwoodjs/project-config": "workspace:*"
+    "@redwoodjs/project-config": "workspace:*",
+    "type-fest": "4.24.0"
   },
   "devDependencies": {
     "@prisma/client": "5.18.0",

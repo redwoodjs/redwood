@@ -6,13 +6,11 @@ import path from 'path'
 
 import { describe, it, expect } from 'vitest'
 
+// @ts-expect-error - Jobs is a JavaScript file
 import * as jobGenerator from '../job'
 
-// Should be refactored as it's repeated
-type WordFilesType = { [key: string]: string }
-
 describe('Single word default files', async () => {
-  const files: WordFilesType = await jobGenerator.files({
+  const files = await jobGenerator.files({
     name: 'Sample',
     queueName: 'default',
     tests: true,
@@ -64,7 +62,7 @@ describe('multi-word files', () => {
 })
 
 describe('generation of js files', async () => {
-  const jsFiles: WordFilesType = await jobGenerator.files({
+  const jsFiles = await jobGenerator.files({
     name: 'Sample',
     queueName: 'default',
     tests: true,
