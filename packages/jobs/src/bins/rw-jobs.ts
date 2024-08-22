@@ -126,15 +126,11 @@ export const startWorkers = ({
     }
 
     // fork the worker process
-    const worker = fork(
-      path.join(import.meta.dirname, 'rw-jobs-worker.js'),
-      workerArgs,
-      {
-        detached: detach,
-        stdio: detach ? 'ignore' : 'inherit',
-        env: process.env,
-      },
-    )
+    const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
+      detached: detach,
+      stdio: detach ? 'ignore' : 'inherit',
+      env: process.env,
+    })
 
     if (detach) {
       worker.unref()
@@ -181,7 +177,7 @@ const stopWorkers = async ({
 
 const clearQueue = ({ logger }: { logger: BasicLogger }) => {
   logger.warn(`Starting worker to clear job queue...`)
-  fork(path.join(import.meta.dirname, 'rw-jobs-worker.js'), ['--clear'])
+  fork(path.join(__dirname, 'rw-jobs-worker.js'), ['--clear'])
 }
 
 const signalSetup = ({

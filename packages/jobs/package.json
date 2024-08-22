@@ -7,21 +7,17 @@
     "directory": "packages/jobs"
   },
   "license": "MIT",
-  "type": "module",
+  "type": "commonjs",
   "exports": {
     ".": {
-      "import": {
+      "default": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
-      },
-      "default": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "rw-jobs": "./dist/bins/rw-jobs.js",
@@ -31,10 +27,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsx ./build.ts",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-jobs.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json",
-    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
     "check:attw": "yarn rw-fwtools-attw",
     "check:package": "concurrently npm:check:attw yarn:publint",

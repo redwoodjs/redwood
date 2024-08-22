@@ -3,7 +3,8 @@ import path from 'node:path'
 
 import { config as dotenvConfig } from 'dotenv'
 import { config as dotenvDefaultsConfig } from 'dotenv-defaults'
-import { hideBin, Parser } from 'yargs/helpers'
+import { hideBin } from 'yargs/helpers'
+import parser from 'yargs-parser'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -17,7 +18,7 @@ export function loadEnvFiles() {
   loadDefaultEnvFiles(base)
   loadNodeEnvDerivedEnvFile(base)
 
-  const { loadEnvFiles } = Parser.default(hideBin(process.argv), {
+  const { loadEnvFiles } = parser(hideBin(process.argv), {
     array: ['load-env-files'],
     default: {
       loadEnvFiles: [],
