@@ -33,6 +33,7 @@
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/context": "workspace:*",
     "@redwoodjs/fastify-web": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/web-server": "workspace:*",
     "chalk": "4.1.2",
