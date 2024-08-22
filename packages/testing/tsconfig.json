@@ -10,6 +10,7 @@
   "references": [
     { "path": "../router/tsconfig.build.json" },
     { "path": "../babel-config" },
+    { "path": "../context/tsconfig.build.json" },
     { "path": "../project-config" },
     { "path": "../web/tsconfig.build.json" },
     { "path": "../auth/tsconfig.build.json" },

@@ -8,5 +8,8 @@
     "tsBuildInfoFile": "./tsconfig.build.tsbuildinfo"
   },
   "include": ["src"],
-  "references": [{ "path": "../cli-helpers" }, { "path": "../project-config" }]
+  "references": [
+    { "path": "../cli-helpers/tsconfig.build.json" },
+    { "path": "../project-config" }
+  ]
 }

@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('../../loaders', () => {
+vi.mock('../../loaders.js', () => {
   return {
     loadJob: mocks.loadJob,
   }

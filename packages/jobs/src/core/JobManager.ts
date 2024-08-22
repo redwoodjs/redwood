@@ -19,6 +19,7 @@ export interface CreateWorkerArgs {
   index: number
   workoff: WorkerOptions['workoff']
   clear: WorkerOptions['clear']
+  processName: string
 }
 
 export class JobManager<
@@ -70,7 +71,7 @@ export class JobManager<
     return jobDefinition as Job<TQueues, TArgs>
   }
 
-  createWorker({ index, workoff, clear }: CreateWorkerArgs) {
+  createWorker({ index, workoff, clear, processName }: CreateWorkerArgs) {
     const config = this.workers[index]
     const adapter = this.adapters[config.adapter]
     if (!adapter) {
@@ -84,7 +85,7 @@ export class JobManager<
       maxRuntime: config.maxRuntime,
       sleepDelay: config.sleepDelay,
       deleteFailedJobs: config.deleteFailedJobs,
-      processName: process.title,
+      processName,
       queues: [config.queue].flat(),
       workoff,
       clear,
