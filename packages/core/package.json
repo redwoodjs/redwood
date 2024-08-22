@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@babel/cli": "7.24.8",
+    "@redwoodjs/api-server": "workspace:*",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
