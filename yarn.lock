@@ -8458,9 +8458,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/prerender@workspace:packages/prerender"
   dependencies:
-    "@babel/cli": "npm:7.24.8"
-    "@babel/core": "npm:^7.22.20"
-    "@babel/runtime-corejs3": "npm:7.25.0"
+    "@redwoodjs/babel-config": "workspace:*"
+    "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
     "@redwoodjs/structure": "workspace:*"
@@ -8470,9 +8469,11 @@ __metadata:
     babel-plugin-ignore-html-and-css-imports: "npm:0.1.0"
     babel-plugin-tester: "npm:11.0.4"
     cheerio: "npm:1.0.0"
-    core-js: "npm:3.38.0"
+    concurrently: "npm:8.2.2"
     graphql: "npm:16.9.0"
     mime-types: "npm:2.1.35"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     vitest: "npm:2.0.5"
   peerDependencies:
