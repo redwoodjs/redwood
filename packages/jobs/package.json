@@ -18,7 +18,8 @@
         "types": "./dist/cjs/index.d.ts",
         "default": "./dist/cjs/index.js"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
