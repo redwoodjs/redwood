@@ -28,7 +28,7 @@ type Options = {
 }
 
 export function reactDocgen({
-  include = /\.(mjs|tsx?|jsx?)$/,
+  include = /\.(tsx?|jsx?)$/,
   exclude = [/node_modules\/.*/],
 }: Options = {}): PluginOption {
   const cwd = process.cwd()
