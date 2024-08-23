@@ -71,7 +71,7 @@ test('redwood.toml update is skipped if fragments are already enabled', async ()
 
   expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
     [
-      "Update Redwood Project Configuration to enable GraphQL Fragments",
+      "GraphQL Fragments are already enabled.",
     ]
   `)
 })
@@ -88,7 +88,7 @@ fragments = true
 
   expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
     [
-      "Update Redwood Project Configuration to enable GraphQL Fragments",
+      "GraphQL Fragments are already enabled.",
     ]
   `)
 
