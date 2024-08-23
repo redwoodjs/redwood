@@ -932,6 +932,8 @@ jobs:
 
       - name: Run E2E test script
         run: yarn e2e:background-jobs ${{ steps.set-up-test-project.outputs.test-project-path }}
+        env:
+          REDWOOD_VERBOSE_TELEMETRY: ''
 
   background-jobs-e2e-skip:
     needs: detect-changes
