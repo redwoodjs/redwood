@@ -90,66 +90,6 @@ describe('Query extensions', () => {
     })
   })
 
-  // Not implemented yet
-  // Ideally it would just work automatically... but I guess we need to do all the variants
-  describe.skip('createMany', () => {
-    it('createMany will remove files if all the create fails', async () => {
-      try {
-        await prismaClient.dumbo.createMany({
-          data: [
-            {
-              firstUpload: '/one/first.txt',
-              secondUpload: '/one/second.txt',
-              // @ts-expect-error Intentional
-              id: 'break',
-            },
-            {
-              firstUpload: '/two/first.txt',
-              secondUpload: '/two/second.txt',
-              // @ts-expect-error Intentional
-              id: 'break2',
-            },
-          ],
-        })
-      } catch {
-        expect(fs.unlink).toHaveBeenCalledTimes(4)
-        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/one/first.txt')
-        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/one/second.txt')
-        expect(fs.unlink).toHaveBeenNthCalledWith(3, '/two/first.txt')
-        expect(fs.unlink).toHaveBeenNthCalledWith(4, '/two/second.txt')
-      }
-
-      expect.assertions(4)
-    })
-
-    it('createMany will remove files from only the creates that fail', async () => {
-      try {
-        await prismaClient.dumbo.createMany({
-          data: [
-            // This one will go through
-            {
-              firstUpload: '/one/first.txt',
-              secondUpload: '/one/second.txt',
-            },
-            {
-              firstUpload: '/two/first.txt',
-              secondUpload: '/two/second.txt',
-              // @ts-expect-error Intentional
-              id: 'break2',
-            },
-          ],
-        })
-      } catch (e) {
-        console.log(e)
-        expect(fs.unlink).toHaveBeenCalledTimes(2)
-        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/two/first.txt')
-        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/two/second.txt')
-      }
-
-      expect.assertions(4)
-    })
-  })
-
   describe('update', () => {
     let ogDummy: Dummy
     let ogDumbo: Dumbo
@@ -204,7 +144,7 @@ describe('Query extensions', () => {
       expect(fs.unlink).not.toHaveBeenCalled()
     })
 
-    it.only('should only delete old files from the fields that are being updated', async () => {
+    it('should only delete old files from the fields that are being updated', async () => {
       const updatedDumbo = await prismaClient.dumbo.update({
         data: {
           firstUpload: '/tmp/newFirst.txt',
