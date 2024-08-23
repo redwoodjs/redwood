@@ -901,3 +901,48 @@ jobs:
 
     steps:
       - run: echo "Skipped"
+
+  background-jobs-e2e:
+    needs: check
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: Background jobs E2E test / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+
+      - name: 🌲 Set up test project
+        id: set-up-test-project
+        uses: ./.github/actions/set-up-test-project
+        with:
+          canary: true
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Run E2E test script
+        run: yarn e2e:background-jobs ${{ steps.set-up-test-project.outputs.test-project-path }}
+
+  background-jobs-e2e-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'false'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: Background jobs E2E test / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - run: echo "Skipped"
