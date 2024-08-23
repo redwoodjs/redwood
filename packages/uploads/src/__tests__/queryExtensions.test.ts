@@ -111,7 +111,7 @@ describe('Query extensions', () => {
             },
           ],
         })
-      } catch (e) {
+      } catch {
         expect(fs.unlink).toHaveBeenCalledTimes(4)
         expect(fs.unlink).toHaveBeenNthCalledWith(1, '/one/first.txt')
         expect(fs.unlink).toHaveBeenNthCalledWith(2, '/one/second.txt')
