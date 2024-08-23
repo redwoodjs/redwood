@@ -8,7 +8,8 @@
     "outDir": "dist"
   },
   "include": ["src", "prisma-override.d.ts"],
-  // Excluding types here causes types to be inaccurate in tests
+  // Excluding tests (as in root compilerOption) causes types to be inaccurate in tests
+  // This overrides the exclude in the root compilerOption
   "exclude": ["dist", "node_modules", "**/__mocks__"],
   "references": [
     {

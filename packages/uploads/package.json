@@ -44,10 +44,10 @@
   },
   "files": [
     "dist",
-    "prisma"
+    "!dist/**/*.test.d.*"
   ],
   "scripts": {
-    "build": "tsx ./build.mts",
+    "build": "yarn setup:test && tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-uploads.tgz",
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
