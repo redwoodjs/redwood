@@ -7,7 +7,11 @@ import {
   SAMPLE_JOB_PERFORM_ARGS,
   SAMPLE_JOB_PERFORM_BODY,
 } from './fixtures.mjs'
-import { projectDirectoryExists, projectFileExists } from './util.mjs'
+import {
+  makeFilePath,
+  projectDirectoryExists,
+  projectFileExists,
+} from './util.mjs'
 
 $.env.DATABASE_URL = 'file:./dev.db'
 
@@ -65,7 +69,7 @@ async function main() {
 
   // Confirm jobs dependency in api package.json
   const apiPackageJson = await import(
-    path.join(projectPath, 'api/package.json')
+    makeFilePath(path.join(projectPath, 'api/package.json'))
   )
   if (!apiPackageJson.dependencies['@redwoodjs/jobs']) {
     console.error(
@@ -91,7 +95,9 @@ async function main() {
 
   // Confirm the prisma model exists
   await $`yarn rw build api`
-  const { db } = await import(path.join(projectPath, 'api/dist/lib/db.js'))
+  const { db } = await import(
+    makeFilePath(path.join(projectPath, 'api/dist/lib/db.js'))
+  )
   const model = db['BackgroundJob']
   if (model?.name !== 'BackgroundJob') {
     console.error("Expected database model 'BackgroundJob' not found")
