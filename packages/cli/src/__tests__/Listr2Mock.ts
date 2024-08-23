@@ -18,8 +18,9 @@ function isSupportedOptionsType(
 
   return optionsArray.every(
     (option) =>
+      typeof option !== 'function' &&
       // message is the only required property in `BasePromptOptions` in Listr2
-      typeof option !== 'function' && 'message' in option,
+      'message' in option,
   )
 }
 
@@ -70,11 +71,11 @@ class Listr2TaskWrapper {
   }
 
   run(ctx: Ctx, task: Listr2TaskWrapper) {
-    // TODO: fix this by removing the type casts.
-    // The reason we have to do this is because of private fields in
-    // Listr.ListrTaskWrapper
     return this.task.task(
       ctx,
+      // TODO: fix this by removing the type casts.
+      // The reason we have to do this is because of private fields in
+      // Listr.ListrTaskWrapper
       task as unknown as Listr.ListrTaskWrapper<
         Ctx,
         typeof Listr.ListrRenderer
