@@ -8,6 +8,7 @@
   "references": [
     { "path": "../internal" },
     { "path": "../project-config" },
+    { "path": "../context/tsconfig.build.json" },
     { "path": "../adapters/fastify/web" },
     { "path": "../web-server" }
   ]

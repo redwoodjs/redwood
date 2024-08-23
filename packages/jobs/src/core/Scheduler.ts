@@ -13,7 +13,12 @@ import {
   QueueNotDefinedError,
   SchedulingError,
 } from '../errors.js'
-import type { BasicLogger, Job, ScheduleJobOptions } from '../types.js'
+import type {
+  BasicLogger,
+  Job,
+  QueueNames,
+  ScheduleJobOptions,
+} from '../types.js'
 
 interface SchedulerConfig<TAdapter extends BaseAdapter> {
   adapter: TAdapter
@@ -43,9 +48,9 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  buildPayload<T extends Job<string[], unknown[]>>(
-    job: T,
-    args?: Parameters<T['perform']>,
+  buildPayload<TJob extends Job<QueueNames, unknown[]>>(
+    job: TJob,
+    args?: Parameters<TJob['perform']>,
     options?: ScheduleJobOptions,
   ): SchedulePayload {
     const queue = job.queue
@@ -67,13 +72,13 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  async schedule<T extends Job<string[], unknown[]>>({
+  async schedule<TJob extends Job<QueueNames, unknown[]>>({
     job,
     jobArgs,
     jobOptions,
   }: {
-    job: T
-    jobArgs?: Parameters<T['perform']>
+    job: TJob
+    jobArgs?: Parameters<TJob['perform']>
     jobOptions?: ScheduleJobOptions
   }) {
     const payload = this.buildPayload(job, jobArgs, jobOptions)

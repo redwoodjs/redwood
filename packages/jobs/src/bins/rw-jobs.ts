@@ -17,7 +17,12 @@ import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
 import { loadJobsManager } from '../loaders.js'
-import type { Adapters, BasicLogger, WorkerConfig } from '../types.js'
+import type {
+  Adapters,
+  BasicLogger,
+  WorkerConfig,
+  QueueNames,
+} from '../types.js'
 
 export type NumWorkersConfig = [number, number][]
 
@@ -114,24 +119,18 @@ export const startWorkers = ({
 
   return numWorkers.map(([index, id]) => {
     // list of args to send to the forked worker script
-    const workerArgs: string[] = []
-    workerArgs.push('--index', index.toString())
-    workerArgs.push('--id', id.toString())
+    const workerArgs = ['--index', index.toString(), '--id', id.toString()]
 
     if (workoff) {
       workerArgs.push('--workoff')
     }
 
     // fork the worker process
-    const worker = fork(
-      path.join(import.meta.dirname, 'rw-jobs-worker.js'),
-      workerArgs,
-      {
-        detached: detach,
-        stdio: detach ? 'ignore' : 'inherit',
-        env: process.env,
-      },
-    )
+    const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
+      detached: detach,
+      stdio: detach ? 'ignore' : 'inherit',
+      env: process.env,
+    })
 
     if (detach) {
       worker.unref()
@@ -178,7 +177,7 @@ const stopWorkers = async ({
 
 const clearQueue = ({ logger }: { logger: BasicLogger }) => {
   logger.warn(`Starting worker to clear job queue...`)
-  fork(path.join(import.meta.dirname, 'rw-jobs-worker.js'), ['--clear'])
+  fork(path.join(__dirname, 'rw-jobs-worker.js'), ['--clear'])
 }
 
 const signalSetup = ({
@@ -217,13 +216,13 @@ const signalSetup = ({
 // Find the process id of a worker by its title
 const findWorkerProcesses = async (id?: number): Promise<number[]> => {
   return new Promise(function (resolve, reject) {
-    const plat = process.platform
+    const platform = process.platform
     const cmd =
-      plat === 'win32'
+      platform === 'win32'
         ? 'tasklist'
-        : plat === 'darwin'
+        : platform === 'darwin'
           ? 'ps -ax | grep ' + PROCESS_TITLE_PREFIX
-          : plat === 'linux'
+          : platform === 'linux'
             ? 'ps -A'
             : ''
     if (cmd === '') {
@@ -236,7 +235,7 @@ const findWorkerProcesses = async (id?: number): Promise<number[]> => {
 
       const list = stdout.trim().split('\n')
       const matches = list.filter((line) => {
-        if (plat == 'darwin' || plat == 'linux') {
+        if (platform == 'darwin' || platform == 'linux') {
           return !line.match('grep')
         }
         return true
@@ -271,7 +270,7 @@ const main = async () => {
     process.exit(1)
   }
 
-  const workerConfig: WorkerConfig<Adapters, string[]>[] = jobsConfig.workers
+  const workerConfig: WorkerConfig<Adapters, QueueNames>[] = jobsConfig.workers
   const numWorkers = buildNumWorkers(workerConfig)
   const logger = jobsConfig.logger ?? DEFAULT_LOGGER
 

@@ -11,7 +11,7 @@
     { "path": "../api-server/tsconfig.build.json" },
     { "path": "../cli-helpers" },
     { "path": "../internal" },
-    { "path": "../prerender" },
+    { "path": "../prerender/tsconfig.build.json" },
     { "path": "../project-config" },
     { "path": "../structure" },
     { "path": "../telemetry" }

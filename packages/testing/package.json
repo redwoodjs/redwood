@@ -8,8 +8,7 @@
     "directory": "packages/testing"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "commonjs",
   "files": [
     "config",
     "web",
@@ -18,17 +17,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-testing.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "build:watch": "nodemon --watch src --ext 'js,jsx,ts,tsx' --ignore dist --exec 'yarn build'",
+    "check:attw": "yarn rw-fwtools-attw",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/context": "workspace:*",
@@ -44,7 +43,6 @@
     "@types/jest": "29.5.12",
     "@types/node": "20.14.15",
     "babel-jest": "^29.7.0",
-    "core-js": "3.38.0",
     "fast-glob": "3.3.2",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
@@ -54,9 +52,11 @@
     "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.8",
-    "@babel/core": "^7.22.20",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "concurrently": "8.2.2",
     "jsdom": "24.1.1",
+    "publint": "0.2.10",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

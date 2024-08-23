@@ -20,6 +20,8 @@
     "rw-dev-fe": "./dist/bins/rw-dev-fe.js",
     "rw-gen": "./dist/bins/rw-gen.js",
     "rw-gen-watch": "./dist/bins/rw-gen-watch.js",
+    "rw-jobs": "./dist/bins/rw-jobs.js",
+    "rw-jobs-worker": "./dist/bins/rw-jobs-worker.js",
     "rw-log-formatter": "./dist/bins/rw-log-formatter.js",
     "rw-serve-api": "./dist/bins/rw-serve-api.js",
     "rw-serve-fe": "./dist/bins/rw-serve-fe.js",
@@ -37,6 +39,7 @@
   },
   "dependencies": {
     "@babel/cli": "7.24.8",
+    "@redwoodjs/api-server": "workspace:*",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
     "@redwoodjs/internal": "workspace:*",

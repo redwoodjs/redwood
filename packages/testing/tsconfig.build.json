@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
     "module": "Node16",
-    "moduleResolution": "Node16"
+    "moduleResolution": "Node16",
+    "tsBuildInfoFile": "./tsconfig.build.tsbuildinfo"
   },
-  "include": ["."],
-  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
+  "include": ["src"],
   "references": [
-    { "path": "../framework-tools" },
     { "path": "../router/tsconfig.build.json" },
     { "path": "../babel-config" },
     { "path": "../context/tsconfig.build.json" },
