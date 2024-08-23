@@ -28,3 +28,26 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
   }
 }
 `
+
+export const JOBS_SCRIPT = `
+import { db } from 'api/src/lib/db'
+
+export default async () => {
+  const jobs = await db.backgroundJob.findMany()
+  console.log(JSON.stringify(jobs))
+}
+`
+
+export const PRISMA_SCRIPT = `
+import { db } from 'api/src/lib/db'
+
+export default async () => {
+  const model = db.backgroundJob
+  console.log(
+    JSON.stringify({
+      name: model.name,
+    })
+  )
+}
+
+`

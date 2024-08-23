@@ -3,6 +3,8 @@ import process from 'node:process'
 import { $, cd, path, ProcessOutput, fs } from 'zx'
 
 import {
+  JOBS_SCRIPT,
+  PRISMA_SCRIPT,
   SAMPLE_FUNCTION,
   SAMPLE_JOB_PERFORM_ARGS,
   SAMPLE_JOB_PERFORM_BODY,
@@ -94,13 +96,17 @@ async function main() {
   }
 
   // Confirm the prisma model exists
-  await $`yarn rw build api`
-  const { db } = await import(
-    makeFilePath(path.join(projectPath, 'api/dist/lib/db.js'))
-  )
-  const model = db['BackgroundJob']
-  if (model?.name !== 'BackgroundJob') {
-    console.error("Expected database model 'BackgroundJob' not found")
+  console.log('Action: Adding scripts to get information from the database')
+  const jobsScriptPath = path.join(projectPath, 'scripts/jobs.ts')
+  fs.writeFileSync(jobsScriptPath, JOBS_SCRIPT)
+  const prismaScriptPath = path.join(projectPath, 'scripts/prisma.ts')
+  fs.writeFileSync(prismaScriptPath, PRISMA_SCRIPT)
+
+  console.log('Testing: the prisma model exists in the database')
+  const prismaData = (await $`yarn rw exec prisma --silent`).toString()
+  const { name } = JSON.parse(prismaData)
+  if (name !== 'BackgroundJob') {
+    console.error('Expected model not found in the database')
     process.exit(1)
   }
   console.log('Confirmed: prisma model exists')
@@ -200,13 +206,15 @@ async function main() {
 
   // Step 10: Confirm the job was scheduled into the database
   console.log('Testing: Confirming the job was scheduled into the database')
-  const job = await db.backgroundJob.findFirst()
-  if (!job) {
+  const rawJobs = (await $`yarn rw exec jobs --silent`).toString()
+  const jobs = JSON.parse(rawJobs)
+  if (!jobs?.length) {
     console.error('Expected job not found in the database')
     process.exit(1)
   }
-  const handler = JSON.parse(job.handler ?? {})
-  const args = handler?.args ?? []
+  const job = jobs[0]
+  const handler = JSON.parse(job?.handler ?? '{}')
+  const args = handler.args ?? []
   if (args[0] !== location || args[1] !== data) {
     console.error('Expected job arguments do not match')
     process.exit(1)
@@ -247,7 +255,9 @@ async function main() {
 
   // Step 13: Confirm the job was removed from the database
   console.log('Testing: Confirming the job was removed from the database')
-  const jobAfter = await db.backgroundJob.findFirst()
+  const rawJobsAfter = (await $`yarn rw exec jobs --silent`).toString()
+  const jobsAfter = JSON.parse(rawJobsAfter)
+  const jobAfter = jobsAfter.find((j: any) => j.id === job.id)
   if (jobAfter) {
     console.error('Expected job found in the database')
     process.exit(1)
