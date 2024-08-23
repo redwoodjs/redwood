@@ -1,6 +1,3 @@
-let mockSkipValues: string[] = []
-let mockPrompt: (() => boolean) | undefined
-
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('fs-extra', async () => {
@@ -28,9 +25,12 @@ vi.mock('execa', () => ({
   },
 }))
 
-vi.mock('listr2', () => ({
-  Listr: Listr2Mock,
-}))
+vi.mock('listr2', () => {
+  return {
+    // Return a constructor function, since we're calling `new` on Listr
+    Listr: Listr2Mock,
+  }
+})
 
 import path from 'node:path'
 
@@ -67,7 +67,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  mockPrompt = undefined
+  Listr2Mock.mockPrompt = undefined
   vi.mocked(console).log.mockRestore()
   vol.reset()
 })
@@ -84,16 +84,12 @@ describe('tasks that should be skipped', () => {
 
     await handler({ install: false })
 
-    expect(Listr2Mock.skippedTaskTitles).toContain(
+    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
       'Installing project-wide packages...',
     )
-    expect(Listr2Mock.skippedTaskTitles).toContain(
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
       'Installing web side packages...',
     )
-    expect(Array.isArray(mockSkipValues)).toBe(true)
-    expect(mockSkipValues.length).toBeGreaterThanOrEqual(2)
-    expect(mockSkipValues[0]).toBe(true)
-    expect(mockSkipValues[1]).toBe(true)
   })
 
   it("should skip adding directives to index.css if they're already in there", async () => {
@@ -108,24 +104,22 @@ describe('tasks that should be skipped', () => {
     await handler({})
 
     expect(Listr2Mock.skippedTaskTitles).toContain(
-      'Adding directives to index.css...',
+      'Directives already exist in index.css',
     )
-    expect(mockSkipValues).toContain('Directives already exist in index.css')
   })
 
   it("should skip updating scaffold.css if it doesn't exist", async () => {
     // No scaffold.css file is the default
     setupDefaultProjectStructure()
 
-    mockPrompt = vi.fn()
+    Listr2Mock.mockPrompt = vi.fn()
 
     await handler({})
 
     expect(Listr2Mock.skippedTaskTitles).toContain(
-      "Updating 'scaffold.css' to use tailwind classes...",
+      "No 'scaffold.css' file to update",
     )
-    expect(mockSkipValues).toContain("No 'scaffold.css' file to update")
-    expect(mockPrompt).not.toHaveBeenCalled()
+    expect(Listr2Mock.mockPrompt).not.toHaveBeenCalled()
   })
 
   it('should skip updating scaffold.css if the user answers "no" to the prompt', async () => {
@@ -139,19 +133,21 @@ describe('tasks that should be skipped', () => {
       ].join('\n'),
     })
 
-    mockPrompt = vi.fn().mockReturnValue(false)
+    Listr2Mock.mockPrompt = vi.fn().mockReturnValue({ default: false })
 
     await handler({})
 
     expect(Listr2Mock.skippedTaskTitles).toContain(
-      "Updating 'scaffold.css' to use tailwind classes...",
+      "Skipping 'scaffold.css' update",
     )
-    expect(mockSkipValues).toContain("Skipping 'scaffold.css' update")
-    expect(mockPrompt).toHaveBeenCalledWith({
-      type: 'Confirm',
-      message:
-        "Do you want to override your 'scaffold.css' to use tailwind classes?",
-    })
+    expect(Listr2Mock.mockPrompt).toHaveBeenCalledWith([
+      {
+        name: 'default',
+        type: 'Confirm',
+        message:
+          "Do you want to override your 'scaffold.css' to use tailwind classes?",
+      },
+    ])
   })
 
   it('should skip adding recommended VS Code extensions to project settings if the user is not using VS Code', async () => {
@@ -162,9 +158,8 @@ describe('tasks that should be skipped', () => {
     await handler({})
 
     expect(Listr2Mock.skippedTaskTitles).toContain(
-      'Adding recommended VS Code extensions to project settings...',
+      "Looks like you're not using VS Code",
     )
-    expect(mockSkipValues).toContain("Looks like you're not using VS Code")
   })
 
   it('should skip adding tailwind intellisense plugin config to VS Code settings if the user is not using VS Code', async () => {
@@ -173,10 +168,15 @@ describe('tasks that should be skipped', () => {
 
     await handler({})
 
-    expect(Listr2Mock.skippedTaskTitles).toContain(
-      'Adding tailwind intellisense plugin configuration to VS Code settings...',
-    )
-    expect(mockSkipValues).toContain("Looks like you're not using VS Code")
+    expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
+      [
+        "Installing project-wide packages...",
+        "Installing web side packages...",
+        "No 'scaffold.css' file to update",
+        "Looks like you're not using VS Code",
+        "Looks like you're not using VS Code",
+      ]
+    `)
   })
 })
 
