@@ -1,6 +1,6 @@
 # E2E Background jobs
 
-This script runs an E2E style test against the redwood jobs feature. Testing that jobs can be setup, generated, scheduled and executed.
+This script runs an E2E style test against the Redwood Jobs feature. Testing that jobs can be setup, generated, scheduled and executed.
 
 ## Usage
 
