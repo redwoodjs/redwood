@@ -1,10 +1,11 @@
-let mockExecutedTaskTitles = []
-let mockSkippedTaskTitles = []
+let mockExecutedTaskTitles: string[] = []
+let mockSkippedTaskTitles: string[] = []
 
 vi.mock('fs-extra')
 
 import '../../../lib/mockTelemetry'
 
+import type * as Listr from 'listr2'
 import { vol, fs as memfsFs } from 'memfs'
 import {
   vi,
@@ -16,6 +17,9 @@ import {
   afterAll,
 } from 'vitest'
 
+import type * as ProjectConfig from '@redwoodjs/project-config'
+
+// @ts-expect-error - This is a JS file
 import * as jobsHandler from '../jobs/jobsHandler.js'
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
@@ -35,9 +39,10 @@ vi.mock('@redwoodjs/cli-helpers', () => ({
     task: async () => {},
   }),
 }))
+
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const path = require('path')
-  const originalProjectConfig = await importOriginal()
+  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
   return {
     ...originalProjectConfig,
     getPaths: () => {
@@ -60,7 +65,10 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
 
 vi.mock('listr2', async () => {
   const ctx = {}
-  const listrImpl = (tasks, listrOptions) => {
+  const listrImpl = (
+    tasks: any[],
+    listrOptions?: Listr.ListrOptions | undefined,
+  ) => {
     return {
       ctx,
       run: async () => {
@@ -80,7 +88,7 @@ vi.mock('listr2', async () => {
             const augmentedTask = {
               ...task,
               newListr: listrImpl,
-              prompt: async (options) => {
+              prompt: async (options: any) => {
                 const enquirer = listrOptions?.injectWrapper?.enquirer
 
                 if (enquirer) {
@@ -90,14 +98,15 @@ vi.mock('listr2', async () => {
                     options[0].name = 'default'
                   }
 
-                  const response = await enquirer.prompt(options)
+                  const response: Record<string, any> =
+                    await enquirer.prompt(options)
 
                   if (options.length === 1) {
                     return response.default
                   }
                 }
               },
-              skip: (msg) => {
+              skip: (msg: string) => {
                 mockSkippedTaskTitles.push(msg || task.title)
               },
             }
@@ -135,9 +144,9 @@ beforeEach(() => {
       'package.json': '{}',
       'api/tsconfig.json': '',
       'api/db/schema.prisma': '',
-      'api/src/lib': {},
+      'api/src/lib': null,
       // api/src/jobs already exists – this should not cause an error
-      'api/src/jobs': {},
+      'api/src/jobs': null,
       [__dirname + '/../jobs/templates/jobs.ts.template']: '',
     },
     '/path/to/project',
