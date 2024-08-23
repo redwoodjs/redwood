@@ -154,12 +154,12 @@ async function main() {
   const functionPath = path.join(projectPath, 'api/src/functions/run.ts')
   fs.writeFileSync(functionPath, SAMPLE_FUNCTION)
 
-  // Step 6: Start the dev server
+  // Step 6: Start the api server
   console.log('Action: Running `yarn rw serve api`')
   await $`yarn rw build api`
   const apiServer = $`yarn rw serve api`.nothrow()
 
-  // Wait for the dev server to start
+  // Wait for the api server to start
   await new Promise((resolve) => {
     apiServer.stdout.on('data', (data) => {
       if (data.includes('API server listening at')) {
@@ -187,7 +187,7 @@ async function main() {
     }),
   })
 
-  // Step 8: Stop the dev server
+  // Step 8: Stop the api server
   console.log('Action: Stopping the api server')
   await apiServer.kill('SIGINT')
 
