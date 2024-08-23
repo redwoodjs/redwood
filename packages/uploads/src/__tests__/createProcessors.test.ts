@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import {
   createFileListProcessor,
   createUploadProcessors,
@@ -43,8 +45,10 @@ describe('Create processors', () => {
     const result = await processors.processDumboUploads(data)
 
     // Location strings in this format: {baseDir/{model}-{field}-{ulid}.{ext}
-    expect(result.firstUpload).toMatch(/\/memory_store_basedir\/dumbo-*.*\.txt/)
-    expect(result.secondUpload).toMatch(
+    expect(ensurePosixPath(result.firstUpload)).toMatch(
+      /\/memory_store_basedir\/dumbo-*.*\.txt/,
+    )
+    expect(ensurePosixPath(result.secondUpload)).toMatch(
       /\/memory_store_basedir\/dumbo-*.*\.txt/,
     )
 
@@ -77,34 +81,43 @@ describe('Create processors', () => {
       fileName: 'overridden',
     })
 
-    expect(fileNameOverrideOnly.uploadField).toBe(
+    expect(ensurePosixPath(fileNameOverrideOnly.uploadField)).toBe(
       '/memory_store_basedir/overridden.png',
     )
 
-    expect(pathOverrideOnly.uploadField).toMatch(/\/bazinga\/.*\.png/)
+    expect(ensurePosixPath(pathOverrideOnly.uploadField)).toMatch(
+      /\/bazinga\/.*\.png/,
+    )
     // Overriding path ignores the baseDir
     expect(pathOverrideOnly.uploadField).not.toContain('memory_store_basedir')
 
-    expect(bothOverride.uploadField).toBe('/bazinga/overridden.png')
+    expect(ensurePosixPath(bothOverride.uploadField)).toBe(
+      '/bazinga/overridden.png',
+    )
   })
 
   it('Should not add extension for unknown file type', async () => {
     const data = {
       uploadField: new File(['Hello'], 'hello', {
-        type: 'bazinga/unknown',
+        type: 'bazinga/unknown', // we don't use this anyway
       }),
     }
 
     const noOverride = await processors.processDummyUploads(data)
 
     // No extension
-    expect(noOverride.uploadField).toMatch(/\/memory_store_basedir\/.*[^.]+$/)
+    expect(ensurePosixPath(noOverride.uploadField)).toMatch(
+      /\/memory_store_basedir\/.*[^.]+$/,
+    )
 
     const withOverride = await processors.processDummyUploads(data, {
       fileName: 'hello',
     })
+
     expect(withOverride.uploadField).toMatch(/[^.]+$/)
-    expect(withOverride.uploadField).toBe('/memory_store_basedir/hello')
+    expect(ensurePosixPath(withOverride.uploadField)).toBe(
+      '/memory_store_basedir/hello',
+    )
   })
 })
 // FileLists
@@ -126,8 +139,13 @@ describe('FileList processing', () => {
     const result = await fileListProcessor(notPrismaData)
 
     expect(result).toHaveLength(2)
-    expect(result[0]).toMatch(/\/memory_store_basedir\/.*\.png/)
-    expect(result[1]).toMatch(/\/memory_store_basedir\/.*\.jpeg/)
+
+    expect(ensurePosixPath(result[0])).toMatch(
+      /\/memory_store_basedir\/.*\.png/,
+    )
+    expect(ensurePosixPath(result[1])).toMatch(
+      /\/memory_store_basedir\/.*\.jpeg/,
+    )
   })
 
   it('Should handle FileLists with SaveOptions', async () => {
@@ -136,8 +154,12 @@ describe('FileList processing', () => {
     })
 
     expect(result).toHaveLength(2)
-    expect(result[0]).toMatch(/\/bazinga_not_mem_store\/.*\.png/)
-    expect(result[1]).toMatch(/\/bazinga_not_mem_store\/.*\.jpeg/)
+    expect(ensurePosixPath(result[0])).toMatch(
+      /\/bazinga_not_mem_store\/.*\.png/,
+    )
+    expect(ensurePosixPath(result[1])).toMatch(
+      /\/bazinga_not_mem_store\/.*\.jpeg/,
+    )
   })
 
   it('Should handle empty FileLists', async () => {

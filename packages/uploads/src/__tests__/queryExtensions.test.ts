@@ -3,6 +3,8 @@ import fs from 'node:fs/promises'
 import type { MockedFunction } from 'vitest'
 import { describe, it, vi, expect, beforeEach, beforeAll } from 'vitest'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import { FileSystemStorage } from '../FileSystemStorage.js'
 import { setupUploads } from '../index.js'
 import type { UploadsConfig } from '../prismaExtension.js'
@@ -66,9 +68,10 @@ describe('Query extensions', () => {
         data: processedData,
       })
 
-      expect(dummy).toMatchObject({
-        uploadField: expect.stringMatching(/\/tmp\/.*\.txt$/),
-      })
+      // On windows the slahes are different
+      const uploadFieldPath = ensurePosixPath(dummy.uploadField)
+
+      expect(uploadFieldPath).toMatch(/\/tmp\/.*\.txt$/)
     })
 
     it('will remove the file if the create fails', async () => {

@@ -1,6 +1,8 @@
 import { vol } from 'memfs'
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import { FileSystemStorage } from '../FileSystemStorage.js'
 
 // Mock the entire fs module
@@ -38,7 +40,8 @@ describe('FileSystemStorage', () => {
     const result = await storage.save(plainFile)
 
     expect(result).toHaveProperty('location')
-    expect(result.location).toMatch(/\/tmp\/test_uploads\/.*\.txt$/)
+    const posixLocation = ensurePosixPath(result.location)
+    expect(posixLocation).toMatch(/\/tmp\/test_uploads\/.*\.txt$/)
     expect(vol.existsSync(result.location)).toBe(true)
   })
 

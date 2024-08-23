@@ -4,6 +4,8 @@ import path from 'node:path'
 
 import mime from 'mime-types'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import type { SaveOptionsOverride } from './StorageAdapter.js'
 import { StorageAdapter } from './StorageAdapter.js'
 
@@ -14,15 +16,16 @@ export class FileSystemStorage
   constructor(opts: { baseDir: string }) {
     super(opts)
     if (!existsSync(opts.baseDir)) {
-      console.log('Creating baseDir >', opts.baseDir)
-      mkdirSync(opts.baseDir, { recursive: true })
+      const posixBaseDir = ensurePosixPath(opts.baseDir)
+      console.log('Creating baseDir >', posixBaseDir)
+      mkdirSync(posixBaseDir, { recursive: true })
     }
   }
   async save(file: File, saveOverride?: SaveOptionsOverride) {
     const fileName = this.generateFileNameWithExtension(saveOverride, file)
 
     const location = path.join(
-      saveOverride?.path || this.adapterOpts.baseDir,
+      ensurePosixPath(saveOverride?.path || this.adapterOpts.baseDir),
       fileName,
     )
     const nodeBuffer = await file.arrayBuffer()

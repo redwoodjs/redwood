@@ -1,5 +1,7 @@
 import { describe, expect, test } from 'vitest'
 
+import { ensurePosixPath } from '@redwoodjs/project-config'
+
 import { MemoryStorage } from '../MemoryStorage.js'
 
 describe('MemoryStorage', () => {
@@ -10,7 +12,7 @@ describe('MemoryStorage', () => {
     const result = await storage.save(file)
 
     expect(result).toHaveProperty('location')
-    expect(result.location).toMatch(/uploads\/.*\.txt$/)
+    expect(ensurePosixPath(result.location)).toMatch(/uploads\/.*\.txt$/)
     expect(storage.store[result.location]).toBeDefined()
   })
 
@@ -47,6 +49,6 @@ describe('MemoryStorage', () => {
     const file = new File(['test content'], 'test.txt', { type: 'text/plain' })
     const result = await storage.save(file, { path: 'custom/path' })
 
-    expect(result.location).toContain('custom/path')
+    expect(ensurePosixPath(result.location)).toContain('custom/path')
   })
 })
