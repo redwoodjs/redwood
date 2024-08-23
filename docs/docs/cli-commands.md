@@ -436,7 +436,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 | `dataMigration <name>` | Generate a data migration component                                                                   |
 | `dbAuth`               | Generate sign in, sign up and password reset pages for dbAuth                                         |
 | `deploy <provider>`    | Generate a deployment configuration                                                                   |
-| `function <name>`      | Generate a Job                                                                                        |
+| `function <name>`      | Generate a Function                                                                                   |
 | `job <name>`           | Generate a background job                                                                             |
 | `layout <name>`        | Generate a layout component                                                                           |
 | `page <name> [path]`   | Generate a page component                                                                             |
