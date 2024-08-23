@@ -23,6 +23,7 @@
     "check:package": "nx run-many -t check:package --output-style static",
     "clean:prisma": "rimraf node_modules/.prisma/client && node node_modules/@prisma/client/scripts/postinstall.js",
     "e2e": "node ./tasks/run-e2e",
+    "e2e:background-jobs": "tsx ./tasks/e2e-background-jobs/run.mts",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "generate-dependency-graph": "node ./tasks/generateDependencyGraph.mjs",
