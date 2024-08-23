@@ -103,11 +103,9 @@ describe('jobsHandler', () => {
   it('ignores error for already existing api/src/jobs dir', async () => {
     await jobsHandler.handler({ force: false })
 
-    expect(
-      Listr2Mock.executedTaskTitles.some(
-        (title) => title === 'Creating jobs dir at api/src/jobs...',
-      ),
-    ).toBeTruthy()
+    expect(Listr2Mock.executedTaskTitles).toContain(
+      'Creating jobs dir at api/src/jobs...',
+    )
     expect(console.error).not.toHaveBeenCalled()
   })
 })
