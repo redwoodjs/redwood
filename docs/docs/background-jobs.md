@@ -276,18 +276,6 @@ later(MillenniumAnnouncementJob, [user.id], {
 })
 ```
 
-:::info Running a Job Immediately
-
-As noted in the [Concepts](#concepts) section, a job is never _guaranteed_ to run at an exact time. The worker could be busy working on other jobs and can't get to yours just yet.
-
-If you absolutely, positively need your job to run right _now_ (with the knowledge that the user will be waiting for it to complete) you can call your job's `perform` function directly in your code:
-
-```js
-await SampleEmailJob.perform(user.id)
-```
-
-:::
-
 If we were to query the `BackgroundJob` table after the job has been scheduled you'd see a new row. We can use the Redwood Console to query the table from the command line:
 
 ```js
@@ -369,6 +357,38 @@ The rest of this doc describes more advanced usage, like:
 - Configuring individual workers to use different adapters
 - Manually start workers without the job runner monitoring them
 - And more!
+
+## Instantly Running Jobs
+
+As noted in the [Concepts](#concepts) section, a job is never _guaranteed_ to run at an exact time. The worker could be busy working on other jobs and can't get to yours just yet.
+
+If you absolutely, positively need your job to run right _now_ (with the knowledge that the user will be waiting for it to complete) you can call your job's `perform` function directly in your code:
+
+```js
+await SampleEmailJob.perform(user.id)
+```
+
+## Recurring Jobs
+
+A common task for a background job is that it does something on a schedule: run reports every night at midnight, check for abandoned carts every 15 minutes, that sort of thing. We call these recurring jobs.
+
+Redwood's job system will soon have native syntax for setting a job to run repeatedly, but in the meantime you can accomplish this by simply having your job schedule another copy of itself at some interval in the future:
+
+```js
+import { later, jobs } from 'src/lib/jobs'
+
+export const NightlyReportJob = jobs.createJob({
+  queue: 'default',
+  perform: async () => {
+    await DailyUsageReport.run()
+    // highlight-start
+    await later(NightlyReportJob, [], {
+      wait: new Date(new Date().getTime() + 86_400 * 1000),
+    })
+    // highlight-end
+  },
+})
+```
 
 ## Configuration
 
