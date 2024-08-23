@@ -79,7 +79,9 @@ describe('FileSystemStorage', () => {
     })
 
     // Note that it doesn't have the baseDir!
-    expect(result.location).toEqual('/my_custom/path/bazinga.txt')
+    expect(ensurePosixPath(result.location)).toEqual(
+      '/my_custom/path/bazinga.txt',
+    )
     expect(vol.existsSync(result.location)).toBe(true)
   })
 })
