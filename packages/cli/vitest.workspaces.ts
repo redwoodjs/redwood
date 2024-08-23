@@ -5,7 +5,7 @@ export default defineWorkspace([
     extends: './vitest.config.mts',
     test: {
       name: 'root',
-      include: ['**/*.test.[jt]s'],
+      include: ['**/*.test.[jt]s?(x)'],
       exclude: [
         ...configDefaults.exclude,
         '__fixtures__',
