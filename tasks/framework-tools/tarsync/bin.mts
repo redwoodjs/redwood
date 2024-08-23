@@ -39,7 +39,7 @@ async function main() {
     // If we're already running we don't trigger on certain files which are likely to be
     // touched by the build process itself.
 
-    // Package.json files are touched when we switch to between esm and cjs builds.
+    // `package.json` files are touched when we switch between esm and cjs builds.
     if (filePath.endsWith('package.json')) {
       return
     }
