@@ -13,6 +13,14 @@
       "api/*": [
         "../api/*"
       ],
+      "$api/src/*": [
+        "../api/src/*",
+        "../.redwood/types/mirror/api/src/*"
+      ],
+      "api/src/*": [
+        "../api/src/*",
+        "../.redwood/types/mirror/api/src/*"
+      ],
       "$web/*": [
         "../web/*"
       ],
