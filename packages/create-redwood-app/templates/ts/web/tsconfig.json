@@ -4,7 +4,7 @@
     "allowJs": true,
     "esModuleInterop": true,
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "ESNext",
     "moduleResolution": "Bundler",
     "skipLibCheck": false,
     "rootDirs": [
