@@ -11,12 +11,12 @@ vi.mock('../Scheduler')
 describe('constructor', () => {
   const mockAdapter = new MockAdapter()
   const adapters = { mock: mockAdapter }
-  const queues = ['queue']
+  const queues = ['queue'] as const
   const logger = mockLogger
   const workers = [
     {
       adapter: 'mock' as const,
-      queue: '*',
+      queue: '*' as const,
       count: 1,
     },
   ]
@@ -61,7 +61,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: [],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -76,7 +76,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: ['*'],
+      queues: ['*'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -92,7 +92,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: [],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -108,11 +108,11 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: ['default'],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
-    const mockJob: Job<string[], unknown[]> = {
+    const mockJob: Job<['default'], unknown[]> = {
       queue: 'default',
       name: 'mockJob',
       path: 'mockJob/mockJob',
@@ -137,11 +137,11 @@ describe('createJob()', () => {
   it('returns the same job description that was passed in', () => {
     const manager = new JobManager({
       adapters: {},
-      queues: ['default'],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
-    const jobDefinition: JobDefinition<string[], unknown[]> = {
+    const jobDefinition: JobDefinition<['default'], unknown[]> = {
       queue: 'default',
       perform: vi.fn(),
     }
