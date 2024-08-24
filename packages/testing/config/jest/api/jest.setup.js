@@ -30,15 +30,33 @@ const isIdenticalArray = (a, b) => {
   return JSON.stringify(a) === JSON.stringify(b)
 }
 
-const configureTeardown = async () => {
+const getSchemaAndDatamodel = async () => {
   const { getDMMF, getSchema } = require('@prisma/internals')
-  const fs = require('fs')
-
   // @NOTE prisma utils are available in cli lib/schemaHelpers
   // But avoid importing them, to prevent memory leaks in jest
   const datamodel = await getSchema(dbSchemaPath)
   const schema = await getDMMF({ datamodel })
+  return { schema, datamodel }
+}
+
+const getPreviewFeatures = async () => {
+  const { extractPreviewFeatures, getConfig } = require('@prisma/internals')
+  const { datamodel } = await getSchemaAndDatamodel()
+  const config = await getConfig({ datamodel })
+  return extractPreviewFeatures(config)
+}
+
+const hasViewsFeature = async () => {
+  const previewFeatures = await getPreviewFeatures()
+  return previewFeatures.includes('views')
+}
+
+const configureTeardown = async () => {
+  const fs = require('fs')
+  const { schema } = await getSchemaAndDatamodel()
   const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
+
+  console.log('>>> schemaModels', schema.datamodel.models)
 
   // check if pre-defined delete order already exists and if so, use it to start
   if (fs.existsSync(TEARDOWN_CACHE_PATH)) {
@@ -160,7 +178,7 @@ const buildDescribeScenario =
 
 const teardown = async () => {
   const fs = require('fs')
-
+  const hasView = await hasViewsFeature()
   const quoteStyle = await getQuoteStyle()
 
   for (const modelName of teardownOrder) {
@@ -175,7 +193,12 @@ const teardown = async () => {
         teardownOrder[index] = null
         teardownOrder.push(modelName)
       } else {
-        throw e
+        if (hasView) {
+          console.warn(e, 'Skipping teardown for view`', modelName, '`')
+        } else {
+          console.error(e)
+          // throw e
+        }
       }
     }
   }
