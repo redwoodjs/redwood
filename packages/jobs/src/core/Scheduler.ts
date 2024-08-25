@@ -50,9 +50,11 @@ export class Scheduler<TAdapter extends BaseAdapter> {
 
   buildPayload<TJob extends Job<QueueNames, unknown[]>>(
     job: TJob,
-    args?: Parameters<TJob['perform']>,
-    options?: ScheduleJobOptions,
+    ...argsAndOptions: Parameters<TJob['perform']> extends []
+      ? [undefined?, ScheduleJobOptions?]
+      : [Parameters<TJob['perform']>, ScheduleJobOptions?]
   ): SchedulePayload {
+    const [args, options] = argsAndOptions
     const queue = job.queue
     const priority = job.priority ?? DEFAULT_PRIORITY
     const wait = options?.wait ?? DEFAULT_WAIT
@@ -72,16 +74,13 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  async schedule<TJob extends Job<QueueNames, unknown[]>>({
-    job,
-    jobArgs,
-    jobOptions,
-  }: {
-    job: TJob
-    jobArgs?: Parameters<TJob['perform']>
-    jobOptions?: ScheduleJobOptions
-  }) {
-    const payload = this.buildPayload(job, jobArgs, jobOptions)
+  async schedule<TJob extends Job<QueueNames, unknown[]>>(
+    job: TJob,
+    ...argsAndOptions: Parameters<TJob['perform']> extends []
+      ? [undefined?, ScheduleJobOptions?]
+      : [Parameters<TJob['perform']>, ScheduleJobOptions?]
+  ) {
+    const payload = this.buildPayload(job, ...argsAndOptions)
 
     this.logger.info(payload, `[RedwoodJob] Scheduling ${job.name}`)
 
