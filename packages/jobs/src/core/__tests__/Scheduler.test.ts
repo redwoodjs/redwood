@@ -208,7 +208,7 @@ describe('schedule()', () => {
       wait: 10,
     }
 
-    await scheduler.schedule({ job, jobArgs: args, jobOptions: options })
+    await scheduler.schedule(job, args, options)
 
     expect(mockAdapter.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -240,8 +240,8 @@ describe('schedule()', () => {
       wait: 10,
     }
 
-    await expect(
-      scheduler.schedule({ job, jobArgs: args, jobOptions: options }),
-    ).rejects.toThrow(errors.SchedulingError)
+    await expect(scheduler.schedule(job, args, options)).rejects.toThrow(
+      errors.SchedulingError,
+    )
   })
 })
