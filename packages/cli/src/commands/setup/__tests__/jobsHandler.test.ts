@@ -1,6 +1,3 @@
-let mockExecutedTaskTitles = []
-let mockSkippedTaskTitles = []
-
 vi.mock('fs-extra')
 
 import '../../../lib/mockTelemetry'
@@ -16,6 +13,10 @@ import {
   afterAll,
 } from 'vitest'
 
+import type * as ProjectConfig from '@redwoodjs/project-config'
+
+import { Listr2Mock } from '../../../__tests__/Listr2Mock'
+// @ts-expect-error - This is a JS file
 import * as jobsHandler from '../jobs/jobsHandler.js'
 
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
@@ -35,9 +36,10 @@ vi.mock('@redwoodjs/cli-helpers', () => ({
     task: async () => {},
   }),
 }))
+
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const path = require('path')
-  const originalProjectConfig = await importOriginal()
+  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
   return {
     ...originalProjectConfig,
     getPaths: () => {
@@ -58,65 +60,9 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   }
 })
 
-vi.mock('listr2', async () => {
-  const ctx = {}
-  const listrImpl = (tasks, listrOptions) => {
-    return {
-      ctx,
-      run: async () => {
-        mockExecutedTaskTitles = []
-        mockSkippedTaskTitles = []
-
-        for (const task of tasks) {
-          const skip =
-            typeof task.skip === 'function' ? task.skip : () => task.skip
-
-          const skipReturnValue = skip()
-          if (typeof skipReturnValue === 'string') {
-            mockSkippedTaskTitles.push(skipReturnValue)
-          } else if (skipReturnValue) {
-            mockSkippedTaskTitles.push(task.title)
-          } else {
-            const augmentedTask = {
-              ...task,
-              newListr: listrImpl,
-              prompt: async (options) => {
-                const enquirer = listrOptions?.injectWrapper?.enquirer
-
-                if (enquirer) {
-                  if (!Array.isArray(options)) {
-                    options = [{ ...options, name: 'default' }]
-                  } else if (options.length === 1) {
-                    options[0].name = 'default'
-                  }
-
-                  const response = await enquirer.prompt(options)
-
-                  if (options.length === 1) {
-                    return response.default
-                  }
-                }
-              },
-              skip: (msg) => {
-                mockSkippedTaskTitles.push(msg || task.title)
-              },
-            }
-            await task.task(ctx, augmentedTask)
-
-            // storing the title after running the task in case the task
-            // modifies its own title
-            mockExecutedTaskTitles.push(augmentedTask.title)
-          }
-        }
-      },
-    }
-  }
-
-  return {
-    // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation(listrImpl),
-  }
-})
+vi.mock('listr2', () => ({
+  Listr: Listr2Mock,
+}))
 
 beforeAll(() => {
   vi.spyOn(console, 'log')
@@ -135,9 +81,9 @@ beforeEach(() => {
       'package.json': '{}',
       'api/tsconfig.json': '',
       'api/db/schema.prisma': '',
-      'api/src/lib': {},
+      'api/src/lib': null,
       // api/src/jobs already exists – this should not cause an error
-      'api/src/jobs': {},
+      'api/src/jobs': null,
       [__dirname + '/../jobs/templates/jobs.ts.template']: '',
     },
     '/path/to/project',
@@ -148,7 +94,7 @@ describe('jobsHandler', () => {
   it('skips creating the BackgroundJobs model if it already exists', async () => {
     await jobsHandler.handler({ force: false })
 
-    expect(mockSkippedTaskTitles).toEqual([
+    expect(Listr2Mock.skippedTaskTitles).toEqual([
       'BackgroundJob model exists, skipping',
     ])
     expect(console.error).not.toHaveBeenCalled()
@@ -157,11 +103,9 @@ describe('jobsHandler', () => {
   it('ignores error for already existing api/src/jobs dir', async () => {
     await jobsHandler.handler({ force: false })
 
-    expect(
-      mockExecutedTaskTitles.some(
-        (title) => title === 'Creating jobs dir at api/src/jobs...',
-      ),
-    ).toBeTruthy()
+    expect(Listr2Mock.executedTaskTitles).toContain(
+      'Creating jobs dir at api/src/jobs...',
+    )
     expect(console.error).not.toHaveBeenCalled()
   })
 })

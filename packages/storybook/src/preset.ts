@@ -31,11 +31,7 @@ export const viteFinal: StorybookConfig['viteFinal'] = async (config) => {
   const { plugins = [] } = config
 
   // Needs to run before the react plugin, so add to the front
-  plugins.unshift(
-    reactDocgen({
-      include: /\.(mjs|tsx?|jsx?)$/,
-    }),
-  )
+  plugins.unshift(reactDocgen())
 
   return mergeConfig(config, {
     // This is necessary as it otherwise just points to the `web` directory,

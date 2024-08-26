@@ -11,12 +11,12 @@ vi.mock('../Scheduler')
 describe('constructor', () => {
   const mockAdapter = new MockAdapter()
   const adapters = { mock: mockAdapter }
-  const queues = ['queue']
+  const queues = ['queue'] as const
   const logger = mockLogger
   const workers = [
     {
       adapter: 'mock' as const,
-      queue: '*',
+      queue: '*' as const,
       count: 1,
     },
   ]
@@ -61,7 +61,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: [],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -76,7 +76,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: ['*'],
+      queues: ['*'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -92,7 +92,7 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: [],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
@@ -108,11 +108,11 @@ describe('createScheduler()', () => {
       adapters: {
         mock: mockAdapter,
       },
-      queues: ['default'],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
-    const mockJob: Job<string[], unknown[]> = {
+    const mockJob: Job<['default'], unknown[]> = {
       queue: 'default',
       name: 'mockJob',
       path: 'mockJob/mockJob',
@@ -125,11 +125,111 @@ describe('createScheduler()', () => {
 
     scheduler(mockJob, mockArgs, mockOptions)
 
-    expect(Scheduler.prototype.schedule).toHaveBeenCalledWith({
-      job: mockJob,
-      jobArgs: mockArgs,
-      jobOptions: mockOptions,
+    expect(Scheduler.prototype.schedule).toHaveBeenCalledWith(
+      mockJob,
+      mockArgs,
+      mockOptions,
+    )
+  })
+
+  it('returns a function that takes an array of arguments to pass to perform()', () => {
+    const manager = new JobManager({
+      adapters: {
+        mock: mockAdapter,
+      },
+      queues: ['default'] as const,
+      logger: mockLogger,
+      workers: [],
     })
+
+    interface MockJobArgs {
+      foo: string
+      bar: number
+    }
+
+    const mockJob = manager.createJob({
+      queue: 'default',
+      perform: ({ foo, bar }: MockJobArgs) => {
+        return void (foo + bar)
+      },
+    })
+
+    const scheduler = manager.createScheduler({ adapter: 'mock' })
+
+    // Should be correct. No red squiggly lines
+    scheduler(mockJob, [{ foo: 'foo', bar: 645 }], { wait: 30 })
+
+    // Uncomment the line below and you should see an error because passing
+    // `undefined` should not be allowed when arguments are required
+    // scheduler(mockJob, undefined, { wait: 30 })
+
+    // Uncomment the line below and you should see an error because not passing
+    // anything should not be allowed when arguments are required
+    // scheduler(mockJob)
+  })
+
+  it("returns a function that doesn't need arguments to pass to perform()", () => {
+    const manager = new JobManager({
+      adapters: {
+        mock: mockAdapter,
+      },
+      queues: ['default'] as const,
+      logger: mockLogger,
+      workers: [],
+    })
+
+    const mockJob = manager.createJob({
+      queue: 'default',
+      perform: () => {
+        return void 'no args'
+      },
+    })
+
+    const scheduler = manager.createScheduler({ adapter: 'mock' })
+
+    // Should be correct
+    scheduler(mockJob, undefined, { wait: 30 })
+    // Should be correct
+    scheduler(mockJob, undefined)
+    // Should be correct
+    scheduler(mockJob)
+
+    // Uncomment the line below and you'll see an error right now. When the
+    // job's perform() method doesn't take any arguments you're not allowed to
+    // pass it an empty array. We could possibly allow this in the future if
+    // we want to, but for now it's an error.
+    // scheduler(mockJob, [], { wait: 30 })
+  })
+
+  it('returns a function with only optional arguments to pass to perform()', () => {
+    const manager = new JobManager({
+      adapters: {
+        mock: mockAdapter,
+      },
+      queues: ['default'] as const,
+      logger: mockLogger,
+      workers: [],
+    })
+
+    const mockJob = manager.createJob({
+      queue: 'default',
+      perform: (first?: string, second?: string) => {
+        return void (first || '' + second)
+      },
+    })
+
+    const scheduler = manager.createScheduler({ adapter: 'mock' })
+
+    // Should be correct
+    scheduler(mockJob, ['1st', '2nd'])
+    // Should be correct
+    scheduler(mockJob, [])
+
+    // Uncomment any of the lines below and you'll see an error. Ideally I think
+    // this should be allowed, because all arguments are optional. But on this
+    // first iteration I couldn't figure out how to make that work.
+    // scheduler(mockJob, undefined)
+    // scheduler(mockJob)
   })
 })
 
@@ -137,11 +237,11 @@ describe('createJob()', () => {
   it('returns the same job description that was passed in', () => {
     const manager = new JobManager({
       adapters: {},
-      queues: ['default'],
+      queues: ['default'] as const,
       logger: mockLogger,
       workers: [],
     })
-    const jobDefinition: JobDefinition<string[], unknown[]> = {
+    const jobDefinition: JobDefinition<['default'], unknown[]> = {
       queue: 'default',
       perform: vi.fn(),
     }
