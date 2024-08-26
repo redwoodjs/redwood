@@ -211,7 +211,6 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     })
   })
 
-
   async function removeUploadedFiles(
     fieldsToDelete: string[],
     data: Record<string, string>,
