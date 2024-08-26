@@ -205,4 +205,4 @@ export type ScheduleJobOptions =
       waitUntil: Date
     }
 
-type PriorityValue = IntRange<0, 101>
+type PriorityValue = IntRange<1, 101>
