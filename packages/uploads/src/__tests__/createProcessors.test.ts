@@ -2,10 +2,7 @@ import { describe, it, expect } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import {
-  createFileListProcessor,
-  createUploadProcessors,
-} from '../createProcessors.js'
+import { createUploadProcessors } from '../createProcessors.js'
 import { MemoryStorage } from '../MemoryStorage.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
@@ -124,7 +121,7 @@ describe('Create processors', () => {
 // Problem is - in the database world, a string[] is not a thing
 // so we need a generic way of doing this
 describe('FileList processing', () => {
-  const fileListProcessor = createFileListProcessor(memStore)
+  const processors = createUploadProcessors(uploadsConfig, memStore)
 
   const notPrismaData = [
     new File(['Hello'], 'hello.png', {
@@ -136,7 +133,7 @@ describe('FileList processing', () => {
   ]
 
   it('Should handle FileLists', async () => {
-    const result = await fileListProcessor(notPrismaData)
+    const result = await processors.processFileList(notPrismaData)
 
     expect(result).toHaveLength(2)
 
@@ -149,7 +146,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle FileLists with SaveOptions', async () => {
-    const result = await fileListProcessor(notPrismaData, {
+    const result = await processors.processFileList(notPrismaData, {
       path: '/bazinga_not_mem_store',
     })
 
@@ -163,7 +160,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle empty FileLists', async () => {
-    const promise = fileListProcessor()
+    const promise = processors.processFileList()
 
     await expect(promise).resolves.not.toThrow()
   })

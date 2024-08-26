@@ -1,7 +1,4 @@
-import {
-  createFileListProcessor,
-  createUploadProcessors,
-} from './createProcessors.js'
+import { createUploadProcessors } from './createProcessors.js'
 import type { ModelNames, UploadsConfig } from './prismaExtension.js'
 import { createUploadsExtension } from './prismaExtension.js'
 import type { UrlSigner } from './signedUrls.js'
@@ -23,12 +20,9 @@ export const setupUploads = <MNames extends ModelNames>(
     storageAdapter,
   )
 
-  const fileListProcessor = createFileListProcessor(storageAdapter)
-
   return {
     prismaExtension,
     uploadsProcessors,
-    fileListProcessor,
   }
 }
 

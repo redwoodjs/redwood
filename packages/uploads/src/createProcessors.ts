@@ -65,7 +65,7 @@ export const createUploadProcessors = <
       const updatedFields = {} as Record<string, string>
       for await (const field of currentModelUploadFields) {
         if (data[field]) {
-          const file = data[field] as File
+          const file = data[field]
 
           const saveOptions = overrideSaveOptions || {
             fileName: `${model}-${field}-${ulid()}`,
@@ -82,5 +82,8 @@ export const createUploadProcessors = <
     }
   })
 
-  return processors
+  return {
+    ...processors,
+    processFileList: createFileListProcessor(storage),
+  }
 }
