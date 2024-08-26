@@ -1,4 +1,5 @@
 import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './${pascalName}Cell'
 import { standard } from './${pascalName}Cell.mock'
 

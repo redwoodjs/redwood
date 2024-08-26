@@ -1,6 +1,3 @@
-let mockExecutedTaskTitles = []
-let mockSkippedTaskTitles = []
-
 global.__dirname = __dirname
 
 vi.mock('fs-extra')
@@ -23,65 +20,13 @@ import {
   afterAll,
 } from 'vitest'
 
+import { Listr2Mock } from '../../../../__tests__/Listr2Mock'
 import { getPaths } from '../../../../lib'
 import * as dbAuth from '../dbAuth'
 
-vi.mock('listr2', async () => {
-  const ctx = {}
-  const listrImpl = (tasks, listrOptions) => {
-    return {
-      ctx,
-      run: async () => {
-        mockExecutedTaskTitles = []
-        mockSkippedTaskTitles = []
-
-        for (const task of tasks) {
-          const skip =
-            typeof task.skip === 'function' ? task.skip : () => task.skip
-
-          if (skip()) {
-            mockSkippedTaskTitles.push(task.title)
-          } else {
-            const augmentedTask = {
-              ...task,
-              newListr: listrImpl,
-              prompt: async (options) => {
-                const enquirer = listrOptions?.injectWrapper?.enquirer
-
-                if (enquirer) {
-                  if (!Array.isArray(options)) {
-                    options = [{ ...options, name: 'default' }]
-                  } else if (options.length === 1) {
-                    options[0].name = 'default'
-                  }
-
-                  const response = await enquirer.prompt(options)
-
-                  if (options.length === 1) {
-                    return response.default
-                  }
-                }
-              },
-              skip: (msg) => {
-                mockSkippedTaskTitles.push(msg || task.title)
-              },
-            }
-            await task.task(ctx, augmentedTask)
-
-            // storing the title after running the task in case the task
-            // modifies its own title
-            mockExecutedTaskTitles.push(augmentedTask.title)
-          }
-        }
-      },
-    }
-  }
-
-  return {
-    // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation(listrImpl),
-  }
-})
+vi.mock('listr2', () => ({
+  Listr: Listr2Mock,
+}))
 
 // Mock files needed for each test
 const mockFiles = {}
@@ -159,7 +104,7 @@ describe('dbAuth handler WebAuthn task title', () => {
       listr2: { silentRendererCondition: true },
     })
 
-    expect(mockExecutedTaskTitles[1]).toEqual(
+    expect(Listr2Mock.executedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: WebAuthn addition included',
     )
   })
@@ -193,7 +138,7 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       passwordLabel: 'password',
     })
 
-    expect(mockSkippedTaskTitles[1]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: WebAuthn setup detected - ' +
         'support will be included in pages',
     )
@@ -227,7 +172,7 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       passwordLabel: 'password',
     })
 
-    expect(mockSkippedTaskTitles[1]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: No WebAuthn setup detected - ' +
         'support will not be included in pages',
     )
@@ -250,7 +195,7 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       listr2: { silentRendererCondition: true },
     })
 
-    expect(mockExecutedTaskTitles[1]).toEqual(
+    expect(Listr2Mock.executedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: WebAuthn addition not included',
     )
   })
@@ -267,7 +212,7 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       webauthn: true,
     })
 
-    expect(mockSkippedTaskTitles[0]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
       'Querying WebAuthn addition: argument webauthn passed, WebAuthn included',
     )
   })
@@ -284,7 +229,7 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       webauthn: false,
     })
 
-    expect(mockSkippedTaskTitles[0]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
       'Querying WebAuthn addition: argument webauthn passed, WebAuthn not included',
     )
   })

@@ -53,12 +53,13 @@ export class JobManager<
       logger: this.logger,
     })
 
-    return <T extends Job<TQueues, any[]>>(
-      job: T,
-      jobArgs?: Parameters<T['perform']>,
-      jobOptions?: ScheduleJobOptions,
+    return <TJob extends Job<TQueues, any[]>>(
+      job: TJob,
+      ...argsAndOptions: Parameters<TJob['perform']> extends []
+        ? [undefined?, ScheduleJobOptions?]
+        : [Parameters<TJob['perform']>, ScheduleJobOptions?]
     ) => {
-      return scheduler.schedule({ job, jobArgs, jobOptions })
+      return scheduler.schedule(job, ...argsAndOptions)
     }
   }
 
