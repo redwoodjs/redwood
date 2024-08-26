@@ -35,9 +35,9 @@ export const createUploadProcessors = <
   type uploadProcessorNames =
     `process${Capitalize<string & modelNamesInUploadConfig>}Uploads`
 
+  // @TODO(TS): Is there a way to make the type of data more specific?
   type Processors = {
     [K in uploadProcessorNames]: <T extends Record<string, any>>(
-      // @TODO(TS): T should be the type of the model
       data: T,
       overrideSaveOptions?: SaveOptionsOverride,
     ) => Promise<MakeFilesString<T>>

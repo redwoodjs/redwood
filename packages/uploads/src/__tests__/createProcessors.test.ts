@@ -10,8 +10,6 @@ const memStore = new MemoryStorage({
   baseDir: '/memory_store_basedir',
 })
 
-// @TODO(TS): How can I make this accept not all model names?
-// This is error-ing out because it wants all the models in my prisma client
 const uploadsConfig: UploadsConfig = {
   dumbo: {
     fields: ['firstUpload', 'secondUpload'],

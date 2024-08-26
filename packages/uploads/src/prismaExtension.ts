@@ -211,8 +211,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     })
   })
 
-  // @TODO(TS): According to TS, data could be a non-object...
-  // Setting args to JsArgs causes errors. This could be a legit issue
+
   async function removeUploadedFiles(
     fieldsToDelete: string[],
     data: Record<string, string>,
