@@ -125,11 +125,11 @@ describe('createScheduler()', () => {
 
     scheduler(mockJob, mockArgs, mockOptions)
 
-    expect(Scheduler.prototype.schedule).toHaveBeenCalledWith(
-      mockJob,
-      mockArgs,
-      mockOptions,
-    )
+    expect(Scheduler.prototype.schedule).toHaveBeenCalledWith({
+      job: mockJob,
+      args: mockArgs,
+      options: mockOptions,
+    })
   })
 
   it('returns a function that takes an array of arguments to pass to perform()', () => {
@@ -187,18 +187,13 @@ describe('createScheduler()', () => {
 
     const scheduler = manager.createScheduler({ adapter: 'mock' })
 
-    // Should be correct
-    scheduler(mockJob, undefined, { wait: 30 })
-    // Should be correct
+    // Should be correct, explicitly passing an empty array as job function arguments
+    scheduler(mockJob, [], { wait: 30 })
+    scheduler(mockJob, [])
+    // Should be correct, explicitly passing `undefined` as job options argument
     scheduler(mockJob, undefined)
-    // Should be correct
+    // Should be correct, not passing any arguments (allowed because the job doesn't require any)
     scheduler(mockJob)
-
-    // Uncomment the line below and you'll see an error right now. When the
-    // job's perform() method doesn't take any arguments you're not allowed to
-    // pass it an empty array. We could possibly allow this in the future if
-    // we want to, but for now it's an error.
-    // scheduler(mockJob, [], { wait: 30 })
   })
 
   it('returns a function with only optional arguments to pass to perform()', () => {
