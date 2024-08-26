@@ -223,7 +223,6 @@ describe('createScheduler()', () => {
     // Uncomment any of the lines below and you'll see an error. Ideally I think
     // this should be allowed, because all arguments are optional. But on this
     // first iteration I couldn't figure out how to make that work.
-    // scheduler(mockJob, undefined)
     // scheduler(mockJob)
   })
 })

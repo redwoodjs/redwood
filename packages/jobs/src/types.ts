@@ -207,6 +207,11 @@ export type ScheduleJobOptions =
 
 type PriorityValue = IntRange<1, 101>
 
+// If the job has no arguments:
+//  - you may pass an empty array for the arguments and then optionally pass the scheduler options
+//  - you may optionally pass the scheduler options
+// If the job has arguments:
+//  - you must pass the arguments and then optionally pass the scheduler options
 export type CreateSchedulerArgs<TJob extends Job<QueueNames>> =
   Parameters<TJob['perform']> extends []
     ? [ScheduleJobOptions?] | [[], ScheduleJobOptions?]
