@@ -89,6 +89,21 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           throw e
         }
       },
+      async createMany({ query, args }) {
+        try {
+          const result = await query(args)
+          return result
+        } catch (e) {
+          const createDatas = args.data as []
+
+          // If the create fails, we need to delete the uploaded files
+          for await (const createData of createDatas) {
+            await removeUploadedFiles(uploadFields, createData)
+          }
+
+          throw e
+        }
+      },
       async update({ query, model, args }) {
         // Check if any of the uploadFields are present in args.data
         // We only want to process fields that are being updated
@@ -123,6 +138,49 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
             return result
           } catch (e) {
             // If the update fails, we need to delete the newly uploaded files
+            // but not the ones that already exist!
+            await removeUploadedFiles(
+              uploadFieldsToUpdate,
+              args.data as Record<string, string>,
+            )
+            throw e
+          }
+        }
+      },
+      async updateMany({ query, model, args }) {
+        // Check if any of the uploadFields are present in args.data
+        // We only want to process fields that are being updated
+        const uploadFieldsToUpdate = uploadFields.filter(
+          (field) =>
+            // All of this non-sense is to make typescript happy. I'm not sure how data could be anything but an object
+            typeof args.data === 'object' &&
+            args.data !== null &&
+            field in args.data,
+        )
+
+        if (uploadFieldsToUpdate.length == 0) {
+          return query(args)
+        } else {
+          // MULTIPLE!
+          const originalRecords = await prismaInstance[
+            model as ModelNames
+            // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
+          ].findMany({
+            where: args.where,
+            // @TODO: should we select here to reduce the amount of data we're handling
+          })
+
+          try {
+            const result = await query(args)
+
+            // Remove the uploaded files from each of the original records
+            for await (const originalRecord of originalRecords) {
+              await removeUploadedFiles(uploadFieldsToUpdate, originalRecord)
+            }
+
+            return result
+          } catch (e) {
+            // If the update many fails, we need to delete the newly uploaded files
             // but not the ones that already exist!
             await removeUploadedFiles(
               uploadFieldsToUpdate,
