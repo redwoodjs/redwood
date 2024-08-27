@@ -53,7 +53,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs: Record<string, boolean>
         compute: (
           modelData: Record<string, unknown>,
-        ) => <T>(this: T, expiresIn?: number) => Promise<T>
+        ) => <T>(this: T, { expiresIn }: { expiresIn?: number }) => Promise<T>
       }
     }
   }
@@ -173,7 +173,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       withSignedUrl: {
         needs,
         compute(modelData) {
-          return (expiresIn?: number) => {
+          return ({ expiresIn }: { expiresIn?: number }) => {
             if (!urlSigner) {
               throw new Error(
                 'Please supply signed url settings in setupUpload()',
