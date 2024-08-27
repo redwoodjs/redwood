@@ -12,11 +12,11 @@ import {
   DEFAULT_SLEEP_DELAY,
 } from '../consts.js'
 import { AdapterRequiredError, QueuesRequiredError } from '../errors.js'
-import type { BasicLogger } from '../types.js'
+import type { BasicLogger, WorkerSharedOptions } from '../types.js'
 
 import { Executor } from './Executor.js'
 
-export interface WorkerOptions {
+export interface WorkerOptions extends WorkerSharedOptions {
   // required
 
   adapter: BaseAdapter
@@ -30,22 +30,7 @@ export interface WorkerOptions {
   logger?: BasicLogger
   /** If true, will clear the queue of all jobs and then exit */
   clear?: boolean
-  /** The maximum number of times to retry a failed job */
-  maxAttempts?: number
-  /** The maximum amount of time to let a job run in seconds */
-  maxRuntime?: number
-  /** Whether to keep succeeded jobs in the database */
-  deleteSuccessfulJobs?: boolean
-  /** Whether to keep failed jobs in the database after reaching maxAttempts */
-  deleteFailedJobs?: boolean
-  /**
-   * The amount of time to wait in milliseconds between checking for jobs.
-   * The time it took to run a job is subtracted from this time, so this is a
-   * maximum wait time.
-   *
-   * @default 5 seconds
-   */
-  sleepDelay?: number
+
   /**
    * Set to `false` and the work loop will quit when the current job is done
    * running (regardless of how many outstanding jobs there are to be worked
@@ -54,11 +39,11 @@ export interface WorkerOptions {
    */
   workoff?: boolean
 
-  // For testing
-
   /**
-   * Mainly used to make testing much easier: we can set to false to NOT run in
-   * an infinite loop by default during tests
+   * If set to `true` will run the worker forever looking for new jobs. Otherwise
+   * will only look for jobs one time and then exit.
+   *
+   * Useful for testing to avoid infinite loops!
    */
   forever?: boolean
 }
