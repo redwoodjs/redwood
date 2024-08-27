@@ -250,4 +250,206 @@ describe('Query extensions', () => {
       expect(fs.unlink).toHaveBeenCalledWith('im-a-invalid-path')
     })
   })
+
+  describe('upsert', () => {
+    it('will remove old files and save new ones on upsert, if it exists', async () => {
+      const ogDumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/tmp/oldFirst.txt',
+          secondUpload: '/tmp/oldSecond.txt',
+        },
+      })
+
+      const updatedDumbo = await prismaClient.dumbo.upsert({
+        update: {
+          firstUpload: '/tmp/newFirst.txt',
+        },
+        create: {
+          firstUpload: '/tmp/newFirst.txt',
+          secondUpload: '/tmp/oldSecond.txt',
+        },
+        where: {
+          id: ogDumbo.id,
+        },
+      })
+
+      expect(updatedDumbo.firstUpload).toBe('/tmp/newFirst.txt')
+      expect(updatedDumbo.secondUpload).toBe('/tmp/oldSecond.txt')
+      expect(fs.unlink).toHaveBeenCalledOnce()
+      expect(fs.unlink).toHaveBeenCalledWith('/tmp/oldFirst.txt')
+    })
+
+    it('will remove processed files if upsert creation fails', async () => {
+      try {
+        await prismaClient.dumbo.upsert({
+          create: {
+            firstUpload: '/tmp/first.txt',
+            secondUpload: '/bazinga/second.txt',
+            // @ts-expect-error Checking the error here
+            id: 'this-is-the-incorrect-type',
+          },
+        })
+      } catch {
+        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/tmp/first.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/bazinga/second.txt')
+      }
+
+      expect.assertions(2)
+    })
+  })
+
+  describe('createMany', () => {
+    it('createMany will remove files if all the create fails', async () => {
+      try {
+        await prismaClient.dumbo.createMany({
+          data: [
+            {
+              firstUpload: '/one/first.txt',
+              secondUpload: '/one/second.txt',
+              // @ts-expect-error Intentional
+              id: 'break',
+            },
+            {
+              firstUpload: '/two/first.txt',
+              secondUpload: '/two/second.txt',
+              // @ts-expect-error Intentional
+              id: 'break2',
+            },
+          ],
+        })
+      } catch {
+        expect(fs.unlink).toHaveBeenCalledTimes(4)
+        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/one/first.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/one/second.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(3, '/two/first.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(4, '/two/second.txt')
+      }
+
+      expect.assertions(5)
+    })
+
+    it('createMany will remove all files, even if one of them errors', async () => {
+      try {
+        await prismaClient.dumbo.createMany({
+          data: [
+            // This one is correct, but createMany fails together
+            // so all the files should be removed!
+            {
+              firstUpload: '/one/first.txt',
+              secondUpload: '/one/second.txt',
+              id: 9158125,
+            },
+            {
+              firstUpload: '/two/first.txt',
+              secondUpload: '/two/second.txt',
+              // @ts-expect-error Intentional
+              id: 'break2',
+            },
+          ],
+        })
+      } catch (e) {
+        // This one doesn't actually get created!
+        expect(
+          prismaClient.dumbo.findUnique({ where: { id: 9158125 } }),
+        ).resolves.toBeNull()
+
+        expect(fs.unlink).toHaveBeenCalledTimes(4)
+        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/one/first.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/one/second.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(3, '/two/first.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(4, '/two/second.txt')
+      }
+
+      expect.assertions(6)
+    })
+  })
+
+  describe('updateMany', () => {
+    it('will remove old files and save new ones on update, if they exist', async () => {
+      const ogDumbo1 = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/FINDME/oldFirst1.txt',
+          secondUpload: '/FINDME/oldSecond1.txt',
+        },
+      })
+
+      const ogDumbo2 = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/FINDME/oldFirst2.txt',
+          secondUpload: '/FINDME/oldSecond2.txt',
+        },
+      })
+
+      const updatedDumbos = await prismaClient.dumbo.updateMany({
+        data: {
+          firstUpload: '/REPLACED/newFirst.txt',
+          secondUpload: '/REPLACED/newSecond.txt',
+        },
+        where: {
+          firstUpload: {
+            contains: 'FINDME',
+          },
+        },
+      })
+
+      expect(updatedDumbos.count).toBe(2)
+
+      const updatedDumbo1 = await prismaClient.dumbo.findFirstOrThrow({
+        where: {
+          id: ogDumbo1.id,
+        },
+      })
+
+      const updatedDumbo2 = await prismaClient.dumbo.findFirstOrThrow({
+        where: {
+          id: ogDumbo2.id,
+        },
+      })
+
+      // Still performs the update
+      expect(updatedDumbo1.firstUpload).toBe('/REPLACED/newFirst.txt')
+      expect(updatedDumbo1.secondUpload).toBe('/REPLACED/newSecond.txt')
+      expect(updatedDumbo2.firstUpload).toBe('/REPLACED/newFirst.txt')
+      expect(updatedDumbo2.secondUpload).toBe('/REPLACED/newSecond.txt')
+
+      // Then deletes the old files
+      expect(fs.unlink).toHaveBeenCalledTimes(4)
+      expect(fs.unlink).toHaveBeenNthCalledWith(1, '/FINDME/oldFirst1.txt')
+      expect(fs.unlink).toHaveBeenNthCalledWith(2, '/FINDME/oldSecond1.txt')
+      expect(fs.unlink).toHaveBeenNthCalledWith(3, '/FINDME/oldFirst2.txt')
+      expect(fs.unlink).toHaveBeenNthCalledWith(4, '/FINDME/oldSecond2.txt')
+    })
+
+    it('will __not__ remove files if the update fails', async () => {
+      const ogDumbo1 = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/tmp/oldFirst1.txt',
+          secondUpload: '/tmp/oldSecond1.txt',
+        },
+      })
+
+      const ogDumbo2 = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/tmp/oldFirst2.txt',
+          secondUpload: '/tmp/oldSecond2.txt',
+        },
+      })
+
+      const failedUpdatePromise = prismaClient.dumbo.updateMany({
+        data: {
+          // @ts-expect-error Intentional
+          id: 'this-is-the-incorrect-type',
+        },
+        where: {
+          OR: [{ id: ogDumbo1.id }, { id: ogDumbo2.id }],
+        },
+      })
+
+      // Id is invalid, so the update should fail
+      await expect(failedUpdatePromise).rejects.toThrowError()
+
+      // The old files should NOT be deleted
+      expect(fs.unlink).not.toHaveBeenCalled()
+    })
+  })
 })
