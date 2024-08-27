@@ -196,8 +196,6 @@ function babelPluginTransformServerFunction({
   // If the same local name is exported more than once, we only need one of the names.
   const localNames = new Map<string, string>()
   const localTypes = new Map<string, string>()
-  // const serverActions = new Set<string>()
-  // const localExports = new Map<string, string>()
   const serverActionNodes: types.FunctionDeclaration[] = []
   const topLevelFunctions: string[] = []
 
