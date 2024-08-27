@@ -8809,6 +8809,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:7.24.7"
     "@babel/runtime": "npm:7.25.0"
     "@babel/runtime-corejs3": "npm:7.25.0"
+    "@n1ru4l/graphql-live-query": "npm:0.10.0"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"

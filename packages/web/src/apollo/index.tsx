@@ -28,6 +28,7 @@ import {
   useSuspenseQuery,
 } from '@apollo/client/react/hooks/hooks.cjs'
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
+import { isLiveQueryOperationDefinitionNode } from '@n1ru4l/graphql-live-query'
 import { Kind, OperationTypeNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 
@@ -237,13 +238,18 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const uploadOrSSELink =
     typeof SSELink !== 'undefined'
       ? split(
-          ({ query }) => {
+          ({ query, variables }) => {
             const definition = getMainDefinition(query)
 
-            return (
+            const isSubscription =
               definition.kind === Kind.OPERATION_DEFINITION &&
               definition.operation === OperationTypeNode.SUBSCRIPTION
-            )
+
+            const isLiveQuery =
+              !!definition &&
+              isLiveQueryOperationDefinitionNode(definition, variables)
+
+            return isSubscription || isLiveQuery
           },
           new SSELink({
             url: uri,
