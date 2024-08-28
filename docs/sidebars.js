@@ -231,6 +231,7 @@ module.exports = {
           ],
         },
         'webhooks',
+        'uploads',
         'vite-configuration',
       ],
     },
