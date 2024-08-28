@@ -614,6 +614,9 @@ const SomePage = () => {
 
 The browser keeps track of the browsing history in a stack. By default when you navigate to a new page a new item is pushed to the history stack. But sometimes you want to replace the top item on the stack instead of appending to the stack. This is how you do that in Redwood: `navigate(routes.home(), { replace: true })`. As you can see you need to pass an options object as the second parameter to `navigate` with the option `replace` set to `true`.
 
+By default `navigate` will scroll to the top after navigating to a new route (except for hash param changes), we can prevent this behavior by setting the `scroll` option to false:
+`navigate(routes.home(), { scroll: false })`
+
 ### back
 
 Going back is as easy as using the `back()` function that's exported from the router.
@@ -674,6 +677,9 @@ const SomePage = () => <Redirect to={routes.home()} />
 ```
 
 In addition to the `to` prop, `<Redirect />` also takes an `options` prop. This is the same as [`navigate()`](#navigate)'s second argument: `navigate(_, { replace: true })`. We can use it to _replace_ the top item of the browser history stack (instead of pushing a new one). This is how you use it to have this effect: `<Redirect to={routes.home()} options={{ replace: true }}/>`.
+
+By default redirect will scroll to the top after navigating to a new route (except for hash param changes), we can prevent this behavior by setting the `scroll` option to false:
+`<Redirect to={routes.home()} options={{ scroll: false }}/>`
 
 ## Code-splitting
 
