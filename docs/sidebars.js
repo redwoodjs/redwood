@@ -194,6 +194,7 @@ module.exports = {
         'schema-relations',
         'security',
         'seo-head',
+        'server-file',
         'serverless-functions',
         'services',
         'storybook',
