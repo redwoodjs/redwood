@@ -7,7 +7,7 @@ There's two parts to this:
 
 2. Manipulate the data inside services, and pass it to Prisma, for persistence - Storage
 
-Visually we can roughly breakdown the flow as follows
+We can roughly breakdown the flow as follows
 
 ![Redwood Uploads Flow Diagram](/img/uploads/uploads-flow.png)
 
@@ -169,7 +169,7 @@ model Profile {
 
 This is because Prisma doesn't have a native File type. Instead, we store the file path or URL as a string in the database. The actual file processing and storage will be handled in your service layer, and pass the path to Prisma to save.
 
-### Setting up Uploads processors and Prisma extension
+### Setting up Storage processors and Prisma extension
 
 To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of "processing" your uploads (i.e. save to storage) and a prisma extension that will handle deletion and updates automatically for you. The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system.
 
@@ -219,7 +219,7 @@ Let's break down the key components of this configuration:
 **1. Upload Configuration**
 This is where you configure the fields that will receive uploads. In our case, it's the profile.avatar field.
 
-The shape of the object looks like this:
+The shape of `UploadsConfig` looks like this:
 
 ```
 [prismaModel] : {
@@ -433,12 +433,13 @@ export const updateAlbum = async ({
 
 ```
 
-### Customizing save file name
+### Customizing save file name or save path
 
 If you'd like to customize the filename that a processor will save to you can override it when calling it. For example, you could name your files by the User's id
 
 ```ts 
 await processors.processProfileUploads(data, {
+  // highlight-next-line
   fileName: 'profilePhoto-' + context.currentUser.id,
 })
 
@@ -446,5 +447,88 @@ await processors.processProfileUploads(data, {
 // /base_path/profilePhoto-58xx4ruv41f8eit0y25.png
 ```
 
-The extension is determined by the name of the uploaded file. 
+If you'd like to customize where files are saved, perhaps you want to put it in a specific folder, so you can make those files [publicly available](#making-a-folder-public), you can override the folder to use too (skipping the base path of your Storage adapter):
 
+```ts
+await processors.processProfileUploads(data, {
+  fileName: 'profilePhoto-' + context.currentUser.id,
+  // highlight-next-line
+  path: '/public_avatar'
+})
+
+// Will save files to
+// /public_avatar/profilePhoto-58xx4ruv41f8eit0y25.png
+```
+
+The extension is determined by the name of the uploaded file.
+
+## Storage Prisma Extension
+
+This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
+
+
+The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-processors-and-prisma-extension).
+
+### `create` & `createMany` operations
+If your create operation fails, it removes any uploaded files to avoid orphaned files (so you can retry the request)
+
+### `update` & `updateMany` operations
+1. If update operation is successful, removes the old uploaded files
+2. If it fails, removes any newly uploaded files (so you can retry the request)
+
+### `delete` operations
+Removes any associated uploaded files, once delete operation completes.
+
+
+
+## Result Extensions
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+
+
+## Configuring the server further
+Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic. 
+
+### Making a folder public
+
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+
+
+### Customising the body limit for requests
+Depending on the sizes of files you're uploading, especially in the case of multiple files, if you receive errors like this:
+
+```json
+{
+"code":"FST_ERR_CTP_BODY_TOO_LARGE",
+"error":"Payload Too Large",
+"message":"Request body is too large"
+}
+```
+The default body size limit for the Redwood API server is 100MB (per request). 
+
+To customise this, you'll have to make use of the [Server File](server-file.md). 
+
+```js title="api/server.js"
+import { createServer } from '@redwoodjs/api-server'
+
+import { logger } from 'src/lib/logger'
+
+async function main() {
+  const server = await createServer({
+    logger,
+    fastifyServerOptions: {
+      // highlight-next-line
+      bodyLimit: 1024 * 1024 * 500, // 500MB
+    },
+  })
+
+  await server.start()
+}
+
+main()
+```
