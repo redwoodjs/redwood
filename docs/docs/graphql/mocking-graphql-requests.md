@@ -86,6 +86,7 @@ mockGraphQLQuery('OperationName', (_variables, { ctx }) => {
 ```
 
 ### Typename
+
 If using [fragments](../graphql/fragments.md) it is important to include the `__typename` otherwise Apollo client will not be able to map the mocked data to the fragment attributes.
 
 :::tip note
@@ -94,23 +95,35 @@ The `__typename: 'Book' as const` ensures that `'Book'` is considered to be a `t
 :::
 
 ## TypeScript
+
 You can get stricter types by passing types when mocking the query, mutation and its variables:
 
 ```tsx
 import type { UserProfileQuery, UserProfileQueryVariables } from 'types/graphql'
 
-mockGraphQLQuery<UserProfileQuery, UserProfileQueryVariables>('UserProfileQuery', { /*... */ })
+mockGraphQLQuery<UserProfileQuery, UserProfileQueryVariables>(
+  'UserProfileQuery',
+  {
+    /*... */
+  }
+)
 ```
+
 or, you can manually pass your own types:
 
 ```tsx
-mockGraphQLQuery<{
-  userProfile: {
-    __typename: 'UserProfile' as const,
-    id: number,
-    name: string,
-  }
-}>('UserProfileQuery', { /*... */ })
+mockGraphQLQuery <
+  {
+    userProfile: {
+      __typename: 'UserProfile' as const,
+      id: number,
+      name: string,
+    },
+  } >
+  ('UserProfileQuery',
+  {
+    /*... */
+  })
 ```
 
 ## Global mock-requests vs local mock-requests

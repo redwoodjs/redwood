@@ -139,7 +139,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   let redirectPath: string | undefined = undefined
 
   if (redirect) {
-    if (redirect[0] === '/') {
+    if (redirect.startsWith('/')) {
       redirectPath = replaceParams(redirect, allParams)
     } else {
       const redirectRouteObject = Object.values(pathRouteMap).find(
@@ -186,7 +186,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
 interface WrappedPageProps {
   children: ReactNode
-  sets: Array<{
+  sets: {
     id: string
     wrappers: Wrappers
     isPrivate: boolean
@@ -194,7 +194,7 @@ interface WrappedPageProps {
       private?: boolean
       [key: string]: unknown
     }
-  }>
+  }[]
 }
 
 /**

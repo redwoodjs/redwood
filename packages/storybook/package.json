@@ -1,6 +1,5 @@
 {
   "name": "storybook-framework-redwoodjs-vite",
-  "type": "module",
   "version": "7.0.0",
   "description": "Storybook for RedwoodJS with Vite",
   "keywords": [
@@ -18,6 +17,7 @@
     "directory": "packages/storybook"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -44,8 +44,8 @@
   ],
   "scripts": {
     "build": "tsx build.ts && yarn build:types",
-    "build:types": "tsc --build --verbose",
-    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
+    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz",
+    "build:types": "tsc --build --verbose"
   },
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
@@ -54,21 +54,21 @@
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "0.30.10",
+    "magic-string": "0.30.11",
     "react-docgen": "7.0.3",
     "unplugin-auto-import": "0.18.2"
   },
   "devDependencies": {
-    "@types/node": "20.14.12",
-    "tsx": "4.16.2",
+    "@types/node": "20.14.15",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vite": "6.0.0-alpha.21"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802",
     "storybook": "7.6.17"
   },
   "engines": {

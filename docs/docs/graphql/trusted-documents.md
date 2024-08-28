@@ -43,20 +43,50 @@ When configured to use Trusted Documents, your project will:
 ```ts title=web/src/graphql/gql.ts
 // ...
 export function graphql(
-  source: "\n  query FindPosts {\n    posts {\n      id\n      title\n      body\n      authorId\n      createdAt\n    }\n  }\n"
-): (typeof documents)["\n  query FindPosts {\n    posts {\n      id\n      title\n      body\n      authorId\n      createdAt\n    }\n  }\n"];
+  source: '\n  query FindPosts {\n    posts {\n      id\n      title\n      body\n      authorId\n      createdAt\n    }\n  }\n'
+): (typeof documents)['\n  query FindPosts {\n    posts {\n      id\n      title\n      body\n      authorId\n      createdAt\n    }\n  }\n']
 // ...
 export function gql(source: string) {
-  return graphql(source);
+  return graphql(source)
 }
-
 ```
 
 and the generated AST with the hash id in `web/src/graphql/graphql.ts`
 
 ```ts title=web/src/graphql/graphql.ts
 // ...
-export const FindPostsDocument = {"__meta__":{"hash":"76308e971322b1ece4cdff75185bb61d7139e343"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FindPosts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<FindPostsQuery, FindPostsQueryVariables>;
+export const FindPostsDocument = {
+  __meta__: { hash: '76308e971322b1ece4cdff75185bb61d7139e343' },
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'FindPosts' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'posts' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'authorId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<FindPostsQuery, FindPostsQueryVariables>
 // ...
 ```
 
@@ -88,8 +118,8 @@ This means that because queries are pre-generated and the hash ids **must match*
 
 Thus preventing unwanted queries or GraphQL traversal attacks,
 
-* Configure RedwoodJS to use Trusted Documents via `redwood.toml`
-* Configure the GraphQL Server
+- Configure RedwoodJS to use Trusted Documents via `redwood.toml`
+- Configure the GraphQL Server
 
 ## Configure Trusted Documents
 
@@ -97,13 +127,12 @@ Below are instructions to manually configure Trusted Documents in your RedwoodJS
 
 Alternatively, you can use the `yarn redwood setup graphql trusted-documents` [CLI setup command](../cli-commands.md#setup-graphql-trusted-docs).
 
-
 ### Configure redwood.toml
 
 Setting `trustedDocuments` to true will
 
-* populate `web/src/graphql` files with the pre-generated documents
-* inform Apollo GraphQL client to send the document hashes and not the query itself
+- populate `web/src/graphql` files with the pre-generated documents
+- inform Apollo GraphQL client to send the document hashes and not the query itself
 
 ```toml title=redwood.toml
 ...
@@ -183,9 +212,8 @@ You can also define a function to returns a `GraphQLError`. This function has ac
 
 In addition to the `persistedQueryOnly` custom error option, you can define error message for:
 
-  * `notFound` - Error to be thrown when the persisted operation is not found
-  * `keyNotFound` - Error to be thrown when the extraction of the persisted operation id failed
-
+- `notFound` - Error to be thrown when the persisted operation is not found
+- `keyNotFound` - Error to be thrown when the extraction of the persisted operation id failed
 
 #### Skipping validation of persisted operations
 
@@ -197,7 +225,6 @@ If you validate your persisted operations while building your store, we recommen
     skipDocumentValidation: true,
   }
 ```
-
 
 #### Allowing arbitrary GraphQL operations
 
@@ -212,14 +239,13 @@ Even if you define `allowArbitraryOperations` the plugin will always check for t
 This can be achieved using the `allowArbitraryOperations` option.
 
 :::warning Important
-Override this option with caution! 
+Override this option with caution!
 :::
 
 For example, you can get a header from the request and allow:
 
 ```ts
-allowArbitraryOperations: (request) =>  {
-    return request.headers.get('x-allow-arbitrary-operations') === 'true'
-} 
+allowArbitraryOperations: (request) => {
+  return request.headers.get('x-allow-arbitrary-operations') === 'true'
+}
 ```
-

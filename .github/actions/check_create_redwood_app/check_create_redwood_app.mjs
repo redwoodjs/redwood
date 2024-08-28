@@ -14,7 +14,7 @@ if (hasCRWA_OkLabel) {
   const { stdout } = await getExecOutput('git diff origin/main --name-only')
   const changedFiles = stdout.toString().trim().split('\n').filter(Boolean)
   const didRebuildJS_Template = changedFiles.some((file) =>
-    file.startsWith('packages/create-redwood-app/templates/js')
+    file.startsWith('packages/create-redwood-app/templates/js'),
   )
 
   if (didRebuildJS_Template) {
@@ -24,17 +24,21 @@ if (hasCRWA_OkLabel) {
         // because git fetch origin main prints to stdout.
         '',
         "The create redwood app JS template's been rebuilt",
-      ].join('\n')
+      ].join('\n'),
     )
   } else {
     // If it doesn't, does it need to be rebuilt? If not, no problem. Otherwise, throw.
-    const shouldRebuildJS_Template = changedFiles.some(
-      (file) =>
-        file.startsWith('packages/create-redwood-app/templates/ts')
+    const shouldRebuildJS_Template = changedFiles.some((file) =>
+      file.startsWith('packages/create-redwood-app/templates/ts'),
     )
 
     if (!shouldRebuildJS_Template) {
-      console.log(['', "The create redwood app JS template doesn't need to be rebuilt"].join('\n'))
+      console.log(
+        [
+          '',
+          "The create redwood app JS template doesn't need to be rebuilt",
+        ].join('\n'),
+      )
     } else {
       console.log(
         [
@@ -46,7 +50,7 @@ if (hasCRWA_OkLabel) {
           '  cd packages/create-redwood-app',
           '  yarn ts-to-js',
           '',
-        ].join('\n')
+        ].join('\n'),
       )
 
       process.exitCode = 1

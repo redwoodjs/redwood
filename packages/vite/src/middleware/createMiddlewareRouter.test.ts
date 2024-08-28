@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createMiddlewareRouter } from './register'
 
-vi.mock('@redwoodjs/project-config', async () => {
+vi.mock('@redwoodjs/project-config', () => {
   const mockWin32Paths = {
     web: {
       base: 'C:\\proj\\web',
@@ -31,13 +31,11 @@ vi.mock('@redwoodjs/project-config', async () => {
 
 const distRegisterMwMock = vi.fn()
 vi.mock('/proj/web/dist/ssr/entry-server.mjs', () => {
-  console.log('using unix mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }
 })
 vi.mock('/C:/proj/web/dist/ssr/entry-server.mjs', () => {
-  console.log('using win32 mock')
   return {
     registerMiddleware: distRegisterMwMock,
   }

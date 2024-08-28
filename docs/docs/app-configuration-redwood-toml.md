@@ -28,17 +28,17 @@ For certain options, instead of having to configure build tools directly, there'
 
 ## [web]
 
-| Key                           | Description                                                | Default                 |
-| :---------------------------- | :--------------------------------------------------------- | :---------------------- |
-| `title`                       | Title of your Redwood app                                  | `'Redwood App'`         |
-| `port`                        | Port for the web server to listen at                                          | `8910`                  |
-| `apiUrl`                      | URL to your api server. This can be a relative URL in which case it acts like a proxy, or a fully-qualified URL | `'/.redwood/functions'` |
-| `includeEnvironmentVariables` | Environment variables made available to the web side during dev and build                           | `[]`                    |
-| `host`                        | Hostname for the web server to listen at                                      | Defaults to `'0.0.0.0'` in production and `'::'` in development           |
-| `apiGraphQLUrl`               | URL to your GraphQL function                   | `'${apiUrl}/graphql'`   |
-| `apiDbAuthUrl`                | URL to your dbAuth function                    | `'${apiUrl}/auth'`      |
-| `sourceMap`                   | Enable source maps for production builds                   | `false`                 |
-| `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y` | `true`                  |
+| Key                           | Description                                                                                                     | Default                                                         |
+| :---------------------------- | :-------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- |
+| `title`                       | Title of your Redwood app                                                                                       | `'Redwood App'`                                                 |
+| `port`                        | Port for the web server to listen at                                                                            | `8910`                                                          |
+| `apiUrl`                      | URL to your api server. This can be a relative URL in which case it acts like a proxy, or a fully-qualified URL | `'/.redwood/functions'`                                         |
+| `includeEnvironmentVariables` | Environment variables made available to the web side during dev and build                                       | `[]`                                                            |
+| `host`                        | Hostname for the web server to listen at                                                                        | Defaults to `'0.0.0.0'` in production and `'::'` in development |
+| `apiGraphQLUrl`               | URL to your GraphQL function                                                                                    | `'${apiUrl}/graphql'`                                           |
+| `apiDbAuthUrl`                | URL to your dbAuth function                                                                                     | `'${apiUrl}/auth'`                                              |
+| `sourceMap`                   | Enable source maps for production builds                                                                        | `false`                                                         |
+| `a11y`                        | Enable storybook `addon-a11y` and `eslint-plugin-jsx-a11y`                                                      | `true`                                                          |
 
 ### Customizing the GraphQL Endpoint
 
@@ -105,19 +105,20 @@ Don't make secrets available to your web side. Everything in `includeEnvironment
 
 ## [api]
 
-| Key            | Description                         | Default                    |
-| :------------- | :---------------------------------- | :------------------------- |
-| `port`         | Port for the api server to listen at                   | `8911`                     |
-| `host`         | Hostname for the api server to listen at               | Defaults to `'0.0.0.0'` in production and `'::'` in development              |
-| `schemaPath`   |  The location of your Prisma schema. If you have [enabled Prisma multi file schemas](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema), then its value is the directory where your `schema.prisma` can be found, for example: `'./api/db/schema'` | Defaults to `'./api/db/schema.prisma'` |
-| `debugPort`    | Port for the debugger to listen at     | `18911`                    |
-| `serverConfig` | [Deprecated; use the [server file](./docker.md#using-the-server-file) instead] Path to the `server.config.js` file | `'./api/server.config.js'` |
+| Key          | Description                                                                                                                                                                                                                                                                             | Default                                                         |
+| :----------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- |
+| `port`       | Port for the api server to listen at                                                                                                                                                                                                                                                    | `8911`                                                          |
+| `host`       | Hostname for the api server to listen at                                                                                                                                                                                                                                                | Defaults to `'0.0.0.0'` in production and `'::'` in development |
+| `schemaPath` | The location of your Prisma schema. If you have [enabled Prisma multi file schemas](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema), then its value is the directory where your `schema.prisma` can be found, for example: `'./api/db/schema'` | Defaults to `'./api/db/schema.prisma'`                          |
+| `debugPort`  | Port for the debugger to listen at                                                                                                                                                                                                                                                      | `18911`                                                         |
+
+Additional server configuration can be done using [Server File](docker.md#using-the-server-file)
 
 ### Multi File Schema
 
-Prisma's `prismaSchemaFolder` [feature](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema) allows you to define multiple files in a schema subdirectory of your prisma directory. 
+Prisma's `prismaSchemaFolder` [feature](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema) allows you to define multiple files in a schema subdirectory of your prisma directory.
 
-:::note Important 
+:::note Important
 If you wish to [organize your Prisma Schema into multiple files](https://www.prisma.io/blog/organize-your-prisma-schema-with-multi-file-support), you will need [enable](https://www.prisma.io/docs/orm/prisma-schema/overview/location#multi-file-prisma-schema) that feature in Prisma, move your `schema.prisma` file into a new directory such as `./api/db/schema` and then set `schemaPath` in the api toml config.
 :::
 
@@ -125,7 +126,7 @@ For example:
 
 ```toml title="redwood.toml"
 [api]
-  port = 8911  
+  port = 8911
   schemaPath = "./api/db/schema"
 ```
 

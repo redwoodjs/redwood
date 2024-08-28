@@ -38,13 +38,13 @@ For example, if you specify the return type on `getCurrentUser` as...
 
 ```ts title="api/src/lib/auth.ts"
 interface MyCurrentUser {
-  id: string,
-  roles: string[],
-  email: string,
+  id: string
+  roles: string[]
+  email: string
   projectId: number
 }
 
-const getCurrentUser = ({decoded}): MyCurrentUser => {
+const getCurrentUser = ({ decoded }): MyCurrentUser => {
   //..
 }
 ```
@@ -77,7 +77,10 @@ Redwood generates types for both the data returned from the query and the query'
 These generated types will use the query's name—in this case, `FindBlogPostQuery`—so you can import them like this:
 
 ```ts title="web/src/components/BlogPostCell.tsx"
-import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
+import type {
+  FindBlogPostQuery,
+  FindBlogPostQueryVariables,
+} from 'types/graphql'
 ```
 
 `FindBlogPostQuery` is the type of the data returned from the query (`{ title: string, body: string }`) and `FindBlogPostQueryVariables` is the type of the query's variables (`{ id: number }`).

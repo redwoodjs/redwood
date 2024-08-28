@@ -7,15 +7,15 @@ a new environment.
 
 Seed data are things like:
 
-* An admin user so that you can log in to your new instance
-* A list of categories that can be assigned to a Product
-* Lists of roles and permissions
+- An admin user so that you can log in to your new instance
+- A list of categories that can be assigned to a Product
+- Lists of roles and permissions
 
 Seed data is not meant for:
 
-* Sample data to be used in development
-* Data to run tests against
-* Randomized data
+- Sample data to be used in development
+- Data to run tests against
+- Randomized data
 
 ## Best Practices
 
@@ -31,7 +31,7 @@ already exists, and if so just update it, if not then create it. But, this
 technique requires a separate SQL statement for each member of your data array
 and is less performant than `createMany()`.
 
-You could also do a check if *any* data exists in the database first, and if
+You could also do a check if _any_ data exists in the database first, and if
 not, create the records with `createMany()`. However, this means that any
 existing seed data that may have been modified will remain, and would not be
 updated to match what you expect in your seed.
@@ -46,7 +46,7 @@ Seeds are automatically run the first time you migrate your database:
 yarn rw prisma migrate dev
 ```
 
-They are run *every* time you reset your database:
+They are run _every_ time you reset your database:
 
 ```bash
 yarn rw prisma migrate reset
@@ -148,14 +148,14 @@ export default async () => {
       { name: 'Fiction', bisacCode: 'FIC000000' },
       { name: 'Nature', bisacCode: 'NAT000000' },
       { name: 'Travel', bisacCode: 'TRV000000' },
-      { name: 'World History', bisacCode: 'HIS037000' }
+      { name: 'World History', bisacCode: 'HIS037000' },
     ]
 
     for (const item of data) {
-      await db.category.upsert({ 
+      await db.category.upsert({
         where: { name: item.name },
         update: { code: item.code },
-        create: { name: item.name, code: item.code } 
+        create: { name: item.name, code: item.code },
       })
     }
   } catch (error) {
@@ -167,7 +167,7 @@ export default async () => {
 You can now execute this seed as many times as you want and you'll end up with
 that exact list in the database each time. And, any additional categories you've
 created in the meantime will remain. Remember: seeds are meant to be the
-*minimum* amount of data you need for your app to run, not necessarily *all* the
+_minimum_ amount of data you need for your app to run, not necessarily _all_ the
 data that will ever be present in those tables.
 
 # Seeding users for dbAuth
@@ -182,27 +182,27 @@ import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 export default async () => {
   const users = [
     { name: 'John', email: 'john@example.com', password: 'secret1' },
-    { name: 'Jane', email: 'jane@example.com', password: 'secret2' }
+    { name: 'Jane', email: 'jane@example.com', password: 'secret2' },
   ]
 
   for (const user of users) {
     const [hashedPassword, salt] = hashPassword(user.password)
 
     await db.user.upsert({
-      where: { 
-        email: user.email 
+      where: {
+        email: user.email,
       },
-      create: { 
+      create: {
         name: user.name,
         email: user.email,
         hashedPassword,
-        salt
+        salt,
       },
       update: {
         name: user.name,
         hashedPassword,
-        salt
-      }
+        salt,
+      },
     })
   }
 }

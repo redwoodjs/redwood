@@ -428,8 +428,6 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
     throw new Error('Unexpected input')
   }
 
-  const config = await getViteConfig()
-
   const [fileName, actionName] = input.rsfId.split('#')
   console.log('Server Action fileName', fileName, 'actionName', actionName)
   const module = await loadServerFile(fileName)
@@ -450,6 +448,12 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
     input.args[0] = formData
   }
 
-  const data = await (module[actionName] || module)(...input.args)
+  const method = module[actionName] || module
+  console.log('rscWorker.ts method', method)
+  console.log('rscWorker.ts args', ...input.args)
+
+  const data = await method(...input.args)
+  const config = await getViteConfig()
+
   return renderToPipeableStream(data, getBundlerConfig(config))
 }

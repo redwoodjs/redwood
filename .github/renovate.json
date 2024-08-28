@@ -1,30 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "configMigration": true,
-
-  "extends": [
-    "config:recommended"
-  ],
-
-  "postUpdateOptions": [
-    "yarnDedupeHighest"
-  ],
+  "extends": ["config:recommended"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
   "prConcurrentLimit": 3,
   "rebaseWhen": "conflicted",
-
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
-
     {
       "groupName": "ESM and @redwoodjs packages",
       "enabled": false,
-
       "matchPackageNames": [
         "boxen",
         "chalk",
@@ -41,16 +29,12 @@
         "tempy",
         "terminal-link",
         "title-case",
-        "untildify"
-      ],
-      "matchPackagePatterns": [
-        "^@redwoodjs/"
+        "untildify",
+        "/^@redwoodjs//"
       ]
     },
-
     {
       "groupName": "chore",
-
       "matchPackageNames": [
         "all-contributors-cli",
         "cypress",

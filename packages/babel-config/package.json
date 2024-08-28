@@ -33,13 +33,13 @@
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
     "@babel/register": "^7.22.15",
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/project-config": "workspace:*",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-module-resolver": "5.0.2",
-    "core-js": "3.37.1",
+    "core-js": "3.38.0",
     "fast-glob": "3.3.2",
     "graphql": "16.9.0",
     "typescript": "5.5.4"
@@ -48,10 +48,10 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel-plugin-tester": "9.0.10",
     "@types/babel__core": "7.20.5",
-    "@types/node": "20.14.12",
+    "@types/node": "20.14.15",
     "babel-plugin-tester": "11.0.4",
-    "tsx": "4.16.2",
-    "vitest": "2.0.4"
+    "tsx": "4.17.0",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

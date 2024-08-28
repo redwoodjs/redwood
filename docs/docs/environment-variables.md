@@ -22,6 +22,7 @@ Redwood also configures Vite, so that all references to `process.env` vars on th
 ## Web
 
 ### Including environment variables
+
 > **Heads Up:** for Web to access environment variables in production, you _must_ configure one of the options below.
 >
 > Redwood recommends **Option 1: `redwood.toml`** as it is the most robust.
@@ -47,12 +48,11 @@ By adding environment variables to this array, they'll be available to Web in pr
 
 Note: if someone inspects your site's source, _they could see your `REDWOOD_ENV_SECRET_API_KEY` in plain text._ This is a limitation of delivering static JS and HTML to the browser.
 
-#### Option 2: Prefixing with REDWOOD\_ENV\_
+#### Option 2: Prefixing with REDWOOD_ENV\_
 
 In `.env`, if you prefix your environment variables with `REDWOOD_ENV_`, they'll be available via `process.env.REDWOOD_ENV_MY_VAR_NAME`, and will be dynamically replaced at build-time.
 
 Like the option above, these are also removed and replaced with the _actual value_ during build in order to be available in production.
-
 
 ### Accessing API URLs
 

@@ -1,7 +1,5 @@
 import { defineConfig, configDefaults } from 'vitest/config'
 
-import { babel } from '@rollup/plugin-babel'
-
 export default defineConfig({
   test: {
     exclude: [...configDefaults.exclude, '**/fixtures', '**/__typetests__'],
@@ -12,5 +10,3 @@ export default defineConfig({
     RWJS_ENV: {},
   },
 })
-
-

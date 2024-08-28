@@ -1,24 +1,13 @@
 {
   "name": "@redwoodjs/web",
   "version": "7.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/web"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "cross-env": "./dist/cjs/bins/cross-env.js",
-    "msw": "./dist/cjs/bins/msw.js",
-    "redwood": "./dist/cjs/bins/redwood.js",
-    "rw": "./dist/cjs/bins/redwood.js",
-    "rwfw": "./dist/cjs/bins/rwfw.js",
-    "storybook": "./dist/cjs/bins/storybook.js",
-    "tsc": "./dist/cjs/bins/tsc.js"
-  },
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -122,6 +111,17 @@
       "import": "./dist/apollo/index.js"
     }
   },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "cross-env": "./dist/cjs/bins/cross-env.js",
+    "msw": "./dist/cjs/bins/msw.js",
+    "redwood": "./dist/cjs/bins/redwood.js",
+    "rw": "./dist/cjs/bins/redwood.js",
+    "rwfw": "./dist/cjs/bins/rwfw.js",
+    "storybook": "./dist/cjs/bins/storybook.js",
+    "tsc": "./dist/cjs/bins/tsc.js"
+  },
   "files": [
     "dist",
     "apollo",
@@ -131,22 +131,23 @@
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.types-cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn:publint",
-    "test": "vitest run",
     "check:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
     "@apollo/client": "3.11.1",
-    "@babel/runtime-corejs3": "7.24.8",
+    "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "@whatwg-node/fetch": "0.9.19",
-    "core-js": "3.37.1",
+    "@whatwg-node/fetch": "0.9.20",
+    "apollo-upload-client": "18.0.1",
+    "core-js": "3.38.0",
     "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
@@ -157,31 +158,32 @@
   },
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.7",
-    "@babel/runtime": "7.24.8",
+    "@babel/runtime": "7.25.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",
+    "@types/apollo-upload-client": "^18",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
     "nodemon": "3.1.4",
-    "publint": "0.2.9",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.1.0",
-    "tsx": "4.16.2",
+    "publint": "0.2.10",
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802",
+    "tstyche": "2.1.1",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -251,14 +251,14 @@ As noted in the [GraphQL spec](https://graphql.org/learn/queries/#directives):
 
 Here's a helpful guide for deciding when you should use one of Redwood's Validator or Transformer directives:
 
-|     | Use                                                                                                              | Directive                                                                                                                                                                  | Custom?                                                                                                               | Type         |
-| --- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
-| ✅  | Check if the request is authenticated?                                                                           | `@requireAuth`                                                                                                                                                             | Built-in                                                                                                              | Validator    |
-| ✅  | Check if the user belongs to a role?                                                                             | `@requireAuth(roles: ["AUTHOR"])`                                                                                                                                          | Built-in                                                                                                              | Validator    |
-| ✅  | Only allow admins to see emails, but others get a masked value like "###@######.###"                             | `@maskedEmail(roles: ["ADMIN"])`                                                                                                                                           | Custom                                                                                                                | Transformer  |
-| 🙅  | Know if the logged in user can edit the record, and/or values                                                    | N/A - Instead do this check in your service                                                                                                                                |
+|     | Use                                                                                                              | Directive                                                                                                                                                               | Custom?                                                                                                               | Type         |
+| --- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
+| ✅  | Check if the request is authenticated?                                                                           | `@requireAuth`                                                                                                                                                          | Built-in                                                                                                              | Validator    |
+| ✅  | Check if the user belongs to a role?                                                                             | `@requireAuth(roles: ["AUTHOR"])`                                                                                                                                       | Built-in                                                                                                              | Validator    |
+| ✅  | Only allow admins to see emails, but others get a masked value like "###@######.###"                             | `@maskedEmail(roles: ["ADMIN"])`                                                                                                                                        | Custom                                                                                                                | Transformer  |
+| 🙅  | Know if the logged in user can edit the record, and/or values                                                    | N/A - Instead do this check in your service                                                                                                                             |
 | 🙅  | Is my input a valid email address format?                                                                        | N/A - Instead do this check in your service using [Service Validations](services.md#service-validations) or consider [GraphQL Scalars](https://www.graphql-scalars.dev) |
-| 🙅  | I want to remove a field from the response for data filtering; for example, do not include the title of the post | `@skip(if: true )` or `@include(if: false)`                                                                                                                                | Instead use [core directives](https://graphql.org/learn/queries/#directives) on the GraphQL client query, not the SDL | Core GraphQL |
+| 🙅  | I want to remove a field from the response for data filtering; for example, do not include the title of the post | `@skip(if: true )` or `@include(if: false)`                                                                                                                             | Instead use [core directives](https://graphql.org/learn/queries/#directives) on the GraphQL client query, not the SDL | Core GraphQL |
 
 ## Combining, Chaining and Cascading Directives
 
@@ -412,11 +412,11 @@ When your app builds and your server starts up, Redwood checks that **all** quer
 If not, then your build will fail:
 
 ```bash
-  ✖ Verifying graphql schema...
-    Building API...
-    Cleaning Web...
-    Building Web...
-    Prerendering Web...
+✖ Verifying graphql schema...
+Building API...
+Cleaning Web...
+Building Web...
+Prerendering Web...
 You must specify one of @requireAuth, @skipAuth or a custom directive for
 - contacts Query
 - posts Query
@@ -490,8 +490,8 @@ you'll be presented with a choice of creating a Validator or a Transformer direc
 yarn redwood generate directive myDirective
 
 ? What type of directive would you like to generate? › - Use arrow-keys. Return to submit.
-❯   Validator - Implement a validation: throw an error if criteria not met to stop execution
-    Transformer - Modify values of fields or query responses
+❯ Validator - Implement a validation: throw an error if criteria not met to stop execution
+Transformer - Modify values of fields or query responses
 ```
 
 > **Note:** You can pass the `--type` flag with either `validator` or `transformer` to create the desired directive type.
@@ -586,7 +586,9 @@ describe('isSubscriber directive', () => {
   it('has a isSubscriber throws an error if validation does not pass', () => {
     const mockExecution = mockRedwoodDirective(isSubscriber, {})
 
-    expect(mockExecution).toThrowError('Implementation missing for isSubscriber')
+    expect(mockExecution).toThrowError(
+      'Implementation missing for isSubscriber'
+    )
   })
 })
 ```
@@ -675,7 +677,6 @@ describe('maskedEmail directive', () => {
 
 If your Transformer Directive is asynchronous, you can use `resolves` to handle the result.
 
-
 ```ts
 import maskedEmail from './maskedEmail'
 
@@ -689,4 +690,5 @@ describe('maskedEmail directive', () => {
   })
 })
 ```
+
 :::

@@ -4,9 +4,10 @@ description: Monitor errors, performance and more in your Redwood app using Sent
 
 # Sentry
 
-**Setup [Sentry](https://sentry.io/welcome/) error and performance monitoring across your Redwood application.** 
+**Setup [Sentry](https://sentry.io/welcome/) error and performance monitoring across your Redwood application.**
 
 From your command line, run:
+
 ```
 yarn redwood setup monitoring sentry
 ```
@@ -44,7 +45,6 @@ export const handler = createGraphQLHandler({
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
-
 
 ```ts title="api/src/functions/graphql.ts"
 import { useSentry } from '@envelop/sentry'
@@ -153,12 +153,10 @@ const SentryLayout = ({ children }: Props) => {
 }
 
 export default SentryLayout
-
 ```
 
 </TabItem>
 </Tabs>
-
 
 ## Capturing exceptions
 

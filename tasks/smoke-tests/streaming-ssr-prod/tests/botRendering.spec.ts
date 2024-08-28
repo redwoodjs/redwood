@@ -40,7 +40,7 @@ test('Check delayed page is NOT progressively rendered', async ({
   const botPageNoBundle = await botContext.newPage()
 
   await botPageNoBundle.route('**/*.*.{js,tsx,ts,jsx}', (route) =>
-    route.abort()
+    route.abort(),
   )
 
   await checkDelayedPageRendering(botPageNoBundle, {

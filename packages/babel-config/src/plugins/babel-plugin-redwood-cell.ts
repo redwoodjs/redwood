@@ -55,7 +55,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
         let name
         if (declaration.type === 'VariableDeclaration') {
           const id = declaration.declarations[0].id as types.Identifier
-          name = id.name as string
+          name = id.name
         }
         if (declaration.type === 'FunctionDeclaration') {
           name = declaration?.id?.name

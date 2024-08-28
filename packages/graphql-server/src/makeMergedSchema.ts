@@ -164,10 +164,7 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
 
     // If the maxIntersection fields is not unique, we are unable to determine type
     if (
-      fieldIntersections.indexOf(
-        maxIntersectionFields,
-        maxIntersectionIdx + 1,
-      ) !== -1
+      fieldIntersections.includes(maxIntersectionFields, maxIntersectionIdx + 1)
     ) {
       throw Error(
         'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver',

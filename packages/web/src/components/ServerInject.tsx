@@ -21,7 +21,7 @@ export const ServerHtmlContext = createContext<
  * and not shared between requests.
  */
 export const createInjector = () => {
-  const injectionState: Set<RenderCallback> = new Set([])
+  const injectionState = new Set<RenderCallback>([])
 
   const injectToPage = (renderCallback: RenderCallback) => {
     injectionState.add(renderCallback)

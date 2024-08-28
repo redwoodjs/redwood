@@ -77,9 +77,12 @@ export default function (
           importStatementPath(p.node.source?.value),
         )
 
-        const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+        const defaultSpecifier = p.node.specifiers.find((specifiers) =>
           t.isImportDefaultSpecifier(specifiers),
-        )[0]
+        )
+        if (!defaultSpecifier) {
+          return
+        }
 
         // Remove Page imports in prerender mode (see babel-preset)
         // The removed imports will be replaced further down in this file

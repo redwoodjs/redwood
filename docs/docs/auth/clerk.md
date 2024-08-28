@@ -13,7 +13,6 @@ See the [migration guide](https://github.com/redwoodjs/redwood/releases/tag/v5.3
 
 :::
 
-
 To get started, run the setup command:
 
 ```text
@@ -83,7 +82,6 @@ const HomePage = () => {
 
 Clicking sign up should open a sign-up box and after you sign up, you should see `{"isAuthenticated":true}` on the page.
 
-
 ## Customizing the session token
 
 There's not a lot to the default session token.
@@ -105,7 +103,7 @@ export const getCurrentUser = async (
 
   // ...
 }
-````
+```
 
 ## Avoiding feature duplication
 

@@ -115,7 +115,7 @@ Add you custom `@adminUI` alias to your `tsconfig.json` file:
 
 You might have noticed the `"../.redwood/types/mirror/web/src/components/modules/admin/common/ui/*"` path. I'm glad you did!
 
-When you build your project redwood will create a set of directories or a virtual directory called`.redwood`, [read more about this typescript feature here](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs). This directory contains types for te Cells, so there is no need for us to  specify an index file.
+When you build your project redwood will create a set of directories or a virtual directory called`.redwood`, [read more about this typescript feature here](https://www.typescriptlang.org/docs/handbook/module-resolution.html#virtual-directories-with-rootdirs). This directory contains types for te Cells, so there is no need for us to specify an index file.
 
 When you combine those two paths `.src/...` and `./.redwood/...` under an alias you can have shorter and cleaner import paths:
 
@@ -130,5 +130,24 @@ import { CustomModal } from '@adminUI/CustomModal'
 #### Some benefits of using alias paths are
 
 1. **Improved code readability**, by abstracting complex directory hierarchies, and having meaningful names for your imports.
-1. **Code maintainability**,  aliases allow you to decouple your code from the file structure and more easily move files around, as they are not tied to the longer path.
+1. **Code maintainability**, aliases allow you to decouple your code from the file structure and more easily move files around, as they are not tied to the longer path.
 1. **Reduce boilerplate**, no more `../../src/components/modules/admin/common/ui/` 😮‍💨
+
+When you start writing tests for components that contain alias paths, you will need to add the following to your Jest configuration in `jest.config.js`:
+
+```js
+const config = {
+  rootDir: '../',
+  preset: '@redwoodjs/testing/config/jest/web',
+  moduleNameMapper: {
+    '^@adminUI/(.*)$':
+      '<rootDir>/web/src/components/modules/admin/common/ui/$1',
+  },
+}
+
+module.exports = config
+```
+
+:::info
+There are 3 `jest.config.js` files within a Redwood project. There's one inside the `web` directory, one inside the `api` directory, and one at the root of the project. Since the alias I created is used within the `web` directory, I added the `moduleNameMapper` to the `jest.config.js` file within the `web` directory.
+:::

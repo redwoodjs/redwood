@@ -57,9 +57,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   const stack = new StackTracey(err).withSources()
 
   const typeName = String(
-    (err as any)['type'] ||
-      (err.constructor && err.constructor.name) ||
-      typeof err,
+    (err as any)['type'] || err.constructor?.name || typeof err,
   )
   const msg = String(err && err.message)
 

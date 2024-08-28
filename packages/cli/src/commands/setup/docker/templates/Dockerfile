@@ -6,11 +6,10 @@ RUN corepack enable
 
 # We tried to make the Dockerfile as lean as possible. In some cases, that means we excluded a dependency your project needs.
 # By far the most common is Python. If you're running into build errors because `python3` isn't available,
-# uncomment the line below here and in other stages as necessary:
+# add `python3 make gcc \` before the `openssl \` line below and in other stages as necessary:
 RUN apt-get update && apt-get install -y \
-    openssl \
-    # python3 make gcc \
-    && rm -rf /var/lib/apt/lists/*
+  openssl \
+  && rm -rf /var/lib/apt/lists/*
 
 USER node
 WORKDIR /home/node/app
@@ -25,8 +24,8 @@ RUN mkdir -p /home/node/.yarn/berry/index
 RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
-    --mount=type=cache,target=/home/node/.cache,uid=1000 \
-    CI=1 yarn install
+  --mount=type=cache,target=/home/node/.cache,uid=1000 \
+  CI=1 yarn install
 
 COPY --chown=node:node redwood.toml .
 COPY --chown=node:node graphql.config.js .
@@ -65,9 +64,8 @@ FROM node:20-bookworm-slim as api_serve
 RUN corepack enable
 
 RUN apt-get update && apt-get install -y \
-    openssl \
-    # python3 make gcc \
-    && rm -rf /var/lib/apt/lists/*
+  openssl \
+  && rm -rf /var/lib/apt/lists/*
 
 USER node
 WORKDIR /home/node/app
@@ -81,8 +79,8 @@ RUN mkdir -p /home/node/.yarn/berry/index
 RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
-    --mount=type=cache,target=/home/node/.cache,uid=1000 \
-    CI=1 yarn workspaces focus api --production
+  --mount=type=cache,target=/home/node/.cache,uid=1000 \
+  CI=1 yarn workspaces focus api --production
 
 COPY --chown=node:node redwood.toml .
 COPY --chown=node:node graphql.config.js .
@@ -103,7 +101,6 @@ ENV NODE_ENV=production
 # CMD [ "./api/dist/server.js" ]
 CMD [ "node_modules/.bin/rw-server", "api" ]
 
-
 # web serve
 # ---------
 FROM node:20-bookworm-slim as web_serve
@@ -122,8 +119,8 @@ RUN mkdir -p /home/node/.yarn/berry/index
 RUN mkdir -p /home/node/.cache
 
 RUN --mount=type=cache,target=/home/node/.yarn/berry/cache,uid=1000 \
-    --mount=type=cache,target=/home/node/.cache,uid=1000 \
-    CI=1 yarn workspaces focus web --production
+  --mount=type=cache,target=/home/node/.cache,uid=1000 \
+  CI=1 yarn workspaces focus web --production
 
 COPY --chown=node:node redwood.toml .
 COPY --chown=node:node graphql.config.js .
@@ -132,7 +129,7 @@ COPY --chown=node:node .env.defaults .env.defaults
 COPY --chown=node:node --from=web_build /home/node/app/web/dist /home/node/app/web/dist
 
 ENV NODE_ENV=production \
-    API_PROXY_TARGET=http://api:8911
+  API_PROXY_TARGET=http://api:8911
 
 # We use the shell form here for variable expansion.
 CMD "node_modules/.bin/rw-web-server" "--api-proxy-target" "$API_PROXY_TARGET"

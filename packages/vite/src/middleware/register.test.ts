@@ -1,4 +1,4 @@
-import { describe, expect, it, vitest } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 
 import type { Middleware, MiddlewareClass } from '@redwoodjs/web/middleware'
 import {
@@ -6,8 +6,12 @@ import {
   MiddlewareResponse,
 } from '@redwoodjs/web/middleware'
 
-import { addMiddlewareHandlers, chain, groupByRoutePatterns } from './register'
-import type { MiddlewareReg } from './types'
+import {
+  addMiddlewareHandlers,
+  chain,
+  groupByRoutePatterns,
+} from './register.js'
+import type { MiddlewareReg } from './types.js'
 
 const fakeMiddleware: Middleware = vitest.fn()
 
@@ -18,7 +22,7 @@ class FakeClassMw implements MiddlewareClass {
     this.value = value
   }
 
-  async invoke(_req: MiddlewareRequest, res: MiddlewareResponse) {
+  invoke(_req: MiddlewareRequest, res: MiddlewareResponse) {
     res.body = 'MW initialized with ' + this.value
     res.headers.set('class-mw-value', this.value.toString())
     return res
@@ -26,6 +30,14 @@ class FakeClassMw implements MiddlewareClass {
 }
 
 describe('groupByRoutePatterns', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    vi.mocked(console).error.mockRestore()
+  })
+
   it('should group middleware by default *', () => {
     const simpleExample = [fakeMiddleware]
 
@@ -83,7 +95,7 @@ describe('groupByRoutePatterns', () => {
       exampleRequest,
       new MiddlewareResponse(),
     )
-    expect((firstOutput || {}).body).toBe('MW initialized with 1')
+    expect(firstOutput?.body).toBe('MW initialized with 1')
 
     const secondOutput = await output['/second-path'][0]?.(
       exampleRequest,

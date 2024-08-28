@@ -8,6 +8,7 @@ import type { CurrentUser } from '@redwoodjs/auth'
 import { createAuthentication } from '@redwoodjs/auth'
 
 // TODO: Map out this user properly.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Auth0User {}
 
 export function createAuth(
@@ -34,10 +35,9 @@ function createAuthImplementation(auth0Client: Auth0Client) {
         global?.location?.search?.includes('state=')
       ) {
         const { appState } = await auth0Client.handleRedirectCallback()
-        const url =
-          appState && appState.targetUrl
-            ? appState.targetUrl
-            : window.location.pathname
+        const url = appState?.targetUrl
+          ? appState.targetUrl
+          : window.location.pathname
         global?.location?.assign(url)
       }
     },

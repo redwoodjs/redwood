@@ -1,4 +1,5 @@
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { context } from '@opentelemetry/api'
 import { suppressTracing } from '@opentelemetry/core'
@@ -17,10 +18,30 @@ import { runScriptFunction } from '../lib/exec'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
 
 const printAvailableScriptsToConsole = () => {
+  // Loop through all scripts and get their relative path
+  // Also group scripts with the same name but different extensions
+  const scripts = findScripts(getPaths().scripts).reduce((acc, scriptPath) => {
+    const relativePath = path.relative(getPaths().scripts, scriptPath)
+    const ext = path.parse(relativePath).ext
+    const pathNoExt = relativePath.slice(0, -ext.length)
+
+    acc[pathNoExt] ||= []
+    acc[pathNoExt].push(relativePath)
+
+    return acc
+  }, {})
+
   console.log('Available scripts:')
-  findScripts().forEach((scriptPath) => {
-    const { name } = path.parse(scriptPath)
-    console.log(c.info(`- ${name}`))
+  Object.entries(scripts).forEach(([name, paths]) => {
+    // If a script name exists with multiple extensions, print them all,
+    // including the extension
+    if (paths.length > 1) {
+      paths.forEach((scriptPath) => {
+        console.log(c.info(`- ${scriptPath}`))
+      })
+    } else {
+      console.log(c.info(`- ${name}`))
+    }
   })
   console.log()
 }
@@ -37,8 +58,6 @@ export const handler = async (args) => {
     printAvailableScriptsToConsole()
     return
   }
-
-  const scriptPath = path.join(getPaths().scripts, name)
 
   const {
     overrides: _overrides,
@@ -99,11 +118,11 @@ export const handler = async (args) => {
     ],
   })
 
-  try {
-    require.resolve(scriptPath)
-  } catch {
+  const scriptPath = resolveScriptPath(name)
+
+  if (!scriptPath) {
     console.error(
-      c.error(`\nNo script called ${c.underline(name)} in ./scripts folder.\n`),
+      c.error(`\nNo script called \`${name}\` in the ./scripts folder.\n`),
     )
 
     printAvailableScriptsToConsole()
@@ -135,11 +154,52 @@ export const handler = async (args) => {
 
   const tasks = new Listr(scriptTasks, {
     rendererOptions: { collapseSubtasks: false },
-    renderer: 'verbose',
+    renderer: args.silent ? 'silent' : 'verbose',
   })
 
   // Prevent user project telemetry from within the script from being recorded
   await context.with(suppressTracing(context.active()), async () => {
     await tasks.run()
   })
+}
+
+function resolveScriptPath(name) {
+  const scriptPath = path.join(getPaths().scripts, name)
+
+  // If scriptPath already has an extension, and it's a valid path, return it
+  // as it is
+  if (fs.existsSync(scriptPath)) {
+    return scriptPath
+  }
+
+  // These extensions match the ones in internal/src/files.ts::findScripts()
+  const extensions = ['.js', '.jsx', '.ts', '.tsx']
+  const matches = []
+
+  for (const extension of extensions) {
+    const p = scriptPath + extension
+
+    if (fs.existsSync(p)) {
+      matches.push(p)
+    }
+  }
+
+  if (matches.length === 1) {
+    return matches[0]
+  } else if (matches.length > 1) {
+    console.error(
+      c.error(
+        `\nMultiple scripts found for \`${name}\`. Please specify the ` +
+          'extension.',
+      ),
+    )
+
+    matches.forEach((match) => {
+      console.log(c.info(`- ${path.relative(getPaths().scripts, match)}`))
+    })
+
+    process.exit(1)
+  }
+
+  return null
 }

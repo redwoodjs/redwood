@@ -1,11 +1,21 @@
-import { execa } from 'execa'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 
 import type { Config } from './config.js'
 
+import { ExitCodeError } from './error.js'
+
 export function shouldRelaunch(config: Config) {
   if (config.verbose) {
     console.log('shouldRelaunch process.argv', process.argv)
+  }
+
+  if (process.argv.includes('--no-check-latest')) {
+    if (config.verbose) {
+      console.log('process.argv includes --no-check-latest. Returning false')
+    }
+
+    return false
   }
 
   if (
@@ -18,14 +28,6 @@ export function shouldRelaunch(config: Config) {
     }
 
     // Not running via npx (so probably running in dev mode, or running tests)
-    return false
-  }
-
-  if (process.argv.includes('--no-check-latest')) {
-    if (config.verbose) {
-      console.log('process.argv includes --no-check-latest. Returning false')
-    }
-
     return false
   }
 
@@ -65,7 +67,7 @@ export function shouldRelaunch(config: Config) {
   return true
 }
 
-export async function relaunchOnLatest(config: Config) {
+export function relaunchOnLatest(config: Config) {
   if (config.verbose) {
     console.log('relaunchOnLatest process.argv', process.argv)
   }
@@ -73,16 +75,48 @@ export async function relaunchOnLatest(config: Config) {
   const args = [...process.argv.slice(2), '--no-check-latest']
 
   if (config.verbose) {
-    console.log(
-      'cmd',
-      `npx @tobbe.dev/create-redwood-rsc-app@latest ${args.join()}`,
+    if (process.argv.includes('--npx')) {
+      console.log('cmd:', 'yarn', ['dev', ...args].join(' '))
+    } else {
+      console.log(
+        'cmd:',
+        'npx',
+        ['create-redwood-rsc-app@latest', ...args].join(' '),
+      )
+    }
+  }
+
+  const spawnOpts = {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      npm_config_yes: 'true',
+    },
+  } as const
+
+  let result: ReturnType<typeof spawnSync>
+
+  if (process.argv.includes('--npx')) {
+    result = spawnSync('yarn', ['dev', ...args], spawnOpts)
+  } else {
+    result = spawnSync(
+      'npx',
+      ['create-redwood-rsc-app@latest', ...args],
+      spawnOpts,
     )
   }
 
-  await execa({
-    stdio: 'inherit',
-    env: {
-      npm_config_yes: 'true',
-    },
-  })`npx @tobbe.dev/create-redwood-rsc-app@latest ${args}`
+  if (config.verbose) {
+    console.log('spawnSync result', result)
+  }
+
+  if (result.error) {
+    console.error(
+      'There was an error launching the latest version of create-redwood-rsc-app.',
+    )
+    console.error('Please try running it manually with `@latest')
+    console.error('npx -y create-redwood-rsc-app@latest APP_PATH')
+
+    throw new ExitCodeError(1, result.error.message)
+  }
 }

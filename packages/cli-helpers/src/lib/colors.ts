@@ -10,6 +10,7 @@ import chalk from 'chalk'
 export const colors = {
   error: chalk.bold.red,
   warning: chalk.hex('#ffa500'),
+  highlight: chalk.hex('#ffa500'),
   success: chalk.green,
   info: chalk.grey,
   bold: chalk.bold,
@@ -18,5 +19,5 @@ export const colors = {
   tip: chalk.green,
   important: chalk.magenta,
   caution: chalk.red,
-  link: chalk.hex('#e8e8e8'),
+  link: chalk.underline,
 }

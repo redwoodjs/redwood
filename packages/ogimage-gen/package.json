@@ -44,14 +44,14 @@
     "@redwoodjs/web": "workspace:*",
     "fast-glob": "3.3.2",
     "lodash": "4.17.21",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802"
   },
   "devDependencies": {
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "1.46.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vite": "6.0.0-alpha.21",
     "vitest": "2.0.4"

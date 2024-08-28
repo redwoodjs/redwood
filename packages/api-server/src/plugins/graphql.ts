@@ -1,3 +1,4 @@
+import fastifyMultiPart from '@fastify/multipart'
 import fastifyUrlData from '@fastify/url-data'
 import fg from 'fast-glob'
 import type {
@@ -6,8 +7,6 @@ import type {
   FastifyReply,
   FastifyRequest,
 } from 'fastify'
-import fastifyRawBody from 'fastify-raw-body'
-import type { Plugin } from 'graphql-yoga'
 
 import type { GlobalContext } from '@redwoodjs/context'
 import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
@@ -34,9 +33,9 @@ export async function redwoodFastifyGraphQLServer(
   redwoodOptions.apiRootPath = coerceRootPath(redwoodOptions.apiRootPath)
 
   fastify.register(fastifyUrlData)
-  // Starting in Fastify v4, we have to await the fastifyRawBody plugin's registration
-  // to ensure it's ready
-  await fastify.register(fastifyRawBody)
+  // We register the multiPart plugin, but not the raw body plugin.
+  // This is to allow multi-part form data to be parsed - otherwise you get errors
+  fastify.register(fastifyMultiPart)
 
   const method = ['GET', 'POST', 'OPTIONS'] as HTTPMethods[]
 
@@ -68,8 +67,8 @@ export async function redwoodFastifyGraphQLServer(
     if (graphqlOptions?.realtime) {
       const { useRedwoodRealtime } = await import('@redwoodjs/realtime')
 
-      const originalExtraPlugins: Array<Plugin<any>> =
-        graphqlOptions.extraPlugins ?? []
+      const originalExtraPlugins = graphqlOptions.extraPlugins ?? []
+      // @ts-expect-error TODO(jgmw): Fix this type issue introduced after switching to Node16 module resolution
       originalExtraPlugins.push(useRedwoodRealtime(graphqlOptions.realtime))
       graphqlOptions.extraPlugins = originalExtraPlugins
 

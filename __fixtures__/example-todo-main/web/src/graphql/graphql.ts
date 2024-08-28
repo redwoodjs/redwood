@@ -18,6 +18,7 @@ export type Scalars = {
   Byte: { input: any; output: any; }
   Date: { input: any; output: any; }
   DateTime: { input: any; output: any; }
+  File: { input: any; output: any; }
   JSON: { input: any; output: any; }
   JSONObject: { input: any; output: any; }
   Time: { input: any; output: any; }

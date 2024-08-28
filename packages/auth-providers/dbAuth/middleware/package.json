@@ -1,6 +1,5 @@
 {
   "name": "@redwoodjs/auth-dbauth-middleware",
-  "type": "module",
   "version": "7.0.0",
   "repository": {
     "type": "git",
@@ -8,11 +7,7 @@
     "directory": "packages/auth-providers/dbAuth/middleware"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -25,14 +20,19 @@
       }
     }
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-auth-dbauth-middleware.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "check:package": "concurrently npm:check:attw yarn:publint",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "build:types-cjs": "tsc --build --verbose tsconfig.cjs.json",
     "check:attw": "yarn attw -P",
-    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
+    "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
@@ -41,17 +41,17 @@
     "@redwoodjs/web": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@types/aws-lambda": "8.10.142",
+    "@types/aws-lambda": "8.10.143",
     "concurrently": "8.2.2",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

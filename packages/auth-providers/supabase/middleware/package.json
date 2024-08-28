@@ -1,13 +1,13 @@
 {
   "name": "@redwoodjs/auth-supabase-middleware",
   "version": "7.0.0",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supabase/middleware"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -27,14 +27,14 @@
     "cjsWrappers"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
-    "build:types": "tsc --build --verbose",
-    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
     "check:attw": "yarn attw -P",
-    "test": "vitest run",
-    "prepublishOnly": "NODE_ENV=production yarn build",
     "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -43,18 +43,18 @@
     "@supabase/ssr": "0.4.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@types/aws-lambda": "8.10.142",
+    "@types/aws-lambda": "8.10.143",
     "concurrently": "8.2.2",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.16.2",
+    "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

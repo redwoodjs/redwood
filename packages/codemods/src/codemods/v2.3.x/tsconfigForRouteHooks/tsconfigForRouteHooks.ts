@@ -24,7 +24,7 @@ export default async function addApiAliasToTsConfig() {
     ts.sys.readFile(webConfigPath) as string, // If file exists, it has contents
   )
 
-  if (webConfig && webConfig?.compilerOptions) {
+  if (webConfig?.compilerOptions) {
     const newPathAliases = {
       ...webConfig.compilerOptions.paths,
       '$api/*': ['../api/*'],

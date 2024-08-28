@@ -36,6 +36,7 @@ export class RWServiceFunction extends BaseNode {
   }
 
   @lazy() get parameterNames() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
     return iter(function* () {
       for (const p of self.node.getParameters()) {
@@ -76,7 +77,12 @@ export class RWServiceFunction extends BaseNode {
           },
         } as ExtendedDiagnostic
         // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
-        if (false) yield diagnostic // eslint-disable-line
+
+        // comment out for now (see https://github.com/redwoodjs/redwood/issues/943)
+        // eslint-disable-next-line no-constant-condition
+        if (false) {
+          yield diagnostic
+        }
       }
 
       // TODO: check that types match

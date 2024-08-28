@@ -1,4 +1,4 @@
-import { parse as parseGraphQL } from 'graphql'
+import { Kind, parse as parseGraphQL } from 'graphql'
 import * as tsm from 'ts-morph'
 import { DiagnosticSeverity } from 'vscode-languageserver-types'
 
@@ -60,7 +60,7 @@ export class RWCell extends RWComponent {
       return undefined
     }
     for (const def of ast.definitions) {
-      if (def.kind == 'OperationDefinition') {
+      if (def.kind == Kind.OPERATION_DEFINITION) {
         return def?.name?.value
       }
     }

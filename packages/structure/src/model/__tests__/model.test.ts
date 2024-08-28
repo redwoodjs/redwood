@@ -100,7 +100,7 @@ describe('Cells', () => {
 })
 
 describe('Redwood Page detection', () => {
-  it('detects pages', async () => {
+  it('detects pages', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -122,7 +122,7 @@ describe('Redwood Page detection', () => {
 })
 
 describe('Redwood Route detection', () => {
-  it('detects the page identifier for a route', async () => {
+  it('detects the page identifier for a route', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -132,7 +132,7 @@ describe('Redwood Route detection', () => {
     expect(pageIdentifiers.length).toBe(9)
     expect(pageIdentifiers).toMatchSnapshot()
   })
-  it('detects routes with the prerender prop', async () => {
+  it('detects routes with the prerender prop', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -160,7 +160,7 @@ describe('Redwood Route detection', () => {
       path: '/private-page',
     })
   })
-  it('detects authenticated routes', async () => {
+  it('detects authenticated routes', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -177,7 +177,7 @@ describe('Redwood Route detection', () => {
     expect(authenticatedRoutes.length).toBe(3)
   })
 
-  it('detects name and path for an authenticated route', async () => {
+  it('detects name and path for an authenticated route', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -198,7 +198,7 @@ describe('Redwood Route detection', () => {
     expect(authenticatedRoutes[1].roles).toContain('admin')
   })
 
-  it('detects roles for an authenticated route when roles is a string of a single role', async () => {
+  it('detects roles for an authenticated route when roles is a string of a single role', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
@@ -219,7 +219,7 @@ describe('Redwood Route detection', () => {
     expect(authenticatedRoutes[1].roles).toContain('admin')
   })
 
-  it('detects roles for an authenticated route when roles is an array of a roles', async () => {
+  it('detects roles for an authenticated route when roles is an array of a roles', () => {
     const projectRoot = getFixtureDir('example-todo-main')
     const project = new RWProject({ projectRoot, host: new DefaultHost() })
     const routes = project.getRouter().routes
