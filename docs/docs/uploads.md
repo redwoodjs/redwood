@@ -1,40 +1,27 @@
-# Uploads
+# Uploads & Storage
 
-Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood enables an integrated way of managing your uploads.
+Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
 
-As with sending and manipulating other types of data, on Redwood this involves configuring and implementing three parts:
+There's two parts to this:
+1. Setting up the frontend and GraphQL schema to send to send files - Uploads
 
-1. The frontend to send to the data
-2. The GraphQL API to validate and receive the data into services
-
-... and
-
-3. Manipulate the data inside services, and pass it to Prisma, for persistence
+2. Manipulate the data inside services, and pass it to Prisma, for persistence - Storage
 
 Visually we can roughly breakdown the flow as follows
 
 ![Redwood Uploads Flow Diagram](/img/uploads/uploads-flow.png)
 
 
-## Sending Files from the front end
+
+## Uploading Files
 
 ### 1. Setting up the File scalar
 
-Before we start sending files via GraphQL we need to tell Redwood how to handle them.
+Before we start sending files via GraphQL we need to tell Redwood how to handle them. Redwood and GraphQL Yoga are pre-configured to handle the `File` scalar. 
 
-While Redwood and GraphQL Yoga are pre-configured to handle files, you need to explicitly define the `File` scalar in your SDL (Schema Definition Language) file. Add the following line to your `profiles.sdl.ts` (or any of your sdl files):
-
-```graphql title="api/src/graphql/profiles.sdl.ts"
-scalar File
-```
-
-When defining fields that will handle file uploads, use the `File` scalar type.
-
-In your mutations, use the `File` scalar type for the fields where you are submitting an upload
+In your mutations, use the `File` scalar for the fields where you are submitting an upload
 
 ```graphql title="api/src/graphql/profiles.sdl.ts"
-scalar File
-
 input UpdateProfileInput {
   id: Int
   firstName: String
@@ -150,7 +137,7 @@ export const updateProfile = async ({ id, input }) => {
 
 You'll see that you are receiving an instance of [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
 
-That's parts parts 1 & 2 done - you can receive uploaded files. In the next steps, we'll talk about some tooling and a Prisma client extension that Redwood gives you, to help you persist and manage your uploads.
+That's part 1 done - you can receive uploaded files. In the next steps, we'll talk about some tooling and a Prisma client extension that Redwood gives you, to help you persist and manage your uploads.
 
 <details>
 <summary>**What's happening behind the scenes?**</summary>
@@ -163,7 +150,7 @@ On the backend, GraphQL Yoga is pre-configured to handle multipart form requests
 
 </details>
 
-## Configuring the API side
+## Storage
 
 ### Prisma schema configuration
 
