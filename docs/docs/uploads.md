@@ -489,14 +489,54 @@ Removes any associated uploaded files, once delete operation completes.
 
 
 ## Configuring the server further
-Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic. 
+Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic - that's exactly what the [Server File](server-file.md) is for!
+
 
 ### Making a folder public
 
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
+
+While you can always create a function to access certain files publicly, similar to the `/signedUrl` function that gets generated for you - another way could be to configure the API server with the [fastify-static](https://github.com/fastify/fastify-static) plugin to make a specific folder publicly accessible. 
+
+```js title="api/server.js"
+import path from 'path'
+// highlight-next-line
+import fastifyStatic from '@fastify/static'
+
+import { createServer } from '@redwoodjs/api-server'
+import { logger } from 'src/lib/logger'
+
+async function main() {
+  const server = await createServer({
+    logger,
+  })
+
+// highlight-start
+  server.register(fastifyStatic, {
+    root: path.join(process.cwd() + '/uploads/public_profile_photos'),
+    prefix: '/public_uploads',
+  })
+// highlight-end
+
+  await server.start()
+}
+
+main()
+
+```
+
+Based on the above, you'll be able to access your files at:
+
+```
+http://localhost:8910/.redwood/functions/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg
+
+OR directly
+
+http://localhost:8911/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg
+
+```
+Where you are only exposing __part__ of your uploads directory publicly
+
+
 
 
 ### Customising the body limit for requests
@@ -511,7 +551,6 @@ Depending on the sizes of files you're uploading, especially in the case of mult
 ```
 The default body size limit for the Redwood API server is 100MB (per request). 
 
-To customise this, you'll have to make use of the [Server File](server-file.md). 
 
 ```js title="api/server.js"
 import { createServer } from '@redwoodjs/api-server'
