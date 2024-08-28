@@ -5,7 +5,7 @@ import proxyquire from 'proxyquire'
 
 import { spawnCancellable } from '../x/child_process'
 
-import { RedwoodCommandString } from './RedwoodCommandString'
+import type { RedwoodCommandString } from './RedwoodCommandString'
 
 export type FileSet = { [filePath: string]: string | null }
 
@@ -29,19 +29,19 @@ interface Opts {
 }
 
 export async function redwood_gen_dry_run(
-  opts: Opts
+  opts: Opts,
 ): Promise<{ stdout: string; files: FileSet }> {
   const { cwd, cmd, fileOverrides, tmpdir } = opts
   if (!cmd.isComplete) {
     throw new Error(
-      'cannot pass an interactive command straight to the redwood-cli. You must run it through the command_builder first'
+      'cannot pass an interactive command straight to the redwood-cli. You must run it through the command_builder first',
     )
   }
   // eslint-disable-next-line
   const x = [proxyquire].length // we need to make sure this module is required. it will be used in a script we will generate dynamically
   const tempDir = tmpdir ?? join(cwd, '.tmp')
   const jsfile = join(tempDir, 'rwcli.js')
-  let requireStatement = 'proxyquire'
+  const requireStatement = 'proxyquire'
   // if (extensionPath) {
   //   requireStatement = relative(
   //     dirname(jsfile),
@@ -67,7 +67,7 @@ const separator = '---------===----===--------'
 
 function buildJS(
   fileOverrides: FileSet = {},
-  proxyquireRequireStatement = 'proxyquire'
+  proxyquireRequireStatement = 'proxyquire',
 ) {
   let js = `
   const proxyquire = require("proxyquire")
@@ -112,7 +112,7 @@ function buildJS(
   js = js.replace(`"__SEPARATOR__"`, JSON.stringify(separator))
   js = js.replace(
     `require("proxyquire")`,
-    `require("${proxyquireRequireStatement}")`
+    `require("${proxyquireRequireStatement}")`,
   )
   return js
 }

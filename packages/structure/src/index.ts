@@ -4,10 +4,8 @@ export { RWProject } from './model'
 export { URL_file } from './x/URL'
 import { DefaultHost } from './hosts'
 import { RWProject } from './model'
-import {
-  ExtendedDiagnostic_format,
-  GetSeverityLabelFunction,
-} from './x/vscode-languageserver-types'
+import type { GetSeverityLabelFunction } from './x/vscode-languageserver-types'
+import { ExtendedDiagnostic_format } from './x/vscode-languageserver-types'
 
 export function getProject(projectRoot: string, host = new DefaultHost()) {
   return new RWProject({
@@ -18,7 +16,7 @@ export function getProject(projectRoot: string, host = new DefaultHost()) {
 
 export async function printDiagnostics(
   projectRoot: string,
-  opts?: { getSeverityLabel?: GetSeverityLabelFunction }
+  opts?: { getSeverityLabel?: GetSeverityLabelFunction },
 ) {
   const project = getProject(projectRoot)
   const formatOpts = { cwd: projectRoot, ...opts }
@@ -41,7 +39,7 @@ export async function printDiagnostics(
       console.log('\nSuccess: no errors or warnings were detected\n')
     } else if (errors > 0) {
       console.error(
-        `\nFailure: ${errors} errors and ${warnings} warnings detected\n`
+        `\nFailure: ${errors} errors and ${warnings} warnings detected\n`,
       )
       process.exit(1)
     }

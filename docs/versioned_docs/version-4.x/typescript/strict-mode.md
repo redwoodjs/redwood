@@ -47,7 +47,7 @@ But the gist of it is that, for Prisma's create and update operations, you may h
 
 For most cases however, you probably want to convert nulls to undefined - one way to do this is to use the `removeNulls` utility function from `@redwoodjs/api`:
 
-```ts title=api/src/services/users.ts
+```ts title="api/src/services/users.ts"
 // highlight-next-line
 import { removeNulls } from "@redwoodjs/api"
 

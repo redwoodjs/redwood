@@ -33,16 +33,16 @@ export const builder = (yargs) => {
       default: true,
     })
     .epilogue(
-      `For all available flags, run jest cli directly ${c.green(
-        'yarn jest --help'
+      `For all available flags, run jest cli directly ${c.tip(
+        'yarn jest --help',
       )}\n\nAlso see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#test'
-      )}\n`
+        'https://redwoodjs.com/docs/cli-commands#test',
+      )}\n`,
     )
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./testHandler')
+  const { handler } = await import('./testHandler.js')
   return handler(options)
 }

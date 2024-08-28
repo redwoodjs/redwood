@@ -291,7 +291,7 @@ b) There was an error when trying to import your GraphQL handler - maybe due to 
 If you've moved this GraphQL function, or we encounter an error executing it, it won't break your builds. All your Cells will be prerendered in their `Loading` state, and will update once the JavaScript loads on the browser. This is effectively skipping prerendering your Cells, but they'll still work!
 
 
-#### Cannot prerender the query {queryName} as it requires auth.
+#### Cannot prerender the query \{queryName\} as it requires auth.
 This error happens during builds when you have a Cell on a page you're prerendering that makes a query marked with `@requireAuth` in your SDL.
 
 During prerender you are not logged in ([see point 1](#1-prerendering-always-happens-as-an-unauthenticated-user)), so you'll have to conditionally render the Cell - for example:
@@ -342,8 +342,7 @@ Depending on what pages you're prerendering, you may want to change your redirec
 Using Netlify as an example:
 
 <details>
-<summary>If you prerender your `notFoundPage`, and all your other routes
-</summary>
+<summary>If you prerender your `notFoundPage`, and all your other routes</summary>
 
 You can remove the default redirect to index in your `netlify.toml`. This means the browser will accurately receive 404 statuses when navigating to a route that doesn't exist:
 
@@ -360,6 +359,7 @@ This makes your app behave much more like a traditional website, where all the p
 <details>
 
 <summary>If you don't prerender your 404s, but prerender all your other pages</summary>
+
 You can add a 404 redirect if you want:
 
 ```diff

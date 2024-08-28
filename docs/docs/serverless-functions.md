@@ -2,9 +2,17 @@
 description: Create, develop, and run serverless functions
 ---
 
-# Serverless Functions
+# Serverless Functions (API Endpoints)
 
 <!-- `redwood.toml`&mdash;`api/src/functions` by default.  -->
+
+:::info
+
+You can think of serverless functions as API Endpoints, and in the future we'll update the terminology used.
+
+Originally, Redwood apps were intended to be deployed as serverless functions to AWS Lambda. Whenever a Redwood app is deployed to a "serverful" environment such as Fly or Render, a Fastify server is started and your Redwood app's functions in `api/src/functions` are automatically registered onto the server. Request adapters are also automatically configured to handle the translation between Fastify's request and reply objects to the functions' AWS Lambda signature.
+
+:::
 
 Redwood looks for serverless functions in `api/src/functions`. Each function is mapped to a URI based on its filename. For example, you can find `api/src/functions/graphql.js` at `http://localhost:8911/graphql`.
 
@@ -33,12 +41,6 @@ export const handler = async (event, context) => {
   }
 }
 ```
-
-:::info
-
-We call them 'serverless' but they can also be used on 'serverful' hosted environments too, such as Render or Heroku.
-
-:::
 
 ## The handler
 
@@ -76,10 +78,10 @@ api/src
 ├── functions
 │   ├── graphql.ts
 │   └── helloWorld
-│       ├── helloWorld.scenarios.ts
-│       ├── helloWorld.test.ts
-│       └── helloWorld.ts     # <-- imports hellWorldLib
-│       └── helloWorldLib.ts  # <-- exports can be used in the helloWorld
+│   ├── helloWorld.scenarios.ts
+│   ├── helloWorld.test.ts
+│   └── helloWorld.ts    # <-- imports hellWorldLib
+│   └── helloWorldLib.ts # <-- exports can be used in the helloWorld
 ```
 
 ## Developing locally
@@ -101,7 +103,7 @@ To help you mock the `event` and `context` information, we've provided several a
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `mockHttpEvent`     | Use this to mock out the http request `event` that is received by your function in unit tests. Here you can set `headers`, `httpMethod`, `queryStringParameters` as well as the `body` and if the body `isBase64Encoded`. The `event` contains information from the invoker as JSON-formatted string whose structure will vary. See [Working with AWS Lambda proxy integrations for HTTP APIs](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html) for the payload format. |
 | `mockContext`       | Use this function to mock the http `context`. Your function handler receives a context object with properties that provide information about the invocation, function, and execution environment. See [AWS Lambda context object in Node.js](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html) for what context properties you can mock.                                                                                                                                                                       |
-| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](webhooks.md#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                    |
+| `mockSignedWebhook` | Use this function to mock a signed webhook. This is a specialized `mockHttpEvent` mock that also signs the payload and adds a signature header needed to verify that the webhook is trustworthy. See [How to Receive and Verify an Incoming Webhook](webhooks.md#how-to-receive-and-verify-an-incoming-webhook) to learn more about signing and verifying webhooks.                                                                                                                                                            |
 
 ### How to Test Serverless Functions
 
@@ -121,7 +123,8 @@ We'll use the querystring to pass the `dividend` and `divisor` to the function h
 
 ```bash
 // request
-http://localhost:8911/divide?dividend=10&divisor=2
+http://localhost:8911/divide?dividend=10 &
+divisor=2
 ```
 
 If the function can successfully divide the two numbers, the function returns a body payload back in the response with a [HTTP 200 Success](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200) status:
@@ -194,10 +197,10 @@ To test a serverless function, you'll work with the test script associated with 
 ```bash
 api
 ├── src
-│   ├── functions
-│   │   ├── divide
-│   │   │   ├── divide.ts
-│   │   │   ├── divide.test.ts
+│ ├── functions
+│ │ ├── divide
+│ │ │ ├── divide.ts
+│ │ │ ├── divide.test.ts
 ```
 
 The setup steps are to:
@@ -314,11 +317,11 @@ First, let's create a fixture for the `divide` function alongside your function 
 ```bash
 api
 ├── src
-│   ├── functions
-│   │   ├── divide
-│   │   │   ├── divide.ts
-│   │   │   ├── divide.test.ts
-│   │   │   ├── divide.fixtures.ts // <-- your fixture
+│ ├── functions
+│ │ ├── divide
+│ │ │ ├── divide.ts
+│ │ │ ├── divide.test.ts
+│ │ │ ├── divide.fixtures.ts // your fixture < --
 ```
 
 Let's define a fixture for a new test case: when the function is invoked, but it is missing a divisor:
@@ -411,12 +414,11 @@ yarn rw generate function updateOrderStatus
 ```bash
 api
 ├── src
-│   ├── functions
-│   │   ├── updateOrderStatus
-│   │   │   ├── updateOrderStatus.ts
-│   │   │   ├── updateOrderStatus.scenarios.ts
-│   │   │   ├── updateOrderStatus.test.ts
-
+│ ├── functions
+│ │ ├── updateOrderStatus
+│ │ │ ├── updateOrderStatus.ts
+│ │ │ ├── updateOrderStatus.scenarios.ts
+│ │ │ ├── updateOrderStatus.test.ts
 ```
 
 The `updateOrderStatus` webhook will expect:
@@ -432,7 +434,11 @@ The `updateOrderStatus` webhook will expect:
 
 ```tsx
 import type { APIGatewayEvent } from 'aws-lambda'
-import { verifyEvent, VerifyOptions, WebhookVerificationError } from '@redwoodjs/api/webhooks'
+import {
+  verifyEvent,
+  VerifyOptions,
+  WebhookVerificationError,
+} from '@redwoodjs/api/webhooks'
 import { db } from 'src/lib/db'
 
 export const handler = async (event: APIGatewayEvent) => {
@@ -472,7 +478,9 @@ export const handler = async (event: APIGatewayEvent) => {
     // updated the order with the new status
     // using the trackingNumber provided
     const order = await db.order.update({
-      where: { trackingNumber_status: { trackingNumber, status: currentOrderStatus } },
+      where: {
+        trackingNumber_status: { trackingNumber, status: currentOrderStatus },
+      },
       data: { status: status },
     })
 
@@ -586,21 +594,27 @@ For brevity we didn't test that the order's status wasn't changed, but that coul
 :::
 
 ```jsx
-scenario('with an invalid signature header, the webhook is unauthorized', async (scenario) => {
-  const order = scenario.order.placed
+scenario(
+  'with an invalid signature header, the webhook is unauthorized',
+  async (scenario) => {
+    const order = scenario.order.placed
 
-  const payload = { trackingNumber: order.trackingNumber, status: 'DELIVERED' }
-  const event = mockSignedWebhook({
-    payload,
-    signatureType: 'sha256Verifier',
-    signatureHeader: 'X-Webhook-Signature-Invalid',
-    secret: 'MY-VOICE-IS-MY-PASSPORT-VERIFY-ME',
-  })
+    const payload = {
+      trackingNumber: order.trackingNumber,
+      status: 'DELIVERED',
+    }
+    const event = mockSignedWebhook({
+      payload,
+      signatureType: 'sha256Verifier',
+      signatureHeader: 'X-Webhook-Signature-Invalid',
+      secret: 'MY-VOICE-IS-MY-PASSPORT-VERIFY-ME',
+    })
 
-  const result = await handler(event)
+    const result = await handler(event)
 
-  expect(result.statusCode).toBe(401)
-})
+    expect(result.statusCode).toBe(401)
+  }
+)
 ```
 
 Next, we test what happens if the event payload is signed, but with a different secret than it expects; that is it was signed using the wrong secret (`MY-NAME-IS-WERNER-BRANDES-VERIFY-ME` and not `MY-VOICE-IS-MY-PASSPORT-VERIFY-ME`).
@@ -608,44 +622,53 @@ Next, we test what happens if the event payload is signed, but with a different 
 Again, we expect as 401 Unauthorized response.
 
 ```jsx
-scenario('with the wrong webhook secret the webhook is unauthorized', async (scenario) => {
-  const order = scenario.order.placed
+scenario(
+  'with the wrong webhook secret the webhook is unauthorized',
+  async (scenario) => {
+    const order = scenario.order.placed
 
-  const payload = { trackingNumber: order.trackingNumber, status: 'DELIVERED' }
-  const event = mockSignedWebhook({
-    payload,
-    signatureType: 'sha256Verifier',
-    signatureHeader: 'X-Webhook-Signature',
-    secret: 'MY-NAME-IS-WERNER-BRANDES-VERIFY-ME',
-  })
+    const payload = {
+      trackingNumber: order.trackingNumber,
+      status: 'DELIVERED',
+    }
+    const event = mockSignedWebhook({
+      payload,
+      signatureType: 'sha256Verifier',
+      signatureHeader: 'X-Webhook-Signature',
+      secret: 'MY-NAME-IS-WERNER-BRANDES-VERIFY-ME',
+    })
 
-  const result = await handler(event)
+    const result = await handler(event)
 
-  expect(result.statusCode).toBe(401)
-})
+    expect(result.statusCode).toBe(401)
+  }
+)
 ```
 
 Next, what happens if the order cannot be found? We'll try a tracking number that doesn't exist (that is we did not create it in our scenario order data):
 
 ```jsx
-scenario('when the tracking number cannot be found, returns an error', async (scenario) => {
-  const order = scenario.order.placed
+scenario(
+  'when the tracking number cannot be found, returns an error',
+  async (scenario) => {
+    const order = scenario.order.placed
 
-  const payload = { trackingNumber: '1Z-DOES-NOT-EXIST', status: 'DELIVERED' }
-  const event = mockSignedWebhook({
-    payload,
-    signatureType: 'sha256Verifier',
-    signatureHeader: 'X-Webhook-Signature',
-    secret: 'MY-VOICE-IS-MY-PASSPORT-VERIFY-ME',
-  })
+    const payload = { trackingNumber: '1Z-DOES-NOT-EXIST', status: 'DELIVERED' }
+    const event = mockSignedWebhook({
+      payload,
+      signatureType: 'sha256Verifier',
+      signatureHeader: 'X-Webhook-Signature',
+      secret: 'MY-VOICE-IS-MY-PASSPORT-VERIFY-ME',
+    })
 
-  const result = await handler(event)
+    const result = await handler(event)
 
-  const body = JSON.parse(result.body)
+    const body = JSON.parse(result.body)
 
-  expect(result.statusCode).toBe(500)
-  expect(body).toHaveProperty('error')
-})
+    expect(result.statusCode).toBe(500)
+    expect(body).toHaveProperty('error')
+  }
+)
 ```
 
 Last, we want to test a business rule that says you cannot update an order to be delivered if it already is delivered
@@ -732,7 +755,7 @@ Serverless functions can use the same user-authentication strategy used by Graph
 
 :::tip
 
- If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
+If you need to protect an endpoint via authentication that isn't user-based, you should consider using [Webhooks](webhooks.md) with a signed payload and verifier.
 
 :::
 
@@ -775,7 +798,7 @@ const myHandler = async (event: APIGatewayEvent, context: Context) => {
         data: 'myHandler function',
       }),
     }
-  // highlight-start
+    // highlight-start
   } else {
     logger.error('Access to myHandler was denied')
 
@@ -821,7 +844,6 @@ auth-provider: supabase
 Content-Type: application/json
 ```
 
-
 ### Other security considerations
 
 In addition to securing your serverless functions, you may consider logging, rate limiting and whitelisting as ways to protect your functions from abuse or misuse.
@@ -860,7 +882,11 @@ Because the `event` passed to the function handler contains the request's IP add
 
 ```jsx
 const ipAddress = ({ event }) => {
-  return event?.headers?.['client-ip'] || event?.requestContext?.identity?.sourceIp || 'localhost'
+  return (
+    event?.headers?.['client-ip'] ||
+    event?.requestContext?.identity?.sourceIp ||
+    'localhost'
+  )
 }
 ```
 

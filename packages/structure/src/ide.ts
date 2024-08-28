@@ -1,23 +1,25 @@
 import { basename } from 'path'
 
-import * as tsm from 'ts-morph'
-import { TextDocuments } from 'vscode-languageserver'
-import { TextDocument } from 'vscode-languageserver-textdocument'
-import {
+import type * as tsm from 'ts-morph'
+import type { TextDocuments } from 'vscode-languageserver'
+import type { TextDocument } from 'vscode-languageserver-textdocument'
+import type {
   CodeLens,
   DocumentLink,
   Hover,
   Location,
-  Range,
 } from 'vscode-languageserver-types'
+import { Range } from 'vscode-languageserver-types'
 
-import { Host, DefaultHost } from './hosts'
-import { ArrayLike, ArrayLike_normalize } from './x/Array'
+import type { Host } from './hosts'
+import { DefaultHost } from './hosts'
+import type { ArrayLike } from './x/Array'
+import { ArrayLike_normalize } from './x/Array'
 import { lazy, memo } from './x/decorators'
 import { basenameNoExt } from './x/path'
 import { createTSMSourceFile_cached } from './x/ts-morph'
 import { URL_file } from './x/URL'
-import { ExtendedDiagnostic } from './x/vscode-languageserver-types'
+import type { ExtendedDiagnostic } from './x/vscode-languageserver-types'
 
 export type NodeID = string
 
@@ -95,7 +97,7 @@ export abstract class BaseNode {
       return this.parent.host
     }
     throw new Error(
-      "Could not find host implementation on root node (you must override the 'host' getter)"
+      "Could not find host implementation on root node (you must override the 'host' getter)",
     )
   }
   exists = true
@@ -140,7 +142,7 @@ export abstract class BaseNode {
     try {
       const d1 = await this._ideInfo()
       const dd = await Promise.all(
-        (await this._children()).map((c) => c.collectIDEInfo(uri))
+        (await this._children()).map((c) => c.collectIDEInfo(uri)),
       )
       const d2 = dd.flat()
       let all = [...d1, ...d2]
@@ -169,7 +171,7 @@ export abstract class BaseNode {
     try {
       const d1 = await this._diagnostics()
       const dd = await Promise.all(
-        (await this._children()).map((c) => c.collectDiagnostics(uri))
+        (await this._children()).map((c) => c.collectDiagnostics(uri)),
       )
       const d2 = dd.flat()
       let all = [...d1, ...d2]
@@ -203,7 +205,6 @@ export abstract class BaseNode {
   }
 
   @lazy() get closestContainingUri(): string | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { uri } = this as any
     if (uri) {
       return uri
@@ -264,7 +265,7 @@ export abstract class FileNode extends BaseNode {
     if (typeof this.text === 'undefined') {
       throw new Error('undefined file ' + this.filePath)
     }
-    return createTSMSourceFile_cached(this.filePath, this.text!)
+    return createTSMSourceFile_cached(this.filePath, this.text)
   }
   @lazy() get basenameNoExt() {
     return basenameNoExt(this.filePath)

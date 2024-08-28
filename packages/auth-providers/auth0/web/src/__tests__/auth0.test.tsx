@@ -5,10 +5,11 @@ import type {
   User,
 } from '@auth0/auth0-spa-js'
 import { renderHook, act } from '@testing-library/react'
+import { vi, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../auth0'
+import { createAuth } from '../auth0.js'
 
 const user: User = {
   sub: 'unique_user_id',
@@ -27,10 +28,10 @@ const adminUser: User = {
 let loggedInUser: User | undefined
 
 async function getTokenSilently(
-  options: GetTokenSilentlyOptions & { detailedResponse: true }
+  options: GetTokenSilentlyOptions & { detailedResponse: true },
 ): Promise<GetTokenSilentlyVerboseResponse>
 async function getTokenSilently(
-  options?: GetTokenSilentlyOptions
+  options?: GetTokenSilentlyOptions,
 ): Promise<string>
 async function getTokenSilently(): Promise<
   string | GetTokenSilentlyVerboseResponse
@@ -52,7 +53,7 @@ const auth0MockClient: Partial<Auth0Client> = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -82,12 +83,12 @@ beforeEach(() => {
 function getAuth0Auth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
     auth0MockClient as Auth0Client,
-    customProviderHooks
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

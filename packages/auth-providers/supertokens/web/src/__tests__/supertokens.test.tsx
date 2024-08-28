@@ -1,13 +1,14 @@
 import { renderHook, act } from '@testing-library/react'
+import { vi, it, expect, beforeAll, beforeEach, describe } from 'vitest'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import {
-  createAuth,
+import type {
   SuperTokensUser,
   SessionRecipe,
   SuperTokensAuth,
-} from '../supertokens'
+} from '../supertokens.js'
+import { createAuth } from '../supertokens.js'
 
 const user: SuperTokensUser = {
   userId: 'unique_user_id',
@@ -26,6 +27,7 @@ const superTokensSessionRecipe: SessionRecipe = {
     loggedInUser = undefined
   },
   doesSessionExist: async () => true,
+  getAccessToken: async () => 'mock_supertokens_access_token',
   getAccessTokenPayloadSecurely: async () => {
     return {
       _jwtPName: 'token',
@@ -49,7 +51,7 @@ const superTokensMockClient: SuperTokensAuth = {
   },
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 
@@ -79,12 +81,12 @@ beforeEach(() => {
 function getSuperTokensAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
-    superTokensMockClient as SuperTokensAuth,
-    customProviderHooks
+    superTokensMockClient,
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

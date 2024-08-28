@@ -10,7 +10,8 @@ There are two ways to add an asset to your Redwood app:
 2. add it to the `web/public` directory and reference it relative to your site's root
 
 Where possible, prefer the first strategy.
-It lets webpack include the asset in the bundle, opting-in to all of webpack's benefits.
+
+It lets Vite include the asset in the bundle when the file is small enough.
 
 ### Co-locating and Importing Assets
 
@@ -45,7 +46,7 @@ const Header = () => {
 export default Header
 ```
 
-If you're curious how this works, see the webpack docs on [asset management](https://webpack.js.org/guides/asset-management/).
+If you're curious how this works, see the Vite docs on [static asset handling](https://vitejs.dev/guide/assets.html).
 
 ## Adding to the `web/public` Directory
 
@@ -54,7 +55,7 @@ During dev and build, Redwood copies `web/public`'s contents into `web/dist`.
 
 > Changes to `web/public` don't hot-reload.
 
-Again, because assets in this directory don't go through webpack, **use this strategy sparingly**, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with webpack—etc.
+Again, because assets in this directory don't go through Vite, **use this strategy sparingly**, and mainly for assets like favicons, manifests, `robots.txt`, libraries incompatible with Vite, etc.
 
 ### Example: Adding Your Logo and Favicon to `web/public`
 
@@ -101,4 +102,79 @@ const Header = () => {
 }
 
 export default Header
+```
+
+## Styling SVGs: The special type of image
+
+By default you can import and use SVG images like any other image asset.
+
+```jsx title="web/src/components/Example.jsx"
+// highlight-next-line
+import svgIconSrc from '../mySvg.svg'
+
+const Example = () => {
+  return (
+    <>
+      // highlight-next-line
+      <img src={svgIconSrc} alt="Logo" />
+    </>
+  )
+}
+
+export default Example
+```
+
+Sometimes however, you might want more control over styling your SVGs - maybe you want to modify the `stroke-width` or `fill` color.
+
+The easiest way to achieve this, is to make your SVGs a React component. Open up your SVG file, and drop in its contents into a component – for example:
+
+```tsx title="web/src/components/icons/CarIcon.tsx"
+import type { SVGProps } from "react"
+
+export const CarIcon = (props: SVGProps) => {
+  return (
+    // 👇 content of your SVG file
+    <svg
+      // highlight-next-line
+      className="fill-blue-500" // 👈 you can use classes, like with tailwind
+      // highlight-next-line
+      stroke={props.strokeColor} // or adjust properties directly
+    // ...
+```
+
+If you needed to convert a whole library of SVGs into stylable (or animatable!) components, one easy way would be to use the [SVGR cli](https://react-svgr.com/docs/cli/)
+
+## Custom fonts
+
+There are many different ways to peel this potato – it's all a search away – but if you're using the CSS `@font-face` rule, we have a quick tip for you:
+
+1. Place your fonts in the public folder, so it gets carried across
+2. In your CSS, use absolute paths - the public folder being your root - to point to the font file (same as the [Vite docs](https://vitejs.dev/guide/assets.html#the-public-directory)), for example:
+
+```shell
+web/
+├── src
+├── App.tsx
+├── entry.client.tsx
+├── index.css
+├── ...
+├── public
+│ ├── favicon.png
+│ ├── fonts
+// highlight-next-line
+│ │ └── RedwoodNeue.woff2
+```
+
+```css
+/* in e.g. index.css */
+@font-face {
+  font-family: 'Redwood Neue';
+  /* 👇 it's a relative path */
+  // highlight-next-line
+  src: url('/fonts/RedwoodNeue.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-style: italic;
+  ascent-override: 97%;
+}
 ```

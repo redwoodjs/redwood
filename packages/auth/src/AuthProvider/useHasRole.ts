@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { CurrentUser } from '../AuthContext'
+import type { CurrentUser } from '../AuthContext.js'
 
 export const useHasRole = (currentUser: CurrentUser | null) => {
   /**
@@ -26,7 +26,7 @@ export const useHasRole = (currentUser: CurrentUser | null) => {
           } else if (Array.isArray(currentUser.roles)) {
             // rolesToCheck is a string, currentUser.roles is an array
             return currentUser.roles?.some(
-              (allowedRole) => rolesToCheck === allowedRole
+              (allowedRole) => rolesToCheck === allowedRole,
             )
           }
         }
@@ -35,12 +35,12 @@ export const useHasRole = (currentUser: CurrentUser | null) => {
           if (Array.isArray(currentUser.roles)) {
             // rolesToCheck is an array, currentUser.roles is an array
             return currentUser.roles?.some((allowedRole) =>
-              rolesToCheck.includes(allowedRole)
+              rolesToCheck.includes(allowedRole),
             )
           } else if (typeof currentUser.roles === 'string') {
             // rolesToCheck is an array, currentUser.roles is a string
             return rolesToCheck.some(
-              (allowedRole) => currentUser?.roles === allowedRole
+              (allowedRole) => currentUser?.roles === allowedRole,
             )
           }
         }
@@ -48,6 +48,6 @@ export const useHasRole = (currentUser: CurrentUser | null) => {
 
       return false
     },
-    [currentUser]
+    [currentUser],
   )
 }

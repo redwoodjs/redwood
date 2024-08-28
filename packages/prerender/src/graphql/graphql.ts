@@ -1,12 +1,20 @@
 import path from 'path'
 
-import { DocumentNode, print } from 'graphql'
+import type { DocumentNode } from 'graphql'
+import { print } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 // @MARK: have to do this, otherwise rwjs/web is loaded before shims
-import { getOperationName } from '@redwoodjs/web/dist/graphql'
+import { getOperationName } from '@redwoodjs/web/dist/graphql.js'
 
 import { GqlHandlerImportError } from '../errors'
+
+interface GqlOperation {
+  operationName: string
+  query: string | undefined
+  variables?: Record<string, unknown>
+  extensions?: Record<string, unknown>
+}
 
 /**
  * Loads the graphql server, with all the user's settings
@@ -20,10 +28,37 @@ import { GqlHandlerImportError } from '../errors'
 export async function executeQuery(
   gqlHandler: (args: any) => Promise<any>,
   query: DocumentNode,
-  variables?: Record<string, unknown>
+  variables?: Record<string, unknown>,
 ) {
+  const config = getConfig()
   const operationName = getOperationName(query)
-  const operation = { operationName, query: print(query), variables }
+
+  const operation: GqlOperation = {
+    operationName,
+    query: print(query),
+    variables,
+  }
+
+  // If Trusted Documents support is enabled, we shouldn't send the actual
+  // query, but rather the hash of the query. We find this hash by looking in
+  // the generated types file /web/src/graphql/graphql.ts (notice that it's
+  // generated on the web side)
+  if (config.graphql.trustedDocuments) {
+    const documentsPath = path.join(getPaths().web.graphql, 'graphql')
+    const documents: Record<string, any> | undefined = require(documentsPath)
+    const documentName =
+      operationName[0].toUpperCase() + operationName.slice(1) + 'Document'
+    const queryHash = documents?.[documentName]?.__meta__?.hash
+
+    operation.query = undefined
+    operation.extensions = {
+      persistedQuery: {
+        version: 1,
+        sha256Hash: queryHash,
+      },
+    }
+  }
+
   const handlerResult = await gqlHandler(operation)
 
   return handlerResult?.body
@@ -39,15 +74,15 @@ export async function getGqlHandler() {
   const gqlPath = path.join(getPaths().api.functions, 'graphql')
 
   try {
-    const { handler } = await import(gqlPath)
+    const { handler } = require(gqlPath)
 
     return async (operation: Record<string, unknown>) => {
       return await handler(buildApiEvent(operation), buildContext())
     }
-  } catch (e) {
+  } catch {
     return () => {
       throw new GqlHandlerImportError(
-        `Unable to import GraphQL handler at ${gqlPath}`
+        `Unable to import GraphQL handler at ${gqlPath}`,
       )
     }
   }

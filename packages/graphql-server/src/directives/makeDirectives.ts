@@ -1,13 +1,13 @@
-import { DocumentNode, ExecutableDefinitionNode } from 'graphql'
+import { Kind, type DocumentNode } from 'graphql'
 
-import {
-  DirectiveType,
+import type {
   RedwoodDirective,
   TransformerDirective,
   TransformerDirectiveFunc,
   ValidatorDirective,
   ValidatorDirectiveFunc,
 } from '../plugins/useRedwoodDirective'
+import { DirectiveType } from '../plugins/useRedwoodDirective'
 
 /*
 We want directivesGlobs type to be an object with this shape:
@@ -20,7 +20,7 @@ But not fully supported in TS
 export type DirectiveGlobImports = Record<string, any>
 
 export const makeDirectivesForPlugin = (
-  directiveGlobs: DirectiveGlobImports
+  directiveGlobs: DirectiveGlobImports,
 ): RedwoodDirective[] => {
   return Object.entries(directiveGlobs).flatMap(
     ([importedGlobName, exports]) => {
@@ -38,26 +38,26 @@ export const makeDirectivesForPlugin = (
 
       if (!directive.type) {
         throw new Error(
-          'Please use `createValidatorDirective` or `createTransformerDirective` functions to define your directive'
+          'Please use `createValidatorDirective` or `createTransformerDirective` functions to define your directive',
         )
       }
 
       return [directive]
-    }
+    },
   )
 }
 
 export const getDirectiveName = (schema: DocumentNode) => {
   const definition = schema.definitions.find(
-    (definition) => definition.kind === 'DirectiveDefinition'
-  ) as ExecutableDefinitionNode
+    (definition) => definition.kind === Kind.DIRECTIVE_DEFINITION,
+  )
 
-  return definition.name?.value
+  return definition?.name?.value
 }
 
 export const createValidatorDirective = (
   schema: DocumentNode,
-  directiveFunc: ValidatorDirectiveFunc
+  directiveFunc: ValidatorDirectiveFunc,
 ): ValidatorDirective => {
   const directiveName = getDirectiveName(schema)
 
@@ -67,7 +67,7 @@ export const createValidatorDirective = (
 
   if (typeof directiveFunc !== 'function') {
     throw new Error(
-      `Directive validation function not implemented for @${directiveName}`
+      `Directive validation function not implemented for @${directiveName}`,
     )
   }
 
@@ -81,7 +81,7 @@ export const createValidatorDirective = (
 
 export const createTransformerDirective = (
   schema: DocumentNode,
-  directiveFunc: TransformerDirectiveFunc
+  directiveFunc: TransformerDirectiveFunc,
 ): TransformerDirective => {
   const directiveName = getDirectiveName(schema)
 
@@ -91,7 +91,7 @@ export const createTransformerDirective = (
 
   if (typeof directiveFunc !== 'function') {
     throw new Error(
-      `Directive transformer function not implemented for @${directiveName}`
+      `Directive transformer function not implemented for @${directiveName}`,
     )
   }
 

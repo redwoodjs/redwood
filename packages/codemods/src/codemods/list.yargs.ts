@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import yargs from 'yargs'
+import type yargs from 'yargs'
 import { decamelize } from 'yargs-parser'
 
 export const command = 'list <rwVersion>'

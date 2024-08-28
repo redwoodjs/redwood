@@ -1,7 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
+
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 export const command = 'generator <name>'
 export const description =
@@ -31,7 +33,7 @@ export const builder = (yargs) => {
     .positional('name', {
       description: 'Name of the generator to copy templates from',
       choices: availableGenerators.filter(
-        (dir) => !EXCLUDE_GENERATORS.includes(dir)
+        (dir) => !EXCLUDE_GENERATORS.includes(dir),
       ),
     })
     .option('force', {
@@ -43,12 +45,17 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-generator'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-generator',
+      )}`,
     )
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./generatorHandler')
+  recordTelemetryAttributes({
+    command: 'setup generator',
+    name: options.name,
+    force: options.force,
+  })
+  const { handler } = await import('./generatorHandler.js')
   return handler(options)
 }

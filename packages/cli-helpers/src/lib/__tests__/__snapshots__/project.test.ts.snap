@@ -1,0 +1,155 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should add a comment that the existing environment variable value was not changed, but include its new value as a comment 1`] = `
+"EXISTING_VAR=value
+# CommentedVar=123
+
+# Note: The existing environment variable EXISTING_VAR was not overwritten. Uncomment to use its new value.
+# Updated existing variable Comment
+# EXISTING_VAR = new_value
+"
+`;
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should add a new environment variable when it does not exist 1`] = `
+"EXISTING_VAR = value
+# CommentedVar = 123
+
+# New Variable Comment
+NEW_VAR = new_value
+"
+`;
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should add a new environment variable when it does not exist when existing envars have no spacing 1`] = `
+"EXISTING_VAR=value
+# CommentedVar = 123
+
+# New Variable Comment
+NEW_VAR = new_value
+"
+`;
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should handle existing environment variables and new value with quoted values by not updating the original value 1`] = `
+"EXISTING_VAR = "value"
+# CommentedVar = 123
+
+# Note: The existing environment variable EXISTING_VAR was not overwritten. Uncomment to use its new value.
+# New Variable Comment
+# EXISTING_VAR = new_value
+"
+`;
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should handle existing environment variables with quoted values 1`] = `
+"EXISTING_VAR = "value"
+# CommentedVar = 123
+"
+`;
+
+exports[`addEnvVar > addEnvVar adds environment variables as part of a setup task > should handle existing environment variables with quoted values and no spacing 1`] = `
+"EXISTING_VAR="value"
+# CommentedVar=123
+"
+`;
+
+exports[`updateTomlConfig > updateTomlConfig configures a new CLI plugin > adds package but keeps autoInstall false 1`] = `
+"[web]
+title = "Redwood App"
+port = 8910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = []
+
+[api]
+port = 8911
+
+[experimental]
+[experimental.cli]
+autoInstall = false
+[experimental]
+[experimental.cli]
+[[experimental.cli.plugins]]
+package = "@example/test-package-when-autoInstall-false"
+enabled = true
+"
+`;
+
+exports[`updateTomlConfig > updateTomlConfig configures a new CLI plugin > adds when experimental cli has some plugins configured 1`] = `
+"[web]
+title = "Redwood App"
+port = 8910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = []
+
+[api]
+port = 8911
+
+[experimental]
+[experimental.cli]
+autoInstall = true
+
+[[experimental.cli.plugins]]
+package = "@existing-example/some-package-when-cli-has-some-packages-configured"
+[experimental]
+[experimental.cli]
+[[experimental.cli.plugins]]
+package = "@example/test-package-name"
+enabled = true
+"
+`;
+
+exports[`updateTomlConfig > updateTomlConfig configures a new CLI plugin > adds when experimental cli is not configured 1`] = `
+"[web]
+title = "Redwood App"
+port = 8910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = []
+
+[api]
+port = 8911
+[experimental]
+[experimental.cli]
+autoInstall = true
+
+[[experimental.cli.plugins]]
+package = "@example/test-package-when-cli-not-configured"
+enabled = true
+"
+`;
+
+exports[`updateTomlConfig > updateTomlConfig configures a new CLI plugin > adds when experimental cli is setup but has no plugins configured 1`] = `
+"[web]
+title = "Redwood App"
+port = 8910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = []
+
+[api]
+port = 8911
+
+[experimental]
+[experimental.cli]
+autoInstall = true
+[experimental]
+[experimental.cli]
+[[experimental.cli.plugins]]
+package = "@example/test-package-when-no-plugins-configured"
+enabled = true
+"
+`;
+
+exports[`updateTomlConfig > updateTomlConfig configures a new CLI plugin > does not add duplicate place when experimental cli has that plugin configured 1`] = `
+"[web]
+title = "Redwood App"
+port = 8910
+apiUrl = "/.redwood/functions"
+includeEnvironmentVariables = []
+
+[api]
+port = 8911
+
+[experimental]
+[experimental.cli]
+autoInstall = true
+
+[[experimental.cli.plugins]]
+package = "@existing-example/some-package-name-already-exists"
+"
+`;

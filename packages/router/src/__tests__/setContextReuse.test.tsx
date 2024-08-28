@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { act, render, waitFor } from '@testing-library/react'
+import { test } from 'vitest'
 
-import { Route, Router, navigate, routes } from '../'
-import { Set } from '../Set'
-import { analyzeRoutes } from '../util'
-
-import '@testing-library/jest-dom/extend-expect'
+import { Route, Router, navigate } from '../index.js'
+import { Set } from '../Set.js'
 
 const HomePage = () => {
   return <p>Home Page</p>
@@ -19,7 +17,7 @@ interface ContextState {
 
 const SetContext = React.createContext<ContextState | undefined>(undefined)
 
-const SetContextProvider = ({ children }) => {
+const SetContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contextValue, setContextValue] = React.useState('initialSetValue')
 
   return (
@@ -80,24 +78,20 @@ test("Doesn't destroy <Set> when navigating inside, but does when navigating bet
 
   await waitFor(() => screen.getByText('Home Page'))
 
-  act(() => navigate(routes.ctx1()))
+  act(() => navigate('/ctx-1-page'))
   await waitFor(() => screen.getByText('1-updatedSetValue'))
-  act(() => navigate(routes.ctx2()))
+  act(() => navigate('/ctx-2-page'))
   await waitFor(() => screen.getByText('2-updatedSetValue'))
-  act(() => navigate(routes.ctx3()))
+  act(() => navigate('/ctx-3-page'))
   await waitFor(() => screen.getByText('3-initialSetValue'))
-  act(() => navigate(routes.ctx4()))
+  act(() => navigate('/ctx-4-page'))
   await waitFor(() => screen.getByText('4-initialSetValue'))
-})
-
-test('Pages are correctly given a setId if they are nested in', () => {
-  const { pathRouteMap } = analyzeRoutes(TestRouter().props.children, {
-    currentPathName: '/',
-  })
-
-  expect(pathRouteMap['/'].setId).toBe(0)
-  expect(pathRouteMap['/ctx-1-page'].setId).toBe(1)
-  expect(pathRouteMap['/ctx-2-page'].setId).toBe(1)
-  expect(pathRouteMap['/ctx-3-page'].setId).toBe(2)
-  expect(pathRouteMap['/ctx-4-page'].setId).toBe(3)
+  act(() => navigate('/ctx-2-page'))
+  await waitFor(() => screen.getByText('2-initialSetValue'))
+  act(() => navigate('/ctx-1-page'))
+  await waitFor(() => screen.getByText('1-updatedSetValue'))
+  act(() => navigate('/ctx-2-page'))
+  await waitFor(() => screen.getByText('2-updatedSetValue'))
+  act(() => navigate('/ctx-4-page'))
+  await waitFor(() => screen.getByText('4-initialSetValue'))
 })

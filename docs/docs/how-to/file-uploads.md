@@ -33,7 +33,7 @@ The first thing we'll do is create an environment variable to hold our Filestack
 REDWOOD_ENV_FILESTACK_API_KEY=AM18i8xV4QpoiGwetoTWd
 ```
 
-> We're prefixing with `REDWOOD_ENV_` here to tell webpack that we want it to replace this variables with its actual value as it's processing pages and statically generating them. Otherwise our generated pages would still contain something like `process.env.FILESTACK_API_KEY`, which wouldn't exist when the pages are static and being served from a CDN.
+> We're prefixing with `REDWOOD_ENV_` here to tell Vite that we want it to replace this variables with its actual value as it's processing pages and statically generating them. Otherwise our generated pages would still contain something like `process.env.FILESTACK_API_KEY`, which wouldn't exist when the pages are static and being served from a CDN.
 
 Now we can start our development server:
 
@@ -471,14 +471,14 @@ Great. Now we can modify our service accordingly:
 ```js {4-23} title="api/src/services/image/image.ts"
 import * as Filestack from 'filestack-js'
 
-export const deleteImage = async({ id }) => {
+export const deleteImage = async ({ id }) => {
   const client = Filestack.init(process.env.REDWOOD_ENV_FILESTACK_API_KEY)
 
   const image = await db.image.findUnique({ where: { id } })
 
   // The `security.handle` is the unique part of the Filestack file's url.
   const handle = image.url.split('/').pop()
-  
+
   const security = Filestack.getSecurity(
     {
       // We set `expiry` at `now() + 5 minutes`.
@@ -490,8 +490,8 @@ export const deleteImage = async({ id }) => {
   )
 
   await client.remove(handle, security)
-  
-  return db.image.delete({ where: { id } } )
+
+  return db.image.delete({ where: { id } })
 }
 ```
 

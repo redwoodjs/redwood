@@ -30,6 +30,7 @@ module.exports = {
     'react',
     'react-hooks',
     'jest-dom',
+    '@redwoodjs',
   ],
   ignorePatterns: ['node_modules', 'dist'],
   settings: {
@@ -45,6 +46,7 @@ module.exports = {
     'import/internal-regex': '^src/',
   },
   rules: {
+    '@redwoodjs/process-env-computed': 'error',
     'prettier/prettier': 'warn',
     'no-console': 'off',
     'prefer-object-spread': 'warn',
@@ -62,13 +64,7 @@ module.exports = {
       { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
     ],
     // React rules
-    'react/prop-types': [
-      'warn',
-      {
-        skipUndeclared: true,
-        ignore: ['style', 'children', 'className', 'theme'],
-      },
-    ],
+    'react/prop-types': 'off',
     'react/display-name': 'off',
     'react-hooks/exhaustive-deps': 'warn',
     'import/order': [
@@ -113,8 +109,7 @@ module.exports = {
             //
             // Uses https://github.com/isaacs/minimatch under the hood
             // See https://github.com/isaacs/node-glob#glob-primer for syntax
-            // eslint-disable-next-line prettier/prettier
-            pattern: 'src/*/**/\*.?(sdl.){js,ts}',
+            pattern: 'src/*/**/*.?(sdl.){js,ts}',
             patternOptions: {
               nobrace: true,
               noglobstar: true,
@@ -155,18 +150,14 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
       rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-empty-interface': 'off',
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/ban-types': 'warn',
-        'no-empty-function': 'off',
+        // TODO: look into enabling these eventually
         '@typescript-eslint/no-empty-function': 'off',
-        camelcase: 'off',
-        '@typescript-eslint/camelcase': 'off',
-        'no-use-before-define': 'off',
-        '@typescript-eslint/no-use-before-define': 'off',
-        '@typescript-eslint/prefer-namespace-keyword': 'off',
+        '@typescript-eslint/prefer-function-type': 'off',
+
+        // Specific 'recommended' rules we alter
+        '@typescript-eslint/no-var-requires': 'off',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
@@ -197,7 +188,10 @@ module.exports = {
       },
     },
     {
-      files: ['web/src/**/*.routeHooks.{js,ts}'],
+      files: [
+        'web/src/**/*.routeHooks.{js,ts}',
+        'web/src/entry.server.{jsx,tsx}',
+      ],
       rules: { 'no-restricted-imports': 'off' },
     },
   ],

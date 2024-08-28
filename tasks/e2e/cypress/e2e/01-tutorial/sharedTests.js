@@ -56,7 +56,7 @@ export function waitForApiSide() {
         .then((r) => {
           return r.status === 200 // The first response could be 504 or 203 (reloading api server)
         }),
-    { timeout: 10_000, interval: 2_000 }
+    { timeout: 10_000, interval: 2_000 },
   )
 }
 
@@ -73,14 +73,14 @@ export const test_pages = () =>
     // https://redwoodjs.com/docs/tutorial/chapter1/second-page
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate page about --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step2_1_PagesHome
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
+      Step2_1_PagesHome,
     )
     cy.contains('About').click()
     cy.get('h1').should('contain', 'AboutPage')
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
-      Step2_2_PagesAbout
+      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.jsx'),
+      Step2_2_PagesAbout,
     )
     cy.get('h1').should('contain', 'Redwood Blog')
     cy.contains('Return home').click()
@@ -90,25 +90,25 @@ export const test_layouts = () =>
   it('3. Layouts', () => {
     cy.exec(`cd ${BASE_DIR}; yarn redwood generate layout blog --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
-      Step3_1_LayoutsBlog
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.jsx'),
+      Step3_1_LayoutsBlog,
     )
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step3_2_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step3_2_Routes)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step3_3_PagesHome
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
+      Step3_3_PagesHome,
     )
     cy.contains('Redwood Blog').click()
     cy.get('main').should('contain', 'Home')
 
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.js'),
-      Step3_4_PagesAbout
+      path.join(BASE_DIR, 'web/src/pages/AboutPage/AboutPage.jsx'),
+      Step3_4_PagesAbout,
     )
     cy.contains('About').click()
     cy.get('p').should(
       'contain',
-      'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
+      'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!',
     )
   })
 
@@ -119,7 +119,7 @@ export const test_dynamic = () =>
     cy.exec(`rm ${BASE_DIR}/api/db/dev.db`, { failOnNonZeroExit: false })
     // need to also handle case where Prisma Client be out of sync
     cy.exec(
-      `cd ${BASE_DIR}; yarn rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`
+      `cd ${BASE_DIR}; yarn dlx rimraf ./api/db/migrations && yarn rw prisma migrate reset --skip-seed --force`,
     )
     cy.exec(`cd ${BASE_DIR}; yarn rw prisma migrate dev --name setup`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g scaffold post --force`)
@@ -132,7 +132,7 @@ export const test_dynamic = () =>
     cy.get('a.rw-button.rw-button-green').should(
       'have.css',
       'background-color',
-      'rgb(72, 187, 120)'
+      'rgb(72, 187, 120)',
     )
     cy.contains(' New Post').click()
     cy.get('h2').should('contain', 'New Post')
@@ -144,7 +144,7 @@ export const test_dynamic = () =>
     cy.get('button.rw-button.rw-button-blue').should(
       'have.css',
       'background-color',
-      'rgb(49, 130, 206)'
+      'rgb(49, 130, 206)',
     )
     cy.get('button').contains('Save').click()
 
@@ -182,19 +182,19 @@ export const test_cells = () =>
   it('5. Cells', () => {
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPosts --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
-      Step5_1_ComponentsCellBlogPost
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.jsx'),
+      Step5_1_ComponentsCellBlogPost,
     )
     cy.writeFile(
       path.join(
         BASE_DIR,
-        'web/src/components/BlogPostsCell/BlogPostsCell.test.js'
+        'web/src/components/BlogPostsCell/BlogPostsCell.test.jsx',
       ),
-      Step5_2_ComponentsCellBlogPostTest
+      Step5_2_ComponentsCellBlogPostTest,
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.js'),
-      Step5_3_PagesHome
+      path.join(BASE_DIR, 'web/src/pages/HomePage/HomePage.jsx'),
+      Step5_3_PagesHome,
     )
 
     cy.visit('http://localhost:8910/')
@@ -202,7 +202,7 @@ export const test_cells = () =>
     cy.get('main').should(
       'contain',
       // [{"title":"Second post","body":"Hello world!","__typename":"Post"}]
-      '"body":"Hello world!"'
+      '"body":"Hello world!"',
     )
   })
 
@@ -213,40 +213,40 @@ export const test_routing_params = () =>
     cy.exec(`cd ${BASE_DIR}; yarn rw g cell BlogPost --force`)
     cy.exec(`cd ${BASE_DIR}; yarn rw g component BlogPost --force`)
 
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step6_1_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step6_1_Routes)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.js'),
-      Step6_2_BlogPostPage
+      path.join(BASE_DIR, 'web/src/pages/BlogPostPage/BlogPostPage.jsx'),
+      Step6_2_BlogPostPage,
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.js'),
-      Step6_3_BlogPostCell
-    )
-    cy.writeFile(
-      path.join(
-        BASE_DIR,
-        'web/src/components/BlogPostCell/BlogPostCell.test.js'
-      ),
-      Step6_3_BlogPostCellTest
-    )
-    cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.js'),
-      Step6_4_BlogPost
-    )
-    cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.js'),
-      Step6_4_BlogPostTest
-    )
-    cy.writeFile(
-      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.js'),
-      Step6_5_BlogPostsCell
+      path.join(BASE_DIR, 'web/src/components/BlogPostCell/BlogPostCell.jsx'),
+      Step6_3_BlogPostCell,
     )
     cy.writeFile(
       path.join(
         BASE_DIR,
-        'web/src/components/BlogPostsCell/BlogPostsCell.mock.js'
+        'web/src/components/BlogPostCell/BlogPostCell.test.jsx',
       ),
-      Step6_5_BlogPostsCellMock
+      Step6_3_BlogPostCellTest,
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.jsx'),
+      Step6_4_BlogPost,
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPost/BlogPost.test.jsx'),
+      Step6_4_BlogPostTest,
+    )
+    cy.writeFile(
+      path.join(BASE_DIR, 'web/src/components/BlogPostsCell/BlogPostsCell.jsx'),
+      Step6_5_BlogPostsCell,
+    )
+    cy.writeFile(
+      path.join(
+        BASE_DIR,
+        'web/src/components/BlogPostsCell/BlogPostsCell.mock.js',
+      ),
+      Step6_5_BlogPostsCellMock,
     )
 
     // Wait for API server to be available.
@@ -276,15 +276,15 @@ export const test_forms = () =>
     // https://redwoodjs.com/docs/tutorial/everyone-s-favorite-thing-to-build-forms
     cy.exec(`cd ${BASE_DIR}; yarn rw g page contact --force`)
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.js'),
-      Step7_1_BlogLayout
+      path.join(BASE_DIR, 'web/src/layouts/BlogLayout/BlogLayout.jsx'),
+      Step7_1_BlogLayout,
     )
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-      Step7_2_ContactPage
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.jsx'),
+      Step7_2_ContactPage,
     )
     cy.writeFile(path.join(BASE_DIR, 'web/src/index.css'), Step7_3_Css)
-    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.js'), Step7_4_Routes)
+    cy.writeFile(path.join(BASE_DIR, 'web/src/Routes.jsx'), Step7_4_Routes)
 
     cy.contains('Contact').click()
     cy.contains('Save').click()
@@ -312,19 +312,19 @@ export const test_saving_data = () =>
     cy.exec(`cd ${BASE_DIR}; yarn rw g sdl contact --force --crud`)
 
     cy.writeFile(
-      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.js'),
-      Step8_1_ContactPageWithoutJsEmailValidation
+      path.join(BASE_DIR, 'web/src/pages/ContactPage/ContactPage.jsx'),
+      Step8_1_ContactPageWithoutJsEmailValidation,
     )
 
     const serviceContactPath = path.join(
       BASE_DIR,
-      'api/src/services/contacts/contacts.js'
+      'api/src/services/contacts/contacts.js',
     )
     cy.writeFile(serviceContactPath, Step8_2_CreateContactServiceValidation)
 
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/contacts/contacts.test.js'),
-      Step8_3_UpdateContactTest
+      Step8_3_UpdateContactTest,
     )
 
     // Wait for API server to be available.
@@ -352,12 +352,12 @@ export const test_auth_cell_failure = () =>
     // Turn auth on.
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_1_RequireAuth
+      Step9_1_RequireAuth,
     )
 
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/services/posts/posts.js'),
-      Step9_2_PostsRequireAuth
+      Step9_2_PostsRequireAuth,
     )
 
     // Wait for API server to be available.
@@ -368,6 +368,6 @@ export const test_auth_cell_failure = () =>
     // disable auth
     cy.writeFile(
       path.join(BASE_DIR, 'api/src/lib/auth.js'),
-      Step9_3_DisableAuth
+      Step9_3_DisableAuth,
     )
   })

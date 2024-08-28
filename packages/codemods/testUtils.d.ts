@@ -8,8 +8,8 @@ declare module 'jscodeshift/dist/testUtils' {
     options?: Options | null,
     testFilePrefix?: string | null,
     testOptions?: {
-      parser: 'ts' | 'tsx' | 'js' | Parser
-    }
+      parser: 'ts' | 'tsx' | 'js' | 'jsx' | Parser
+    },
   ): () => any
 
   function defineInlineTest(
@@ -17,7 +17,7 @@ declare module 'jscodeshift/dist/testUtils' {
     options: Options,
     inputSource: string,
     expectedOutputSource: string,
-    testName?: string
+    testName?: string,
   ): () => any
 
   function runInlineTest(
@@ -28,29 +28,51 @@ declare module 'jscodeshift/dist/testUtils' {
       source: string
     },
     expectedOutput: string,
-    testOptions?: TestOptions
+    testOptions?: TestOptions,
   ): string
 }
 
-import { matchFolderTransform } from './testUtils/matchFolderTransform'
-import { matchInlineTransformSnapshot } from './testUtils/matchInlineTransformSnapshot'
-import { matchTransformSnapshot } from './testUtils/matchTransformSnapshot'
+// @NOTE: Redefining types, because they get lost when importing from the testUtils file
+type MatchTransformSnapshotFunction = (
+  transformName: string,
+  fixtureName?: string,
+  parser?: 'ts' | 'tsx',
+) => Promise<void>
 
-type MatchFunction = typeof matchTransformSnapshot
-type MatchInlineFunction = typeof matchInlineTransformSnapshot
-type MatchFolder = typeof matchFolderTransform
+type MatchFolderTransformFunction = (
+  transformFunctionOrName: (() => any) | string,
+  fixtureName: string,
+  options?: {
+    removeWhitespace?: boolean
+    targetPathsGlob?: string
+    /**
+     * Use this option, when you want to run a codemod that uses jscodeshift
+     * as well as modifies file names. e.g. convertJsToJsx
+     */
+    useJsCodeshift?: boolean
+  },
+) => Promise<void>
 
-// This file gets loaded in jest setup, so becomes available globally in tests
+type MatchInlineTransformSnapshotFunction = (
+  transformName: string,
+  fixtureCode: string,
+  expectedCode: string,
+  parser: 'ts' | 'tsx' | 'babel' = 'tsx',
+) => Promise<void>
+
+// These files gets loaded in jest setup, so becomes available globally in tests
 declare global {
-  const matchTransformSnapshot: MatchFunction
-  const matchInlineTransformSnapshot: MatchInlineFunction
-  const matchFolderTransform: MatchFolder
+  const matchTransformSnapshot: MatchTransformSnapshotFunction
+  const matchInlineTransformSnapshot: MatchInlineTransformSnapshotFunction
+  const matchFolderTransform: MatchFolderTransformFunction
   namespace jest {
     interface Matchers<R> {
       toMatchFileContents(
         fixturePath: string,
-        { removeWhitespace }: { removeWhitespace: boolean }
+        { removeWhitespace }: { removeWhitespace: boolean },
       ): R
     }
   }
 }
+
+export {}

@@ -2,7 +2,7 @@ import React from 'react'
 
 // Exporting everything here, but exports further down in this file will
 // override exports with the same name
-export * from '@redwoodjs/auth/dist/index'
+export * from '@redwoodjs/auth'
 
 import { mockedUserMeta } from './mockRequests'
 
@@ -33,7 +33,7 @@ export function useAuth() {
     getCurrentUser: async () => mockedUserMeta.currentUser,
     hasRole: (roles: string | string[]) => {
       const currentUserRoles = makeArray(
-        mockedUserMeta.currentUser?.roles as string | string[] | undefined
+        mockedUserMeta.currentUser?.roles as string | string[] | undefined,
       )
 
       if (currentUserRoles) {

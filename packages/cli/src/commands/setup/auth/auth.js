@@ -4,7 +4,10 @@ import execa from 'execa'
 import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
+import {
+  recordTelemetryAttributes,
+  standardAuthBuilder,
+} from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../../lib/'
 
@@ -18,8 +21,8 @@ export async function builder(yargs) {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#setup-auth'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#setup-auth',
+      )}`,
     )
     // Command "redirects" for auth providers we used to support
     .command(...redirectCommand('ethereum'))
@@ -33,101 +36,160 @@ export async function builder(yargs) {
       'Set up auth for Auth0',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth auth0',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-auth0-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       ['azure-active-directory', 'azureActiveDirectory'],
       'Set up auth for Azure Active Directory',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth azure-active-directory',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler(
-          '@redwoodjs/auth-azure-active-directory-setup'
+          '@redwoodjs/auth-azure-active-directory-setup',
         )
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'clerk',
       'Set up auth for Clerk',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth clerk',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-clerk-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'custom',
       'Set up a custom auth provider',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth custom',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-custom-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'dbAuth',
       'Set up auth for dbAuth',
       (yargs) => {
-        return standardAuthBuilder(yargs).option('webauthn', {
-          alias: 'w',
-          default: null,
-          description: 'Include WebAuthn support (TouchID/FaceID)',
-          type: 'boolean',
-        })
+        return standardAuthBuilder(yargs)
+          .option('webauthn', {
+            alias: 'w',
+            default: null,
+            description: 'Include WebAuthn support (TouchID/FaceID)',
+            type: 'boolean',
+          })
+          .option('createUserModel', {
+            alias: 'u',
+            default: null,
+            description: 'Create a User database model',
+            type: 'boolean',
+          })
+          .option('generateAuthPages', {
+            alias: 'g',
+            default: null,
+            description: 'Generate auth pages (login, signup, etc.)',
+            type: 'boolean',
+          })
       },
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth dbAuth',
+          force: args.force,
+          verbose: args.verbose,
+          webauthn: args.webauthn,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-dbauth-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'firebase',
       'Set up auth for Firebase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth firebase',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-firebase-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'netlify',
       'Set up auth for Netlify',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth netlify',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-netlify-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'supabase',
       'Set up auth for Supabase',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth supabase',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler('@redwoodjs/auth-supabase-setup')
         console.log()
         handler(args)
-      }
+      },
     )
     .command(
       'supertokens',
       'Set up auth for SuperTokens',
       (yargs) => standardAuthBuilder(yargs),
       async (args) => {
+        recordTelemetryAttributes({
+          command: 'setup auth supertokens',
+          force: args.force,
+          verbose: args.verbose,
+        })
         const handler = await getAuthHandler(
-          '@redwoodjs/auth-supertokens-setup'
+          '@redwoodjs/auth-supertokens-setup',
         )
         console.log()
         handler(args)
-      }
+      },
     )
 }
 
@@ -141,6 +203,9 @@ function redirectCommand(provider) {
     false,
     () => {},
     () => {
+      recordTelemetryAttributes({
+        command: `setup auth ${provider}`,
+      })
       console.log(getRedirectMessage(provider))
     },
   ]
@@ -155,7 +220,7 @@ function redirectCommand(provider) {
 function getRedirectMessage(provider) {
   return `${provider} is no longer supported out of the box. But you can still integrate it yourself with ${terminalLink(
     'Custom Auth',
-    'https://redwoodjs.com/docs/canary/auth/custom'
+    'https://redwoodjs.com/docs/canary/auth/custom',
   )}`
 }
 
@@ -167,17 +232,31 @@ async function getAuthHandler(module) {
   let { version } = fs.readJSONSync(packageJsonPath)
 
   if (!isInstalled(module)) {
-    const { stdout } = await execa.command(
-      `yarn npm info ${module} --fields versions --json`
-    )
-
     // If the version includes a plus, like '4.0.0-rc.428+dd79f1726'
     // (all @canary, @next, and @rc packages do), get rid of everything after the plus.
     if (version.includes('+')) {
       version = version.split('+')[0]
     }
 
-    const versionIsPublished = JSON.parse(stdout).versions.includes(version)
+    let packument
+
+    try {
+      const packumentResponse = await fetch(
+        `https://registry.npmjs.org/${module}`,
+      )
+
+      packument = await packumentResponse.json()
+
+      if (packument.error) {
+        throw new Error(packument.error)
+      }
+    } catch (error) {
+      throw new Error(
+        `Couldn't fetch packument for ${module}: ${error.message}`,
+      )
+    }
+
+    const versionIsPublished = Object.keys(packument.versions).includes(version)
 
     if (!versionIsPublished) {
       // Fallback to canary. This is most likely because it's a new package
@@ -192,9 +271,9 @@ async function getAuthHandler(module) {
     })
   }
 
-  const { handler } = await import(module)
+  const setupModule = await import(module)
 
-  return handler
+  return setupModule.default.handler
 }
 
 /**
@@ -205,7 +284,7 @@ async function getAuthHandler(module) {
  */
 function isInstalled(module) {
   const { dependencies, devDependencies } = fs.readJSONSync(
-    path.join(getPaths().base, 'package.json')
+    path.join(getPaths().base, 'package.json'),
   )
 
   const deps = {

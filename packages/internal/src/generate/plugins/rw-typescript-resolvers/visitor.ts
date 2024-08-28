@@ -1,12 +1,10 @@
-import {
-  TypeScriptResolversPluginConfig,
-  TypeScriptResolversVisitor,
-} from '@graphql-codegen/typescript-resolvers'
+import type { TypeScriptResolversPluginConfig } from '@graphql-codegen/typescript-resolvers'
+import { TypeScriptResolversVisitor } from '@graphql-codegen/typescript-resolvers'
 import {
   indent,
   DeclarationBlock,
 } from '@graphql-codegen/visitor-plugin-common'
-import {
+import type {
   FieldDefinitionNode,
   GraphQLSchema,
   ObjectTypeDefinitionNode,
@@ -15,7 +13,7 @@ import {
 export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
   constructor(
     pluginConfig: TypeScriptResolversPluginConfig,
-    schema: GraphQLSchema
+    schema: GraphQLSchema,
   ) {
     super(pluginConfig, schema)
   }
@@ -23,7 +21,7 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
   FieldDefinition(
     node: FieldDefinitionNode,
     key: string | number,
-    parent: any
+    parent: any,
   ): (parentName: string) => string | null {
     const hasArguments = node.arguments && node.arguments.length > 0
 
@@ -74,9 +72,9 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
           `${
             this.config.internalResolversPrefix
           }isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>${this.getPunctuation(
-            'type'
-          )}`
-        )
+            'type',
+          )}`,
+        ),
       )
     }
 
@@ -120,7 +118,7 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
     //      __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
     //    };
     const blockRelationsResolver = new DeclarationBlock(
-      this._declarationBlockConfig
+      this._declarationBlockConfig,
     )
       .export()
       .asKind('type')
@@ -128,17 +126,17 @@ export class RwTypeScriptResolversVisitor extends TypeScriptResolversVisitor {
         name.replace('Resolvers', 'RelationResolvers'),
         `<ContextType = ${
           this.config.contextType.type
-        }, ${this.transformParentGenericType(parentType)}>`
+        }, ${this.transformParentGenericType(parentType)}>`,
       )
       .withBlock(
         fieldsContent
           .map((content) =>
             content.replace(
               /: (?:OptArgs)?Resolver(?:Fn)?/,
-              '?: RequiredResolverFn'
-            )
+              '?: RequiredResolverFn',
+            ),
           )
-          .join('\n')
+          .join('\n'),
       )
 
     return originalBlock + '\n' + blockRelationsResolver.string

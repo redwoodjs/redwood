@@ -1,11 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addWebPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -13,7 +11,7 @@ import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),
 )
 
 export const handler = async ({ force, verbose, addPackage }) => {
@@ -22,19 +20,21 @@ export const handler = async ({ force, verbose, addPackage }) => {
     [
       {
         title: 'Adding vite.config.js...',
-        task: () => {
+        task: async () => {
+          // @NOTE: do not use getPaths().viteConfig because it'll come through as null
+          // this is because we do a check for the file's existence in getPaths()
           const viteConfigPath = `${getPaths().web.base}/vite.config.${
             ts ? 'ts' : 'js'
           }`
 
           const templateContent = fs.readFileSync(
             path.resolve(__dirname, 'templates', 'vite.config.ts.template'),
-            'utf-8'
+            'utf-8',
           )
 
           const viteConfigContent = ts
             ? templateContent
-            : transformTSToJS(viteConfigPath, templateContent)
+            : await transformTSToJS(viteConfigPath, templateContent)
 
           return writeFile(viteConfigPath, viteConfigContent, {
             overwriteExisting: force,
@@ -42,36 +42,22 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        title: "Checking bundler isn't set to webpack...",
-        task: (_ctx, task) => {
-          const redwoodTomlPath = getConfigPath()
-          const configContent = fs.readFileSync(redwoodTomlPath, 'utf-8')
-
-          if (configContent.includes('bundler = "webpack"')) {
-            throw new Error(
-              'You have the bundler set to webpack in your redwood.toml. Remove this line, or change it to "vite" and try again.'
-            )
-          } else {
-            task.skip('Vite bundler flag already set in redwood.toml')
-          }
-        },
-      },
-      {
-        title: 'Creating new entry point in `web/src/entry-client.jsx`...',
+        title:
+          'Creating new entry point in `web/src/entry.client.{jsx,tsx}`...',
         task: () => {
-          // Keep it as JSX for now
           const entryPointFile = path.join(
             getPaths().web.src,
-            `entry-client.jsx`
+            `entry.client.${ts ? 'tsx' : 'jsx'}`,
           )
+
           const content = fs
             .readFileSync(
               path.join(
                 getPaths().base,
                 // NOTE we're copying over the index.js before babel transform
-                'node_modules/@redwoodjs/web/src/entry/index.js'
+                'node_modules/@redwoodjs/web/src/entry/index.js',
               ),
-              'utf-8'
+              'utf-8',
             )
             .replace('~redwood-app-root', './App')
 
@@ -81,31 +67,20 @@ export const handler = async ({ force, verbose, addPackage }) => {
         },
       },
       {
-        ...addWebPackages([`@redwoodjs/vite@${version}`]),
-        title: 'Adding @redwoodjs/vite dependency...',
+        // @NOTE: make sure its added as a dev package.
+        ...addWebPackages(['-D', `@redwoodjs/vite@${version}`]),
+        title: 'Adding @redwoodjs/vite dev dependency to web side...',
         skip: () => {
           if (!addPackage) {
-            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dependency on the web workspace'
+            return 'Skipping package install, you will need to add @redwoodjs/vite manaually as a dev-dependency on the web workspace'
           }
-        },
-      },
-      {
-        title: 'One more thing...',
-        task: (_ctx, task) => {
-          task.title = `One more thing...\n
-          ${c.green('Vite Support is still experimental!')}
-          ${c.green('Please let us know if you find bugs or quirks.')}
-          ${chalk.hex('#e8e8e8')(
-            'https://github.com/redwoodjs/redwood/issues/new'
-          )}
-        `
         },
       },
     ],
     {
       rendererOptions: { collapseSubtasks: false },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

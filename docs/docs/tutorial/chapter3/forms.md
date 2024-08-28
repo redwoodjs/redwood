@@ -25,7 +25,7 @@ We can put a link to Contact in our layout's header:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.js"
+```jsx title="web/src/layouts/BlogLayout/BlogLayout.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 const BlogLayout = ({ children }) => {
@@ -108,7 +108,7 @@ And then use the `BlogLayout` for the `ContactPage` by making sure its wrapped b
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -148,9 +148,19 @@ import BlogLayout from 'src/layouts/BlogLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={ScaffoldLayout} title="Posts" titleTo="posts" buttonLabel="New Post" buttonTo="newPost">
+      <Set
+        wrap={ScaffoldLayout}
+        title="Posts"
+        titleTo="posts"
+        buttonLabel="New Post"
+        buttonTo="newPost"
+      >
         <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
-        <Route path="/posts/{id:Int}/edit" page={PostEditPostPage} name="editPost" />
+        <Route
+          path="/posts/{id:Int}/edit"
+          page={PostEditPostPage}
+          name="editPost"
+        />
         <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
         <Route path="/posts" page={PostPostsPage} name="posts" />
       </Set>
@@ -185,15 +195,15 @@ We won't be pulling any data from the database on our Contact page so we won't c
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       // highlight-next-line
       <Form></Form>
@@ -208,15 +218,14 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
-
+      <Metadata title="Contact" description="Contact page" />
       // highlight-next-line
       <Form></Form>
     </>
@@ -234,15 +243,15 @@ Well that was anticlimactic. You can't even see it in the browser. Let's add a f
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form>
         // highlight-next-line
@@ -259,14 +268,14 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form>
         // highlight-next-line
@@ -289,15 +298,15 @@ Something is showing! Still, pretty boring. How about adding a submit button?
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form>
         <TextField name="input" />
@@ -315,14 +324,14 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form>
         <TextField name="input" />
@@ -350,8 +359,8 @@ Similar to a plain HTML form we'll give `<Form>` an `onSubmit` handler. That han
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import { Form, TextField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -363,7 +372,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       // highlight-next-line
       <Form onSubmit={onSubmit}>
@@ -381,7 +390,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, Submit, SubmitHandler } from '@redwoodjs/forms'
 
@@ -400,8 +409,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
-
+      <Metadata title="Contact" description="Contact page" />
       // highlight-next-line
       <Form onSubmit={onSubmit}>
         <TextField name="input" />
@@ -426,8 +434,8 @@ Great! Let's turn this into a more useful form by adding a couple fields. We'll 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
@@ -438,7 +446,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-start
@@ -459,14 +467,14 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-start
 import {
   Form,
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 // highlight-end
 
@@ -485,7 +493,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-start
@@ -514,8 +522,8 @@ Let's add some labels:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import { Form, TextField, TextAreaField, Submit } from '@redwoodjs/forms'
 
 const ContactPage = () => {
@@ -525,7 +533,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-next-line
@@ -553,13 +561,13 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   Form,
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -575,21 +583,18 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-next-line
         <label htmlFor="name">Name</label>
         <TextField name="name" />
-
         // highlight-next-line
         <label htmlFor="email">Email</label>
         <TextField name="email" />
-
         // highlight-next-line
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -615,7 +620,7 @@ All three of these fields should be required in order for someone to send a mess
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
@@ -644,15 +649,12 @@ return (
     <label htmlFor="name">Name</label>
     // highlight-next-line
     <TextField name="name" required />
-
     <label htmlFor="email">Email</label>
     // highlight-next-line
     <TextField name="email" required />
-
     <label htmlFor="message">Message</label>
     // highlight-next-line
     <TextAreaField name="message" required />
-
     <Submit>Save</Submit>
   </Form>
 )
@@ -670,7 +672,7 @@ Yes! Let's update that `required` call to instead be an object we pass to a cust
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   <Form onSubmit={onSubmit}>
     <label htmlFor="name">Name</label>
@@ -699,15 +701,12 @@ return (
     <label htmlFor="name">Name</label>
     // highlight-next-line
     <TextField name="name" validation={{ required: true }} />
-
     <label htmlFor="email">Email</label>
     // highlight-next-line
     <TextField name="email" validation={{ required: true }} />
-
     <label htmlFor="message">Message</label>
     // highlight-next-line
     <TextAreaField name="message" validation={{ required: true }} />
-
     <Submit>Save</Submit>
   </Form>
 )
@@ -725,8 +724,8 @@ Introducing `<FieldError>` (don't forget to include it in the `import` statement
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import {
   // highlight-next-line
   FieldError,
@@ -743,7 +742,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
@@ -774,7 +773,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   // highlight-next-line
   FieldError,
@@ -798,24 +797,21 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
         <TextField name="name" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="name" />
-
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="email" />
-
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="message" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -837,8 +833,8 @@ But this is just the beginning. Let's make sure folks realize this is an error m
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -854,7 +850,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
@@ -885,14 +881,14 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
   TextField,
   TextAreaField,
   Submit,
-  SubmitHandler
+  SubmitHandler,
 } from '@redwoodjs/forms'
 
 interface FormValues {
@@ -908,24 +904,21 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
         <TextField name="name" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="name" className="error" />
-
         <label htmlFor="email">Email</label>
         <TextField name="email" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="email" className="error" />
-
         <label htmlFor="message">Message</label>
         <TextAreaField name="message" validation={{ required: true }} />
         // highlight-next-line
         <FieldError name="message" className="error" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -945,8 +938,8 @@ You know what would be nice? If the input itself somehow displayed the fact that
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -962,7 +955,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
@@ -1005,7 +998,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -1028,7 +1021,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         <label htmlFor="name">Name</label>
@@ -1077,8 +1070,8 @@ Oooo, what if the _label_ could change as well? It can, but we'll need Redwood's
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -1096,7 +1089,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-start
@@ -1148,7 +1141,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -1173,7 +1166,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit}>
         // highlight-start
@@ -1187,7 +1180,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="name" className="error" />
-
         // highlight-start
         <Label name="email" errorClassName="error">
           Email
@@ -1199,7 +1191,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="email" className="error" />
-
         // highlight-start
         <Label name="message" errorClassName="error">
           Message
@@ -1211,7 +1202,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="message" className="error" />
-
         <Submit>Save</Submit>
       </Form>
     </>
@@ -1243,7 +1233,7 @@ Let's also change the message on the email validation to be a little more friend
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 <TextField
   name="email"
   validation={{
@@ -1294,7 +1284,7 @@ Finally, you know what would _really_ be nice? If the fields were validated as s
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
 ```
 

@@ -51,41 +51,42 @@ You can also add WebAuthn to an existing dbAuth install. [Read more about WebAut
 Read the post-install instructions carefully as they contain instructions for adding database fields for the hashed password and salt, as well as how to configure the auth serverless function based on the name of the table that stores your user data. Here they are, but could change in future releases (these do not include the additional WebAuthn required options, make sure you get those from the output of the `setup` command):
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
->
->     model User {
->       id             Int @id @default(autoincrement())
->       email          String  @unique
->       hashedPassword      String    // <─┐
->       salt                String    // <─┼─ add these lines
->       resetToken          String?   // <─┤
->       resetTokenExpiresAt DateTime? // <─┘
->     }
->
+> ```
+> model User {
+>   id             Int @id @default(autoincrement())
+>   email          String  @unique
+>   hashedPassword      String    // <─┐
+>   salt                String    // <─┼─ add these lines
+>   resetToken          String?   // <─┤
+>   resetTokenExpiresAt DateTime? // <─┘
+> }
+> ```
 > If you already have existing user records you will need to provide a default value or Prisma complains, so change those to:
->
->     hashedPassword String @default("")
->     salt           String @default("")
->
+> ```
+>   hashedPassword String @default("")
+>   salt           String @default("")
+> ```
 > You'll need to let Redwood know what field you're using for your users' `id` and `username` fields In this case we're using `id` and `email`, so update those in the `authFields` config in `/api/src/functions/auth.js` (this is also the place to tell Redwood if you used a different name for the `hashedPassword` or `salt` fields):
->
->     authFields: {
->       id: 'id',
->       username: 'email',
->       hashedPassword: 'hashedPassword',
->       salt: 'salt',
->       resetToken: 'resetToken',
->       resetTokenExpiresAt: 'resetTokenExpiresAt',
->     },
->
+> ```
+> authFields: {
+>   id: 'id',
+>   username: 'email',
+>   hashedPassword: 'hashedPassword',
+>   salt: 'salt',
+>   resetToken: 'resetToken',
+>   resetTokenExpiresAt: 'resetTokenExpiresAt',
+> },
+> ```
 > To get the actual user that's logged in, take a look at `getCurrentUser()` in `/api/src/lib/auth.js`. We default it to something simple, but you may use different names for your model or unique ID fields, in which case you need to update those calls (instructions are in the comment above the code).
 >
 > Finally, we created a `SESSION_SECRET` environment variable for you in `.env`. This value should NOT be checked into version control and should be unique for each environment you deploy to. If you ever need to log everyone out of your app at once change this secret to a new value. To create a new secret, run:
->
->     yarn rw g secret
->
+> ```
+> yarn rw g secret
+> ```
 > Need simple Login, Signup and Forgot Password pages? Of course we have a generator for those:
->
->     yarn rw generate dbAuth
+> ```
+> yarn rw generate dbAuth
+> ```
 
 Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](logger.md#redaction) docs for info.
 
@@ -226,13 +227,13 @@ forgotPassword: {
 ### forgotPassword.handler()
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
-
-    https://example.com/reset-password?resetToken=${user.resetToken}
-
+```
+https://example.com/reset-password?resetToken=${user.resetToken}
+```
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
-
-    https://example.com/reset-password?resetKey=${user.resetKey}
-
+```
+https://example.com/reset-password?resetKey=${user.resetKey}
+```
 ### resetPassword.enabled
 
 Allow users to reset their password via a code from a call to `forgotPassword`. Defaults to true. Needs to be explicitly set to false to disable the flow.
@@ -288,7 +289,7 @@ By default, the session cookie will not have the `Domain` property set, which a 
 
 To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-```json title=api/src/functions/auth.js
+```json title="api/src/functions/auth.js"
 cookie: {
   HttpOnly: true,
   Path: '/',
@@ -301,9 +302,9 @@ cookie: {
 ### Session Secret Key
 
 If you need to change the secret key that's used to encrypt the session cookie, or deploy to a new target (each deploy environment should have its own unique secret key) we've got a CLI tool for creating a new one:
-
-    yarn rw g secret
-
+```
+yarn rw g secret
+```
 Note that the secret that's output is _not_ appended to your `.env` file or anything else, it's merely output to the screen. You'll need to put it in the right place after that.
 
 :::caution .env and Version Control
@@ -406,7 +407,7 @@ If you didn't setup WebAuthn at first, but decided you now want WebAuthn, you co
 
 You'll need to add two fields to your `User` model, and a new `UserCredential` model to store the devices that are used and associate them with a user:
 
-```javascript title=api/db/schema.prisma
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -462,7 +463,7 @@ credentials: [UserCredential]!
 
 Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)
 
-```javascript title=api/src/functions/auth.js
+```javascript title="api/src/functions/auth.js"
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 

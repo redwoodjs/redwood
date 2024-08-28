@@ -6,31 +6,65 @@
 _by Tom Preston-Werner, Peter Pistorius, Rob Cameron, David Price, and more than
 250 amazing contributors (see end of file for a full list)._
 
+## Bighorn Epoch (current development epoch)
+
+> **NOTE:** This section of the Readme is aspirational for the current development
+> epoch we call Bighorn. Bighorn has not yet been released, but when it is, it will
+> fulfill the promises of what you read below. If you’d like to help us on this
+> journey, please say hi in the [Community Forums](https://redwoodjs.com/community)!
+
+**Redwood is a framework for quickly creating React-based web applications that
+provide an amazing end user experience.** Our goal is to be simple and approachable
+enough for use in prototypes and hackathons, but performant and comprehensive enough
+to evolve into your next startup.
+
+We accomplish this in two primary ways:
+
+1. Redwood is opinionated and full-stack. We’ve chosen the best technologies in the
+   JS/TS ecosystem and beautifully integrated them into a cohesive framework that
+   lets you get things done instead of endlessly evaluating technology options. You
+   can get started using Redwood without a backend, but the framework really shines
+   when you’re building a data driven application. Our transparent data fetching and
+   optional GraphQL API make building and growing your application easier than you
+   expect!
+
+2. Redwood’s declarative data fetching and simple form submission features are built
+   on top of RSC + Server Actions and simplify common use cases so you can focus on
+   your users’ experience. Creating the best, most responsive user interfaces
+   requires reasoning about whether code should execute on the server or the client.
+   Redwood makes it easy to choose the best execution context for your code by
+   leveraging the power of React Server Components.
+
+The entire framework is built with TypeScript, so you get type safety from the router
+to the database and everywhere in-between. If you’d rather build your app with
+JavaScript, you can do that too, and still enjoy great code completion features in
+your favorite editor.
+
+> **TRY BIGHORN:** While Bighorn does not yet have a production release, we do
+> publish the latest code as canaries, and we welcome you to experiment with them!
+> The best way to get familiar with these canaries is to keep an eye on the [Redwood
+> Blog](https://redwoodjs.com/blog).
+
+## Arapahoe Epoch (current stable release)
+
 **Redwood is an opinionated, full-stack, JavaScript/TypeScript web application
-framework designed to keep you moving fast as your app grows from side project
-to startup.**
+framework designed to keep you moving fast as your app grows from side project to
+startup.**
 
 At the highest level, a Redwood app is a React frontend that talks to a custom
-GraphQL API. The API uses Prisma to operate on a database. Out of the box you
-get tightly integrated testing with Jest, logging with Pino, and a UI component
-catalog with Storybook. Setting up authentication (like Auth0) or CSS frameworks
-(like Tailwind CSS) are a single command line invocation away. And to top it
-off, Redwood's architecture allows you to deploy to either serverless providers
-(e.g. Netlify, Vercel) or traditional server and container providers (e.g. AWS,
-Render) with nearly no code changes between the two!
+GraphQL API. The API uses Prisma to operate on a database. Out of the box you get
+tightly integrated testing with Jest, logging with Pino, and a UI component catalog
+with Storybook. Setting up authentication (like Auth0) or CSS frameworks (like
+Tailwind CSS) are a single command line invocation away. And to top it off, Redwood's
+architecture allows you to deploy to either serverless providers (e.g. Netlify,
+Vercel) or traditional server and container providers (e.g. AWS, Render) with nearly
+no code changes between the two!
 
-By making a lot of decisions for you, Redwood lets you get to work on what makes
-your application special, instead of wasting cycles choosing and re-choosing
-various technologies and configurations. Plus, because Redwood is a proper
-framework, you benefit from continued performance and feature upgrades over time
-and with minimum effort.
-
-Redwood is the latest open source project initiated by Tom Preston-Werner,
-cofounder of GitHub (most popular code host on the planet), creator of Jekyll
-(one of the first and most popular static site generators), creator of Gravatar
-(the most popular avatar service on the planet), author of the Semantic
-Versioning specification (powers the Node packaging ecosystem), and inventor of
-TOML (an obvious, minimal configuration language used by many projects).
+By making a lot of decisions for you, Redwood lets you get to work on what makes your
+application special, instead of wasting cycles choosing and re-choosing various
+technologies and configurations. Plus, because Redwood is a proper framework, you
+benefit from continued performance and feature upgrades over time and with minimum
+effort.
 
 > **TUTORIAL:** The best way to get to know Redwood is by going through the
 > extensive [Redwood Tutorial](https://redwoodjs.com/docs/tutorial). Have fun!
@@ -39,12 +73,18 @@ TOML (an obvious, minimal configuration language used by many projects).
 > your machine with only a couple commands. Check out the [Quick
 > Start](https://redwoodjs.com/docs/quick-start) guide to get started.
 
-**EXAMPLES:** If you'd like to see some simple examples of what a Redwood
-application looks like, take a look at the following projects:
+> **DOCS:** Visit the full [RedwoodJS
+> Documentation](https://redwoodjs.com/docs/introduction) for extensive reference
+> docs and guides.
 
-- [Todo](https://github.com/redwoodjs/example-todo)
-- [Store](https://github.com/redwoodjs/example-store-stripe)
-- [Invoice](https://github.com/redwoodjs/example-invoice)
+## About
+
+Redwood is the latest open source project initiated by Tom Preston-Werner, cofounder
+of GitHub (most popular code host on the planet), creator of Jekyll (one of the first
+and most popular static site generators), creator of Gravatar (the most popular
+avatar service on the planet), author of the Semantic Versioning specification
+(powers the Node packaging ecosystem), and inventor of TOML (an obvious, minimal
+configuration language used by many projects).
 
 ## Technologies
 
@@ -56,75 +96,19 @@ development experience you can fall in love with!
 Here's a quick taste of the technologies a standard Redwood application will
 use:
 
-- [React](https://reactjs.org/)
-- [GraphQL](https://graphql.org/) ([GraphQL Yoga](https://www.graphql-yoga.com) + [Envelop](https://www.envelop.dev) + [Apollo Client](https://www.apollographql.com/docs/react))
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
 - [Prisma](https://www.prisma.io/)
 - [Jest](https://jestjs.io/)
 - [Storybook](https://storybook.js.org/)
-- [Babel](https://babeljs.io/)
-- [Webpack](https://webpack.js.org/)
-- [Fastify](https://www.fastify.io)
 - [Pino](https://getpino.io)
 
-## Features
+If you'd like to use our optional built-in GraphQL API support, here's our stack:
 
-- Opinionated defaults for formatting, file organization, Webpack, Babel, and more
-- Simple but powerful routing (all routes defined in one file) with dynamic (typed) parameters, custom types, and named route functions (to generate correct URLs)
-- Automatic page-based code-splitting
-- Boilerplate-less GraphQL API construction
-- Cells: a declarative way to fetch data from the backend API
-- Generators for pages, layouts, cells, SDL, services, etc.
-- Scaffold generator for CRUD operations specific to a DB table
-- Forms with easy client- and/or server-side validation and error handling
-- Fast Refresh (hot reloading) for faster development
-- Database and Data migrations
-- [Envelop Plugins](https://www.envelop.dev) that enhance the GraphQL lifecycle from context to execution
-- Simple but powerful GraphQL Directives to validate access or transform resolved data
-- Logging using [Pino](https://getpino.io) including [transports](https://getpino.io/#/docs/transports)
-- Webhooks: signature verification and payload signing for handling both incoming and outgoing
-- Jest testing utilities integrated across your codebase: mocks, test DB, generated boilerplate tests, scenarios, Web (components), and API (services, serverless functions, and webhooks)
-- Page prerendering at build time
-- Built-in Storybook integration: generated boilerplate component stories, tests, graphql/api mocks (Cells), and scenarios
-- API Server using [Fastify](https://www.fastify.io) for Serverful deploys
-- First-class Jamstack-style deployment to both serverless and traditional infrastructure: [Netlify](https://www.netlify.com/), [Vercel](https://vercel.com/), [Serverless](https://www.serverless.com/), [Render](https://render.com/), [Docker container](https://community.redwoodjs.com/t/dockerize-redwoodjs/2291) (for AWS, Google Cloud, Azure, etc.), and many more on the way!
-
-## How it works
-
-A Redwood application is split into two parts: a frontend and a backend. This is
-represented as two JS/TS projects within a single monorepo. We use
-[Yarn](https://yarnpkg.com/) to make it easy to operate across both projects
-while keeping them in a single Git repository.
-
-The frontend project is called `web` and the backend project is called `api`.
-For clarity, we will refer to these in prose as "sides", i.e. the "web side" and
-the "api side". They are separate projects because code on the web side will end
-up running in the user's browser while code on the api side will run on a server
-somewhere. It is important that you keep this distinction clear in your mind as
-you develop your application. The two separate projects are intended to make
-this obvious. In addition, separate projects allow for different dependencies
-and build processes for each project.
-
-The api side is an implementation of a GraphQL API. Your business logic is
-organized into "services" that represent their own internal API and can be
-called both from external GraphQL requests and other internal services. Redwood
-can automatically connect your internal services with Apollo, reducing the
-amount of boilerplate you have to write. Your services can interact with a
-database via Prisma's ORM, and Prisma's migration tooling provides first-class
-migrations that take the pain out of evolving your database schema.
-
-The web side is built with React. Redwood's router makes it simple to map URL
-paths to React "Page" components (and automatically code-split your app on each
-route). Pages may contain a "Layout" component to wrap content. They also
-contain "Cells" and regular React components. Cells allow you to declaratively
-manage the lifecycle of a component that fetches and displays data. Other
-Redwood utility components make it trivial to implement smart forms and various
-common needs. An ideal development flow starts with Storybook entries and Jest
-tests, so Redwood closely integrates both, making it easy to do the right thing.
-
-You'll notice that the web side is called "web" and not "frontend". This is
-because Redwood conceives of a world where you may have other sides like
-"mobile", "desktop", "cli", etc., all consuming the same GraphQL API and living
-in the same monorepo.
+- [GraphQL](https://graphql.org/)
+- [GraphQL Yoga](https://www.graphql-yoga.com)
+- [Envelop](https://www.envelop.dev)
+- [Apollo Client](https://www.apollographql.com/docs/react)
 
 ## Roadmap
 
@@ -164,35 +148,43 @@ for my nascent web app framework. Namely:
 And there you have it.
 
 ## Contributors
-*A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀*
 
-### Co-founders
+_A gigantic "Thank YOU!" to everyone below who has contributed to one or more Redwood projects: [Framework](https://github.com/redwoodjs/redwood), [Website](https://github.com/redwoodjs/sprout), [Docs](https://github.com/redwoodjs/redwood/tree/main/docs), and [Create-Redwood Template](https://github.com/redwoodjs/redwood/tree/main/packages/create-redwood-app/template). 🚀_
+
+### Core Team: Leadership
+
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center" valign="top" width="25%"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a><br /><sub>founder, leadership</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a><br /><sub>founder</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a><br /><sub>founder</sub></td>
-    <td align="center" valign="top" width="25%"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a><br /><sub>founder, leadership</sub></td>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/ahaywood/"><img src="https://avatars0.githubusercontent.com/u/212300?v=4" width="100px;" alt=""/><br /><sub><b>Amy Haywood Dutton</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://github.com/tobbe/"><img src="https://avatars0.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="https://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a></td>
   </tr>
 </table>
 
-### Core Team: Lead Maintainers and Community Leads
+### Core Team: Maintainer and Community Leads
 
 <table>
   <tr>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/dthyresson"><img src="https://avatars2.githubusercontent.com/u/1051633?v=4" width="100px;" alt=""/><br /><sub><b>David Thyresson</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="https://edamame.studio/"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Choudhury</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center"><a href="http://tlundberg.com/"><img src="https://avatars1.githubusercontent.com/u/30793?v=4" width="100px;" alt=""/><br /><sub><b>Tobbe Lundberg</b></sub></a><br /><sub>maintainer</sub></td>
-    <td align="center" valign="top" width="20%"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /><sub>maintainer</sub></td>
-</tr>
-<tr>
+    <td align="center" valign="top" width="20%"><a href="https://edamame.studio/"><img src="https://avatars0.githubusercontent.com/u/1521877?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Choudhury</b></sub></a><br /><sub>maintainer</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/keithtelliott"><img src="https://avatars.githubusercontent.com/u/43206213?v=4" width="100px;" alt=""/><br /><sub><b>Keith T Elliot</b></sub></a><br /><sub>community</sub></td>
-    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>BBurnworth</b></sub></a><br /><sub>community</sub></td>
+    <td align="center" valign="top" width="20%"><a href="https://github.com/BBurnworth"><img src="https://avatars.githubusercontent.com/u/5750537?v=4" width="100px;" alt=""/><br /><sub><b>Barrett Burnworth</b></sub></a><br /><sub>community</sub></td>
     <td align="center" valign="top" width="20%"><a href="https://github.com/Josh-Walker-GM"><img src="https://avatars.githubusercontent.com/u/56300765?v=4" width="100px;" alt=""/><br /><sub><b>Josh GM Walker</b></sub></a><br /><sub>maintainer</sub></td>
 </tr>
+</table>
+
+### Founders
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="25%"><a href="http://tom.preston-werner.com/"><img src="https://avatars0.githubusercontent.com/u/1?v=4" width="100px;" alt=""/><br /><sub><b>Tom Preston-Werner</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://peterp.org/"><img src="https://avatars0.githubusercontent.com/u/44849?v=4" width="100px;" alt=""/><br /><sub><b>Peter Pistorius</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://ridingtheclutch.com/"><img src="https://avatars1.githubusercontent.com/u/300?v=4" width="100px;" alt=""/><br /><sub><b>Rob Cameron</b></sub></a></td>
+    <td align="center" valign="top" width="25%"><a href="http://thedavidprice.com/"><img src="https://avatars0.githubusercontent.com/u/2951?v=4" width="100px;" alt=""/><br /><sub><b>David Price</b></sub></a></td>
+  </tr>
 </table>
 
 ### Core Team: Alumni
@@ -217,8 +209,10 @@ And there you have it.
     <td align="center"><a href="https://github.com/ajcwebdev"><img src="https://avatars0.githubusercontent.com/u/12433465?v=4" width="100px;" alt=""/><br /><sub><b>Anthony Campolo</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/clairefro"><img src="https://avatars1.githubusercontent.com/u/9841162?v=4" width="100px;" alt=""/><br /><sub><b>Claire Froelich</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/kimadeline"><img src="https://avatars3.githubusercontent.com/u/51720070?v=4" width="100px;" alt=""/><br /><sub><b>Kim-Adeline Miguel</b></sub></a><br /></td>
-
-
+    <td align="center"><a href="https://github.com/jtoar"><img src="https://avatars2.githubusercontent.com/u/32992335?v=4" width="100px;" alt=""/><br /><sub><b>Dominic Saadi</b></sub></a><br /></td>
+</tr>
+<tr>
+    <td align="center"><a href="http://kriscoulson.com/"><img src="https://avatars3.githubusercontent.com/u/6943688?v=4" width="100px;" alt=""/><br /><sub><b>Kris Coulson</b></sub></a><br /></td>
 </tr>
 </table>
 <!-- markdownlint-restore -->
@@ -837,6 +831,34 @@ And there you have it.
       <td align="center" valign="top" width="20%"><a href="https://github.com/aslaker"><img src="https://avatars.githubusercontent.com/u/51129804?v=4" width="100px;" alt=""/><br /><sub><b>aslaker</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/zach-withcoherence"><img src="https://avatars.githubusercontent.com/u/86851918?v=4" width="100px;" alt=""/><br /><sub><b>zach-withcoherence</b></sub></a></td>
       <td align="center" valign="top" width="20%"><a href="https://github.com/tuxcommunity"><img src="https://avatars.githubusercontent.com/u/74874193?v=4" width="100px;" alt=""/><br /><sub><b>tuxcommunity</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ted2810"><img src="https://avatars.githubusercontent.com/u/1466111?v=4" width="100px;" alt=""/><br /><sub><b>Ted</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://daltoncraven.com/"><img src="https://avatars.githubusercontent.com/u/7117993?v=4" width="100px;" alt=""/><br /><sub><b>Dalton Craven</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/drikusroor"><img src="https://avatars.githubusercontent.com/u/8208970?v=4" width="100px;" alt=""/><br /><sub><b>Drikus Roor</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://dev.to/@ekafyi"><img src="https://avatars.githubusercontent.com/u/6597211?v=4" width="100px;" alt=""/><br /><sub><b>Eka</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.linkedin.com/in/modupe-daniel/"><img src="https://avatars.githubusercontent.com/u/69601432?v=4" width="100px;" alt=""/><br /><sub><b>ModupeD</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/nkshah2"><img src="https://avatars.githubusercontent.com/u/18233774?v=4" width="100px;" alt=""/><br /><sub><b>Nemi Shah</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://githubcampus.expert/roeeyn/"><img src="https://avatars.githubusercontent.com/u/13385000?v=4" width="100px;" alt=""/><br /><sub><b>Rodrigo Medina</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://kingsmendv.com/"><img src="https://avatars.githubusercontent.com/u/13755626?v=4" width="100px;" alt=""/><br /><sub><b>Russell Anthony</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/jgal1"><img src="https://avatars.githubusercontent.com/u/108492038?v=4" width="100px;" alt=""/><br /><sub><b>Jason Daniel</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/rayhatfield"><img src="https://avatars.githubusercontent.com/u/1164081?v=4" width="100px;" alt=""/><br /><sub><b>ray hatfield</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://learninpublic.org/"><img src="https://avatars.githubusercontent.com/u/6764957?v=4" width="100px;" alt=""/><br /><sub><b>swyx.io</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/BWizard06"><img src="https://avatars.githubusercontent.com/u/89217401?v=4" width="100px;" alt=""/><br /><sub><b>BWizard06</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Bigood"><img src="https://avatars.githubusercontent.com/u/11982534?v=4" width="100px;" alt=""/><br /><sub><b>Bigood</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/c-ciobanu"><img src="https://avatars.githubusercontent.com/u/33382714?v=4" width="100px;" alt=""/><br /><sub><b>Cristi Ciobanu</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/gilliardmacedo"><img src="https://avatars.githubusercontent.com/u/26877564?v=4" width="100px;" alt=""/><br /><sub><b>Gilliard Macedo</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/ravenberg"><img src="https://avatars.githubusercontent.com/u/8441153?v=4" width="100px;" alt=""/><br /><sub><b>Lee Ravenberg</b></sub></a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://mooncreativelab.com/"><img src="https://avatars.githubusercontent.com/u/196089?v=4" width="100px;" alt=""/><br /><sub><b>Matthew Phillips</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/rapzo"><img src="https://avatars.githubusercontent.com/u/147788?v=4" width="100px;" alt=""/><br /><sub><b>Rui Lima</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/chousheng"><img src="https://avatars.githubusercontent.com/u/38355699?v=4" width="100px;" alt=""/><br /><sub><b>Sheng Chou</b></sub></a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/yahhuh"><img src="https://avatars.githubusercontent.com/u/132234369?v=4" width="100px;" alt=""/><br /><sub><b>yahhuh</b></sub></a></td>
     </tr>
   </tbody>
 </table>
@@ -846,4 +868,4 @@ And there you have it.
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-Redwood projects *(mostly)* follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.
+Redwood projects _(mostly)_ follow the [all-contributions](https://allcontributors.org/) specification. Contributions of any kind are welcome.

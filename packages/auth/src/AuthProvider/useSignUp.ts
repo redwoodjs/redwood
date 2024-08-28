@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import { AuthProviderState } from './AuthProviderState'
-import { useCurrentUser } from './useCurrentUser'
-import { useReauthenticate } from './useReauthenticate'
+import type { AuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useReauthenticate } from './useReauthenticate.js'
 
 export const useSignUp = <
   TUser,
@@ -19,7 +19,7 @@ export const useSignUp = <
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -40,13 +40,11 @@ export const useSignUp = <
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined
 ) => {
   const reauthenticate = useReauthenticate(
     authImplementation,
     setAuthProviderState,
     getCurrentUser,
-    skipFetchCurrentUser
   )
 
   return useCallback(
@@ -55,6 +53,6 @@ export const useSignUp = <
       await reauthenticate()
       return signupOutput
     },
-    [authImplementation, reauthenticate]
+    [authImplementation, reauthenticate],
   )
 }

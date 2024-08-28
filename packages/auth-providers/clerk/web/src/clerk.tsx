@@ -1,4 +1,4 @@
-import {
+import type {
   SignInProps,
   SignUpProps,
   SignOutCallback,
@@ -7,7 +7,8 @@ import {
   SignOutOptions,
 } from '@clerk/types'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 type Clerk = ClerkClient | undefined | null
 
@@ -19,10 +20,10 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
   },
-  authImplementationOptions?: AuthImplementationOptions
+  authImplementationOptions?: AuthImplementationOptions,
 ) {
   const authImplementation = createAuthImplementation(authImplementationOptions)
 
@@ -47,7 +48,7 @@ function createAuthImplementation({
     },
     logout: async (
       callbackOrOptions?: SignOutCallback | SignOutOptions,
-      options?: SignOutOptions
+      options?: SignOutOptions,
     ) => {
       const clerk = (window as any).Clerk as Clerk
       return clerk?.signOut(callbackOrOptions as any, options)

@@ -1,10 +1,11 @@
 /* eslint-env node, es2021 */
-// import fs from 'node:fs'
-import c from 'ansi-colors'
-import fse from 'fs-extra'
-import template from 'lodash.template'
 import fs from 'node:fs'
 import url from 'node:url'
+
+import chalk from 'chalk'
+import fse from 'fs-extra'
+// lodash is commonjs
+import template from 'lodash/template.js'
 import prompts from 'prompts'
 
 const questions = [
@@ -56,18 +57,18 @@ await generateCodemod(version, name, kind)
  */
 async function generateCodemod(version, name, kind) {
   console.log(
-    `Generating ${c.green(kind)} codemod ${c.green(name)} for ${c.green(
-      version
-    )}...`
+    `Generating ${chalk.green(kind)} codemod ${chalk.green(
+      name,
+    )} for ${chalk.green(version)}...`,
   )
 
   // Make the destination.
   const dest = new URL(
     `../../src/codemods/${version}/${name}/`,
-    import.meta.url
+    import.meta.url,
   )
   const [testFixturesDest, testsDest] = ['__testfixtures__/', '__tests__/'].map(
-    (dir) => new URL(dir, dest)
+    (dir) => new URL(dir, dest),
   )
   for (const dir of [testFixturesDest, testsDest]) {
     fs.mkdirSync(dir, { recursive: true })
@@ -79,18 +80,18 @@ async function generateCodemod(version, name, kind) {
   // __testfixtures__
   fse.copySync(
     url.fileURLToPath(new URL('__testfixtures__', src)),
-    url.fileURLToPath(testFixturesDest)
+    url.fileURLToPath(testFixturesDest),
   )
 
   // __tests__
   const codemodTestTs = template(
-    fs.readFileSync(new URL('__tests__/codemod.test.ts.template', src), 'utf8')
+    fs.readFileSync(new URL('__tests__/codemod.test.ts.template', src), 'utf8'),
   )({ name })
   fs.writeFileSync(new URL(`${name}.test.ts`, testsDest), codemodTestTs)
 
   // codemod.ts
   const codemodTs = template(
-    fs.readFileSync(new URL('codemod.ts.template', src), 'utf8')
+    fs.readFileSync(new URL('codemod.ts.template', src), 'utf8'),
   )({ name })
   fs.writeFileSync(new URL(`${name}.ts`, dest), codemodTs)
 
@@ -98,7 +99,7 @@ async function generateCodemod(version, name, kind) {
   const { titleName, kebabName } = makeNameVariants(name)
 
   const codemodYargsTs = template(
-    fs.readFileSync(new URL('codemod.yargs.ts.template', src))
+    fs.readFileSync(new URL('codemod.yargs.ts.template', src)),
   )({
     titleName,
     kebabName,

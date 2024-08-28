@@ -1,14 +1,12 @@
 import { useEngine } from '@envelop/core'
 import { assertSingleExecutionValue, createTestkit } from '@envelop/testing'
+import type { FieldDefinitionNode, GraphQLDirective } from 'graphql'
 import * as GraphQLJS from 'graphql'
-import {
-  FieldDefinitionNode,
-  getDirectiveValues,
-  GraphQLDirective,
-} from 'graphql'
-import { Plugin, createSchema } from 'graphql-yoga'
+import { getDirectiveValues } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { createSchema } from 'graphql-yoga'
 
-import { GraphQLTypeWithFields } from '../../index'
+import type { GraphQLTypeWithFields } from '../../index'
 import { useRedwoodDirective, DirectiveType } from '../useRedwoodDirective'
 
 //  ===== Test Setup ======
@@ -117,7 +115,7 @@ const testInstance = createTestkit(
       name: 'skipAuth',
     }),
   ] as Plugin[],
-  schemaWithDirectiveQueries
+  schemaWithDirectiveQueries,
 )
 
 // ====== End Test Setup ======
@@ -159,7 +157,7 @@ describe('Directives on Queries', () => {
 
   it('Should enforce a requireAuth() directive if a Type field declares that directive', async () => {
     const result = await testInstance.execute(
-      `query { userProfiles { name, email } }`
+      `query { userProfiles { name, email } }`,
     )
 
     assertSingleExecutionValue(result)
@@ -214,7 +212,7 @@ describe('Directives on Queries', () => {
 describe('Directives on Mutations', () => {
   it('Should allow mutation on skipAuth', async () => {
     const result = await testInstance.execute(
-      `mutation { createPost(input: { title: "Post Created" }) { title } }`
+      `mutation { createPost(input: { title: "Post Created" }) { title } }`,
     )
     assertSingleExecutionValue(result)
 
@@ -228,7 +226,7 @@ describe('Directives on Mutations', () => {
 
   it('Should disallow mutation on requireAuth', async () => {
     const result = await testInstance.execute(
-      `mutation { updatePost(input: { title: "Post changed" }) { title } }`
+      `mutation { updatePost(input: { title: "Post changed" }) { title } }`,
     )
     assertSingleExecutionValue(result)
 
@@ -241,7 +239,7 @@ describe('Directives on Mutations', () => {
   // note there is no actual roles check here
   it('Should disallow mutation on requireAuth() with roles given', async () => {
     const result = await testInstance.execute(
-      `mutation { deletePost(title: "Post to delete") { title } }`
+      `mutation { deletePost(title: "Post to delete") { title } }`,
     )
 
     assertSingleExecutionValue(result)
@@ -254,14 +252,14 @@ describe('Directives on Mutations', () => {
 
   it('Should identify the role names specified in requireAuth()', async () => {
     const mutationType = schemaWithDirectiveQueries.getType(
-      'Mutation'
+      'Mutation',
     ) as GraphQLTypeWithFields
 
     const deletePost = mutationType.getFields()['deletePost']
 
     //getFields()['deletePost']
     const directive = schemaWithDirectiveQueries.getDirective(
-      'requireAuth'
+      'requireAuth',
     ) as GraphQLDirective
 
     const { roles } = getDirectiveValues(
@@ -269,7 +267,7 @@ describe('Directives on Mutations', () => {
       deletePost.astNode as FieldDefinitionNode,
       {
         args: 'roles',
-      }
+      },
     ) as { roles: string[] }
 
     expect(roles).toContain('admin')
@@ -279,18 +277,18 @@ describe('Directives on Mutations', () => {
 
   it('Should get the argument values for a directive', async () => {
     const postType = schemaWithDirectiveQueries.getType(
-      'Post'
+      'Post',
     ) as GraphQLTypeWithFields
 
     const description = postType.getFields()['description']
 
     const directive = schemaWithDirectiveQueries.getDirective(
-      'truncate'
+      'truncate',
     ) as GraphQLDirective
 
     const directiveArgs = getDirectiveValues(
       directive,
-      description.astNode as FieldDefinitionNode
+      description.astNode as FieldDefinitionNode,
     )
 
     expect(directiveArgs).toHaveProperty('maxLength')
@@ -302,18 +300,18 @@ describe('Directives on Mutations', () => {
 
   it('Should get the specified argument value for a directive', async () => {
     const postType = schemaWithDirectiveQueries.getType(
-      'Post'
+      'Post',
     ) as GraphQLTypeWithFields
 
     const description = postType.getFields()['description']
 
     const directive = schemaWithDirectiveQueries.getDirective(
-      'truncate'
+      'truncate',
     ) as GraphQLDirective
 
     const { maxLength } = getDirectiveValues(
       directive,
-      description.astNode as FieldDefinitionNode
+      description.astNode as FieldDefinitionNode,
     ) as { maxLength: number }
 
     expect(maxLength).toEqual(5)

@@ -1,30 +1,15 @@
 import React from 'react'
 
-import { toHaveClass, toHaveStyle } from '@testing-library/jest-dom/matchers'
-import { render } from '@testing-library/react'
-// TODO: Remove when jest configs are in place
-expect.extend({ toHaveClass, toHaveStyle })
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
 
-import { NavLink, useMatch, Link } from '../links'
-import { LocationProvider } from '../location'
-import { flattenSearchParams } from '../util'
+import { back, Route, Router } from '../index.js'
+import { Link } from '../link.js'
+import { LocationProvider } from '../location.js'
+import { NavLink } from '../navLink.js'
 
 function createDummyLocation(pathname: string, search = '') {
-  return {
-    pathname,
-    hash: '',
-    host: '',
-    hostname: '',
-    href: '',
-    ancestorOrigins: null,
-    assign: () => null,
-    reload: () => null,
-    replace: () => null,
-    origin: '',
-    port: '',
-    protocol: '',
-    search,
-  }
+  return new URL(pathname + search, 'http://localhost/')
 }
 
 describe('<NavLink />', () => {
@@ -36,7 +21,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" to="/dunder-mifflin">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -45,7 +30,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with search parameters', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -56,7 +41,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -70,7 +55,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -84,7 +69,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users/1">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -102,7 +87,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -111,7 +96,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key', () => {
     const mockLocation = createDummyLocation(
       '/pathname-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -119,11 +104,12 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -132,7 +118,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -144,7 +130,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -153,7 +139,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and a matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1&category=book'
+      '?tab=main&page=1&category=book',
     )
 
     const { getByText } = render(
@@ -161,11 +147,12 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=book`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ category: 'book' }, 'page']}
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -174,7 +161,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and multiple matched key-value param', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=about&page=3&category=magazine'
+      '?tab=about&page=3&category=magazine',
     )
 
     const { getByText } = render(
@@ -182,11 +169,12 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3, category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -195,7 +183,7 @@ describe('<NavLink />', () => {
   it('receives active class on the same pathname with a matched param key and multiple matched key-value param in separated', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=about&page=3&category=magazine'
+      '?tab=about&page=3&category=magazine',
     )
 
     const { getByText } = render(
@@ -203,11 +191,12 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/search-params?page=3&tab=main&category=magazine`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={[{ page: 3 }, { category: 'magazine' }, 'tab']}
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).toHaveClass('activeTest')
@@ -221,7 +210,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" matchSubPaths to="/users">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -235,7 +224,7 @@ describe('<NavLink />', () => {
         <NavLink activeClassName="activeTest" to="/dunder-mifflin">
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -244,7 +233,7 @@ describe('<NavLink />', () => {
   it('does NOT receive active class on the same pathname with different search params', () => {
     const mockLocation = createDummyLocation(
       '/search-params',
-      '?tab=main&page=1'
+      '?tab=main&page=1',
     )
 
     const { getByText } = render(
@@ -255,7 +244,7 @@ describe('<NavLink />', () => {
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
@@ -264,7 +253,7 @@ describe('<NavLink />', () => {
   it('does NOT receive active class on the same pathname with a different search param key', () => {
     const mockLocation = createDummyLocation(
       '/pathname-params',
-      '?category=car&page=1'
+      '?category=car&page=1',
     )
 
     const { getByText } = render(
@@ -272,84 +261,60 @@ describe('<NavLink />', () => {
         <NavLink
           activeClassName="activeTest"
           to={`/pathname-params?tab=main&page=2`}
+          // @ts-expect-error TODO: Fix our types
           activeMatchParams={['tab']}
         >
           Dunder Mifflin
         </NavLink>
-      </LocationProvider>
+      </LocationProvider>,
     )
 
     expect(getByText(/Dunder Mifflin/)).not.toHaveClass('activeTest')
   })
 })
 
-describe('useMatch', () => {
-  const MyLink = ({ to, ...rest }) => {
-    const [pathname, queryString] = to.split('?')
-    const matchInfo = useMatch(pathname, {
-      searchParams: flattenSearchParams(queryString),
+describe('<Link />', () => {
+  describe('options', () => {
+    it('should let us replace history when clicking on a link', async () => {
+      const HomePage = () => (
+        <>
+          <h1>Home Page</h1>
+          <Link to="/about">About-link</Link>
+        </>
+      )
+      const AboutPage = () => (
+        <>
+          <h1>About Page</h1>
+          <Link to="/contact" options={{ replace: true }}>
+            Contact-link
+          </Link>
+        </>
+      )
+      const ContactPage = () => <h1>Contact Page</h1>
+
+      const TestRouter = () => (
+        <Router>
+          <Route path="/" page={HomePage} name="home" />
+          <Route path="/about" page={AboutPage} name="about" />
+          <Route path="/contact" page={ContactPage} name="about" />
+        </Router>
+      )
+
+      const screen = render(<TestRouter />)
+
+      // starts on home page
+      await waitFor(() => screen.getByText('Home Page'))
+
+      fireEvent.click(screen.getByText('About-link'))
+      await waitFor(() => screen.getByText('About Page'))
+
+      fireEvent.click(screen.getByText('Contact-link'))
+      await waitFor(() => screen.getByText('Contact Page'))
+
+      // Going back here skips the About page because the link on the About
+      // page had the replace option
+      act(() => back())
+      await waitFor(() => screen.getByText('Home Page'))
     })
-
-    return (
-      <Link
-        to={to}
-        style={{ color: matchInfo.match ? 'green' : 'red' }}
-        {...rest}
-      />
-    )
-  }
-
-  it('returns a match on the same pathname', () => {
-    const mockLocation = createDummyLocation('/dunder-mifflin')
-
-    const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
-    )
-
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
-  })
-
-  it('returns a match on the same pathname with search parameters', () => {
-    const mockLocation = createDummyLocation(
-      '/search-params',
-      '?page=1&tab=main'
-    )
-
-    const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to={`/search-params?tab=main&page=1`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
-    )
-
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: green')
-  })
-
-  it('does NOT receive active class on different path', () => {
-    const mockLocation = createDummyLocation('/staples')
-
-    const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to="/dunder-mifflin">Dunder Mifflin</MyLink>
-      </LocationProvider>
-    )
-
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
-  })
-
-  it('does NOT receive active class on the same pathname with different parameters', () => {
-    const mockLocation = createDummyLocation(
-      '/search-params',
-      '?tab=main&page=1'
-    )
-
-    const { getByText } = render(
-      <LocationProvider location={mockLocation}>
-        <MyLink to={`/search-params?page=2&tab=main`}>Dunder Mifflin</MyLink>
-      </LocationProvider>
-    )
-
-    expect(getByText(/Dunder Mifflin/)).toHaveStyle('color: red')
   })
 })

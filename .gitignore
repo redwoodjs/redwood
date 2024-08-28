@@ -1,4 +1,5 @@
 *.icloud
+.cosine
 .idea
 .DS_Store
 node_modules
@@ -8,7 +9,6 @@ yarn-error.log
 **/*.tsbuildinfo
 tasks/.verdaccio
 tasks/e2e/cypress/fixtures/example.json
-tasks/release/*.md
 tmp/
 blog-test-project/*
 .yarn/*
@@ -21,6 +21,13 @@ blog-test-project/*
 .pnp.*
 *.code-workspace
 .nova
+packages/**/redwoodjs-*.tgz
+packages/**/storybook-*.tgz
+packages/create-redwood-app/create-redwood-app.tgz
 
 # For esbuild.
 **/meta.json
+**/meta.*.json
+
+.nx/cache
+.nx/workspace-data

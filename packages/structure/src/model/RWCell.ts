@@ -1,4 +1,4 @@
-import { parse as parseGraphQL } from 'graphql'
+import { Kind, parse as parseGraphQL } from 'graphql'
 import * as tsm from 'ts-morph'
 import { DiagnosticSeverity } from 'vscode-languageserver-types'
 
@@ -60,7 +60,7 @@ export class RWCell extends RWComponent {
       return undefined
     }
     for (const def of ast.definitions) {
-      if (def.kind == 'OperationDefinition') {
+      if (def.kind == Kind.OPERATION_DEFINITION) {
         return def?.name?.value
       }
     }
@@ -72,7 +72,7 @@ export class RWCell extends RWComponent {
     if (!this.exportedSymbols.has('QUERY')) {
       yield err(
         this.uri,
-        'Every Cell MUST export a QUERY variable (GraphQL query string)'
+        'Every Cell MUST export a QUERY variable (GraphQL query string)',
       )
     }
 
@@ -104,7 +104,7 @@ export class RWCell extends RWComponent {
     if (!this.exportedSymbols.has('Success')) {
       yield err(
         this.uri,
-        'Every Cell MUST export a Success variable (React Component)'
+        'Every Cell MUST export a Success variable (React Component)',
       )
     }
   }

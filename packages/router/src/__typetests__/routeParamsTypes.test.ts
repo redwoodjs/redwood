@@ -1,10 +1,10 @@
-import { expectAssignable, expectType } from 'tsd-lite'
+import { describe, expect, test } from 'tstyche'
 
-import type { RouteParams, ParamType } from '../routeParamsTypes'
+import type { RouteParams, ParamType } from '../routeParamsTypes.js'
 
 /**
  * FAQ:
- * - why aren't you using expectAssignable in all tests?
+ * - why aren't you using .toBeAssignable() in all tests?
  * because {b: string} is assignable to Record, and then test isn't accurate enough
  *
  * - why aren't you just checking the entire type?
@@ -21,7 +21,7 @@ describe('RouteParams<>', () => {
       id: 2,
     }
 
-    expectType<number>(simple.id)
+    expect(simple.id).type.toBeNumber()
   })
 
   test('Starts with parameter', () => {
@@ -30,8 +30,8 @@ describe('RouteParams<>', () => {
       driver: 44,
     }
 
-    expectType<number>(startParam.driver)
-    expectType<number>(startParam.position)
+    expect(startParam.driver).type.toBeNumber()
+    expect(startParam.position).type.toBeNumber()
   })
 
   test('Route string with no types defaults to string', () => {
@@ -42,10 +42,10 @@ describe('RouteParams<>', () => {
       slug: 'hello-world',
     }
 
-    expectType<string>(untypedParams.year)
-    expectType<string>(untypedParams.month)
-    expectType<string>(untypedParams.day)
-    expectType<string>(untypedParams.slug)
+    expect(untypedParams.year).type.toBeString()
+    expect(untypedParams.month).type.toBeString()
+    expect(untypedParams.day).type.toBeString()
+    expect(untypedParams.slug).type.toBeString()
   })
 
   test('Custom param types', () => {
@@ -53,7 +53,7 @@ describe('RouteParams<>', () => {
       name: 'hello-world-slug',
     }
 
-    expectType<string>(customParams.name)
+    expect(customParams.name).type.toBeString()
   })
 
   test('Parameter inside string', () => {
@@ -61,7 +61,7 @@ describe('RouteParams<>', () => {
       status: true,
     }
 
-    expectType<boolean>(stringConcat.status)
+    expect(stringConcat.status).type.toBeBoolean()
   })
 
   test('Multiple Glob route params', () => {
@@ -70,8 +70,8 @@ describe('RouteParams<>', () => {
       toDate: '2021/11/17',
     }
 
-    expectType<string>(globRoutes.fromDate)
-    expectType<string>(globRoutes.toDate)
+    expect(globRoutes.fromDate).type.toBeString()
+    expect(globRoutes.toDate).type.toBeString()
   })
 
   test('Single Glob route params', () => {
@@ -79,7 +79,7 @@ describe('RouteParams<>', () => {
       fromDate: '2021/11/03',
     }
 
-    expectType<string>(globRoutes.fromDate)
+    expect(globRoutes.fromDate).type.toBeString()
   })
 
   test('Starts with Glob route params', () => {
@@ -87,17 +87,15 @@ describe('RouteParams<>', () => {
       description: 'cute',
     }
 
-    expectType<string>(globRoutes.description)
+    expect(globRoutes.description).type.toBeString()
   })
 
   test('Glob params in the middle', () => {
-    test('Multiple Glob route params', () => {
-      const middleGlob: RouteParams<'/repo/{folders...}/edit'> = {
-        folders: 'src/lib/auth.js',
-      }
+    const middleGlob: RouteParams<'/repo/{folders...}/edit'> = {
+      folders: 'src/lib/auth.js',
+    }
 
-      expectType<string>(middleGlob.folders)
-    })
+    expect(middleGlob.folders).type.toBeString()
   })
 
   test('Mixed typed and untyped params', () => {
@@ -111,11 +109,11 @@ describe('RouteParams<>', () => {
       c: 'stringy-string',
     }
 
-    expectType<string>(untypedFirst.b)
-    expectType<boolean>(untypedFirst.c)
+    expect(untypedFirst.b).type.toBeString()
+    expect(untypedFirst.c).type.toBeBoolean()
 
-    expectType<number>(typedFirst.b)
-    expectType<string>(typedFirst.c)
+    expect(typedFirst.b).type.toBeNumber()
+    expect(typedFirst.c).type.toBeString()
   })
 
   test('Params in the middle', () => {
@@ -125,26 +123,26 @@ describe('RouteParams<>', () => {
         id: 10,
       }
 
-    expectType<string>(paramsInTheMiddle.authorId)
-    expectType<number>(paramsInTheMiddle.id)
+    expect(paramsInTheMiddle.authorId).type.toBeString()
+    expect(paramsInTheMiddle.id).type.toBeNumber()
   })
 })
 
 describe('ParamType<>', () => {
   test('Float', () => {
-    expectAssignable<ParamType<'Float'>>(1.02)
+    expect<ParamType<'Float'>>().type.toBeAssignableWith(1.02)
   })
 
   test('Boolean', () => {
-    expectAssignable<ParamType<'Boolean'>>(true)
-    expectAssignable<ParamType<'Boolean'>>(false)
+    expect<ParamType<'Boolean'>>().type.toBeAssignableWith(true)
+    expect<ParamType<'Boolean'>>().type.toBeAssignableWith(false)
   })
 
   test('Int', () => {
-    expectAssignable<ParamType<'Int'>>(51)
+    expect<ParamType<'Int'>>().type.toBeAssignableWith(51)
   })
 
   test('String', () => {
-    expectAssignable<ParamType<'String'>>('bazinga')
+    expect<ParamType<'String'>>().type.toBeAssignableWith('bazinga')
   })
 })

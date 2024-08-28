@@ -17,21 +17,25 @@ jest.mock('../../makeMergedSchema', () => {
           }
 
           type User {
-            id: ID!
             firstName: String!
             lastName: String!
+            id: ID!
+            token: String!
+            roles: [String!]!
           }
         `,
         resolvers: {
           Query: {
             me: () => {
-              const globalContext = require('../../globalContext').context
+              const globalContext = require('@redwoodjs/context').context
               const currentUser = globalContext.currentUser
 
               return {
-                id: currentUser.userId,
                 firstName: 'Ba',
                 lastName: 'Zinga',
+                id: currentUser.userId,
+                token: currentUser.token,
+                roles: currentUser.roles,
               }
             },
           },
@@ -54,7 +58,7 @@ type Decoder = (
   req: {
     event: APIGatewayProxyEvent
     context: Context
-  }
+  },
 ) => Promise<Decoded>
 
 interface MockLambdaParams {
@@ -117,20 +121,6 @@ const mockLambdaEvent = ({
 }
 
 describe('createGraphQLHandler', () => {
-  beforeAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  })
-
-  afterAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '0'
-  })
-
-  afterEach(() => {
-    // Clean up after test cases
-    const globalContext = require('../../globalContext').context
-    delete globalContext.currentUser
-  })
-
   const adminAuthDecoder: Decoder = async (token, type) => {
     if (type !== 'admin-auth') {
       return null
@@ -178,20 +168,18 @@ describe('createGraphQLHandler', () => {
         'auth-provider': 'admin-auth',
         authorization: 'Bearer auth-test-token-admin',
       },
-      body: JSON.stringify({ query: '{ me { id, firstName, lastName } }' }),
+      body: JSON.stringify({
+        query: '{ me { id, firstName, lastName, token, roles } }',
+      }),
       httpMethod: 'POST',
     })
 
     const response = await handler(mockedEvent, {} as Context)
 
     const body = JSON.parse(response.body)
-    const globalContext = require('../../globalContext').context
-    const currentUser = globalContext.currentUser
-
     expect(body.data.me.id).toEqual('admin-one')
-    expect(currentUser.userId).toEqual('admin-one')
-    expect(currentUser.token).toEqual('auth test token admin')
-    expect(currentUser.roles).toEqual(['admin'])
+    expect(body.data.me.token).toEqual('auth test token admin')
+    expect(body.data.me.roles).toEqual(['admin'])
     expect(response.statusCode).toBe(200)
   })
 
@@ -212,20 +200,19 @@ describe('createGraphQLHandler', () => {
         'auth-provider': 'admin-auth',
         authorization: 'Bearer auth-test-token-admin',
       },
-      body: JSON.stringify({ query: '{ me { id, firstName, lastName } }' }),
+      body: JSON.stringify({
+        query: '{ me { id, firstName, lastName, token, roles } }',
+      }),
       httpMethod: 'POST',
     })
 
     const response = await handler(mockedEvent, {} as Context)
 
     const body = JSON.parse(response.body)
-    const globalContext = require('../../globalContext').context
-    const currentUser = globalContext.currentUser
 
     expect(body.data.me.id).toEqual('admin-one')
-    expect(currentUser.userId).toEqual('admin-one')
-    expect(currentUser.token).toEqual('auth test token admin')
-    expect(currentUser.roles).toEqual(['admin'])
+    expect(body.data.me.token).toEqual('auth test token admin')
+    expect(body.data.me.roles).toEqual(['admin'])
     expect(response.statusCode).toBe(200)
   })
 
@@ -246,20 +233,19 @@ describe('createGraphQLHandler', () => {
         'auth-provider': 'customer-auth',
         authorization: 'Bearer auth-test-token-customer',
       },
-      body: JSON.stringify({ query: '{ me { id, firstName, lastName } }' }),
+      body: JSON.stringify({
+        query: '{ me { id, firstName, lastName, token, roles } }',
+      }),
       httpMethod: 'POST',
     })
 
     const response = await handler(mockedEvent, {} as Context)
 
     const body = JSON.parse(response.body)
-    const globalContext = require('../../globalContext').context
-    const currentUser = globalContext.currentUser
 
     expect(body.data.me.id).toEqual('customer-one')
-    expect(currentUser.userId).toEqual('customer-one')
-    expect(currentUser.token).toEqual('auth test token customer')
-    expect(currentUser.roles).toEqual(['user'])
+    expect(body.data.me.token).toEqual('auth test token customer')
+    expect(body.data.me.roles).toEqual(['user'])
     expect(response.statusCode).toBe(200)
   })
 })

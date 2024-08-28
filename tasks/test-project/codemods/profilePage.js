@@ -6,7 +6,7 @@ if (loading) {
 
 return (
   <>
-    <MetaTags title="Profile" description="Profile page" />
+    <Metadata title="Profile" description="Profile page" og />
 
     <h1 className="text-2xl">Profile</h1>
 
@@ -50,9 +50,19 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
+  // Remove the `{ Link, routes }` imports that are generated and unused
+  root
+    .find(j.ImportDeclaration, {
+      source: {
+        type: 'StringLiteral',
+        value: '@redwoodjs/router',
+      },
+    })
+    .remove()
+
   const useAuthImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useAuth'))],
-    j.stringLiteral('src/auth')
+    j.stringLiteral('src/auth'),
   )
 
   root.find(j.ImportDeclaration).at(0).insertBefore(useAuthImport)

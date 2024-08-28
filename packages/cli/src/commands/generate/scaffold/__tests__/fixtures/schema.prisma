@@ -72,3 +72,26 @@ model Tag {
   post   Post?  @relation(fields: [postId], references: [id])
   postId Int?
 }
+
+model CustomIdField {
+  uuid String @id @default(uuid())
+  name String
+}
+
+model Pixel {
+  id       Int    @id @default(autoincrement())
+  color    PixelColor
+  geometry PixelGeometry?
+}
+
+enum PixelColor {
+  RED
+  GREEN
+  BLUE
+}
+
+enum PixelGeometry {
+  TRIANGULAR
+  STRIPES
+  DIAGONAL
+}

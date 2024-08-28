@@ -1,5 +1,6 @@
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
 
 import { getPaths } from './index'
 
@@ -28,7 +29,7 @@ export function setLock(identifier) {
 
   fs.writeFileSync(
     path.join(getPaths().generated.base, 'locks', identifier),
-    ''
+    '',
   )
 }
 
@@ -53,9 +54,24 @@ export function unsetLock(identifier) {
  * @returns {boolean} `true` if the lock is set, otherwise `false`
  */
 export function isLockSet(identifier) {
-  return fs.existsSync(
-    path.join(getPaths().generated.base, 'locks', identifier)
-  )
+  const lockfilePath = path.join(getPaths().generated.base, 'locks', identifier)
+
+  // Check if the lock file exists
+  const exists = fs.existsSync(lockfilePath)
+  if (!exists) {
+    return false
+  }
+
+  // Ensure this lock isn't stale due to some error
+  // Locks are only valid for 1 hour
+  const createdAt = fs.statSync(lockfilePath).birthtimeMs
+  if (Date.now() - createdAt > 3600000) {
+    unsetLock(identifier)
+    return false
+  }
+
+  // If the lock file exists and isn't stale, the lock is set
+  return true
 }
 
 /**

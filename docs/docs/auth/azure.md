@@ -94,9 +94,7 @@ const HomePage = () => {
       {/* MetaTags, h1, paragraphs, etc. */}
 
       <p>{JSON.stringify({ isAuthenticated })}</p>
-      <button onClick={signUp}>
-        Sign Up
-      </button>
+      <button onClick={signUp}>Sign Up</button>
     </>
   )
 }
@@ -108,7 +106,7 @@ To add roles exposed via the `roles` claim, follow [Add app roles to your applic
 
 ## `logIn` Options
 
-`options` in `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized.
+`options` in `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/types/_azure_msal_browser.RedirectRequest.html) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized.
 By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
 
 ```jsx
@@ -117,11 +115,11 @@ await logIn({
 })
 ```
 
-See [loginRedirect](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html#loginredirect), [PublicClientApplication](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html) class and [Scopes Behavior](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-core/docs/scopes.md#scopes-behavior) for more documentation.
+See [loginRedirect](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.PublicClientApplication.html#loginRedirect), [PublicClientApplication](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.PublicClientApplication.html) class and [Scopes Behavior](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/msal-lts/lib/msal-core/docs/scopes.md#scopes-behavior) for more documentation.
 
 ## `getToken` Options
 
-`options` in `getToken(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/modules/_azure_msal_browser.html#redirectrequest).
+`options` in `getToken(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/types/_azure_msal_browser.RedirectRequest.html).
 By default, `getToken` will be called with scope `['openid', 'profile']`.
 Since Azure Active Directory applies [incremental consent](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#dynamic-scopes-and-incremental-consent), we can extend the permissions from the login example by including another scope, for example `Mail.Read`:
 
@@ -131,7 +129,7 @@ await getToken({
 })
 ```
 
-See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.publicclientapplication.html#acquiretokensilent), [Resources and Scopes](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#resources-and-scopes) or [full class documentation](https://pub.dev/documentation/msal_js/latest/msal_js/PublicClientApplication-class.html#constructors) for more.
+See [acquireTokenSilent](https://azuread.github.io/microsoft-authentication-library-for-js/ref/classes/_azure_msal_browser.PublicClientApplication.html#acquireTokenSilent), [Resources and Scopes](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md#resources-and-scopes) or [full class documentation](https://pub.dev/documentation/msal_js/latest/msal_js/PublicClientApplication-class.html#constructors) for more.
 
 ## Azure Active Directory B2C-specific configuration
 
@@ -155,7 +153,7 @@ AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY=https://rwauthtestb2c.b2clogin.com
 ```
 
 And don't forget to add `AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY` to the `includeEnvironmentVariables` array in `redwood.toml`.
-(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side. But more importantly, it's sensitive—do *not* include it in the web side.)
+(`AZURE_ACTIVE_DIRECTORY_JWT_ISSUER` is only used on the API side. But more importantly, it's sensitive—do _not_ include it in the web side.)
 
 #### Update `activeDirectoryClient` instance
 
@@ -170,7 +168,7 @@ const azureActiveDirectoryClient = new PublicClientApplication({
     postLogoutRedirectUri:
       process.env.AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI,
     // highlight-next-line
-    knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY]
+    knownAuthorities: [process.env.AZURE_ACTIVE_DIRECTORY_KNOWN_AUTHORITY],
   },
 })
 ```
@@ -178,5 +176,6 @@ const azureActiveDirectoryClient = new PublicClientApplication({
 Now you can call the `logIn` and `logOut` functions from `useAuth()`, and everything should just work.
 
 Here's a few more links to relevant documentation for reference:
+
 - [Overview of tokens in Azure Active Directory B2C](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tokens-overview)
 - [Working with MSAL.js and Azure AD B2C](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/working-with-b2c.md)

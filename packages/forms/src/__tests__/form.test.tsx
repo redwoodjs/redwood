@@ -1,11 +1,6 @@
 import React from 'react'
 
 import {
-  toHaveFocus,
-  toHaveClass,
-  toBeInTheDocument,
-} from '@testing-library/jest-dom/matchers'
-import {
   screen,
   render,
   cleanup,
@@ -13,7 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-expect.extend({ toHaveFocus, toHaveClass, toBeInTheDocument })
+import { vi, describe, it, expect, afterEach } from 'vitest'
 
 import {
   Form,
@@ -109,9 +104,9 @@ describe('Form', () => {
   }
 
   const TestComponentWithRef = () => {
-    const inputEl = React.useRef(null)
+    const inputEl = React.useRef<HTMLInputElement>(null)
     React.useEffect(() => {
-      inputEl.current.focus()
+      inputEl.current?.focus()
     })
     return (
       <Form>
@@ -129,7 +124,7 @@ describe('Form', () => {
   })
 
   it('calls onSubmit', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponent onSubmit={mockFn} />)
 
@@ -139,7 +134,7 @@ describe('Form', () => {
   })
 
   it('renders and coerces user-supplied values', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponent onSubmit={mockFn} />)
 
@@ -171,12 +166,12 @@ describe('Form', () => {
         datetimeLocal: new Date('2021-04-16T12:34'),
         date: new Date('2021-04-16'),
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('finds nested form fields to coerce', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(<TestComponentWithWrappedFormElements onSubmit={mockFn} />)
 
@@ -185,7 +180,7 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { 'wrapped-ff': 3.14, 'wrapped-nf-1': 101, 'wrapped-nf-2': 102 },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
@@ -199,10 +194,10 @@ describe('Form', () => {
   })
 
   it('lets users pass custom coercion functions', async () => {
-    const mockFn = jest.fn()
-    const coercionFunctionNumber = (value) =>
+    const mockFn = vi.fn()
+    const coercionFunctionNumber = (value: string) =>
       parseInt(value.replace('_', ''), 10)
-    const coercionFunctionText = (value) => value.replace('_', '-')
+    const coercionFunctionText = (value: string) => value.replace('_', '-')
 
     render(
       <Form onSubmit={mockFn}>
@@ -220,7 +215,7 @@ describe('Form', () => {
           <option>Option_2</option>
         </SelectField>
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -228,12 +223,12 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { tf: 123456, select: 'Option-2' },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('sets the value to null for empty string on relational fields', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -246,7 +241,7 @@ describe('Form', () => {
           <option value={2}>Group 2</option>
         </SelectField>
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -254,12 +249,12 @@ describe('Form', () => {
     await waitFor(() => expect(mockFn).toHaveBeenCalledTimes(1))
     expect(mockFn).toBeCalledWith(
       { userId: null, groupId: null },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('ensures required textField is enforced by validation', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -270,19 +265,19 @@ describe('Form', () => {
         />
         <FieldError name="userId2" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
   })
 
   it('ensures required selectField is enforced by validation', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -297,12 +292,12 @@ describe('Form', () => {
         </SelectField>
         <FieldError name="groupId2" data-testid="fieldError" />{' '}
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -310,7 +305,7 @@ describe('Form', () => {
   })
 
   it('handles int and float blank values gracefully', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
     console.log('handles int and float blank values gracefully')
 
     render(
@@ -322,7 +317,7 @@ describe('Form', () => {
           validation={{ valueAsNumber: true }}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.click(screen.getByText('Save'))
 
@@ -332,13 +327,13 @@ describe('Form', () => {
         int: NaN,
         float: NaN,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   // Note the good JSON case is tested in an earlier test
   it('does not call the onSubmit function for a bad entry into a TextAreaField with valueAsJSON', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -349,11 +344,11 @@ describe('Form', () => {
         />
         <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -361,7 +356,7 @@ describe('Form', () => {
   })
 
   it('displays a FieldError for a bad entry into a TextAreaField with valueAsJSON', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -372,11 +367,11 @@ describe('Form', () => {
         />
         <FieldError name="jsonField" data-testid="fieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('fieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('fieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -384,7 +379,7 @@ describe('Form', () => {
   })
 
   it('for a FieldError with name set to path', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -403,12 +398,12 @@ describe('Form', () => {
         />
         <FieldError name="address.street" data-testid="streetFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.submit(screen.getByText('Save'))
 
     await waitFor(() =>
-      expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('phoneFieldError')).toBeInTheDocument(),
     )
     // The validation should catch and prevent the onSubmit from being called
     expect(mockFn).not.toHaveBeenCalled()
@@ -434,13 +429,13 @@ describe('Form', () => {
         />
         <FieldError name="phone" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('phone is not formatted correctly')
   })
@@ -456,13 +451,13 @@ describe('Form', () => {
         />
         <FieldError name="false" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('false is not formatted correctly')
   })
@@ -477,19 +472,19 @@ describe('Form', () => {
         />
         <FieldError name="0" data-testid="phoneFieldError" />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
 
     const phoneError = await waitFor(
-      () => screen.getByTestId('phoneFieldError').textContent
+      () => screen.getByTestId('phoneFieldError').textContent,
     )
     expect(phoneError).toEqual('0 is not formatted correctly')
   })
 
   it('returns appropriate values for fields with emptyAs not defined ', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -513,7 +508,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -531,12 +526,12 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it(`returns appropriate values for non-empty fields with emptyAs={'undefined'}`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -550,6 +545,17 @@ describe('Form', () => {
           <option value={2}>Option 2</option>
           <option value={3}>Option 3</option>
         </SelectField>
+        <SelectField
+          name="selectFieldAsNumber"
+          defaultValue=""
+          emptyAs={'undefined'}
+          validation={{ valueAsNumber: true }}
+        >
+          <option value={''}>No option selected</option>
+          <option value={1}>Option 1</option>
+          <option value={2}>Option 2</option>
+          <option value={3}>Option 3</option>
+        </SelectField>
         <TextAreaField
           name="jsonField"
           defaultValue=""
@@ -559,7 +565,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={'undefined'} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -572,15 +578,16 @@ describe('Form', () => {
         numberField: undefined,
         dateField: undefined,
         selectField: undefined,
+        selectFieldAsNumber: undefined,
         jsonField: undefined,
         fieldId: undefined,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('returns null for empty fields with emptyAs={null}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -603,7 +610,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={null} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -619,12 +626,12 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('returns appropriate value empty fields with emptyAs={0}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -647,7 +654,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={0} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -664,12 +671,12 @@ describe('Form', () => {
         jsonField: 0,
         fieldId: 0,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it(`returns an empty string empty fields with emptyAs={''}`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -692,7 +699,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={''} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -709,12 +716,12 @@ describe('Form', () => {
         jsonField: '',
         fieldId: '',
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('should have appropriate validation for NumberFields and DateFields with emptyAs={null}', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -727,14 +734,14 @@ describe('Form', () => {
         <FieldError name="numberField" data-testid="numberFieldError" />
         <DateField name="dateField" emptyAs={null} />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
     fireEvent.change(screen.getByTestId('numberField'), {
       target: { value: 2 },
     })
     fireEvent.submit(screen.getByText('Save'))
     await waitFor(() =>
-      expect(screen.getByTestId('numberFieldError')).toBeInTheDocument()
+      expect(screen.getByTestId('numberFieldError')).toBeInTheDocument(),
     )
 
     // The validation should catch and prevent the onSubmit from being called
@@ -742,7 +749,7 @@ describe('Form', () => {
   })
 
   it(`handles invalid emptyAs values with default values`, async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -776,7 +783,7 @@ describe('Form', () => {
         <TextField name="fieldId" defaultValue="" emptyAs={'badEmptyAsValue'} />
 
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -792,12 +799,12 @@ describe('Form', () => {
         jsonField: null,
         fieldId: null,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('should return a number for a textfield with valueAsNumber, regardless of emptyAs', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -825,7 +832,7 @@ describe('Form', () => {
           emptyAs={0}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -839,12 +846,12 @@ describe('Form', () => {
         tf3: 42,
         tf4: 42,
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
   })
 
   it('should return a date for a textfield with valueAsDate, regardless of emptyAs', async () => {
-    const mockFn = jest.fn()
+    const mockFn = vi.fn()
 
     render(
       <Form onSubmit={mockFn}>
@@ -872,7 +879,7 @@ describe('Form', () => {
           emptyAs={0}
         />
         <Submit>Save</Submit>
-      </Form>
+      </Form>,
     )
 
     fireEvent.click(screen.getByText('Save'))
@@ -886,7 +893,22 @@ describe('Form', () => {
         tf3: new Date('2022-02-01'),
         tf4: new Date('2022-02-01'),
       },
-      expect.anything() // event that triggered the onSubmit call
+      expect.anything(), // event that triggered the onSubmit call
     )
+  })
+
+  it('should throw an intelligible error if the name prop is missing', async () => {
+    const mockFn = vi.fn()
+
+    const testRender = () =>
+      render(
+        <Form onSubmit={mockFn}>
+          {/* @ts-expect-error - Testing a JS scenario */}
+          <TextField />
+          <Submit>Save</Submit>
+        </Form>,
+      )
+
+    expect(testRender).toThrow('`name` prop must be provided')
   })
 })

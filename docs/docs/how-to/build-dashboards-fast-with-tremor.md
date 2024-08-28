@@ -1,6 +1,5 @@
 ---
-
-description: "Learn how to build dashboards fast using the Tremor React library of data visualization components."
+description: 'Learn how to build dashboards fast using the Tremor React library of data visualization components.'
 ---
 
 # Build Dashboards Fast with Tremor
@@ -9,10 +8,10 @@ description: "Learn how to build dashboards fast using the Tremor React library 
 
 In this how to, you'll learn how to
 
-* setup tremor in a new or existing RedwoodJS app
-* use tremor components to layout a new dashboard
-* use a chart and card component to visualize static data
-* access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo)
+- setup tremor in a new or existing RedwoodJS app
+- use tremor components to layout a new dashboard
+- use a chart and card component to visualize static data
+- access a GitHub repo to make your dashboard dynamic using an [example RedwoodJS app](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo)
 
 ## Live Demo
 
@@ -24,7 +23,6 @@ Let's get started!
 
 ## Create a New RedwoodJS Project
 
-
 In our terminal, we create a new RedwoodJS project:
 
 ```bash
@@ -35,11 +33,9 @@ yarn create redwood-app my-project --ts
 
 If you do not want a TypeScript project, omit the `--ts` flag.
 
-> **Important:** RedwoodJS prefers yarn over npm because a project is monorepo with api and web workspaces.  You will install tremor and other web packages using yarn workspaces.
-
+> **Important:** RedwoodJS prefers yarn over npm because a project is monorepo with api and web workspaces. You will install tremor and other web packages using yarn workspaces.
 
 Use the Redwood setup command to install `TailwindCSS`, its peer dependencies, and create the `tailwind.config.js` file.
-
 
 ```bash
 yarn rw setup ui tailwindcss
@@ -90,7 +86,6 @@ You will now have a new page at `web/src/pages/DashboardPage/DashboardPage.tsx` 
 
 <Route path="/" page={DashboardPage} name="dashboard" />
 ```
-
 
 Add simple area chart to the `DashboardPage`:
 
@@ -252,42 +247,45 @@ import type { Kpi } from 'src/components/KpiCard/KpiCard' // 👈 Import the Kpi
 Next, create the `kpi` data collection with sample data
 
 ```tsx
- const kpis: Kpi[] = [ // 👈 Create some sample KPI data
-    {
-      title: 'Sales',
-      metric: '$ 12,699',
-      progress: 15.9,
-      metricTarget: '$ 80,000',
-      delta: '13.2%',
-      deltaType: 'moderateIncrease',
-    },
-    {
-      title: 'Profit',
-      metric: '$ 45,564',
-      progress: 36.5,
-      metricTarget: '$ 125,000',
-      delta: '23.9%',
-      deltaType: 'increase',
-    },
-    {
-      title: 'Customers',
-      metric: '1,072',
-      progress: 53.6,
-      metricTarget: '2,000',
-      delta: '10.1%',
-      deltaType: 'moderateDecrease',
-    },
-  ]
+const kpis: Kpi[] = [
+  // 👈 Create some sample KPI data
+  {
+    title: 'Sales',
+    metric: '$ 12,699',
+    progress: 15.9,
+    metricTarget: '$ 80,000',
+    delta: '13.2%',
+    deltaType: 'moderateIncrease',
+  },
+  {
+    title: 'Profit',
+    metric: '$ 45,564',
+    progress: 36.5,
+    metricTarget: '$ 125,000',
+    delta: '23.9%',
+    deltaType: 'increase',
+  },
+  {
+    title: 'Customers',
+    metric: '1,072',
+    progress: 53.6,
+    metricTarget: '2,000',
+    delta: '10.1%',
+    deltaType: 'moderateDecrease',
+  },
+]
 ```
 
 Then iterate over the collection to add a `KpiCard` inside new `Col` for each KPI data item:
 
 ```tsx
-  {kpis.map((kpi, i) => (
+{
+  kpis.map((kpi, i) => (
     <Col key={i} numColSpan={1}>
       <KpiCard kpi={kpi} />
     </Col>
-  ))}
+  ))
+}
 ```
 
 Your Dashboard page should now look like:
@@ -334,7 +332,8 @@ const DashboardPage = () => {
     },
   ]
 
-  const kpis: Kpi[] = [ // 👈 Create some sample KPI data
+  const kpis: Kpi[] = [
+    // 👈 Create some sample KPI data
     {
       title: 'Sales',
       metric: '$ 12,699',
@@ -377,7 +376,7 @@ const DashboardPage = () => {
             <KpiCard kpi={kpi} />
           </Col>
         ))}
-       <Col numColSpan={1} numColSpanLg={3}>
+        <Col numColSpan={1} numColSpanLg={3}>
           <Card>
             <Title>Newsletter revenue over time (USD)</Title>
             <AreaChart
@@ -409,5 +408,3 @@ Now that you have a Dashboard
 2. Learn how to make a [dynamic dashboard using RedwoodJS cells](https://github.com/redwoodjs/redwoodjs-tremor-dashboard-demo) to fetch data from a Prisma-backed database using GraphQL.
 
 3. See a [dynamic dashboard live demo](https://tremor-redwood-dashboard-demo.netlify.app)!
-
-

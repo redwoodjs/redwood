@@ -1,11 +1,11 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
 import { addApiPackages } from '@redwoodjs/cli-helpers'
-import { getConfigPath } from '@redwoodjs/project-config'
+import { getConfigPath, resolveFile } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../lib'
@@ -43,14 +43,14 @@ export const handler = async ({ force, verbose }) => {
   const opentelemetryTasks = [
     {
       title: `Adding OpenTelemetry setup files...`,
-      task: () => {
+      task: async () => {
         const setupTemplateContent = fs.readFileSync(
           path.resolve(__dirname, 'templates', 'opentelemetry.ts.template'),
-          'utf-8'
+          'utf-8',
         )
         const setupScriptContent = ts
           ? setupTemplateContent
-          : transformTSToJS(opentelemetryScriptPath, setupTemplateContent)
+          : await transformTSToJS(opentelemetryScriptPath, setupTemplateContent)
 
         return [
           writeFile(opentelemetryScriptPath, setupScriptContent, {
@@ -69,18 +69,64 @@ export const handler = async ({ force, verbose }) => {
           writeFile(
             redwoodTomlPath,
             configContent.concat(
-              `\n[experimental.opentelemetry]\n\tenabled = true\n\tapiSdk = "${opentelemetryScriptPath}"`
+              `\n[experimental.opentelemetry]\n\tenabled = true\n\twrapApi = true`,
             ),
             {
               overwriteExisting: true, // redwood.toml always exists
-            }
+            },
           )
         } else {
           task.skip(
-            `The [experimental.opentelemetry] config block already exists in your 'redwood.toml' file.`
+            `The [experimental.opentelemetry] config block already exists in your 'redwood.toml' file.`,
           )
         }
       },
+    },
+    {
+      title: 'Notice: GraphQL function update...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.functions, 'graphql')),
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'createGraphQLHandler' function options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.functions, 'graphql'),
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
+    },
+    {
+      title: 'Notice: GraphQL function update (server file)...',
+      enabled: () => {
+        return fs.existsSync(
+          resolveFile(path.join(getPaths().api.src, 'server')),
+        )
+      },
+      task: (_ctx, task) => {
+        task.output = [
+          "Please add the following to your 'redwoodFastifyGraphQLServer' plugin options to enable OTel for your graphql",
+          'openTelemetryOptions: {',
+          '  resolvers: true,',
+          '  result: true,',
+          '  variables: true,',
+          '}',
+          '',
+          `Which can found at ${c.info(
+            path.join(getPaths().api.src, 'server'),
+          )}`,
+        ].join('\n')
+      },
+      options: { persistentOutput: true },
     },
     addApiPackages(opentelemetryPackages),
   ]
@@ -101,8 +147,8 @@ export const handler = async ({ force, verbose }) => {
               'generator client'.length,
             schemaContent.indexOf(
               '}',
-              schemaContent.indexOf('generator client')
-            ) + 1
+              schemaContent.indexOf('generator client'),
+            ) + 1,
           )
           .trim()
 
@@ -110,18 +156,18 @@ export const handler = async ({ force, verbose }) => {
         let newSchemaContents = schemaContent
         if (previewLineExists) {
           task.skip(
-            'Please add "tracing" to your previewFeatures in prisma.schema'
+            'Please add "tracing" to your previewFeatures in prisma.schema',
           )
         } else {
           const newClientConfig = clientConfig.trim().split('\n')
           newClientConfig.splice(
             newClientConfig.length - 1,
             0,
-            'previewFeatures = ["tracing"]'
+            'previewFeatures = ["tracing"]',
           )
           newSchemaContents = newSchemaContents.replace(
             clientConfig,
-            newClientConfig.join('\n')
+            newClientConfig.join('\n'),
           )
         }
 
@@ -168,7 +214,7 @@ export const handler = async ({ force, verbose }) => {
     {
       rendererOptions: { collapseSubtasks: false, persistentOutput: true },
       renderer: verbose ? 'verbose' : 'default',
-    }
+    },
   )
 
   try {

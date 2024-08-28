@@ -1,17 +1,23 @@
 import React, { useCallback } from 'react'
 
-import { Redirect } from './links'
-import { routes } from './router'
-import { useRouterState } from './router-context'
+import type { GeneratedRoutesMap } from './analyzeRoutes.js'
+import { namedRoutes } from './namedRoutes.js'
+import { Redirect } from './redirect.js'
+import { useRouterState } from './router-context.js'
 
-export function AuthenticatedRoute(props: any) {
-  const {
-    private: privateSet,
-    unauthenticated,
-    roles,
-    whileLoadingAuth,
-    children,
-  } = props
+interface AuthenticatedRouteProps {
+  children: React.ReactNode | Thenable<React.ReactNode>
+  roles?: string | string[]
+  unauthenticated: keyof GeneratedRoutesMap
+  whileLoadingAuth?: () => React.ReactElement | null
+}
+
+export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
+  unauthenticated,
+  roles,
+  whileLoadingAuth,
+  children,
+}) => {
   const routerState = useRouterState()
   const {
     loading: authLoading,
@@ -23,15 +29,7 @@ export function AuthenticatedRoute(props: any) {
     return !(isAuthenticated && (!roles || hasRole(roles)))
   }, [isAuthenticated, roles, hasRole])
 
-  // Make sure `wrappers` is always an array with at least one wrapper component
-  if (privateSet && unauthorized()) {
-    if (!unauthenticated) {
-      throw new Error(
-        'Private Sets need to specify what route to redirect unauthorized ' +
-          'users to by setting the `unauthenticated` prop'
-      )
-    }
-
+  if (unauthorized()) {
     if (authLoading) {
       return whileLoadingAuth?.() || null
     } else {
@@ -39,14 +37,18 @@ export function AuthenticatedRoute(props: any) {
         globalThis.location.pathname +
         encodeURIComponent(globalThis.location.search)
 
-      if (!routes[unauthenticated]) {
+      // We type cast like this, because AvailableRoutes is generated in the
+      // user's project
+      const generatedRoutesMap = namedRoutes as GeneratedRoutesMap
+
+      if (!generatedRoutesMap[unauthenticated]) {
         throw new Error(`We could not find a route named ${unauthenticated}`)
       }
 
       let unauthenticatedPath
 
       try {
-        unauthenticatedPath = routes[unauthenticated]()
+        unauthenticatedPath = generatedRoutesMap[unauthenticated]()
       } catch (e) {
         if (
           e instanceof Error &&
@@ -55,12 +57,12 @@ export function AuthenticatedRoute(props: any) {
           throw new Error(
             `Redirecting to route "${unauthenticated}" would require route ` +
               'parameters, which currently is not supported. Please choose ' +
-              'a different route'
+              'a different route',
           )
         }
 
         throw new Error(
-          `Could not redirect to the route named ${unauthenticated}`
+          `Could not redirect to the route named ${unauthenticated}`,
         )
       }
 

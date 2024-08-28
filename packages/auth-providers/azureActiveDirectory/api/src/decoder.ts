@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import jwksClient from 'jwks-rsa'
 
-import { Decoder } from '@redwoodjs/api'
+import type { Decoder } from '@redwoodjs/api'
 
 export const authDecoder: Decoder = async (token: string, type: string) => {
   if (type !== 'azureActiveDirectory') {
@@ -43,7 +43,7 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
                 'Azure Active Directory. This might be a result of an ' +
                 'outage. See https://status.azure.com/en-us/status for ' +
                 'current status.',
-              err
+              err,
             )
           }
         })
@@ -63,9 +63,9 @@ export const authDecoder: Decoder = async (token: string, type: string) => {
         resolve(
           typeof decoded === 'undefined'
             ? null
-            : (decoded as Record<string, unknown>)
+            : (decoded as Record<string, unknown>),
         )
-      }
+      },
     )
   })
 }

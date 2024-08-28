@@ -8,10 +8,10 @@ import mime from 'mime-types'
 // Not sure if possible in actually running builds
 export function convertToDataUrl(assetPath: string) {
   try {
-    const base64AssetContents = fs.readFileSync(assetPath as string, 'base64')
-    const mimeType = mime.lookup(assetPath as string)
+    const base64AssetContents = fs.readFileSync(assetPath, 'base64')
+    const mimeType = mime.lookup(assetPath)
     return `data:${mimeType};base64,${base64AssetContents}`
-  } catch (e) {
+  } catch {
     console.warn(`Could not read file ${assetPath} for conversion to data uri`)
     return ''
   }

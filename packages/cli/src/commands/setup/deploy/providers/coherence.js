@@ -1,3 +1,5 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'coherence'
 
 export const description = 'Setup Coherence deploy'
@@ -11,6 +13,10 @@ export function builder(yargs) {
 }
 
 export async function handler(options) {
-  const { handler } = await import('./coherenceHandler')
+  recordTelemetryAttributes({
+    command: 'setup deploy coherence',
+    force: options.force,
+  })
+  const { handler } = await import('./coherenceHandler.js')
   return handler(options)
 }

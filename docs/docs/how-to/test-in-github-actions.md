@@ -48,13 +48,13 @@ If it is, you should see something like this:
 ```sh
 ...
 
- PASS   api  api/src/directives/requireAuth/requireAuth.test.ts
- PASS   api  api/src/directives/skipAuth/skipAuth.test.ts
+PASS api api/src/directives/requireAuth/requireAuth.test.ts
+PASS api api/src/directives/skipAuth/skipAuth.test.ts
 
 Test Suites: 2 passed, 2 total
-Tests:       3 passed, 3 total
-Snapshots:   0 total
-Time:        1.669 s
+Tests: 3 passed, 3 total
+Snapshots: 0 total
+Time: 1.669 s
 Ran all test suites.
 
 Watch Usage: Press w to show more.
@@ -93,7 +93,7 @@ model UserExample {
 
 Then add your connection strings to your `.env` file:
 
-:::caution
+:::warning
 
 Make sure you don't commit this file to your repo since it contains sensitive information.
 
@@ -165,13 +165,13 @@ yarn rw test
 You should see something like this:
 
 ```sh
- PASS   web  web/src/lib/formatters.test.tsx
- PASS   api  api/src/services/userExamples/userExamples.test.ts
+PASS web web/src/lib/formatters.test.tsx
+PASS api api/src/services/userExamples/userExamples.test.ts
 
 Test Suites: 2 passed, 2 total
-Tests:       21 passed, 21 total
-Snapshots:   0 total
-Time:        3.587 s
+Tests: 21 passed, 21 total
+Snapshots: 0 total
+Time: 3.587 s
 Ran all test suites related to changed files in 2 projects.
 ```
 
@@ -204,7 +204,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     services:
@@ -226,11 +226,12 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: corepack enable
       # install all the dependencies
       - run: yarn install
       # build the redwood app
@@ -268,8 +269,6 @@ name: Redwood CI for Pull Requests
 on:
   pull_request:
     branches: ['main']
-
-...
 ```
 
 Now, if you open or push to a pull request, this action will run and you'll see something like this:
@@ -303,7 +302,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     services:
@@ -325,11 +324,12 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+      - run: corepack enable
       # install all the dependencies
       - run: yarn install
       # build the redwood app

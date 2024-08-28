@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
+  },
+  "include": ["src/**/*", "./ambient.d.ts", "./modules.d.ts"],
+  "references": [
+    { "path": "../cookie-jar" },
+    { "path": "../internal" },
+    { "path": "../project-config" },
+    { "path": "../router/tsconfig.build.json" },
+    { "path": "../server-store" },
+    { "path": "../web/tsconfig.build.json" }
+  ]
+}

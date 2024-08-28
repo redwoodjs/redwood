@@ -1,19 +1,15 @@
 // import terminalLink from 'terminal-link'
-import fs from 'fs'
 import path from 'path'
 
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths } from '../../../../lib'
+import { addPackagesTask, getPaths, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import {
-  addToGitIgnoreTask,
-  addToDotEnvTask,
-  addFilesTask,
-  printSetupNotes,
-} from '../helpers'
+import { addToGitIgnoreTask, addToDotEnvTask, addFilesTask } from '../helpers'
 import { SERVERLESS_API_YML } from '../templates/serverless/api'
 import { SERVERLESS_WEB_YML } from '../templates/serverless/web'
 
@@ -33,7 +29,7 @@ export const notes = [
   'https://redwoodjs.com/docs/deploy/serverless',
   '',
   '',
-  c.green("You're almost ready to deploy using the Serverless framework!"),
+  c.success("You're almost ready to deploy using the Serverless framework!"),
   '',
   '• See https://redwoodjs.com/docs/deploy#serverless-deploy for more info. If you ',
   '  want to give it a shot, open your `.env` file and add your AWS credentials,',
@@ -75,7 +71,7 @@ const prismaBinaryTargetAdditions = () => {
   if (!content.includes('rhel-openssl-1.0.x')) {
     const result = content.replace(
       /binaryTargets =.*\n/,
-      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`
+      `binaryTargets = ["native", "rhel-openssl-1.0.x"]\n`,
     )
 
     fs.writeFileSync(getPaths().api.dbSchema, result)
@@ -92,7 +88,7 @@ const updateRedwoodTomlTask = () => {
 
       const newContent = content.replace(
         /apiUrl.*?\n/m,
-        'apiUrl = "${API_URL:/api}"       # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless-deploy\n'
+        'apiUrl = "${API_URL:/api}"       # Set API_URL in production to the Serverless deploy endpoint of your api service, see https://redwoodjs.com/docs/deploy/serverless-deploy\n',
       )
       fs.writeFileSync(configPath, newContent)
     },
@@ -100,6 +96,10 @@ const updateRedwoodTomlTask = () => {
 }
 
 export const handler = async ({ force }) => {
+  recordTelemetryAttributes({
+    command: 'setup deploy serverless',
+    force,
+  })
   const [serverless, serverlessLift, ...rest] = projectDevPackages
 
   const tasks = new Listr(
@@ -141,7 +141,7 @@ export const handler = async ({ force }) => {
     {
       exitOnError: true,
       rendererOptions: { collapseSubtasks: false },
-    }
+    },
   )
   try {
     await tasks.run()

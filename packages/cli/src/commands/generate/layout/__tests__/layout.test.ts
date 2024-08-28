@@ -1,13 +1,15 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { describe, test, it, expect } from 'vitest'
+
 // Load shared mocks
 import '../../../../lib/test'
 
 import * as layout from '../layout'
 
-describe('Single Word default files', () => {
-  const singleWordDefaultFiles = layout.files({
+describe('Single Word default files', async () => {
+  const singleWordDefaultFiles = await layout.files({
     name: 'App',
     tests: true,
     stories: true,
@@ -21,9 +23,9 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -31,9 +33,9 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -41,15 +43,15 @@ describe('Single Word default files', () => {
     expect(
       singleWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.js'
+          '/path/to/project/web/src/layouts/AppLayout/AppLayout.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('Multi word default files', () => {
-  const multiWordDefaultFiles = layout.files({
+describe('Multi word default files', async () => {
+  const multiWordDefaultFiles = await layout.files({
     name: 'SinglePage',
     tests: true,
     stories: true,
@@ -59,9 +61,9 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -69,9 +71,9 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -79,15 +81,15 @@ describe('Multi word default files', () => {
     expect(
       multiWordDefaultFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.js'
+          '/path/to/project/web/src/layouts/SinglePageLayout/SinglePageLayout.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('JS Files', () => {
-  const javascriptFiles = layout.files({
+describe('JS Files', async () => {
+  const javascriptFiles = await layout.files({
     name: 'JavascriptPage',
     javascript: true,
     tests: true,
@@ -98,22 +100,22 @@ describe('JS Files', () => {
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.js'
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.jsx',
         )
-      ]
+      ],
     ).not.toBeUndefined()
     expect(
       javascriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.js'
+          '/path/to/project/web/src/layouts/JavascriptPageLayout/JavascriptPageLayout.test.jsx',
         )
-      ]
+      ],
     ).not.toBeUndefined()
   })
 })
 
-test('trims Layout from end of name', () => {
-  const files = layout.files({
+test('trims Layout from end of name', async () => {
+  const files = await layout.files({
     name: 'BazingaLayout',
     tests: true,
     stories: true,
@@ -122,18 +124,18 @@ test('trims Layout from end of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.js'
+        '/path/to/project/web/src/layouts/BazingaLayout/BazingaLayout.jsx',
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default BazingaLayout')
+    layoutCode.split('\n').includes('export default BazingaLayout'),
   ).toBeTruthy()
 })
 
-test('Does not trim Layout from beginning of name', () => {
-  const files = layout.files({
+test('Does not trim Layout from beginning of name', async () => {
+  const files = await layout.files({
     name: 'LayoutForBazinga',
     tests: true,
     stories: true,
@@ -142,18 +144,18 @@ test('Does not trim Layout from beginning of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.js'
+        '/path/to/project/web/src/layouts/LayoutForBazingaLayout/LayoutForBazingaLayout.jsx',
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default LayoutForBazingaLayout')
+    layoutCode.split('\n').includes('export default LayoutForBazingaLayout'),
   ).toBeTruthy()
 })
 
-test('Does not trim Layout from middle of name', () => {
-  const files = layout.files({
+test('Does not trim Layout from middle of name', async () => {
+  const files = await layout.files({
     name: 'MyLayoutForBazinga',
     tests: true,
     stories: true,
@@ -162,18 +164,18 @@ test('Does not trim Layout from middle of name', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.js'
+        '/path/to/project/web/src/layouts/MyLayoutForBazingaLayout/MyLayoutForBazingaLayout.jsx',
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout')
+    layoutCode.split('\n').includes('export default MyLayoutForBazingaLayout'),
   ).toBeTruthy()
 })
 
-test('Only trims Layout once', () => {
-  const files = layout.files({
+test('Only trims Layout once', async () => {
+  const files = await layout.files({
     name: 'BazingaLayoutLayout',
     tests: true,
     stories: true,
@@ -182,18 +184,18 @@ test('Only trims Layout once', () => {
   const layoutCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.js'
+        '/path/to/project/web/src/layouts/BazingaLayoutLayout/BazingaLayoutLayout.jsx',
       )
     ]
 
   expect(layoutCode).not.toBeUndefined()
   expect(
-    layoutCode.split('\n').includes('export default BazingaLayoutLayout')
+    layoutCode.split('\n').includes('export default BazingaLayoutLayout'),
   ).toBeTruthy()
 })
 
-describe('TS files', () => {
-  const typescriptFiles = layout.files({
+describe('TS files', async () => {
+  const typescriptFiles = await layout.files({
     name: 'TypescriptPage',
     typescript: true,
     tests: true,
@@ -204,22 +206,22 @@ describe('TS files', () => {
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.tsx'
+          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.tsx',
         )
-      ]
+      ],
     ).not.toBeUndefined()
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.test.tsx'
+          '/path/to/project/web/src/layouts/TypescriptPageLayout/TypescriptPageLayout.test.tsx',
         )
-      ]
+      ],
     ).not.toBeUndefined()
   })
 })
 
-test("doesn't include storybook file when --stories is set to false", () => {
-  const withoutStoryFiles = layout.files({
+test("doesn't include storybook file when --stories is set to false", async () => {
+  const withoutStoryFiles = await layout.files({
     name: 'withoutStories',
     javascript: true,
     tests: true,
@@ -228,16 +230,16 @@ test("doesn't include storybook file when --stories is set to false", () => {
 
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.js'
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.test.jsx',
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.js'
+      '/path/to/project/web/src/layouts/WithoutStoriesLayout/WithoutStoriesLayout.jsx',
     ),
   ])
 })
 
-test("doesn't include test file when --tests is set to false", () => {
-  const withoutTestFiles = layout.files({
+test("doesn't include test file when --tests is set to false", async () => {
+  const withoutTestFiles = await layout.files({
     name: 'withoutTests',
     tests: false,
     stories: true,
@@ -245,16 +247,16 @@ test("doesn't include test file when --tests is set to false", () => {
 
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.js'
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.stories.jsx',
     ),
     path.normalize(
-      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.js'
+      '/path/to/project/web/src/layouts/WithoutTestsLayout/WithoutTestsLayout.jsx',
     ),
   ])
 })
 
-test('JavaScript: includes skip link when --skipLink is set to true', () => {
-  const withSkipLinkFilesJS = layout.files({
+test('JavaScript: includes skip link when --skipLink is set to true', async () => {
+  const withSkipLinkFilesJS = await layout.files({
     name: 'A11y',
     skipLink: true,
   })
@@ -262,14 +264,14 @@ test('JavaScript: includes skip link when --skipLink is set to true', () => {
   expect(
     withSkipLinkFilesJS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.js'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.jsx',
       )
-    ]
+    ],
   ).toMatchSnapshot()
 })
 
-test('TypeScript: includes skip link when --skipLink is set to true', () => {
-  const withSkipLinkFilesTS = layout.files({
+test('TypeScript: includes skip link when --skipLink is set to true', async () => {
+  const withSkipLinkFilesTS = await layout.files({
     name: 'A11y',
     skipLink: true,
     typescript: true,
@@ -278,8 +280,8 @@ test('TypeScript: includes skip link when --skipLink is set to true', () => {
   expect(
     withSkipLinkFilesTS[
       path.normalize(
-        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx'
+        '/path/to/project/web/src/layouts/A11yLayout/A11yLayout.tsx',
       )
-    ]
+    ],
   ).toMatchSnapshot()
 })

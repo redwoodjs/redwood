@@ -14,14 +14,14 @@ Can you guess what broke in this test?
 
 ![image](https://user-images.githubusercontent.com/300/153312402-dd7f08bc-e23d-4acc-8202-cdfc9798a911.png)
 
-The test was looking for the full text of the blog post, but remember that in `ArticlesCell` we had `Article` only display the *summary* of the post. This test is looking for the full text match, which is no longer present on the page.
+The test was looking for the full text of the blog post, but remember that in `ArticlesCell` we had `Article` only display the _summary_ of the post. This test is looking for the full text match, which is no longer present on the page.
 
 Let's update the test so that it checks for the expected behavior instead. There are entire books written on the best way to test, so no matter what we decide on testing in this code there will be someone out there to tell us we're doing it wrong. As just one example, the simplest test would be to just copy what's output and use that for the text in the test:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell.test.js"
+```jsx title="web/src/components/ArticlesCell.test.jsx"
 test('Success renders successfully', async () => {
   const articles = standard().articles
   render(<Success articles={articles} />)
@@ -61,13 +61,13 @@ test('Success renders successfully', async () => {
 
 But the truncation length could change later, so how do we encapsulate that in our test? Or should we? The number of characters to truncate to is hardcoded in the `Article` component, which this component shouldn't really care about: it should be up to the page that's presenting the article to determine much or how little to show (based on space concerns, design constraints, etc.) don't you think? Even if we refactored the `truncate()` function into a shared place and imported it into both `Article` and this test, the test will still be knowing too much about `Article`—why should it have detailed knowledge of the internals of `Article` and that it's making use of this `truncate()` function at all? It shouldn't! One theory of testing says that the thing you're testing should be a black box: you can't see inside of it, all you can test is what data comes out when you send certain data in.
 
-Let's compromise—by virtue of the fact that this functionality has a prop called "summary" we can guess that it's doing *something* to shorten the text. So what if we test three things that we can make reasonable assumptions about right now:
+Let's compromise—by virtue of the fact that this functionality has a prop called "summary" we can guess that it's doing _something_ to shorten the text. So what if we test three things that we can make reasonable assumptions about right now:
 
-1. The full body of the post body *is not* present
-2. But, at least the first couple of words of the post *are* present
+1. The full body of the post body _is not_ present
+2. But, at least the first couple of words of the post _are_ present
 3. The text that is shown ends in "..."
 
-This gives us a buffer if we decide to truncate to something like 25 words, or even if we go up to a couple of hundred. What it *doesn't* encompass, however, is the case where the body of the blog post is shorter than the truncate limit. In that case the full text *would* be present, and we should probably update the `truncate()` function to not add the `...` in that case. We'll leave adding that functionality and test case up to you to add in your free time. ;)
+This gives us a buffer if we decide to truncate to something like 25 words, or even if we go up to a couple of hundred. What it _doesn't_ encompass, however, is the case where the body of the blog post is shorter than the truncate limit. In that case the full text _would_ be present, and we should probably update the `truncate()` function to not add the `...` in that case. We'll leave adding that functionality and test case up to you to add in your free time. ;)
 
 ### Adding the Test
 
@@ -76,7 +76,7 @@ Okay, let's do this:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell.test.js"
+```jsx title="web/src/components/ArticlesCell.test.jsx"
 // highlight-next-line
 import { render, screen, within } from '@redwoodjs/testing'
 
@@ -203,31 +203,34 @@ Find the title of the article in the page.
 ```javascript
 expect(screen.queryByText(article.body)).not.toBeInTheDocument()
 ```
-When trying to find the *full* text of the body, it should *not* be present.
+
+When trying to find the _full_ text of the body, it should _not_ be present.
 
 ```javascript
 expect(matchedBody).toBeInTheDocument()
 ```
-Assert that the truncated text is .
+
+Assert that the truncated text is present.
 
 ```javascript
 expect(ellipsis).toBeInTheDocument()
 ```
+
 Assert that the ellipsis is present.
 
 :::info What's the difference between `getByText()` and `queryByText()`?
 
-`getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will  return `null` and let you continue with your testing (and is one way to test that some text is *not* present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
+`getByText()` will throw an error if the text isn't found in the document, whereas `queryByText()` will return `null` and let you continue with your testing (and is one way to test that some text is _not_ present on the page). You can read more about these in the [DOM Testing Library Queries](https://testing-library.com/docs/dom-testing-library/api-queries) docs.
 
 :::
 
 As soon as you saved that test file the test should have run and passed! Press `a` to run the whole suite if you want to make sure nothing else broke. Remember to press `o` to go back to only testing changes again. (There's nothing wrong with running the full test suite each time, but it will take longer than only testing the things that have changed since the last time you committed your code.)
 
-To double check that we're testing what we think we're testing, open up `ArticlesCell.js` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post *is* on the page and the expectation in our test `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` fails because the full body *is* in the document! Make sure to put the `summary={true}` back before we continue.
+To double check that we're testing what we think we're testing, open up `ArticlesCell.jsx` and remove the `summary={true}` prop (or set it to `false`) and the test should fail: now the full body of the post _is_ on the page and the expectation in our test `expect(screen.queryByText(article.body)).not.toBeInTheDocument()` fails because the full body _is_ in the document! Make sure to put the `summary={true}` back before we continue.
 
 ### What's the Deal with Mocks?
 
-Did you wonder where the articles were coming from in our test? Was it the development database? Nope: that data came from a **Mock**. That's the `ArticlesCell.mock.js` file that lives next to your component, test and stories files. Mocks are used when you want to define the data that would normally be returned by GraphQL in your Storybook stories or tests. In cells, a GraphQL call goes out (the query defined by the variable `QUERY` at the top of the file) and returned to the `Success` component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
+Did you wonder where the articles were coming from in our test? Was it the development database? Nope: that data came from a **Mock**. That's the `ArticlesCell.mock.js` file that lives next to your component, test and stories files. Mocks are used when you want to define the data that would normally be returned by GraphQL in your Storybook stories or tests. In cells, a GraphQL call goes out (the query defined by the variable `QUERY` at the top of the file) and is returned to the `Success` component. We don't want to have to run the api-side server and have real data in the database just for Storybook or our tests, so Redwood intercepts those GraphQL calls and returns the data from the mock instead.
 
 :::info If the server is being mocked, how do we test the api-side code?
 
@@ -320,7 +323,7 @@ So we can just spread the result of `standard()` in a story or test when using t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.jsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -335,7 +338,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -350,12 +353,12 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 </Tabs>
 
-Some folks find this syntax a little *too* succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashioned way:
+Some folks find this syntax a little _too_ succinct and would rather see the `<Success>` component being invoked the same way it is in their actual code. If that sounds like you, skip the spread syntax and just call the `articles` property on `standard()` the old fashioned way:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title=web/src/components/ArticlesCell/ArticlesCell.stories.js
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.stories.jsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -370,7 +373,7 @@ export default { title: 'Cells/ArticlesCell' }
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title=web/src/components/ArticlesCell/ArticlesCell.stories.tsx
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.stories.tsx"
 import { Success } from './ArticlesCell'
 import { standard } from './ArticlesCell.mock'
 
@@ -395,19 +398,19 @@ When you get into the flow of building your app it can be very easy to overlook 
 
 The summary functionality in `Article` is pretty simple, but there are a couple of different ways we could test it:
 
-* Export the `truncate()` function and test it directly
-* Test the final rendered state of the component
+- Export the `truncate()` function and test it directly
+- Test the final rendered state of the component
 
 In this case `truncate()` "belongs to" `Article` and the outside world really shouldn't need to worry about it or know that it exists. If we came to a point in development where another component needed to truncate text then that would be a perfect time to move this function to a shared location and import it into both components that need it. `truncate()` could then have its own dedicated test. But for now let's keep our separation of concerns and test the one thing that's "public" about this component—the result of the render.
 
-In this case let's just test that the output matches an exact string. Since the knowledge of how long to make the summary is contained in `Article` itself, at this point it feels okay to have the test tightly coupled to the render result of this particular component. (`ArticlesCell` itself didn't know about how long to truncate, just that *something* was shortening the text.) You could spin yourself in circles trying to refactor the code to make it absolutely bulletproof to code changes breaking the tests, but will you ever actually need that level of flexibility? It's always a trade-off!
+In this case let's just test that the output matches an exact string. Since the knowledge of how long to make the summary is contained in `Article` itself, at this point it feels okay to have the test tightly coupled to the render result of this particular component. (`ArticlesCell` itself didn't know about how long to truncate, just that _something_ was shortening the text.) You could spin yourself in circles trying to refactor the code to make it absolutely bulletproof to code changes breaking the tests, but will you ever actually need that level of flexibility? It's always a trade-off!
 
 We'll move the sample article data in the test to a constant and then use it in both the existing test (which tests that not passing the `summary` prop at all results in the full body being rendered) and our new test that checks for the summary version being rendered:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.test.js"
+```jsx title="web/src/components/Article/Article.test.jsx"
 import { render, screen } from '@redwoodjs/testing'
 
 import Article from './Article'

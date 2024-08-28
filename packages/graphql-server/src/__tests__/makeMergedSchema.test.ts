@@ -1,4 +1,5 @@
-import { parse, GraphQLResolveInfo, graphql, GraphQLError } from 'graphql'
+import type { GraphQLResolveInfo } from 'graphql'
+import { parse, graphql, GraphQLError } from 'graphql'
 import gql from 'graphql-tag'
 
 import {
@@ -7,7 +8,7 @@ import {
   createValidatorDirective,
 } from '../directives/makeDirectives'
 import { makeMergedSchema } from '../makeMergedSchema'
-import {
+import type {
   GraphQLTypeWithFields,
   ServicesGlobImports,
   SdlGlobImports,
@@ -148,25 +149,23 @@ describe('makeMergedSchema', () => {
 
     it('Resolver functions are mapped correctly.', () => {
       expect(
-        queryFields.inResolver.resolve &&
-          queryFields.inResolver.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo
-          )
+        queryFields.inResolver.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("I'm defined in the resolver.")
     })
 
     it('Resolver functions take preference over service functions.', () => {
       expect(
-        queryFields.inResolverAndServices.resolve &&
-          queryFields.inResolverAndServices.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo
-          )
+        queryFields.inResolverAndServices.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("I'm defined in the resolver.")
     })
 
@@ -177,8 +176,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          ))
+            {} as GraphQLResolveInfo,
+          )),
       ).toEqual("I'm defined in the service.")
     })
   })
@@ -189,25 +188,23 @@ describe('makeMergedSchema', () => {
 
     it('Resolver functions are mapped correctly', () => {
       expect(
-        myOwnTypeFields.inTypeResolverAndServices.resolve &&
-          myOwnTypeFields.inTypeResolverAndServices.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo
-          )
+        myOwnTypeFields.inTypeResolverAndServices.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
     it('Resolver functions take preference over service functions.', () => {
       expect(
-        myOwnTypeFields.inTypeResolver.resolve &&
-          myOwnTypeFields.inTypeResolver.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo
-          )
+        myOwnTypeFields.inTypeResolver.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
@@ -218,8 +215,8 @@ describe('makeMergedSchema', () => {
             null,
             {},
             null,
-            {} as GraphQLResolveInfo
-          ))
+            {} as GraphQLResolveInfo,
+          )),
       ).toEqual("MyOwnType: I'm defined in the services.")
     })
   })
@@ -251,7 +248,7 @@ describe('makeMergedSchema', () => {
       const res = await graphql({ schema, source: query })
       expect(res.errors).toEqual([
         new GraphQLError(
-          'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver'
+          'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver',
         ),
       ])
       expect((res.data as any).searchTypeSameFields).toBeNull()
@@ -270,7 +267,7 @@ describe('makeMergedSchema', () => {
       const res = await graphql({ schema, source: query })
       expect(res.errors).toBeUndefined()
       expect((res.data as any).searchTypeSameFieldsWithTypename.name).toBe(
-        'MySecondType'
+        'MySecondType',
       )
     })
   })

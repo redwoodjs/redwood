@@ -165,7 +165,7 @@ As described in [Side Quest: How Redwood Deals with Data](../chapter2/side-quest
 
 :::tip
 
-*Psssstttt* I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
+_Psssstttt_ I'll let you in on a little secret: if you just need a simple read-only SDL, you can skip creating the create/update/delete mutations by passing a flag to the SDL generator like so:
 
 `yarn rw g sdl Contact --no-crud`
 
@@ -173,7 +173,7 @@ You'd only get a single `contacts` type to return them all.
 
 :::
 
-We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need to change `@requireAuth` to `@skipAuth`. This one says that authentication is *not* required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
+We'll only need `createContact` for our contact page. It accepts a single variable, `input`, that is an object that conforms to what we expect for a `CreateContactInput`, namely `{ name, email, message }`. This mutation should be able to be accessed by anyone, so we'll need to change `@requireAuth` to `@skipAuth`. This one says that authentication is _not_ required and will allow anyone to anonymously send us a message. Note that having at least one schema directive is required for each `Query` and `Mutation` or you'll get an error: Redwood embraces the idea of "secure by default" meaning that we try and keep your application safe, even if you do nothing special to prevent access. In this case it's much safer to throw an error than to accidentally expose all of your users' data to the internet!
 
 :::info
 
@@ -237,12 +237,6 @@ export const schema = gql`
     name: String!
     email: String!
     message: String!
-  }
-
-  input UpdateContactInput {
-    name: String
-    email: String
-    message: String
   }
 
   // highlight-start
@@ -366,8 +360,8 @@ Our GraphQL mutation is ready to go on the backend so all that's left is to invo
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -394,7 +388,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -446,7 +440,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -480,7 +474,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -538,9 +532,9 @@ Next we'll call the `useMutation` hook provided by Redwood which will allow us t
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // highlight-next-line
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -568,7 +562,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -621,7 +615,7 @@ export default ContactPage
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
 // highlight-next-line
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -667,7 +661,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -753,8 +747,8 @@ That means we can update the `onSubmit` function to invoke the mutation with the
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -782,7 +776,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -834,7 +828,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import {
   FieldError,
   Form,
@@ -877,7 +871,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
         <Label name="name" errorClassName="error">
@@ -942,9 +936,9 @@ Remember: we haven't added authentication yet, so the concept of someone being l
 
 Our contact form works but it has a couple of issues at the moment:
 
-* Clicking the submit button multiple times will result in multiple submits
-* The user has no idea if their submission was successful
-* If an error was to occur on the server, we have no way of notifying the user
+- Clicking the submit button multiple times will result in multiple submits
+- The user has no idea if their submission was successful
+- If an error was to occur on the server, we have no way of notifying the user
 
 Let's address these issues.
 
@@ -955,7 +949,7 @@ The `useMutation` hook returns a couple more elements along with the function to
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // ...
 
 const ContactPage = () => {
@@ -1003,7 +997,7 @@ Now we know if the database call is still in progress by looking at `loading`. A
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   // ...
   // highlight-next-line
@@ -1044,8 +1038,8 @@ Add the `onCompleted` callback to `useMutation` and include the **&lt;Toaster&gt
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1080,7 +1074,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       // highlight-next-line
       <Toaster />
@@ -1134,7 +1128,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
@@ -1184,8 +1178,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
-
+      <Metadata title="Contact" description="Contact page" />
       // highlight-next-line
       <Toaster />
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }}>
@@ -1257,7 +1250,7 @@ We do have an additional layer of validation for free: because name, email and m
 
 :::
 
-We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with  [Service Validations](../../services.md#service-validations).
+We talked about business logic belonging in our services files and this is a perfect example. And since validating inputs is such a common requirement, Redwood once again makes our lives easier with [Service Validations](../../services.md#service-validations).
 
 We'll make a call to a new `validate` function to our `contacts` service, which will do the work of making sure that the `email` field is actually formatted like an email address:
 
@@ -1288,7 +1281,9 @@ import { validate } from '@redwoodjs/api'
 
 // ...
 
-export const createContact: MutationResolvers['createContact'] = ({ input }) => {
+export const createContact: MutationResolvers['createContact'] = ({
+  input,
+}) => {
   // highlight-next-line
   validate(input.email, 'email', { email: true })
   return db.contact.create({ data: input })
@@ -1311,7 +1306,7 @@ Right now we won't even be able to test our validation on the server because we'
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```diff title="web/src/pages/ContactPage/ContactPage.js"
+```diff title="web/src/pages/ContactPage/ContactPage.jsx"
  <TextField
    name="email"
    validation={{
@@ -1352,8 +1347,8 @@ Add a `<FormError>` component, passing the `error` constant we got from `useMuta
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1387,7 +1382,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       // highlight-start
@@ -1440,7 +1435,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1489,14 +1484,12 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
-
+      <Metadata title="Contact" description="Contact page" />
       <Toaster />
       // highlight-start
       <Form onSubmit={onSubmit} config={{ mode: 'onBlur' }} error={error}>
         <FormError error={error} wrapperClassName="form-error" />
         // highlight-end
-
         <Label name="name" errorClassName="error">
           Name
         </Label>
@@ -1506,7 +1499,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="name" className="error" />
-
         <Label name="email" errorClassName="error">
           Email
         </Label>
@@ -1518,7 +1510,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="email" className="error" />
-
         <Label name="message" errorClassName="error">
           Message
         </Label>
@@ -1528,7 +1519,6 @@ const ContactPage = () => {
           errorClassName="error"
         />
         <FieldError name="message" className="error" />
-
         <Submit disabled={loading}>Save</Submit>
       </Form>
     </>
@@ -1545,16 +1535,16 @@ Now submit a message with an invalid email address:
 
 ![Email error from the server side](https://user-images.githubusercontent.com/300/158897801-8a3f7ae8-6e67-4fc0-b828-3095c264507e.png)
 
-We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't *have* to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
+We get that error message at the top saying something went wrong in plain English _and_ the actual field is highlighted for us, just like the inline validation! The message at the top may be overkill for such a short form, but it can be key if a form is multiple screens long; the user gets a summary of what went wrong all in one place and they don't have to resort to hunting through a long form looking for red boxes. You don't _have_ to use that message box at the top, though; just remove `<FormError>` and the field will still be highlighted as expected.
 
 :::info
 
 `<FormError>` has several styling options which are attached to different parts of the message:
 
-* `wrapperStyle` / `wrapperClassName`: the container for the entire message
-* `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
-* `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
-* `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
+- `wrapperStyle` / `wrapperClassName`: the container for the entire message
+- `titleStyle` / `titleClassName`: the "Errors prevented this form..." title
+- `listStyle` / `listClassName`: the `<ul>` that contains the list of errors
+- `listItemStyle` / `listItemClassName`: each individual `<li>` around each error
 
 :::
 
@@ -1569,17 +1559,17 @@ export const createCar = ({ input }) => {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
   })
   validate(input.color, 'color', {
-    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+    exclusion: { in: ['Beige', 'Mauve'], message: 'No one wants that color' },
   })
   validate(input.hasDamage, 'hasDamage', {
-    absence: true
+    absence: true,
   })
   validate(input.vin, 'vin', {
     format: /[A-Z0-9]+/,
-    length: { equal: 17 }
+    length: { equal: 17 },
   })
   validate(input.odometer, 'odometer', {
-    numericality: { positive: true, lessThanOrEqual: 10000 }
+    numericality: { positive: true, lessThanOrEqual: 10000 },
   })
 
   return db.car.create({ data: input })
@@ -1595,17 +1585,17 @@ export const createCar = ({ input }: Car) => {
     inclusion: ['Audi', 'BMW', 'Ferrari', 'Lexus', 'Tesla'],
   })
   validate(input.color, 'color', {
-    exclusion: { in: ['Beige', 'Mauve'], message: "No one wants that color" }
+    exclusion: { in: ['Beige', 'Mauve'], message: 'No one wants that color' },
   })
   validate(input.hasDamage, 'hasDamage', {
-    absence: true
+    absence: true,
   })
   validate(input.vin, 'vin', {
     format: /[A-Z0-9]+/,
-    length: { equal: 17 }
+    length: { equal: 17 },
   })
   validate(input.odometer, 'odometer', {
-    numericality: { positive: true, lessThanOrEqual: 10000 }
+    numericality: { positive: true, lessThanOrEqual: 10000 },
   })
 
   return db.car.create({ data: input })
@@ -1661,7 +1651,7 @@ First we'll import `useForm`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 import {
   FieldError,
   Form,
@@ -1700,7 +1690,7 @@ And now call it inside of our component:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 const ContactPage = () => {
   // highlight-next-line
   const formMethods = useForm()
@@ -1725,7 +1715,7 @@ Finally we'll tell `<Form>` to use the `formMethods` we just got from `useForm()
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 return (
   <>
     <Toaster />
@@ -1764,7 +1754,7 @@ Now we can call `reset()` on `formMethods` after we call `toast()`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 // ...
 
 const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
@@ -1801,7 +1791,7 @@ const [create, { loading, error }] = useMutation<
 </TabItem>
 </Tabs>
 
-:::caution
+:::warning
 
 You can put the email validation back into the `<TextField>` now, but you should leave the server validation in place, just in case.
 
@@ -1812,8 +1802,8 @@ Here's the entire page:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ContactPage/ContactPage.js"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1850,7 +1840,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       <Form
@@ -1910,7 +1900,7 @@ export default ContactPage
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/pages/ContactPage/ContactPage.tsx"
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import {
   FieldError,
@@ -1962,7 +1952,7 @@ const ContactPage = () => {
 
   return (
     <>
-      <MetaTags title="Contact" description="Contact page" />
+      <Metadata title="Contact" description="Contact page" />
 
       <Toaster />
       <Form
@@ -2030,7 +2020,7 @@ You may have noticed that the onBlur form config stopped working once you starte
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```js title="web/src/pages/ContactPage/ContactPage.js"
+```jsx title="web/src/pages/ContactPage/ContactPage.jsx"
 const ContactPage = () => {
   const formMethods = useForm({ mode: 'onBlur' })
   //...

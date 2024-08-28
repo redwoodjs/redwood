@@ -1,5 +1,5 @@
+import type { Plugin } from 'graphql-yoga'
 import {
-  Plugin,
   handleStreamOrSingleExecutionResult,
   createGraphQLError,
 } from 'graphql-yoga'
@@ -7,7 +7,7 @@ import {
 import { RedwoodError } from '@redwoodjs/api'
 import type { Logger } from '@redwoodjs/api/logger'
 
-import { RedwoodGraphQLContext } from '../types'
+import type { RedwoodGraphQLContext } from '../types'
 
 /**
  * Converts RedwoodErrors to GraphQLErrors
@@ -25,7 +25,7 @@ import { RedwoodGraphQLContext } from '../types'
  * @returns ExecutionResult
  */
 export const useRedwoodError = (
-  logger: Logger
+  logger: Logger,
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onExecute() {
@@ -41,7 +41,7 @@ export const useRedwoodError = (
                 ) {
                   logger.debug(
                     { custom: { name: error.originalError.name } },
-                    'Converting RedwoodError to GraphQLError'
+                    'Converting RedwoodError to GraphQLError',
                   )
                   return createGraphQLError(error.message, {
                     extensions: error.extensions,
@@ -52,12 +52,16 @@ export const useRedwoodError = (
                 }
               })
 
+              // be certain to return the complete result
+              // and not just the data or the errors
+              // because defer, stream and AsyncIterator results
+              // need to be returned as is
               setResult({
-                data: result.data,
+                ...result,
                 errors,
                 extensions: result.extensions || {},
               })
-            }
+            },
           )
         },
       }

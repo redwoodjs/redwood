@@ -53,40 +53,50 @@ Read the post-install instructions carefully as they contain instructions for ad
 
 > You will need to add a couple of fields to your User table in order to store a hashed password and salt:
 >
->     model User {
->       id             Int @id @default(autoincrement())
->       email          String  @unique
->       hashedPassword      String    // <─┐
->       salt                String    // <─┼─ add these lines
->       resetToken          String?   // <─┤
->       resetTokenExpiresAt DateTime? // <─┘
->     }
+> ```
+> model User {
+>   id             Int @id @default(autoincrement())
+>   email          String  @unique
+>   hashedPassword      String    // <─┐
+>   salt                String    // <─┼─ add these lines
+>   resetToken          String?   // <─┤
+>   resetTokenExpiresAt DateTime? // <─┘
+> }
+> ```
 >
 > If you already have existing user records you will need to provide a default value or Prisma complains, so change those to:
 >
->     hashedPassword String @default("")
->     salt           String @default("")
+> ```
+>   hashedPassword String @default("")
+>   salt           String @default("")
+> ```
 >
 > You'll need to let Redwood know what field you're using for your users' `id` and `username` fields In this case we're using `id` and `email`, so update those in the `authFields` config in `/api/src/functions/auth.js` (this is also the place to tell Redwood if you used a different name for the `hashedPassword` or `salt` fields):
 >
->     authFields: {
->       id: 'id',
->       username: 'email',
->       hashedPassword: 'hashedPassword',
->       salt: 'salt',
->       resetToken: 'resetToken',
->       resetTokenExpiresAt: 'resetTokenExpiresAt',
->     },
+> ```
+> authFields: {
+>   id: 'id',
+>   username: 'email',
+>   hashedPassword: 'hashedPassword',
+>   salt: 'salt',
+>   resetToken: 'resetToken',
+>   resetTokenExpiresAt: 'resetTokenExpiresAt',
+> },
+> ```
 >
 > To get the actual user that's logged in, take a look at `getCurrentUser()` in `/api/src/lib/auth.js`. We default it to something simple, but you may use different names for your model or unique ID fields, in which case you need to update those calls (instructions are in the comment above the code).
 >
 > Finally, we created a `SESSION_SECRET` environment variable for you in `.env`. This value should NOT be checked into version control and should be unique for each environment you deploy to. If you ever need to log everyone out of your app at once change this secret to a new value. To create a new secret, run:
 >
->     yarn rw g secret
+> ```
+> yarn rw g secret
+> ```
 >
 > Need simple Login, Signup and Forgot Password pages? Of course we have a generator for those:
 >
->     yarn rw generate dbAuth
+> ```
+> yarn rw generate dbAuth
+> ```
 
 Note that if you change the fields named `hashedPassword` and `salt`, and you have some verbose logging in your app, you'll want to scrub those fields from appearing in your logs. See the [Redaction](logger.md#redaction) docs for info.
 
@@ -107,6 +117,22 @@ If you'd rather create your own, you might want to start from the generated page
 ## Configuration
 
 Almost all config for dbAuth lives in `api/src/functions/auth.js` in the object you give to the `DbAuthHandler` initialization. The comments above each key will explain what goes where. Here's an overview of the more important options:
+
+### allowedUserFields
+
+```javascript
+allowedUserFields: ['id', 'email']
+```
+
+Most of the auth handlers accept a `user` argument that you can reference in the body of the function. These handlers also sometimes return that `user` object. As a security measure, `allowedUserFields` defines the only properties that will be available in that object so that sensitive data isn't accidentally leaked by these handlers to the client.
+
+:::info
+
+The `signup` and `forgotPassword` handlers return to the client whatever data is returned from their handlers, which can be used to display something like the email address that a verification email was just sent to. Without `allowedUserFields` it would be very easy to include the user's `hashedPassword` and `salt` in that response (just return `user` from those handlers) and then any customer could open the Web Inspector in their browser and see those values in plain text!
+
+:::
+
+`allowedUserFields` is defaulted to `id` and `email` but you can add any property on `user` to that list.
 
 ### login.enabled
 
@@ -197,13 +223,16 @@ If the password is valid, return `true`. Otherwise, throw the `PasswordValidatio
 ```javascript
 signup: {
   passwordValidation: (password) => {
-
     if (password.length < 8) {
-      throw new PasswordValidationError('Password must be at least 8 characters')
+      throw new PasswordValidationError(
+        'Password must be at least 8 characters'
+      )
     }
 
     if (!password.match(/[A-Z]/)) {
-      throw new PasswordValidationError('Password must contain at least one capital letter')
+      throw new PasswordValidationError(
+        'Password must contain at least one capital letter'
+      )
     }
 
     return true
@@ -228,11 +257,15 @@ forgotPassword: {
 
 This handler is invoked if a user is found with the username/email that they submitted on the Forgot Password page, and that user will be passed as an argument. Inside this function is where you'll send the user a link to reset their password—via an email is most common. The link will, by default, look like:
 
-    https://example.com/reset-password?resetToken=${user.resetToken}
+```
+https://example.com/reset-password?resetToken=${user.resetToken}
+```
 
 If you changed the path to the Reset Password page in your routes you'll need to change it here. If you used another name for the `resetToken` database field, you'll need to change that here as well:
 
-    https://example.com/reset-password?resetKey=${user.resetKey}
+```
+https://example.com/reset-password?resetKey=${user.resetKey}
+```
 
 > Note that although the user table contains a hash of `resetToken`, only for the handler, `user.resetToken` will contain the raw `resetToken` to use for generating a password reset link.
 
@@ -253,7 +286,7 @@ This handler is invoked after the password has been successfully changed in the 
 
 ### usernameMatch
 
-This configuration allows you to perform a case insensitive check on a username at the point of user creation.
+This configuration allows you to perform a case insensitive check on a username at the point of db check. You will need to provide the configuration of your choice for both signup and login.
 
 ```javascript
 signup: {
@@ -261,16 +294,21 @@ signup: {
 }
 ```
 
+```javascript
+login: {
+  usernameMatch: 'insensitive'
+}
+```
+
 By default no setting is required. This is because each db has its own rules for enabling this feature. To enable please see the table below and pick the correct 'userMatchString' for your db of choice.
 
-| DB | Default  | usernameMatchString  | notes |
-|---|---|---|---|
-| Postgres  | 'default'  | 'insensitive'  | |
-| MySQL  | 'case-insensitive'  | N/A  | turned on by default so no setting required |
-| MongoDB  | 'default'  | 'insensitive'  |
-| SQLite | N/A  | N/A  | [Not Supported] Insensitive checks can only be defined at a per column level |
-| Microsoft SQL Server | 'case-insensitive' | N/A | turned on by default so no setting required |
-
+| DB                   | Default            | usernameMatchString | notes                                                                        |
+| -------------------- | ------------------ | ------------------- | ---------------------------------------------------------------------------- |
+| Postgres             | 'default'          | 'insensitive'       |                                                                              |
+| MySQL                | 'case-insensitive' | N/A                 | turned on by default so no setting required                                  |
+| MongoDB              | 'default'          | 'insensitive'       |
+| SQLite               | N/A                | N/A                 | [Not Supported] Insensitive checks can only be defined at a per column level |
+| Microsoft SQL Server | 'case-insensitive' | N/A                 | turned on by default so no setting required                                  |
 
 ### Cookie config
 
@@ -312,7 +350,7 @@ By default, the session cookie will not have the `Domain` property set, which a 
 
 To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-```json title=api/src/functions/auth.js
+```json title="api/src/functions/auth.js"
 cookie: {
   HttpOnly: true,
   Path: '/',
@@ -326,11 +364,13 @@ cookie: {
 
 If you need to change the secret key that's used to encrypt the session cookie, or deploy to a new target (each deploy environment should have its own unique secret key) we've got a CLI tool for creating a new one:
 
-    yarn rw g secret
+```
+yarn rw g secret
+```
 
 Note that the secret that's output is _not_ appended to your `.env` file or anything else, it's merely output to the screen. You'll need to put it in the right place after that.
 
-:::caution .env and Version Control
+:::warning .env and Version Control
 
 The `.env` file is set to be ignored by git and not committed to version control. There is another file, `.env.defaults`, which is meant to be safe to commit and contain simple ENV vars that your dev team can share. The encryption key for the session cookie is NOT one of these shareable vars!
 
@@ -403,13 +443,13 @@ In both cases, actual scanning and matching of devices is handled by the operati
 
 WebAuthn is supported in the following browsers (as of July 2022):
 
-| OS      |	Browser	| Authenticator |
-| ------- | ------- | ------------- |
-| macOS   |	Firefox |	Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
-| macOS   |	Chrome  |	Touch ID, Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
-| iOS     |	All     |	Face ID, Touch ID, Yubikey Security Key NFC (NFC), Yubikey 5Ci |
-| Android |	Chrome  |	Fingerprint Scanner, caBLE |
-| Android |	Firefox |	Screen PIN |
+| OS      | Browser | Authenticator                                                  |
+| ------- | ------- | -------------------------------------------------------------- |
+| macOS   | Firefox | Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey           |
+| macOS   | Chrome  | Touch ID, Yubikey Security Key NFC (USB), Yubikey 5Ci, SoloKey |
+| iOS     | All     | Face ID, Touch ID, Yubikey Security Key NFC (NFC), Yubikey 5Ci |
+| Android | Chrome  | Fingerprint Scanner, caBLE                                     |
+| Android | Firefox | Screen PIN                                                     |
 
 ### Configuration
 
@@ -430,7 +470,7 @@ If you didn't setup WebAuthn at first, but decided you now want WebAuthn, you co
 
 You'll need to add two fields to your `User` model, and a new `UserCredential` model to store the devices that are used and associate them with a user:
 
-```javascript title=api/db/schema.prisma
+```javascript title="api/db/schema.prisma"
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -468,7 +508,7 @@ model UserCredential {
 
 Run `yarn rw prisma migrate dev` to apply the changes to your database.
 
-:::caution Do Not Allow GraphQL Access to `UserCredential`
+:::warning Do Not Allow GraphQL Access to `UserCredential`
 
 As you can probably tell by the name, this new model contains secret credential info for the user. You **should not** make this data publicly available by adding an SDL file to `api/src/graphql`.
 
@@ -486,12 +526,11 @@ credentials: [UserCredential]!
 
 Next we need to let dbAuth know about the new field and model names, as well as how you want WebAuthn to behave (see the highlighted section)
 
-```javascript title=api/src/functions/auth.js
+```javascript title="api/src/functions/auth.js"
 import { db } from 'src/lib/db'
 import { DbAuthHandler } from '@redwoodjs/api'
 
 export const handler = async (event, context) => {
-
   // assorted handler config here...
 
   const authHandler = new DbAuthHandler(event, context, {
@@ -552,24 +591,24 @@ export const handler = async (event, context) => {
 }
 ```
 
-* `credentialModelAccessor` specifies the name of the accessor that you call to access the model you created to store credentials. If your model name is `UserCredential` then this field would be `userCredential` as that's how Prisma's naming conventions work.
-* `authFields.challenge` specifies the name of the field in the user model that will hold the WebAuthn challenge string. This string is generated automatically whenever a WebAuthn registration or authentication request starts and is one more verification that the browser request came from this user. A user can only have one WebAuthn request/response cycle going at a time, meaning that they can't open a desktop browser, get the TouchID prompt, then switch to iOS Safari to use FaceID, then return to the desktop to scan their fingerprint. The most recent WebAuthn request will clobber any previous one that's in progress.
-* `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests. If you decide to stop using WebAuthn, you'll want to turn it off here as well as update the LoginPage to stop prompting.
-* `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user *must* use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks (this is similar to login on macOS where your TouchID session expires after a couple of days of inactivity). In this example you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
-* `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
-* `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
-* `webAuthn.origin` is the domain *including* the protocol and port that the request is coming from, ex: https://app.server.com In development mode, this would be `http://localhost:8910`
-* `webAuthn.type`: the type of device that's allowed to be used (see [next section below](#webauthn-type-option))
-* `webAuthn.timeout`: how long to wait for a device to be used in milliseconds (defaults to 60 seconds)
-* `webAuthn.credentialFields`: lists the expected field names that dbAuth uses internally mapped to what they're actually called in your model. This includes 5 fields total: `id`, `userId`, `publicKey`, `transports`, `counter`.
+- `credentialModelAccessor` specifies the name of the accessor that you call to access the model you created to store credentials. If your model name is `UserCredential` then this field would be `userCredential` as that's how Prisma's naming conventions work.
+- `authFields.challenge` specifies the name of the field in the user model that will hold the WebAuthn challenge string. This string is generated automatically whenever a WebAuthn registration or authentication request starts and is one more verification that the browser request came from this user. A user can only have one WebAuthn request/response cycle going at a time, meaning that they can't open a desktop browser, get the TouchID prompt, then switch to iOS Safari to use FaceID, then return to the desktop to scan their fingerprint. The most recent WebAuthn request will clobber any previous one that's in progress.
+- `webAuthn.enabled` is a boolean, denoting whether the server should respond to webAuthn requests. If you decide to stop using WebAuthn, you'll want to turn it off here as well as update the LoginPage to stop prompting.
+- `webAuthn.expires` is the number of seconds that a user will be allowed to keep using their fingerprint/face scan to re-authenticate into your site. Once this value expires, the user _must_ use their username/password to authenticate the next time, and then WebAuthn will be re-enabled (again, for this length of time). For security, you may want to log users out of your app after an hour of inactivity, but allow them to easily use their fingerprint/face to re-authenticate for the next two weeks (this is similar to login on macOS where your TouchID session expires after a couple of days of inactivity). In this example you would set `login.expires` to `60 * 60` and `webAuthn.expires` to `60 * 60 * 24 * 14`.
+- `webAuthn.name` is the name of the app that will show in some browser's prompts to use the device
+- `webAuthn.domain` is the name of domain making the request. This is just the domain part of the URL, ex: `app.server.com`, or in development mode `localhost`
+- `webAuthn.origin` is the domain _including_ the protocol and port that the request is coming from, ex: [https://app.server.com](https://app.server.com) In development mode, this would be `http://localhost:8910`
+- `webAuthn.type`: the type of device that's allowed to be used (see [next section below](#webauthn-type-option))
+- `webAuthn.timeout`: how long to wait for a device to be used in milliseconds (defaults to 60 seconds)
+- `webAuthn.credentialFields`: lists the expected field names that dbAuth uses internally mapped to what they're actually called in your model. This includes 5 fields total: `id`, `userId`, `publicKey`, `transports`, `counter`.
 
 ### WebAuthn `type` Option
 
 The config option `webAuthn.type` can be set to `any`, `platform` or `cross-platform`:
 
-* `platform` means to *only* allow embedded devices (TouchID, FaceID, Windows Hello) to be used
-* `cross-platform` means to *only* allow third party devices (like a Yubikey USB fingerprint reader)
-* `any` means to allow both platform and cross-platform devices
+- `platform` means to _only_ allow embedded devices (TouchID, FaceID, Windows Hello) to be used
+- `cross-platform` means to _only_ allow third party devices (like a Yubikey USB fingerprint reader)
+- `any` means to allow both platform and cross-platform devices
 
 In some browsers this can lead to a pretty drastic UX difference. For example, here is the interface in Chrome on macOS with the included TouchID sensor on a Macbook Pro:
 
@@ -622,7 +661,7 @@ First you'll need to import the `WebAuthnClient` and give it to the `<AuthProvid
 ```jsx title="web/src/App.js"
 import { AuthProvider } from '@redwoodjs/auth'
 // highlight-start
-import WebAuthnClient from '@redwoodjs/auth/webAuthn'
+import WebAuthnClient from '@redwoodjs/auth-dbauth-web/webAuthn'
 // highlight-end
 import { FatalErrorBoundary, RedwoodProvider } from '@redwoodjs/web'
 import { RedwoodApolloProvider } from '@redwoodjs/web/apollo'
@@ -664,7 +703,7 @@ const { isAuthenticated, client, logIn } = useAuth()
 
 `client` gives you access to four functions for working with WebAuthn:
 
-* `client.isSupported()`: returns a Promise which resolves to a boolean—whether or not WebAuthn is supported in the current browser browser
-* `client.isEnabled()`: returns a boolean for whether the user currently has a `webAuthn` cookie, which means this device has been registered already and can be used for login
-* `client.register()`: returns a Promise which gets options from the server, presents the prompt to scan your fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This function is used when the user has not registered this device yet (`client.isEnabled()` returns `false`).
-* `client.authenticate()`: returns a Promise which gets options from the server, presents the prompt to scan the user's fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This should be used when the user has already registered this device (`client.isEnabled()` returns `true`)
+- `client.isSupported()`: returns a Promise which resolves to a boolean—whether or not WebAuthn is supported in the current browser browser
+- `client.isEnabled()`: returns a boolean for whether the user currently has a `webAuthn` cookie, which means this device has been registered already and can be used for login
+- `client.register()`: returns a Promise which gets options from the server, presents the prompt to scan your fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This function is used when the user has not registered this device yet (`client.isEnabled()` returns `false`).
+- `client.authenticate()`: returns a Promise which gets options from the server, presents the prompt to scan the user's fingerprint/face, and then sends the result up to the server. It will either resolve successfully with an object `{ verified: true }` or throw an error. This should be used when the user has already registered this device (`client.isEnabled()` returns `true`)

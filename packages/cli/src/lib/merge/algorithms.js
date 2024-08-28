@@ -1,4 +1,4 @@
-import { _ } from 'lodash'
+import { forOwn } from 'lodash'
 
 export const nodeIs = (type) => (node) => node.type === type
 
@@ -29,7 +29,7 @@ export function sieve(...listRulePairs) {
 }
 
 export function forEachFunctionOn(object, callback) {
-  _.forOwn(object, (value, key) => {
+  forOwn(object, (value, key) => {
     if (typeof value === 'function') {
       callback(key, value)
     }

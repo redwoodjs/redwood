@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "references": [
+    { "path": "../project-config" },
+    { "path": "../vite/tsconfig.build.json" },
+    { "path": "../router/tsconfig.build.json" },
+    { "path": "../internal" }
+  ]
+}

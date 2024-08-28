@@ -1,8 +1,10 @@
-import React, { useReducer, createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 
-import { AuthContextInterface, useNoAuth } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth' with { 'resolution-mode': 'import' }
+import { useNoAuth } from '@redwoodjs/auth'
 
-import type { ParamType } from './util'
+import type { analyzeRoutes } from './analyzeRoutes.js'
+import type { ParamType } from './util.js'
 
 type UseAuth = () => AuthContextInterface<
   unknown,
@@ -22,50 +24,40 @@ type UseAuth = () => AuthContextInterface<
 export interface RouterState {
   paramTypes?: Record<string, ParamType>
   useAuth: UseAuth
+  routes: ReturnType<typeof analyzeRoutes>
+  activeRouteName?: string | undefined | null
 }
 
 const RouterStateContext = createContext<RouterState | undefined>(undefined)
 
-export interface RouterSetContextProps {
-  setState: (newState: Partial<RouterState>) => void
-}
-
-const RouterSetContext = createContext<
-  React.Dispatch<Partial<RouterState>> | undefined
->(undefined)
-
-/***
- *
- * This file splits the context into getter and setter contexts.
- * This was originally meant to optimize the number of redraws
- * See https://kentcdodds.com/blog/how-to-optimize-your-context-value
- *
- */
 export interface RouterContextProviderProps
   extends Omit<RouterState, 'useAuth'> {
   useAuth?: UseAuth
+  routes: ReturnType<typeof analyzeRoutes>
+  activeRouteName?: string | undefined | null
   children: React.ReactNode
-}
-
-function stateReducer(state: RouterState, newState: Partial<RouterState>) {
-  return { ...state, ...newState }
 }
 
 export const RouterContextProvider: React.FC<RouterContextProviderProps> = ({
   useAuth,
   paramTypes,
+  routes,
+  activeRouteName,
   children,
 }) => {
-  const [state, setState] = useReducer(stateReducer, {
-    useAuth: useAuth || useNoAuth,
-    paramTypes,
-  })
+  const state = useMemo(
+    () => ({
+      useAuth: useAuth || useNoAuth,
+      paramTypes,
+      routes,
+      activeRouteName,
+    }),
+    [useAuth, paramTypes, routes, activeRouteName],
+  )
 
   return (
     <RouterStateContext.Provider value={state}>
-      <RouterSetContext.Provider value={setState}>
-        {children}
-      </RouterSetContext.Provider>
+      {children}
     </RouterStateContext.Provider>
   )
 }
@@ -75,7 +67,7 @@ export const useRouterState = () => {
 
   if (context === undefined) {
     throw new Error(
-      'useRouterState must be used within a RouterContextProvider'
+      'useRouterState must be used within a RouterContextProvider',
     )
   }
 

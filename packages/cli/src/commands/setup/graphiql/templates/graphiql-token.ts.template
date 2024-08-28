@@ -1,7 +1,0 @@
-const generateGraphiQLHeader = () => {
-  return JSON.stringify(${payload}, null, 2)
-}
-
-console.log(generateGraphiQLHeader())
-
-export default generateGraphiQLHeader

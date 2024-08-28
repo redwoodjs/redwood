@@ -26,7 +26,7 @@ export default class RelationProxy {
 
       if (!model) {
         console.warn(
-          `Model ${record.constructor.name} has a relationship defined for \`${name}\` in schema.prisma, but there is no Redwoood model for this relationship.`
+          `Model ${record.constructor.name} has a relationship defined for \`${name}\` in schema.prisma, but there is no Redwoood model for this relationship.`,
         )
         continue
       }
@@ -75,7 +75,7 @@ export default class RelationProxy {
 
       if (!model) {
         console.warn(
-          `Model ${record.constructor.name} has a relationship defined for \`${name}\` in schema.prisma, but there is no Redwoood model for this relationship.`
+          `Model ${record.constructor.name} has a relationship defined for \`${name}\` in schema.prisma, but there is no Redwoood model for this relationship.`,
         )
         continue
       }

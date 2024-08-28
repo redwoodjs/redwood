@@ -1,0 +1,57 @@
+{
+  "name": "@redwoodjs/babel-config",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/babel-config"
+  },
+  "license": "MIT",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-babel-config.tgz",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@babel/core": "^7.22.20",
+    "@babel/parser": "^7.22.16",
+    "@babel/plugin-transform-class-properties": "^7.22.5",
+    "@babel/plugin-transform-private-methods": "^7.22.5",
+    "@babel/plugin-transform-private-property-in-object": "^7.22.11",
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
+    "@babel/plugin-transform-runtime": "7.24.7",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-react": "^7.22.15",
+    "@babel/preset-typescript": "^7.22.15",
+    "@babel/register": "^7.22.15",
+    "@babel/runtime-corejs3": "7.25.0",
+    "@babel/traverse": "^7.22.20",
+    "@redwoodjs/project-config": "workspace:*",
+    "babel-plugin-auto-import": "1.1.0",
+    "babel-plugin-graphql-tag": "3.3.0",
+    "babel-plugin-module-resolver": "5.0.2",
+    "core-js": "3.38.0",
+    "fast-glob": "3.3.2",
+    "graphql": "16.9.0",
+    "typescript": "5.5.4"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/babel-plugin-tester": "9.0.10",
+    "@types/babel__core": "7.20.5",
+    "@types/node": "20.14.15",
+    "babel-plugin-tester": "11.0.4",
+    "tsx": "4.17.0",
+    "vitest": "2.0.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

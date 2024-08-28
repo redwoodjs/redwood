@@ -1,8 +1,11 @@
 .idea
 .DS_Store
-.env
+.env*
+!.env.example
+!.env.defaults
 .netlify
-.redwood
+.redwood/*
+!.redwood/README.md
 dev.db*
 dist
 dist-babel

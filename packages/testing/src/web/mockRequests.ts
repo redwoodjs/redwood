@@ -1,4 +1,4 @@
-// MSW is shared by Jest (NodeJS) and Storybook (Webpack)
+// MSW is used by Jest (NodeJS)
 import { setupWorker, graphql } from 'msw'
 import type {
   StartOptions as StartMSWWorkerOptions,
@@ -31,7 +31,7 @@ type StartOptions<Target> = Target extends 'browsers'
   : SharedMSWOptions
 export const startMSW = async <Target extends 'node' | 'browsers'>(
   target: Target,
-  options?: StartOptions<Target>
+  options?: StartOptions<Target>,
 ) => {
   if (SERVER_INSTANCE) {
     return SERVER_INSTANCE
@@ -73,7 +73,7 @@ export const registerHandler = (handler: RequestHandler) => {
 
 export type DataFunction<
   Query extends Record<string, unknown> = Record<string, unknown>,
-  QueryVariables = Record<string, any>
+  QueryVariables = Record<string, any>,
 > = (
   variables: QueryVariables,
   {
@@ -82,7 +82,7 @@ export type DataFunction<
   }: {
     req: GraphQLRequest<any>
     ctx: GraphQLContext<Record<string, any>>
-  }
+  },
 ) => Query | void
 
 // These should get exported from MSW
@@ -100,12 +100,12 @@ const mockGraphQL = (
   type: 'query' | 'mutation',
   operation: string,
   data: DataFunction | Record<string, any>,
-  responseEnhancer?: ResponseEnhancer
+  responseEnhancer?: ResponseEnhancer,
 ) => {
   const resolver = (
     req: GraphQLRequest<any>,
     res: ResponseComposition<any>,
-    ctx: GraphQLContext<Record<string, any>>
+    ctx: GraphQLContext<Record<string, any>>,
   ) => {
     let d = data
     let responseTransforms: any[] = []
@@ -114,9 +114,7 @@ const mockGraphQL = (
       // We wrap the original context return values and store them `ctxForResponse`,
       // so that we can provide them to the final `res()` call at the end of this
       // function.
-      const captureTransform = <T extends Array<any>, U>(
-        fn: (...args: T) => U
-      ) => {
+      const captureTransform = <T extends any[], U>(fn: (...args: T) => U) => {
         return (...args: T): U => {
           const resTransform = fn(...args)
           responseTransforms = [...responseTransforms, resTransform]
@@ -143,33 +141,32 @@ const mockGraphQL = (
 
     return (responseEnhancer ? res[responseEnhancer] : res)(
       ctx.data(d) as any,
-      ...responseTransforms
+      ...responseTransforms,
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   registerHandler(graphql[type](operation, resolver))
   return data
 }
 
 export const mockGraphQLQuery = <
   Query extends Record<string, unknown> = Record<string, unknown>,
-  QueryVariables = Record<string, any>
+  QueryVariables = Record<string, any>,
 >(
   operation: string,
   data: DataFunction<Query, QueryVariables> | Query,
-  responseEnhancer?: ResponseEnhancer
+  responseEnhancer?: ResponseEnhancer,
 ) => {
   return mockGraphQL('query', operation, data, responseEnhancer)
 }
 
 export const mockGraphQLMutation = <
   Query extends Record<string, unknown> = Record<string, unknown>,
-  QueryVariables = Record<string, any>
+  QueryVariables = Record<string, any>,
 >(
   operation: string,
   data: DataFunction<Query, QueryVariables> | Query,
-  responseEnhancer?: ResponseEnhancer
+  responseEnhancer?: ResponseEnhancer,
 ) => {
   return mockGraphQL('mutation', operation, data, responseEnhancer)
 }

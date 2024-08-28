@@ -1,6 +1,6 @@
 import { memo } from '../x/decorators'
 
-import { RWLanguageServer } from './RWLanguageServer'
+import type { RWLanguageServer } from './RWLanguageServer'
 
 /**
  * A set of custom methods (not included in the LSP spec) exposed to the client
@@ -22,13 +22,13 @@ export class XMethodsManager {
       'redwoodjs/x-getFilePathForRoutePath',
       (routePath: string) => {
         return server.getProject()?.router.getFilePathForRoutePath(routePath)
-      }
+      },
     )
     connection.onRequest(
       'redwoodjs/x-getRoutePathForFilePath',
       (uri: string) => {
         return server.getProject()?.router.getRoutePathForFilePath(uri)
-      }
+      },
     )
   }
 }

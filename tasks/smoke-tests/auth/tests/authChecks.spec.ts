@@ -1,13 +1,17 @@
 import { test, expect } from '@playwright/test'
 
-import { loginAsTestUser, signUpTestUser } from '../../common'
+import { loginAsTestUser, signUpTestUser } from '../../shared/common'
 
-// Signs up a user before these tests
+const testUser = {
+  email: 'testuser@bazinga.com',
+  password: 'test123',
+  fullName: 'Test User',
+}
 
 test.beforeAll(async ({ browser }) => {
   const page = await browser.newPage()
 
-  await signUpTestUser({ page })
+  await signUpTestUser({ page, ...testUser })
 
   await page.close()
 })
@@ -17,90 +21,83 @@ test('useAuth hook, auth redirects checks', async ({ page }) => {
 
   // To check redirects to the login page
   await expect(page).toHaveURL(
-    `http://localhost:8910/login?redirectTo=/profile`
+    `http://localhost:8910/login?redirectTo=/profile`,
   )
 
-  await loginAsTestUser({ page })
+  await loginAsTestUser({ page, ...testUser })
 
   await page.goto('/profile')
 
   const usernameRow = await page.waitForSelector('*css=tr >> text=EMAIL')
   await expect(await usernameRow.innerHTML()).toBe(
-    '<td>EMAIL</td><td>testuser@bazinga.com</td>'
+    '<td>EMAIL</td><td>testuser@bazinga.com</td>',
   )
 
   const isAuthenticatedRow = await page.waitForSelector(
-    '*css=tr >> text=isAuthenticated'
+    '*css=tr >> text=isAuthenticated',
   )
   await expect(await isAuthenticatedRow.innerHTML()).toBe(
-    '<td>isAuthenticated</td><td>true</td>'
+    '<td>isAuthenticated</td><td>true</td>',
   )
 
   const isAdminRow = await page.waitForSelector('*css=tr >> text=Is Admin')
   await expect(await isAdminRow.innerHTML()).toBe(
-    '<td>Is Admin</td><td>false</td>'
+    '<td>Is Admin</td><td>false</td>',
   )
 
-  // Log Out
   await page.goto('/')
-  await page.click('text=Log Out')
-  await expect(await page.locator('text=Login')).toBeTruthy()
+  await page.getByText('Log Out').click()
+  await expect(page.getByText('Log In')).toBeVisible()
 })
 
+const post = {
+  title: 'Hello world! Soft kittens are the best.',
+  body: 'Bazinga, bazinga, bazinga',
+  authorId: '2',
+}
+
 test('requireAuth graphql checks', async ({ page }) => {
-  // Create posts
+  // Try to create a post as an anonymous user.
   await createNewPost({ page })
 
   await expect(
     page
       .locator('.rw-form-error-title')
-      .locator("text=You don't have permission to do that")
+      .locator("text=You don't have permission to do that"),
   ).toBeTruthy()
 
   await page.goto('/')
 
-  await expect(
-    await page
-      .locator('article:has-text("Hello world! Soft kittens are the best.")')
-      .count()
-  ).toBe(0)
+  await expect(page.getByText(post.title)).not.toBeVisible()
 
-  await loginAsTestUser({
-    page,
-  })
+  // Now log in and try again.
+  await loginAsTestUser({ page, ...testUser })
 
   await createNewPost({ page })
 
   await page.goto('/')
-  await expect(
-    await page
-      .locator('article:has-text("Hello world! Soft kittens are the best.")')
-      .first()
-  ).not.toBeEmpty()
+
+  await expect(page.getByText(post.title)).toBeVisible()
+
+  // Delete the post to keep this test idempotent.
+  // Clicking "Delete" opens a confirmation dialog that we havee to accept.
+  await page.goto('/posts')
+
+  page.once('dialog', (dialog) => dialog.accept())
+
+  await page
+    .getByRole('row')
+    .filter({ has: page.getByText(post.title) })
+    .getByRole('button', { name: 'Delete' })
+    .click()
 })
 
 async function createNewPost({ page }) {
   await page.goto('/posts/new')
 
-  await page.locator('input[name="title"]').click()
-  await page
-    .locator('input[name="title"]')
-    .fill('Hello world! Soft kittens are the best.')
-  await page.locator('input[name="title"]').press('Tab')
-  await page.locator('input[name="body"]').fill('Bazinga, bazinga, bazinga')
-  await page.locator('input[name="authorId"]').fill('2')
+  await page.getByLabel('Title').fill(post.title)
+  await page.getByLabel('Body').fill(post.body)
+  await page.getByLabel('Author id').fill(post.authorId)
 
-  const permissionError = page
-    .locator('.rw-form-error-title')
-    .locator(`text=You don't have permission to do that`)
-
-  // Either wait for success and redirect
-  // Or get the error
-  await Promise.all([
-    Promise.race([
-      page.waitForURL('**/'),
-      permissionError.waitFor({ timeout: 5000 }),
-    ]),
-    await page.click('text=SAVE'),
-  ])
+  await page.getByRole('button', { name: 'Save' }).click()
 }

@@ -58,7 +58,7 @@ export default function transform(file: FileInfo, api: API) {
         path.value.argument as ObjectExpression
       ).properties.filter(
         (property) =>
-          property.type !== 'SpreadElement' && property.name !== 'decoded'
+          property.type !== 'SpreadElement' && property.name !== 'decoded',
       )
 
       properties.push(j.spreadElement(j.identifier(newReturn)))

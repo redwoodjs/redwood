@@ -8,7 +8,7 @@ export function spawnCancellable(
   opts?: child_process.SpawnOptions & {
     stdout_cb?: (x: any) => void
     stderr_cb?: (x: any) => void
-  }
+  },
 ): CancellablePromise<SpawnOut> {
   let cp: child_process.ChildProcess
   const promise = new Promise<SpawnOut>((resolve, reject) => {
@@ -33,7 +33,7 @@ export function spawnCancellable(
   ;(promise as any).cancel = () => {
     try {
       cp.kill()
-    } catch (e) {
+    } catch {
       // intentionally left empty
     }
   }
@@ -44,7 +44,7 @@ export type CancellablePromise<T> = Promise<T> & { cancel: () => void }
 
 export function CancellablePromise_then<T, U>(
   p: CancellablePromise<T>,
-  f: (t: T) => U
+  f: (t: T) => U,
 ): CancellablePromise<T> {
   const p2 = p.then(f)
   ;(p2 as any).cancel = p.cancel

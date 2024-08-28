@@ -1,8 +1,9 @@
 import path from 'path'
 
 import { getPaths, colors } from '@redwoodjs/cli-helpers'
+import type { AuthGeneratorCtx } from '@redwoodjs/cli-helpers/src/auth/authTasks.js'
 
-import { functionsPath, libPath } from './setupData'
+import { addModels, functionsPath, hasModel, libPath } from './shared'
 
 // copy some identical values from dbAuth provider
 export { extraTask } from './setupData'
@@ -12,6 +13,41 @@ export const webPackages = ['@simplewebauthn/browser@^7']
 
 // required packages to install on the api side
 export const apiPackages = ['@simplewebauthn/server@^7']
+
+export const createUserModelTask = {
+  title: 'Creating model `User`...',
+  task: async (ctx: AuthGeneratorCtx) => {
+    const hasUserModel = await hasModel('User')
+
+    if (hasUserModel && !ctx.force) {
+      throw new Error('User model already exists')
+    }
+
+    addModels(`
+model User {
+  id                  Int       @id @default(autoincrement())
+  email               String    @unique
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  webAuthnChallenge   String? @unique
+  credentials         UserCredential[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model UserCredential {
+  id         String  @id
+  userId     Int
+  user       User    @relation(fields: [userId], references: [id])
+  publicKey  Bytes
+  transports String?
+  counter    BigInt
+}
+`)
+  },
+}
 
 // any notes to print out when the job is done
 export const notes = [
@@ -55,7 +91,7 @@ export const notes = [
   "You'll need to let Redwood know what fields you're using for your",
   "users' `id` and `username` fields. In this case we're using `id` and",
   '`email`, so update those in the `authFields` config in',
-  `\`${functionsPath}/auth.js\` (this is also the place to tell Redwood if`,
+  `\`${functionsPath}/auth.js\`. This is also the place to tell Redwood if`,
   'you used a different name for the `hashedPassword`, `salt`,',
   '`resetToken` or `resetTokenExpiresAt`, fields:`',
   '',
@@ -81,6 +117,10 @@ export const notes = [
   'change this secret to a new value and deploy. To create a new secret, run:',
   '',
   '  yarn rw generate secret',
+  '',
+]
+
+export const noteGenerate = [
   '',
   'Need simple Login, Signup, Forgot Password pages and WebAuthn prompts?',
   "We've got a generator for those as well:",

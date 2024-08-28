@@ -143,7 +143,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Cannot query field "toootle" on type "Post". [Suggestion hidden]?"'
+          '"Cannot query field "toootle" on type "Post". [Suggestion hidden]?"',
         )
       })
     })
@@ -160,7 +160,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Cannot query field "toootle" on type "Post". Did you mean "title"?"'
+          '"Cannot query field "toootle" on type "Post". Did you mean "title"?"',
         )
       })
     })
@@ -177,7 +177,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Cannot query field "toootle" on type "Post". <REDACTED>?"'
+          '"Cannot query field "toootle" on type "Post". <REDACTED>?"',
         )
       })
     })
@@ -218,7 +218,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Query depth limit of 6 exceeded, found 8."'
+          '"Syntax Error: Query depth limit of 6 exceeded, found 8."',
         )
       })
     })
@@ -300,7 +300,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Query depth limit of 4 exceeded, found 8."'
+          '"Syntax Error: Query depth limit of 4 exceeded, found 8."',
         )
       })
     })
@@ -370,7 +370,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Aliases limit of 15 exceeded, found 21."'
+          '"Syntax Error: Aliases limit of 15 exceeded, found 21."',
         )
       })
     })
@@ -441,7 +441,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Aliases limit of 3 exceeded, found 6."'
+          '"Syntax Error: Aliases limit of 3 exceeded, found 6."',
         )
       })
     })
@@ -471,11 +471,8 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
    *
    * Note: When reporting the number of found tokens as in
    *
-   * '"Syntax Error: Token limit of 2 exceeded, found 3."'
+   * '"Syntax Error: Token limit of 2 exceeded."'
    *
-   * The number found is not the total tokens, but the value when found that exceeded the limit.
-   *
-   * Therefore found would be n + 1.
    *
    */
   describe('when protecting against token complexity', () => {
@@ -491,7 +488,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Token limit of 2 exceeded, found 3."'
+          '"Syntax Error: Token limit of 2 exceeded."',
         )
       })
     })
@@ -507,7 +504,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Unknown directive "@a"."'
+          '"Unknown directive "@a"."',
         )
       })
     })
@@ -524,7 +521,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Unknown directive "@a"."'
+          '"Unknown directive "@a"."',
         )
       })
     })
@@ -541,7 +538,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Directives limit of 2 exceeded, found 4."'
+          '"Syntax Error: Directives limit of 2 exceeded, found 4."',
         )
       })
     })
@@ -596,7 +593,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Query Cost limit of 1 exceeded, found 5."'
+          '"Syntax Error: Query Cost limit of 1 exceeded, found 5."',
         )
       })
     })
@@ -621,7 +618,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Query Cost limit of 10 exceeded, found 23."'
+          '"Syntax Error: Query Cost limit of 10 exceeded, found 23."',
         )
       })
 
@@ -644,7 +641,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
         expect(response.statusCode).toBe(200)
         expect(data).toBeUndefined()
         expect(errors[0].message).toMatchInlineSnapshot(
-          '"Syntax Error: Query Cost limit of 2000 exceeded, found 5003."'
+          '"Syntax Error: Query Cost limit of 2000 exceeded, found 5003."',
         )
       })
     })
@@ -668,7 +665,7 @@ describe('useArmor secures the GraphQLHandler endpoint for depth, aliases, cost,
       expect(response.statusCode).toBe(200)
       expect(data).toBeUndefined()
       expect(errors[0].message).toMatchInlineSnapshot(
-        '"Syntax Error: Query Cost limit of 20 exceeded, found 24."'
+        '"Syntax Error: Query Cost limit of 20 exceeded, found 24."',
       )
     })
   })

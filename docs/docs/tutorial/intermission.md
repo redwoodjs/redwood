@@ -22,7 +22,7 @@ yarn rw setup ui tailwindcss
 
 However, none of the screenshots that follow will come anywhere close to what you're seeing in your browser (except for those isolated components you build in Storybook) so you may want to just start with the [example repo](https://github.com/redwoodjs/redwood-tutorial). You'll also be missing out on a good starting test suite that we've added!
 
-If you're *still* set on continuing with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead with good ol' SQLite (what we were using locally to build everything in the first half).
+If you're _still_ set on continuing with your own repo, and you deployed to a service like Netlify, you would have changed the database provider in `schema.prisma` to `postgresql`. If that's the case then make sure your local development environment has changed over as well. Check out the [Local Postgres Setup](../local-postgres-setup.md) for assistance. If you stick with the [example repo](https://github.com/redwoodjs/redwood-tutorial) instead, you can go ahead with good ol' SQLite (what we were using locally to build everything in the first half).
 
 Once you're ready, start up the dev server:
 
@@ -33,6 +33,12 @@ yarn rw dev
 ### Using the Example Repo (Recommended)
 
 If you haven't been through the first tutorial, or maybe you went through it on an older version of Redwood (anything pre-0.41) you can clone [this repo](https://github.com/redwoodjs/redwood-tutorial) which contains everything built so far and also adds a little styling so it isn't quite so...tough to look at. The example repo includes [TailwindCSS](https://tailwindcss.com) to style things up and adds a `<div>` or two to give us some additional hooks to hang styling on.
+
+:::warning The TypeScript version of the Example Repo is currently in progress
+
+If you want to complete the tutorial in TypeScript, continue with your own repo, making any necessary edits. Don't worry, the remainder of the tutorial continues to offer both TypeScript and JavaScript example code changes.
+
+:::
 
 ```bash
 git clone https://github.com/redwoodjs/redwood-tutorial

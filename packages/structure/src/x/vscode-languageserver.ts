@@ -1,4 +1,4 @@
-import { Connection } from 'vscode-languageserver'
+import type { Connection } from 'vscode-languageserver'
 
 /**
  * will monkey patch the connection object
@@ -32,7 +32,7 @@ export function Connection_suppressErrors<T extends Connection>(conn: T) {
               conn.console.error(dd)
               return null
             })
-          : arg
+          : arg,
       )
       return v.apply(conn, args2)
     }
@@ -45,7 +45,7 @@ function with_catch2(f, clause: CatchClause) {
   return (...args) =>
     catch2(
       () => f(...args),
-      (e) => clause(e, args)
+      (e) => clause(e, args),
     )
   function catch2(f, clause2) {
     try {

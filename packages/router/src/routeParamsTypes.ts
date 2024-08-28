@@ -1,4 +1,4 @@
-import { A } from 'ts-toolbelt'
+import type { A } from 'ts-toolbelt'
 
 export type GenericParams = Record<string | number, string | number | boolean>
 
@@ -12,10 +12,10 @@ export type RouteParams<Route> = Route extends `${string}/${infer Rest}`
 export type ParamType<match> = match extends 'Int'
   ? number
   : match extends 'Boolean'
-  ? boolean
-  : match extends 'Float'
-  ? number
-  : string
+    ? boolean
+    : match extends 'Float'
+      ? number
+      : string
 
 // This is used for a specific case where the first param
 // doesnt have a type, but second one does
@@ -23,7 +23,7 @@ export type ParamType<match> = match extends 'Int'
 type ParamsFromGreedyMatch<
   TParam extends string,
   TMatch extends string,
-  TRest extends string
+  TRest extends string,
 > = {
   [ParamName in TParam as RemoveGlobDots<ParamName>]: string
 } & ParsedParams<`${TRest}:${TMatch}}`> &
@@ -33,7 +33,7 @@ type ParamsFromGreedyMatch<
 type TypedParamInFront<
   TParam extends string,
   TMatch extends string,
-  TRest extends string
+  TRest extends string,
 > = TParam extends `${infer Param2}}/${infer Rest2}`
   ? // check for greedy match (basically if the param contains a slash in it)
     // e.g. in {b}/{c:Int} it matches b}/{c as the param
@@ -49,7 +49,7 @@ type TypedParamInFront<
 // Needs to be right after TypedParamInFront
 type TypedParamAtEnd<
   TParam extends string,
-  TMatch extends string
+  TMatch extends string,
 > = TParam extends `${infer Param2}}/${infer Rest2}`
   ? {
       [ParamName in Param2]: string
@@ -78,20 +78,20 @@ type ParsedParams<PartialRoute> =
   PartialRoute extends `${string}{${infer Param}:${infer Match}}${string}/${infer Rest}`
     ? TypedParamInFront<Param, Match, Rest>
     : // has type, but at the end e.g. {d:Int}
-    PartialRoute extends `${string}{${infer Param}:${infer Match}}${string}`
-    ? // Greedy match order 2
-      TypedParamAtEnd<Param, Match>
-    : // no type, but has stuff after it, e.g. {c}/{d} or {c}/bazinga
-    PartialRoute extends `${string}{${infer Param}}${string}/${infer Rest}`
-    ? MultiParamsWithoutType<Param, Rest>
-    : // last one with no type e.g. {d} - just a param
-    PartialRoute extends `${string}{${infer Param}}${string}`
-    ? JustParamNoType<Param>
-    : // if there's a non param
-    PartialRoute extends `${string}/${infer Rest}`
-    ? ParsedParams<`${Rest}`>
-    : // Fallback when doesn't match any of these
-      GenericParams
+      PartialRoute extends `${string}{${infer Param}:${infer Match}}${string}`
+      ? // Greedy match order 2
+        TypedParamAtEnd<Param, Match>
+      : // no type, but has stuff after it, e.g. {c}/{d} or {c}/bazinga
+        PartialRoute extends `${string}{${infer Param}}${string}/${infer Rest}`
+        ? MultiParamsWithoutType<Param, Rest>
+        : // last one with no type e.g. {d} - just a param
+          PartialRoute extends `${string}{${infer Param}}${string}`
+          ? JustParamNoType<Param>
+          : // if there's a non param
+            PartialRoute extends `${string}/${infer Rest}`
+            ? ParsedParams<`${Rest}`>
+            : // Fallback when doesn't match any of these
+              GenericParams
 
 /**
  * Translation in pseudocode without ternaries

@@ -4,7 +4,7 @@ The whole reason we started building Redwood was to make full-stack web apps eas
 
 ### Git
 
-Remember at the start of the tutorial when we said that you didn't *really* need to use git if you didn't want to? Well, if you want to follow along with this deploy, you'll need to start using it now. Sorry! Commit your changes and push up to GitHub, GitLab or Bitbucket if you want to continue to follow along. Need a git primer? The most concise one we've seen is to simply create a new repo on GitHub. You'll be shown the list of commands necessary to get your local code committed and pushed up:
+Remember at the start of the tutorial when we said that you didn't _really_ need to use git if you didn't want to? Well, if you want to follow along with this deploy, you'll need to start using it now. Sorry! Commit your changes and push up to GitHub, GitLab or Bitbucket if you want to continue to follow along. Need a git primer? The most concise one we've seen is to simply create a new repo on GitHub. You'll be shown the list of commands necessary to get your local code committed and pushed up:
 
 ![image](https://user-images.githubusercontent.com/300/152596271-7921c9dc-fe83-4827-b7e4-2740e826fb42.png)
 
@@ -16,7 +16,7 @@ We'll need a database somewhere on the internet to store our data. We've been us
 
 :::danger
 
-Prisma only supports one database provider at a time, and since we can't use SQLite in production and *must* switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](../../local-postgres-setup.md) guide to get you started.
+Prisma only supports one database provider at a time, and since we can't use SQLite in production and _must_ switch to Postgres or MySQL, that means we need to use the same database on our local development system after making this change. See our [Local Postgres Setup](../../local-postgres-setup.md) guide to get you started.
 
 :::
 
@@ -27,7 +27,7 @@ There are several hosting providers where you can quickly start up a Postgres in
 - [Digital Ocean](https://www.digitalocean.com/products/managed-databases)
 - [AWS](https://aws.amazon.com/rds/postgresql/)
 
-We're going to go with Railway for now because it's a) free and b) ridiculously easy to get started, by far the easiest we've found. You don't even need to create a login! The only limitation is that if you *don't* create an account, your database will be removed after one day. If you think you can finish everything you need to do in the next 24 hours, go for it! Otherwise just create an account first and it'll stick around.
+We're going to go with Railway for now because it's a) free and b) ridiculously easy to get started, by far the easiest we've found. You don't even need to create a login! The only limitation is that if you _don't_ create an account, your database will be removed after one day. If you think you can finish everything you need to do in the next 24 hours, go for it! Otherwise just create an account first and it'll stick around.
 
 Head over to Railway and click **Start a New Project**:
 
@@ -37,16 +37,16 @@ And then Provision PostgreSQL:
 
 ![image](https://user-images.githubusercontent.com/300/152593907-1f8b599e-b4fb-4930-a841-866505e3b79d.png)
 
-And believe it or not, we're done! Now we just need the connection URL. Click on **PostgreSQL** at the left, and then the **Connect** tab. Copy the **Postgres Connection URL**, the one that starts with `postgresql://`:
+And believe it or not, we're done! Now we just need the connection URL. Click on the **Postgres** card toward the left, and then the **Variables** tab. Copy the **DATABASE_URL**, which starts with `postgresql://`:
 
-![image](https://user-images.githubusercontent.com/300/107562577-da7eb180-6b94-11eb-8731-e86a1c7127af.png)
+![Screenshot_2024-03-19_225953_dkf](https://github.com/redwoodjs/redwood/assets/158021342/69cc2cb1-e973-4234-abe1-ca591ba214bb)
 
 ### Change Database Provider
 
 We need to let Prisma know that we intend to use Postgres instead of SQLite from now on. Update the `provider` entry in `schema.prisma`:
 
 ```javascript
-provider = "postgresql"
+provider = 'postgresql'
 ```
 
 ### Recreate Migrations
@@ -87,11 +87,10 @@ This adds a `netlify.toml` config file in the root of the project that is good t
 
 And with that, we're ready to setup Netlify itself.
 
-:::caution
+:::warning
 While you may be tempted to use the [Netlify CLI](https://cli.netlify.com) commands to [build](https://cli.netlify.com/commands/build) and [deploy](https://cli.netlify.com/commands/deploy) your project directly from you local project directory, doing so **will lead to errors when deploying and/or when running functions**. I.e. errors in the function needed for the GraphQL server, but also other serverless functions.
 
 The main reason for this is that these Netlify CLI commands simply build and deploy -- they build your project locally and then push the dist folder. That means that when building a RedwoodJS project, the [Prisma client is generated with binaries matching the operating system at build time](https://cli.netlify.com/commands/link) -- and not the [OS compatible](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#binarytargets-options) with running functions on Netlify. Your Prisma client engine may be `darwin` for OSX or `windows` for Windows, but it needs to be `debian-openssl-1.1.x` or `rhel-openssl-1.1.x`. If the client is incompatible, your functions will fail.
-
 
 Therefore, **please follow the instructions below** to sync your GitHub (or other compatible source control service) repository with Netlify and allow their build and deploy system to manage deployments.
 :::
@@ -108,12 +107,14 @@ Netlify will start building your app and it will eventually say the deployment f
 
 #### Environment Variables
 
-Go back to the main site page and then to **Site settings** at the top, and then **Environment variables**. Click **Add a Variable** and this is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. The default values for Scopes and Values can be left as is. Click **Create variable** to proceed.
+Go back to the main site page and then to **Site configuration** on the left, and then **Environment variables**. Click the **Add a variable** button, then choose **Add a single variable** from the drop-down. This is where we'll paste the database connection URI we got from Railway (note the **Key** is "DATABASE_URL"). After pasting the value, append `?connection_limit=1` to the end. The URI will have the following format: `postgresql://<user>:<pass>@<url>/<db>?connection_limit=1`. The default values for Scopes and Values can be left as is. Click **Create variable** to proceed.
 
 :::tip
 
 This connection limit setting is [recommended by Prisma](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#recommended-connection-pool-size-1) when working with relational databases in a Serverless context.
 :::
+
+![Screenshot_2024-03-19_231931_dkf](https://github.com/redwoodjs/redwood/assets/158021342/973c827f-1098-4952-b720-d982bc668853)
 
 We'll need to add one more environment variable, `SESSION_SECRET` which contains a big long string that's used to encrypt the session cookies for dbAuth. This was included in development when you installed dbAuth, but now we need to tell Netlify about it. If you look in your `.env` file you'll see it at the bottom, but we want to create a unique one for every environment we deploy to (each developer should have a unique one as well). We've got a CLI command to create a new one:
 

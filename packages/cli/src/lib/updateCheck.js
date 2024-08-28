@@ -1,16 +1,15 @@
-import { spawn } from 'child_process'
-import fs from 'fs'
-import os from 'os'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
 import semver from 'semver'
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import { setLock, unsetLock } from './locking'
+import { spawnBackgroundProcess } from './background'
+import { isLockSet, setLock, unsetLock } from './locking'
 
 import { getPaths } from './index'
 
@@ -41,7 +40,12 @@ export const DEFAULT_DATETIME_MS = 946684800000
 /**
  * @const {string} The identifier used for the lock within the check function
  */
-export const LOCK_IDENTIFIER = 'UPDATE_CHECK'
+export const CHECK_LOCK_IDENTIFIER = 'UPDATE_CHECK'
+
+/**
+ * @const {string} The identifier used for the lock when showing an update message
+ */
+export const SHOW_LOCK_IDENTIFIER = 'UPDATE_CHECK_SHOW'
 
 /**
  * @const {string[]} The name of commands which should NOT execute the update checker
@@ -68,11 +72,11 @@ function getPersistenceDirectory() {
  */
 export async function check() {
   try {
-    setLock(LOCK_IDENTIFIER)
+    console.time('Update Check')
 
     // Read package.json and extract the @redwood/core version
     const packageJson = JSON.parse(
-      fs.readFileSync(path.join(getPaths().base, 'package.json'))
+      fs.readFileSync(path.join(getPaths().base, 'package.json')),
     )
     let localVersion = packageJson.devDependencies['@redwoodjs/core']
 
@@ -80,28 +84,35 @@ export async function check() {
     while (!/\d/.test(localVersion.charAt(0))) {
       localVersion = localVersion.substring(1)
     }
+    console.log(`Detected the current version of RedwoodJS: '${localVersion}'`)
 
     const remoteVersions = new Map()
     for (const tag of getConfig().notifications.versionUpdates) {
+      console.log(`Checking for new versions for npm tag: '${tag}'`)
       try {
         remoteVersions.set(
           tag,
-          await latestVersion('@redwoodjs/core', { version: tag })
+          await latestVersion('@redwoodjs/core', { version: tag }),
         )
       } catch (error) {
         // This error may result as the ability of the user to specify arbitrary tags within their config file
+        console.error(`Couldn't find a version for tag: '${tag}'`)
         console.error(error)
       }
     }
+    console.log(`Detected the latest versions of RedwoodJS as:`)
+    console.log(JSON.stringify([...remoteVersions.entries()], undefined, 2))
 
     // Save the latest update information
+    console.log('Saving updated version information for future checks...')
     updateUpdateDataFile({
       localVersion,
       remoteVersions,
       checkedAt: new Date().getTime(),
     })
   } finally {
-    unsetLock(LOCK_IDENTIFIER)
+    unsetLock(CHECK_LOCK_IDENTIFIER)
+    console.timeEnd('Update Check')
   }
 }
 
@@ -118,6 +129,12 @@ export function isEnabled() {
  * @see {@link CHECK_PERIOD} for the time between notifications
  */
 export function shouldCheck() {
+  // We don't want to check if a different process is already checking
+  if (isLockSet(CHECK_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check if we haven't checked recently
   const data = readUpdateDataFile()
   return data.checkedAt < new Date().getTime() - CHECK_PERIOD
 }
@@ -128,6 +145,12 @@ export function shouldCheck() {
  * @see {@link SHOW_PERIOD} for the time between notifications
  */
 export function shouldShow() {
+  // We don't want to show if a different process is already about to
+  if (isLockSet(SHOW_LOCK_IDENTIFIER)) {
+    return false
+  }
+
+  // Check there is a new version and we haven't shown the user recently
   const data = readUpdateDataFile()
   let newerVersion = false
   data.remoteVersions.forEach((version) => {
@@ -191,14 +214,14 @@ function getUpdateMessage() {
 export function readUpdateDataFile() {
   try {
     if (!fs.existsSync(getPersistenceDirectory())) {
-      fs.mkdirSync(getPersistenceDirectory())
+      fs.mkdirSync(getPersistenceDirectory(), { recursive: true })
     }
     const persistedData = JSON.parse(
-      fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json'))
+      fs.readFileSync(path.join(getPersistenceDirectory(), 'data.json')),
     )
     // Reconstruct the map
     persistedData.remoteVersions = new Map(
-      Object.entries(persistedData.remoteVersions)
+      Object.entries(persistedData.remoteVersions),
     )
     return persistedData
   } catch (error) {
@@ -231,7 +254,7 @@ function updateUpdateDataFile({
   const updatedData = {
     localVersion: localVersion ?? existingData.localVersion,
     remoteVersions: Object.fromEntries(
-      remoteVersions ?? existingData.remoteVersions
+      remoteVersions ?? existingData.remoteVersions,
     ),
     checkedAt: checkedAt ?? existingData.checkedAt,
     shownAt: shownAt ?? existingData.shownAt,
@@ -239,7 +262,7 @@ function updateUpdateDataFile({
 
   fs.writeFileSync(
     path.join(getPersistenceDirectory(), 'data.json'),
-    JSON.stringify(updatedData, null, 2)
+    JSON.stringify(updatedData, null, 2),
   )
 }
 
@@ -262,46 +285,18 @@ export function updateCheckMiddleware(argv) {
   }
 
   if (shouldShow()) {
+    setLock(SHOW_LOCK_IDENTIFIER)
     process.on('exit', () => {
       showUpdateMessage()
+      unsetLock(SHOW_LOCK_IDENTIFIER)
     })
   }
 
   if (shouldCheck()) {
-    if (!fs.existsSync(getPersistenceDirectory())) {
-      fs.mkdirSync(getPersistenceDirectory())
-    }
-
-    const stdout = fs.openSync(
-      path.join(getPersistenceDirectory(), 'stdout.log'),
-      'w'
-    )
-
-    const stderr = fs.openSync(
-      path.join(getPersistenceDirectory(), 'stderr.log'),
-      'w'
-    )
-
-    // We must account for some platform specific behaviour on windows.
-    const spawnOptions =
-      os.type() === 'Windows_NT'
-        ? {
-            // The following options run the process in the background without a console window, even though they don't look like they would.
-            // See https://github.com/nodejs/node/issues/21825#issuecomment-503766781 for information
-            detached: false,
-            windowsHide: false,
-            shell: true,
-            stdio: ['ignore', stdout, stderr],
-          }
-        : {
-            detached: true,
-            stdio: ['ignore', stdout, stderr],
-          }
-    const child = spawn(
-      'yarn',
-      ['node', path.join(__dirname, 'updateCheckExecute.js')],
-      spawnOptions
-    )
-    child.unref()
+    setLock(CHECK_LOCK_IDENTIFIER)
+    spawnBackgroundProcess('updateCheck', 'yarn', [
+      'node',
+      path.join(__dirname, 'updateCheckExecute.js'),
+    ])
   }
 }

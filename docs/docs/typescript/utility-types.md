@@ -17,14 +17,17 @@ This is used to type the props of your Cell's `Success` component.
 It takes two arguments as generics:
 
 | Generic      | Description                                                                              |
-|:-------------|:-----------------------------------------------------------------------------------------|
+| :----------- | :--------------------------------------------------------------------------------------- |
 | `TData`      | The type of data you're expecting to receive (usually the type generated from the query) |
 | `TVariables` | An optional second parameter for the type of the query's variables                       |
 
 Not only does `CellSuccessProps` type the data returned from the query, but it also types the variables and methods returned by Apollo Client's `useQuery` hook!
 
 ```ts title="web/src/components/BlogPostCell.tsx"
-import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
+import type {
+  FindBlogPostQuery,
+  FindBlogPostQueryVariables,
+} from 'types/graphql'
 
 // highlight-next-line
 import type { CellSuccessProps } from '@redwoodjs/web'
@@ -32,12 +35,15 @@ import type { CellSuccessProps } from '@redwoodjs/web'
 // ...
 
 // highlight-next-line
-type SuccessProps = CellSuccessProps<FindBlogPostQuery, FindBlogPostQueryVariables>
+type SuccessProps = CellSuccessProps<
+  FindBlogPostQuery,
+  FindBlogPostQueryVariables
+>
 
 export const Success = ({
   blogPost, // From the query. This is typed of course
-  queryResult // 👈 From Apollo Client. This is typed too!
-// highlight-next-line
+  queryResult, // 👈 From Apollo Client. This is typed too!
+  // highlight-next-line
 }: SuccessProps) => {
   // ...
 }
@@ -48,7 +54,7 @@ export const Success = ({
 This gives you the types of the props in your Cell's `Failure` component.
 It takes `TVariables` as an optional generic parameter, which is useful if you want to print error messages like `"Couldn't load data for ${variables.searchTerm}"`:
 
-```ts title=web/src/components/BlogPostCell.tsx
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -69,7 +75,7 @@ export const Failure = ({
 
 Similar to `CellFailureProps`, but for the props of your Cell's `Loading` component:
 
-```ts title=web/src/components/BlogPostCell.tsx
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -96,14 +102,14 @@ defineScenario<PrismaCreateType, TName, TKey>
 ```
 
 | Generic            | Description                                                                                           |
-|:-------------------|:------------------------------------------------------------------------------------------------------|
+| :----------------- | :---------------------------------------------------------------------------------------------------- |
 | `PrismaCreateType` | (Optional) the type imported from Prisma's create operation that goes into the "data" key             |
 | `TName`            | (Optional) the name or names of the models in your scenario                                           |
 | `TKeys`            | (Optional) the key(s) in your scenario. These are really only useful while you write out the scenario |
 
 An example:
 
-```ts title=posts.scenarios.ts
+```ts title="posts.scenarios.ts"
 import type { Prisma, Post } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.PostCreateArgs, 'post', 'one'>({
@@ -129,15 +135,15 @@ defineScenario<Prisma.PostCreateArgs | Prisma.UserCreateArgs, 'post' | 'user'>
 This utility type makes it easy for you to access data created by your scenarios in your tests.
 It takes three generic parameters:
 
-| Generic | Description                                                                      |
-|:--------|:---------------------------------------------------------------------------------|
-| `TData` | The Prisma model that'll be returned                                             |
-| `TName` | (Optional) the name of the model. ("post" in the example below)                  |
+| Generic | Description                                                                     |
+| :------ | :------------------------------------------------------------------------------ |
+| `TData` | The Prisma model that'll be returned                                            |
+| `TName` | (Optional) the name of the model. ("post" in the example below)                 |
 | `TKeys` | (optional) the key(s) used to define the scenario. ("one" in the example below) |
 
 We know this is a lot of generics, but that's so you get to choose how specific you want to be with the types!
 
-```ts title=api/src/services/posts/posts.scenario.ts
+```ts title="api/src/services/posts/posts.scenario.ts"
 import type { Post } from '@prisma/client'
 
 //...
@@ -145,7 +151,7 @@ import type { Post } from '@prisma/client'
 export type StandardScenario = ScenarioData<Post, 'post'>
 ```
 
-```ts title=api/src/services/posts/posts.test.ts
+```ts title="api/src/services/posts/posts.test.ts"
 import type { StandardScenario } from './posts.scenarios'
 
 scenario('returns a single post', async (scenario: StandardScenario) => {
@@ -157,7 +163,7 @@ You can of course just define the type in the test file instead of importing it.
 
 ## DbAuth
 
-When you setup dbAuth, the generated files in `api/src/lib/auth.ts`  and `api/src/functions/auth.ts` have all the types you need. Let's break down some of the utility types.
+When you setup dbAuth, the generated files in `api/src/lib/auth.ts` and `api/src/functions/auth.ts` have all the types you need. Let's break down some of the utility types.
 
 ### `DbAuthSession`
 
@@ -200,21 +206,19 @@ export const handler = async (
   context: Context
 ) => {
   // Pass in the generic to the type here 👇
-  const forgotPasswordOptions: DbAuthHandlerOptions<PrismaUser>['forgotPassword'] = {
+  const forgotPasswordOptions: DbAuthHandlerOptions<PrismaUser>['forgotPassword'] =
+    {
+      // ...
 
-    // ...
+      // Now in the handler function, `user` will be typed
+      handler: (user) => {
+        return user
+      },
 
-    // Now in the handler function, `user` will be typed
-    handler: (user) => {
-      return user
-    },
-
-   // ...
-
-  }
+      // ...
+    }
 
   // ...
-
 }
 ```
 
@@ -222,8 +226,8 @@ Note that in strict mode, you'll likely see errors where the handlers expect "tr
 
 ## Directives
 
-
 ### `ValidatorDirectiveFunc`
+
 When you generate a [validator directive](directives.md#validators) you will see your `validate` function typed already with `ValidatorDirectiveFunc<TDirectiveArgs>`
 
 ```ts
@@ -258,10 +262,11 @@ const validate: RequireAuthValidate = ({ directiveArgs }) => {
 ```
 
 | Generic          | Description                                               |
-|:-----------------|:----------------------------------------------------------|
+| :--------------- | :-------------------------------------------------------- |
 | `TDirectiveArgs` | The type of arguments passed to your directive in the SDL |
 
 ### `TransformerDirectiveFunc`
+
 When you generate a [transformer directive](directives.md#transformers) you will see your `transform` function typed with `TransformDirectiveFunc<TField, TDirectiveArgs>`.
 
 ```ts
@@ -275,12 +280,13 @@ This type takes two generics - the type of the field you are transforming, and t
 So for example, let's say you have a transformer directive `@maskedEmail(permittedRoles: ['ADMIN'])` that you apply to `String` fields. You would pass in the following types
 
 ```ts
-type MaskedEmailTransform = TransformerDirectiveFunc<string, {permittedRoles?: string[]}>
+type MaskedEmailTransform = TransformerDirectiveFunc<
+  string,
+  { permittedRoles?: string[] }
+>
 ```
 
 | Generic          | Description                                                                    |
-|:-----------------|:-------------------------------------------------------------------------------|
+| :--------------- | :----------------------------------------------------------------------------- |
 | `TField`         | This will type `resolvedValue` i.e. the type of the field you are transforming |
 | `TDirectiveArgs` | The type of arguments passed to your directive in the SDL                      |
-
-

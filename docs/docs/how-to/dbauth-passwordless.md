@@ -1,25 +1,30 @@
 # Setting up dbAuth to be passwordless
 
-Security is really important.  Sometimes you don't want to integrate with a third-party authentication services.  Whatever the reason, Redwood has you covered with Redwood's dbAuth to authenticate users.  This is a great option.
+Security is really important. Sometimes you don't want to integrate with a third-party authentication services. Whatever the reason, Redwood has you covered with Redwood's dbAuth to authenticate users. This is a great option.
 
-One thing though is now you're collecting the user's login and password.  If you'd like to not collect that, an alternative is to generate a token in place of the password.  The only data needed for passwordless is the users email address.
+One thing though is now you're collecting the user's login and password. If you'd like to not collect that, an alternative is to generate a token in place of the password. The only data needed for passwordless is the users email address.
 
 In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a way to [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
 
 ## Background
 
 Let me start by sharing a little bit about how passwordless works.
-### What is a passwordless authentication method?
-A passwordless authentication method is a method of authentication where the user is not required to enter a password.  Instead, the user is sent a link to their email address.  When they click the link, they are logged in.
 
-Passwordless uses a token that is time-sensitive.  So instead of storing a password, we store a token, and an expiration.
+### What is a passwordless authentication method?
+
+A passwordless authentication method is a method of authentication where the user is not required to enter a password. Instead, the user is sent a link to their email address. When they click the link, they are logged in.
+
+Passwordless uses a token that is time-sensitive. So instead of storing a password, we store a token, and an expiration.
 
 That token is generated randomly and is stored in the database.
+
 ## How to do it
+
 ### 1. Modify the Prisma schema
+
 First, we need to modify the Prisma schema.
 
-If you followed the tutorial you'll have a `User` model.  Here's is what it looks like with after the changes.
+If you followed the tutorial you'll have a `User` model. Here's is what it looks like with after the changes.
 
 ```jsx {4-6}
 model User {
@@ -41,9 +46,10 @@ yarn rw prisma migrate dev
 ```
 
 ### 2. Setting up the generateToken function
+
 Next, we need to create a function that will generate a token and an expiration date.
 
-If you followed the tutorial, you might not have a `/api/src/services/users/users.js` file.  If that's the case, you can create it with the following command using your terminal.
+If you followed the tutorial, you might not have a `/api/src/services/users/users.js` file. If that's the case, you can create it with the following command using your terminal.
 
 ```bash
 yarn rw g service users
@@ -59,7 +65,11 @@ export const generateLoginToken = async ({ email }) => {
   try {
     // look up if the user exists
     let lookupUser = await db.user.findFirst({ where: { email } })
-    if (!lookupUser) return { message: 'Login Request received' }
+
+    if (!lookupUser) {
+      return { message: 'Login Request received' }
+    }
+    // here we're going to generate a random password of 6 numbers
     // here we're going to generate a random password of 6 numbers
     let randomNumber = (() => {
       let random = CryptoJS.lib.WordArray.random(6)
@@ -82,13 +92,13 @@ export const generateLoginToken = async ({ email }) => {
     let loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
     let data = {
-        salt,
-        loginToken,
-        loginTokenExpiresAt,
+      salt,
+      loginToken,
+      loginTokenExpiresAt,
     }
     await db.user.update({
       where: { id: lookupUser.id },
-      data
+      data,
     })
 
     return { message: 'Login Request received' }
@@ -97,11 +107,11 @@ export const generateLoginToken = async ({ email }) => {
     throw new UserInputError(error.message)
   }
 }
-
 ```
+
 ### 3. Add generateToken to the SDL and secure loginToken
 
-In addition to the new function, we need to add it to the sdl file.  While we're here let's also ensure we do not expose the loginToken.  This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
+In addition to the new function, we need to add it to the sdl file. While we're here let's also ensure we do not expose the loginToken. This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
 
 ```javascript {21} title="/api/src/graphql/users.sdl.js"
 export const schema = gql`
@@ -131,32 +141,39 @@ export const schema = gql`
 
 ### 4. Modify the auth function
 
-We need to consider how we want to limit the authentication.  I've added a expiration date to the token, so we'll need to check that.
+We need to consider how we want to limit the authentication. I've added a expiration date to the token, so we'll need to check that.
 
 ```js title="/api/src/functions/auth.js"
 // ... other functions
 const loginOptions = {
-  handler: async (user) =>{
+  handler: async (user) => {
     let loginExpiresAt = new Date(user?.loginTokenExpiresAt)
     let now = new Date()
-    if (loginExpiresAt < now) throw 'Login token expired'
+
+    if (loginExpiresAt < now) {
+      throw 'Login token expired'
+    }
+    // if the user logged in with a token we need to break
+    // the token.  We'll do this by clearing the salt and
+    // expiration
+    // this will make the token a one-time use
     // if the user logged in with a token we need to break
     // the token.  We'll do this by clearing the salt and
     // expiration
     // this will make the token a one-time use
     db.user.update({
-        where: { id: user.id },
-        data: {
-            loginTokenExpiresAt: null,
-            salt: null,
-        }
+      where: { id: user.id },
+      data: {
+        loginTokenExpiresAt: null,
+        salt: null,
+      },
     })
     return user
   },
   errors: {
     // here I modified the following, feel free to modify the other messages
     incorrectPassword: 'Incorrect token',
-  }
+  },
 }
 // we also need to update the signupOptions
 const signupOptions = {
@@ -167,9 +184,9 @@ const signupOptions = {
         loginToken: hashedPassword,
         salt: null,
         name: userAttributes.name,
-      }
+      },
     })
-  }
+  },
   // ... othter stuff
 }
 // and last we need to update the authFields
@@ -197,7 +214,7 @@ Let's start with the generator.
 yarn rw g component LoginPasswordlessForm
 ```
 
-This created a component in `web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js`.  Let's update it.
+This created a component in `web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js`. Let's update it.
 
 ```jsx title="/web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js"
 import {
@@ -310,7 +327,7 @@ Now we also need a form that will accept the code that was sent to the user.
 yarn rw g component LoginPasswordlessTokenForm
 ```
 
-```jsx  title="/web/src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm.js"
+```jsx title="/web/src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm.js"
 import { useEffect, useRef } from 'react'
 
 import {
@@ -425,13 +442,14 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
 export default LoginPasswordlessTokenForm
 ```
 
-This will be the form loaded after the email is entered.  Again, we aren't rendering it anywhere, but we will in the next step.
+This will be the form loaded after the email is entered. Again, we aren't rendering it anywhere, but we will in the next step.
 
 Here's a preview of the form.
 
 ![image](https://user-images.githubusercontent.com/638764/220212316-bcc5cde6-53cf-4a65-ab54-0e2763da924a.png)
 
 ### 7. Making the new login page
+
 Now each of those forms are controlled with the props we pass to them. We will make a new page that will control the state of the forms.
 
 ```bash
@@ -494,7 +512,9 @@ const LoginPasswordlessPage = () => {
 
 export default LoginPasswordlessPage
 ```
+
 ### 8. Updating the signup page
+
 We need to update the signup page to just take the email.
 
 ```jsx title="/web/src/pages/SignupPage/SignupPage.js"
@@ -619,11 +639,11 @@ You should see the changes and it should look like this!
 
 ![image](https://user-images.githubusercontent.com/638764/220204883-800829ab-e037-41e1-a2da-d47923c4d20c.png)
 
-
 ### 9. Updating the routes
+
 The last thing we need to to do is update the routes to use the new page.
 
-```jsx  title="/web/src/Routes.js"
+```jsx title="/web/src/Routes.js"
 const Routes = () => {
   // other stuff
   return (
@@ -635,6 +655,7 @@ const Routes = () => {
   )
 }
 ```
+
 ## You did it!
 
-Now that you did you can rest easy.  You're authentication relies on just your database but also, if some bad actor got access to it the only user data you have is really the email address.
+Now that you did you can rest easy. Your authentication relies on just your database but also, if some bad actor got access to it the only user data you have is really the email address.

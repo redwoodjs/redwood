@@ -3,44 +3,111 @@ globalThis.__dirname = __dirname
 globalThis.mockFs = false
 let mockFiles = {}
 
-jest.mock('fs', () => {
-  const actual = jest.requireActual('fs')
+vi.mock('fs', async (importOriginal) => {
+  const originalFs = await importOriginal()
 
   return {
-    ...actual,
-    existsSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return actual.existsSync.apply(null, args)
-      }
-      return false
-    },
-    mkdirSync: (...args) => {
-      if (!globalThis.mockFs) {
-        return actual.mkdirSync.apply(null, args)
-      }
-    },
-    writeFileSync: (target, contents) => {
-      if (!globalThis.mockFs) {
-        return actual.writeFileSync.call(null, target, contents)
-      }
-    },
-    readFileSync: (path) => {
-      if (!globalThis.mockFs) {
-        return actual.readFileSync.call(null, path)
-      }
+    default: {
+      ...originalFs,
+      existsSync: (...args) => {
+        console.log('existsSync', args)
+        if (mockFiles[args[0]]) {
+          return true
+        }
 
-      const mockedContent = mockFiles[path]
+        return originalFs.existsSync.apply(null, args)
+      },
+      readFileSync: (path) => {
+        if (mockFiles[path]) {
+          return mockFiles[path]
+        }
 
-      return mockedContent || actual.readFileSync.call(null, path)
+        return originalFs.readFileSync
+      },
     },
   }
 })
 
-import fs from 'fs'
+vi.mock('fs-extra', async (importOriginal) => {
+  const originalFsExtra = await importOriginal()
+
+  return {
+    default: {
+      ...originalFsExtra,
+      existsSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.existsSync.apply(null, args)
+        }
+        return false
+      },
+      mkdirSync: (...args) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.mkdirSync.apply(null, args)
+        }
+      },
+      writeFileSync: (target, contents) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.writeFileSync.call(null, target, contents)
+        }
+      },
+      readFileSync: (path) => {
+        if (!globalThis.mockFs) {
+          return originalFsExtra.readFileSync.call(null, path)
+        }
+
+        const mockedContent = mockFiles[path]
+
+        return mockedContent || originalFsExtra.readFileSync.call(null, path)
+      },
+    },
+  }
+})
+
 import path from 'path'
 
-// Load mocks
-import '../../../../lib/test'
+import fs from 'fs-extra'
+import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
+
+import '../../../../lib/mockTelemetry'
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const path = require('path')
+  const originalProjectConfig = await importOriginal()
+  return {
+    getPaths: () => {
+      const BASE_PATH = '/path/to/project'
+
+      return {
+        base: BASE_PATH,
+        web: {
+          generators: path.join(BASE_PATH, './web/generators'),
+          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
+          pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+      }
+    },
+    getConfig: () => ({}),
+    ensurePosixPath: originalProjectConfig.ensurePosixPath,
+    resolveFile: originalProjectConfig.resolveFile,
+  }
+})
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
+  return {
+    generate: () => {
+      return { errors: [] }
+    },
+  }
+})
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
@@ -48,8 +115,8 @@ import { getPaths } from '../../../../lib'
 import { pathName } from '../../helpers'
 import * as page from '../page'
 
-describe('Single world files', () => {
-  const singleWordFiles = page.files({
+describe('Single world files', async () => {
+  const singleWordFiles = await page.files({
     name: 'Home',
     tests: true,
     stories: true,
@@ -63,8 +130,8 @@ describe('Single world files', () => {
   it('creates a page component', () => {
     expect(
       singleWordFiles[
-        path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.js')
-      ]
+        path.normalize('/path/to/project/web/src/pages/HomePage/HomePage.jsx')
+      ],
     ).toMatchSnapshot()
   })
 
@@ -72,9 +139,9 @@ describe('Single world files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.test.js'
+          '/path/to/project/web/src/pages/HomePage/HomePage.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -82,15 +149,15 @@ describe('Single world files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/HomePage/HomePage.stories.js'
+          '/path/to/project/web/src/pages/HomePage/HomePage.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('multiWorldFiles', () => {
-  const multiWordFiles = page.files({
+describe('multiWorldFiles', async () => {
+  const multiWordFiles = await page.files({
     name: 'ContactUs',
     tests: true,
     stories: true,
@@ -101,9 +168,9 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -111,9 +178,9 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -121,15 +188,15 @@ describe('multiWorldFiles', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.js'
+          '/path/to/project/web/src/pages/ContactUsPage/ContactUsPage.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('Plural word files', () => {
-  const pluralWordFiles = page.files({
+describe('Plural word files', async () => {
+  const pluralWordFiles = await page.files({
     name: 'Cats',
     tests: true,
     stories: true,
@@ -139,14 +206,14 @@ describe('Plural word files', () => {
   test('creates a page component with a plural word for name', () => {
     expect(
       pluralWordFiles[
-        path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.js')
-      ]
+        path.normalize('/path/to/project/web/src/pages/CatsPage/CatsPage.jsx')
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('paramFiles', () => {
-  const paramFiles = page.files({
+describe('paramFiles', async () => {
+  const paramFiles = await page.files({
     name: 'Post',
     tests: true,
     stories: true,
@@ -156,8 +223,8 @@ describe('paramFiles', () => {
   it('creates a page component with params', () => {
     expect(
       paramFiles[
-        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.js')
-      ]
+        path.normalize('/path/to/project/web/src/pages/PostPage/PostPage.jsx')
+      ],
     ).toMatchSnapshot()
   })
 
@@ -165,15 +232,15 @@ describe('paramFiles', () => {
     expect(
       paramFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/PostPage/PostPage.test.js'
+          '/path/to/project/web/src/pages/PostPage/PostPage.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
 
-describe('No test files', () => {
-  const noTestsFiles = page.files({
+describe('No test files', async () => {
+  const noTestsFiles = await page.files({
     name: 'NoTests',
     tests: false,
     stories: true,
@@ -183,17 +250,17 @@ describe('No test files', () => {
   it('doesnt create a test for page component when tests=false', () => {
     expect(Object.keys(noTestsFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.js'
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.stories.jsx',
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.js'
+        '/path/to/project/web/src/pages/NoTestsPage/NoTestsPage.jsx',
       ),
     ])
   })
 })
 
-describe('No stories files', () => {
-  const noStoriesFiles = page.files({
+describe('No stories files', async () => {
+  const noStoriesFiles = await page.files({
     name: 'NoStories',
     tests: true,
     stories: false,
@@ -203,10 +270,10 @@ describe('No stories files', () => {
   it('doesnt create a story for page component when stories=false', () => {
     expect(Object.keys(noStoriesFiles)).toEqual([
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.js'
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.test.jsx',
       ),
       path.normalize(
-        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.js'
+        '/path/to/project/web/src/pages/NoStoriesPage/NoStoriesPage.jsx',
       ),
     ])
   })
@@ -338,8 +405,8 @@ test('paramVariants paramType defaults to string', () => {
 
 describe('handler', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'info').mockImplementation(() => {})
-    jest.spyOn(console, 'log').mockImplementation(() => {})
+    vi.spyOn(console, 'info').mockImplementation(() => {})
+    vi.spyOn(console, 'log').mockImplementation(() => {})
   })
 
   afterEach(() => {
@@ -365,7 +432,7 @@ describe('handler', () => {
       ].join('\n'),
     }
 
-    const spy = jest.spyOn(fs, 'writeFileSync')
+    const spy = vi.spyOn(fs, 'writeFileSync')
 
     globalThis.mockFs = true
 
@@ -410,7 +477,7 @@ describe('handler', () => {
       ].join('\n'),
     }
 
-    const spy = jest.spyOn(fs, 'writeFileSync')
+    const spy = vi.spyOn(fs, 'writeFileSync')
     globalThis.mockFs = true
 
     await page.handler({
@@ -436,8 +503,8 @@ describe('handler', () => {
   })
 })
 
-describe('TS Files', () => {
-  const typescriptFiles = page.files({
+describe('TS Files', async () => {
+  const typescriptFiles = await page.files({
     name: 'TSFiles',
     typescript: true,
     tests: true,
@@ -449,30 +516,30 @@ describe('TS Files', () => {
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx'
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.tsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
 
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx'
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.stories.tsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
 
     expect(
       typescriptFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx'
+          '/path/to/project/web/src/pages/TSFilesPage/TSFilesPage.test.tsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
-  test('TS Params', () => {
-    const typescriptParamFiles = page.files({
+  test('TS Params', async () => {
+    const typescriptParamFiles = await page.files({
       name: 'TSParamFiles',
       typescript: true,
       tests: true,
@@ -483,29 +550,29 @@ describe('TS Files', () => {
     expect(
       typescriptParamFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx'
+          '/path/to/project/web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
-  test('TS Params with type', () => {
-    const typescriptParamTypeFiles = page.files({
+  test('TS Params with type', async () => {
+    const typescriptParamTypeFiles = await page.files({
       name: 'TSParamTypeFiles',
       typescript: true,
       tests: false,
       stories: false,
       ...page.paramVariants(
-        pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type')
+        pathName('/bazinga-ts/{id:Int}', 'typescript-param-with-type'),
       ),
     })
 
     expect(
       typescriptParamTypeFiles[
         path.normalize(
-          '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx'
+          '/path/to/project/web/src/pages/TSParamTypeFilesPage/TSParamTypeFilesPage.tsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })

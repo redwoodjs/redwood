@@ -1,3 +1,5 @@
+import React from 'react'
+
 type PropsInfallibleErrorBoundary = Partial<{
   children: React.ReactNode
 }>
@@ -55,4 +57,4 @@ class FatalErrorBoundary extends React.Component<
   }
 }
 
-export default FatalErrorBoundary
+export { FatalErrorBoundary }

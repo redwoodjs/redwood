@@ -1,6 +1,7 @@
 ---
 description: Declarative data fetching with Cells
 ---
+
 # Cells
 
 Cells are a declarative approach to data fetching and one of Redwood's signature modes of abstraction.
@@ -43,7 +44,7 @@ yarn rw generate cell equipment --list
 
 ## Cells in-depth
 
-Cells exports five constants: `QUERY`, `Loading` , `Empty` , `Failure`  and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](tutorial/chapter2/cells.md#our-first-cell) section of the Tutorial for a great example of this.
+Cells exports five constants: `QUERY`, `Loading` , `Empty` , `Failure` and `Success`. The root query in `QUERY` is the same as `<name>` so that, if you're generating a cell based on a model in your `schema.prisma`, you can get something out of the database right away. But there's a good chance you won't generate your Cell this way, so if you need to, make sure to change the root query. See the [Cells](tutorial/chapter2/cells.md#our-first-cell) section of the Tutorial for a great example of this.
 
 ## Usage
 
@@ -114,7 +115,7 @@ export default HomePage
 
 ```jsx {2-3}
 export const QUERY = gql`
-  query($numberToShow: Int!) {
+  query ($numberToShow: Int!) {
     posts(numberToShow: $numberToShow) {
       id
       title
@@ -135,8 +136,8 @@ By default, `beforeQuery` gives any props passed from the parent component to `Q
 export const beforeQuery = (props) => {
   return {
     variables: props,
-    fetchPolicy: 'cache-and-network'
-   }
+    fetchPolicy: 'cache-and-network',
+  }
 }
 ```
 
@@ -156,8 +157,8 @@ export const beforeQuery = () => {
   const { currentUser } = useAuth()
 
   return {
-    variables: { userId: currentUser.id }
-   }
+    variables: { userId: currentUser.id },
+  }
 }
 ```
 
@@ -224,6 +225,7 @@ But, like `Loading`, Storybook is probably a better place to develop this.
 In production, failed cells won't break your app, they'll just be empty divs... -->
 
 In this example, we use the `errorCode` to conditionally render the error heading title, and we also use it for our translation string.
+
 ```jsx
 export const Failure = ({ error, errorCode }: CellFailureProps) => {
   const { t } = useTranslation()
@@ -282,7 +284,7 @@ client = useApolloClient()
 client.query({
   query: gql`
     ...
-  `
+  `,
 })
 ```
 
@@ -347,6 +349,7 @@ And now let's say that Babel isn't going to come along and assemble our exports.
 We'd probably do something like this:
 
 <!-- {35,39,44,47,49} -->
+
 ```jsx
 const QUERY = gql`
   query {
@@ -409,4 +412,4 @@ export const Cell = () => {
 
 That's a lot of code. A lot of imperative code too.
 
-We're basically just dumping the contents of [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/createCell.tsx) into this file. Can you imagine having to do this every time you wanted to fetch data that might be delayed in responding? Yikes.
+We're basically just dumping the contents of [createCell.tsx](https://github.com/redwoodjs/redwood/blob/main/packages/web/src/components/cell/createCell.tsx) into this file. Can you imagine having to do this every time you wanted to fetch data that might be delayed in responding? Yikes.

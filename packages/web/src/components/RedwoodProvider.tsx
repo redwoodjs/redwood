@@ -1,4 +1,8 @@
-import { Helmet, HelmetProvider } from 'react-helmet-async'
+import React from 'react'
+
+// @NOTE: Helmet is not used in SSR & RSC
+import * as helmetPkg from 'react-helmet-async'
+const { Helmet, HelmetProvider } = helmetPkg
 
 interface RedwoodProviderProps {
   children: React.ReactNode
@@ -18,6 +22,11 @@ export const RedwoodProvider = ({
     }
     return ''
   }
+
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    return <>{children}</>
+  }
+
   return (
     <HelmetProvider context={globalThis.__REDWOOD__HELMET_CONTEXT}>
       <Helmet titleTemplate={template()} defaultTitle={appTitle}>

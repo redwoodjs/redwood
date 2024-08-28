@@ -33,17 +33,17 @@ export const convertTsScriptsToJs = (cwd = getPaths().base) => {
  * @param {string} cwd - Current directory
  * @param {string[]} files - Collection of files to convert
  */
-export const convertTsFilesToJs = (cwd: string, files: string[]) => {
+export const convertTsFilesToJs = async (cwd: string, files: string[]) => {
   if (files.length === 0) {
     console.log('No TypeScript files found to convert to JS in this project.')
   }
   for (const f of files) {
-    const code = transformTSToJS(f)
+    const code = await transformTSToJS(f)
     if (code) {
       fs.writeFileSync(
-        path.join(cwd, f.replace('.tsx', '.js').replace('.ts', '.js')),
+        path.join(cwd, f.replace('.tsx', '.jsx').replace('.ts', '.js')),
         code,
-        'utf8'
+        'utf8',
       )
       fs.unlinkSync(path.join(cwd, f))
     }
@@ -52,19 +52,19 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
   if (fs.existsSync(path.join(cwd, 'api/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'api/tsconfig.json'),
-      path.join(cwd, 'api/jsconfig.json')
+      path.join(cwd, 'api/jsconfig.json'),
     )
   }
   if (fs.existsSync(path.join(cwd, 'web/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'web/tsconfig.json'),
-      path.join(cwd, 'web/jsconfig.json')
+      path.join(cwd, 'web/jsconfig.json'),
     )
   }
   if (fs.existsSync(path.join(cwd, 'scripts/tsconfig.json'))) {
     fs.renameSync(
       path.join(cwd, 'scripts/tsconfig.json'),
-      path.join(cwd, 'scripts/jsconfig.json')
+      path.join(cwd, 'scripts/jsconfig.json'),
     )
   }
 }
@@ -74,7 +74,7 @@ export const convertTsFilesToJs = (cwd: string, files: string[]) => {
  */
 export const typeScriptSourceFiles = (
   cwd: string,
-  globPattern = '{api,web}/src/**/*.{ts,tsx}'
+  globPattern = '{api,web}/src/**/*.{ts,tsx}',
 ) => {
   console.log(globPattern)
   // TODO: When sides are expanded read the `api` and `web` string instead
@@ -117,10 +117,13 @@ export const transformTSToJS = (file: string) => {
   return prettify(result.code, filename.replace(/\.ts$/, '.js'))
 }
 
-export const prettierConfig = () => {
+export const getPrettierConfig = async () => {
   try {
-    return require(path.join(getPaths().base, 'prettier.config.js'))
-  } catch (e) {
+    const { default: prettierConfig } = await import(
+      `file://${path.join(getPaths().base, 'prettier.config.js')}`
+    )
+    return prettierConfig
+  } catch {
     return undefined
   }
 }
@@ -152,15 +155,17 @@ const prettierParser = (filename: string) => {
  * @param {string} code
  * @param {string} filename
  */
-export const prettify = (code: string, filename: string) => {
+export const prettify = async (code: string, filename: string) => {
   const parser = prettierParser(filename)
   // Return unformatted code if we could not determine the parser.
   if (typeof parser === 'undefined') {
     return code
   }
 
+  const prettierConfig = await getPrettierConfig()
+
   return format(code, {
-    ...prettierConfig(),
+    ...prettierConfig,
     parser,
   })
 }

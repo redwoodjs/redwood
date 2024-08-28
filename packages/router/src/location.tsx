@@ -1,34 +1,41 @@
+'use client'
 import React from 'react'
 
-import { gHistory } from './history'
-import { createNamedContext, TrailingSlashesTypes } from './util'
+import { createNamedContext } from './createNamedContext.js'
+import { gHistory } from './history.js'
+import type { TrailingSlashesTypes } from './util.js'
 
-export interface LocationContextType {
-  pathname: string
-  search?: string
-  hash?: string
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface LocationContextType extends URL {}
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Location extends URL {}
+
 interface LocationProviderProps {
-  location?: {
-    pathname: string
-    search?: string
-    hash?: string
-  }
+  location?: Location
   trailingSlashes?: TrailingSlashesTypes
   children?: React.ReactNode
 }
 
-class LocationProvider extends React.Component<LocationProviderProps> {
+interface LocationProviderState {
+  context: Location | undefined
+}
+
+class LocationProvider extends React.Component<
+  LocationProviderProps,
+  LocationProviderState
+> {
   // When prerendering, there might be more than one level of location
   // providers. Use the values from the one above.
+  // (this is basically the class component version of `useLocation()`)
   static contextType = LocationContext
+
   declare context: React.ContextType<typeof LocationContext>
   HISTORY_LISTENER_ID: string | undefined = undefined
 
-  state = {
+  state: LocationProviderState = {
     context: this.getContext(),
   }
 
@@ -51,7 +58,7 @@ class LocationProvider extends React.Component<LocationProviderProps> {
             window.history.replaceState(
               {},
               '',
-              pathname.substr(0, pathname.length - 1)
+              pathname.substr(0, pathname.length - 1),
             )
           }
           break
@@ -66,23 +73,27 @@ class LocationProvider extends React.Component<LocationProviderProps> {
           break
       }
 
-      windowLocation = window.location
-    } else {
-      windowLocation = {
-        pathname: this.context?.pathname || '',
-        search: this.context?.search || '',
-        hash: this.context?.hash || '',
-      }
+      windowLocation = new URL(window.location.href)
     }
 
-    const { pathname, search, hash } = this.props.location || windowLocation
-
-    return { pathname, search, hash }
+    return this.props.location || this.context || windowLocation
   }
 
+  // componentDidMount() is not called during server rendering (aka SSR and
+  // prerendering)
   componentDidMount() {
     this.HISTORY_LISTENER_ID = gHistory.listen(() => {
-      this.setState(() => ({ context: this.getContext() }))
+      const context = this.getContext()
+      this.setState((lastState) => {
+        if (
+          context?.pathname !== lastState?.context?.pathname ||
+          context?.search !== lastState?.context?.search
+        ) {
+          globalThis?.scrollTo(0, 0)
+        }
+
+        return { context }
+      })
     })
   }
 

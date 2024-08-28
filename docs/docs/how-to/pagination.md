@@ -26,12 +26,13 @@ export const schema = gql`
   }
 
   # ...
- `
+`
 ```
 
 You might have noticed that we made the page optional. That's because we want to be able to default to the first page if no page is provided.
 
 Now we need to add a resolver for this new query to our posts service.
+
 ```javascript title="api/src/services/posts/posts.js"
 const POSTS_PER_PAGE = 5
 

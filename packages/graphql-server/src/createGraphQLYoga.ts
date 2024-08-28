@@ -1,11 +1,14 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
-import { GraphQLSchema, OperationTypeNode } from 'graphql'
-import { Plugin, useReadinessCheck, createYoga } from 'graphql-yoga'
+import type { GraphQLSchema } from 'graphql'
+import { OperationTypeNode } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { useReadinessCheck, createYoga } from 'graphql-yoga'
 
 import { mapRwCorsOptionsToYoga } from './cors'
 import { makeDirectivesForPlugin } from './directives/makeDirectives'
+import { configureGraphiQLPlayground } from './graphiql'
+import { configureGraphQLIntrospection } from './introspection'
 import { makeMergedSchema } from './makeMergedSchema'
 import {
   useArmor,
@@ -16,7 +19,7 @@ import {
   useRedwoodOpenTelemetry,
   useRedwoodLogger,
   useRedwoodPopulateContext,
-  useRedwoodRealtime,
+  useRedwoodTrustedDocuments,
 } from './plugins'
 import type {
   useRedwoodDirectiveReturn,
@@ -47,10 +50,14 @@ export const createGraphQLYoga = ({
   graphiQLEndpoint = '/graphql',
   schemaOptions,
   realtime,
+  trustedDocuments,
+  openTelemetryOptions,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
   const logger = loggerConfig.logger
+
+  const isDevEnv = process.env.NODE_ENV === 'development'
 
   try {
     // @NOTE: Directives are optional
@@ -59,7 +66,7 @@ export const createGraphQLYoga = ({
     if (projectDirectives.length > 0) {
       ;(redwoodDirectivePlugins as useRedwoodDirectiveReturn[]) =
         projectDirectives.map((directive) =>
-          useRedwoodDirective(directive as DirectivePluginOptions)
+          useRedwoodDirective(directive as DirectivePluginOptions),
         )
     }
 
@@ -68,7 +75,7 @@ export const createGraphQLYoga = ({
 
     if (realtime?.subscriptions?.subscriptions) {
       projectSubscriptions = makeSubscriptions(
-        realtime.subscriptions.subscriptions
+        realtime.subscriptions.subscriptions,
       )
     }
 
@@ -82,7 +89,9 @@ export const createGraphQLYoga = ({
   } catch (e) {
     logger.fatal(e as Error, '\n ⚠️ GraphQL server crashed \n')
 
-    onException && onException()
+    if (onException) {
+      onException()
+    }
 
     // Forcefully crash the graphql server
     // so users know that a misconfiguration has happened
@@ -92,33 +101,11 @@ export const createGraphQLYoga = ({
   try {
     // Important: Plugins are executed in order of their usage, and inject functionality serially,
     // so the order here matters
-    const plugins: Array<Plugin<any>> = []
+    const plugins: Plugin<any>[] = []
 
-    const isDevEnv = process.env.NODE_ENV === 'development'
-    const disableIntrospection =
-      (allowIntrospection === null && !isDevEnv) || allowIntrospection === false
-    const disableGraphQL =
-      (allowGraphiQL === null && !isDevEnv) || allowGraphiQL === false
-
-    const defaultQuery = `query Redwood {
-    redwood {
-    version
-    }
-  }`
-
-    // TODO: Once Studio is not experimental, can remove these generateGraphiQLHeaders
-    const authHeader = `{"x-auth-comment": "See documentation: https://redwoodjs.com/docs/cli-commands#setup-graphiql-headers on how to auto generate auth headers"}`
-
-    const graphiql = !disableGraphQL
-      ? {
-          title: 'Redwood GraphQL Playground',
-          headers: generateGraphiQLHeader
-            ? generateGraphiQLHeader()
-            : authHeader,
-          defaultQuery,
-          headerEditorEnabled: true,
-        }
-      : false
+    const { disableIntrospection } = configureGraphQLIntrospection({
+      allowIntrospection,
+    })
 
     if (disableIntrospection) {
       plugins.push(useDisableIntrospection())
@@ -136,7 +123,9 @@ export const createGraphQLYoga = ({
     plugins.push(...redwoodDirectivePlugins)
 
     // Custom Redwood OpenTelemetry plugin
-    plugins.push(useRedwoodOpenTelemetry())
+    if (openTelemetryOptions !== undefined) {
+      plugins.push(useRedwoodOpenTelemetry(openTelemetryOptions))
+    }
 
     // Secure the GraphQL server
     plugins.push(useArmor(logger, armorConfig))
@@ -147,19 +136,17 @@ export const createGraphQLYoga = ({
       OperationTypeNode.MUTATION,
     ]
 
-    // now allow subscriptions if using them (unless you override)
+    // allow subscriptions if using them (unless you override)
     if (realtime?.subscriptions?.subscriptions) {
       defaultAllowedOperations.push(OperationTypeNode.SUBSCRIPTION)
-    } else {
-      logger.info('Subscriptions are disabled.')
     }
 
     plugins.push(
-      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations)
+      useFilterAllowedOperations(allowedOperations || defaultAllowedOperations),
     )
 
-    if (realtime) {
-      plugins.push(useRedwoodRealtime(realtime))
+    if (trustedDocuments && !trustedDocuments.disabled) {
+      plugins.push(useRedwoodTrustedDocuments(trustedDocuments))
     }
 
     // App-defined plugins
@@ -176,7 +163,7 @@ export const createGraphQLYoga = ({
           try {
             // if we can reach the health check endpoint ...
             const response = await yoga.fetch(
-              new URL(graphiQLEndpoint + '/health', request.url)
+              new URL(graphiQLEndpoint + '/health', request.url),
             )
 
             const expectedHealthCheckId = healthCheckId || 'yoga'
@@ -193,28 +180,13 @@ export const createGraphQLYoga = ({
             return false
           }
         },
-      })
+      }),
     )
 
     // Must be "last" in plugin chain, but before error masking
     // so can process any data added to results and extensions
     plugins.push(useRedwoodLogger(loggerConfig))
 
-    logger.debug(
-      {
-        healthCheckId,
-        allowedOperations,
-        defaultAllowedOperations,
-        allowIntrospection,
-        defaultError,
-        disableIntrospection,
-        disableGraphQL,
-        allowGraphiQL,
-        graphiql,
-        graphiQLEndpoint,
-      },
-      'GraphiQL and Introspection Config'
-    )
     const yoga = createYoga({
       id: healthCheckId,
       landingPage: isDevEnv,
@@ -227,7 +199,10 @@ export const createGraphQLYoga = ({
       logging: logger,
       healthCheckEndpoint: graphiQLEndpoint + '/health',
       graphqlEndpoint: graphiQLEndpoint,
-      graphiql,
+      graphiql: configureGraphiQLPlayground({
+        allowGraphiQL,
+        generateGraphiQLHeader,
+      }),
       cors: (request: Request) => {
         const requestOrigin = request.headers.get('origin')
         return mapRwCorsOptionsToYoga(cors, requestOrigin)
@@ -236,7 +211,9 @@ export const createGraphQLYoga = ({
 
     return { yoga, logger }
   } catch (e) {
-    onException && onException()
+    if (onException) {
+      onException()
+    }
     throw e
   }
 }

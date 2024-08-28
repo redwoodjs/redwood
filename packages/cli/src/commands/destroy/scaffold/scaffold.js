@@ -1,6 +1,8 @@
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import {
   deleteFilesTask,
   getPaths,
@@ -33,20 +35,20 @@ const removeSetImport = () => {
   const routesPath = getPaths().web.routes
   const routesContent = readFile(routesPath).toString()
   if (routesContent.match('<Set')) {
-    return 'Skipping removal of Set import in Routes.{js,tsx}'
+    return 'Skipping removal of Set import in Routes.{jsx,tsx}'
   }
 
   const [redwoodRouterImport] = routesContent.match(
-    /import {[^]*} from '@redwoodjs\/router'/
+    /import {[^]*} from '@redwoodjs\/router'/,
   )
   const removedSetImport = redwoodRouterImport.replace(/,*\s*Set,*/, '')
   const newRoutesContent = routesContent.replace(
     redwoodRouterImport,
-    removedSetImport
+    removedSetImport,
   )
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Removed Set import in Routes.{js,tsx}'
+  return 'Removed Set import in Routes.{jsx,tsx}'
 }
 
 const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
@@ -62,12 +64,12 @@ const removeLayoutImport = ({ model: name, path: scaffoldPath = '' }) => {
 
   const newRoutesContent = routesContent.replace(
     new RegExp(`\\s*${importLayout}`),
-    ''
+    '',
   )
 
   writeFile(routesPath, newRoutesContent, { overwriteExisting: true })
 
-  return 'Removed layout import from Routes.{js,tsx}'
+  return 'Removed layout import from Routes.{jsx,tsx}'
 }
 
 export const builder = (yargs) => {
@@ -89,6 +91,7 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
             tests,
             nestScaffoldByModel,
           })
+
           return deleteFilesTask(f)
         },
       },
@@ -106,10 +109,13 @@ export const tasks = ({ model, path, tests, nestScaffoldByModel }) =>
         task: () => removeLayoutImport({ model, path }),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const handler = async ({ model: modelArg }) => {
+  recordTelemetryAttributes({
+    command: 'destory scaffold',
+  })
   const { model, path } = splitPathAndModel(modelArg)
   try {
     const { name } = await verifyModelName({ name: model, isDestroyer: true })

@@ -1,14 +1,17 @@
-import { JsonMap, parse as parseTOML } from '@iarna/toml'
+import * as toml from 'smol-toml'
 import { Range } from 'vscode-languageserver-types'
 
 import { FileNode } from '../ide'
 import { lazy } from '../x/decorators'
 import { err } from '../x/vscode-languageserver-types'
 
-import { RWProject } from './RWProject'
+import type { RWProject } from './RWProject'
 
 export class RWTOML extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
   // @lazy() get content(): TOML.JsonMap {
@@ -16,16 +19,14 @@ export class RWTOML extends FileNode {
   // }
   // TODO: diagnostics
   @lazy() get parsedTOML() {
-    return parseTOML(this.text)
+    return toml.parse(this.text)
   }
   @lazy() get web_includeEnvironmentVariables(): string[] | undefined {
-    return (
-      ((this.parsedTOML?.web as JsonMap)
-        ?.includeEnvironmentVariables as string[]) ?? []
-    )
+    return this.parsedTOML?.web?.['includeEnvironmentVariables'] ?? []
   }
   *diagnostics() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.parsedTOML
     } catch (e: any) {
       const pos = { line: e.line - 1, character: e.column - 1 }

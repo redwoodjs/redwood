@@ -1,0 +1,27 @@
+// api/src/graphql/auctions.sdl.ts
+
+export const schema = gql`
+  type Query {
+    ${liveQueryName}(id: ID!): ${typeName} @requireAuth
+  }
+
+  type ${typeName} {
+    id: ID!
+    title: String!
+    largest${typeName}Item: ${typeName}Item
+    items: [${typeName}Item!]!
+  }
+
+  type ${typeName}Item {
+    amount: Int!
+  }
+
+  type Mutation {
+    create${typeName}Item(input: ${typeName}ItemInput!): ${typeName}Item @requireAuth
+  }
+
+  input ${typeName}ItemInput {
+    ${camelName}Id: ID!
+    amount: Int!
+  }
+`

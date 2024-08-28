@@ -1,13 +1,15 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import chalk from 'chalk'
 import { config } from 'dotenv-defaults'
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import prompts from 'prompts'
 import terminalLink from 'terminal-link'
+
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import { getPaths } from '../../lib'
 import c from '../../lib/colors'
@@ -54,8 +56,8 @@ export const builder = (yargs) => {
   yargs.epilogue(
     `Also see the ${terminalLink(
       'Redwood CLI Reference',
-      'https://redwoodjs.com/docs/cli-commands#deploy'
-    )}\n`
+      'https://redwoodjs.com/docs/cli-commands#deploy',
+    )}\n`,
   )
 }
 
@@ -82,7 +84,7 @@ export const buildCommands = ({ sides }) => {
       task: async () => {
         // Dynamically import this function
         // because its dependencies are only installed when `rw setup deploy serverless` is run
-        const { nftPack } = (await import('./packing/nft')).default
+        const { nftPack } = await import('./packing/nft.js')
 
         await nftPack()
       },
@@ -127,6 +129,14 @@ const loadDotEnvForStage = (dotEnvPath) => {
 }
 
 export const handler = async (yargs) => {
+  recordTelemetryAttributes({
+    command: 'deploy serverless',
+    sides: JSON.stringify(yargs.sides),
+    verbose: yargs.verbose,
+    packOnly: yargs.packOnly,
+    firstRun: yargs.firstRun,
+  })
+
   const rwjsPaths = getPaths()
   const dotEnvPath = path.join(rwjsPaths.base, `.env.${yargs.stage}`)
 
@@ -142,7 +152,7 @@ export const handler = async (yargs) => {
     {
       exitOnError: true,
       renderer: yargs.verbose && 'verbose',
-    }
+    },
   )
   try {
     await tasks.run()
@@ -151,20 +161,20 @@ export const handler = async (yargs) => {
       const SETUP_MARKER = chalk.bgBlue(chalk.black('First Setup '))
       console.log()
 
-      console.log(SETUP_MARKER, c.green('Starting first setup wizard...'))
+      console.log(SETUP_MARKER, c.success('Starting first setup wizard...'))
 
       const { stdout: slsInfo } = await execa(
         `yarn serverless info --verbose --stage=${yargs.stage}`,
         {
           shell: true,
           cwd: getPaths().api.base,
-        }
+        },
       )
 
       const deployedApiUrl = slsInfo.match(/HttpApiUrl: (https:\/\/.*)/)[1]
 
       console.log()
-      console.log(SETUP_MARKER, `Found ${c.green(deployedApiUrl)}`)
+      console.log(SETUP_MARKER, `Found ${c.success(deployedApiUrl)}`)
       console.log()
 
       const { addDotEnv } = await prompts({
@@ -186,7 +196,7 @@ export const handler = async (yargs) => {
 
         console.log(
           SETUP_MARKER,
-          'First deploys can take a good few minutes...'
+          'First deploys can take a good few minutes...',
         )
         console.log()
 
@@ -194,7 +204,7 @@ export const handler = async (yargs) => {
           [
             // Rebuild web with the new API_URL
             ...buildCommands({ ...yargs, sides: ['web'], firstRun: false }).map(
-              mapCommandsToListr
+              mapCommandsToListr,
             ),
             ...deployCommands({
               ...yargs,
@@ -205,7 +215,7 @@ export const handler = async (yargs) => {
           {
             exitOnError: true,
             renderer: yargs.verbose && 'verbose',
-          }
+          },
         )
 
         // Deploy the web side now that the API_URL has been configured
@@ -216,7 +226,7 @@ export const handler = async (yargs) => {
           {
             shell: true,
             cwd: getPaths().web.base,
-          }
+          },
         )
 
         const deployedWebUrl = slsInfo.match(/url: (https:\/\/.*)/)[1]
@@ -224,7 +234,7 @@ export const handler = async (yargs) => {
         const message = [
           c.bold('Successful first deploy!'),
           '',
-          `View your deployed site at: ${c.green(deployedWebUrl)}`,
+          `View your deployed site at: ${c.success(deployedWebUrl)}`,
           '',
           'You can use serverless.com CI/CD by connecting/creating an app',
           'To do this run `yarn serverless` on each of the sides, and connect your account',
@@ -238,7 +248,7 @@ export const handler = async (yargs) => {
             padding: { top: 0, bottom: 0, right: 1, left: 1 },
             margin: 1,
             borderColor: 'gray',
-          })
+          }),
         )
       }
     }

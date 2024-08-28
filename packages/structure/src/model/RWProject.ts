@@ -1,11 +1,11 @@
 import { join } from 'path'
 
 import type { DMMF } from '@prisma/generator-helper'
-import { getDMMF } from '@prisma/internals'
+import { getDMMF, getSchema } from '@prisma/internals'
 
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
-import { Host } from '../hosts'
+import type { Host } from '../hosts'
 import { BaseNode } from '../ide'
 import { lazy, memo } from '../x/decorators'
 import {
@@ -86,11 +86,10 @@ export class RWProject extends BaseNode {
   // TODO: do we move this to a separate node? (ex: RWDatabase)
   @memo() async prismaDMMF(): Promise<DMMF.Document | undefined> {
     try {
+      const datamodel = await getSchema(this.pathHelper.api.dbSchema)
       // consider case where dmmf doesn't exist (or fails to parse)
-      return await getDMMF({
-        datamodel: this.host.readFileSync(this.pathHelper.api.dbSchema),
-      })
-    } catch (e) {
+      return await getDMMF({ datamodel })
+    } catch {
       return undefined
     }
   }
@@ -107,12 +106,14 @@ export class RWProject extends BaseNode {
   @lazy() private get processPagesDir() {
     try {
       return processPagesDir(this.pathHelper.web.pages)
-    } catch (e) {
+    } catch {
       return []
     }
   }
   @lazy() get pages(): RWPage[] {
-    return this.processPagesDir.map((p) => new RWPage(p.const, p.path, this))
+    return this.processPagesDir.map(
+      (p) => new RWPage(p.constName, p.path, this),
+    )
   }
   @lazy() get router() {
     return this.getRouter()
@@ -130,7 +131,7 @@ export class RWProject extends BaseNode {
 
   // TODO: move to path helper
   @lazy() get defaultNotFoundPageFilePath() {
-    const ext = this.isTypeScriptProject ? '.tsx' : '.js' // or jsx?
+    const ext = this.isTypeScriptProject ? '.tsx' : '.jsx'
     return join(this.pathHelper.web.pages, 'NotFoundPage', 'NotFoundPage' + ext)
   }
 

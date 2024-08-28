@@ -1,0 +1,38 @@
+{
+  "name": "@redwoodjs/server-store",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/server-store"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    "types": "./dist/serverStore.d.ts",
+    "default": "./dist/serverStore.js"
+  },
+  "types": "./dist/serverStore.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-server-store.tgz",
+    "build:types": "tsc --build --verbose"
+  },
+  "dependencies": {
+    "@redwoodjs/auth": "workspace:*",
+    "@redwoodjs/cookie-jar": "workspace:*",
+    "esbuild": "0.23.0",
+    "fast-glob": "3.3.2",
+    "fs-extra": "11.2.0"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/fs-extra": "11.0.4",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

@@ -1,35 +1,46 @@
-import React, { type ReactNode } from 'react'
+import * as React from 'react'
+import type { ReactNode } from 'react'
 
-import { render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import { act, render, waitFor } from '@testing-library/react'
+import { beforeEach, test, describe, vi, expect } from 'vitest'
 
-import { Route, Router } from '../router'
-import { Set } from '../Set'
+import { navigate } from '../history.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
+import { Set } from '../Set.js'
 
 // SETUP
+interface LayoutProps {
+  children: ReactNode
+}
+
 const ChildA = () => <h1>ChildA</h1>
 const ChildB = () => <h1>ChildB</h1>
 const ChildC = () => <h1>ChildC</h1>
-const GlobalLayout: React.FC<{ children?: ReactNode }> = ({ children }) => (
+const GlobalLayout = ({ children }: LayoutProps) => (
   <div>
     <h1>Global Layout</h1>
     {children}
     <footer>This is a footer</footer>
   </div>
 )
-const CustomWrapper: React.FC<{ children?: ReactNode }> = ({ children }) => (
+const CustomWrapper = ({ children }: LayoutProps) => (
   <div>
     <h1>Custom Wrapper</h1>
     {children}
     <p>Custom Wrapper End</p>
   </div>
 )
-const BLayout = ({ children }) => (
+const BLayout = ({ children }: LayoutProps) => (
   <div>
     <h1>Layout for B</h1>
     {children}
   </div>
 )
+
+beforeEach(() => {
+  window.history.pushState({}, '', '/')
+})
 
 test('wraps components in other components', async () => {
   const TestSet = () => (
@@ -89,10 +100,10 @@ test('passes props to wrappers', async () => {
   interface Props {
     propOne: string
     propTwo: string
-    children?: ReactNode
+    children: ReactNode
   }
 
-  const PropWrapper: React.FC<Props> = ({ children, propOne, propTwo }) => (
+  const PropWrapper = ({ children, propOne, propTwo }: Props) => (
     <div>
       <h1>Prop Wrapper</h1>
       <p>1:{propOne}</p>
@@ -100,9 +111,18 @@ test('passes props to wrappers', async () => {
       {children}
     </div>
   )
+
+  const PropWrapperTwo = ({ children }: Props) => (
+    <div>
+      <h1>Prop Wrapper Two</h1>
+      {children}
+      <footer>This is a footer</footer>
+    </div>
+  )
+
   const TestSet = () => (
     <Router>
-      <Set wrap={[PropWrapper, GlobalLayout]} propOne="une" propTwo="deux">
+      <Set wrap={[PropWrapper, PropWrapperTwo]} propOne="une" propTwo="deux">
         <Route path="/" page={ChildA} name="childA" />
       </Set>
     </Router>
@@ -128,7 +148,7 @@ test('passes props to wrappers', async () => {
         </p>
         <div>
           <h1>
-            Global Layout
+            Prop Wrapper Two
           </h1>
           <h1>
             ChildA
@@ -147,4 +167,128 @@ test('passes props to wrappers', async () => {
       </div>
     </div>
   `)
+})
+
+describe('Navigating Sets', () => {
+  const HomePage = () => <h1>Home Page</h1>
+  const Page = () => <h1>Page</h1>
+
+  test('Sets should not cause a re-mount of wrap components when navigating within the set', async () => {
+    const layoutOneMount = vi.fn()
+    const layoutOneUnmount = vi.fn()
+
+    const Layout1 = ({ children }: LayoutProps) => {
+      React.useEffect(() => {
+        // Called on mount and re-mount of this layout
+        layoutOneMount()
+
+        return () => {
+          layoutOneUnmount()
+        }
+      }, [])
+
+      return (
+        <>
+          <p>ONE</p>
+          {children}
+        </>
+      )
+    }
+
+    const Routes = () => (
+      <Router>
+        <Route path="/" page={HomePage} name="home" />
+        <Set wrap={Layout1}>
+          <Route path="/posts/new" page={Page} name="newPost" />
+          <Route path="/posts/{id:Int}/edit" page={Page} name="editPost" />
+          <Route path="/posts/{id:Int}" page={Page} name="post" />
+          <Route path="/posts" page={Page} name="posts" />
+        </Set>
+      </Router>
+    )
+
+    render(<Routes />)
+
+    act(() => navigate('/'))
+    act(() => navigate('/posts'))
+    act(() => navigate('/posts/new'))
+    act(() => navigate('/posts'))
+    act(() => navigate('/posts/1'))
+    act(() => navigate('/posts/new'))
+    act(() => navigate('/posts'))
+
+    // Navigating into, and then within Layout1 should not cause a re-mount
+    expect(layoutOneMount).toHaveBeenCalledTimes(1)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+  })
+
+  test('Sets should make wrap components remount when navigating between separate sets with the same wrap component', async () => {
+    const layoutOneMount = vi.fn()
+    const layoutOneUnmount = vi.fn()
+
+    const Layout1 = ({ children }: LayoutProps) => {
+      React.useEffect(() => {
+        // Called on mount and re-mount of this layout
+        layoutOneMount()
+
+        return () => {
+          layoutOneUnmount()
+        }
+      }, [])
+
+      return (
+        <>
+          <p>ONE</p>
+          {children}
+        </>
+      )
+    }
+
+    const Routes = () => (
+      <Router>
+        <Route path="/" page={HomePage} name="home" />
+        <Set wrap={Layout1}>
+          <Route path="/posts" page={Page} name="posts" />
+        </Set>
+        <Set wrap={Layout1}>
+          <Route path="/comments" page={Page} name="comments" />
+        </Set>
+      </Router>
+    )
+
+    render(<Routes />)
+
+    act(() => navigate('/'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(0)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+
+    act(() => navigate('/posts'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(1)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(0)
+
+    act(() => navigate('/'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(1)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(1)
+
+    act(() => navigate('/posts'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(2)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(1)
+
+    // This is the real test. Navigating between /posts and /comments should
+    // remount the wrap component because even though it's the same component,
+    // it's in different sets.
+    act(() => navigate('/comments'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(3)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(2)
+
+    act(() => navigate('/'))
+
+    expect(layoutOneMount).toHaveBeenCalledTimes(3)
+    expect(layoutOneUnmount).toHaveBeenCalledTimes(3)
+  })
 })

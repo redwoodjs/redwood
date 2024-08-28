@@ -1267,7 +1267,7 @@ The `prisma db push` command only restores a snapshot of the current database sc
 
 In order to preserve those statements in your test database, you can set an additional ENV var which will use the command `yarn rw prisma migrate reset` instead. This will run each migration in sequence against your test database. The tradeoff is that starting your test suite will take a little longer depending on how many migrations you have:
 
-```.env title=/.env
+```.env title="/.env"
 TEST_DATABASE_STRATEGY=reset
 ```
 

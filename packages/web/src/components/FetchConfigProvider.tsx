@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { UseAuth, useNoAuth } from '@redwoodjs/auth'
+import type { UseAuth } from '@redwoodjs/auth'
+import { useNoAuth } from '@redwoodjs/auth'
 
 export const getApiGraphQLUrl = () => {
   return globalThis.RWJS_API_GRAPHQL_URL
@@ -41,13 +42,18 @@ export const FetchConfigProvider: React.FC<Props> = ({
     )
   }
 
+  // @NOTE: See packages/web/src/apollo/links.tsx
+  // Where we remove the auth-provider header if token is null.
+  // Token === null means you're logged out OR are using cookie/middleware auth
+  const headers = {
+    'auth-provider': type,
+  }
+
   return (
     <FetchConfigContext.Provider
       value={{
         uri: getApiGraphQLUrl(),
-        headers: {
-          'auth-provider': type,
-        },
+        headers,
       }}
       {...rest}
     />

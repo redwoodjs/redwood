@@ -38,7 +38,7 @@ const buildRedwoodFramework = () => {
         cwd: REDWOODJS_FRAMEWORK_PATH,
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -58,31 +58,43 @@ const createRedwoodJSApp = ({ typescript }) => {
         '--no-yarn-install',
         `--typescript ${typescript}`,
         '--no-telemetry',
-        '--no-git',
+        '--git',
+        '-m "first"',
       ].filter(Boolean),
       {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'packages/create-redwood-app'),
         env: { REDWOOD_CI: '1' },
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
 
-    // Add prisma resolutions
+    // Add package resolutions
+    //
+    // This is needed because the test project uses the current stable version
+    // of Redwood when installing, but then when we use rwfw to link, newer
+    // versions of packages might be installed causing conflicts. Setting
+    // resolutions prevents this.
+    // Note that this isn't limited to any specific versions. It's always
+    // going to be a potential issue when package versions differ between
+    // stable and canary.
+    // See https://github.com/redwoodjs/redwood/pull/6772 for more info.
+
     const packageJSONPath = path.join(REDWOOD_PROJECT_DIRECTORY, 'package.json')
     const packageJSON = fs.readJSONSync(packageJSONPath)
 
-    const getVersionFrmRwPkg = (dep, pkg) => {
+    const getVersionFromRwPackage = (dep, pkg) => {
       return fs.readJSONSync(
-        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json')
+        path.join(REDWOODJS_FRAMEWORK_PATH, 'packages', pkg, 'package.json'),
       ).dependencies[dep]
     }
 
     packageJSON.resolutions = {
-      prisma: getVersionFrmRwPkg('prisma', 'cli'),
-      '@prisma/client': getVersionFrmRwPkg('@prisma/client', 'api'),
-      '@prisma/internals': getVersionFrmRwPkg('@prisma/internals', 'cli'),
-      'graphql-yoga': getVersionFrmRwPkg('graphql-yoga', 'graphql-server'),
+      prisma: getVersionFromRwPackage('prisma', 'cli'),
+      '@prisma/client': getVersionFromRwPackage('@prisma/client', 'api'),
+      '@prisma/internals': getVersionFromRwPackage('@prisma/internals', 'cli'),
+      'graphql-yoga': getVersionFromRwPackage('graphql-yoga', 'graphql-server'),
+      graphql: getVersionFromRwPackage('graphql', 'graphql-server'),
     }
 
     fs.writeFileSync(packageJSONPath, JSON.stringify(packageJSON, null, 2))
@@ -95,9 +107,9 @@ const createRedwoodJSApp = ({ typescript }) => {
   }
 }
 
-const addFrameworkDepsToProject = () => {
+const runTarsync = () => {
   try {
-    execa.sync('yarn project:deps', {
+    execa.sync('yarn project:tarsync -v', {
       cwd: REDWOODJS_FRAMEWORK_PATH,
       shell: true,
       stdio: 'inherit',
@@ -109,44 +121,8 @@ const addFrameworkDepsToProject = () => {
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'Error: Could not add Redwood Framework dependencies to project'
+        'Error: Could not tarsync framework dependencies/code to project',
       )
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
-const copyFrameworkPackages = () => {
-  try {
-    execa.sync('yarn project:copy', {
-      cwd: REDWOODJS_FRAMEWORK_PATH,
-      shell: true,
-      stdio: 'inherit',
-      env: {
-        RWFW_PATH: REDWOODJS_FRAMEWORK_PATH,
-        RWJS_CWD: REDWOOD_PROJECT_DIRECTORY,
-      },
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Error: We could not copy Redwood Framework packages')
-      console.error(e)
-    }
-    process.exit(1)
-  }
-}
-
-const runYarnInstall = () => {
-  try {
-    execa.sync('yarn install', {
-      cwd: REDWOOD_PROJECT_DIRECTORY,
-      shell: true,
-      stdio: 'inherit',
-    })
-  } catch (e) {
-    if (e.signal !== 'SIGINT') {
-      console.error('Error: Could not run `yarn install`')
       console.error(e)
     }
     process.exit(1)
@@ -190,7 +166,7 @@ const runCypress = () => {
         cwd: path.join(REDWOODJS_FRAMEWORK_PATH, 'tasks/e2e'),
         shell: true,
         stdio: 'inherit',
-      }
+      },
     )
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -217,7 +193,7 @@ const initGit = () => {
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'There was an error with the `git init` or `git commit` step:'
+        'There was an error with the `git init` or `git commit` step:',
       )
       console.error(e)
     }
@@ -245,7 +221,7 @@ let REDWOOD_PROJECT_DIRECTORY =
     os.tmpdir(),
     'redwood-e2e',
     // ":" is problematic with paths
-    new Date().toISOString().split(':').join('-')
+    new Date().toISOString().split(':').join('-'),
   )
 
 console.log()
@@ -266,9 +242,10 @@ let {
 const tasks = [
   buildFramework && buildRedwoodFramework,
   createProject && (() => createRedwoodJSApp({ typescript })),
-  copyFramework && addFrameworkDepsToProject,
-  copyFramework && runYarnInstall,
-  copyFramework && copyFrameworkPackages,
+  copyFramework && runTarsync,
+  // copyFramework && addFrameworkDepsToProject,
+  // copyFramework && runYarnInstall,
+  // copyFramework && copyFrameworkPackages,
   autoStart && runDevServerInBackground,
   autoStart && initGit,
   autoStart && runCypress,
@@ -288,7 +265,7 @@ process.on('exit', () => {
     console.log('Clean up complete')
   } else {
     console.log(
-      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`
+      `E2E files within "${REDWOOD_PROJECT_DIRECTORY}" have not been automatically cleaned up.`,
     )
   }
 })

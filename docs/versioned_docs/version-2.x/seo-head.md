@@ -22,7 +22,7 @@ Now that you have the app title set, you probably want some consistence with the
 
 Add `titleTemplate` as a prop for `RedwoodProvider` to have a title template for every pages
 
-In _web/src/App.{tsx,js}_
+In _web/src/App.\{tsx,js\}_
 ```diff
 -  <RedwoodProvider>
 +  <RedwoodProvider titleTemplate="%PageTitle | %AppTitle">
@@ -51,7 +51,7 @@ Let's say you want to change the title of your About page,
 Redwood provides a built in `<Head>` component, which you can use like this
 
 
-In _AboutPage/AboutPage.{tsx,js}_
+In _AboutPage/AboutPage.\{tsx,js\}_
 ```diff
 +import { Head } from '@redwoodjs/web'
 
@@ -114,7 +114,7 @@ Great - so far we can see the changes, and bots will pick up our tags if we've p
 
 _Just keep in mind, that Cells are currently not prerendered_ - so it'll be visible to your users, but not to link scrapers and bots.
 
-> **<Head\>s up**<br/>
+> **\<Head\>s up**<br/>
 > For dynamic tags to appear to bots and link scrapers you have to setup an external prerendering service. If you're on Netlify you can use their [built-in one](https://docs.netlify.com/site-deploys/post-processing/prerendering/). Otherwise you can follow [this great how to](https://community.redwoodjs.com/t/cookbook-getting-og-and-meta-tags-working-with-nginx-pre-render-io-and-docker/2014) from the Redwood community
 
 

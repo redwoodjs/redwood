@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nmHoisting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="m-4">
+    <div class="mb-4">
+      <div class="flex flex-row gap-4 justify-between">
+        <div>
+          <h1 class="text-2xl">nmHoisting</h1>
+          <p>
+            This page visualizes the data collected by the
+            <code>nmHoisting</code> task.
+          </p>
+        </div>
+        <div class="flex flex-row gap-4">
+          <div class="flex flex-col gap-2">
+            <label for="versionASelect">Version A</label>
+            <select
+              name="versionA"
+              id="versionASelect"
+              class="bg-gray-100 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 p-1"
+            >
+              <!-- Will be populated by JS -->
+            </select>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="versionBSelect">Version B</label>
+            <select
+              name="versionB"
+              id="versionBSelect"
+              class="bg-gray-100 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 p-1"
+            >
+              <option value="-1" selected>No Comparison</option>
+              <!-- Will be populated by JS -->
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-2xl">Redwood packages with nested `node_modules`</h2>
+    <canvas id="rw-bar-chart" style="max-height: 100vh"></canvas>
+
+    <h2 class="text-2xl">All packages with nested `node_modules`</h2>
+    <canvas id="bar-chart" style="max-height: 100vh"></canvas>
+
+    <h2 class="text-2xl">Raw data</h2>
+    <pre id="raw-data" class="text-xs"></pre>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="nmHoistingData.js"></script>
+    <script src="nmHoistingVisualize.js"></script>
+  </body>
+</html>

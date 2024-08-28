@@ -1,22 +1,22 @@
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
 
-import { getConfig } from '@redwoodjs/project-config'
-
-import { getPaths } from '../../lib'
-import { apiServerHandler } from '../serveHandler'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { getPaths } from '@redwoodjs/project-config'
 
 export const command = 'flightcontrol <side>'
 export const alias = 'fc'
 export const description =
   'Build, Migrate, and Serve commands for Flightcontrol deploy'
+
 export const builder = (yargs) => {
   yargs
     .positional('side', {
       choices: ['api', 'web'],
-      description: 'select side to build',
+      description: 'Side to deploy',
       type: 'string',
     })
     .option('prisma', {
@@ -30,7 +30,7 @@ export const builder = (yargs) => {
       default: false,
     })
     .option('data-migrate', {
-      description: 'Migrate the data in your database',
+      description: 'Apply data migrations',
       type: 'boolean',
       default: true,
       alias: 'dm',
@@ -38,54 +38,69 @@ export const builder = (yargs) => {
     .epilogue(
       `For more commands, options, and examples, see ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#deploy',
+      )}`,
     )
 }
 
 export const handler = async ({ side, serve, prisma, dm: dataMigrate }) => {
+  recordTelemetryAttributes({
+    command: 'deploy flightcontrol',
+    side,
+    prisma,
+    dataMigrate,
+    serve,
+  })
   const rwjsPaths = getPaths()
 
   const execaConfig = {
+    cwd: rwjsPaths.base,
     shell: true,
     stdio: 'inherit',
-    cwd: rwjsPaths.base,
-    extendEnv: true,
-    cleanup: true,
   }
 
   async function runApiCommands() {
-    if (serve) {
-      console.log('\nStarting api...')
-      await apiServerHandler({
-        port: getConfig().api?.port || 8911,
-        apiRootPath: '/',
-      })
-    } else {
-      console.log('\nBuilding api...')
-      execa.sync('yarn rw build api', execaConfig)
+    if (!serve) {
+      console.log('Building api...')
+      execa.commandSync('yarn rw build api --verbose', execaConfig)
 
-      prisma &&
-        execa.sync(
-          path.join(rwjsPaths.base, 'node_modules/.bin/prisma'),
-          ['migrate', 'deploy', '--schema', `"${rwjsPaths.api.dbSchema}"`],
-          execaConfig
+      if (prisma) {
+        console.log('Running database migrations...')
+        execa.commandSync(
+          `node_modules/.bin/prisma migrate deploy --schema "${rwjsPaths.api.dbSchema}"`,
+          execaConfig,
         )
-      dataMigrate && execa.sync('yarn rw dataMigrate up', execaConfig)
+      }
+
+      if (dataMigrate) {
+        console.log('Running data migrations...')
+        execa.commandSync('yarn rw dataMigrate up', execaConfig)
+      }
+
+      return
+    }
+
+    const serverFilePath = path.join(rwjsPaths.api.dist, 'server.js')
+    const hasServerFile = fs.pathExistsSync(serverFilePath)
+
+    if (hasServerFile) {
+      execa(`yarn node ${serverFilePath}`, execaConfig)
+    } else {
+      const { handler } = await import(
+        '@redwoodjs/api-server/dist/apiCLIConfigHandler.js'
+      )
+      handler()
     }
   }
 
   async function runWebCommands() {
-    execa.sync('yarn rw build web', execaConfig)
+    console.log('Building web...')
+    execa.commandSync('yarn rw build web --verbose', execaConfig)
   }
 
   if (side === 'api') {
     runApiCommands()
   } else if (side === 'web') {
-    console.log('\nBuilding web...')
     runWebCommands()
-  } else {
-    console.log('Error with arguments provided')
-    // you broke something, which should be caught by Yargs
   }
 }

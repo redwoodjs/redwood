@@ -1,0 +1,15 @@
+{
+  "extends": "../../../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "dist",
+    "module": "Node16",
+    "moduleResolution": "Node16"
+  },
+  "include": ["."],
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
+  "references": [
+    { "path": "../../../auth/tsconfig.build.json" },
+    { "path": "../../../vite/tsconfig.build.json" }
+  ]
+}

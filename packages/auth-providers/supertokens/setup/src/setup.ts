@@ -1,4 +1,4 @@
-import yargs from 'yargs'
+import type yargs from 'yargs'
 
 import { standardAuthBuilder } from '@redwoodjs/cli-helpers'
 
@@ -14,6 +14,6 @@ export interface Args {
 }
 
 export async function handler(options: Args) {
-  const { handler } = await import('./setupHandler')
+  const { handler } = await import('./setupHandler.js')
   return handler(options)
 }

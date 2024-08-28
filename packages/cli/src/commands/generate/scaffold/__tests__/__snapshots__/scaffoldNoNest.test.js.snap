@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`in javascript (default) mode creates a edit page 1`] = `
+exports[`in javascript (default) mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/EditPostCell'
 
 const EditPostPage = ({ id }) => {
@@ -11,7 +11,7 @@ export default EditPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a form component 1`] = `
+exports[`in javascript (default) mode > creates a form component 1`] = `
 "import {
   Form,
   FormError,
@@ -273,7 +273,7 @@ export default PostForm
 "
 `;
 
-exports[`in javascript (default) mode creates a index page 1`] = `
+exports[`in javascript (default) mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
@@ -284,7 +284,7 @@ export default PostsPage
 "
 `;
 
-exports[`in javascript (default) mode creates a layout 1`] = `
+exports[`in javascript (default) mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -317,11 +317,12 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in javascript (default) mode creates a new component 1`] = `undefined`;
+exports[`in javascript (default) mode > creates a new component 1`] = `undefined`;
 
-exports[`in javascript (default) mode creates a new component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates a new component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfileForm'
@@ -368,7 +369,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in javascript (default) mode creates a new page 1`] = `
+exports[`in javascript (default) mode > creates a new page 1`] = `
 "import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
@@ -379,7 +380,7 @@ export default NewPostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a show cell 1`] = `
+exports[`in javascript (default) mode > creates a show cell 1`] = `
 "import Post from 'src/components/Post'
 
 export const QUERY = gql\`
@@ -416,9 +417,10 @@ export const Success = ({ post }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates a show component 1`] = `
+exports[`in javascript (default) mode > creates a show component 1`] = `
 "import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
@@ -536,7 +538,7 @@ export default Post
 "
 `;
 
-exports[`in javascript (default) mode creates a show page 1`] = `
+exports[`in javascript (default) mode > creates a show page 1`] = `
 "import PostCell from 'src/components/PostCell'
 
 const PostPage = ({ id }) => {
@@ -547,7 +549,7 @@ export default PostPage
 "
 `;
 
-exports[`in javascript (default) mode creates a stylesheet 1`] = `
+exports[`in javascript (default) mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -948,9 +950,9 @@ exports[`in javascript (default) mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in javascript (default) mode creates an edit cell 1`] = `undefined`;
+exports[`in javascript (default) mode > creates an edit cell 1`] = `undefined`;
 
-exports[`in javascript (default) mode creates an edit component with int foreign keys converted in onSave 1`] = `
+exports[`in javascript (default) mode > creates an edit component with int foreign keys converted in onSave 1`] = `
 "import { navigate, routes } from '@redwoodjs/router'
 
 import { useMutation } from '@redwoodjs/web'
@@ -967,6 +969,7 @@ export const QUERY = gql\`
     }
   }
 \`
+
 const UPDATE_USER_PROFILE_MUTATION = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
@@ -1025,7 +1028,7 @@ export const Success = ({ userProfile }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index cell 1`] = `
+exports[`in javascript (default) mode > creates an index cell 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 
 import Posts from 'src/components/Posts'
@@ -1073,9 +1076,10 @@ export const Success = ({ posts }) => {
 "
 `;
 
-exports[`in javascript (default) mode creates an index component 1`] = `
+exports[`in javascript (default) mode > creates an index component 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
@@ -1190,7 +1194,7 @@ export default PostsList
 "
 `;
 
-exports[`in typescript mode creates a edit page 1`] = `
+exports[`in typescript mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/EditPostCell'
 
 type PostPageProps = {
@@ -1205,8 +1209,11 @@ export default EditPostPage
 "
 `;
 
-exports[`in typescript mode creates a form component 1`] = `
-"import {
+exports[`in typescript mode > creates a form component 1`] = `
+"import type { EditPostById, UpdatePostInput } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
+import {
   Form,
   FormError,
   FieldError,
@@ -1218,9 +1225,6 @@ exports[`in typescript mode creates a form component 1`] = `
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
-
-import type { EditPostById, UpdatePostInput } from 'types/graphql'
-import type { RWGqlError } from '@redwoodjs/forms'
 
 const formatDatetime = (value) => {
   if (value) {
@@ -1479,7 +1483,7 @@ export default PostForm
 "
 `;
 
-exports[`in typescript mode creates a index page 1`] = `
+exports[`in typescript mode > creates a index page 1`] = `
 "import PostsCell from 'src/components/PostsCell'
 
 const PostsPage = () => {
@@ -1490,7 +1494,7 @@ export default PostsPage
 "
 `;
 
-exports[`in typescript mode creates a layout 1`] = `
+exports[`in typescript mode > creates a layout 1`] = `
 "import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
 
@@ -1531,18 +1535,26 @@ export default ScaffoldLayout
 "
 `;
 
-exports[`in typescript mode creates a new component 1`] = `undefined`;
+exports[`in typescript mode > creates a new component 1`] = `undefined`;
 
-exports[`in typescript mode creates a new component with int foreign keys converted in onSave 1`] = `
-"import { navigate, routes } from '@redwoodjs/router'
+exports[`in typescript mode > creates a new component with int foreign keys converted in onSave 1`] = `
+"import type {
+  CreateUserProfileMutation,
+  CreateUserProfileInput,
+  CreateUserProfileMutationVariables,
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfileForm'
 
-import type { CreateUserProfileInput } from 'types/graphql'
-
-const CREATE_USER_PROFILE_MUTATION = gql\`
+const CREATE_USER_PROFILE_MUTATION: TypedDocumentNode<
+  CreateUserProfileMutation,
+  CreateUserProfileMutationVariables
+> = gql\`
   mutation CreateUserProfileMutation($input: CreateUserProfileInput!) {
     createUserProfile(input: $input) {
       id
@@ -1584,7 +1596,7 @@ export default NewUserProfile
 "
 `;
 
-exports[`in typescript mode creates a new page 1`] = `
+exports[`in typescript mode > creates a new page 1`] = `
 "import NewPost from 'src/components/NewPost'
 
 const NewPostPage = () => {
@@ -1595,57 +1607,72 @@ export default NewPostPage
 "
 `;
 
-exports[`in typescript mode creates a show cell 1`] = `
-"import type { FindPostById } from 'types/graphql'
+exports[`in typescript mode > creates a show cell 1`] = `
+"import type { FindPostById, FindPostByIdVariables } from 'types/graphql'
 
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import Post from 'src/components/Post'
 
-export const QUERY = gql\`
-  query FindPostById($id: Int!) {
-    post: post(id: $id) {
-      id
-      title
-      slug
-      author
-      body
-      image
-      postedAt
-      isPinned
-      readTime
-      rating
-      upvotes
-      metadata
-      hugeNumber
+export const QUERY: TypedDocumentNode<FindPostById, FindPostByIdVariables> =
+  gql\`
+    query FindPostById($id: Int!) {
+      post: post(id: $id) {
+        id
+        title
+        slug
+        author
+        body
+        image
+        postedAt
+        isPinned
+        readTime
+        rating
+        upvotes
+        metadata
+        hugeNumber
+      }
     }
-  }
-\`
+  \`
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Post not found</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<FindPostByIdVariables>) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ post }: CellSuccessProps<FindPostById>) => {
+export const Success = ({
+  post,
+}: CellSuccessProps<FindPostById, FindPostByIdVariables>) => {
   return <Post post={post} />
 }
 "
 `;
 
-exports[`in typescript mode creates a show component 1`] = `
-"import { Link, routes, navigate } from '@redwoodjs/router'
+exports[`in typescript mode > creates a show component 1`] = `
+"import type {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  FindPostById,
+} from 'types/graphql'
+
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { checkboxInputTag, jsonDisplay, timeTag } from 'src/lib/formatters'
 
-import type { DeletePostMutationVariables, FindPostById } from 'types/graphql'
-
-const DELETE_POST_MUTATION = gql\`
+const DELETE_POST_MUTATION: TypedDocumentNode<
+  DeletePostMutation,
+  DeletePostMutationVariables
+> = gql\`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
       id
@@ -1762,7 +1789,7 @@ export default Post
 "
 `;
 
-exports[`in typescript mode creates a show page 1`] = `
+exports[`in typescript mode > creates a show page 1`] = `
 "import PostCell from 'src/components/PostCell'
 
 type PostPageProps = {
@@ -1777,7 +1804,7 @@ export default PostPage
 "
 `;
 
-exports[`in typescript mode creates a stylesheet 1`] = `
+exports[`in typescript mode > creates a stylesheet 1`] = `
 "/*
   normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css
 */
@@ -2178,17 +2205,25 @@ exports[`in typescript mode creates a stylesheet 1`] = `
 "
 `;
 
-exports[`in typescript mode creates an edit cell 1`] = `
-"import type { EditPostById, UpdatePostInput } from 'types/graphql'
+exports[`in typescript mode > creates an edit cell 1`] = `
+"import type {
+  EditPostById,
+  UpdatePostInput,
+  UpdatePostMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import PostForm from 'src/components/PostForm'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<EditPostById> = gql\`
   query EditPostById($id: Int!) {
     post: post(id: $id) {
       id
@@ -2207,7 +2242,11 @@ export const QUERY = gql\`
     }
   }
 \`
-const UPDATE_POST_MUTATION = gql\`
+
+const UPDATE_POST_MUTATION: TypedDocumentNode<
+  EditPostById,
+  UpdatePostMutationVariables
+> = gql\`
   mutation UpdatePostMutation($id: Int!, $input: UpdatePostInput!) {
     updatePost(id: $id, input: $input) {
       id
@@ -2264,17 +2303,25 @@ export const Success = ({ post }: CellSuccessProps<EditPostById>) => {
 "
 `;
 
-exports[`in typescript mode creates an edit component with int foreign keys converted in onSave 1`] = `
-"import type { EditUserProfileById, UpdateUserProfileInput } from 'types/graphql'
+exports[`in typescript mode > creates an edit component with int foreign keys converted in onSave 1`] = `
+"import type {
+  EditUserProfileById,
+  UpdateUserProfileInput,
+  UpdateUserProfileMutationVariables,
+} from 'types/graphql'
 
 import { navigate, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import UserProfileForm from 'src/components/UserProfileForm'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<EditUserProfileById> = gql\`
   query EditUserProfileById($id: Int!) {
     userProfile: userProfile(id: $id) {
       id
@@ -2283,7 +2330,11 @@ export const QUERY = gql\`
     }
   }
 \`
-const UPDATE_USER_PROFILE_MUTATION = gql\`
+
+const UPDATE_USER_PROFILE_MUTATION: TypedDocumentNode<
+  EditUserProfileById,
+  UpdateUserProfileMutationVariables
+> = gql\`
   mutation UpdateUserProfileMutation(
     $id: Int!
     $input: UpdateUserProfileInput!
@@ -2346,15 +2397,19 @@ export const Success = ({
 "
 `;
 
-exports[`in typescript mode creates an index cell 1`] = `
-"import type { FindPosts } from 'types/graphql'
+exports[`in typescript mode > creates an index cell 1`] = `
+"import type { FindPosts, FindPostsVariables } from 'types/graphql'
 
 import { Link, routes } from '@redwoodjs/router'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
 import Posts from 'src/components/Posts'
 
-export const QUERY = gql\`
+export const QUERY: TypedDocumentNode<FindPosts, FindPostsVariables> = gql\`
   query FindPosts {
     posts {
       id
@@ -2387,19 +2442,28 @@ export const Empty = () => {
   )
 }
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<FindPosts>) => (
   <div className="rw-cell-error">{error?.message}</div>
 )
 
-export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
+export const Success = ({
+  posts,
+}: CellSuccessProps<FindPosts, FindPostsVariables>) => {
   return <Posts posts={posts} />
 }
 "
 `;
 
-exports[`in typescript mode creates an index component 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+exports[`in typescript mode > creates an index component 1`] = `
+"import type {
+  DeletePostMutation,
+  DeletePostMutationVariables,
+  FindPosts,
+} from 'types/graphql'
+
+import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/PostsCell'
@@ -2410,9 +2474,10 @@ import {
   truncate,
 } from 'src/lib/formatters'
 
-import type { DeletePostMutationVariables, FindPosts } from 'types/graphql'
-
-const DELETE_POST_MUTATION = gql\`
+const DELETE_POST_MUTATION: TypedDocumentNode<
+  DeletePostMutation,
+  DeletePostMutationVariables
+> = gql\`
   mutation DeletePostMutation($id: Int!) {
     deletePost(id: $id) {
       id

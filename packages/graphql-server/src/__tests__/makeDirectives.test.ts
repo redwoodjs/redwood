@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { DirectiveParams } from '..'
+import type { DirectiveParams } from '..'
 import {
   makeDirectivesForPlugin,
   createTransformerDirective,
@@ -46,13 +46,13 @@ test('Should map directives globs to defined structure correctly', async () => {
 
   expect(bazingaDirective.name).toBe('bazinga')
   expect(bazingaDirective.onResolvedValue).rejects.toThrowError(
-    'Only soft kittens allowed'
+    'Only soft kittens allowed',
   )
   expect(bazingaDirective.schema.kind).toBe('Document')
 
   expect(barDirective.name).toBe('bar')
   expect(await barDirective.onResolvedValue({} as DirectiveParams)).toBe(
-    'I am bar'
+    'I am bar',
   )
   expect(barDirective.schema.kind).toBe('Document')
 })
@@ -67,28 +67,28 @@ describe('Errors out with a helpful message, if the directive is not constructed
     }
 
     expect(() => makeDirectivesForPlugin(incorrectDirectiveFiles)).toThrowError(
-      'Please use `createValidatorDirective` or `createTransformerDirective` functions to define your directive'
+      'Please use `createValidatorDirective` or `createTransformerDirective` functions to define your directive',
     )
   })
 
   it('Tells you if you forgot the implementation function', () => {
     expect(() => createValidatorDirective(fooSchema, undefined)).toThrowError(
-      'Directive validation function not implemented for @foo'
+      'Directive validation function not implemented for @foo',
     )
 
     expect(() => createTransformerDirective(fooSchema, undefined)).toThrowError(
-      'Directive transformer function not implemented for @foo'
+      'Directive transformer function not implemented for @foo',
     )
   })
 
   it('Tells you if you messed up the schema', () => {
     // The messages come from the graphql libs, so no need to check the messages
     expect(() =>
-      createValidatorDirective(gql`directive @misdirective`, undefined)
+      createValidatorDirective(gql`directive @misdirective`, undefined),
     ).toThrow()
 
     expect(() =>
-      createTransformerDirective(gql`misdirective`, undefined)
+      createTransformerDirective(gql`misdirective`, undefined),
     ).toThrow()
   })
 })

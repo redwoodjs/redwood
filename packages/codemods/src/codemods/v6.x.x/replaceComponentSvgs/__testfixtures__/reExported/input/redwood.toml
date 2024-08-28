@@ -1,0 +1,18 @@
+# This file contains the configuration settings for your Redwood app.
+# This file is also what makes your Redwood app a Redwood app.
+# If you remove it and try to run `yarn rw dev`, you'll get an error.
+#
+# For the full list of options, see the "App Configuration: redwood.toml" doc:
+# https://redwoodjs.com/docs/app-configuration-redwood-toml
+
+[web]
+  title = "Redwood App"
+  port = 8910
+  apiUrl = "/.redwood/functions" # you can customise graphql and dbauth urls individually too: see https://redwoodjs.com/docs/app-configuration-redwood-toml#api-paths
+  includeEnvironmentVariables = [] # any ENV vars that should be available to the web side, see https://redwoodjs.com/docs/environment-variables#web
+[api]
+  port = 8911
+[browser]
+  open = true
+[notifications]
+  versionUpdates = ["latest"]

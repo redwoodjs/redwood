@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 
-import { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import { AuthProviderState } from './AuthProviderState'
-import { useCurrentUser } from './useCurrentUser'
-import { useToken } from './useToken'
+import type { AuthProviderState } from './AuthProviderState.js'
+import type { useCurrentUser } from './useCurrentUser.js'
+import { useToken } from './useToken.js'
 
 const notAuthenticatedState = {
   isAuthenticated: false,
@@ -20,7 +20,6 @@ export const useReauthenticate = <TUser>(
     React.SetStateAction<AuthProviderState<TUser>>
   >,
   getCurrentUser: ReturnType<typeof useCurrentUser>,
-  skipFetchCurrentUser: boolean | undefined
 ) => {
   const getToken = useToken(authImplementation)
 
@@ -38,9 +37,15 @@ export const useReauthenticate = <TUser>(
     }
 
     try {
-      const userMetadata = await authImplementation.getUserMetadata()
+      // This call here is a local check against the auth provider's client.
+      // e.g. if the auth sdk has logged you out, it'll throw an error
+      const token = await getToken()
+      let currentUser
+      if (token || authImplementation.middlewareAuthEnabled) {
+        currentUser = await getCurrentUser()
+      }
 
-      if (!userMetadata) {
+      if (!currentUser) {
         let loading = false
 
         if (authImplementation.clientHasLoaded) {
@@ -53,15 +58,13 @@ export const useReauthenticate = <TUser>(
           client: authImplementation.client,
         })
       } else {
-        await getToken()
-
-        const currentUser = skipFetchCurrentUser ? null : await getCurrentUser()
+        const userMetadata = await authImplementation.getUserMetadata()
 
         setAuthProviderState((oldState) => ({
           ...oldState,
           userMetadata,
           currentUser,
-          isAuthenticated: true,
+          isAuthenticated: !!currentUser,
           loading: false,
           client: authImplementation.client,
         }))
@@ -73,11 +76,5 @@ export const useReauthenticate = <TUser>(
         error: e as Error,
       })
     }
-  }, [
-    authImplementation,
-    getToken,
-    setAuthProviderState,
-    skipFetchCurrentUser,
-    getCurrentUser,
-  ])
+  }, [authImplementation, setAuthProviderState, getToken, getCurrentUser])
 }

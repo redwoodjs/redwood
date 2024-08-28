@@ -1,10 +1,10 @@
 import fs from 'fs'
 
-import toml from '@iarna/toml'
 import merge from 'deepmerge'
+import * as toml from 'smol-toml'
 import { env as envInterpolation } from 'string-env-interpolation'
 
-import { getConfigPath } from './configPath'
+import { getConfigPath } from './configPath.js'
 
 export enum TargetEnum {
   NODE = 'node',
@@ -13,15 +13,10 @@ export enum TargetEnum {
   ELECTRON = 'electron',
 }
 
-export enum BundlerEnum {
-  WEBPACK = 'webpack',
-  VITE = 'vite',
-}
-
 export interface NodeTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.NODE
@@ -33,11 +28,10 @@ export interface NodeTargetConfig {
 interface BrowserTargetConfig {
   title: string
   name?: string
-  host: string
+  host?: string
   port: number
   path: string
   target: TargetEnum.BROWSER
-  bundler: BundlerEnum
   includeEnvironmentVariables: string[]
   /**
    * Specify the URL to your api-server.
@@ -75,7 +69,7 @@ interface AuthImpersonationConfig {
 }
 
 interface StudioConfig {
-  inMemory: boolean
+  basePort: number
   graphiql?: GraphiQLStudioConfig
 }
 
@@ -90,38 +84,52 @@ export interface Config {
     stories: boolean
     nestScaffoldByModel: boolean
   }
+  graphql: {
+    fragments: boolean
+    trustedDocuments: boolean
+  }
   notifications: {
     versionUpdates: string[]
   }
+  studio: StudioConfig
   experimental: {
     opentelemetry: {
       enabled: boolean
+      wrapApi: boolean
       apiSdk?: string
     }
-    studio: StudioConfig
     cli: {
       autoInstall: boolean
       plugins: CLIPlugin[]
+    }
+    useSDLCodeGenForGraphQLTypes: boolean
+    streamingSsr: {
+      enabled: boolean
+    }
+    rsc: {
+      enabled: boolean
+    }
+    realtime: {
+      enabled: boolean
+    }
+    reactCompiler: {
+      enabled: boolean
+      lintOnly: boolean
     }
   }
 }
 
 export interface CLIPlugin {
   package: string
-  version?: string
   enabled?: boolean
 }
 
-// Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
-// https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
 const DEFAULT_CONFIG: Config = {
   web: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
@@ -130,7 +138,6 @@ const DEFAULT_CONFIG: Config = {
   },
   api: {
     title: 'Redwood App',
-    host: 'localhost',
     port: 8911,
     path: './api',
     target: TargetEnum.NODE,
@@ -138,6 +145,7 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
+  graphql: { fragments: false, trustedDocuments: false },
   browser: {
     open: false,
   },
@@ -149,31 +157,46 @@ const DEFAULT_CONFIG: Config = {
   notifications: {
     versionUpdates: [],
   },
+  studio: {
+    basePort: 4318,
+    graphiql: {
+      authImpersonation: {
+        authProvider: undefined,
+        userId: undefined,
+        email: undefined,
+        jwtSecret: 'secret',
+      },
+    },
+  },
   experimental: {
     opentelemetry: {
       enabled: false,
-      apiSdk: undefined,
-    },
-    studio: {
-      inMemory: false,
-      graphiql: {
-        endpoint: 'graphql',
-        authImpersonation: {
-          authProvider: undefined,
-          userId: undefined,
-          email: undefined,
-          roles: undefined,
-          jwtSecret: 'secret',
-        },
-      },
+      wrapApi: true,
     },
     cli: {
       autoInstall: true,
       plugins: [
         {
-          package: '@redwoodjs/cli-storybook',
+          package: '@redwoodjs/cli-storybook-vite',
+        },
+        {
+          package: '@redwoodjs/cli-data-migrate',
         },
       ],
+    },
+    useSDLCodeGenForGraphQLTypes: false,
+    streamingSsr: {
+      enabled: false,
+    },
+    rsc: {
+      enabled: false,
+    },
+    realtime: {
+      enabled: false,
+    },
+    reactCompiler: {
+      enabled: false,
+      lintOnly: false,
     },
   },
 }

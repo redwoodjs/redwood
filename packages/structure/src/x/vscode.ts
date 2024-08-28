@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // vscode is a compile-time only dependency
 // we only use it in type declarations
 // (we can't use "import type" since we need to do use it in some typeof expressions)
 import { memoize } from 'lodash'
-import * as vscode from 'vscode'
-import { Connection as LSPConnection } from 'vscode-languageserver'
-import { Command, Location } from 'vscode-languageserver-types'
+import type * as vscode from 'vscode'
+import type { Connection as LSPConnection } from 'vscode-languageserver'
+import type { Command } from 'vscode-languageserver-types'
+import { Location } from 'vscode-languageserver-types'
 
 import { lazy, memo } from '../x/decorators'
 
@@ -18,7 +17,7 @@ export type VSCodeWindowMethods = Pick<
 } & { withProgress(opts: any, task: () => void): void }
 
 export function VSCodeWindowMethods_fromConnection(
-  connection
+  connection,
 ): VSCodeWindowMethods {
   return new VSCodeWindowMethodsWrapper(connection)
 }
@@ -101,7 +100,7 @@ export class TreeItem2Wrapper {
   constructor(
     public item: TreeItem2,
     public parent?: TreeItem2Wrapper,
-    public indexInParent: number = 0
+    public indexInParent = 0,
   ) {}
   @lazy() get keys(): string[] {
     if (!this.parent) {
@@ -202,7 +201,7 @@ type RemoteTreeDataProvider = ReplacePropTypes<
 export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   constructor(
     private getRoot: () => TreeItem2,
-    private refreshInterval = 5000
+    private refreshInterval = 5000,
   ) {}
 
   private root!: TreeItem2Wrapper
@@ -223,11 +222,11 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   }
 
   // ----- start TreeDataProvider impl
-  private listeners: Array<(e: string | undefined) => void> = []
+  private listeners: ((e: string | undefined) => void)[] = []
   onDidChangeTreeData(listener: (e: string | undefined) => void) {
     this.lazyInit()
     this.listeners.push(listener)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     return null as any // TODO: disposable (we're not using it for now)
   }
 
@@ -267,23 +266,23 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
 export function RemoteTreeDataProvider_publishOverLSPConnection(
   tdp: RemoteTreeDataProvider,
   connection: LSPConnection,
-  methodPrefix: string
+  methodPrefix: string,
 ) {
   const lazyInit = memoize(() => {
     // we only setup this listener if we receive a call
     tdp.onDidChangeTreeData?.((id) =>
-      connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id])
+      connection.sendRequest(`${methodPrefix}onDidChangeTreeData`, [id]),
     )
   })
-  connection.onRequest(`${methodPrefix}getChildren`, async (id) => {
+  connection.onRequest(`${methodPrefix}getChildren`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getChildren(id))
-    } catch (e) {
+    } catch {
       return []
     }
   })
-  connection.onRequest(`${methodPrefix}getTreeItem`, async (id) => {
+  connection.onRequest(`${methodPrefix}getTreeItem`, async (id: string) => {
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getTreeItem(id))
@@ -294,7 +293,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
 }
 
 export async function ProviderResult_normalize<T>(
-  x: vscode.ProviderResult<T>
+  x: vscode.ProviderResult<T>,
 ): Promise<T | undefined> {
   if (isThenable(x)) {
     return await ProviderResult_normalize(await x)
@@ -341,7 +340,6 @@ export function Command_cli(cmd: string, title = 'run...'): Command {
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type ReplacePropTypes<T extends {}, Replacements extends {}> = {
+type ReplacePropTypes<T extends object, Replacements extends object> = {
   [K in keyof T]: K extends keyof Replacements ? Replacements[K] : T[K]
 }

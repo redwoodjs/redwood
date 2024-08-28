@@ -1,7 +1,10 @@
 import { Listr } from 'listr2'
+import { vi, describe, it, expect } from 'vitest'
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
+    ...originalProjectConfig,
     getPaths: () => ({
       base: `${__dirname}/fixtures`,
     }),
@@ -15,8 +18,8 @@ describe('verifyConfig', () => {
     expect(() =>
       baremetal.verifyConfig(
         { production: { servers: [{ host: 'prod.server.com' }] } },
-        {}
-      )
+        {},
+      ),
     ).toThrow('Must specify an environment to deploy to')
   })
 
@@ -24,8 +27,8 @@ describe('verifyConfig', () => {
     expect(() =>
       baremetal.verifyConfig(
         { production: { servers: [{ host: 'prod.server.com' }] } },
-        { environment: 'staging' }
-      )
+        { environment: 'staging' },
+      ),
     ).toThrow('No servers found for environment "staging"')
   })
 })
@@ -36,9 +39,9 @@ describe('verifyServerConfig', () => {
       baremetal.verifyServerConfig({
         path: '/var/www/app',
         repo: 'git://github.com',
-      })
+      }),
     ).toThrow(
-      '"host" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+      '"host" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml',
     )
   })
 
@@ -47,9 +50,9 @@ describe('verifyServerConfig', () => {
       baremetal.verifyServerConfig({
         host: 'host.test',
         repo: 'git://github.com',
-      })
+      }),
     ).toThrow(
-      '"path" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+      '"path" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml',
     )
   })
 
@@ -58,9 +61,9 @@ describe('verifyServerConfig', () => {
       baremetal.verifyServerConfig({
         host: 'host.test',
         path: '/var/www/app',
-      })
+      }),
     ).toThrow(
-      '"repo" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml'
+      '"repo" config option not set. See https://redwoodjs.com/docs/deployment/baremetal#deploytoml',
     )
   })
 
@@ -70,7 +73,7 @@ describe('verifyServerConfig', () => {
         host: 'host.test',
         path: '/var/www/app',
         repo: 'git://github.com',
-      })
+      }),
     ).toEqual(true)
   })
 })
@@ -80,7 +83,7 @@ describe('maintenanceTasks', () => {
     const tasks = baremetal.maintenanceTasks(
       'up',
       {},
-      { path: '/var/www/app', processNames: ['api'] }
+      { path: '/var/www/app', processNames: ['api'] },
     )
 
     expect(tasks.length).toEqual(2)
@@ -92,7 +95,7 @@ describe('maintenanceTasks', () => {
     const tasks = baremetal.maintenanceTasks(
       'down',
       {},
-      { path: '/var/www/app', processNames: ['api'] }
+      { path: '/var/www/app', processNames: ['api'] },
     )
 
     expect(tasks.length).toEqual(2)
@@ -106,7 +109,7 @@ describe('rollbackTasks', () => {
     const tasks1 = baremetal.rollbackTasks(
       1,
       {},
-      { path: '/var/www/app', processNames: ['api'] }
+      { path: '/var/www/app', processNames: ['api'] },
     )
 
     expect(tasks1.length).toEqual(2)
@@ -116,7 +119,7 @@ describe('rollbackTasks', () => {
     const tasks2 = baremetal.rollbackTasks(
       5,
       {},
-      { path: '/var/www/app', processNames: ['api'] }
+      { path: '/var/www/app', processNames: ['api'] },
     )
 
     expect(tasks2[0].title).toMatch('Rolling back 5')
@@ -160,7 +163,7 @@ describe('serverConfigWithDefaults', () => {
   it('overrides branch name from yargs no matter what', () => {
     const config = baremetal.serverConfigWithDefaults(
       { branch: 'earth' },
-      { branch: 'moon' }
+      { branch: 'moon' },
     )
     expect(config.branch).toEqual('moon')
   })
@@ -173,7 +176,7 @@ describe('parseConfig', () => {
       `
         [[production.servers]]
         host = 'server.com'
-      `
+      `,
     )
 
     expect(envConfig).toEqual({ servers: [{ host: 'server.com' }] })
@@ -188,7 +191,7 @@ describe('parseConfig', () => {
 
         [[staging.servers]]
         host = 'staging.server.com'
-      `
+      `,
     )
 
     expect(envConfig).toEqual({ servers: [{ host: 'staging.server.com' }] })
@@ -200,7 +203,7 @@ describe('parseConfig', () => {
       `
         [[production.servers]]
         host = 'server.com'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({})
@@ -216,7 +219,7 @@ describe('parseConfig', () => {
 
         [[production.servers]]
         host = 'server.com'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({ install: ['yarn global'] })
@@ -233,7 +236,7 @@ describe('parseConfig', () => {
 
         [[production.servers]]
         host = 'server.com'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({
@@ -252,7 +255,7 @@ describe('parseConfig', () => {
 
         [[production.servers]]
         host = 'server.com'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({
@@ -270,7 +273,7 @@ describe('parseConfig', () => {
 
         [production.before]
         install = 'yarn env'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({ install: ['yarn env'] })
@@ -290,7 +293,7 @@ describe('parseConfig', () => {
         [production.before]
         install = 'yarn env one'
         update = 'yarn env two'
-      `
+      `,
     )
 
     expect(envLifecycle.before).toEqual({
@@ -313,7 +316,7 @@ describe('parseConfig', () => {
         repo = '\${TEST_VAR_REPO:git://github.com}'
         path = '\${TEST_VAR_PATH:/var/www/app}'
         privateKeyPath = '/Users/me/.ssh/id_rsa'
-      `
+      `,
     )
     const server = servers[0]
     expect(server.host).toEqual('staging.server.com')
@@ -323,8 +326,8 @@ describe('parseConfig', () => {
     // No substitution should work
     expect(server.privateKeyPath).toEqual('/Users/me/.ssh/id_rsa')
 
-    delete process.env['TEST_VAR_HOST']
-    delete process.env['TEST_VAR_REPO']
+    delete process.env.TEST_VAR_HOST
+    delete process.env.TEST_VAR_REPO
   })
 })
 
@@ -525,7 +528,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(Object.keys(tasks).length).toEqual(8)
@@ -552,7 +555,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       { ...defaultServerConfig, sides: ['api', 'web'] },
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -565,7 +568,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       { ...defaultServerConfig, migrate: false },
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(Object.keys(tasks).length).toEqual(8)
@@ -577,7 +580,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, firstRun: true },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -590,7 +593,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, update: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[0].skip()).toEqual(true)
@@ -603,7 +606,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, install: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[2].skip()).toEqual(true)
@@ -614,7 +617,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, migrate: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[3].skip()).toEqual(true)
@@ -625,7 +628,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, build: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[4].skip()).toEqual(true)
@@ -636,7 +639,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, restart: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[6].skip()).toEqual(true)
@@ -647,7 +650,7 @@ describe('deployTasks', () => {
       { ...defaultYargs, cleanup: false },
       {}, // ssh
       defaultServerConfig,
-      {} // lifecycle
+      {}, // lifecycle
     )
 
     expect(tasks[7].skip()).toEqual(true)
@@ -658,7 +661,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { update: ['touch before-update.txt'] } }
+      { before: { update: ['touch before-update.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -671,7 +674,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { install: ['touch before-install.txt'] } }
+      { before: { install: ['touch before-install.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -684,7 +687,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { migrate: ['touch before-migrate.txt'] } }
+      { before: { migrate: ['touch before-migrate.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -697,7 +700,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { build: ['touch before-build.txt'] } }
+      { before: { build: ['touch before-build.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -710,7 +713,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { restart: ['touch before-restart.txt'] } }
+      { before: { restart: ['touch before-restart.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -723,7 +726,7 @@ describe('deployTasks', () => {
       defaultYargs,
       {}, // ssh
       defaultServerConfig,
-      { before: { cleanup: ['touch before-cleanup.txt'] } }
+      { before: { cleanup: ['touch before-cleanup.txt'] } },
     )
 
     expect(Object.keys(tasks).length).toEqual(9)
@@ -736,11 +739,11 @@ describe('commands', () => {
   it('contains a top-level task for each server in an environment', () => {
     const prodServers = baremetal.commands(
       { environment: 'production', releaseDir: '2022051120000' },
-      {}
+      {},
     )
     const stagingServers = baremetal.commands(
       { environment: 'staging', releaseDir: '2022051120000' },
-      {}
+      {},
     )
 
     expect(prodServers.length).toEqual(2)
@@ -754,7 +757,7 @@ describe('commands', () => {
   it('a single server contains nested deploy tasks', () => {
     const servers = baremetal.commands(
       { environment: 'staging', releaseDir: '2022051120000' },
-      {}
+      {},
     )
 
     expect(servers[0].task()).toBeInstanceOf(Listr)
@@ -763,7 +766,7 @@ describe('commands', () => {
   it('contains connection and disconnection tasks', () => {
     const servers = baremetal.commands(
       { environment: 'staging', releaseDir: '2022051120000' },
-      {}
+      {},
     )
     const tasks = servers[0].task().tasks
 
@@ -774,7 +777,7 @@ describe('commands', () => {
   it('contains deploy tasks by default', () => {
     const servers = baremetal.commands(
       { environment: 'staging', releaseDir: '2022051120000' },
-      {}
+      {},
     )
     const tasks = servers[0].task().tasks
 
@@ -788,7 +791,7 @@ describe('commands', () => {
         releaseDir: '2022051120000',
         maintenance: 'up',
       },
-      {}
+      {},
     )
     const tasks = servers[0].task().tasks
 
@@ -803,7 +806,7 @@ describe('commands', () => {
         releaseDir: '2022051120000',
         rollback: 2,
       },
-      {}
+      {},
     )
     const tasks = servers[0].task().tasks
 
@@ -817,7 +820,7 @@ describe('commands', () => {
         environment: 'test',
         releaseDir: '2022051120000',
       },
-      {}
+      {},
     )
     const tasks = servers[0].task().tasks
 

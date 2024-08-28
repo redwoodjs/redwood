@@ -19,16 +19,22 @@ export const builder = (yargs) => {
       default: false,
       description: 'List available scripts',
     })
+    .option('silent', {
+      alias: 's',
+      type: 'boolean',
+      default: false,
+      description: "Silence Redwood's output, leaving only the script output",
+    })
     .strict(false)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#up'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#up',
+      )}`,
     )
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./execHandler')
+  const { handler } = await import('./execHandler.js')
   return handler(options)
 }

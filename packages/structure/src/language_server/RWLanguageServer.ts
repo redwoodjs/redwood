@@ -1,14 +1,15 @@
+import type { InitializeParams } from 'vscode-languageserver'
 import {
   createConnection,
-  InitializeParams,
   ProposedFeatures,
   TextDocuments,
   TextDocumentSyncKind,
 } from 'vscode-languageserver'
 import { TextDocument } from 'vscode-languageserver-textdocument'
-import { CodeAction } from 'vscode-languageserver-types'
+import type { CodeAction } from 'vscode-languageserver-types'
 
-import { HostWithDocumentsStore, IDEInfo } from '../ide'
+import type { IDEInfo } from '../ide'
+import { HostWithDocumentsStore } from '../ide'
 import { RWProject } from '../model'
 import { lazy, memo } from '../x/decorators'
 import { URL_toFile } from '../x/URL'
@@ -36,7 +37,7 @@ export class RWLanguageServer {
     const { connection, documents } = this
     connection.onInitialize((params) => {
       connection.console.log(
-        `Redwood Language Server onInitialize(), PID=${process.pid}`
+        `Redwood Language Server onInitialize(), PID=${process.pid}`,
       )
       this.initializeParams = params
       return {
@@ -107,7 +108,7 @@ export class RWLanguageServer {
         for (const xd of xds) {
           const as = await ExtendedDiagnostic_findRelevantQuickFixes(
             xd,
-            context
+            context,
           )
           for (const a of as) {
             actions.push(a)
@@ -165,10 +166,10 @@ export class RWLanguageServer {
   }
   async info<T extends IDEInfo['kind']>(
     uri: string,
-    kind: T
+    kind: T,
   ): Promise<(IDEInfo & { kind: T })[]> {
     return (await this.collectIDEInfo(uri)).filter(
-      (i) => i.kind === kind
+      (i) => i.kind === kind,
     ) as any
   }
 

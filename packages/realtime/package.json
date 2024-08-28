@@ -1,0 +1,56 @@
+{
+  "name": "@redwoodjs/realtime",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/realtime"
+  },
+  "license": "MIT",
+  "exports": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && run build:types",
+    "build:pack": "yarn pack -o redwoodjs-realtime.tgz",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@envelop/live-query": "7.0.0",
+    "@graphql-tools/schema": "10.0.5",
+    "@graphql-tools/utils": "10.5.3",
+    "@graphql-yoga/plugin-defer-stream": "3.6.3",
+    "@graphql-yoga/plugin-graphql-sse": "3.6.3",
+    "@graphql-yoga/redis-event-target": "3.0.1",
+    "@graphql-yoga/subscription": "5.0.1",
+    "@n1ru4l/graphql-live-query": "0.10.0",
+    "@n1ru4l/in-memory-live-query-store": "0.10.0",
+    "graphql": "16.9.0"
+  },
+  "devDependencies": {
+    "@envelop/core": "5.0.1",
+    "@envelop/testing": "7.0.0",
+    "@envelop/types": "5.0.0",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "ioredis": "^5.3.2",
+    "nodemon": "3.1.4",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  },
+  "peerDependencies": {
+    "ioredis": "^5.3.2"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    }
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

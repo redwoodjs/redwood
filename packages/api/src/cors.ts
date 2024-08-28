@@ -1,6 +1,6 @@
 import { Headers } from '@whatwg-node/fetch'
 
-import type { Request } from './transforms'
+import type { PartialRequest } from './transforms'
 
 export type CorsConfig = {
   origin?: boolean | string | string[]
@@ -34,7 +34,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       } else if (Array.isArray(cors.allowedHeaders)) {
         corsHeaders.set(
           'access-control-allow-headers',
-          cors.allowedHeaders.join(',')
+          cors.allowedHeaders.join(','),
         )
       }
     }
@@ -45,7 +45,7 @@ export function createCorsContext(cors: CorsConfig | undefined) {
       } else if (Array.isArray(cors.exposedHeaders)) {
         corsHeaders.set(
           'access-control-expose-headers',
-          cors.exposedHeaders.join(',')
+          cors.exposedHeaders.join(','),
         )
       }
     }
@@ -59,14 +59,14 @@ export function createCorsContext(cors: CorsConfig | undefined) {
   }
 
   return {
-    shouldHandleCors(request: Request) {
+    shouldHandleCors(request: PartialRequest) {
       return request.method === 'OPTIONS'
     },
-    getRequestHeaders(request: Request): CorsHeaders {
+    getRequestHeaders(request: PartialRequest): CorsHeaders {
       const eventHeaders = new Headers(request.headers as HeadersInit)
       const requestCorsHeaders = new Headers(corsHeaders)
 
-      if (cors && cors.origin) {
+      if (cors?.origin) {
         const requestOrigin = eventHeaders.get('origin')
         if (typeof cors.origin === 'string') {
           requestCorsHeaders.set('access-control-allow-origin', cors.origin)
@@ -81,12 +81,12 @@ export function createCorsContext(cors: CorsConfig | undefined) {
         }
 
         const requestAccessControlRequestHeaders = eventHeaders.get(
-          'access-control-request-headers'
+          'access-control-request-headers',
         )
         if (!cors.allowedHeaders && requestAccessControlRequestHeaders) {
           requestCorsHeaders.set(
             'access-control-allow-headers',
-            requestAccessControlRequestHeaders
+            requestAccessControlRequestHeaders,
           )
         }
       }

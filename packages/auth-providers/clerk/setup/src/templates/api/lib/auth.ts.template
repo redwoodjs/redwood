@@ -1,12 +1,11 @@
-import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
 import { logger } from 'src/lib/logger'
 
 /**
- * getCurrentUser returns the user information together with
- * an optional collection of roles used by requireAuth() to check
- * if the user is authenticated or has role-based access
+ * getCurrentUser returns the user information.
+ * Once you're ready you can also return a collection of roles
+ * for `requireAuth` and the Router to use.
  *
  * @param decoded - The decoded access token containing user info and JWT claims like `sub`. Note could be null.
  * @param { token, SupportedAuthTypes type } - The access token itself as well as the auth provider type
@@ -27,16 +26,10 @@ export const getCurrentUser = async (
     return null
   }
 
-  const { roles } = parseJWT({ decoded })
+  const { id, ..._rest } = decoded
 
-  // Remove privateMetadata property from CurrentUser as it should not be accessible on the web
-  const { privateMetadata, ...userWithoutPrivateMetadata } = decoded
-
-  if (roles) {
-    return { ...userWithoutPrivateMetadata, roles }
-  }
-
-  return { ...userWithoutPrivateMetadata }
+  // Be careful to only return information that should be accessible on the web side.
+  return { id }
 }
 
 /**

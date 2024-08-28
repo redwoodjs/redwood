@@ -1,11 +1,12 @@
+import { describe, it, expect, test } from 'vitest'
 import {
   DiagnosticSeverity,
   Position,
   Range,
 } from 'vscode-languageserver-types'
 
+import type { ExtendedDiagnostic } from '../vscode-languageserver-types'
 import {
-  ExtendedDiagnostic,
   ExtendedDiagnostic_format,
   Position_compare,
   Position_fromOffset,
@@ -13,7 +14,7 @@ import {
 } from '../vscode-languageserver-types'
 
 describe('Position_compare', () => {
-  it('', async () => {
+  it('', () => {
     x(0, 0, 0, 0, 'equal')
 
     x(0, 0, 0, 1, 'smaller')
@@ -27,14 +28,14 @@ describe('Position_compare', () => {
     x(0, 2, 1, 0, 'smaller')
     function x(l1: number, c1: number, l2: number, c2: number, r: string) {
       expect(
-        Position_compare(Position.create(l1, c1), Position.create(l2, c2))
+        Position_compare(Position.create(l1, c1), Position.create(l2, c2)),
       ).toEqual(r)
     }
   })
 })
 
 describe('Range_contains', () => {
-  it('', async () => {
+  it('', () => {
     const r = Range.create(0, 1, 0, 3)
     x(r, 0, 0, false)
     x(r, 0, 1, true)
@@ -48,7 +49,7 @@ describe('Range_contains', () => {
 })
 
 describe('ExtendedDiagnostic_format', () => {
-  it('can format diagnostics', async () => {
+  it('can format diagnostics', () => {
     const d: ExtendedDiagnostic = {
       uri: 'file:///path/to/app/b.ts',
       diagnostic: {
@@ -81,10 +82,9 @@ describe('Position_fromOffset', () => {
       offset: number,
       text: string,
       expectedLine: number,
-      expectedCharacter: number
+      expectedCharacter: number,
     ) {
       const pos = Position_fromOffset(offset, text)
-      pos //?
       expect(pos).toEqual({ line: expectedLine, character: expectedCharacter })
     }
   })

@@ -1,14 +1,7 @@
-import {
-  context as globalContext,
-  getAsyncStoreInstance,
-  setContext,
-} from '../../globalContext'
+import { context as globalContext, setContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
 
 describe('Global context with context isolation', () => {
-  beforeAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '0'
-  })
-
   it('Should work when assigning directly into context', async () => {
     const asyncStore = getAsyncStoreInstance()
 
@@ -35,5 +28,22 @@ describe('Global context with context isolation', () => {
 
     // Check that context was isolated
     expect(globalContext.anotherValue).not.toBe('kittens')
+  })
+
+  it('setContext replaces global context', async () => {
+    const asyncStore = getAsyncStoreInstance()
+
+    asyncStore.run(new Map(), () => {
+      // This is the actual test
+      globalContext.myNewValue = 'bazinga'
+      setContext({ anotherValue: 'kittens' })
+
+      expect(globalContext.myNewValue).toBeUndefined()
+      expect(globalContext.anotherValue).toBe('kittens')
+    })
+
+    // Check that context was isolated
+    expect(globalContext.myNewValue).toBeUndefined()
+    expect(globalContext.anotherValue).toBeUndefined()
   })
 })

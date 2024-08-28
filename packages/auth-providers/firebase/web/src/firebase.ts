@@ -2,7 +2,8 @@ import type { FirebaseApp } from 'firebase/app'
 import type { CustomParameters, OAuthProvider, User } from 'firebase/auth'
 import type FirebaseAuthNamespace from 'firebase/auth'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 type FirebaseAuth = typeof FirebaseAuthNamespace
 
@@ -48,7 +49,7 @@ interface EmailLinkOptions {
 }
 
 const hasPasswordCredentials = (
-  options: Options
+  options: Options,
 ): options is PasswordOptions => {
   return options.email !== undefined && options.password !== undefined
 }
@@ -63,7 +64,7 @@ const isEmailLinkOptions = (options: Options): options is EmailLinkOptions => {
 
 const applyProviderOptions = (
   provider: OAuthProvider,
-  options: Options
+  options: Options,
 ): OAuthProvider => {
   if (options.customParameters) {
     provider.setCustomParameters(options.customParameters)
@@ -79,9 +80,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(firebaseClient)
 
@@ -127,7 +128,7 @@ function createAuthImplementation({
       })
     },
     login: async (
-      options: oAuthProvider | Options = { providerId: 'google.com' }
+      options: oAuthProvider | Options = { providerId: 'google.com' },
     ) => {
       // If argument provided is a string, it should be the oAuth Provider
       // Cast the provider string into the options object
@@ -139,7 +140,7 @@ function createAuthImplementation({
         return firebaseAuth.signInWithEmailAndPassword(
           auth,
           options.email,
-          options.password
+          options.password,
         )
       }
 
@@ -162,7 +163,7 @@ function createAuthImplementation({
     },
     logout: () => auth.signOut(),
     signup: async (
-      options: oAuthProvider | Options = { providerId: 'google.com' }
+      options: oAuthProvider | Options = { providerId: 'google.com' },
     ) => {
       if (typeof options === 'string') {
         options = { providerId: options }
@@ -172,7 +173,7 @@ function createAuthImplementation({
         return firebaseAuth.createUserWithEmailAndPassword(
           auth,
           options.email,
-          options.password
+          options.password,
         )
       }
 

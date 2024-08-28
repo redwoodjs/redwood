@@ -60,11 +60,11 @@ export const mockedAuthenticationEvent = ({
 
 const handler = async (
   _event: APIGatewayEvent,
-  _context: Context
+  _context: Context,
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   return {
@@ -78,7 +78,7 @@ const handler = async (
 
 const handlerWithAuthChecks = async (
   _event: APIGatewayEvent,
-  _context: Context
+  _context: Context,
 ): Promise<unknown> => {
   // TODO: Add requireAuth('role') here
   // or isAuthenticated()
@@ -110,11 +110,11 @@ const handlerWithAuthChecks = async (
 
 const handlerWithError = async (
   _event: APIGatewayEvent,
-  _context: Context
+  _context: Context,
 ): Promise<any> => {
   // @MARK
   // Don't use globalContext until beforeAll runs
-  const globalContext = require('../../globalContext').context
+  const globalContext = require('@redwoodjs/context').context
   const currentUser = globalContext.currentUser
 
   try {
@@ -140,26 +140,12 @@ const handlerWithError = async (
 
 const getCurrentUserWithError = async (
   _decoded,
-  { token: _token }
+  { token: _token },
 ): Promise<RedwoodUser> => {
   throw Error('Something went wrong getting the user info')
 }
 
 describe('useRequireAuth', () => {
-  beforeAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '1'
-  })
-
-  afterAll(() => {
-    process.env.DISABLE_CONTEXT_ISOLATION = '0'
-  })
-
-  afterEach(() => {
-    // Clean up after test cases
-    const globalContext = require('../../globalContext').context
-    delete globalContext.currentUser
-  })
-
   it('Updates context with output of current user', async () => {
     // @MARK
     // Because we use context inside useRequireAuth, we only want to import this function
@@ -174,7 +160,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return { token }
       },
@@ -187,7 +173,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers }),
-      {} as Context
+      {} as Context,
     )
 
     const response = JSON.parse(output.body)
@@ -208,7 +194,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return jwt.decode(token) as Record<string, any>
       },
@@ -231,7 +217,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: headersWithRoles }),
-      {} as Context
+      {} as Context,
     )
 
     const response = JSON.parse(output.body)
@@ -256,7 +242,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: customHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     expect(output.statusCode).toEqual(200)
@@ -275,7 +261,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         _token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return null
       },
@@ -285,7 +271,7 @@ describe('useRequireAuth', () => {
 
     const output = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: missingHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     expect(output.statusCode).toEqual(200)
@@ -304,7 +290,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return { token }
       },
@@ -317,7 +303,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: unsupportedProviderHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)
@@ -337,7 +323,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return jwt.decode(token) as Record<string, any>
       },
@@ -358,7 +344,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)
@@ -385,7 +371,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: invalidJWTHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)
@@ -411,7 +397,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: invalidJWTHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)
@@ -437,7 +423,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: customHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const message = JSON.parse(response.body).error
@@ -463,7 +449,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)
@@ -496,7 +482,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return jwt.decode(token) as Record<string, any>
       },
@@ -505,8 +491,8 @@ describe('useRequireAuth', () => {
     await expect(
       handlerEnrichedWithAuthentication(
         mockedAuthenticationEvent({ headers: netlifyJWTHeaders }),
-        {} as Context
-      )
+        {} as Context,
+      ),
     ).rejects.toThrow("You don't have access to do that.")
   })
 
@@ -536,7 +522,7 @@ describe('useRequireAuth', () => {
       authDecoder: async (
         token: string,
         _type: string,
-        _req: { event: APIGatewayEvent; context: Context }
+        _req: { event: APIGatewayEvent; context: Context },
       ) => {
         return jwt.decode(token) as Record<string, any>
       },
@@ -544,7 +530,7 @@ describe('useRequireAuth', () => {
 
     const response = await handlerEnrichedWithAuthentication(
       mockedAuthenticationEvent({ headers: headersWithRoles }),
-      {} as Context
+      {} as Context,
     )
 
     const body = JSON.parse(response.body)

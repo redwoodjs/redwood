@@ -15,22 +15,53 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
-import { DocumentNode } from 'graphql'
+import { Kind, type DocumentNode } from 'graphql'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getPaths, getConfig } from '@redwoodjs/project-config'
 
 import { getTsConfigs } from '../project'
 
 import * as rwTypescriptResolvers from './plugins/rw-typescript-resolvers'
-
 enum CodegenSide {
   API,
   WEB,
 }
 
-export const generateTypeDefGraphQLApi = async () => {
+type TypeDefResult = {
+  typeDefFiles: string[]
+  errors: { message: string; error: unknown }[]
+}
+
+export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
+  const config = getConfig()
+  const errors: { message: string; error: unknown }[] = []
+
+  if (config.experimental.useSDLCodeGenForGraphQLTypes) {
+    const paths = getPaths()
+    const sdlCodegen = await import('@sdl-codegen/node')
+
+    const dtsFiles: string[] = []
+
+    try {
+      const output = sdlCodegen.runFullCodegen('redwood', { paths })
+      dtsFiles.concat(output.paths)
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        errors.push({
+          message: e.message,
+          error: e,
+        })
+      }
+    }
+
+    return {
+      typeDefFiles: dtsFiles,
+      errors,
+    }
+  }
+
   const filename = path.join(getPaths().api.types, 'graphql.d.ts')
-  const prismaModels = getPrismaModels()
+  const prismaModels = await getPrismaModels()
   const prismaImports = Object.keys(prismaModels).map((key) => {
     return `${key} as Prisma${key}`
   })
@@ -49,7 +80,7 @@ export const generateTypeDefGraphQLApi = async () => {
       codegenPlugin: addPlugin,
     },
     {
-      name: 'print-mapped-moddels',
+      name: 'print-mapped-models',
       options: {},
       codegenPlugin: printMappedModelsPlugin,
     },
@@ -61,18 +92,29 @@ export const generateTypeDefGraphQLApi = async () => {
   ]
 
   try {
-    return await runCodegenGraphQL([], extraPlugins, filename, CodegenSide.API)
+    return {
+      typeDefFiles: await runCodegenGraphQL(
+        [],
+        extraPlugins,
+        filename,
+        CodegenSide.API,
+      ),
+      errors,
+    }
   } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (api)')
-    console.error(e)
-    console.error()
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (api)',
+      error: e,
+    })
 
-    return []
+    return {
+      typeDefFiles: [],
+      errors,
+    }
   }
 }
 
-export const generateTypeDefGraphQLWeb = async () => {
+export const generateTypeDefGraphQLWeb = async (): Promise<TypeDefResult> => {
   const filename = path.join(getPaths().web.types, 'graphql.d.ts')
   const options = getLoadDocumentsOptions(filename)
   const documentsGlob = './web/src/**/!(*.d).{ts,tsx,js,jsx}'
@@ -83,7 +125,10 @@ export const generateTypeDefGraphQLWeb = async () => {
     documents = await loadDocuments([documentsGlob], options)
   } catch {
     // No GraphQL documents present, no need to try to run codegen
-    return []
+    return {
+      typeDefFiles: [],
+      errors: [],
+    }
   }
 
   const extraPlugins: CombinedPluginConfig[] = [
@@ -102,20 +147,28 @@ export const generateTypeDefGraphQLWeb = async () => {
     },
   ]
 
-  try {
-    return await runCodegenGraphQL(
-      documents,
-      extraPlugins,
-      filename,
-      CodegenSide.WEB
-    )
-  } catch (e) {
-    console.error()
-    console.error('Error: Could not generate GraphQL type definitions (web)')
-    console.error(e)
-    console.error()
+  const errors: { message: string; error: unknown }[] = []
 
-    return []
+  try {
+    return {
+      typeDefFiles: await runCodegenGraphQL(
+        documents,
+        extraPlugins,
+        filename,
+        CodegenSide.WEB,
+      ),
+      errors,
+    }
+  } catch (e) {
+    errors.push({
+      message: 'Error: Could not generate GraphQL type definitions (web)',
+      error: e,
+    })
+
+    return {
+      typeDefFiles: [],
+      errors,
+    }
   }
 }
 
@@ -129,7 +182,7 @@ async function runCodegenGraphQL(
   documents: CodegenTypes.DocumentFile[],
   extraPlugins: CombinedPluginConfig[],
   filename: string,
-  side: CodegenSide
+  side: CodegenSide,
 ) {
   const userCodegenConfig = await loadCodegenConfig({
     configFilePath: getPaths().base,
@@ -137,7 +190,7 @@ async function runCodegenGraphQL(
 
   // Merge in user codegen config with the rw built-in one
   const mergedConfig = {
-    ...getPluginConfig(side),
+    ...(await getPluginConfig(side)),
     ...userCodegenConfig?.config?.config,
   }
 
@@ -150,7 +203,7 @@ async function runCodegenGraphQL(
   return [filename]
 }
 
-function getLoadDocumentsOptions(filename: string) {
+export function getLoadDocumentsOptions(filename: string) {
   const loadTypedefsConfig: LoadTypedefsOptions<{ cwd: string }> = {
     cwd: getPaths().base,
     ignore: [path.join(process.cwd(), filename)],
@@ -161,11 +214,12 @@ function getLoadDocumentsOptions(filename: string) {
   return loadTypedefsConfig
 }
 
-function getPrismaClient(hasGenerated = false): {
+async function getPrismaClient(hasGenerated = false): Promise<{
   ModelName: Record<string, string>
-} {
-  const localPrisma = require('@prisma/client')
+}> {
+  const { default: localPrisma } = await import('@prisma/client')
 
+  // @ts-expect-error I believe this type will only exist if the prisma client has been generated
   if (!localPrisma.ModelName) {
     if (hasGenerated) {
       return { ModelName: {} }
@@ -187,13 +241,15 @@ function getPrismaClient(hasGenerated = false): {
     }
   }
 
+  // @ts-expect-error See above, the generated client should contain a ModelName property that
+  // satisfies Record<string, string>
   return localPrisma
 }
 
-function getPrismaModels() {
+async function getPrismaModels() {
   // Extract the models from the prisma client and use those to
   // set up internal redirects for the return values in resolvers.
-  const localPrisma = getPrismaClient()
+  const localPrisma = await getPrismaClient()
   const prismaModels = localPrisma.ModelName
 
   // This isn't really something you'd put in the GraphQL API, so
@@ -205,8 +261,8 @@ function getPrismaModels() {
   return prismaModels
 }
 
-function getPluginConfig(side: CodegenSide) {
-  const prismaModels: Record<string, string> = getPrismaModels()
+async function getPluginConfig(side: CodegenSide) {
+  const prismaModels: Record<string, string> = await getPrismaModels()
   Object.keys(prismaModels).forEach((key) => {
     /** creates an object like this
      * {
@@ -214,9 +270,8 @@ function getPluginConfig(side: CodegenSide) {
      *  ...
      * }
      */
-    prismaModels[
-      key
-    ] = `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
+    prismaModels[key] =
+      `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
   })
 
   const pluginConfig: CodegenTypes.PluginConfig &
@@ -232,6 +287,8 @@ function getPluginConfig(side: CodegenSide) {
       JSON: 'Prisma.JsonValue',
       JSONObject: 'Prisma.JsonObject',
       Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
+      Byte: 'Buffer',
+      File: 'File',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
@@ -245,7 +302,7 @@ function getPluginConfig(side: CodegenSide) {
       // Look at type or source https://shrtm.nu/2BA0 for possible config, not well documented
       resolvers: true,
     },
-    contextType: `@redwoodjs/graphql-server/dist/functions/types#RedwoodGraphQLContext`,
+    contextType: `@redwoodjs/graphql-server/dist/types#RedwoodGraphQLContext`,
   }
 
   return pluginConfig
@@ -290,7 +347,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
     // this way we can make sure relation types are not required
     const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap())
       .filter((type) => {
-        return type.astNode?.kind === 'ObjectTypeDefinition'
+        return type.astNode?.kind === Kind.OBJECT_TYPE_DEFINITION
       })
       .filter((objectDefType) => {
         const modelName = objectDefType.astNode?.name.value
@@ -301,7 +358,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
       .map((objectDefType) => objectDefType.astNode?.name.value)
 
     return `type MaybeOrArrayOfMaybe<T> = T | Maybe<T> | Maybe<T>[];\ntype AllMappedModels = MaybeOrArrayOfMaybe<${sdlTypesWhichAreMapped.join(
-      ' | '
+      ' | ',
     )}>`
   },
 }
@@ -309,7 +366,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
 function getCodegenOptions(
   documents: CodegenTypes.DocumentFile[],
   config: CodegenTypes.PluginConfig,
-  extraPlugins: CombinedPluginConfig[]
+  extraPlugins: CombinedPluginConfig[],
 ) {
   const plugins = [
     { typescript: { enumsAsTypes: true } },
@@ -320,7 +377,7 @@ function getCodegenOptions(
     typescript: typescriptPlugin,
     ...extraPlugins.reduce(
       (acc, cur) => ({ ...acc, [cur.name]: cur.codegenPlugin }),
-      {}
+      {},
     ),
   }
 

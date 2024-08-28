@@ -3,10 +3,10 @@ import path from 'path'
 
 import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
+import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export async function handler({ force: forceArg }: Args) {
@@ -37,9 +37,9 @@ export async function handler({ force: forceArg }: Args) {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "AZURE_ACTIVE_DIRECTORY_CLIENT_ID"',
-      '  "AZURE_ACTIVE_DIRECTORY_AUTHORITY"',
-      '  "AZURE_ACTIVE_DIRECTORY_REDIRECT_URI"',
+      '  "AZURE_ACTIVE_DIRECTORY_CLIENT_ID",',
+      '  "AZURE_ACTIVE_DIRECTORY_AUTHORITY",',
+      '  "AZURE_ACTIVE_DIRECTORY_REDIRECT_URI",',
       '  "AZURE_ACTIVE_DIRECTORY_LOGOUT_REDIRECT_URI"',
       ']',
       '```',

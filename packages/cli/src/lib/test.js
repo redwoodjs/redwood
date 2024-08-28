@@ -1,4 +1,4 @@
-/* eslint-env jest */
+/* eslint-env vitest */
 
 // Include at the top of your tests. Automatically mocks out the file system
 //
@@ -8,21 +8,26 @@
 //   expect('some output').toEqual(loadComponentFixture('component', 'filename.js'))
 // })
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
+import { vi } from 'vitest'
 
 import './mockTelemetry'
 
-jest.mock('@redwoodjs/internal/dist/generate/generate', () => {
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
   return {
-    generate: () => {},
+    generate: () => {
+      return { errors: [] }
+    },
   }
 })
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const path = require('path')
+  const originalProjectConfig = await importOriginal()
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...originalProjectConfig,
     getPaths: () => {
       const BASE_PATH = '/path/to/project'
       return {
@@ -33,16 +38,18 @@ jest.mock('@redwoodjs/project-config', () => {
           dbSchema: path.join(
             globalThis.__dirname,
             'fixtures',
-            'schema.prisma'
+            'schema.prisma',
           ), // this folder
           generators: path.join(BASE_PATH, './api/generators'),
           src: path.join(BASE_PATH, './api/src'),
+          jobs: path.join(BASE_PATH, './api/src/jobs'),
           services: path.join(BASE_PATH, './api/src/services'),
           directives: path.join(BASE_PATH, './api/src/directives'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
           functions: path.join(BASE_PATH, './api/src/functions'),
         },
         web: {
+          base: path.join(BASE_PATH, './web'),
           config: path.join(BASE_PATH, './web/config'),
           src: path.join(BASE_PATH, './web/src'),
           generators: path.join(BASE_PATH, './web/generators'),
@@ -66,40 +73,32 @@ jest.mock('@redwoodjs/project-config', () => {
   }
 })
 
-jest.mock('./project', () => ({
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
+vi.mock('./project', () => ({
   isTypeScriptProject: () => false,
   sides: () => ['web', 'api'],
 }))
 
 globalThis.__prettierPath = path.resolve(
   __dirname,
-  './__tests__/fixtures/prettier.config.js'
+  './__tests__/fixtures/prettier.config.js',
 )
 
-jest.mock('path', () => {
-  const path = jest.requireActual('path')
-  return {
-    ...path,
-    join: (...paths) => {
-      if (
-        paths &&
-        paths[0] === '/path/to/project' &&
-        paths[1] === 'prettier.config.js'
-      ) {
-        return globalThis.__prettierPath
-      }
-      return path.join(...paths)
-    },
-  }
-})
-
-jest.spyOn(Math, 'random').mockReturnValue(0.123456789)
+vi.spyOn(Math, 'random').mockReturnValue(0.123456789)
 
 export const generatorsRootPath = path.join(
   __dirname,
   '..',
   'commands',
-  'generate'
+  'generate',
 )
 
 /**
@@ -122,8 +121,8 @@ export const loadGeneratorFixture = (generator, name) => {
       generator,
       '__tests__',
       'fixtures',
-      name
-    )
+      name,
+    ),
   )
 }
 

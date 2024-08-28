@@ -4,6 +4,7 @@ import camelcase from 'camelcase'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
@@ -12,7 +13,7 @@ import { prepareForRollback } from '../../../lib/rollback'
 import { yargsDefaults } from '../helpers'
 import { validateName, templateForComponentFile } from '../helpers'
 
-export const files = ({
+export const files = async ({
   name,
   typescript: generateTypescript = false,
   tests: generateTests = true,
@@ -24,7 +25,7 @@ export const files = ({
 
   const outputFiles = []
 
-  const functionFiles = templateForComponentFile({
+  const functionFiles = await templateForComponentFile({
     name: functionName,
     componentName: functionName,
     extension,
@@ -35,14 +36,14 @@ export const files = ({
     outputPath: path.join(
       getPaths().api.functions,
       functionName,
-      `${functionName}${extension}`
+      `${functionName}${extension}`,
     ),
   })
 
   outputFiles.push(functionFiles)
 
   if (generateTests) {
-    const testFile = templateForComponentFile({
+    const testFile = await templateForComponentFile({
       name: functionName,
       componentName: functionName,
       extension,
@@ -53,11 +54,11 @@ export const files = ({
       outputPath: path.join(
         getPaths().api.functions,
         functionName,
-        `${functionName}.test${extension}`
+        `${functionName}.test${extension}`,
       ),
     })
 
-    const scenarioFile = templateForComponentFile({
+    const scenarioFile = await templateForComponentFile({
       name: functionName,
       componentName: functionName,
       extension,
@@ -68,7 +69,7 @@ export const files = ({
       outputPath: path.join(
         getPaths().api.functions,
         functionName,
-        `${functionName}.scenarios${extension}`
+        `${functionName}.scenarios${extension}`,
       ),
     })
 
@@ -76,16 +77,18 @@ export const files = ({
     outputFiles.push(scenarioFile)
   }
 
-  return outputFiles.reduce((acc, [outputPath, content]) => {
+  return outputFiles.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
     const template = generateTypescript
       ? content
-      : transformTSToJS(outputPath, content)
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const command = 'function <name>'
@@ -109,8 +112,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-function'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-function',
+      )}`,
     )
 
   // Add default options, includes '--typescript', '--javascript', '--force', ...
@@ -122,6 +125,12 @@ export const builder = (yargs) => {
 // This could be built using createYargsForComponentGeneration;
 // however, we need to add a message after generating the function files
 export const handler = async ({ name, force, ...rest }) => {
+  recordTelemetryAttributes({
+    command: 'generate function',
+    force,
+    rollback: rest.rollback,
+  })
+
   validateName(name)
 
   const tasks = new Listr(
@@ -129,13 +138,13 @@ export const handler = async ({ name, force, ...rest }) => {
       {
         title: 'Generating function files...',
         task: async () => {
-          return writeFilesTask(files({ name, ...rest }), {
+          return writeFilesTask(await files({ name, ...rest }), {
             overwriteExisting: force,
           })
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
   try {
@@ -151,16 +160,16 @@ export const handler = async ({ name, force, ...rest }) => {
     console.info(
       c.bold(
         'When deployed, a custom serverless function is an open API endpoint and ' +
-          'is your responsibility to secure appropriately.'
-      )
+          'is your responsibility to secure appropriately.',
+      ),
     )
 
     console.info('')
     console.info(
       `Please consult the ${terminalLink(
         'Serverless Function Considerations',
-        'https://redwoodjs.com/docs/serverless-functions#security-considerations'
-      )} in the RedwoodJS documentation for more information.`
+        'https://redwoodjs.com/docs/serverless-functions#security-considerations',
+      )} in the RedwoodJS documentation for more information.`,
     )
     console.info('')
   } catch (e) {

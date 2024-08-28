@@ -1,4 +1,11 @@
-import { Head } from '../index'
+import React from 'react'
+
+import * as helmetPkg from 'react-helmet-async'
+
+const { Helmet: HelmetHead } = helmetPkg
+// Ideally we wouldn't include this for non experiment builds
+// But.... not worth the effort to remove it from bundle atm
+import PortalHead from './PortalHead.js'
 
 type RobotsParams =
   | 'noindex'
@@ -57,10 +64,11 @@ interface MetaTagsProps {
 }
 
 /**
- * Add commonly used <meta> tags for unfurling/seo purposes
+ * Add commonly used `<meta>` tags for unfurling/seo purposes
  * using the open graph protocol https://ogp.me/
  * @example
  * <MetaTags title="About Page" ogContentUrl="/static/about-og.png"/>
+ * @deprecated Please use `<Metadata>` instead
  */
 export const MetaTags = (props: MetaTagsProps) => {
   const {
@@ -78,6 +86,13 @@ export const MetaTags = (props: MetaTagsProps) => {
     author,
     children,
   } = props
+
+  let Head: typeof HelmetHead | typeof PortalHead = HelmetHead
+
+  if (RWJS_ENV.RWJS_EXP_STREAMING_SSR) {
+    Head = PortalHead
+  }
+
   return (
     <>
       {title && (

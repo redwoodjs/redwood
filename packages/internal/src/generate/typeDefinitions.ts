@@ -1,9 +1,16 @@
 import fs from 'fs'
 import path from 'path'
 
+import { SourceMapGenerator } from 'source-map'
+
 import { getPaths, processPagesDir } from '@redwoodjs/project-config'
 
-import { getCellGqlQuery, fileToAst } from '../ast'
+import {
+  getCellGqlQuery,
+  fileToAst,
+  getDefaultExportLocation,
+  getNamedExports,
+} from '../ast'
 import { findCells, findDirectoryNamedModules } from '../files'
 import { parseGqlQueryToAst } from '../gql'
 import { getJsxElements } from '../jsx'
@@ -38,38 +45,46 @@ import { writeTemplate } from './templates'
  */
 export const generateTypeDefs = async () => {
   // Return all the paths so they can be printed
-  const gqlApi = await generateTypeDefGraphQLApi()
-  const gqlWeb = await generateTypeDefGraphQLWeb()
-  return [
-    ...generateMirrorDirectoryNamedModules(),
-    ...generateMirrorCells(),
-    ...generateTypeDefRouterPages(),
-    ...generateTypeDefCurrentUser(),
-    ...generateTypeDefRouterRoutes(),
-    ...generateTypeDefGlobImports(),
-    ...generateTypeDefGlobalContext(),
-    ...generateTypeDefScenarios(),
-    ...generateTypeDefTestMocks(),
-    ...gqlApi,
-    ...gqlWeb,
-  ]
+  const { typeDefFiles: gqlApiTypeDefFiles, errors: apiErrors } =
+    await generateTypeDefGraphQLApi()
+  const { typeDefFiles: gqlWebTypeDefFiles, errors: webErrors } =
+    await generateTypeDefGraphQLWeb()
+
+  return {
+    typeDefFiles: [
+      ...generateMirrorDirectoryNamedModules(),
+      ...generateMirrorCells(),
+      ...generateTypeDefRouterPages(),
+      ...generateTypeDefCurrentUser(),
+      ...generateTypeDefRouterRoutes(),
+      ...generateTypeDefGlobImports(),
+      ...generateTypeDefGlobalContext(),
+      ...generateTypeDefScenarios(),
+      ...generateTypeDefTestMocks(),
+      ...generateStubStorybookTypes(),
+      ...generateViteClientTypesDirective(),
+      ...gqlApiTypeDefFiles,
+      ...gqlWebTypeDefFiles,
+    ],
+    errors: [...apiErrors, ...webErrors],
+  }
 }
 
 export const generateMirrorDirectoryNamedModules = () => {
   const rwjsPaths = getPaths()
   return findDirectoryNamedModules().map((p) =>
-    generateMirrorDirectoryNamedModule(p, rwjsPaths)
+    generateMirrorDirectoryNamedModule(p, rwjsPaths),
   )
 }
 
 export const mirrorPathForDirectoryNamedModules = (
   p: string,
-  rwjsPaths = getPaths()
+  rwjsPaths = getPaths(),
 ) => {
   return [
     path.join(
       rwjsPaths.generated.types.mirror,
-      path.relative(rwjsPaths.base, path.dirname(p))
+      path.relative(rwjsPaths.base, path.dirname(p)),
     ),
     'index.d.ts',
   ]
@@ -77,7 +92,7 @@ export const mirrorPathForDirectoryNamedModules = (
 
 export const generateMirrorDirectoryNamedModule = (
   p: string,
-  rwjsPaths = getPaths()
+  rwjsPaths = getPaths(),
 ) => {
   const [mirrorDir, typeDef] = mirrorPathForDirectoryNamedModules(p, rwjsPaths)
   fs.mkdirSync(mirrorDir, { recursive: true })
@@ -88,8 +103,46 @@ export const generateMirrorDirectoryNamedModule = (
   writeTemplate(
     'templates/mirror-directoryNamedModule.d.ts.template',
     typeDefPath,
-    { name }
+    { name },
   )
+
+  // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
+  // We do this for the web side only
+  if (p.startsWith(rwjsPaths.web.src)) {
+    try {
+      // Get the line and column where the default export is defined
+      const fileContents = fileToAst(p)
+      const defaultExportLocation = getDefaultExportLocation(fileContents) ?? {
+        line: 1,
+        column: 0,
+      }
+
+      // Generate a source map that points to the definition of the default export
+      const map = new SourceMapGenerator({
+        file: 'index.d.ts',
+      })
+      map.addMapping({
+        generated: {
+          line: 4,
+          column: 0,
+        },
+        source: path.relative(path.dirname(typeDefPath), p),
+        original: defaultExportLocation,
+      })
+
+      fs.writeFileSync(
+        `${typeDefPath}.map`,
+        JSON.stringify(map.toJSON(), undefined, 2),
+      )
+    } catch (error) {
+      console.error(
+        "Couldn't generate a definition map for directory named module at path:",
+        p,
+      )
+      console.error(error)
+    }
+  }
+
   return typeDefPath
 }
 
@@ -101,7 +154,7 @@ export const generateMirrorCells = () => {
 export const mirrorPathForCell = (p: string, rwjsPaths = getPaths()) => {
   const mirrorDir = path.join(
     rwjsPaths.generated.types.mirror,
-    path.relative(rwjsPaths.base, path.dirname(p))
+    path.relative(rwjsPaths.base, path.dirname(p)),
   )
 
   fs.mkdirSync(mirrorDir, { recursive: true })
@@ -135,17 +188,51 @@ export const generateMirrorCell = (p: string, rwjsPaths = getPaths()) => {
     })
   }
 
+  // We add a source map to allow "go to definition" to avoid ending in the .d.ts file
+  // Unlike pages, layouts, components etc. there is no clear definition location so we link
+  // to the Success component
+  try {
+    // Get the location of the Success component
+    const exportedComponents = getNamedExports(fileContents)
+    const successComponent = exportedComponents.find(
+      (x) => x.name === 'Success',
+    )
+    if (successComponent === undefined) {
+      throw new Error('No Success component found')
+    }
+
+    // Generate the map
+    const map = new SourceMapGenerator({
+      file: 'index.d.ts',
+    })
+    map.addMapping({
+      generated: {
+        line: 12,
+        column: 0,
+      },
+      source: path.relative(path.dirname(typeDefPath), p),
+      original: successComponent.location,
+    })
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2),
+    )
+  } catch (error) {
+    console.error("Couldn't generate a definition map for cell at path:", p)
+    console.error(error)
+  }
+
   return typeDefPath
 }
 
 const writeTypeDefIncludeFile = (
   template: string,
-  values: Record<string, unknown> = {}
+  values: Record<string, unknown> = {},
 ) => {
   const rwjsPaths = getPaths()
   const typeDefPath = path.join(
     rwjsPaths.generated.types.includes,
-    template.replace('.template', '')
+    template.replace('.template', ''),
   )
 
   const templateFilename = path.join('templates', template)
@@ -155,19 +242,118 @@ const writeTypeDefIncludeFile = (
 
 export const generateTypeDefRouterRoutes = () => {
   const ast = fileToAst(getPaths().web.routes)
+  let hasRootRoute = false
   const routes = getJsxElements(ast, 'Route').filter((x) => {
     // All generated "routes" should have a "name" and "path" prop-value
-    return (
+    const isValidRoute =
       typeof x.props?.path !== 'undefined' &&
       typeof x.props?.name !== 'undefined'
-    )
+
+    if (isValidRoute && x.props.path === '/') {
+      hasRootRoute = true
+    }
+
+    return isValidRoute
   })
+
+  // Generate declaration mapping for improved go-to-definition behaviour
+  try {
+    const typeDefPath = path.join(
+      getPaths().generated.types.includes,
+      'web-routerRoutes.d.ts',
+    )
+
+    const map = new SourceMapGenerator({
+      file: 'web-routerRoutes.d.ts',
+    })
+
+    // Start line is based on where in the template the
+    // `    ${name}: (params?: RouteParams<"${path}"> & QueryParams) => "${path}"`
+    // line is defined
+    const startLine = 7
+
+    // Map the location of the default export for each page
+    for (let i = 0; i < routes.length; i++) {
+      map.addMapping({
+        generated: {
+          line: startLine + i,
+          column: 4,
+        },
+        source: path.relative(path.dirname(typeDefPath), getPaths().web.routes),
+        original: routes[i].location,
+      })
+    }
+
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2),
+    )
+  } catch (error) {
+    console.error(
+      "Couldn't generate a definition map for web-routerRoutes.d.ts:",
+    )
+    console.error(error)
+  }
+
+  if (!hasRootRoute) {
+    routes.push({
+      name: 'splashPage route',
+      location: { line: -1, column: -1 },
+      props: {
+        path: '/',
+        name: 'home',
+      },
+    })
+  }
 
   return writeTypeDefIncludeFile('web-routerRoutes.d.ts.template', { routes })
 }
 
 export const generateTypeDefRouterPages = () => {
   const pages = processPagesDir()
+
+  // Generate declaration map for better go-to-definition behaviour
+  try {
+    const typeDefPath = path.join(
+      getPaths().generated.types.includes,
+      'web-routesPages.d.ts',
+    )
+
+    const map = new SourceMapGenerator({
+      file: 'web-routesPages.d.ts',
+    })
+
+    // Start line is based on where in the template the `  const ${importName}: typeof ${importName}Type` are defined
+    const startLine = pages.length + 5
+
+    // Map the location of the default export for each page
+    for (let i = 0; i < pages.length; i++) {
+      const fileContents = fileToAst(pages[i].path)
+      const defaultExportLocation = getDefaultExportLocation(fileContents) ?? {
+        line: 1,
+        column: 0,
+      }
+      map.addMapping({
+        generated: {
+          line: startLine + i,
+          column: 0,
+        },
+        source: path.relative(path.dirname(typeDefPath), pages[i].path),
+        original: defaultExportLocation,
+      })
+    }
+
+    fs.writeFileSync(
+      `${typeDefPath}.map`,
+      JSON.stringify(map.toJSON(), undefined, 2),
+    )
+  } catch (error) {
+    console.error(
+      "Couldn't generate a definition map for web-routesPages.d.ts:",
+    )
+    console.error(error)
+  }
+
   return writeTypeDefIncludeFile('web-routesPages.d.ts.template', { pages })
 }
 
@@ -192,4 +378,54 @@ export const generateTypeDefGlobImports = () => {
 
 export const generateTypeDefGlobalContext = () => {
   return writeTypeDefIncludeFile('api-globalContext.d.ts.template')
+}
+/**
+ * Typescript does not preserve triple slash directives when outputting js or d.ts files.
+ * This is a work around so that *.svg, *.png, etc. imports have types.
+ */
+export const generateViteClientTypesDirective = () => {
+  const viteClientDirective = `/// <reference types="vite/client" />`
+  const redwoodProjectPaths = getPaths()
+
+  const viteClientDirectivePath = path.join(
+    redwoodProjectPaths.generated.types.includes,
+    'web-vite-client.d.ts',
+  )
+  fs.writeFileSync(viteClientDirectivePath, viteClientDirective)
+
+  return [viteClientDirectivePath]
+}
+
+function generateStubStorybookTypes() {
+  const stubStorybookTypesFileContent = `\
+declare module '@storybook/react' {
+  export type Meta<T = any> = any
+  export type StoryObj<T = any> = any
+}
+`
+
+  const redwoodProjectPaths = getPaths()
+
+  const packageJson = JSON.parse(
+    fs.readFileSync(
+      path.join(redwoodProjectPaths.base, 'package.json'),
+      'utf-8',
+    ),
+  )
+
+  const hasCliStorybookVite = Object.keys(
+    packageJson['devDependencies'],
+  ).includes('@redwoodjs/cli-storybook-vite')
+
+  if (hasCliStorybookVite) {
+    return []
+  }
+
+  const stubStorybookTypesFilePath = path.join(
+    redwoodProjectPaths.generated.types.includes,
+    'web-storybook.d.ts',
+  )
+  fs.writeFileSync(stubStorybookTypesFilePath, stubStorybookTypesFileContent)
+
+  return [stubStorybookTypesFilePath]
 }

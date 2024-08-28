@@ -1,0 +1,63 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: api_serve
+    # Without a command specified, the Dockerfile's api_serve CMD will be used.
+    # If you are using a custom server file, you should either use the following
+    # command to launch your server or update the Dockerfile to do so.
+    # This is important if you intend to configure GraphQL to use Realtime.
+    # command: "./api/dist/server.js"
+    ports:
+      - '8911:8911'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood
+      - TEST_DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood_test
+      - SESSION_SECRET=super_secret_session_key_change_me_in_production_please
+
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: web_serve
+    ports:
+      - '8910:8910'
+    depends_on:
+      - api
+    environment:
+      - API_PROXY_TARGET=http://api:8911
+
+  db:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_USER: redwood
+      POSTGRES_PASSWORD: redwood
+      POSTGRES_DB: redwood
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+
+  # After starting with `docker compose -f ./docker-compose.prod.yml up`,
+  # use the console to run commands in the container:
+  #
+  # ```
+  # docker compose -f ./docker-compose.prod.yml run --rm -it console /bin/bash
+  # ```
+  console:
+    user: root
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: console
+    tmpfs:
+      - /tmp
+    command: 'true'
+    environment:
+      - DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood
+      - TEST_DATABASE_URL=postgresql://redwood:redwood@db:5432/redwood_test
+    depends_on:
+      - db

@@ -4,11 +4,12 @@ description: Deploy serverless in an instant with Vercel
 
 # Deploy to Vercel
 
->The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
+> The following instructions assume you have read the [General Deployment Setup](./introduction.md#general-deployment-setup) section above.
 
 ## Vercel tl;dr Deploy
 
 If you simply want to experience the Vercel deployment process without a database and/or adding custom code, you can do the following:
+
 1. create a new redwood project: `yarn create redwood-app ./vercel-deploy`
 2. after your "vercel-deploy" project installation is complete, init git, commit, and add it as a new repo to GitHub, BitBucket, or GitLab
 3. run the command `yarn rw setup deploy vercel` and commit and push changes
@@ -29,6 +30,7 @@ Complete the following two steps. Then save, commit, and push your changes.
 ### Step 1. Serverless Functions Path
 
 Run the following CLI Command:
+
 ```shell
 yarn rw setup deploy vercel
 ```
@@ -39,7 +41,18 @@ This updates your `redwood.toml` file, setting `apiUrl = "/api"`:
 
 Follow the steps in the [Prisma and Database](./introduction#3-prisma-and-database) section above. _(Skip this step if your project does not require a database.)_
 
+:::info
+
+If you're using Vercel Postgres, you may want to limit certain Prisma operations when you deploy. For example, if you're on the Hobby plan, there are some storage and write limits that you can mitigate by turning the Prisma and data migration steps off during deploy and only enabling them on a case-by-case basis when needed:
+
+```
+yarn rw deploy vercel --prisma=false --data-migrate=false
+```
+
+:::
+
 ### Vercel Initial Setup and Configuration
+
 Either [login](https://vercel.com/login) to your Vercel account and select "Import Project" or use the Vercel [quick start](https://vercel.com/#get-started).
 
 Then select the "Continue" button within the "From Git Repository" section:
@@ -50,6 +63,7 @@ Next, select the provider where your repo is hosted: GitHub, GitLab, or Bitbucke
 You'll then need to provide permissions for Vercel to access the repo on your hosting provider.
 
 ### Import and Deploy your Project
+
 Vercel will recognize your repo as a Redwood project and take care of most configuration heavy lifting. You should see the following options and, most importantly, the "Framework Preset" showing RedwoodJS.
 
 <img src="https://user-images.githubusercontent.com/2951/90486275-9337cc80-e0ed-11ea-9af3-fd9613c1256b.png" />
@@ -73,3 +87,55 @@ Go ahead, click that "Visit" button. You’ve earned it 🎉
 From the Vercel Dashboard you can access the full settings and information for your Redwood App. The default settings seem to work just fine for most Redwood projects. Do take a look around, but be sure check out the [docs as well](https://vercel.com/docs).
 
 From now on, each time you push code to your git repo, Vercel will automatically trigger a deploy of the new code. You can also manually redeploy if you select "Deployments", then the specific deployment from the list, and finally the "Redeploy" option from the vertical dots menu next to "Visit".
+
+## Configuration
+
+You can use `vercel.json` to configure and override the default behavior of Vercel from within your project. For [`functions`](#functions), you should configure in code directly and not in `vercel.json`.
+
+### Project
+
+The [`vercel.json` configuration file](https://vercel.com/docs/projects/project-configuration#configuring-projects-with-vercel.json) lets you configure, and override the default behavior of Vercel from within your project such as rewrites or headers.
+
+### Functions
+
+By default, API requests in Vercel have a timeout limit of 15 seconds, but can be configured to be up to 90 seconds. Pro and other plans allow for longer [duration](https://vercel.com/docs/functions/runtimes#max-duration) and larger [memory-size limits](https://vercel.com/docs/functions/runtimes#memory-size-limits).
+
+To change the `maxDuration` or `memory` per function, export a `config` with the settings you want applied in your function. For example:
+
+```ts
+import type { APIGatewayEvent, Context } from 'aws-lambda'
+
+import { logger } from 'src/lib/logger'
+
+export const config = {
+  maxDuration: 30,
+  memory: 512,
+}
+
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
+  logger.info(`${event.httpMethod} ${event.path}: vercel function`)
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data: 'vercel function',
+    }),
+  }
+}
+```
+
+:::tip important
+Since Redwood has it's own handling of the api directory, the Vercel flavored api directory is disabled. Therefore you don't use the "functions" config in `vercel.json` with Redwood.
+
+Also, be sure to use Node version 20.x or greater or set the `runtime` in the function config:
+
+```ts
+export const config = {
+  runtime: 'nodejs20.x',
+}
+```
+
+:::

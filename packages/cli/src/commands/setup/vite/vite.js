@@ -1,7 +1,8 @@
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'vite'
 
-export const description =
-  '[Experimental] Configure the web side to use Vite, instead of Webpack'
+export const description = 'Configure the web side to use Vite'
 
 export const builder = (yargs) => {
   yargs.option('force', {
@@ -25,6 +26,12 @@ export const builder = (yargs) => {
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./viteHandler')
+  recordTelemetryAttributes({
+    command: 'setup vite',
+    force: options.force,
+    verbose: options.verbose,
+    addPackage: options.addPackage,
+  })
+  const { handler } = await import('./viteHandler.js')
   return handler(options)
 }

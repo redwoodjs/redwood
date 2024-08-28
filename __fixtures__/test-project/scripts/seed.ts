@@ -1,5 +1,11 @@
-import type { Prisma } from '@prisma/client'
 import { db } from 'api/src/lib/db'
+
+// Manually apply seeds via the `yarn rw prisma db seed` command.
+//
+// Seeds automatically run the first time you run the `yarn rw prisma migrate dev`
+// command and every time you run the `yarn rw prisma migrate reset` command.
+//
+// See https://redwoodjs.com/docs/database-seeds for more info
 
 export default async () => {
   try {
@@ -20,11 +26,11 @@ export default async () => {
       },
     ]
 
-    await Promise.all(
-      users.map(async (user) => {
-        const newUser = await db.user.create({ data: user })
-      })
-    )
+    if ((await db.user.count()) === 0) {
+      await Promise.all(users.map((user) => db.user.create({ data: user })))
+    } else {
+      console.log('Users already seeded')
+    }
   } catch (error) {
     console.error(error)
   }
@@ -48,73 +54,35 @@ export default async () => {
       },
     ]
 
-    await Promise.all(
-      posts.map(async (post) => {
-        const newPost = await db.post.create({ data: post })
+    if ((await db.post.count()) === 0) {
+      await Promise.all(
+        posts.map(async (post) => {
+          const newPost = await db.post.create({ data: post })
 
-        console.log(newPost)
-      })
-    )
+          console.log(newPost)
+        })
+      )
+    } else {
+      console.log('Posts already seeded')
+    }
   } catch (error) {
     console.error(error)
   }
 
   try {
+    // Create your database records here! For example, seed some users:
     //
-    // Manually seed via `yarn rw prisma db seed`
-    // Seeds automatically with `yarn rw prisma migrate dev` and `yarn rw prisma migrate reset`
+    // const users = [
+    //   { name: 'Alice', email: 'alice@redwoodjs.com },
+    //   { name: 'Bob', email: 'bob@redwoodjs.com },
+    // ]
     //
-    // Update "const data = []" to match your data model and seeding needs
-    //
-    const data: Prisma.UserExampleCreateArgs['data'][] = [
-      // To try this example data with the UserExample model in schema.prisma,
-      // uncomment the lines below and run 'yarn rw prisma migrate dev'
-      //
-      // { name: 'alice', email: 'alice@example.com' },
-      // { name: 'mark', email: 'mark@example.com' },
-      // { name: 'jackie', email: 'jackie@example.com' },
-      // { name: 'bob', email: 'bob@example.com' },
-    ]
-    console.log(
-      "\nUsing the default './scripts/seed.{js,ts}' template\nEdit the file to add seed data\n"
-    )
+    // await db.user.createMany({ data: users })
 
-    // Note: if using PostgreSQL, using `createMany` to insert multiple records is much faster
-    // @see: https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#createmany
-    Promise.all(
-      //
-      // Change to match your data model and seeding needs
-      //
-      data.map(async (data: Prisma.UserExampleCreateArgs['data']) => {
-        const record = await db.userExample.create({ data })
-        console.log(record)
-      })
+    console.info(
+      '\n  No seed data, skipping. See scripts/seed.ts to start seeding your database!\n'
     )
-
-    // If using dbAuth and seeding users, you'll need to add a `hashedPassword`
-    // and associated `salt` to their record. Here's how to create them using
-    // the same algorithm that dbAuth uses internally:
-    //
-    //   import { hashPassword } from '@redwoodjs/auth-dbauth-api'
-    //
-    //   const users = [
-    //     { name: 'john', email: 'john@example.com', password: 'secret1' },
-    //     { name: 'jane', email: 'jane@example.com', password: 'secret2' }
-    //   ]
-    //
-    //   for (user of users) {
-    //     const [hashedPassword, salt] = hashPassword(user.password)
-    //     await db.user.create({
-    //       data: {
-    //         name: user.name,
-    //         email: user.email,
-    //         hashedPassword,
-    //         salt
-    //       }
-    //     })
-    //   }
   } catch (error) {
-    console.warn('Please define your seed data.')
     console.error(error)
   }
 }

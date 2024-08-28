@@ -1,8 +1,9 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 
-import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
-import { usePageLoadingContext } from './PageLoadingContext'
-import { inIframe, Spec } from './util'
+import { getAnnouncement, getFocus, resetFocus } from './a11yUtils.js'
+import type { Spec } from './page.js'
+import { usePageLoadingContext } from './PageLoadingContext.js'
+import { inIframe } from './util.js'
 
 interface Props {
   path: string
@@ -14,6 +15,9 @@ interface Props {
 
 let isPrerendered = false
 
+// TODO (STREAMING)
+// SSR and streaming changes how we mount the React app (we render the whole page, including head and body)
+// This logic is no longer valid and needs to be rethought
 if (typeof window !== 'undefined') {
   const redwoodAppElement = document.getElementById('redwood-app')
 
@@ -48,7 +52,9 @@ export const ActiveRouteLoader = ({
   const announcementRef = useRef<HTMLDivElement>(null)
 
   const usePrerenderLoader =
-    globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad)
+    // Prerendering doesn't work with Streaming/SSR yet. So we disable it.
+    !globalThis.RWJS_EXP_STREAMING_SSR &&
+    (globalThis.__REDWOOD__PRERENDERING || (isPrerendered && firstLoad))
 
   const LazyRouteComponent = usePrerenderLoader
     ? spec.prerenderLoader(spec.name).default
@@ -64,8 +70,6 @@ export const ActiveRouteLoader = ({
     if (inIframe()) {
       return
     }
-
-    globalThis?.scrollTo(0, 0)
 
     if (announcementRef.current) {
       announcementRef.current.innerText = getAnnouncement()
@@ -85,6 +89,9 @@ export const ActiveRouteLoader = ({
     delete params['key']
   }
 
+  // Level 3/3 (ActiveRouteLoader)
+  // This is where we actually render the page component. Either using a
+  // prerender loader or the lazy component
   return (
     <Suspense fallback={<Fallback>{whileLoadingPage?.()}</Fallback>}>
       <LazyRouteComponent {...params} />

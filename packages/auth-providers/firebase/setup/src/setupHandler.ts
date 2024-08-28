@@ -3,10 +3,10 @@ import path from 'path'
 
 import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
+import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export async function handler({ force: forceArg }: Args) {
@@ -16,9 +16,10 @@ export async function handler({ force: forceArg }: Args) {
     provider: 'firebase',
     authDecoderImport:
       "import { authDecoder } from '@redwoodjs/auth-firebase-api'",
-    webPackages: ['firebase@^9', `@redwoodjs/auth-firebase-web@${version}`],
+    webPackages: ['firebase@^10', `@redwoodjs/auth-firebase-web@${version}`],
     apiPackages: [
-      'firebase-admin@^10',
+      // Note that the version of this package should be exactly the same as the version in `@redwoodjs/auth-firebase-api` .
+      'firebase-admin@12.1.1',
       `@redwoodjs/auth-firebase-api@${version}`,
     ],
     notes: [
@@ -35,7 +36,7 @@ export async function handler({ force: forceArg }: Args) {
       '',
       '```toml title="redwood.toml"',
       'includeEnvironmentVariables = [',
-      '  "FIREBASE_API_KEY"',
+      '  "FIREBASE_API_KEY",',
       '  "FIREBASE_AUTH_DOMAIN"',
       ']',
       '```',

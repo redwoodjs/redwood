@@ -1,0 +1,42 @@
+{
+  "name": "@redwoodjs/web-server",
+  "version": "7.0.0",
+  "description": "Redwood's server for the Web side",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/web-server"
+  },
+  "license": "MIT",
+  "main": "./dist/cliConfig.js",
+  "types": "./dist/cliConfig.d.ts",
+  "bin": {
+    "rw-web-server": "./dist/bin.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-web-server.tgz",
+    "build:types": "tsc --build --verbose",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build && yarn fix:permissions\"",
+    "fix:permissions": "chmod +x dist/index.js; chmod +x dist/watch.js",
+    "prepublishOnly": "NODE_ENV=production yarn build"
+  },
+  "dependencies": {
+    "@redwoodjs/fastify-web": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
+    "chalk": "4.1.2",
+    "dotenv-defaults": "5.0.2",
+    "fastify": "4.28.1",
+    "fs-extra": "11.2.0",
+    "yargs": "17.7.2"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

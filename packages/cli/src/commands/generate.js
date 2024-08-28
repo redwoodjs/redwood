@@ -1,6 +1,8 @@
 import execa from 'execa'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 export const command = 'generate <type>'
 export const aliases = ['g']
 export const description = 'Generate boilerplate code and type definitions'
@@ -8,7 +10,16 @@ export const description = 'Generate boilerplate code and type definitions'
 export const builder = (yargs) =>
   yargs
     .command('types', 'Generate supplementary code', {}, () => {
-      execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
+      recordTelemetryAttributes({
+        command: 'generate types',
+      })
+      try {
+        execa.sync('yarn rw-gen', { shell: true, stdio: 'inherit' })
+      } catch (error) {
+        // rw-gen is responsible for logging its own errors but we need to
+        // make sure we exit with a non-zero exit code
+        process.exitCode = error.exitCode ?? 1
+      }
     })
     .commandDir('./generate', {
       recurse: true,
@@ -25,6 +36,6 @@ export const builder = (yargs) =>
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#generate-alias-g'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#generate-alias-g',
+      )}`,
     )

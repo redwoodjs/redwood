@@ -2,17 +2,15 @@ import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 
-import { context, getAsyncStoreInstance } from '../../index'
+import type { GlobalContext } from '@redwoodjs/context'
+import { context, setContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodGlobalContextSetter } from '../useRedwoodGlobalContextSetter'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
 
-afterAll(() => {
-  process.env.SAFE_GLOBAL_CONTEXT = '0' // set to default
-})
-
-test('Safe Context OFF: Updates global context with extended context', async () => {
-  process.env.DISABLE_CONTEXT_ISOLATION = '0' // default: use async local storage
+test('Context is correctly populated', async () => {
   const testkit = createTestkit(
     [
       useEngine(GraphQLJS),
@@ -20,33 +18,65 @@ test('Safe Context OFF: Updates global context with extended context', async () 
       useRedwoodPopulateContext({ foo: 'bar' }),
       useRedwoodGlobalContextSetter(),
     ],
-    testSchema
+    testSchema,
   )
 
-  await getAsyncStoreInstance().run(new Map(), async () => {
-    await testkit.execute(testQuery, {}, {})
+  await getAsyncStoreInstance().run(
+    new Map<string, GlobalContext>(),
+    async () => {
+      await testkit.execute(testQuery, {}, {})
 
-    expect(context.hello).toBe('world')
-    expect(context.foo).toBe('bar')
-    expect(context.bazinga).not.toBeDefined() // just an extra check here because this test is async
-  })
+      expect(context.hello).toBe('world')
+      expect(context.foo).toBe('bar')
+      expect(context.bazinga).toBeUndefined()
+    },
+  )
 })
 
-test('Safe Context ON: Updates global context with extended context', async () => {
-  process.env.DISABLE_CONTEXT_ISOLATION = '1' // user is saying its safe to not proxy the context
-
+test('Plugin lets you populate context at any point in the lifecycle', async () => {
   const testkit = createTestkit(
     [
       useEngine(GraphQLJS),
       useRedwoodGlobalContextSetter(),
       useRedwoodPopulateContext(() => ({ hello: 'world' })),
       useRedwoodPopulateContext({ foo: 'bar' }),
+      useRedwoodPopulateContext({ bazinga: 'new value!' }),
     ],
-    testSchema
+    testSchema,
   )
 
-  await testkit.execute(testQuery, {}, {})
+  await getAsyncStoreInstance().run(
+    new Map<string, GlobalContext>(),
+    async () => {
+      await testkit.execute(testQuery, {}, {})
 
-  expect(context.hello).toBe('world')
-  expect(context.foo).toBe('bar')
+      expect(context.hello).toBe('world')
+      expect(context.foo).toBe('bar')
+      expect(context.bazinga).toBe('new value!')
+    },
+  )
+})
+
+test('setContext erases the existing context', async () => {
+  const testkit = createTestkit(
+    [
+      useEngine(GraphQLJS),
+      useRedwoodPopulateContext(() => ({ hello: 'world' })),
+      useRedwoodPopulateContext({ foo: 'bar' }),
+      useRedwoodGlobalContextSetter(),
+    ],
+    testSchema,
+  )
+
+  await getAsyncStoreInstance().run(
+    new Map<string, GlobalContext>(),
+    async () => {
+      await testkit.execute(testQuery, {}, {})
+      setContext({ bazinga: 'new value!' })
+
+      expect(context.hello).toBeUndefined()
+      expect(context.foo).toBeUndefined()
+      expect(context.bazinga).toBe('new value!')
+    },
+  )
 })

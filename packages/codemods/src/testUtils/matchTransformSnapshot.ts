@@ -2,15 +2,24 @@ import fs from 'fs'
 import path from 'path'
 
 import tempy from 'tempy'
+import { expect } from 'vitest'
 
 import runTransform from '../lib/runTransform'
 
 import { formatCode } from './index'
 
-export const matchTransformSnapshot = async (
-  transformName: string,
-  fixtureName: string = transformName,
-  parser: 'ts' | 'tsx' | 'babel' = 'tsx'
+export interface MatchTransformSnapshotFunction {
+  (
+    transformName: string,
+    fixtureName?: string,
+    parser?: 'ts' | 'tsx',
+  ): Promise<void>
+}
+
+export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
+  transformName,
+  fixtureName,
+  parser,
 ) => {
   const tempFilePath = tempy.file()
 
@@ -21,13 +30,30 @@ export const matchTransformSnapshot = async (
     throw new Error('Could not find test path')
   }
 
-  // Use require.resolve, so we can pass in ts/js/tsx without specifying
-  const fixturePath = require.resolve(
-    path.join(testPath, '../../__testfixtures__', `${fixtureName}.input`)
+  let fixturePath
+
+  const maybeFixturePath = path.join(
+    testPath,
+    '../../__testfixtures__',
+    `${fixtureName}.input`,
   )
 
+  for (const extension of ['ts', 'tsx', 'js', 'jsx']) {
+    try {
+      fixturePath = require.resolve(`${maybeFixturePath}.${extension}`)
+    } catch {
+      continue
+    }
+  }
+
+  if (!fixturePath) {
+    throw new Error(
+      `Could not find fixture for ${fixtureName} in ${maybeFixturePath}`,
+    )
+  }
+
   const transformPath = require.resolve(
-    path.join(testPath, '../../', transformName)
+    path.join(testPath, '../../', `${transformName}.ts`),
   )
 
   // Step 1: Copy fixture to temp file
@@ -39,7 +65,8 @@ export const matchTransformSnapshot = async (
     targetPaths: [tempFilePath],
     parser,
     options: {
-      verbose: true,
+      verbose: 1,
+      print: true,
     },
   })
 
@@ -48,8 +75,10 @@ export const matchTransformSnapshot = async (
 
   const expectedOutput = fs.readFileSync(
     fixturePath.replace('.input.', '.output.'),
-    'utf-8'
+    'utf-8',
   )
 
-  expect(formatCode(transformedContent)).toEqual(formatCode(expectedOutput))
+  expect(await formatCode(transformedContent)).toEqual(
+    await formatCode(expectedOutput),
+  )
 }

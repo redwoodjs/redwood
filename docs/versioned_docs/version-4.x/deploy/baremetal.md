@@ -650,7 +650,7 @@ If nginx will be serving our web side, what about api-side? Redwood's internal A
 
 This doc isn't going to go through installing and getting nginx running, there are plenty of resources for that available. What we will show is a successful nginx configuration file used by several Redwood apps currently in production.
 
-```text title=nginx.conf
+```text title="nginx.conf"
 upstream redwood_server {
   server 127.0.0.1:8911 fail_timeout=0;
 }
@@ -697,7 +697,7 @@ yarn rw serve api
 
 When using `pm2` to start/monitor your processes, you can simplify your `deploy.toml` and `ecosystem.config.js` files to only worry about the api side:
 
-```toml title=deploy.toml
+```toml title="deploy.toml"
 [[production.servers]]
 host = "myserver.com"
 username = "ubuntu"
@@ -713,7 +713,7 @@ packageManagerCommand = "yarn"
 monitorCommand = "pm2"
 ```
 
-```js title=ecosystem.config.js
+```js title="ecosystem.config.js"
 module.exports = {
   apps: [
     {
@@ -738,7 +738,7 @@ If you don't love the path of `/.redwood/functions` for your API calls, this is 
 
 For example, to simplify the path to just `/api` you'll need to make a change to `redwood.toml` and your new nginx config file:
 
-```toml title=redwood.toml
+```toml title="redwood.toml"
 [web]
   title = "My App"
   port = 8910
@@ -751,7 +751,7 @@ For example, to simplify the path to just `/api` you'll need to make a change to
   open = true
 ```
 
-```text title=nginx.conf
+```text title="nginx.conf"
 upstream redwood_server {
   server 127.0.0.1:8911 fail_timeout=0;
 }

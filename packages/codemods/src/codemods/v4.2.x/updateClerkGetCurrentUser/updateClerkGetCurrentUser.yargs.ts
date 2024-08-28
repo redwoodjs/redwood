@@ -1,6 +1,7 @@
 import path from 'path'
 
-import task, { TaskInnerAPI } from 'tasuku'
+import type { TaskInnerAPI } from 'tasuku'
+import task from 'tasuku'
 
 import { getPaths } from '@redwoodjs/project-config'
 

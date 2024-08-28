@@ -883,7 +883,7 @@ This leads to your product cache being rebuilt every hour, even though you haven
 
 Just like the `v1` we added to the `product` cache key above, you can globally prefix a string to *all* of your cache keys:
 
-```js title=api/src/lib/cache.js
+```js title="api/src/lib/cache.js"
 export const { cache, cacheFindMany } = createCache(client, {
   logger,
   timeout: 500,
@@ -921,7 +921,7 @@ yarn rw setup cache redis
 
 This generates the following (memcached example shown):
 
-```js title=api/src/lib/cache.js
+```js title="api/src/lib/cache.js"
 import { createCache, MemcachedClient } from '@redwoodjs/api/cache'
 
 import { logger } from './logger'

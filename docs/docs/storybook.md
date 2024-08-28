@@ -4,14 +4,20 @@ description: A component-driven development workflow
 
 # Storybook
 
-Storybook enables a kind of frontend-first, component-driven development workflow that we've always wanted.
+[Storybook](https://storybook.js.org) enables the kind of frontend-first, component-driven development workflow that we've always wanted.
 By developing your UI components in isolation, you get to focus exclusively on your UI's needs,
 saving you from getting too caught up in the details of your API too early.
 
 Storybook also makes debugging a lot easier.
 You don't have to start the dev server, login as a user, tab through dropdowns, and click buttons just for that one bug to show up.
-Or render a whole page and make six GraphQL calls just to change the color of a modal.
-You can set it all up as a story, tweak it there as you see fit, and even test it for good measure.
+And say goodbye to rendering a whole page and make six GraphQL calls just to change the color of a modal!
+You can set up every component as a story and tweak it within Storybook. And for any [cells](./cells.md), [mocking GraphQL could not be easier!](./how-to/mocking-graphql-in-storybook.md)
+
+RedwoodJS offers a Storybook integration leveraging Storybook's [Framework Packages](https://storybook.js.org/docs/configure/integration/frameworks),
+using Vite as its bundler to align with your production project.
+
+An older version of our Storybook integration used Webpack as its bundler — For more information on the differences, see [this forum post](https://community.redwoodjs.com/t/storybook-in-redwood-is-moving-to-vite/7212).
+If you were previously using this older version, see [this section](#migrating-from-storybook-webpack-to-storybook-vite).
 
 ## Getting Started with Storybook
 
@@ -21,90 +27,27 @@ You can start Storybook with `yarn rw storybook`:
 yarn rw storybook
 ```
 
-This spins up Storybook on port `7910`.
+If this is your first time running Storybook:
+
+- The Redwood CLI will install Storybook, the framework package, and all related dependencies.
+- The Redwood CLI will create the following config files for you:
+  - `web/.storybook/main.ts`
+    - This is the primary [Storybook configuration file](https://storybook.js.org/docs/configure). Note that it references our framework package, [`storybook-framework-redwoodjs-vite`](https://www.npmjs.com/package/storybook-framework-redwoodjs-vite).
+  - `web/.storybook/preview-body.html`
+    - This is required to change the `id` of the root div to `redwood-app`, which is what the entry file used by Vite requires.
+
+Once Storybook is all set up, it'll spin up on localhost port `7910` and open your browser.
 
 ## Configuring Storybook
 
-You only have to configure Storybook if you want to extend Redwood's default configuration, which handles things like how to find stories, configuring Webpack, starting Mock Service Worker, etc.
+To configure Storybook, please follow [the official Storybook docs](https://storybook.js.org/docs/configure).
 
-There are three files you can add to your project's `web/config` directory to configure Storybook: `storybook.config.js`, `storybook.manager.js`, and `storybook.preview.js`. Note that you may have to create the `web/config` directory:
+## Migrating from Storybook Webpack to Storybook Vite
 
-```
-cd redwood-project/web
-mkdir config
-touch config/storybook.config.js config/storybook.manager.js config/storybook.preview.js
-```
+An older version of our Storybook integration relied on Webpack. If you're just getting started with Storybook, this does not apply to you! 😊
 
-`storybook.config.js` configures Storybook's server, `storybook.manager.js` configures Storybook's UI, and `storybook.preview.js` configures the way stories render.
-All of these files get merged with Redwood's default configurations, which you can find in the `@redwoodjs/testing` package:
+If you've been using Storybook for a while, you might need to take some manual steps in upgrading to the new version.
 
-- [main.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/main.js)—gets merged with your project's `storybook.config.js`
-- [manager.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/manager.js)—gets merged with your project's `storybook.manager.js`
-- [preview.js](https://github.com/redwoodjs/redwood/blob/main/packages/testing/config/storybook/preview.js)—gets merged with your project's `storybook.preview.js`
+If you don't have any custom [Storybook configuration](https://redwoodjs.com/docs/storybook#configuring-storybook), you should be good to go - no changes needed. The Out of Box experience should be the same, and please [let us know](https://github.com/redwoodjs/redwood/issues/new?assignees=&labels=bug%2Fneeds-info&projects=&template=bug-report.yml&title=%5BBug%5D%3A+) if you run into any issues.
 
-### Configuring the Server with `storybook.config.js`
-
-> Since `storybook.config.js` configures Storybook's server, note that any changes you make require restarting Storybook.
-
-While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
-
-```javascript title="web/config/storybook.config.js"
-module.exports = {
-  /**
-   * This line adds all of Storybook's essential addons.
-   *
-   * @see {@link https://storybook.js.org/addons/tag/essentials}
-   */
-  addons: ['@storybook/addon-essentials'],
-}
-```
-
-### Configuring Rendering with `storybook.preview.js`
-
-Sometimes you want to change the way all your stories render.
-It'd be mixing concerns to add that logic to your actual components, and it'd get old fast to add it to every single `.stories.js` file.
-Instead decorate all your stories with any custom rendering logic you want in `storybook.preview.js`.
-
-For example, something you may want to do is add some margin to all your stories so that they're not glued to the top left corner:
-
-```jsx title="web/config/storybook.preview.js"
-export const decorators = [
-  (Story) => (
-    <div style={{ margin: '48px' }}>
-      <Story />
-    </div>
-  ),
-]
-```
-
-For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/react/configure/overview#configure-story-rendering).
-
-### Configuring the UI with `storybook.manager.js`
-
-> Note that some of the changes you make to Storybook's UI require refreshing its cache.
-> The easiest way to do so is when starting Storybook:
->
-> ```
-> yarn rw storybook --no-manager-cache
-> ```
-
-You can [theme Storybook's UI](https://storybook.js.org/docs/react/configure/theming) by installing two packages and making a few changes to Redwood's initial configuration.
-
-From the root of your RedwoodJS project:
-
-```
-yarn workspace web add -D @storybook/addons @storybook/theming
-```
-
-Then, we'll configure our theme by creating a `storybook.manager.js` file. Below we're enabling Storybook's dark theme.
-
-```javascript title="web/config/storybook.manager.js"
-import { addons } from '@storybook/addons'
-import { themes } from '@storybook/theming'
-
-addons.setConfig({
-  theme: themes.dark,
-})
-```
-
-Check out [Storybook's theming quickstart](https://storybook.js.org/docs/react/configure/theming#create-a-theme-quickstart) for a guide on creating your own theme. You may also want to export your theme to [re-use it with Storybook Docs](https://storybook.js.org/docs/react/configure/theming#theming-docs).
+If you do have custom Storybook configuration, then you'll need to manually migrate it over to the new files. For example, if you've got any global decorators, you can now just follow the official Storybook docs on that: https://storybook.js.org/docs/writing-stories/decorators#global-decorators

@@ -1,9 +1,0 @@
-name: Check test project fixture
-description: Determines if the test project fixture should be rebuilt
-runs:
-  # `node18` isn't supported yet
-  using: node16
-  main: check_test_project_fixture.mjs
-inputs:
-  labels:
-    required: true

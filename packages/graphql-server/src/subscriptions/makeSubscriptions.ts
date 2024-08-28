@@ -1,12 +1,13 @@
-import { DocumentNode } from 'graphql'
-/*
-We want SubscriptionsGlobs type to be an object with this shape:
-But not fully supported in TS
-{
-  schema: DocumentNode // <-- required
-  [string]: RedwoodSubscription
-}
-*/
+import type { DocumentNode } from 'graphql'
+/**
+ * We want SubscriptionsGlobs type to be an object with this shape:
+ *
+ * But not fully supported in TS
+ * {
+ *   schema: DocumentNode // <-- required
+ *   [string]: RedwoodSubscription
+ * }
+ */
 export type SubscriptionGlobImports = Record<string, any>
 
 export type RedwoodSubscription = {
@@ -16,7 +17,7 @@ export type RedwoodSubscription = {
 }
 
 export const makeSubscriptions = (
-  SubscriptionGlobs: SubscriptionGlobImports
+  SubscriptionGlobs: SubscriptionGlobImports,
 ): RedwoodSubscription[] => {
   return Object.entries(SubscriptionGlobs).flatMap(
     ([importedGlobName, exports]) => {
@@ -34,6 +35,6 @@ export const makeSubscriptions = (
       } as RedwoodSubscription
 
       return [subscription]
-    }
+    },
   )
 }

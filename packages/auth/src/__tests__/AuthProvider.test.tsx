@@ -1,23 +1,39 @@
-require('whatwg-fetch')
-
 import React, { useEffect, useState } from 'react'
 
 import {
+  act,
   render,
+  renderHook,
   screen,
   fireEvent,
   waitFor,
   configure,
 } from '@testing-library/react'
-import { renderHook, act } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 import { graphql } from 'msw'
 import { setupServer } from 'msw/node'
-
 import {
-  CustomTestAuthClient,
-  createCustomTestAuth,
-} from './fixtures/customTestAuth'
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  vi,
+} from 'vitest'
+import {
+  fetch as fetchPolyfill,
+  Headers as HeadersPolyfill,
+  Request as RequestPolyfill,
+  Response as ResponsePolyfill,
+} from 'whatwg-fetch'
+
+globalThis.fetch = fetchPolyfill
+globalThis.Headers = HeadersPolyfill
+globalThis.Request = RequestPolyfill
+globalThis.Response = ResponsePolyfill
+
+import type { CustomTestAuthClient } from './fixtures/customTestAuth.js'
+import { createCustomTestAuth } from './fixtures/customTestAuth.js'
 
 configure({
   asyncUtilTimeout: 5_000,
@@ -34,43 +50,38 @@ let CURRENT_USER_DATA: {
 
 globalThis.RWJS_API_GRAPHQL_URL = '/.netlify/functions/graphql'
 
+let mockedIsAuthenticatedStatus = false
 const server = setupServer(
   graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
+    if (!mockedIsAuthenticatedStatus) {
+      return res(ctx.status(500))
+    }
+
     return res(
       ctx.data({
         redwood: {
           currentUser: CURRENT_USER_DATA,
         },
-      })
+      }),
     )
-  })
+  }),
 )
 
 const consoleError = console.error
 
-beforeAll(() => {
-  server.listen()
-  console.error = () => {}
-})
-
-afterAll(() => {
-  server.close()
-  console.error = consoleError
-})
-
-const customTestAuth: CustomTestAuthClient = {
+const mockedTestAuthClient = {
   login: () => true,
   signup: () => {},
   logout: () => {},
-  getToken: () => 'hunter2',
-  getUserMetadata: jest.fn(() => null),
+  getToken: vi.fn(),
+  getUserMetadata: vi.fn(),
   forgotPassword: () => {},
   resetPassword: () => true,
   validateResetToken: () => ({}),
-}
+} satisfies CustomTestAuthClient
 
 async function getCustomTestAuth() {
-  const { AuthProvider, useAuth } = createCustomTestAuth(customTestAuth)
+  const { AuthProvider, useAuth } = createCustomTestAuth(mockedTestAuthClient)
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,
   })
@@ -78,17 +89,29 @@ async function getCustomTestAuth() {
   return result.current
 }
 
+beforeAll(() => {
+  server.listen()
+  console.error = () => {}
+})
+
 beforeEach(() => {
+  mockedIsAuthenticatedStatus = false
+
   server.resetHandlers()
   CURRENT_USER_DATA = {
     name: 'Peter Pistorius',
     email: 'nospam@example.net',
   }
-  customTestAuth.getUserMetadata = jest.fn(() => null)
+  vi.resetAllMocks()
+})
+
+afterAll(() => {
+  server.close()
+  console.error = consoleError
 })
 
 describe('Custom auth provider', () => {
-  const { AuthProvider, useAuth } = createCustomTestAuth(customTestAuth)
+  const { AuthProvider, useAuth } = createCustomTestAuth(mockedTestAuthClient)
 
   const AuthConsumer = () => {
     const {
@@ -113,7 +136,7 @@ describe('Custom auth provider', () => {
         setAuthToken(token)
       }
       retrieveToken()
-    }, [getToken])
+    }, [isAuthenticated, getToken])
 
     if (loading) {
       return <>Loading...</>
@@ -127,7 +150,11 @@ describe('Custom auth provider', () => {
       <>
         <button
           onClick={() => {
-            isAuthenticated ? logOut() : logIn()
+            if (isAuthenticated) {
+              logOut()
+            } else {
+              logIn()
+            }
           }}
         >
           {isAuthenticated ? 'Log Out' : 'Log In'}
@@ -162,12 +189,12 @@ describe('Custom auth provider', () => {
    * A logged out user can login, view their personal account information and logout.
    */
   test('Authentication flow (logged out -> login -> logged in -> logout) works as expected', async () => {
-    const mockAuthClient = customTestAuth
+    mockedTestAuthClient.getToken.mockReturnValue(null)
 
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -175,66 +202,30 @@ describe('Custom auth provider', () => {
 
     // The user is not authenticated
     await waitFor(() => screen.getByText('Log In'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    // Override the mocked login status, so getCurrentUser msw mock returns a user
+    pretendWeLoggedIn()
+
     fireEvent.click(screen.getByText('Log In'))
 
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
+    // We wait for the token, because it's updated by the useEffect
+    // if we just wait for "Log Out" button, tests sometimes fail on windows
+    await waitFor(() => screen.getByText('authToken: hunter2'))
+    expect(mockedTestAuthClient.getUserMetadata).toBeCalledTimes(1)
+    expect(mockedTestAuthClient.getToken).toHaveBeenCalled()
+    expect(mockedTestAuthClient.getToken()).toEqual('hunter2')
+
     expect(
       screen.getByText(
-        'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}'
-      )
+        'userMetadata: {"sub":"abcdefg|123456","username":"peterp"}',
+      ),
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
-      )
+        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
+      ),
     ).toBeInTheDocument()
-    expect(screen.getByText('authToken: hunter2')).toBeInTheDocument()
-
-    // Log out
-    fireEvent.click(screen.getByText('Log Out'))
-    await waitFor(() => screen.getByText('Log In'))
-  })
-
-  test('Fetching the current user can be skipped', async () => {
-    const mockAuthClient = customTestAuth
-
-    render(
-      <AuthProvider skipFetchCurrentUser>
-        <AuthConsumer />
-      </AuthProvider>
-    )
-
-    // We're booting up!
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
-
-    // The user is not authenticated
-    await waitFor(() => screen.getByText('Log In'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
-    fireEvent.click(screen.getByText('Log In'))
-
-    // Check that you're logged in!
-    await waitFor(() => screen.getByText('Log Out'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
-    expect(screen.getByText(/no current user data/)).toBeInTheDocument()
+    expect(screen.getByText('Log Out')).toBeInTheDocument()
 
     // Log out
     fireEvent.click(screen.getByText('Log Out'))
@@ -245,36 +236,28 @@ describe('Custom auth provider', () => {
    * This is especially helpful if you want to update the currentUser state.
    */
   test('A user can be re-authenticated to update the "auth state"', async () => {
-    const mockAuthClient = customTestAuth
-
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // The user is not authenticated
     await waitFor(() => screen.getByText('Log In'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
+
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
     await waitFor(() => screen.getByText('Log Out'))
-    expect(mockAuthClient.getUserMetadata).toBeCalledTimes(1)
+    expect(mockedTestAuthClient.getUserMetadata).toBeCalledTimes(1)
 
     // The original current user data is fetched.
     expect(
       screen.getByText(
-        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}'
-      )
+        'currentUser: {"name":"Peter Pistorius","email":"nospam@example.net"}',
+      ),
     ).toBeInTheDocument()
 
     CURRENT_USER_DATA = { ...CURRENT_USER_DATA, name: 'Rambo' }
@@ -282,37 +265,8 @@ describe('Custom auth provider', () => {
 
     await waitFor(() =>
       screen.getByText(
-        'currentUser: {"name":"Rambo","email":"nospam@example.net"}'
-      )
-    )
-  })
-
-  test('When the current user cannot be fetched the user is not authenticated', async () => {
-    server.use(
-      graphql.query('__REDWOOD__AUTH_GET_CURRENT_USER', (_req, res, ctx) => {
-        return res(ctx.status(404))
-      })
-    )
-
-    const mockAuthClient = customTestAuth
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
-
-    render(
-      <AuthProvider>
-        <AuthConsumer />
-      </AuthProvider>
-    )
-
-    // We're booting up!
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
-
-    await waitFor(() =>
-      screen.getByText('Could not fetch current user: Not Found (404)')
+        'currentUser: {"name":"Rambo","email":"nospam@example.net"}',
+      ),
     )
   })
 
@@ -320,8 +274,6 @@ describe('Custom auth provider', () => {
    * Check assigned role access
    */
   test('Authenticated user has assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -331,7 +283,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -343,13 +295,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -367,8 +313,6 @@ describe('Custom auth provider', () => {
    * Check unassigned role access
    */
   test('Authenticated user has not been assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -378,7 +322,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -390,13 +334,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -414,8 +352,6 @@ describe('Custom auth provider', () => {
    * Check some unassigned role access
    */
   test('Authenticated user has not been assigned some role access but not others as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -425,7 +361,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -437,13 +373,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -461,8 +391,6 @@ describe('Custom auth provider', () => {
    * Check assigned role access when specified as single array element
    */
   test('Authenticated user has assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -472,7 +400,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -484,13 +412,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -507,8 +429,6 @@ describe('Custom auth provider', () => {
    * Check assigned role access when specified as array element
    */
   test('Authenticated user has assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -518,7 +438,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -530,13 +450,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -550,8 +464,6 @@ describe('Custom auth provider', () => {
   })
 
   test('Checks roles successfully when roles in currentUser is a string', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -561,7 +473,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -573,13 +485,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -597,8 +503,6 @@ describe('Custom auth provider', () => {
    * Check if assigned one of the roles in an array
    */
   test('Authenticated user has assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -608,7 +512,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -620,13 +524,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -643,8 +541,6 @@ describe('Custom auth provider', () => {
    * Check if not assigned any of the roles in an array
    */
   test('Authenticated user has assigned role access as expected', async () => {
-    const mockAuthClient = customTestAuth
-
     CURRENT_USER_DATA = {
       name: 'Peter Pistorius',
       email: 'nospam@example.net',
@@ -654,7 +550,7 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <AuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     // We're booting up!
@@ -666,13 +562,7 @@ describe('Custom auth provider', () => {
     expect(screen.queryByText('Has Admin:')).not.toBeInTheDocument()
     expect(screen.queryByText('Has Super User:')).not.toBeInTheDocument()
 
-    // Replace "getUserMetadata" with actual data, and login!
-    mockAuthClient.getUserMetadata = jest.fn(() => {
-      return {
-        sub: 'abcdefg|123456',
-        username: 'peterp',
-      }
-    })
+    pretendWeLoggedIn()
     fireEvent.click(screen.getByText('Log In'))
 
     // Check that you're logged in!
@@ -688,7 +578,12 @@ describe('Custom auth provider', () => {
   })
 
   test('proxies forgotPassword() calls to client', async () => {
-    const mockedForgotPassword = jest.spyOn(customTestAuth, 'forgotPassword')
+    const mockedForgotPassword = vi.spyOn(
+      mockedTestAuthClient,
+      'forgotPassword',
+    )
+
+    // @ts-expect-error We're testing this
     mockedForgotPassword.mockImplementation((username: string) => {
       expect(username).toEqual('username')
     })
@@ -708,14 +603,15 @@ describe('Custom auth provider', () => {
     render(
       <AuthProvider>
         <TestAuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     )
 
     await waitFor(() => expect(mockedForgotPassword).toBeCalledWith('username'))
   })
 
   test('proxies resetPassword() calls to client', async () => {
-    customTestAuth.resetPassword = (password: string) => {
+    // @ts-expect-error We're testing this
+    mockedTestAuthClient.resetPassword = (password: string) => {
       expect(password).toEqual('password')
 
       return true
@@ -735,7 +631,8 @@ describe('Custom auth provider', () => {
   })
 
   test('proxies validateResetToken() calls to client', async () => {
-    customTestAuth.validateResetToken = (resetToken: string | null) => {
+    // @ts-expect-error Test function, chill out
+    mockedTestAuthClient.validateResetToken = (resetToken: string | null) => {
       expect(resetToken).toEqual('12345')
 
       return {}
@@ -751,16 +648,31 @@ describe('Custom auth provider', () => {
   })
 
   test("getToken doesn't fail if client throws an error", async () => {
-    customTestAuth.getToken = jest.fn(() => {
-      throw 'Login Required'
+    mockedTestAuthClient.getToken.mockImplementation(() => {
+      throw new Error('Login Required')
     })
-
     const auth = await getCustomTestAuth()
 
     await act(async () => {
       await auth.getToken()
     })
 
-    expect(customTestAuth.getToken).toBeCalledTimes(1)
+    expect(mockedTestAuthClient.getToken).toThrow()
+
+    // If we got here, the whole test did not throw even though getToken did
+    expect.assertions(1)
   })
 })
+
+function pretendWeLoggedIn() {
+  mockedIsAuthenticatedStatus = true
+  mockedTestAuthClient.getToken.mockReturnValue('hunter2')
+  mockedTestAuthClient.getUserMetadata.mockImplementation(() => {
+    return mockedIsAuthenticatedStatus
+      ? {
+          sub: 'abcdefg|123456',
+          username: 'peterp',
+        }
+      : null
+  })
+}

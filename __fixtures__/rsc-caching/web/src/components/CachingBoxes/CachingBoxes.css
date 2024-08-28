@@ -1,0 +1,10 @@
+.caching-boxes {
+  > div {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin: 10px;
+    border: 1px solid black;
+    padding: 2px;
+  }
+}

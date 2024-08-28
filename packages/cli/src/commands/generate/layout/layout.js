@@ -9,20 +9,20 @@ import {
 const COMPONENT_SUFFIX = 'Layout'
 const REDWOOD_WEB_PATH_NAME = 'layouts'
 
-export const files = ({ name, typescript = false, ...options }) => {
+export const files = async ({ name, typescript = false, ...options }) => {
   const layoutName = removeGeneratorName(name, 'layout')
-  const extension = typescript ? '.tsx' : '.js'
-  const layoutFile = templateForComponentFile({
+  const extension = typescript ? '.tsx' : '.jsx'
+  const layoutFile = await templateForComponentFile({
     name: layoutName,
     suffix: COMPONENT_SUFFIX,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     extension,
     generator: 'layout',
     templatePath: options.skipLink
-      ? 'layout.tsx.a11yTemplate'
+      ? 'layout.tsx.a11y.template'
       : 'layout.tsx.template',
   })
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name: layoutName,
     suffix: COMPONENT_SUFFIX,
     extension: `.test${extension}`,
@@ -30,7 +30,7 @@ export const files = ({ name, typescript = false, ...options }) => {
     generator: 'layout',
     templatePath: 'test.tsx.template',
   })
-  const storyFile = templateForComponentFile({
+  const storyFile = await templateForComponentFile({
     name: layoutName,
     suffix: COMPONENT_SUFFIX,
     extension: `.stories${extension}`,
@@ -53,14 +53,18 @@ export const files = ({ name, typescript = false, ...options }) => {
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = typescript ? content : transformTSToJS(outputPath, content)
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
+      ? content
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 const optionsObj = {

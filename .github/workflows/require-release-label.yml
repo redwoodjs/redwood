@@ -15,8 +15,8 @@ jobs:
     name: 🏷 Require release label
     runs-on: ubuntu-latest
     steps:
-      - uses: mheap/github-action-required-labels@v4
+      - uses: mheap/github-action-required-labels@v5
         with:
           mode: exactly
           count: 1
-          labels: "release:docs, release:chore, release:experiment, release:fix, release:feature, release:feature-breaking"
+          labels: 'release:docs, release:chore, release:experimental-breaking, release:fix, release:feature, release:breaking, release:dependency'

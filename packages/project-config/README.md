@@ -6,19 +6,3 @@
 > **Don't depend on this directly in a Redwood project**.
 
 This package offers functionality to parse Redwood's configuration file, redwood.toml, and a convenient way of getting a Redwood project's paths.
-
-## Package size
-
-| Version                                                                            | Publish | Install |
-| :--------------------------------------------------------------------------------- | :------ | :------ |
-| [v5.2.1](https://packagephobia.com/result?p=%40redwoodjs%2Fproject-config%405.2.1) | 96.6 kB | 809 kB  |
-
-## Dependency graphs
-
-### src
-
-![src](./dependency-graph-src.svg)
-
-### dist
-
-![dist](./dependency-graph-dist.svg)

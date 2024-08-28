@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node", "jest"]
+  },
+  "include": ["src"],
+  // Excluding cypress types, because it interferes with expect in tests
+  "exclude": ["node_modules/cypress/types/*", "**/__tests__/__fixtures__/*"],
+  "references": [{ "path": "../project-config" }]
+}

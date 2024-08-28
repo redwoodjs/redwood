@@ -1,6 +1,6 @@
 import type { Logger } from '../logger'
 
-import BaseClient from './clients/BaseClient'
+import type BaseClient from './clients/BaseClient'
 import { CacheTimeoutError } from './errors'
 
 export { default as MemcachedClient } from './clients/MemcachedClient'
@@ -22,12 +22,12 @@ export interface CacheOptions {
 }
 
 export interface CacheFindManyOptions<
-  TFindManyArgs extends Record<string, unknown>
+  TFindManyArgs extends Record<string, unknown>,
 > extends CacheOptions {
   conditions?: TFindManyArgs
 }
 
-export type CacheKey = string | Array<string>
+export type CacheKey = string | string[]
 export type LatestQuery = Record<string, unknown>
 
 type GenericDelegate = {
@@ -69,7 +69,7 @@ const serialize = (input: any) => {
 
 export const createCache = (
   cacheClient: BaseClient,
-  options?: CreateCacheOptions
+  options?: CreateCacheOptions,
 ) => {
   const client = cacheClient
   const logger = options?.logger
@@ -80,7 +80,7 @@ export const createCache = (
   const cache = async <TResult>(
     key: CacheKey,
     input: () => TResult | Promise<TResult>,
-    options?: CacheOptions
+    options?: CacheOptions,
   ): Promise<any> => {
     const cacheKey = formatCacheKey(key, prefix)
 
@@ -125,7 +125,7 @@ export const createCache = (
       ])
 
       logger?.debug(
-        `[Cache] MISS '${cacheKey}', SET ${JSON.stringify(data).length} bytes`
+        `[Cache] MISS '${cacheKey}', SET ${JSON.stringify(data).length} bytes`,
       )
       return serialize(data)
     } catch (e: any) {
@@ -137,7 +137,7 @@ export const createCache = (
   const cacheFindMany = async <TDelegate extends GenericDelegate>(
     key: CacheKey,
     model: TDelegate,
-    options: CacheFindManyOptions<Parameters<TDelegate['findMany']>[0]> = {}
+    options: CacheFindManyOptions<Parameters<TDelegate['findMany']>[0]> = {},
   ) => {
     const { conditions, ...rest } = options
     const cacheKey = formatCacheKey(key, prefix)
@@ -158,7 +158,7 @@ export const createCache = (
     } catch (e: any) {
       if (e instanceof PrismaClientValidationError) {
         logger?.error(
-          `[Cache] cacheFindMany error: model does not contain \`${fields.id}\` or \`${fields.updatedAt}\` fields`
+          `[Cache] cacheFindMany error: model does not contain \`${fields.id}\` or \`${fields.updatedAt}\` fields`,
         )
       } else {
         logger?.error(`[Cache] cacheFindMany error: ${e.message}`)
@@ -175,7 +175,7 @@ export const createCache = (
       }${cacheKeySeparator}${latest[fields.updatedAt].getTime()}`
     } else {
       logger?.debug(
-        `[Cache] cacheFindMany: No data to cache for key \`${key}\`, skipping`
+        `[Cache] cacheFindMany: No data to cache for key \`${key}\`, skipping`,
       )
 
       return serialize(await model.findMany(conditions))
@@ -191,7 +191,7 @@ export const createCache = (
 
     try {
       await Promise.race([
-        (result = client.del(cacheKey as string)),
+        (result = client.del(cacheKey)),
         wait(timeout).then(() => {
           throw new CacheTimeoutError()
         }),

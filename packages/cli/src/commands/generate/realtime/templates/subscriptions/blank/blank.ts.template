@@ -1,0 +1,58 @@
+import gql from 'graphql-tag'
+
+import type { PubSub } from '@redwoodjs/realtime'
+
+import { logger } from 'src/lib/logger'
+
+export const schema = gql`
+  type Subscription {
+    ${subscriptionName}(id: ID!): ${typeName}! @requireAuth
+  }
+`
+
+export type Publish${typeName}Channel = {
+  ${typeName}: [id: string, payload: { from: string; body: string }]
+}
+
+export type Publish${typeName}ChannelType = PubSub<Publish${typeName}Channel>
+
+/**
+ * To test this ${typeName} subscription, run the following in one GraphQL Playground to subscribe:
+ *
+ * subscription ListenTo${channelName} {
+ *   ${subscriptionName}(id: "1") {
+ *     body
+ *     from
+ *   }
+ * }
+ *
+ *
+ * And run the following in another GraphQL Playground to publish and send a new ${name} to the channel:
+ *
+ * mutation PublishTo${channelName} {
+ *   ${subscriptionServiceResolver}(input: {id: "1", from: "hello", body: "bob"}) {
+ *     body
+ *     from
+ *   }
+ * }
+ */
+const ${subscriptionName}Subscription = {
+  ${subscriptionName}: {
+    subscribe: (
+      _,
+      { id },
+      { pubSub }: { pubSub: Publish${typeName}ChannelType }
+    ) => {
+      logger.debug({ id }, '${name} subscription')
+
+      return pubSub.subscribe('${typeName}', id)
+    },
+    resolve: (payload) => {
+      logger.debug({ payload }, '${name} subscription resolve')
+
+      return payload
+    },
+  },
+}
+
+export default ${subscriptionName}Subscription

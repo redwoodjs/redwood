@@ -1,4 +1,4 @@
-import { DocumentNode } from 'graphql'
+import { Kind, type DocumentNode } from 'graphql'
 
 /**
  * Given a query like the one below this function will return
@@ -23,7 +23,10 @@ import { DocumentNode } from 'graphql'
  */
 export function getOperationName(document: DocumentNode) {
   for (const definition of document.definitions) {
-    if (definition.kind === 'OperationDefinition' && definition.name?.value) {
+    if (
+      definition.kind === Kind.OPERATION_DEFINITION &&
+      definition.name?.value
+    ) {
       return definition.name.value
     }
   }

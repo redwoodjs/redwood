@@ -1,21 +1,20 @@
 import { mapSchema, MapperKind } from '@graphql-tools/utils'
-import {
-  defaultFieldResolver,
+import type {
   DirectiveNode,
   DocumentNode,
-  getDirectiveValues,
   GraphQLFieldConfig,
   GraphQLObjectType,
   GraphQLResolveInfo,
   GraphQLSchema,
 } from 'graphql'
-import { Plugin } from 'graphql-yoga'
+import { defaultFieldResolver, getDirectiveValues } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
 
-import { GlobalContext } from '../index'
+import type { GlobalContext } from '@redwoodjs/context'
 
 export interface DirectiveParams<
   FieldType = any,
-  DirectiveArgs = Record<string, any>
+  DirectiveArgs = Record<string, any>,
 > {
   root: unknown
   args: Record<string, unknown>
@@ -50,7 +49,7 @@ export declare type ValidateArgs<DirectiveArgs = Record<string, any>> = Omit<
  *
  */
 export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
-  args: ValidateArgs<TDirectiveArgs>
+  args: ValidateArgs<TDirectiveArgs>,
 ) => Promise<void> | void
 
 /**
@@ -61,7 +60,7 @@ export type ValidatorDirectiveFunc<TDirectiveArgs = Record<string, any>> = (
  */
 export declare type TransformArgs<
   TField = any,
-  TDirectiveArgs = Record<string, any>
+  TDirectiveArgs = Record<string, any>,
 > = DirectiveParams<TField, TDirectiveArgs>
 
 /**
@@ -77,7 +76,7 @@ export declare type TransformArgs<
  */
 export type TransformerDirectiveFunc<
   TField = any,
-  TDirectiveArgs = Record<string, any>
+  TDirectiveArgs = Record<string, any>,
 > = (args: TransformArgs<TField, TDirectiveArgs>) => TField
 
 // @NOTE don't use unspecified enums, because !type would === true
@@ -129,10 +128,10 @@ export function hasDirective(info: GraphQLResolveInfo): boolean {
 
 export function getDirectiveByName(
   fieldConfig: GraphQLFieldConfig<any, any, any>,
-  directiveName: string
+  directiveName: string,
 ): null | DirectiveNode {
   const associatedDirective = fieldConfig.astNode?.directives?.find(
-    (directive) => directive.name.value === directiveName
+    (directive) => directive.name.value === directiveName,
   )
   return associatedDirective ?? null
 }
@@ -143,7 +142,7 @@ export function isPromise(value: any): value is Promise<unknown> {
 
 function wrapAffectedResolvers(
   schema: GraphQLSchema,
-  options: DirectivePluginOptions
+  options: DirectivePluginOptions,
 ): GraphQLSchema {
   return mapSchema(schema, {
     [MapperKind.OBJECT_FIELD](fieldConfig, _, __, schema) {
@@ -154,7 +153,11 @@ function wrapAffectedResolvers(
       if (directiveNode && directive) {
         const directiveArgs =
           getDirectiveValues(directive, { directives: [directiveNode] }) || {}
+
         const originalResolve = fieldConfig.resolve ?? defaultFieldResolver
+        // Only validator directives handle a subscribe function
+        const originalSubscribe = fieldConfig.subscribe ?? defaultFieldResolver
+
         if (_isValidator(options)) {
           return {
             ...fieldConfig,
@@ -162,7 +165,7 @@ function wrapAffectedResolvers(
               root,
               args,
               context,
-              info
+              info,
             ) {
               const result = options.onResolvedValue({
                 root,
@@ -175,10 +178,32 @@ function wrapAffectedResolvers(
 
               if (isPromise(result)) {
                 return result.then(() =>
-                  originalResolve(root, args, context, info)
+                  originalResolve(root, args, context, info),
                 )
               }
               return originalResolve(root, args, context, info)
+            },
+            subscribe: function useRedwoodDirectiveValidatorResolver(
+              root,
+              args,
+              context,
+              info,
+            ) {
+              const result = options.onResolvedValue({
+                root,
+                args,
+                context,
+                info,
+                directiveNode,
+                directiveArgs,
+              })
+
+              if (isPromise(result)) {
+                return result.then(() =>
+                  originalSubscribe(root, args, context, info),
+                )
+              }
+              return originalSubscribe(root, args, context, info)
             },
           }
         }
@@ -189,7 +214,7 @@ function wrapAffectedResolvers(
               root,
               args,
               context,
-              info
+              info,
             ) {
               const resolvedValue = originalResolve(root, args, context, info)
               if (isPromise(resolvedValue)) {
@@ -202,7 +227,7 @@ function wrapAffectedResolvers(
                     directiveNode,
                     directiveArgs,
                     resolvedValue,
-                  })
+                  }),
                 )
               }
               return options.onResolvedValue({
@@ -228,7 +253,7 @@ export type useRedwoodDirectiveReturn = Plugin<{
 }>
 
 export const useRedwoodDirective = (
-  options: DirectivePluginOptions
+  options: DirectivePluginOptions,
 ): useRedwoodDirectiveReturn => {
   /**
    * This symbol is added to the schema extensions for checking whether the transform got already applied.
@@ -257,13 +282,13 @@ export const useRedwoodDirective = (
 
 // For narrowing types
 const _isValidator = (
-  options: DirectivePluginOptions
+  options: DirectivePluginOptions,
 ): options is ValidatorDirectiveOptions => {
   return options.type === DirectiveType.VALIDATOR
 }
 
 const _isTransformer = (
-  options: DirectivePluginOptions
+  options: DirectivePluginOptions,
 ): options is TransformerDirectiveOptions => {
   return options.type === DirectiveType.TRANSFORMER
 }

@@ -38,13 +38,13 @@ For example, if you specify the return type on `getCurrentUser` as...
 
 ```ts title="api/src/lib/auth.ts"
 interface MyCurrentUser {
-  id: string,
-  roles: string[],
-  email: string,
+  id: string
+  roles: string[]
+  email: string
   projectId: number
 }
 
-const getCurrentUser = ({decoded}): MyCurrentUser => {
+const getCurrentUser = ({ decoded }): MyCurrentUser => {
   //..
 }
 ```
@@ -77,7 +77,10 @@ Redwood generates types for both the data returned from the query and the query'
 These generated types will use the query's name—in this case, `FindBlogPostQuery`—so you can import them like this:
 
 ```ts title="web/src/components/BlogPostCell.tsx"
-import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
+import type {
+  FindBlogPostQuery,
+  FindBlogPostQueryVariables,
+} from 'types/graphql'
 ```
 
 `FindBlogPostQuery` is the type of the data returned from the query (`{ title: string, body: string }`) and `FindBlogPostQueryVariables` is the type of the query's variables (`{ id: number }`).
@@ -164,9 +167,40 @@ You can configure graphql-codegen in a number of different ways: `codegen.yml`, 
 
 For completeness, [here's the docs](https://www.graphql-code-generator.com/docs/config-reference/config-field) on configuring GraphQL Code Generator. Currently, Redwood only supports the root level `config` option.
 
+## Experimental SDL Code Generation
+
+There is also an experimental code generator based on [sdl-codegen](https://github.com/sdl-codegen/sdl-codegen) available. sdl-codegen is a fresh implementation of code generation for service files, built with Redwood in mind. It is currently in opt-in and can be enabled by setting the `experimentalSdlCodeGen` flag to `true` in your `redwood.toml` file:
+
+```toml title="redwood.toml"
+[experimental]
+  useSDLCodeGenForGraphQLTypes = true
+```
+
+Running `yarn rw g types` will generate types for your resolvers on a per-file basis, this feature can be paired with the optional eslint auto-fix rule to have types automatically applied to your resolvers in TypeScript service files by editing your root `package.json` with:
+
+```diff title="package.json"
+   "eslintConfig": {
+     "extends": "@redwoodjs/eslint-config",
+     "root": true,
+     "parserOptions": {
+       "warnOnUnsupportedTypeScriptVersion": false
+     },
++    "overrides": [
++      {
++        "files": [
++          "api/src/services/**/*.ts"
++        ],
++        "rules": {
++          "@redwoodjs/service-type-annotations": "error"
++        }
++      }
+     ]
+   },
+```
+
 :::tip Using VSCode?
 
-As a part of type generation, the [VSCode GraphQL extension](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) configures itself based on the merged schema Redwood generates in `.redwood/schema.graphql`.
+As a part of type generation, the extension [GraphQL: Language Feature Support](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) configures itself based on the merged schema Redwood generates in `.redwood/schema.graphql`.
 You can configure it further in `graphql.config.js` at the root of your project.
 
 :::

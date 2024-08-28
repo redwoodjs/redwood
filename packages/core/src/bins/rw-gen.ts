@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import { createRequire } from 'module'
+import { createRequire } from 'node:module'
 
+const require = createRequire(import.meta.url)
 const requireFromInternal = createRequire(
-  require.resolve('@redwoodjs/internal/package.json')
+  require.resolve('@redwoodjs/internal/package.json'),
 )
 
 const bins = requireFromInternal('./package.json')['bin']

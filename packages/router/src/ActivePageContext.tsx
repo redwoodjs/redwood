@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
-import { LocationContextType } from './location'
-import { createNamedContext } from './util'
+import { createNamedContext } from './createNamedContext.js'
+import type { LocationContextType } from './location.js'
 
 export type LoadingState = 'PRE_SHOW' | 'SHOW_LOADING' | 'DONE'
 export type LoadingStateRecord = Record<
@@ -28,7 +28,7 @@ export const useActivePageContext = () => {
 
   if (!activePageContext) {
     throw new Error(
-      'useActivePageContext must be used within a ActivePageContext provider'
+      'useActivePageContext must be used within a ActivePageContext provider',
     )
   }
 

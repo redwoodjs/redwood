@@ -1,18 +1,21 @@
 import fs from 'fs'
 import path from 'path'
 
-import { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
+import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
-import { ExistingFiles, transformTSToJS, writeFilesTask } from '../lib'
-import { colors } from '../lib/colors'
-import { getPaths, resolveFile } from '../lib/paths'
+import { getConfig, resolveFile } from '@redwoodjs/project-config'
+
+import { colors } from '../lib/colors.js'
+import type { ExistingFiles } from '../lib/index.js'
+import { transformTSToJS, writeFilesTask } from '../lib/index.js'
+import { getPaths } from '../lib/paths.js'
 import {
   getGraphqlPath,
   graphFunctionDoesExist,
   isTypeScriptProject,
-} from '../lib/project'
+} from '../lib/project.js'
 
-import { apiSideFiles, generateUniqueFileNames } from './authFiles'
+import { apiSideFiles, generateUniqueFileNames } from './authFiles.js'
 
 const AUTH_PROVIDER_HOOK_IMPORT = `import { AuthProvider, useAuth } from './auth'`
 const AUTH_HOOK_IMPORT = `import { useAuth } from './auth'`
@@ -37,12 +40,12 @@ function addAuthDecoderToCreateGraphQLHandler(content: string) {
   // emulate an atomic group.
   if (
     !new RegExp('(?=(^.*?createGraphQLHandler))\\1.*\\bauthDecoder', 's').test(
-      content
+      content,
     )
   ) {
     return content.replace(
       /^(?<indentation>\s*)(loggerConfig:)(.*)$/m,
-      `$<indentation>authDecoder,\n$<indentation>$2$3`
+      `$<indentation>authDecoder,\n$<indentation>$2$3`,
     )
   }
 
@@ -107,20 +110,20 @@ export const addApiConfig = ({
 
   const hasCurrentUserImport =
     /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
-      newContent
+      newContent,
     )
 
   if (!hasCurrentUserImport) {
     // add import statement
     newContent = newContent.replace(
       /^(import { db } from 'src\/lib\/db')$/m,
-      `import { getCurrentUser } from 'src/lib/auth'\n$1`
+      `import { getCurrentUser } from 'src/lib/auth'\n$1`,
     )
 
     // add object to handler
     newContent = newContent.replace(
       /^(\s*)(loggerConfig:)(.*)$/m,
-      `$1getCurrentUser,\n$1$2$3`
+      `$1getCurrentUser,\n$1$2$3`,
     )
   }
 
@@ -137,7 +140,7 @@ const addAuthImportToApp = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
   const importIndex = contentLines.findLastIndex((line: string) =>
-    /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
+    /^\s*import (?!.*(?:.css'|.scss'))/.test(line),
   )
 
   // After the import found above, insert a blank line followed by the
@@ -151,7 +154,7 @@ const addAuthImportToRoutes = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
   const importIndex = contentLines.findLastIndex((line: string) =>
-    /^\s*import (?!.*(?:.css'|.scss'))/.test(line)
+    /^\s*import (?!.*(?:.css'|.scss'))/.test(line),
   )
 
   // After the import found above, insert a blank line followed by the
@@ -219,18 +222,18 @@ export const removeAuthProvider = (content: string) => {
     .join('\n')
 }
 
-/** returns the content of App.{js,tsx} with <AuthProvider> added */
+/** returns the content of App.{jsx,tsx} with <AuthProvider> added */
 const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
   if (setupMode === 'FORCE' || setupMode === 'REPLACE') {
     content = removeAuthProvider(content)
   }
 
   const match = content.match(
-    /(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s
+    /(\s+)(<RedwoodProvider.*?>)(.*)(<\/RedwoodProvider>)/s,
   )
 
   if (!match) {
-    throw new Error('Could not find <RedwoodProvider> in App.{js,tsx}')
+    throw new Error('Could not find <RedwoodProvider> in App.{jsx,tsx}')
   }
 
   // If Auth.tsx already contains exactly what we're trying to add there's no
@@ -267,38 +270,38 @@ const addAuthProviderToApp = (content: string, setupMode: AuthSetupMode) => {
 
   return content.replace(
     /\s+<RedwoodProvider.*?>.*<\/RedwoodProvider>/s,
-    renderContent
+    renderContent,
   )
 }
 
 const hasUseAuthHook = (componentName: string, content: string) => {
   return new RegExp(
     `<${componentName}.*useAuth={.*?}.*?>.*<\/${componentName}>`,
-    's'
+    's',
   ).test(content)
 }
 
 const addUseAuthHook = (componentName: string, content: string) => {
   return content.replace(
     `<${componentName}`,
-    `<${componentName} useAuth={useAuth}`
+    `<${componentName} useAuth={useAuth}`,
   )
 }
 
 /**
- * Actually inserts the required config lines into App.{js,tsx}
+ * Actually inserts the required config lines into App.{jsx,tsx}
  * Exported for testing
  */
 export const addConfigToWebApp = <
-  Renderer extends typeof ListrRenderer
+  Renderer extends typeof ListrRenderer,
 >(): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
-    title: 'Updating web/src/App.{js,tsx}',
+    title: 'Updating web/src/App.{jsx,tsx}',
     task: (ctx, task) => {
       const webAppPath = getWebAppPath()
 
       if (!fs.existsSync(webAppPath)) {
-        const ext = isTypeScriptProject() ? 'tsx' : 'js'
+        const ext = isTypeScriptProject() ? 'tsx' : 'jsx'
         throw new Error(`Could not find root App.${ext}`)
       }
 
@@ -312,7 +315,7 @@ export const addConfigToWebApp = <
         // Remove legacy AuthProvider import
         content = content.replace(
           "import { AuthProvider } from '@redwoodjs/auth'\n",
-          ''
+          '',
         )
       }
 
@@ -326,7 +329,7 @@ export const addConfigToWebApp = <
         task.output = colors.warning(
           'Could not find <RedwoodApolloProvider>.\nIf you are using a custom ' +
             'GraphQL Client you will have to make sure it gets access to your ' +
-            '`useAuth`, if it needs it.'
+            '`useAuth`, if it needs it.',
         )
       }
 
@@ -339,24 +342,35 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
   const templatesBaseDir = path.join(basedir, 'templates', 'web')
   const templates = fs.readdirSync(templatesBaseDir)
 
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+  const templateStart =
+    'auth' + (webAuthn ? '.webAuthn' : '') + (rscEnabled ? '.rsc' : '') + '.ts'
+
   const templateFileName = templates.find((template) => {
-    return template.startsWith('auth.' + (webAuthn ? 'webAuthn.ts' : 'ts'))
+    return template.startsWith(templateStart)
   })
 
   if (!templateFileName) {
-    throw new Error('Could not find the auth.ts template')
+    throw new Error(
+      'Could not find the auth.ts(x) template, looking for filename starting with ' +
+        templateStart,
+    )
   }
 
   const templateExtension = templateFileName.split('.').at(-2)
 
   const isTSProject = isTypeScriptProject()
 
-  // ext will be tsx, ts or js
-  const ext = isTypeScriptProject() ? templateExtension : 'js'
+  // ext will be tsx, ts or jsx, js
+  let ext = templateExtension
+  if (!isTypeScriptProject()) {
+    ext = ext?.replace('ts', 'js')
+  }
 
   return {
     title: `Creating web/src/auth.${ext}`,
-    task: (ctx: AuthGeneratorCtx) => {
+    task: async (ctx: AuthGeneratorCtx) => {
       // @MARK - finding unused file name here,
       // We should only use an unused filename, if the user is CHOOSING not to replace the existing provider
 
@@ -377,7 +391,7 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
           authFileName = path.join(
             getPaths().web.src,
-            ctx.provider + 'Auth' + count
+            ctx.provider + 'Auth' + count,
           )
 
           i++
@@ -388,12 +402,12 @@ export const createWebAuth = (basedir: string, webAuthn: boolean) => {
 
       let template: string | undefined = fs.readFileSync(
         path.join(templatesBaseDir, templateFileName),
-        'utf-8'
+        'utf-8',
       )
 
       template = isTSProject
         ? template
-        : transformTSToJS(authFileName, template)
+        : await transformTSToJS(authFileName, template)
 
       fs.writeFileSync(authFileName, template)
     },
@@ -429,20 +443,20 @@ export const addConfigToRoutes = () => {
  */
 export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
   basedir: string,
-  webAuthn: boolean
+  webAuthn: boolean,
 ): ListrTask<AuthGeneratorCtx, Renderer> => {
   return {
     title: 'Generating auth api side files...',
     task: async (ctx, task) => {
       if (!apiSrcDoesExist()) {
         return new Error(
-          'Could not find api/src directory. Cannot continue setup!'
+          'Could not find api/src directory. Cannot continue setup!',
         )
       }
 
       // The keys in `filesRecord` are the full paths to where the file contents,
       // which is the values in `filesRecord`, will be written.
-      let filesRecord = apiSideFiles({ basedir, webAuthn })
+      let filesRecord = await apiSideFiles({ basedir, webAuthn })
 
       // Always overwrite files in force mode, no need to prompt
       let existingFiles: ExistingFiles = 'FAIL'
@@ -463,7 +477,7 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
       } else if (ctx.setupMode === 'COMBINE') {
         const uniqueFilesRecord = generateUniqueFileNames(
           filesRecord,
-          ctx.provider
+          ctx.provider,
         )
 
         filesRecord = uniqueFilesRecord
@@ -488,12 +502,12 @@ function findExistingFiles(filesMap: Record<string, string>) {
 }
 
 export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
-  authDecoderImport?: string
+  authDecoderImport?: string,
 ) => ({
   title: 'Adding auth config to GraphQL API...',
   task: (
     ctx: AuthGeneratorCtx,
-    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>,
   ) => {
     if (graphFunctionDoesExist()) {
       addApiConfig({
@@ -503,7 +517,7 @@ export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
       })
     } else {
       throw new Error(
-        'GraphQL function not found. You will need to pass the decoder to the createGraphQLHandler function.'
+        'GraphQL function not found. You will need to pass the decoder to the createGraphQLHandler function.',
       )
     }
   },
@@ -518,16 +532,17 @@ export type AuthSetupMode =
 export interface AuthGeneratorCtx {
   setupMode: AuthSetupMode
   provider: string
+  force: boolean
 }
 
 export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
-  force: boolean
+  force: boolean,
 ) => {
   return {
     title: 'Checking project for existing auth...',
     task: async (
       ctx: AuthGeneratorCtx,
-      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>
+      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>,
     ) => {
       if (force) {
         ctx.setupMode = 'FORCE'

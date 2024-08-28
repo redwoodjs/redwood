@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 
-import type { AuthImplementation } from '../AuthImplementation'
+import type { AuthImplementation } from '../AuthImplementation.js'
 
-import { useToken } from './useToken'
+import { useToken } from './useToken.js'
 
 export const useCurrentUser = (authImplementation: AuthImplementation) => {
   const getToken = useToken(authImplementation)
@@ -29,7 +29,7 @@ export const useCurrentUser = (authImplementation: AuthImplementation) => {
       return data?.redwood?.currentUser
     } else {
       throw new Error(
-        `Could not fetch current user: ${response.statusText} (${response.status})`
+        `Could not fetch current user: ${response.statusText} (${response.status})`,
       )
     }
   }, [authImplementation, getToken])

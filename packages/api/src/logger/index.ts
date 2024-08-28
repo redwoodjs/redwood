@@ -159,10 +159,10 @@ export const logLevel: LevelWithSilent | string = (() => {
  *
  * @see {@link https://github.com/pinojs/pino/blob/master/docs/api.md}
  */
-export const defaultLoggerOptions: LoggerOptions = {
+export const defaultLoggerOptions = {
   level: logLevel,
   redact: redactionsList,
-}
+} satisfies LoggerOptions
 
 /**
  * RedwoodLoggerOptions defines custom logger options that extend those available in LoggerOptions
@@ -224,7 +224,7 @@ export const createLogger = ({
   if (isFile) {
     if (isProduction) {
       console.warn(
-        'Please make certain that file system access is available when logging to a file in a production environment.'
+        'Please make certain that file system access is available when logging to a file in a production environment.',
       )
     }
 
@@ -232,7 +232,7 @@ export const createLogger = ({
   } else {
     if (isStream && isDevelopment && !isTest) {
       console.warn(
-        'Logs will be sent to the transport stream in the current development environment.'
+        'Logs will be sent to the transport stream in the current development environment.',
       )
     }
 
@@ -321,12 +321,12 @@ export const handlePrismaLogging = (config: PrismaLoggingConfig): void => {
         if (queryEvent.duration >= slowQueryThreshold) {
           logger.warn(
             { ...queryEvent },
-            `Slow Query performed in ${queryEvent.duration} msec`
+            `Slow Query performed in ${queryEvent.duration} msec`,
           )
         } else {
           logger.debug(
             { ...queryEvent },
-            `Query performed in ${queryEvent.duration} msec`
+            `Query performed in ${queryEvent.duration} msec`,
           )
         }
       })

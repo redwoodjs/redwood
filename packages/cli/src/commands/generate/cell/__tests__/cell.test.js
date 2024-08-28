@@ -1,11 +1,13 @@
 globalThis.__dirname = __dirname
 import path from 'path'
 
+import { vi, describe, it, expect, test, beforeAll } from 'vitest'
+
 // Load mocks
 import '../../../../lib/test'
 import * as cell from '../cell'
 
-jest.mock('@redwoodjs/structure', () => {
+vi.mock('@redwoodjs/structure', () => {
   return {
     getProject: () => ({
       cells: [{ queryOperationName: 'AlreadyDefinedQueryName' }],
@@ -33,9 +35,9 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -43,9 +45,9 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -53,9 +55,9 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -63,9 +65,9 @@ describe('Single word files', () => {
     expect(
       singleWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+          '/path/to/project/web/src/components/UserCell/UserCell.mock.js',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
@@ -82,13 +84,13 @@ test('trims Cell from end of name', async () => {
   const cellCode =
     files[
       path.normalize(
-        '/path/to/project/web/src/components/BazingaCell/BazingaCell.js'
+        '/path/to/project/web/src/components/BazingaCell/BazingaCell.jsx',
       )
     ]
 
   expect(cellCode).not.toBeUndefined()
   expect(
-    cellCode.split('\n').includes('export const Success = ({ bazinga }) => {')
+    cellCode.split('\n').includes('export const Success = ({ bazinga }) => {'),
   ).toBeTruthy()
 })
 
@@ -109,9 +111,9 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -119,9 +121,9 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -129,9 +131,9 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -139,9 +141,9 @@ describe('Multiword files', () => {
     expect(
       multiWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
@@ -163,9 +165,9 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -173,9 +175,9 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -183,9 +185,9 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -193,9 +195,9 @@ describe('Snake case words', () => {
     expect(
       snakeCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
@@ -216,9 +218,9 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -226,9 +228,9 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -236,9 +238,9 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -246,9 +248,9 @@ describe('Kebab case words', () => {
     expect(
       kebabCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
@@ -270,9 +272,9 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -280,9 +282,9 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.test.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -290,9 +292,9 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.stories.jsx',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 
@@ -300,9 +302,9 @@ describe('camelCase words', () => {
     expect(
       camelCaseWordFiles[
         path.normalize(
-          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js'
+          '/path/to/project/web/src/components/UserProfileCell/UserProfileCell.mock.js',
         )
-      ]
+      ],
     ).toMatchSnapshot()
   })
 })
@@ -317,12 +319,12 @@ test("doesn't include test file when --tests is set to false", async () => {
 
   expect(Object.keys(withoutTestFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js',
     ),
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.stories.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.stories.jsx',
     ),
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -336,12 +338,12 @@ test("doesn't include storybook file when --stories is set to false", async () =
 
   expect(Object.keys(withoutStoryFiles)).toEqual([
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.mock.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.mock.js',
     ),
     path.normalize(
-      '/path/to/project/web/src/components/UserCell/UserCell.test.js'
+      '/path/to/project/web/src/components/UserCell/UserCell.test.jsx',
     ),
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -354,7 +356,7 @@ test("doesn't include storybook and test files when --stories and --tests is set
   })
 
   expect(Object.keys(withoutTestAndStoryFiles)).toEqual([
-    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.js'),
+    path.normalize('/path/to/project/web/src/components/UserCell/UserCell.jsx'),
   ])
 })
 
@@ -367,19 +369,19 @@ test('generates list cells if list flag passed in', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js',
   )
 
   // Check the file names
@@ -405,19 +407,19 @@ test('generates list cells if name is plural', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.test.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.js',
   )
 
   // Check the file names
@@ -441,19 +443,19 @@ test('TypeScript: generates list cells if list flag passed in', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/BazingaCell/BazingaCell.tsx'
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.tsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/BazingaCell/BazingaCell.test.tsx'
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.test.tsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/BazingaCell/BazingaCell.stories.tsx'
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.stories.tsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/BazingaCell/BazingaCell.mock.ts'
+    '/path/to/project/web/src/components/BazingaCell/BazingaCell.mock.ts',
   )
 
   // Check the file names
@@ -480,19 +482,19 @@ test('TypeScript: generates list cells if name is plural', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.tsx'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.tsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.test.tsx'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.test.tsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.tsx'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.stories.tsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.ts'
+    '/path/to/project/web/src/components/MembersCell/MembersCell.mock.ts',
   )
 
   // Check the file names
@@ -516,19 +518,19 @@ test('"equipment" with list flag', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.mock.js'
+    '/path/to/project/web/src/components/EquipmentListCell/EquipmentListCell.mock.js',
   )
 
   // Check the file names
@@ -552,19 +554,19 @@ test('"equipment" withOUT list flag should find equipment by id', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.mock.js'
+    '/path/to/project/web/src/components/EquipmentCell/EquipmentCell.mock.js',
   )
 
   // Check the file names
@@ -588,19 +590,19 @@ test('generates a cell with a string primary id key', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.test.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressCell/AddressCell.mock.js'
+    '/path/to/project/web/src/components/AddressCell/AddressCell.mock.js',
   )
 
   // Check the file names
@@ -627,19 +629,19 @@ test('generates list a cell with a string primary id keys', async () => {
   })
 
   const CELL_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.jsx',
   )
 
   const TEST_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.test.jsx',
   )
 
   const STORY_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.stories.jsx',
   )
 
   const MOCK_PATH = path.normalize(
-    '/path/to/project/web/src/components/AddressesCell/AddressesCell.mock.js'
+    '/path/to/project/web/src/components/AddressesCell/AddressesCell.mock.js',
   )
 
   // Check the file names
@@ -667,7 +669,7 @@ describe('Custom query names', () => {
     })
 
     const CELL_PATH = path.normalize(
-      '/path/to/project/web/src/components/CluesCell/CluesCell.js'
+      '/path/to/project/web/src/components/CluesCell/CluesCell.jsx',
     )
 
     expect(generatedFiles[CELL_PATH]).toContain('query FindBluesClues {')
@@ -680,9 +682,124 @@ describe('Custom query names', () => {
         tests: false,
         stories: false,
         query: 'AlreadyDefinedQueryName',
-      })
+      }),
     ).rejects.toThrow(
-      'Specified query name: "AlreadyDefinedQueryName" is not unique'
+      'Specified query name: "AlreadyDefinedQueryName" is not unique',
     )
+  })
+})
+
+describe('Custom Id Field files', () => {
+  let customIdFieldFiles
+  let customIdFieldListFiles
+
+  describe('Single cell', () => {
+    beforeAll(async () => {
+      customIdFieldFiles = await cell.files({
+        name: 'CustomIdField',
+        tests: true,
+        stories: true,
+        list: false,
+      })
+    })
+
+    it('returns exactly 4 files', () => {
+      expect(Object.keys(customIdFieldFiles).length).toEqual(4)
+    })
+
+    it('creates a cell component with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell test with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.test.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell stories with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.stories.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell mock with a custom id field', () => {
+      expect(
+        customIdFieldFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldCell/CustomIdFieldCell.mock.js',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+  })
+
+  describe('List cell', () => {
+    beforeAll(async () => {
+      customIdFieldListFiles = await cell.files({
+        name: 'CustomIdField',
+        tests: true,
+        stories: true,
+        list: true,
+      })
+    })
+
+    it('returns exactly 4 files', () => {
+      expect(Object.keys(customIdFieldFiles).length).toEqual(4)
+    })
+
+    it('creates a cell list component with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list test with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.test.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list stories with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.stories.jsx',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
+
+    it('creates a cell list mock with a custom id field', () => {
+      expect(
+        customIdFieldListFiles[
+          path.normalize(
+            '/path/to/project/web/src/components/CustomIdFieldsCell/CustomIdFieldsCell.mock.js',
+          )
+        ],
+      ).toMatchSnapshot()
+    })
   })
 })

@@ -1,162 +1,163 @@
-import fs from 'fs'
 import path from 'path'
 
-import chalk from 'chalk'
-import execa from 'execa'
+import fs from 'fs-extra'
 import terminalLink from 'terminal-link'
+
+import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig'
+import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import * as webServerCLIConfig from '@redwoodjs/web-server'
 
 import { getPaths, getConfig } from '../lib'
 import c from '../lib/colors'
+import { serverFileExists } from '../lib/project.js'
+
+import { webSsrServerHandler } from './serveWebHandler'
 
 export const command = 'serve [side]'
-export const description = 'Run server for api or web in production'
+export const description =
+  'Start a server for serving both the api and web sides'
 
-export async function builder(yargs) {
-  const redwoodProjectPaths = getPaths()
-  const redwoodProjectConfig = getConfig()
+export const builder = async (yargs) => {
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+  const streamingEnabled = getConfig().experimental?.streamingSsr?.enabled
 
   yargs
-    .usage('usage: $0 <side>')
     .command({
       command: '$0',
-      description: 'Run both api and web servers. Uses the web port and host',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: redwoodProjectConfig.web.port,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
-          },
-          socket: { type: 'string' },
-        }),
+      description: bothServerCLIConfig.description,
+      builder: bothServerCLIConfig.builder,
       handler: async (argv) => {
-        const serverFilePath = path.join(
-          redwoodProjectPaths.api.dist,
-          'server.js'
-        )
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+        })
 
-        if (fs.existsSync(serverFilePath)) {
-          console.log(
-            [
-              separator,
-              `🧪 ${chalk.green('Experimental Feature')} 🧪`,
-              separator,
-              'Using the experimental API server file at api/dist/server.js',
-              separator,
-            ].join('\n')
+        // Run the server file, if it exists, with web side also
+        if (serverFileExists()) {
+          const { bothServerFileHandler } = await import(
+            './serveBothHandler.js'
           )
-
-          await execa('yarn', ['node', path.join('dist', 'server.js')], {
-            cwd: redwoodProjectPaths.api.base,
-            stdio: 'inherit',
-            shell: true,
-          })
-
-          return
+          await bothServerFileHandler(argv)
+        } else if (rscEnabled || streamingEnabled) {
+          const { bothSsrRscServerHandler } = await import(
+            './serveBothHandler.js'
+          )
+          await bothSsrRscServerHandler(argv, rscEnabled)
+        } else {
+          await bothServerCLIConfig.handler(argv)
         }
-
-        const { bothServerHandler } = await import('./serveHandler.js')
-        await bothServerHandler(argv)
       },
     })
     .command({
       command: 'api',
-      description: 'Start server for serving only the api',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: redwoodProjectConfig.api.port,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.api.host,
-            type: 'string',
-          },
-          socket: { type: 'string' },
-          apiRootPath: {
-            alias: ['api-root-path', 'rootPath', 'root-path'],
-            default: '/',
-            type: 'string',
-            desc: 'Root path where your api functions are served',
-            coerce: coerceRootPath,
-          },
-        }),
+      description: apiServerCLIConfig.description,
+      builder: apiServerCLIConfig.builder,
       handler: async (argv) => {
-        const { apiServerHandler } = await import('./serveHandler.js')
-        await apiServerHandler(argv)
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiRootPath: argv.apiRootPath,
+        })
+
+        // Run the server file, if it exists, api side only
+        if (serverFileExists()) {
+          const { apiServerFileHandler } = await import('./serveApiHandler.js')
+          await apiServerFileHandler(argv)
+        } else {
+          await apiServerCLIConfig.handler(argv)
+        }
       },
     })
     .command({
       command: 'web',
-      description: 'Start server for serving only the web side',
-      builder: (yargs) =>
-        yargs.options({
-          port: {
-            default: redwoodProjectConfig.web.port,
-            type: 'number',
-            alias: 'p',
-          },
-          host: {
-            default: redwoodProjectConfig.web.host,
-            type: 'string',
-          },
-          socket: { type: 'string' },
-          apiHost: {
-            alias: 'api-host',
-            type: 'string',
-            desc: 'Forward requests from the apiUrl, defined in redwood.toml to this host',
-          },
-        }),
+      description: webServerCLIConfig.description,
+      builder: webServerCLIConfig.builder,
       handler: async (argv) => {
-        const { webServerHandler } = await import('./serveHandler.js')
-        await webServerHandler(argv)
+        recordTelemetryAttributes({
+          command: 'serve',
+          port: argv.port,
+          host: argv.host,
+          socket: argv.socket,
+          apiHost: argv.apiHost,
+        })
+
+        if (streamingEnabled) {
+          await webSsrServerHandler(rscEnabled)
+        } else {
+          await webServerCLIConfig.handler(argv)
+        }
       },
     })
     .middleware((argv) => {
+      recordTelemetryAttributes({
+        command: 'serve',
+      })
+
       // Make sure the relevant side has been built, before serving
       const positionalArgs = argv._
 
       if (
         positionalArgs.includes('web') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html')
+        !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
       ) {
         console.error(
           c.error(
-            '\n Please run `yarn rw build web` before trying to serve web. \n'
-          )
+            '\n Please run `yarn rw build web` before trying to serve web. \n',
+          ),
         )
         process.exit(1)
       }
 
-      if (
-        positionalArgs.includes('api') &&
-        !fs.existsSync(path.join(redwoodProjectPaths.api.dist))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build api` before trying to serve api. \n'
+      const apiSideExists = fs.existsSync(getPaths().api.base)
+      if (positionalArgs.includes('api')) {
+        if (!apiSideExists) {
+          console.error(
+            c.error(
+              '\n Unable to serve the api side as no `api` folder exists. \n',
+            ),
           )
-        )
-        process.exit(1)
+          process.exit(1)
+        }
+
+        if (!fs.existsSync(path.join(getPaths().api.dist))) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build api` before trying to serve api. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
-      if (
-        // serve both
-        positionalArgs.length === 1 &&
-        (!fs.existsSync(path.join(redwoodProjectPaths.api.dist)) ||
-          !fs.existsSync(path.join(redwoodProjectPaths.web.dist), 'index.html'))
-      ) {
-        console.error(
-          c.error(
-            '\n Please run `yarn rw build` before trying to serve your redwood app. \n'
+      // serve both
+      if (positionalArgs.length === 1) {
+        if (!apiSideExists && !rscEnabled) {
+          console.error(
+            c.error(
+              '\n Unable to serve the both sides as no `api` folder exists. Please use `yarn rw serve web` instead. \n',
+            ),
           )
-        )
-        process.exit(1)
+          process.exit(1)
+        }
+
+        // We need the web side (and api side, if it exists) to have been built
+        if (
+          (fs.existsSync(path.join(getPaths().api.base)) &&
+            !fs.existsSync(path.join(getPaths().api.dist))) ||
+          !fs.existsSync(path.join(getPaths().web.dist), 'index.html')
+        ) {
+          console.error(
+            c.error(
+              '\n Please run `yarn rw build` before trying to serve your redwood app. \n',
+            ),
+          )
+          process.exit(1)
+        }
       }
 
       // Set NODE_ENV to production, if not set
@@ -167,22 +168,7 @@ export async function builder(yargs) {
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#serve'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#serve',
+      )}`,
     )
-}
-
-const separator = chalk.hex('#ff845e')(
-  '------------------------------------------------------------------'
-)
-
-// We'll clean this up later, but for now note that this function is
-// duplicated between this package and @redwoodjs/fastify
-// to avoid importing @redwoodjs/fastify when the CLI starts.
-export function coerceRootPath(path) {
-  // Make sure that we create a root path that starts and ends with a slash (/)
-  const prefix = path.charAt(0) !== '/' ? '/' : ''
-  const suffix = path.charAt(path.length - 1) !== '/' ? '/' : ''
-
-  return `${prefix}${path}${suffix}`
 }

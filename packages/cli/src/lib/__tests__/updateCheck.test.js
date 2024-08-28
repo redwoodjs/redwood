@@ -1,10 +1,12 @@
 global.__dirname = __dirname
 
-jest.mock('fs')
-jest.mock('latest-version')
+vi.mock('fs-extra')
+vi.mock('latest-version')
 
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         generated: {
@@ -13,13 +15,23 @@ jest.mock('@redwoodjs/project-config', () => {
         base: '',
       }
     },
-    getConfig: jest.fn(),
+    getConfig: vi.fn(),
   }
 })
 
-import fs from 'fs'
-
+import fs from 'fs-extra'
 import latestVersion from 'latest-version'
+import { vol } from 'memfs'
+import {
+  vi,
+  describe,
+  beforeAll,
+  afterAll,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+} from 'vitest'
 
 import { getConfig } from '@redwoodjs/project-config'
 
@@ -31,17 +43,28 @@ const TESTING_CURRENT_DATETIME = 1640995200000
 describe('Update is not available (1.0.0 -> 1.0.0)', () => {
   beforeAll(() => {
     // Use fake datetime
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
     getConfig.mockReturnValue({
       notifications: {
         versionUpdates: ['latest'],
       },
     })
+    // Prevent the appearance of stale locks
+    fs.statSync = vi.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
+    })
+
+    // Prevent console output during tests
+    console.log = vi.fn()
+    console.time = vi.fn()
+    console.timeEnd = vi.fn()
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   beforeEach(() => {
@@ -50,7 +73,7 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
       return '1.0.0'
     })
 
-    fs.__setMockFiles({
+    vol.fromJSON({
       // Users package.json containing the redwood version
       'package.json': JSON.stringify({
         devDependencies: {
@@ -61,8 +84,8 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
   })
 
   afterEach(() => {
-    fs.__setMockFiles({})
-    jest.clearAllMocks()
+    vol.reset()
+    vi.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
@@ -96,27 +119,31 @@ describe('Update is not available (1.0.0 -> 1.0.0)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
 describe('Update is available (1.0.0 -> 2.0.0)', () => {
   beforeAll(() => {
     // Use fake datetime
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
     getConfig.mockReturnValue({
       notifications: {
         versionUpdates: ['latest'],
       },
     })
+    // Prevent the appearance of stale locks
+    fs.statSync = vi.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
+    })
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   beforeEach(() => {
@@ -125,7 +152,7 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
       return '2.0.0'
     })
 
-    fs.__setMockFiles({
+    vol.fromJSON({
       // Users package.json containing the redwood version
       'package.json': JSON.stringify({
         devDependencies: {
@@ -136,8 +163,8 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
   })
 
   afterEach(() => {
-    fs.__setMockFiles({})
-    jest.clearAllMocks()
+    vol.reset()
+    vi.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
@@ -171,27 +198,31 @@ describe('Update is available (1.0.0 -> 2.0.0)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })
 
 describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
   beforeAll(() => {
     // Use fake datetime
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(TESTING_CURRENT_DATETIME))
     getConfig.mockReturnValue({
       notifications: {
         versionUpdates: ['latest', 'rc'],
       },
     })
+    // Prevent the appearance of stale locks
+    fs.statSync = vi.fn(() => {
+      return {
+        birthtimeMs: Date.now(),
+      }
+    })
   })
 
   afterAll(() => {
-    jest.useRealTimers()
+    vi.useRealTimers()
   })
 
   beforeEach(() => {
@@ -200,7 +231,7 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
       return version === 'rc' ? '1.0.1-rc.58' : '1.0.0'
     })
 
-    fs.__setMockFiles({
+    vol.fromJSON({
       // Users package.json containing the redwood version
       'package.json': JSON.stringify({
         devDependencies: {
@@ -211,8 +242,8 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
   })
 
   afterEach(() => {
-    fs.__setMockFiles({})
-    jest.clearAllMocks()
+    vol.reset()
+    vi.clearAllMocks()
   })
 
   it('Produces the correct updateData.json file', async () => {
@@ -246,9 +277,7 @@ describe('Update is available with rc tag (1.0.0-rc.1 -> 1.0.1-rc.58)', () => {
   })
 
   it('Respects the lock', async () => {
-    setLock(updateCheck.LOCK_IDENTIFIER)
-    await expect(updateCheck.check()).rejects.toThrow(
-      `Lock "${updateCheck.LOCK_IDENTIFIER}" is already set`
-    )
+    setLock(updateCheck.CHECK_LOCK_IDENTIFIER)
+    expect(updateCheck.shouldCheck()).toBe(false)
   })
 })

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "types": ["node", "vite/client"]
+  },
+  "include": ["src/**/*"]
+}

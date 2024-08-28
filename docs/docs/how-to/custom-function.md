@@ -60,7 +60,7 @@ from the web side would give you an error like:
 Access to fetch at 'http://localhost:8911/serverTime' from origin 'http://localhost:8910' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
 ```
 
-We could set the headers for `serverTime` to allow requests from any origin... but maybe a better idea would be to never request `8911` from `8910` in the first place. Hence the `apiUrl`! We're making a request to `8910/.redwood/functions/serverTime`&mdash;still the same domain&mdash;but the [webpack dev-server](https://webpack.js.org/configuration/dev-server/#devserverproxy) proxies them to `localhost:8911/serverTime` for us.
+We could set the headers for `serverTime` to allow requests from any origin... but maybe a better idea would be to never request `8911` from `8910` in the first place. Hence the `apiUrl`! We're making a request to `8910/.redwood/functions/serverTime`&mdash;still the same domain&mdash;but [Vite](https://github.com/redwoodjs/redwood/blob/main/packages/vite/src/index.ts#L119) proxies them to `localhost:8911/serverTime` for us.
 
 ## Getting the Time
 
@@ -70,7 +70,7 @@ Ok&mdash;back to our custom Function. Let's get the current time and return it i
 export const handler = async (event, context) => {
   return {
     statusCode: 200,
-    body: new Date()
+    body: new Date(),
   }
 }
 ```

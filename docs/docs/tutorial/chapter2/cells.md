@@ -81,16 +81,16 @@ export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
 When React renders this component, Redwood will perform the `QUERY` and display the `Loading` component until a response is received.
 
 Once the query returns, it will display one of three states:
-  - If there was an error, the `Failure` component
-  - If the data return is empty (`null` or empty array), the `Empty` component
-  - Otherwise, the `Success` component
+
+- If there was an error, the `Failure` component
+- If the data return is empty (`null` or empty array), the `Empty` component
+- Otherwise, the `Success` component
 
 There are also some lifecycle helpers like `beforeQuery` (for manipulating any props before being given to the `QUERY`) and `afterQuery` (for manipulating the data returned from GraphQL but before being sent to the `Success` component).
 
 The minimum you need for a cell are the `QUERY` and `Success` exports. If you don't export an `Empty` component, empty results will be sent to your `Success` component. If you don't provide a `Failure` component, you'll get error output sent to the console.
 
 A guideline for when to use cells is if your component needs some data from the database or other service that may be delayed in responding. Let Redwood worry about juggling what is displayed when and you can focus on the happy path of the final, rendered component populated with data.
-
 
 <ShowForTs>
 
@@ -110,7 +110,7 @@ Usually in a blog the homepage will display a list of recent posts. This list is
 
 :::info Wait, don't we already have a home page?
 
-We do, but you will generally want to use a *cell* when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
+We do, but you will generally want to use a _cell_ when you need data from the database. A best practice for Redwood is to create a Page for each unique URL your app has, but that you fetch and display data in Cells. So the existing HomePage will render this new cell as a child.
 
 :::
 
@@ -120,12 +120,12 @@ As you'll see repeatedly going forward, Redwood has a generator for this feature
 yarn rw g cell Articles
 ```
 
-This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{js,tsx}` (and `test.{js,tsx}` `mock.{js,ts}` and `stories.{js,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
+This command will result in a new file at `/web/src/components/ArticlesCell/ArticlesCell.{jsx,tsx}` (and `test.{jsx,tsx}` `mock.{js,ts}` and `stories.{jsx,tsx}` files—more on those in [chapter 5 of the tutorial](../chapter5/storybook.md)!). This file will contain some boilerplate to get you started:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     articles {
@@ -192,7 +192,7 @@ export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
 
 :::info Indicating Multiplicity to the Cell Generator
 
-When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.{js,tsx}`):
+When generating a cell you can use any case you'd like and Redwood will do the right thing when it comes to naming. These will all create the same filename (`web/src/components/BlogArticlesCell/BlogArticlesCell.{jsx,tsx}`):
 
 ```bash
 yarn rw g cell blog_articles
@@ -203,7 +203,7 @@ yarn rw g cell BlogArticles
 
 You will need _some_ kind of indication that you're using more than one word: either snake_case (`blog_articles`), kebab-case (`blog-articles`), camelCase (`blogArticles`) or PascalCase (`BlogArticles`).
 
-Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.{js,tsx}`.
+Calling `yarn redwood g cell blogarticles` (without any indication that we're using two words) will generate a file at `web/src/components/BlogarticlesCell/BlogarticlesCell.{jsx,tsx}`.
 
 :::
 
@@ -212,7 +212,7 @@ To get you off and running as quickly as possible the generator assumes you've g
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -240,14 +240,14 @@ export const QUERY = gql`
 </TabItem>
 </Tabs>
 
-However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.{js,ts}`) and Service (`api/src/services/posts/posts.{js,ts}`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the *Getting Dynamic* part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
+However, this is not a valid query name for our existing Posts SDL (`api/src/graphql/posts.sdl.{js,ts}`) and Service (`api/src/services/posts/posts.{js,ts}`). (To see where these files come from, go back to the [Creating a Post Editor section](getting-dynamic.md#creating-a-post-editor) in the _Getting Dynamic_ part.) Redwood names the query elements after the cell itself for convenience (more often than not you'll be creating a cell for a specific model), but in this case our cell name doesn't match our model name so we'll need to make some manual tweaks.
 
 We'll have to rename them to `posts` in both the query name and in the prop name in `Success`:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -341,8 +341,8 @@ Let's plug this cell into our `HomePage` and see what happens:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/HomePage/HomePage.jsx"
+import { Metadata } from '@redwoodjs/web'
 
 // highlight-next-line
 import ArticlesCell from 'src/components/ArticlesCell'
@@ -350,7 +350,7 @@ import ArticlesCell from 'src/components/ArticlesCell'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       // highlight-next-line
       <ArticlesCell />
     </>
@@ -364,7 +364,7 @@ export default HomePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/HomePage/HomePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 // highlight-next-line
 import ArticlesCell from 'src/components/ArticlesCell'
@@ -372,7 +372,7 @@ import ArticlesCell from 'src/components/ArticlesCell'
 const HomePage = () => {
   return (
     <>
-      <MetaTags title="Home" description="Home page" />
+      <Metadata title="Home" description="Home page" />
       // highlight-next-line
       <ArticlesCell />
     </>
@@ -485,7 +485,7 @@ In fact, let's use the aforementioned alias so that the name of our cell, and th
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     // highlight-next-line
@@ -558,7 +558,7 @@ In addition to the `id` that was added to the `query` by the generator, let's ge
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```javascript title="web/src/components/ArticlesCell/ArticlesCell.js"
+```javascript title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const QUERY = gql`
   query ArticlesQuery {
     articles: posts {
@@ -603,7 +603,7 @@ Now we're in the realm of good ol' React components, so just build out the `Succ
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 export const Success = ({ articles }) => {
   return (
     // highlight-start

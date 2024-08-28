@@ -1,9 +1,10 @@
-import fs from 'fs'
 import path from 'path'
 
 import boxen from 'boxen'
 import execa from 'execa'
+import fs from 'fs-extra'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../lib/colors'
@@ -11,6 +12,10 @@ import { getPaths } from '../lib/index'
 
 // eslint-disable-next-line no-unused-vars
 export const handler = async ({ _, $0, commands = [], ...options }) => {
+  recordTelemetryAttributes({
+    command: 'prisma',
+  })
+
   const rwjsPaths = getPaths()
 
   // Prisma only supports '--help', but Redwood CLI supports `prisma <command> help`
@@ -25,10 +30,12 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   if (!hasHelpOption) {
     if (
       ['generate', 'introspect', 'db', 'migrate', 'studio', 'format'].includes(
-        commands[0]
+        commands[0],
       )
     ) {
-      if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
+      // if no schema file or directory exists
+      const schemaDir = path.dirname(rwjsPaths.api.dbSchema)
+      if (!fs.existsSync(rwjsPaths.api.dbSchema) && !fs.existsSync(schemaDir)) {
         console.error()
         console.error(c.error('No Prisma Schema found.'))
         console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
@@ -56,7 +63,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   }
 
   console.log()
-  console.log(c.green('Running Prisma CLI...'))
+  console.log(c.note('Running Prisma CLI...'))
   console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 
@@ -69,7 +76,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
         cwd: rwjsPaths.base,
         stdio: 'inherit',
         cleanup: true,
-      }
+      },
     )
 
     if (hasHelpOption || commands.length === 0) {
@@ -97,6 +104,6 @@ const printWrapInfo = () => {
       padding: { top: 0, bottom: 0, right: 1, left: 1 },
       margin: 1,
       borderColor: 'gray',
-    })
+    }),
   )
 }

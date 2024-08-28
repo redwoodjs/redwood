@@ -1,0 +1,73 @@
+// api/src/services/${name}s/${name}s.ts
+import type { LiveQueryStorageMechanism } from '@redwoodjs/realtime'
+
+import { logger } from 'src/lib/logger'
+
+const ${collectionName} = [
+  { id: '1', title: 'First ${modelName}', items: [{ amount: 11 }] },
+  { id: '2', title: '2nd ${modelName}', items: [{ amount: 22 }] },
+  { id: '3', title: 'Third ${modelName}',  items: [{ amount: 33 }] },
+  { id: '4', title: '4th ${modelName}', items: [{ amount: 44 }] },
+  { id: '5', title: 'Fifth ${modelName}', items: [{ amount: 55 }] },
+]
+
+/**
+ * To test this live query, run the following in the GraphQL Playground:
+ *
+ * query GetRecent${pluralPascalName} @live {
+ *  ${liveQueryName}(id: "1") {
+ *    items {
+ *      amount
+ *    }
+ *    largest${typeName}Item {
+ *      amount
+ *    }
+ *    id
+ *    title
+ *   }
+ * }
+ *
+ * And then make a related item with the following mutation:
+ *
+ * mutation Create${typeName}Item {
+ *   create${typeName}Item(input: {${camelName}Id: "1", amount: 100}) {
+ *     amount
+ *   }
+ * }
+ */
+export const ${liveQueryName} = async ({ id }) => {
+  const found${modelName} = ${collectionName}.find((a) => a.id === id)
+  logger.debug({ id, ${name}: found${modelName} }, `${name} details`)
+  return found${modelName}
+}
+
+export const create${typeName}Item = async (
+  { input },
+  { context }: { context: { liveQueryStore: LiveQueryStorageMechanism } }
+) => {
+  const { ${camelName}Id, amount } = input
+
+  const index = ${collectionName}.findIndex((a) => a.id === ${camelName}Id)
+
+  const item = { amount }
+
+  ${collectionName}[index].items.push(item)
+  logger.debug({ ${camelName}Id, item }, 'Added item to ${collectionName}')
+
+  const key = `${typeName}:<%= '$' %>{${camelName}Id}`
+  context.liveQueryStore.invalidate(key)
+
+  logger.debug({ key }, 'Invalidated ${typeName} key in liveQueryStore')
+
+  return item
+}
+
+export const ${modelName} = {
+  largest${typeName}Item: (obj, { root }) => {
+    const [largest] = root.items.sort((a, b) => b.amount - a.amount)
+
+    logger.debug({ obj, root }, 'largest ${typeName}Item')
+
+    return largest
+  },
+}

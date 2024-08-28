@@ -5,12 +5,15 @@ import { iter } from '../x/Array'
 import { lazy } from '../x/decorators'
 import { basenameNoExt } from '../x/path'
 
-import { RWProject } from './RWProject'
-import { RWSDL } from './RWSDL'
+import type { RWProject } from './RWProject'
+import type { RWSDL } from './RWSDL'
 import { RWServiceFunction } from './RWServiceFunction'
 
 export class RWService extends FileNode {
-  constructor(public filePath: string, public parent: RWProject) {
+  constructor(
+    public filePath: string,
+    public parent: RWProject,
+  ) {
     super()
   }
   /**
@@ -40,6 +43,7 @@ export class RWService extends FileNode {
    */
 
   @lazy() get funcs() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
     return iter(function* () {
       // export const foo = () => {}

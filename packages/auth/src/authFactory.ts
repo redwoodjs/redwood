@@ -1,7 +1,15 @@
-import { createAuthContext, CurrentUser } from './AuthContext'
-import { AuthImplementation } from './AuthImplementation'
-import { createAuthProvider } from './AuthProvider/AuthProvider'
-import { createUseAuth } from './useAuth'
+import type { CurrentUser } from './AuthContext.js'
+import { createAuthContext } from './AuthContext.js'
+import type { AuthImplementation } from './AuthImplementation.js'
+import { createAuthProvider } from './AuthProvider/AuthProvider.js'
+import { createUseAuth } from './useAuth.js'
+
+export type CustomProviderHooks = {
+  useCurrentUser?: () => Promise<CurrentUser>
+  useHasRole?: (
+    currentUser: CurrentUser | null,
+  ) => (rolesToCheck: string | string[]) => boolean
+}
 
 export function createAuthentication<
   TUser,
@@ -16,7 +24,7 @@ export function createAuthentication<
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient
+  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -36,9 +44,9 @@ export function createAuthentication<
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const AuthContext = createAuthContext<
     TUser,
@@ -58,7 +66,7 @@ export function createAuthentication<
   const AuthProvider = createAuthProvider(
     AuthContext,
     authImplementation,
-    customProviderHooks
+    customProviderHooks,
   )
 
   return { AuthContext, AuthProvider, useAuth }

@@ -1,9 +1,13 @@
-import { render, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
+import React from 'react'
 
-import { getFocus } from '../a11yUtils'
-import RouteFocus from '../route-focus'
-import { Router, Route, routes } from '../router'
+import { render, waitFor } from '@testing-library/react'
+import { test, beforeEach, expect } from 'vitest'
+
+import { getFocus } from '../a11yUtils.js'
+import { namedRoutes as routes } from '../namedRoutes.js'
+import RouteFocus from '../route-focus.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
 
 // SETUP
 const RouteFocusPage = () => (
@@ -20,6 +24,7 @@ const NoRouteFocusPage = () => <h1>No Route Focus Page</h1>
 
 const RouteFocusNoChildren = () => (
   <>
+    {/* @ts-expect-error - Testing a JS scenario */}
     <RouteFocus></RouteFocus>
     <h1>Route Focus No Children Page</h1>
     <p></p>
@@ -45,7 +50,7 @@ const RouteFocusNegativeTabIndexPage = () => (
 )
 
 beforeEach(() => {
-  window.history.pushState({}, null, '/')
+  window.history.pushState({}, '', '/')
   Object.keys(routes).forEach((key) => delete routes[key])
 })
 

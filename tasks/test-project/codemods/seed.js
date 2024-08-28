@@ -17,11 +17,11 @@ const createPosts = `
       }
     ]
 
-    await Promise.all(
-      users.map(async (user) => {
-        const newUser = await db.user.create({ data: user })
-      })
-    )
+    if ((await db.user.count()) === 0) {
+      await Promise.all(users.map((user) => db.user.create({ data: user })))
+    } else {
+      console.log('Users already seeded')
+    }
   } catch (error) {
     console.error(error)
   }
@@ -45,13 +45,17 @@ const createPosts = `
       },
     ]
 
-    await Promise.all(
-      posts.map(async (post) => {
-        const newPost = await db.post.create({ data: post })
+    if ((await db.post.count()) === 0) {
+      await Promise.all(
+        posts.map(async (post) => {
+          const newPost = await db.post.create({ data: post })
 
-        console.log(newPost)
-      })
-    )
+          console.log(newPost)
+        })
+      )
+    } else {
+      console.log('Posts already seeded')
+    }
   } catch (error) {
     console.error(error)
   }
@@ -61,5 +65,13 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  return root.find(j.TryStatement).insertBefore(createPosts).toSource()
+  let newSource = root.find(j.TryStatement).insertBefore(createPosts).toSource()
+
+  // Uncomment the db import line
+  newSource = newSource.replace(
+    "// import { db } from 'api/src/lib/db'",
+    "import { db } from 'api/src/lib/db'",
+  )
+
+  return newSource
 }

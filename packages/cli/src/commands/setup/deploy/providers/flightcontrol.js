@@ -1,16 +1,17 @@
 // import terminalLink from 'terminal-link'
-import fs from 'fs'
 import { EOL } from 'os'
 import path from 'path'
 
 import { getSchema, getConfig } from '@prisma/internals'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../../lib'
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 import {
   flightcontrolConfig,
   databaseEnvVariables,
@@ -34,7 +35,7 @@ export const getFlightcontrolJson = async (database) => {
   }
 
   const schema = await getSchema(
-    path.join(getPaths().base, 'api/db/schema.prisma')
+    path.join(getPaths().base, 'api/db/schema.prisma'),
   )
   const config = await getConfig({ datamodel: schema })
   const detectedDatabase = config.datasources[0].activeProvider
@@ -95,11 +96,11 @@ const updateGraphQLFunction = () => {
     task: (_ctx) => {
       const graphqlTsPath = path.join(
         getPaths().base,
-        'api/src/functions/graphql.ts'
+        'api/src/functions/graphql.ts',
       )
       const graphqlJsPath = path.join(
         getPaths().base,
-        'api/src/functions/graphql.js'
+        'api/src/functions/graphql.js',
       )
 
       let graphqlFunctionsPath
@@ -121,7 +122,7 @@ const updateGraphQLFunction = () => {
         .readFileSync(graphqlFunctionsPath, 'utf8')
         .split(EOL)
       const graphqlHanderIndex = graphqlContent.findIndex((line) =>
-        line.includes('createGraphQLHandler({')
+        line.includes('createGraphQLHandler({'),
       )
 
       if (graphqlHanderIndex === -1) {
@@ -137,7 +138,7 @@ const updateGraphQLFunction = () => {
       graphqlContent.splice(
         graphqlHanderIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },',
       )
 
       fs.writeFileSync(graphqlFunctionsPath, graphqlContent.join(EOL))
@@ -164,7 +165,7 @@ const updateDbAuth = () => {
 
       const authContent = fs.readFileSync(authFnPath, 'utf8').split(EOL)
       const sameSiteLineIndex = authContent.findIndex((line) =>
-        line.match(/SameSite:.*,/)
+        line.match(/SameSite:.*,/),
       )
       if (sameSiteLineIndex === -1) {
         console.log(`
@@ -174,12 +175,11 @@ const updateDbAuth = () => {
     `)
         return
       }
-      authContent[
-        sameSiteLineIndex
-      ] = `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
+      authContent[sameSiteLineIndex] =
+        `      SameSite: process.env.NODE_ENV === 'development' ? 'Strict' : 'None',`
 
       const dbHandlerIndex = authContent.findIndex((line) =>
-        line.includes('new DbAuthHandler(')
+        line.includes('new DbAuthHandler('),
       )
       if (dbHandlerIndex === -1) {
         console.log(`
@@ -193,7 +193,7 @@ const updateDbAuth = () => {
       authContent.splice(
         dbHandlerIndex + 1,
         0,
-        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },'
+        '  cors: { origin: process.env.REDWOOD_WEB_URL, credentials: true },',
       )
 
       fs.writeFileSync(authFnPath, authContent.join(EOL))
@@ -203,11 +203,11 @@ const updateDbAuth = () => {
 
 const updateApp = () => {
   return {
-    title: 'Updating App.js fetch config...',
+    title: 'Updating App.jsx fetch config...',
     task: (_ctx) => {
       // TODO Can improve in the future with RW getPaths()
       const appTsPath = path.join(getPaths().base, 'web/src/App.tsx')
-      const appJsPath = path.join(getPaths().base, 'web/src/App.js')
+      const appJsPath = path.join(getPaths().base, 'web/src/App.jsx')
 
       let appPath
       if (fs.existsSync(appTsPath)) {
@@ -216,13 +216,13 @@ const updateApp = () => {
         appPath = appJsPath
       } else {
         // TODO this should never happen. Throw instead?
-        console.log(`Skipping, did not detect web/src/App.js|tsx`)
+        console.log(`Skipping, did not detect web/src/App.jsx|tsx`)
         return
       }
 
       const appContent = fs.readFileSync(appPath, 'utf8').split(EOL)
       const authLineIndex = appContent.findIndex((line) =>
-        line.includes('<AuthProvider')
+        line.includes('<AuthProvider'),
       )
       if (authLineIndex === -1) {
         console.log(`
@@ -233,14 +233,13 @@ const updateApp = () => {
     `)
         // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
       } else if (appContent.toString().match(/dbAuth/)) {
-        appContent[
-          authLineIndex
-        ] = `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
+        appContent[authLineIndex] =
+          `      <AuthProvider type="dbAuth" config={{ fetchConfig: { credentials: 'include' } }}>
 `
       }
 
       const gqlLineIndex = appContent.findIndex((line) =>
-        line.includes('<RedwoodApolloProvider')
+        line.includes('<RedwoodApolloProvider'),
       )
       if (gqlLineIndex === -1) {
         console.log(`
@@ -251,9 +250,8 @@ const updateApp = () => {
     `)
         // This is CORS config for cookies, which is currently only dbAuth Currently only dbAuth uses cookies and would require this config
       } else if (appContent.toString().match(/dbAuth/)) {
-        appContent[
-          gqlLineIndex
-        ] = `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
+        appContent[gqlLineIndex] =
+          `        <RedwoodApolloProvider graphQLClientConfig={{ httpLinkConfig: { credentials: 'include' }}} >
 `
       }
 
@@ -304,6 +302,11 @@ const notes = [
 ]
 
 export const handler = async ({ force, database }) => {
+  recordTelemetryAttributes({
+    command: 'setup deploy flightcontrol',
+    force,
+    database,
+  })
   const tasks = new Listr(
     [
       {
@@ -322,7 +325,7 @@ export const handler = async ({ force, database }) => {
       addToDotEnvDefaultTask(),
       printSetupNotes(notes),
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

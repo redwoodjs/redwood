@@ -17,7 +17,8 @@ import {
   testFilteredQuery,
   testValidationErrorQuery,
 } from '../__fixtures__/common'
-import { LoggerConfig, useRedwoodLogger } from '../useRedwoodLogger'
+import type { LoggerConfig } from '../useRedwoodLogger'
+import { useRedwoodLogger } from '../useRedwoodLogger'
 
 const watchFileCreated = (filename) => {
   return new Promise((resolve, reject) => {
@@ -46,7 +47,7 @@ const parseLogFile = (logFile) => {
       .toString()
       .trim()
       .split(/\r\n|\n/)
-      .join(',')}]`
+      .join(',')}]`,
   )
 
   return parsedLogFile
@@ -54,7 +55,7 @@ const parseLogFile = (logFile) => {
 
 const setupLogger = (
   loggerOptions: LoggerOptions,
-  destination: string
+  destination: string,
 ): {
   logger: Logger
 } => {
@@ -69,7 +70,7 @@ const setupLogger = (
 describe('Populates context', () => {
   const logFile = join(
     os.tmpdir(),
-    '_' + Math.random().toString(36).substr(2, 9)
+    '_' + Math.random().toString(36).substr(2, 9),
   )
 
   const { logger } = setupLogger({ level: 'trace' }, logFile)
@@ -82,7 +83,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testQuery, {}, {})
@@ -111,7 +112,7 @@ describe('Populates context', () => {
     expect(executionCompleted).toHaveProperty('data')
 
     expect(executionCompleted.msg).toEqual(
-      'GraphQL execution completed: meQuery'
+      'GraphQL execution completed: meQuery',
     )
     expect(executionCompleted.data).toHaveProperty('me')
     expect(executionCompleted.operationName).toEqual('meQuery')
@@ -126,7 +127,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testParseErrorQuery, {}, {})
@@ -145,7 +146,7 @@ describe('Populates context', () => {
     expect(lastStatement.name).toEqual('graphql-server')
 
     expect(lastStatement.msg).toEqual(
-      'Cannot query field "unknown_field" on type "User".'
+      'Cannot query field "unknown_field" on type "User".',
     )
   })
 
@@ -157,7 +158,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testValidationErrorQuery, {}, {})
@@ -176,14 +177,14 @@ describe('Populates context', () => {
 
     expect(lastStatement).toHaveProperty('msg')
     expect(lastStatement.msg).toEqual(
-      'Syntax Error: Expected "$", found Name "id".'
+      'Syntax Error: Expected "$", found Name "id".',
     )
 
     expect(lastStatement).toHaveProperty('err')
     expect(lastStatement.err).toHaveProperty('type')
     expect(lastStatement.err.type).toEqual('GraphQLError')
     expect(lastStatement.err.message).toEqual(
-      'Syntax Error: Expected "$", found Name "id".'
+      'Syntax Error: Expected "$", found Name "id".',
     )
   })
 
@@ -195,7 +196,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testErrorQuery, {}, {})
@@ -224,7 +225,7 @@ describe('Populates context', () => {
 
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
 
     await testkit.execute(testErrorQuery, {}, {})
@@ -251,7 +252,7 @@ describe('Populates context', () => {
     } as LoggerConfig
     const testkit = createTestkit(
       [useEngine(GraphQLJS), useRedwoodLogger(loggerConfig)],
-      testSchema
+      testSchema,
     )
     await testkit.execute(testFilteredQuery, {}, {})
     await watchFileCreated(logFile)
@@ -263,7 +264,7 @@ describe('Populates context', () => {
         expect.objectContaining({
           msg: expect.stringContaining('FilteredQuery'),
         }),
-      ])
+      ]),
     )
   })
 })

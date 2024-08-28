@@ -1,10 +1,12 @@
 import { renderHook, act } from '@testing-library/react'
 import type FirebaseAuthNamespace from 'firebase/auth'
-import { User, OperationType, OAuthProvider, Auth } from 'firebase/auth'
+import type { User, OAuthProvider, Auth } from 'firebase/auth'
+import { OperationType } from 'firebase/auth'
 
-import { CurrentUser } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth, FirebaseClient } from '../firebase'
+import type { FirebaseClient } from '../firebase'
+import { createAuth } from '../firebase'
 
 const user: User = {
   uid: 'unique_user_id',
@@ -95,7 +97,7 @@ const firebaseAuth: Partial<typeof FirebaseAuthNamespace> = {
   signInWithEmailAndPassword: async (
     _auth: Auth,
     email: string,
-    _password: string
+    _password: string,
   ) => {
     if (email.startsWith('admin')) {
       loggedInUser = adminUser
@@ -145,12 +147,12 @@ beforeEach(() => {
 function getFirebaseAuth(customProviderHooks?: {
   useCurrentUser?: () => Promise<CurrentUser>
   useHasRole?: (
-    currentUser: CurrentUser | null
+    currentUser: CurrentUser | null,
   ) => (rolesToCheck: string | string[]) => boolean
 }) {
   const { useAuth, AuthProvider } = createAuth(
-    firebaseMockClient as FirebaseClient,
-    customProviderHooks
+    firebaseMockClient,
+    customProviderHooks,
   )
   const { result } = renderHook(() => useAuth(), {
     wrapper: AuthProvider,

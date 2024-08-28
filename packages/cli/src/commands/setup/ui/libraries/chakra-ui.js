@@ -3,6 +3,8 @@ import path from 'path'
 import execa from 'execa'
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
@@ -29,10 +31,17 @@ export function builder(yargs) {
 const CHAKRA_THEME_AND_COMMENTS = `\
 // This object will be used to override Chakra-UI theme defaults.
 // See https://chakra-ui.com/docs/styled-system/theming/theme for theming options
-module.exports = {}
+const theme = {}
+export default theme
 `
 
 export async function handler({ force, install }) {
+  recordTelemetryAttributes({
+    command: 'setup ui chakra-ui',
+    force,
+    install,
+  })
+
   const rwPaths = getPaths()
 
   const packages = [
@@ -57,7 +66,7 @@ export async function handler({ force, install }) {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
@@ -85,7 +94,7 @@ export async function handler({ force, install }) {
           writeFile(
             path.join(rwPaths.web.config, 'chakra.config.js'),
             CHAKRA_THEME_AND_COMMENTS,
-            { overwriteExisting: force }
+            { overwriteExisting: force },
           )
         },
       },
@@ -99,12 +108,12 @@ export async function handler({ force, install }) {
               __dirname,
               '..',
               'templates',
-              'chakra.storybook.preview.js.template'
-            )
+              'chakra.storybook.preview.tsx.template',
+            ),
           ),
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

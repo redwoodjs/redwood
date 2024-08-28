@@ -4,9 +4,11 @@ import type {
   RedirectLoginOptions,
 } from '@auth0/auth0-spa-js'
 
-import { CurrentUser, createAuthentication } from '@redwoodjs/auth'
+import type { CurrentUser } from '@redwoodjs/auth'
+import { createAuthentication } from '@redwoodjs/auth'
 
 // TODO: Map out this user properly.
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface Auth0User {}
 
 export function createAuth(
@@ -14,9 +16,9 @@ export function createAuth(
   customProviderHooks?: {
     useCurrentUser?: () => Promise<CurrentUser>
     useHasRole?: (
-      currentUser: CurrentUser | null
+      currentUser: CurrentUser | null,
     ) => (rolesToCheck: string | string[]) => boolean
-  }
+  },
 ) {
   const authImplementation = createAuthImplementation(auth0Client)
 
@@ -33,10 +35,9 @@ function createAuthImplementation(auth0Client: Auth0Client) {
         global?.location?.search?.includes('state=')
       ) {
         const { appState } = await auth0Client.handleRedirectCallback()
-        const url =
-          appState && appState.targetUrl
-            ? appState.targetUrl
-            : window.location.pathname
+        const url = appState?.targetUrl
+          ? appState.targetUrl
+          : window.location.pathname
         global?.location?.assign(url)
       }
     },

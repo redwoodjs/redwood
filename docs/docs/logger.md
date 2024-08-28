@@ -52,7 +52,10 @@ logger.trace(`>> items service -> About to save item ${item.name}`)
 logger.info(`Saving item ${item.name}`)
 logger.debug({ item }, `Item ${item.name} detail`)
 logger.warn(item, `Item ${item.id} is missing a name`)
-logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values`)
+logger.warn(
+  { missing: { name: item.name } },
+  `Item ${item.id} is missing values`
+)
 logger.error(error, `Failed to save item`)
 ```
 
@@ -80,7 +83,7 @@ In addition to the rich [features](https://github.com/pinojs/pino/blob/master/do
 
 One of 'fatal', 'error', 'warn', 'info', 'debug', 'trace' or 'silent'.
 
-The logger detects you current environment and will default to a sensible minimum log level.
+The logger detects your current environment and will default to a sensible minimum log level.
 
 > **_NOTE:_** In Development, the default is `trace` while in Production, the default is `warn`.
 > This means that output in your dev server can be verbose, but when you deploy you won't miss out on critical issues.
@@ -178,7 +181,7 @@ Output:
 
 ```bash
 11:00:28 🌲 Hello RedwoodJS
-✨  Done in 0.14s.
+✨ Done in 0.14s.
 ```
 
 #### Usage
@@ -311,7 +314,10 @@ Since you can log metadata information alongside your message as seen in:
 ```jsx
 logger.debug({ item }, `Item ${item.name} detail`)
 logger.warn(item, `Item ${item.id} is missing a name`)
-logger.warn({ missing: { name: item.name } }, `Item ${item.id} is missing values`)
+logger.warn(
+  { missing: { name: item.name } },
+  `Item ${item.id} is missing values`
+)
 logger.error(error, `Failed to save item`)
 ```
 

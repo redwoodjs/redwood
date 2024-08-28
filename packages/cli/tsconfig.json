@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.compilerOption.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "emitDeclarationOnly": false,
+    "noEmit": true
+  },
+  "include": ["src", "./testUtils.d.ts"],
+  "exclude": ["**/__testfixtures__"],
+  "references": [
+    { "path": "../api-server/tsconfig.build.json" },
+    { "path": "../cli-helpers" },
+    { "path": "../internal" },
+    { "path": "../prerender/tsconfig.build.json" },
+    { "path": "../project-config" },
+    { "path": "../structure" },
+    { "path": "../telemetry" }
+  ]
+}

@@ -1,10 +1,12 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { outputFileSync } from 'fs-extra'
 import { Listr } from 'listr2'
+import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, usingVSCode } from '../../../../lib'
@@ -29,48 +31,97 @@ export const builder = (yargs) => {
   })
 }
 
-const tailwindImports = [
-  // using outer double quotes and inner single quotes here to generate code
-  // the way prettier wants it in the actual RW app where this will be used
-  "@import 'tailwindcss/base';",
-  "@import 'tailwindcss/components';",
-  "@import 'tailwindcss/utilities';",
+const tailwindDirectives = [
+  '@tailwind base;',
+  '@tailwind components;',
+  '@tailwind utilities;',
 ]
 
-const tailwindImportsExist = (indexCSS) =>
-  tailwindImports
-    .map((el) => new RegExp(el))
-    .every((tailwindDirective) => tailwindDirective.test(indexCSS))
+/** @param {string} indexCSS */
+const tailwindDirectivesExist = (indexCSS) =>
+  tailwindDirectives.every((tailwindDirective) =>
+    indexCSS.includes(tailwindDirective),
+  )
 
 const tailwindImportsAndNotes = [
   '/**',
   ' * START --- SETUP TAILWINDCSS EDIT',
   ' *',
-  ' * `yarn rw setup ui tailwindcss` placed these imports here',
+  ' * `yarn rw setup ui tailwindcss` placed these directives here',
   " * to inject Tailwind's styles into your CSS.",
-  ' * For more information, see: https://tailwindcss.com/docs/installation#include-tailwind-in-your-css',
+  ' * For more information, see: https://tailwindcss.com/docs/installation',
   ' */',
-  ...tailwindImports,
+  ...tailwindDirectives,
   '/**',
   ' * END --- SETUP TAILWINDCSS EDIT',
   ' */\n',
 ]
 
+const recommendedVSCodeExtensions = [
+  'csstools.postcss',
+  'bradlc.vscode-tailwindcss',
+]
+
+const recommendationTexts = {
+  'csstools.postcss': terminalLink(
+    'PostCSS Language Support',
+    'https://marketplace.visualstudio.com/items?itemName=csstools.postcss',
+  ),
+  'bradlc.vscode-tailwindcss': terminalLink(
+    'Tailwind CSS IntelliSense',
+    'https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss',
+  ),
+}
+
+async function recommendExtensionsToInstall() {
+  if (!usingVSCode()) {
+    return
+  }
+
+  let recommendations = []
+
+  try {
+    const { stdout } = await execa('code', ['--list-extensions'])
+    const installedExtensions = stdout.split('\n').map((ext) => ext.trim())
+    recommendations = recommendedVSCodeExtensions.filter(
+      (ext) => !installedExtensions.includes(ext),
+    )
+  } catch {
+    // `code` probably not in PATH so can't check for installed extensions.
+    // We'll just recommend all extensions
+    recommendations = recommendedVSCodeExtensions
+  }
+
+  if (recommendations.length > 0) {
+    console.log()
+    console.log(
+      c.info(
+        'For the best experience we recommend that you install the following ' +
+          (recommendations.length === 1 ? 'extension:' : 'extensions:'),
+      ),
+    )
+
+    recommendations.forEach((extension) => {
+      console.log(c.info('  ' + recommendationTexts[extension]))
+    })
+  }
+}
+
 export const handler = async ({ force, install }) => {
+  recordTelemetryAttributes({
+    command: 'setup ui tailwindcss',
+    force,
+    install,
+  })
   const rwPaths = getPaths()
 
-  const projectPackages = ['prettier-plugin-tailwindcss']
+  const projectPackages = ['prettier-plugin-tailwindcss@^0.5.12']
 
   const webWorkspacePackages = [
     'postcss',
     'postcss-loader',
     'tailwindcss',
     'autoprefixer',
-  ]
-
-  const recommendedVSCodeExtensions = [
-    'csstools.postcss',
-    'bradlc.vscode-tailwindcss',
   ]
 
   const tasks = new Listr(
@@ -95,12 +146,12 @@ export const handler = async ({ force, install }) => {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
       {
-        title: 'Installing web workspace-wide packages...',
+        title: 'Installing web side packages...',
         skip: () => !install,
         task: () => {
           return new Listr(
@@ -118,7 +169,7 @@ export const handler = async ({ force, install }) => {
                 },
               },
             ],
-            { rendererOptions: { collapseSubtasks: false } }
+            { rendererOptions: { collapseSubtasks: false } },
           )
         },
       },
@@ -133,12 +184,12 @@ export const handler = async ({ force, install }) => {
 
           if (!force && fs.existsSync(postCSSConfigPath)) {
             throw new Error(
-              'PostCSS config already exists.\nUse --force to override existing config.'
+              'PostCSS config already exists.\nUse --force to override existing config.',
             )
           } else {
             const postCSSConfig = fs.readFileSync(
               path.join(__dirname, '../templates/postcss.config.js.template'),
-              'utf-8'
+              'utf-8',
             )
 
             return outputFileSync(postCSSConfigPath, postCSSConfig)
@@ -150,16 +201,16 @@ export const handler = async ({ force, install }) => {
         task: async () => {
           const tailwindConfigPath = path.join(
             rwPaths.web.config,
-            'tailwind.config.js'
+            'tailwind.config.js',
           )
 
           if (fs.existsSync(tailwindConfigPath)) {
             if (force) {
-              // `yarn tailwindcss init` will fail these files already exists
+              // `yarn tailwindcss init` will fail if these files already exists
               fs.unlinkSync(tailwindConfigPath)
             } else {
               throw new Error(
-                'Tailwindcss config already exists.\nUse --force to override existing config.'
+                'Tailwind CSS config already exists.\nUse --force to override existing config.',
               )
             }
           }
@@ -172,19 +223,19 @@ export const handler = async ({ force, install }) => {
           const tailwindConfig = fs.readFileSync(tailwindConfigPath, 'utf-8')
           const newTailwindConfig = tailwindConfig.replace(
             'content: []',
-            "content: ['src/**/*.{js,jsx,ts,tsx}']"
+            "content: ['src/**/*.{js,jsx,ts,tsx}']",
           )
           fs.writeFileSync(tailwindConfigPath, newTailwindConfig)
         },
       },
       {
-        title: 'Adding import to index.css...',
+        title: 'Adding directives to index.css...',
         task: (_ctx, task) => {
           const INDEX_CSS_PATH = path.join(rwPaths.web.src, 'index.css')
           const indexCSS = fs.readFileSync(INDEX_CSS_PATH, 'utf-8')
 
-          if (tailwindImportsExist(indexCSS)) {
-            task.skip('Imports already exist in index.css')
+          if (tailwindDirectivesExist(indexCSS)) {
+            task.skip('Directives already exist in index.css')
           } else {
             const newIndexCSS = tailwindImportsAndNotes.join('\n') + indexCSS
             fs.writeFileSync(INDEX_CSS_PATH, newIndexCSS)
@@ -192,36 +243,136 @@ export const handler = async ({ force, install }) => {
         },
       },
       {
-        title: 'Adding recommended VS Code extensions...',
-        task: (_ctx, task) => {
+        title: "Updating 'scaffold.css' to use tailwind classes...",
+        skip: () => {
+          // Skip this step if the 'scaffold.css' file doesn't exist
+          return (
+            !fs.existsSync(path.join(rwPaths.web.src, 'scaffold.css')) &&
+            "No 'scaffold.css' file to update"
+          )
+        },
+        task: async (_ctx, task) => {
+          const overrideScaffoldCss =
+            force ||
+            (await task.prompt({
+              type: 'Confirm',
+              message:
+                "Do you want to override your 'scaffold.css' to use tailwind classes?",
+            }))
+
+          if (!overrideScaffoldCss) {
+            return task.skip("Skipping 'scaffold.css' update")
+          }
+
+          const tailwindScaffoldTemplate = fs.readFileSync(
+            path.join(
+              __dirname,
+              '..',
+              '..',
+              '..',
+              'generate',
+              'scaffold',
+              'templates',
+              'assets',
+              'scaffold.tailwind.css.template',
+            ),
+          )
+          fs.writeFileSync(
+            path.join(rwPaths.web.src, 'scaffold.css'),
+            tailwindScaffoldTemplate,
+          )
+        },
+      },
+      {
+        title: 'Adding recommended VS Code extensions to project settings...',
+        skip: () => !usingVSCode() && "Looks like you're not using VS Code",
+        task: () => {
           const VS_CODE_EXTENSIONS_PATH = path.join(
             rwPaths.base,
-            '.vscode/extensions.json'
+            '.vscode/extensions.json',
           )
 
-          if (!usingVSCode()) {
-            task.skip("Looks like your're not using VS Code")
-          } else {
-            let originalExtensionsJson = { recommendations: [] }
-            if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
-              const originalExtensionsFile = fs.readFileSync(
-                VS_CODE_EXTENSIONS_PATH,
-                'utf-8'
-              )
-              originalExtensionsJson = JSON.parse(originalExtensionsFile)
-            }
-            const newExtensionsJson = {
-              ...originalExtensionsJson,
-              recommendations: [
-                ...originalExtensionsJson.recommendations,
-                ...recommendedVSCodeExtensions,
-              ],
-            }
-            fs.writeFileSync(
+          let originalExtensionsJson = { recommendations: [] }
+
+          if (fs.existsSync(VS_CODE_EXTENSIONS_PATH)) {
+            const originalExtensionsFile = fs.readFileSync(
               VS_CODE_EXTENSIONS_PATH,
-              JSON.stringify(newExtensionsJson, null, 2)
+              'utf-8',
             )
+
+            originalExtensionsJson = JSON.parse(originalExtensionsFile)
           }
+
+          const newExtensionsJson = {
+            ...originalExtensionsJson,
+            recommendations: [
+              ...originalExtensionsJson.recommendations,
+              ...recommendedVSCodeExtensions,
+            ],
+          }
+
+          fs.writeFileSync(
+            VS_CODE_EXTENSIONS_PATH,
+            JSON.stringify(newExtensionsJson, null, 2),
+          )
+        },
+      },
+      {
+        title:
+          'Adding tailwind intellisense plugin configuration to VS Code settings...',
+        skip: () => !usingVSCode() && "Looks like you're not using VS Code",
+        task: () => {
+          // Adds support for Redwood specific className props to tailwind intellisense
+          //   "tailwindCSS.classAttributes": [
+          //     "class",
+          //     "className",
+          //     "activeClassName",
+          //     "errorClassName"
+          //   ]
+          // The default value for this setting is:
+          //   ["class", "className", "ngClass", "class:list"]
+
+          const VS_CODE_SETTINGS_PATH = path.join(
+            rwPaths.base,
+            '.vscode/settings.json',
+          )
+
+          const classAttributes = [
+            'class',
+            'className',
+            'activeClassName',
+            'errorClassName',
+          ]
+
+          let newSettingsJson = {
+            ['tailwindCSS.classAttributes']: classAttributes,
+          }
+
+          if (fs.existsSync(VS_CODE_SETTINGS_PATH)) {
+            const originalSettingsFile = fs.readFileSync(
+              VS_CODE_SETTINGS_PATH,
+              'utf-8',
+            )
+            const originalSettingsJson = JSON.parse(
+              originalSettingsFile || '{}',
+            )
+            const originalTwClassAttributesJson =
+              originalSettingsJson['tailwindCSS.classAttributes'] || []
+
+            const mergedClassAttributes = Array.from(
+              new Set([...classAttributes, ...originalTwClassAttributesJson]),
+            )
+
+            newSettingsJson = {
+              ...originalSettingsJson,
+              ['tailwindCSS.classAttributes']: mergedClassAttributes,
+            }
+          }
+
+          fs.writeFileSync(
+            VS_CODE_SETTINGS_PATH,
+            JSON.stringify(newSettingsJson, null, 2) + '\n',
+          )
         },
       },
       {
@@ -229,14 +380,14 @@ export const handler = async ({ force, install }) => {
         task: async (_ctx) => {
           const prettierConfigPath = path.join(
             rwPaths.base,
-            'prettier.config.js'
+            'prettier.config.js',
           )
           // Add tailwindcss ordering plugin to prettier
           const prettierConfig = fs.readFileSync(prettierConfigPath, 'utf-8')
           const tailwindConfigPath = path
             .relative(
               rwPaths.base,
-              path.posix.join(rwPaths.web.config, 'tailwind.config.js')
+              path.posix.join(rwPaths.web.config, 'tailwind.config.js'),
             )
             .replaceAll('\\', '/')
 
@@ -245,17 +396,17 @@ export const handler = async ({ force, install }) => {
             if (force) {
               newPrettierConfig = newPrettierConfig.replace(
                 /tailwindConfig: .*(,)?/,
-                `tailwindConfig: './${tailwindConfigPath}',`
+                `tailwindConfig: './${tailwindConfigPath}',`,
               )
             } else {
               throw new Error(
-                'tailwindConfig setting already exists in prettier configuration.\nUse --force to override existing config.'
+                'tailwindConfig setting already exists in prettier configuration.\nUse --force to override existing config.',
               )
             }
           } else {
             newPrettierConfig = newPrettierConfig.replace(
               /,(\n\s*)(\}\n?)$/,
-              `,\n  tailwindConfig: './${tailwindConfigPath}',$1$2`
+              `,\n  tailwindConfig: './${tailwindConfigPath}',$1$2`,
             )
           }
 
@@ -267,7 +418,7 @@ export const handler = async ({ force, install }) => {
         task: async (_ctx, task) => {
           const prettierConfigPath = path.join(
             rwPaths.base,
-            'prettier.config.js'
+            'prettier.config.js',
           )
           // Add tailwindcss ordering plugin to prettier
           const prettierConfig = fs.readFileSync(prettierConfigPath, 'utf-8')
@@ -275,29 +426,29 @@ export const handler = async ({ force, install }) => {
           let newPrettierConfig = prettierConfig
           if (newPrettierConfig.includes('plugins: [')) {
             const pluginsMatch = newPrettierConfig.match(
-              /plugins: \[[\sa-z\(\)'\-,]*]/
+              /plugins: \[[\sa-z\(\)'\-,]*]/,
             )
 
             const matched = pluginsMatch && pluginsMatch[0]
 
             if (
               matched &&
-              (matched.includes("require('prettier-plugin-tailwindcss')") ||
-                matched.includes('require("prettier-plugin-tailwindcss")'))
+              (matched.includes("'prettier-plugin-tailwindcss'") ||
+                matched.includes('"prettier-plugin-tailwindcss"'))
             ) {
               task.skip(
-                'tailwindcss-plugin-prettier already required in plugins'
+                'tailwindcss-plugin-prettier already required in plugins',
               )
             } else {
               newPrettierConfig = newPrettierConfig.replace(
                 /plugins: \[(\n\s+)*/,
-                `plugins: [$1require('prettier-plugin-tailwindcss'),$1`
+                `plugins: [$'prettier-plugin-tailwindcss',$1`,
               )
             }
           } else {
             newPrettierConfig = newPrettierConfig.replace(
               /,(\n\s*)(\}\n?)$/,
-              `,\n  plugins: [require('prettier-plugin-tailwindcss')],$1$2`
+              `,\n  plugins: ['prettier-plugin-tailwindcss'],$1$2`,
             )
           }
 
@@ -305,11 +456,12 @@ export const handler = async ({ force, install }) => {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {
     await tasks.run()
+    await recommendExtensionsToInstall()
   } catch (e) {
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))

@@ -30,3 +30,8 @@ model Address {
   city     String
   country  String
 }
+
+model CustomIdField {
+  uuid String @id @default(uuid())
+  name String
+}

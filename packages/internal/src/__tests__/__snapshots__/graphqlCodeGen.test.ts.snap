@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Generate gql typedefs api 1`] = `
 "import { Prisma } from "@prisma/client"
 import { MergePrismaWithSdlTypes, MakeRelationsOptional } from '@redwoodjs/api'
 import { PrismaModelOne as PrismaPrismaModelOne, PrismaModelTwo as PrismaPrismaModelTwo, Post as PrismaPost, Todo as PrismaTodo } from '@prisma/client'
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/functions/types';
+import { RedwoodGraphQLContext } from '@redwoodjs/graphql-server/dist/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -33,8 +33,10 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
+  Byte: Buffer;
   Date: Date | string;
   DateTime: Date | string;
+  File: File;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
   Time: Date | string;
@@ -160,8 +162,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Byte: ResolverTypeWrapper<Scalars['Byte']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
+  File: ResolverTypeWrapper<Scalars['File']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
@@ -177,8 +181,10 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   BigInt: Scalars['BigInt'];
   Boolean: Scalars['Boolean'];
+  Byte: Scalars['Byte'];
   Date: Scalars['Date'];
   DateTime: Scalars['DateTime'];
+  File: Scalars['File'];
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
@@ -204,12 +210,20 @@ export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'BigInt';
 }
 
+export interface ByteScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Byte'], any> {
+  name: 'Byte';
+}
+
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date';
 }
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
+}
+
+export interface FileScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['File'], any> {
+  name: 'File';
 }
 
 export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
@@ -280,8 +294,10 @@ export type TodoRelationResolvers<ContextType = RedwoodGraphQLContext, ParentTyp
 
 export type Resolvers<ContextType = RedwoodGraphQLContext> = {
   BigInt: GraphQLScalarType;
+  Byte: GraphQLScalarType;
   Date: GraphQLScalarType;
   DateTime: GraphQLScalarType;
+  File: GraphQLScalarType;
   JSON: GraphQLScalarType;
   JSONObject: GraphQLScalarType;
   Mutation: MutationResolvers<ContextType>;
@@ -313,8 +329,10 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigInt: number;
+  Byte: Buffer;
   Date: string;
   DateTime: string;
+  File: File;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
   Time: string;

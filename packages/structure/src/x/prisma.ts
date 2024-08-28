@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs-extra'
-import { Location, Range } from 'vscode-languageserver'
+import type { Location } from 'vscode-languageserver'
+import { Range } from 'vscode-languageserver'
 
 import { URL_file, URL_toFile } from './URL'
 import { Position_fromOffsetOrFail } from './vscode-languageserver-types'
@@ -9,7 +10,7 @@ import { Position_fromOffsetOrFail } from './vscode-languageserver-types'
  * @param prismaSchemaFilePath
  */
 export function* prisma_parseEnvExpressionsInFile(
-  prismaSchemaFilePath: string
+  prismaSchemaFilePath: string,
 ) {
   const uri = URL_file(prismaSchemaFilePath)
   const file = URL_toFile(uri) // convert back and forth in case someone passed a uri
@@ -37,7 +38,7 @@ export function* prisma_parseEnvExpressions(src: string) {
       const range = Range.create(start, end)
       const key = JSON.parse(match[1])
       yield { range, key }
-    } catch (e) {
+    } catch {
       // we don't care about malformed env() calls
       // that should be picked up by the prisma parser
     }

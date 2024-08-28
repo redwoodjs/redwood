@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`JavaScript: includes skip link when --skipLink is set to true 1`] = `
 "import { SkipNavLink, SkipNavContent } from '@redwoodjs/router'
-import '@reach/skip-nav/styles.css'
+import '@redwoodjs/router/skip-nav.css'
 
 /**
  * since the main content isn't usually the first thing in the document,
@@ -27,7 +27,7 @@ export default A11yLayout
 "
 `;
 
-exports[`Multi word default files creates a multi word layout component 1`] = `
+exports[`Multi word default files > creates a multi word layout component 1`] = `
 "const SinglePageLayout = ({ children }) => {
   return <>{children}</>
 }
@@ -36,7 +36,7 @@ export default SinglePageLayout
 "
 `;
 
-exports[`Multi word default files creates a multi word layout test 1`] = `
+exports[`Multi word default files > creates a multi word layout test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import SinglePageLayout from './SinglePageLayout'
@@ -54,21 +54,20 @@ describe('SinglePageLayout', () => {
 "
 `;
 
-exports[`Multi word default files creates a multi word layout test 2`] = `
+exports[`Multi word default files > creates a multi word layout test 2`] = `
 "import SinglePageLayout from './SinglePageLayout'
 
-export const generated = (args) => {
-  return <SinglePageLayout {...args} />
-}
-
-export default {
-  title: 'Layouts/SinglePageLayout',
+const meta = {
   component: SinglePageLayout,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 
-exports[`Single Word default files creates a single word layout component 1`] = `
+exports[`Single Word default files > creates a single word layout component 1`] = `
 "const AppLayout = ({ children }) => {
   return <>{children}</>
 }
@@ -77,21 +76,20 @@ export default AppLayout
 "
 `;
 
-exports[`Single Word default files creates a single word layout stories 1`] = `
+exports[`Single Word default files > creates a single word layout stories 1`] = `
 "import AppLayout from './AppLayout'
 
-export const generated = (args) => {
-  return <AppLayout {...args} />
-}
-
-export default {
-  title: 'Layouts/AppLayout',
+const meta = {
   component: AppLayout,
 }
+
+export default meta
+
+export const Primary = {}
 "
 `;
 
-exports[`Single Word default files creates a single word layout test 1`] = `
+exports[`Single Word default files > creates a single word layout test 1`] = `
 "import { render } from '@redwoodjs/testing/web'
 
 import AppLayout from './AppLayout'
@@ -111,7 +109,7 @@ describe('AppLayout', () => {
 
 exports[`TypeScript: includes skip link when --skipLink is set to true 1`] = `
 "import { SkipNavLink, SkipNavContent } from '@redwoodjs/router'
-import '@reach/skip-nav/styles.css'
+import '@redwoodjs/router/skip-nav.css'
 
 /**
  * since the main content isn't usually the first thing in the document,

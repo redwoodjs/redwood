@@ -1,13 +1,20 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "outDir": "dist",
+    "isolatedModules": true,
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "outDir": "dist"
   },
-  "include": ["src/**/*", "./ambient.d.ts", "./vite-plugin-commonjs.d.ts"],
+  "include": ["."],
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
   "references": [
+    { "path": "../cookie-jar" },
+    { "path": "../framework-tools" },
     { "path": "../internal" },
+    { "path": "../project-config" },
+    { "path": "../router/tsconfig.build.json" },
+    { "path": "../server-store" },
+    { "path": "../web/tsconfig.build.json" }
   ]
 }

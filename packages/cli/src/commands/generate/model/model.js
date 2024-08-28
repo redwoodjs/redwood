@@ -3,6 +3,8 @@ import path from 'path'
 import { Listr } from 'listr2'
 import terminalLink from 'terminal-link'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
@@ -10,12 +12,12 @@ import { verifyModelName } from '../../../lib/schemaHelpers'
 import { validateName, yargsDefaults } from '../helpers'
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
-export const files = ({ name, typescript = false }) => {
+const files = async ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
   const outputPath = path.join(getPaths().api.models, outputFilename)
 
   return {
-    [outputPath]: generateTemplate(TEMPLATE_PATH, { name }),
+    [outputPath]: await generateTemplate(TEMPLATE_PATH, { name }),
   }
 }
 
@@ -35,8 +37,8 @@ export const builder = (yargs) => {
     .epilogue(
       `Also see the ${terminalLink(
         'RedwoodRecord Reference',
-        'https://redwoodjs.com/docs/redwoodrecord'
-      )}`
+        'https://redwoodjs.com/docs/redwoodrecord',
+      )}`,
     )
 
   Object.entries(yargsDefaults).forEach(([option, config]) => {
@@ -45,25 +47,31 @@ export const builder = (yargs) => {
 }
 
 export const handler = async ({ force, ...args }) => {
+  recordTelemetryAttributes({
+    command: 'generate model',
+    force,
+    rollback: args.rollback,
+  })
+
   validateName(args.name)
 
   const tasks = new Listr(
     [
       {
         title: 'Generating model file...',
-        task: () => {
-          return writeFilesTask(files(args), { overwriteExisting: force })
+        task: async () => {
+          return writeFilesTask(await files(args), { overwriteExisting: force })
         },
       },
       {
         title: 'Parsing datamodel, generating api/src/models/index.js...',
         task: async () => {
-          const { parseDatamodel } = await import('@redwoodjs/record')
-          await parseDatamodel()
+          const redwoodRecordModule = await import('@redwoodjs/record')
+          await redwoodRecordModule.default.parseDatamodel()
         },
       },
     ].filter(Boolean),
-    { rendererOptions: { collapseSubtasks: false } }
+    { rendererOptions: { collapseSubtasks: false } },
   )
 
   try {

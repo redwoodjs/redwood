@@ -17,11 +17,12 @@ For a reference on dotenv syntax, see the dotenv README's [Rules](https://github
 
 <!-- also in a Redwood app's base directory. -->
 
-Redwood also configures Webpack with `dotenv-webpack`, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at build-time. More on this in [Web](#Web).
+Redwood also configures Vite, so that all references to `process.env` vars on the Web side will be replaced with the variable's actual value at build-time. More on this in [Web](#Web).
 
 ## Web
 
 ### Including environment variables
+
 > **Heads Up:** for Web to access environment variables in production, you _must_ configure one of the options below.
 >
 > Redwood recommends **Option 1: `redwood.toml`** as it is the most robust.
@@ -31,7 +32,8 @@ In production, you can get environment variables to the Web Side either by
 1. adding to `redwood.toml` via the `includeEnvironmentVariables` array, or
 2. prefixing with `REDWOOD_ENV_`
 
-Just like for the API Side, you'll also have to set them up with your provider.
+Just like for the API Side, you'll also have to set them up with your provider. Some hosting providers distinguish between build and runtime environments for configuring environment variables.
+Environment variables for the web side should in those cases be configured as build-time variables.
 
 #### Option 1: includeEnvironmentVariables in redwood.toml
 
@@ -46,12 +48,11 @@ By adding environment variables to this array, they'll be available to Web in pr
 
 Note: if someone inspects your site's source, _they could see your `REDWOOD_ENV_SECRET_API_KEY` in plain text._ This is a limitation of delivering static JS and HTML to the browser.
 
-#### Option 2: Prefixing with REDWOOD\_ENV\_
+#### Option 2: Prefixing with REDWOOD_ENV\_
 
 In `.env`, if you prefix your environment variables with `REDWOOD_ENV_`, they'll be available via `process.env.REDWOOD_ENV_MY_VAR_NAME`, and will be dynamically replaced at build-time.
 
 Like the option above, these are also removed and replaced with the _actual value_ during build in order to be available in production.
-
 
 ### Accessing API URLs
 
@@ -115,6 +116,7 @@ Navigating to http://localhost:8911/hello shows that the Function successfully a
 <!-- Deployment system? platform? -->
 
 Whichever platform you deploy to, they'll have some specific way of making environment variables available to the serverless environment where your Functions run. For example, if you deploy to Netlify, you set your environment variables in **Settings** > **Build & Deploy** > **Environment**. You'll just have to read your provider's documentation.
+Some hosting providers distinguish between build and runtime environments for configuring environment variables. Environment variables for the api side should in those cases be configured as runtime variables.
 
 ## Keeping Sensitive Information Safe
 

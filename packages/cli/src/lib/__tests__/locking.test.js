@@ -1,7 +1,8 @@
 global.__dirname = __dirname
-jest.mock('@redwoodjs/project-config', () => {
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const originalProjectConfig = await importOriginal()
   return {
-    ...jest.requireActual('@redwoodjs/project-config'),
+    ...originalProjectConfig,
     getPaths: () => {
       return {
         generated: {
@@ -11,16 +12,24 @@ jest.mock('@redwoodjs/project-config', () => {
     },
   }
 })
-jest.mock('fs')
+vi.mock('fs-extra')
 
-import fs from 'fs'
 import path from 'path'
+
+import fs from 'fs-extra'
+import { vol } from 'memfs'
+import { vi, it, expect, beforeEach } from 'vitest'
 
 import { setLock, unsetLock, isLockSet, clearLocks } from '../locking'
 
 beforeEach(() => {
   // Start with no files
-  fs.__setMockFiles({})
+  vol.reset()
+  fs.statSync = vi.fn(() => {
+    return {
+      birthtimeMs: Date.now(),
+    }
+  })
 })
 
 it('Set a lock', () => {
@@ -65,6 +74,24 @@ it('Detect if lock is set when it is already unset', () => {
 
   const isSet = isLockSet('TEST')
   expect(isSet).toBe(false)
+})
+
+it('Detects a stale lock', () => {
+  // Fake that the lock is older than 1 hour
+  fs.statSync.mockImplementation(() => {
+    return {
+      birthtimeMs: Date.now() - 3600001,
+    }
+  })
+  const spy = vi.spyOn(fs, 'rmSync')
+
+  setLock('TEST')
+
+  const isSet = isLockSet('TEST')
+  expect(isSet).toBe(false)
+  expect(fs.rmSync).toHaveBeenCalled()
+
+  spy.mockRestore()
 })
 
 it('Clear a list of locks', () => {

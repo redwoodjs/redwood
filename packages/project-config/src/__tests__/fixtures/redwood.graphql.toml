@@ -1,0 +1,5 @@
+[web]
+  port = 8888
+[graphql]
+  fragments = true
+  trustedDocuments = true

@@ -1,0 +1,60 @@
+{
+  "name": "@redwoodjs/ogimage-gen",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/ogimage-gen"
+  },
+  "license": "MIT",
+  "exports": {
+    "./plugin": {
+      "import": "./dist/vite-plugin-ogimage-gen.js",
+      "default": "./cjsWrappers/plugin.js",
+      "types": "./dist/vite-plugin-ogimage-gen.d.ts"
+    },
+    "./middleware": {
+      "import": "./dist/OgImageMiddleware.js",
+      "default": "./cjsWrappers/middleware.js",
+      "react-server": "./empty.js",
+      "types": "./dist/OgImageMiddleware.d.ts"
+    },
+    "./hooks": {
+      "import": "./dist/hooks.js",
+      "default": "./cjsWrappers/hooks.js",
+      "types": "./dist/hooks.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "cjsWrappers"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-ogimage-gen.tgz",
+    "build:types": "tsc --build --verbose",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@redwoodjs/internal": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
+    "@redwoodjs/router": "workspace:*",
+    "@redwoodjs/web": "workspace:*",
+    "fast-glob": "3.3.2",
+    "lodash": "4.17.21",
+    "react": "19.0.0-rc-8269d55d-20240802",
+    "react-dom": "19.0.0-rc-8269d55d-20240802"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.46.0",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "ts-toolbelt": "9.6.0",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4",
+    "vite": "5.4.1",
+    "vitest": "2.0.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

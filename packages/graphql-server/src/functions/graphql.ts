@@ -4,8 +4,10 @@ import type {
   Context as LambdaContext,
 } from 'aws-lambda'
 
+import type { GlobalContext } from '@redwoodjs/context'
+import { getAsyncStoreInstance } from '@redwoodjs/context/dist/store'
+
 import { createGraphQLYoga } from '../createGraphQLYoga'
-import { getAsyncStoreInstance } from '../globalContext'
 import type { GraphQLHandlerOptions } from '../types'
 
 /**
@@ -39,38 +41,41 @@ export const createGraphQLHandler = ({
   defaultError = 'Something went wrong.',
   graphiQLEndpoint = '/graphql',
   schemaOptions,
+  openTelemetryOptions,
+  trustedDocuments,
 }: GraphQLHandlerOptions) => {
+  const { yoga, logger } = createGraphQLYoga({
+    healthCheckId,
+    loggerConfig,
+    context,
+    getCurrentUser,
+    onException,
+    generateGraphiQLHeader,
+    extraPlugins,
+    authDecoder,
+    cors,
+    services,
+    sdls,
+    directives,
+    armorConfig,
+    allowedOperations,
+    allowIntrospection,
+    allowGraphiQL,
+    defaultError,
+    graphiQLEndpoint,
+    schemaOptions,
+    openTelemetryOptions,
+    trustedDocuments,
+  })
+
   const handlerFn = async (
     event: APIGatewayProxyEvent,
-    requestContext: LambdaContext
+    requestContext: LambdaContext,
   ): Promise<APIGatewayProxyResult> => {
     // In the future, this could be part of a specific handler for AWS lambdas
     requestContext.callbackWaitsForEmptyEventLoop = false
 
     let lambdaResponse: APIGatewayProxyResult
-
-    const { yoga, logger } = createGraphQLYoga({
-      healthCheckId,
-      loggerConfig,
-      context,
-      getCurrentUser,
-      onException,
-      generateGraphiQLHeader,
-      extraPlugins,
-      authDecoder,
-      cors,
-      services,
-      sdls,
-      directives,
-      armorConfig,
-      allowedOperations,
-      allowIntrospection,
-      allowGraphiQL,
-      defaultError,
-      graphiQLEndpoint,
-      schemaOptions,
-    })
-
     try {
       // url needs to be normalized
       const [, rest = ''] = event.path.split(graphiQLEndpoint)
@@ -97,7 +102,7 @@ export const createGraphQLHandler = ({
         {
           event,
           requestContext,
-        }
+        },
       )
 
       // @WARN - multivalue headers aren't supported on all deployment targets correctly
@@ -106,6 +111,7 @@ export const createGraphQLHandler = ({
       // If you specify values for both headers and multiValueHeaders, API Gateway merges them into a single list.
       const responseHeaders: Record<string, string> = {}
 
+      // @ts-expect-error - https://github.com/ardatan/whatwg-node/issues/574
       response.headers.forEach((value, name) => {
         responseHeaders[name] = value
       })
@@ -118,7 +124,9 @@ export const createGraphQLHandler = ({
       }
     } catch (e: any) {
       logger.error(e)
-      onException && onException()
+      if (onException) {
+        onException()
+      }
 
       lambdaResponse = {
         body: JSON.stringify({ error: 'GraphQL execution failed' }),
@@ -147,25 +155,19 @@ export const createGraphQLHandler = ({
 
   return (
     event: APIGatewayProxyEvent,
-    context: LambdaContext
+    context: LambdaContext,
   ): Promise<any> => {
     const execFn = async () => {
       try {
         return await handlerFn(event, context)
       } catch (e) {
-        onException && onException()
+        if (onException) {
+          onException()
+        }
 
         throw e
       }
     }
-
-    if (getAsyncStoreInstance()) {
-      // This must be used when you're self-hosting RedwoodJS.
-      return getAsyncStoreInstance().run(new Map(), execFn)
-    } else {
-      // This is OK for AWS (Netlify/Vercel) because each Lambda request
-      // is handled individually.
-      return execFn()
-    }
+    return getAsyncStoreInstance().run(new Map<string, GlobalContext>(), execFn)
   }
 }

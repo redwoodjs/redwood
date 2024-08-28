@@ -10,7 +10,7 @@
  */
 export const getAnnouncement = () => {
   const routeAnnouncement = globalThis?.document.querySelectorAll(
-    '[data-redwood-route-announcement]'
+    '[data-redwood-route-announcement]',
   )?.[0]
   if (routeAnnouncement?.textContent) {
     return routeAnnouncement.textContent
@@ -30,12 +30,11 @@ export const getAnnouncement = () => {
 
 export const getFocus = () => {
   const routeFocus = globalThis?.document.querySelectorAll(
-    '[data-redwood-route-focus]'
+    '[data-redwood-route-focus]',
   )?.[0]
 
   if (
-    !routeFocus ||
-    !routeFocus.children.length ||
+    !routeFocus?.children.length ||
     (routeFocus.children[0] as HTMLElement).tabIndex < 0
   ) {
     return null

@@ -33,13 +33,12 @@ export type SupportedVerifiers =
   | Sha256Verifier
   | Base64Sha1Verifier
   | Base64Sha256Verifier
-  | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
 
 export type SupportedVerifierTypes = keyof typeof verifierLookup
 
-export const DEFAULT_WEBHOOK_SECRET = process.env['WEBHOOK_SECRET'] ?? ''
+export const DEFAULT_WEBHOOK_SECRET = process.env.WEBHOOK_SECRET ?? ''
 
 export const VERIFICATION_ERROR_MESSAGE =
   "You don't have access to invoke this function."

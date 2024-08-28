@@ -1,7 +1,8 @@
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+
 import { deleteFilesTask } from '../../lib'
-import c from '../../lib/colors'
 
 const tasks = ({ componentName, filesFn, name }) =>
   new Listr(
@@ -14,7 +15,7 @@ const tasks = ({ componentName, filesFn, name }) =>
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true },
   )
 
 export const createYargsForComponentDestroy = ({
@@ -32,12 +33,11 @@ export const createYargsForComponentDestroy = ({
       })
     },
     handler: async (options) => {
-      try {
-        options = await preTasksFn({ ...options, isDestroyer: true })
-        await tasks({ componentName, filesFn, name: options.name }).run()
-      } catch (e) {
-        console.log(c.error(e.message))
-      }
+      recordTelemetryAttributes({
+        command: `destroy ${componentName}`,
+      })
+      options = await preTasksFn({ ...options, isDestroyer: true })
+      await tasks({ componentName, filesFn, name: options.name }).run()
     },
     tasks,
   }

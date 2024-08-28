@@ -3,17 +3,17 @@ import path from 'path'
 
 import { standardAuthHandler } from '@redwoodjs/cli-helpers'
 
-import { Args } from './setup'
+import type { Args } from './setup'
 
 const { version } = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')
+  fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'),
 )
 
 export const handler = async ({ force: forceArg }: Args) => {
   standardAuthHandler({
     basedir: __dirname,
     forceArg,
-    authDecoderImport: `import { authDecoder } from '@redwoodjs/auth-clerk-api'`,
+    authDecoderImport: `import { clerkAuthDecoder as authDecoder } from '@redwoodjs/auth-clerk-api'`,
     provider: 'clerk',
     webPackages: [
       '@clerk/clerk-react@^4',
@@ -21,14 +21,11 @@ export const handler = async ({ force: forceArg }: Args) => {
     ],
     apiPackages: [`@redwoodjs/auth-clerk-api@${version}`],
     notes: [
-      "You'll need to add three env vars to your .env file:",
+      "You'll need to add two env vars to your .env file:",
       '',
       '```title=".env"',
       'CLERK_PUBLISHABLE_KEY="..."',
       'CLERK_SECRET_KEY="..."',
-      'CLERK_JWT_KEY="-----BEGIN PUBLIC KEY-----',
-      '...',
-      '-----END PUBLIC KEY-----"',
       '```',
       '',
       `You can find their values under "API Keys" on your Clerk app's dashboard.`,

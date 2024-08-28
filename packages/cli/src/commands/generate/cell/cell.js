@@ -17,6 +17,7 @@ import {
 
 import {
   checkProjectForQueryField,
+  getIdName,
   getIdType,
   operationNameIsUnique,
   uniqueOperationName,
@@ -25,17 +26,14 @@ import {
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'
 
-export const files = async ({
-  name,
-  typescript: generateTypescript,
-  ...options
-}) => {
+export const files = async ({ name, typescript, ...options }) => {
   let cellName = removeGeneratorName(name, 'cell')
+  let idName = 'id'
   let idType,
     mockIdValues = [42, 43, 44],
     model = null
   let templateNameSuffix = ''
-
+  let typeName = cellName
   // Create a unique operation name.
 
   const shouldGenerateList =
@@ -46,7 +44,9 @@ export const files = async ({
   try {
     // todo should pull from graphql schema rather than prisma!
     model = await getSchema(pascalcase(singularize(cellName)))
+    idName = getIdName(model)
     idType = getIdType(model)
+    typeName = model.name
     mockIdValues =
       idType === 'String'
         ? mockIdValues.map((value) => `'${value}'`)
@@ -67,9 +67,8 @@ export const files = async ({
 
   let operationName = options.query
   if (operationName) {
-    const userSpecifiedOperationNameIsUnique = await operationNameIsUnique(
-      operationName
-    )
+    const userSpecifiedOperationNameIsUnique =
+      await operationNameIsUnique(operationName)
     if (!userSpecifiedOperationNameIsUnique) {
       throw new Error(`Specified query name: "${operationName}" is not unique!`)
     }
@@ -79,46 +78,50 @@ export const files = async ({
     })
   }
 
-  const cellFile = templateForComponentFile({
+  const extension = typescript ? '.tsx' : '.jsx'
+  const cellFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.tsx' : '.js',
+    extension,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: `cell${templateNameSuffix}.tsx.template`,
     templateVars: {
       operationName,
+      idName,
       idType,
     },
   })
 
-  const testFile = templateForComponentFile({
+  const testFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.test.tsx' : '.test.js',
+    extension: `.test${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
   })
 
-  const storiesFile = templateForComponentFile({
+  const storiesFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.stories.tsx' : '.stories.js',
+    extension: `.stories${extension}`,
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: 'stories.js.template',
+    templatePath: 'stories.tsx.template',
   })
 
-  const mockFile = templateForComponentFile({
+  const mockFile = await templateForComponentFile({
     name: cellName,
     suffix: COMPONENT_SUFFIX,
-    extension: generateTypescript ? '.mock.ts' : '.mock.js',
+    extension: typescript ? '.mock.ts' : '.mock.js',
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
-    templatePath: `mock${templateNameSuffix}.js.template`,
+    templatePath: `mock${templateNameSuffix}.ts.template`,
     templateVars: {
+      idName,
       mockIdValues,
+      typeName,
     },
   })
 
@@ -141,16 +144,18 @@ export const files = async ({
   //    "path/to/fileA": "<<<template>>>",
   //    "path/to/fileB": "<<<template>>>",
   // }
-  return files.reduce((acc, [outputPath, content]) => {
-    const template = generateTypescript
+  return files.reduce(async (accP, [outputPath, content]) => {
+    const acc = await accP
+
+    const template = typescript
       ? content
-      : transformTSToJS(outputPath, content)
+      : await transformTSToJS(outputPath, content)
 
     return {
       [outputPath]: template,
       ...acc,
     }
-  }, {})
+  }, Promise.resolve({}))
 }
 
 export const { command, description, builder, handler } =
@@ -179,18 +184,25 @@ export const { command, description, builder, handler } =
           title: `Generating types ...`,
           task: async (_ctx, task) => {
             const queryFieldName = nameVariants(
-              removeGeneratorName(cellName, 'cell')
+              removeGeneratorName(cellName, 'cell'),
             ).camelName
-            const projectHasSdl = await checkProjectForQueryField(
-              queryFieldName
-            )
+            const projectHasSdl =
+              await checkProjectForQueryField(queryFieldName)
 
             if (projectHasSdl) {
-              await generateTypes()
+              const { errors } = await generateTypes()
+
+              for (const { message, error } of errors) {
+                console.error(message)
+                console.log()
+                console.error(error)
+                console.log()
+              }
+
               addFunctionToRollback(generateTypes, true)
             } else {
               task.skip(
-                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`
+                `Skipping type generation: no SDL defined for "${queryFieldName}". To generate types, run 'yarn rw g sdl ${queryFieldName}'.`,
               )
             }
           },

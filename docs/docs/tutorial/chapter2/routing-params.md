@@ -11,7 +11,7 @@ Now let's link the title of the post on the homepage to the detail page (and inc
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
@@ -78,7 +78,7 @@ But what we really need is to specify _which_ post we want to view on this page.
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 <Route path="/article/{id}" page={ArticlePage} name="article" />
 ```
 
@@ -97,7 +97,7 @@ Notice the `{id}`. Redwood calls these _route parameters_. They say "whatever va
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 import { Router, Route, Set } from '@redwoodjs/router'
 import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 import BlogLayout from 'src/layouts/BlogLayout'
@@ -164,7 +164,7 @@ Cool, cool, cool. Now we need to construct a link that has the ID of a post in i
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 <h2>
   <Link to={routes.article({ id: article.id })}>{article.title}</Link>
 </h2>
@@ -193,7 +193,6 @@ In this case, the path `/article/{id}` doesn't specify the type of `id` - so it 
 
 </ShowForTs>
 
-
 For routes with route parameters, the named route function expects an object where you specify a value for each parameter. If you click on the link now, it will indeed take you to `/article/1` (or `/article/2`, etc, depending on the ID of the post).
 
 You may have noticed that when trying to view the new single-article page that you're getting an error. This is because the boilerplate code included with the page when it was generated includes a link to the page itself—a link which now requires an `id`. Remove the link and your page should be working again:
@@ -203,12 +202,12 @@ You may have noticed that when trying to view the new single-article page that y
 
 ```diff title="web/src/pages/ArticlePage.js"
 - import { Link, routes } from '@redwoodjs/router'
-  import { MetaTags } from '@redwoodjs/web'
+  import { Metadata } from '@redwoodjs/web'
 
   const ArticlePage = () => {
     return (
       <>
-        <MetaTags title="Article" description="Article page" />
+        <Metadata title="Article" description="Article page" />
 
         <h1>ArticlePage</h1>
         <p>
@@ -230,12 +229,12 @@ You may have noticed that when trying to view the new single-article page that y
 
 ```diff title="web/src/pages/ArticlePage.tsx"
 - import { Link, routes } from '@redwoodjs/router'
-  import { MetaTags } from '@redwoodjs/web'
+  import { Metadata } from '@redwoodjs/web'
 
   const ArticlePage = () => {
     return (
       <>
-        <MetaTags title="Article" description="Article page" />
+        <Metadata title="Article" description="Article page" />
 
         <h1>ArticlePage</h1>
         <p>
@@ -268,15 +267,15 @@ And then we'll use that cell in `ArticlePage`:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
 
 const ArticlePage = () => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell />
@@ -291,14 +290,14 @@ export default ArticlePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 // highlight-next-line
 import ArticleCell from 'src/components/ArticleCell'
 
 const ArticlePage = () => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell />
@@ -317,9 +316,9 @@ Now over to the cell, we need access to that `{id}` route param so we can look u
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+```jsx title="web/src/components/ArticleCell/ArticleCell.jsx"
 export const QUERY = gql`
-  query ArticleQuery($id: Int!) {
+  query FindArticleQuery($id: Int!) {
     // highlight-next-line
     article: post(id: $id) {
       id
@@ -349,11 +348,11 @@ export const Success = ({ article }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticleCell/ArticleCell.tsx"
-import type { ArticleQuery } from 'types/graphql'
+import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ArticleQuery($id: Int!) {
+  query FindArticleQuery($id: Int!) {
     // highlight-next-line
     article: post(id: $id) {
       id
@@ -374,7 +373,9 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
+export const Success = ({
+  article,
+}: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
   return <div>{JSON.stringify(article)}</div>
 }
 ```
@@ -387,15 +388,15 @@ Okay, we're getting closer. Still, where will that `$id` come from? Redwood has 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/pages/ArticlePage/ArticlePage.js"
-import { MetaTags } from '@redwoodjs/web'
+```jsx title="web/src/pages/ArticlePage/ArticlePage.jsx"
+import { Metadata } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
 // highlight-next-line
 const ArticlePage = ({ id }) => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell id={id} />
@@ -410,7 +411,7 @@ export default ArticlePage
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/pages/ArticlePage/ArticlePage.tsx"
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import ArticleCell from 'src/components/ArticleCell'
 
 // highlight-start
@@ -423,7 +424,7 @@ interface Props {
 const ArticlePage = ({ id }: Props) => {
   return (
     <>
-      <MetaTags title="Article" description="Article page" />
+      <Metadata title="Article" description="Article page" />
 
       // highlight-next-line
       <ArticleCell id={id} />
@@ -462,7 +463,7 @@ What if you could request the conversion right in the route's path? Introducing 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/Routes.js"
+```jsx title="web/src/Routes.jsx"
 <Route path="/article/{id:Int}" page={ArticlePage} name="article" />
 ```
 
@@ -514,7 +515,8 @@ export const Success = ({ article, id, rand }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-interface Props extends CellSuccessProps<ArticleQuery> {
+interface Props
+  extends CellSuccessProps<FindArticleQuery, FindArticleQueryVariables> {
   id: number
   rand: number
 }
@@ -539,17 +541,17 @@ Now let's display the actual post instead of just dumping the query result. We c
 yarn rw g component Article
 ```
 
-Which creates `web/src/components/Article/Article.{js,tsx}` (and corresponding test and more!) as a super simple React component:
+Which creates `web/src/components/Article/Article.{jsx,tsx}` (and corresponding test and more!) as a super simple React component:
 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 const Article = () => {
   return (
     <div>
       <h2>{'Article'}</h2>
-      <p>{'Find me in ./web/src/components/Article/Article.js'}</p>
+      <p>{'Find me in ./web/src/components/Article/Article.jsx'}</p>
     </div>
   )
 }
@@ -587,7 +589,7 @@ Let's copy the `<article>` section from `ArticlesCell` and put it here instead, 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 // highlight-next-line
 import { Link, routes } from '@redwoodjs/router'
 
@@ -655,7 +657,7 @@ And update `ArticlesCell` to use this new component instead:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 // highlight-next-line
 import Article from 'src/components/Article'
 
@@ -739,12 +741,12 @@ Last but not least we can update the `ArticleCell` to properly display our blog 
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticleCell/ArticleCell.js"
+```jsx title="web/src/components/ArticleCell/ArticleCell.jsx"
 // highlight-next-line
 import Article from 'src/components/Article'
 
 export const QUERY = gql`
-  query ArticleQuery($id: Int!) {
+  query FindArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
@@ -775,11 +777,11 @@ export const Success = ({ article }) => {
 // highlight-next-line
 import Article from 'src/components/Article'
 
-import type { ArticleQuery } from 'types/graphql'
+import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
 
 export const QUERY = gql`
-  query ArticleQuery($id: Int!) {
+  query FindArticleQuery($id: Int!) {
     article: post(id: $id) {
       id
       title
@@ -797,7 +799,7 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<ArticleQuery>) => {
+export const Success = ({ article }: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
   // highlight-next-line
   return <Article article={article} />
 }
@@ -825,4 +827,3 @@ To recap:
 3. We created a cell to fetch and display the post.
 4. Redwood made the world a better place by making that `id` available to us at several key junctions in our code and even turning it into a number automatically.
 5. We turned the actual post display into a standard React component and used it in both the homepage and new detail page.
-

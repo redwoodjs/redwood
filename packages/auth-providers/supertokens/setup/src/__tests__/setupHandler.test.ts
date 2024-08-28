@@ -1,12 +1,12 @@
 // mock Telemetry for CLI commands so they don't try to spawn a process
-jest.mock('@redwoodjs/telemetry', () => {
+vi.mock('@redwoodjs/telemetry', () => {
   return {
-    errorTelemetry: () => jest.fn(),
-    timedTelemetry: () => jest.fn(),
+    errorTelemetry: () => vi.fn(),
+    timedTelemetry: () => vi.fn(),
   }
 })
 
-jest.mock('@redwoodjs/cli-helpers', () => {
+vi.mock('@redwoodjs/cli-helpers', () => {
   return {
     getPaths: () => {
       return {
@@ -18,26 +18,25 @@ jest.mock('@redwoodjs/cli-helpers', () => {
         base: '',
       }
     },
-    standardAuthHandler: () => jest.fn(),
+    standardAuthHandler: () => vi.fn(),
   }
 })
 
-// This will load packages/auth-providers/supertokens/setup/__mocks__/fs.js
-jest.mock('fs')
-
-const mockFS = fs as unknown as Omit<jest.Mocked<typeof fs>, 'readdirSync'> & {
-  __setMockFiles: (files: Record<string, string>) => void
-}
+vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 
 import fs from 'fs'
 
-import { extraTask } from '../setupHandler'
+import { vol } from 'memfs'
+import { vi, describe, it, expect } from 'vitest'
 
-test('extraTask', () => {
-  mockFS.__setMockFiles({
-    'Routes.tsx':
-      "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
-      `
+import { addRoutingLogic } from '../setupHandler'
+
+describe('addRoutingLogic', () => {
+  it('modifies the Routes.{jsx,tsx} file', () => {
+    vol.fromJSON({
+      'Routes.tsx':
+        "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
+        `
 import { Router, Route } from '@redwoodjs/router'
 
 import { useAuth } from './auth'
@@ -54,18 +53,43 @@ const Routes = () => {
 
 export default Routes
 `,
+    })
+
+    addRoutingLogic.task()
+
+    expect(fs.readFileSync('Routes.tsx', 'utf-8')).toMatchInlineSnapshot(`
+          "// In this file, all Page components from 'src/pages' are auto-imported.
+
+          import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
+
+          import { Router, Route } from '@redwoodjs/router'
+
+          import { useAuth, PreBuiltUI } from './auth'
+
+          const Routes = () => {
+            if (canHandleRoute(PreBuiltUI)) {
+              return getRoutingComponent(PreBuiltUI)
+            }
+
+            return (
+              <Router useAuth={useAuth}>
+                <Route path="/login" page={LoginPage} name="login" />
+                <Route path="/signup" page={SignupPage} name="signup" />
+                <Route notfound page={NotFoundPage} />
+              </Router>
+            )
+          }
+
+          export default Routes
+          "
+      `)
   })
 
-  extraTask.task()
-
-  expect(mockFS.readFileSync('Routes.tsx')).toMatchSnapshot()
-})
-
-test('extraTask already setup', () => {
-  mockFS.__setMockFiles({
-    'Routes.tsx':
-      "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
-      `
+  it('handles a Routes.{jsx,tsx} file with a legacy setup', () => {
+    vol.fromJSON({
+      'Routes.tsx':
+        "// In this file, all Page components from 'src/pages' are auto-imported.\n" +
+        `
 import SuperTokens from 'supertokens-auth-react'
 
 import { Router, Route } from '@redwoodjs/router'
@@ -88,9 +112,39 @@ const Routes = () => {
 
 export default Routes
 `,
+    })
+
+    addRoutingLogic.task()
+
+    expect(fs.readFileSync('Routes.tsx', 'utf-8')).toMatchInlineSnapshot(`
+      "// In this file, all Page components from 'src/pages' are auto-imported.
+
+
+
+      import { canHandleRoute, getRoutingComponent } from 'supertokens-auth-react/ui'
+
+      import { Router, Route } from '@redwoodjs/router'
+
+      import { useAuth, PreBuiltUI } from './auth'
+
+      const Routes = () => {
+        if (canHandleRoute(PreBuiltUI)) {
+          return getRoutingComponent(PreBuiltUI)
+        }
+
+
+
+        return (
+          <Router useAuth={useAuth}>
+            <Route path="/login" page={LoginPage} name="login" />
+            <Route path="/signup" page={SignupPage} name="signup" />
+            <Route notfound page={NotFoundPage} />
+          </Router>
+        )
+      }
+
+      export default Routes
+      "
+    `)
   })
-
-  extraTask.task()
-
-  expect(mockFS.readFileSync('Routes.tsx')).toMatchSnapshot()
 })

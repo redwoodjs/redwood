@@ -49,7 +49,7 @@ export const Success = ({
 This gives you the types of the props in your Cell's `Failure` component.
 It takes `TVariables` as an optional generic parameter, which is useful if you want to print error messages like `"Couldn't load data for ${variables.searchTerm}"`:
 
-```ts title=web/src/components/BlogPostCell.tsx
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -70,7 +70,7 @@ export const Failure = ({
 
 Similar to `CellFailureProps`, but for the props of your Cell's `Loading` component:
 
-```ts title=web/src/components/BlogPostCell.tsx
+```ts title="web/src/components/BlogPostCell.tsx"
 import type { FindBlogPostQuery, FindBlogPostQueryVariables } from 'types/graphql'
 
 // highlight-next-line
@@ -104,7 +104,7 @@ defineScenario<PrismaCreateType, TName, TKey>
 
 An example:
 
-```ts title=posts.scenarios.ts
+```ts title="posts.scenarios.ts"
 import type { Prisma, Post } from '@prisma/client'
 
 export const standard = defineScenario<Prisma.PostCreateArgs, 'post', 'one'>({
@@ -138,7 +138,7 @@ It takes three generic parameters:
 
 We know this is a lot of generics, but that's so you get to choose how specific you want to be with the types!
 
-```ts title=api/src/services/posts/posts.scenario.ts
+```ts title="api/src/services/posts/posts.scenario.ts"
 import type { Post } from '@prisma/client'
 
 //...
@@ -146,7 +146,7 @@ import type { Post } from '@prisma/client'
 export type StandardScenario = ScenarioData<Post, 'post'>
 ```
 
-```ts title=api/src/services/posts/posts.test.ts
+```ts title="api/src/services/posts/posts.test.ts"
 import type { StandardScenario } from './posts.scenarios'
 
 scenario('returns a single post', async (scenario: StandardScenario) => {

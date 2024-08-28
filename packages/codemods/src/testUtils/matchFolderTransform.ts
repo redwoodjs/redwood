@@ -2,13 +2,36 @@ import path from 'path'
 
 import fg from 'fast-glob'
 import fse from 'fs-extra'
+import { expect } from 'vitest'
+
+import runTransform from '../lib/runTransform'
 
 import { createProjectMock } from './index'
 
-export const matchFolderTransform = async (
-  transformFunction: () => any,
-  fixtureName: string,
-  { removeWhitespace } = { removeWhitespace: false }
+type Options = {
+  removeWhitespace?: boolean
+  targetPathsGlob?: string
+  /**
+   * Use this option, when you want to run a codemod that uses jscodeshift
+   * as well as modifies file names. e.g. convertJsToJsx
+   */
+  useJsCodeshift?: boolean
+}
+
+type MatchFolderTransformFunction = (
+  transformFunctionOrName: (() => any) | string,
+  fixtureName?: string,
+  options?: Options,
+) => Promise<void>
+
+export const matchFolderTransform: MatchFolderTransformFunction = async (
+  transformFunctionOrName,
+  fixtureName,
+  {
+    removeWhitespace = false,
+    targetPathsGlob = '**/*',
+    useJsCodeshift = false,
+  } = {},
 ) => {
   const tempDir = createProjectMock()
 
@@ -25,7 +48,7 @@ export const matchFolderTransform = async (
   const fixtureFolder = path.join(
     testPath,
     '../../__testfixtures__',
-    fixtureName
+    fixtureName || '',
   )
 
   const fixtureInputDir = path.join(fixtureFolder, 'input')
@@ -36,17 +59,53 @@ export const matchFolderTransform = async (
     overwrite: true,
   })
 
-  // Step 2: Run transform against temp dir
-  await transformFunction()
-
   const GLOB_CONFIG = {
     absolute: false,
     dot: true,
     ignore: ['redwood.toml', '**/*.DS_Store'], // ignore the fake redwood.toml added for getPaths
   }
-  const transformedPaths = fg.sync('**/*', { ...GLOB_CONFIG, cwd: tempDir })
 
-  const expectedPaths = fg.sync('**/*', {
+  // Step 2: Run transform against temp dir
+  if (useJsCodeshift) {
+    if (typeof transformFunctionOrName !== 'string') {
+      throw new Error(
+        'When running matchFolderTransform with useJsCodeshift, transformFunction must be a string (file name of jscodeshift transform)',
+      )
+    }
+    const transformName = transformFunctionOrName
+    const transformPath = require.resolve(
+      path.join(testPath, '../../', `${transformName}.ts`),
+    )
+
+    const targetPaths = fg.sync(targetPathsGlob, {
+      ...GLOB_CONFIG,
+      cwd: tempDir,
+    })
+
+    // So that the transform can use getPaths() utility func
+    // This is used inside the runTransform function
+    process.env.RWJS_CWD = tempDir
+
+    await runTransform({
+      transformPath,
+      targetPaths: targetPaths.map((p) => path.join(tempDir, p)),
+    })
+  } else {
+    if (typeof transformFunctionOrName !== 'function') {
+      throw new Error(
+        'transformFunction must be a function, if useJsCodeshift set to false',
+      )
+    }
+    const transformFunction = transformFunctionOrName
+    await transformFunction()
+  }
+
+  const transformedPaths = fg.sync(targetPathsGlob, {
+    ...GLOB_CONFIG,
+    cwd: tempDir,
+  })
+
+  const expectedPaths = fg.sync(targetPathsGlob, {
     ...GLOB_CONFIG,
     cwd: fixtureOutputDir,
   })
@@ -62,5 +121,5 @@ export const matchFolderTransform = async (
     expect(actualPath).toMatchFileContents(expectedPath, { removeWhitespace })
   })
 
-  delete process.env['RWJS_CWD']
+  delete process.env.RWJS_CWD
 }

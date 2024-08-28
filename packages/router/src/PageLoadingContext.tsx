@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
-import { createNamedContext } from './util'
+import { createNamedContext } from './createNamedContext.js'
 
 export interface PageLoadingContextInterface {
   loading: boolean
@@ -36,7 +36,7 @@ export const usePageLoadingContext = () => {
 
   if (!pageLoadingContext) {
     throw new Error(
-      'usePageLoadingContext must be used within a PageLoadingContext provider'
+      'usePageLoadingContext must be used within a PageLoadingContext provider',
     )
   }
 

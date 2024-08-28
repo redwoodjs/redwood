@@ -1,9 +1,7 @@
 // @ts-check
 const path = require('path')
 
-const {
-  getApiSideDefaultBabelConfig,
-} = require('@redwoodjs/internal/dist/build/babel/api')
+const { getApiSideDefaultBabelConfig } = require('@redwoodjs/babel-config')
 const { getPaths } = require('@redwoodjs/project-config')
 
 const rwjsPaths = getPaths()
@@ -23,7 +21,7 @@ module.exports = {
       apiSrcPath: rwjsPaths.api.src,
       tearDownCachePath: path.join(
         rwjsPaths.generated.base,
-        'scenarioTeardown.json'
+        'scenarioTeardown.json',
       ),
       dbSchemaPath: rwjsPaths.api.dbSchema,
     },
@@ -52,7 +50,7 @@ module.exports = {
     // This is to prevent web stuff leaking into api, and vice versa
     '^@redwoodjs/testing$': path.join(
       NODE_MODULES_PATH,
-      '@redwoodjs/testing/api'
+      '@redwoodjs/testing/api',
     ),
   },
   transform: {
@@ -68,4 +66,5 @@ module.exports = {
       },
     ],
   },
+  testPathIgnorePatterns: ['.scenarios.[jt]s$'],
 }

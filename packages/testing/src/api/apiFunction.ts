@@ -43,9 +43,12 @@ export const mockHttpEvent = ({
   const payloadAsString =
     typeof payload === 'string' ? payload : JSON.stringify(payload)
 
-  const body = isBase64Encoded
-    ? Buffer.from(payloadAsString || '').toString('base64')
-    : payloadAsString
+  const body =
+    payload === null
+      ? null
+      : isBase64Encoded
+        ? Buffer.from(payloadAsString || '').toString('base64')
+        : payloadAsString
 
   return {
     body,

@@ -4,29 +4,29 @@ description: How to get started connecting to and deploying to a real server
 
 # Introduction to Servers
 
-If you're looking at deploying to a real, physical server using something like the [Baremetal](/docs/deploy/baremetal) deploy option, you're going to need to get familiar with connecting to remote servers. On *nix-based systems (but also Windows after installing something like Powershell) this is handled by the [SSH](https://en.wikipedia.org/wiki/Secure_Shell) utility. In this doc we'll learn about the various strategies that SSH can use to connect:
+If you're looking at deploying to a real, physical server using something like the [Baremetal](/docs/deploy/baremetal) deploy option, you're going to need to get familiar with connecting to remote servers. On \*nix-based systems (but also Windows after installing something like Powershell) this is handled by the [SSH](https://en.wikipedia.org/wiki/Secure_Shell) utility. In this doc we'll learn about the various strategies that SSH can use to connect:
 
-* Username & password
-* Private key
-* Public key
+- Username & password
+- Private key
+- Public key
 
 ## Terminology
 
 Let's define a few terms so we're on the same page going forward:
 
-* SSH - Secure Shell Protocol (where'd the P go in the acronym?) is the protocol used by the `ssh` command line utility we'll be using throughout this doc
-* `ssh` - when shown in code font like this it's referring to the actual command line utility, rather than the all-encompassing "SSH" concept
-* `ssh-agent` - another utility that keeps track of public and private keys and makes them available for use by the `ssh` utility
+- SSH - Secure Shell Protocol (where'd the P go in the acronym?) is the protocol used by the `ssh` command line utility we'll be using throughout this doc
+- `ssh` - when shown in code font like this it's referring to the actual command line utility, rather than the all-encompassing "SSH" concept
+- `ssh-agent` - another utility that keeps track of public and private keys and makes them available for use by the `ssh` utility
 
 ## First Connect
 
-Before we can do anything else, we want to make sure that we can remotely connect to our server via SSH manually, as *nix folks have been doing for hundreds of years using SSH. Depending on how the server is configured, you'll connect with either a username and password, a private key known to the server, or a public key known to the server. We'll look at each one below.
+Before we can do anything else, we want to make sure that we can remotely connect to our server via SSH manually, as \*nix folks have been doing for hundreds of years using SSH. Depending on how the server is configured, you'll connect with either a username and password, a private key known to the server, or a public key known to the server. We'll look at each one below.
 
 A requirement of all of these authentication methods is that you know the username of the account you're connecting to. You'll need to get this from your hosting/cloud provider, and it could be pretty different depending on who your host is:
 
-* If you use AWS and create an EC2 instance from an Ubuntu image, the user will be `ubuntu`
-* If you use Amazon's own Linux image, it'll be `ec2user`
-* If you create a Digital Ocean Droplet the user will be `root`
+- If you use AWS and create an EC2 instance from an Ubuntu image, the user will be `ubuntu`
+- If you use Amazon's own Linux image, it'll be `ec2user`
+- If you create a Digital Ocean Droplet the user will be `root`
 
 Et cetera. Whatever it is, you'll need to know that before connecting.
 
@@ -63,7 +63,7 @@ If you're connecting to cloud-based servers, turning them on and off, and potent
 
 Once you're past that prompt you'll then either be prompted for your password, or logged in automatically (when using a private or public key). Let's look at each one in detail.
 
-:::caution Baremetal First Deploy Woes?
+:::warning Baremetal First Deploy Woes?
 
 If you're having trouble deploying to your server with Baremetal, and you've never connected to your server manually via SSH, this could be why: Baremetal provides no interactive prompt to accept this server fingerprint. You need to connect manually at least once before Baremetal can connect.
 
@@ -99,9 +99,9 @@ Some providers, like AWS, will give you a private key at the time the server is 
 
 :::info More About Public/Private Keypairs
 
-Learn more about [public/private key authentication](https://www.ssh.com/academy/ssh/public-key-authentication). But the gist is that you create two keys, one public and one private. Either one can encrypt a document, but, only the private key can *decrypt* it. This means that anyone can have the public key and it can be freely distrubted (thus the "public" name), and the owner of the private key can always verify that it was encrypted using the related public key. A related technique can happen in reverse: the private key can be used to create a signature of a document, and the public key can be used to *verify* that the signature was created by the matching private key. So you can get the original message, and after verifying the signature, trust that it was sent by the owner of the private key.
+Learn more about [public/private key authentication](https://www.ssh.com/academy/ssh/public-key-authentication). But the gist is that you create two keys, one public and one private. Either one can encrypt a document, but, only the private key can _decrypt_ it. This means that anyone can have the public key and it can be freely distrubted (thus the "public" name), and the owner of the private key can always verify that it was encrypted using the related public key. A related technique can happen in reverse: the private key can be used to create a signature of a document, and the public key can be used to _verify_ that the signature was created by the matching private key. So you can get the original message, and after verifying the signature, trust that it was sent by the owner of the private key.
 
-You can't *decrypt* something with the public key that was encrypted with the private key, however. That would defeat the purpose of sharing the public key: anyone could read your message! If you need two-way encryption of messages then both parties could share their public keys and each would encrypt using the other party's public key.
+You can't _decrypt_ something with the public key that was encrypted with the private key, however. That would defeat the purpose of sharing the public key: anyone could read your message! If you need two-way encryption of messages then both parties could share their public keys and each would encrypt using the other party's public key.
 
 :::
 
@@ -158,10 +158,10 @@ ubuntu@192.168.0.122: Permission denied (publickey,password).
 
 It could be one of several things:
 
-* The username is wrong
-* The password is wrong
-* The public key your system is trying to connect with is not found on the server in its `~/.ssh/authorized_keys` file
-* The private key you passed with the `-i` flag is not found on the server
+- The username is wrong
+- The password is wrong
+- The public key your system is trying to connect with is not found on the server in its `~/.ssh/authorized_keys` file
+- The private key you passed with the `-i` flag is not found on the server
 
 If you run the command again with the `-v` flag (verbose) you'll see everything that SSH is trying when it tries to log in. There are lots of resources on the internet to help you [troubleshoot](https://docs.digitalocean.com/support/how-to-troubleshoot-ssh-connectivity-issues/).
 
@@ -218,7 +218,7 @@ If you're already using [public key auth](#public-key) then you can probably ski
 
 :::
 
-You can have multiple public keys from multiple development machines on the server so you can connect from multiple computers. This comes in very handy when working on a team: when someone leaves you just remove their public key from the server. Contrast this with password authentication, where you either need to share the password to a single deploy user to all of your teammates, and then change the password when someone leaves, or give everyone a copy of the server's private key and change *that* every time someone leaves. Just adding their public keys is much simpler to manage.
+You can have multiple public keys from multiple development machines on the server so you can connect from multiple computers. This comes in very handy when working on a team: when someone leaves you just remove their public key from the server. Contrast this with password authentication, where you either need to share the password to a single deploy user to all of your teammates, and then change the password when someone leaves, or give everyone a copy of the server's private key and change _that_ every time someone leaves. Just adding their public keys is much simpler to manage.
 
 ### Public/Private Keypairs
 
@@ -318,7 +318,7 @@ ssh-add ~/.ssh/id_ed25519
 
 ### Adding Your SSH Public Key to the Server
 
-So SSH is now presenting the key to the server, but the server doesn't know what to do with it. We'll now copy our *public* key to the server so that it allows connections from it. Write your public key to the terminal so that you can copy it:
+So SSH is now presenting the key to the server, but the server doesn't know what to do with it. We'll now copy our _public_ key to the server so that it allows connections from it. Write your public key to the terminal so that you can copy it:
 
 ```
 cat ~/.ssh/id_ed25519.pub
@@ -357,7 +357,7 @@ And you should be in!
 
 ## SSH Agent Forwarding
 
-When connecting to a remote server, it would be nice if you could also SSH into other machines and have them identify you as *you*, on your personal computer, not as the server itself. By default this doesn't happen: making an SSH connection from your remote server uses the credentials on the server itself, meaning you'd have to go through all of the steps above to now treat the remote server as the client as whatever server *that* server wants to connect to as the host, allowing you to connect with your public key. Ugh.
+When connecting to a remote server, it would be nice if you could also SSH into other machines and have them identify you as _you_, on your personal computer, not as the server itself. By default this doesn't happen: making an SSH connection from your remote server uses the credentials on the server itself, meaning you'd have to go through all of the steps above to now treat the remote server as the client as whatever server _that_ server wants to connect to as the host, allowing you to connect with your public key. Ugh.
 
 Luckily SSH has a mechanism that supports this: SSH Agent Forwarding.
 
@@ -421,9 +421,9 @@ If you you use a shell other than `bash` or `zsh` the files are going to be name
 
 ```bash
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
+  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \$\[\033[00m\] '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 ```
 

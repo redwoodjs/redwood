@@ -1,58 +1,46 @@
-import fs from 'fs'
 import path from 'path'
 
 import execa from 'execa'
+import fs from 'fs-extra'
 import { Listr } from 'listr2'
-import { rimraf } from 'rimraf'
 import terminalLink from 'terminal-link'
 
-import { buildApi } from '@redwoodjs/internal/dist/build/api'
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import { buildApi, cleanApiBuild } from '@redwoodjs/internal/dist/build/api'
+import { generate } from '@redwoodjs/internal/dist/generate/generate'
 import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
-import { timedTelemetry, errorTelemetry } from '@redwoodjs/telemetry'
+import { timedTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, getConfig } from '../lib'
-import c from '../lib/colors'
 import { generatePrismaCommand } from '../lib/generatePrismaClient'
 
 export const handler = async ({
   side = ['api', 'web'],
   verbose = false,
-  performance = false,
-  stats = false,
   prisma = true,
   prerender,
 }) => {
+  recordTelemetryAttributes({
+    command: 'build',
+    side: JSON.stringify(side),
+    verbose,
+    prisma,
+    prerender,
+  })
+
   const rwjsPaths = getPaths()
+  const rwjsConfig = getConfig()
+  const useFragments = rwjsConfig.graphql?.fragments
+  const useTrustedDocuments = rwjsConfig.graphql?.trustedDocuments
 
-  if (performance) {
-    console.log('Measuring Web Build Performance...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.perf.js'
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
-    )
-    // We do not want to continue building...
-    return
-  }
-
-  if (stats) {
-    console.log('Building Web Stats...')
-    execa.sync(
-      `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-        '@redwoodjs/core/config/webpack.stats.js'
-      )}`,
-      { stdio: 'inherit', shell: true, cwd: rwjsPaths.web.base }
-    )
-    // We do not want to continue building...
-    return
-  }
-
+  const prismaSchemaExists = fs.existsSync(rwjsPaths.api.dbSchema)
   const prerenderRoutes =
     prerender && side.includes('web') ? detectPrerenderRoutes() : []
   const shouldGeneratePrismaClient =
-    prisma && (side.includes('api') || prerenderRoutes.length > 0)
+    prisma &&
+    prismaSchemaExists &&
+    (side.includes('api') || prerenderRoutes.length > 0)
 
   const tasks = [
     shouldGeneratePrismaClient && {
@@ -66,14 +54,29 @@ export const handler = async ({
         })
       },
     },
+    // If using GraphQL Fragments or Trusted Documents, then we need to use
+    // codegen to generate the types needed for possible types and the
+    // trusted document store hashes
+    (useFragments || useTrustedDocuments) && {
+      title: `Generating types needed for ${[
+        useFragments && 'GraphQL Fragments',
+        useTrustedDocuments && 'Trusted Documents',
+      ]
+        .filter(Boolean)
+        .join(' and ')} support...`,
+      task: async () => {
+        await generate()
+      },
+    },
     side.includes('api') && {
       title: 'Verifying graphql schema...',
       task: loadAndValidateSdls,
     },
     side.includes('api') && {
       title: 'Building API...',
-      task: () => {
-        const { errors, warnings } = buildApi()
+      task: async () => {
+        await cleanApiBuild()
+        const { errors, warnings } = await buildApi()
 
         if (errors.length) {
           console.error(errors)
@@ -84,47 +87,46 @@ export const handler = async ({
       },
     },
     side.includes('web') && {
-      // Clean web/dist before building
-      // Vite handles this internally
-      title: 'Cleaning Web...',
-      task: () => {
-        return rimraf(rwjsPaths.web.dist)
-      },
-      enabled: getConfig().web.bundler !== 'vite',
-    },
-    side.includes('web') && {
       title: 'Building Web...',
       task: async () => {
-        if (getConfig().web.bundler === 'vite') {
-          // @NOTE: we're using the vite build command here, instead of the buildWeb function
-          // because we want the process.cwd to be the web directory, not the root of the project
-          // This is important for postcss/tailwind to work correctly
-          await execa(`yarn rw-vite-build`, {
+        // @NOTE: we're using the vite build command here, instead of the
+        // buildWeb function directly because we want the process.cwd to be
+        // the web directory, not the root of the project.
+        // This is important for postcss/tailwind to work correctly
+        // Having a separate binary lets us contain the change of cwd to that
+        // process only. If we changed cwd here, or in the buildWeb function,
+        // it could affect other things that run in parallel while building.
+        // We don't have any parallel tasks right now, but someone might add
+        // one in the future as a performance optimization.
+        //
+        // Disable the new warning in Vite v5 about the CJS build being deprecated
+        // so that users don't have to see it when this command is called with --verbose
+        process.env.VITE_CJS_IGNORE_WARNING = 'true'
+        await execa(
+          `node ${require.resolve(
+            '@redwoodjs/vite/bins/rw-vite-build.mjs',
+          )} --webDir="${rwjsPaths.web.base}" --verbose=${verbose}`,
+          {
             stdio: verbose ? 'inherit' : 'pipe',
             shell: true,
-            cwd: rwjsPaths.web.base, // <-- important for postcss/tailwind
-          })
-        } else {
-          await execa(
-            `yarn cross-env NODE_ENV=production webpack --config ${require.resolve(
-              '@redwoodjs/core/config/webpack.production.js'
-            )}`,
-            {
-              stdio: verbose ? 'inherit' : 'pipe',
-              shell: true,
-              cwd: rwjsPaths.web.base,
-            }
+            // `cwd` is needed for yarn to find the rw-vite-build binary
+            // It won't change process.cwd for anything else here, in this
+            // process
+            cwd: rwjsPaths.web.base,
+          },
+        )
+
+        // Streaming SSR does not use the index.html file.
+        if (!getConfig().experimental?.streamingSsr?.enabled) {
+          console.log('Creating 200.html...')
+
+          const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
+
+          fs.copyFileSync(
+            indexHtmlPath,
+            path.join(getPaths().web.dist, '200.html'),
           )
         }
-
-        console.log('Creating 200.html...')
-
-        const indexHtmlPath = path.join(getPaths().web.dist, 'index.html')
-
-        fs.copyFileSync(
-          indexHtmlPath,
-          path.join(getPaths().web.dist, '200.html')
-        )
       },
     },
   ].filter(Boolean)
@@ -135,10 +137,13 @@ export const handler = async ({
       console.log(
         `You have not marked any routes to "prerender" in your ${terminalLink(
           'Routes',
-          'file://' + rwjsPaths.web.routes
-        )}.`
+          'file://' + rwjsPaths.web.routes,
+        )}.`,
       )
+
+      return
     }
+
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
     await execa('yarn rw prerender', {
@@ -152,18 +157,12 @@ export const handler = async ({
     renderer: verbose && 'verbose',
   })
 
-  try {
-    await timedTelemetry(process.argv, { type: 'build' }, async () => {
-      await jobs.run()
+  await timedTelemetry(process.argv, { type: 'build' }, async () => {
+    await jobs.run()
 
-      if (side.includes('web') && prerender) {
-        // This step is outside Listr so that it prints clearer, complete messages
-        await triggerPrerender()
-      }
-    })
-  } catch (e) {
-    console.log(c.error(e.message))
-    errorTelemetry(process.argv, e.message)
-    process.exit(1)
-  }
+    if (side.includes('web') && prerender && prismaSchemaExists) {
+      // This step is outside Listr so that it prints clearer, complete messages
+      await triggerPrerender()
+    }
+  })
 }

@@ -3,10 +3,12 @@
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
 import chokidar from 'chokidar'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import { cliLogger } from '../cliLogger'
 import {
   isCellFile,
   isPageFile,
@@ -15,6 +17,7 @@ import {
 } from '../files'
 import { warningForDuplicateRoutes } from '../routes'
 
+import { generateClientPreset } from './clientPreset'
 import { generate } from './generate'
 import {
   generateTypeDefGraphQLApi,
@@ -32,7 +35,7 @@ import {
 
 const rwjsPaths = getPaths()
 
-const watcher = chokidar.watch('**/src/**/*.{ts,js,jsx,tsx}', {
+const watcher = chokidar.watch('(web|api)/src/**/*.{ts,js,jsx,tsx}', {
   persistent: true,
   ignored: ['node_modules', '.redwood'],
   ignoreInitial: true,
@@ -51,62 +54,80 @@ let routesWarningMessage = ''
 process.stdin.on('data', async (data) => {
   const str = data.toString().trim().toLowerCase()
   if (str === 'g' || str === 'rs') {
-    console.log('Regenerating types and schemas....')
+    cliLogger('Re-creating TypeScript definitions and GraphQL schemas')
     await generate()
   }
 })
 
 watcher
   .on('ready', async () => {
-    console.log('Generating TypeScript definitions and GraphQL schemas...')
-    const files = await generate()
-    console.log(files.length, 'files generated')
+    const start = Date.now()
+    cliLogger('Generating full TypeScript definitions and GraphQL schemas')
+    const { files, errors } = await generate()
+    cliLogger(`Done.`)
+    cliLogger.debug(`\nCreated ${files.length} in ${Date.now() - start} ms`)
+
+    if (errors.length > 0) {
+      for (const { message, error } of errors) {
+        console.error(message)
+        console.error(error)
+        console.log()
+      }
+    }
+
     routesWarningMessage = warningForDuplicateRoutes()
+
     if (routesWarningMessage) {
       console.warn(routesWarningMessage)
     }
   })
   .on('all', async (eventName, p) => {
+    cliLogger.trace(
+      `File system change: ${chalk.magenta(eventName)} ${chalk.dim(p)}`,
+    )
     if (!['add', 'change', 'unlink'].includes(eventName)) {
       return
     }
-    eventName = eventName as 'add' | 'change' | 'unlink'
-
+    const eventTigger = eventName as 'add' | 'change' | 'unlink'
     const absPath = path.join(rwjsPaths.base, p)
 
-    if (absPath.indexOf('Cell') !== -1 && isCellFile(absPath)) {
+    // Track the time in debug
+    const start = Date.now()
+    const finished = (type: string) =>
+      cliLogger.debug(
+        action[eventTigger],
+        type + ':',
+        chalk.dim(p),
+        chalk.dim.italic(Date.now() - start + ' ms'),
+      )
+
+    if (absPath.includes('Cell') && isCellFile(absPath)) {
       await generateTypeDefGraphQLWeb()
+      await generateClientPreset()
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForCell(absPath, rwjsPaths)[0])
       } else {
         generateMirrorCell(absPath, rwjsPaths)
       }
-
-      console.log(action[eventName], 'Cell:', '\x1b[2m', p, '\x1b[0m')
+      finished('Cell')
     } else if (absPath === rwjsPaths.web.routes) {
       generateTypeDefRouterRoutes()
       routesWarningMessage = warningForDuplicateRoutes()
-      console.log(action[eventName], 'Routes:', '\x1b[2m', p, '\x1b[0m')
-    } else if (absPath.indexOf('Page') !== -1 && isPageFile(absPath)) {
+      finished('Routes')
+    } else if (absPath.includes('Page') && isPageFile(absPath)) {
       generateTypeDefRouterPages()
-      console.log(action[eventName], 'Page:', '\x1b[2m', p, '\x1b[0m')
+      finished('Page')
     } else if (isDirectoryNamedModuleFile(absPath)) {
       if (eventName === 'unlink') {
         fs.unlinkSync(mirrorPathForDirectoryNamedModules(absPath, rwjsPaths)[0])
       } else {
         generateMirrorDirectoryNamedModule(absPath, rwjsPaths)
       }
-      console.log(
-        action[eventName],
-        'Directory named module:',
-        '\x1b[2m',
-        p,
-        '\x1b[0m'
-      )
+      finished('Directory named module')
     } else if (isGraphQLSchemaFile(absPath)) {
       await generateGraphQLSchema()
       await generateTypeDefGraphQLApi()
-      console.log(action[eventName], 'GraphQL Schema:', '\x1b[2m', p, '\x1b[0m')
+      finished('GraphQL Schema')
     }
 
     if (routesWarningMessage) {

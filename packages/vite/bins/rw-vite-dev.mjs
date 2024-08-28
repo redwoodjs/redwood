@@ -1,9 +1,10 @@
+#!/usr/bin/env node
 import { createServer } from 'vite'
 import yargsParser from 'yargs-parser'
 
-import projectConfig from '@redwoodjs/project-config'
+import { getPaths } from '@redwoodjs/project-config'
 
-const rwPaths = projectConfig.getPaths()
+const rwPaths = getPaths()
 
 const startDevServer = async () => {
   const configFile = rwPaths.web.viteConfig

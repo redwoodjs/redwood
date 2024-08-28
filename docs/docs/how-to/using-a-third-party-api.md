@@ -125,7 +125,7 @@ This gives us a very simple form and some validation that the user is entering a
 Now let's talk to the API and get some data for real. We can do that in one of two ways:
 
 1. Have the client (React app running in the browser) talk to the API directly
-2. Have our own server (or serverless function, in the case of Redwood) talk to the API, and have the client talk to *our* server.
+2. Have our own server (or serverless function, in the case of Redwood) talk to the API, and have the client talk to _our_ server.
 
 We'll build out an example of both types of integration below.
 
@@ -135,14 +135,14 @@ For the first version of our client-side integration let's access the API direct
 
 **Pros**
 
-* Simplest design: no server design/build needed
-* Fewest network calls: one!
-* Fast: calling directly to the API
+- Simplest design: no server design/build needed
+- Fewest network calls: one!
+- Fast: calling directly to the API
 
 **Cons**
 
-* Insecure: users could inspect the page source and get our API key
-* No throttling: someone could write a bot to hit the page thousands of times a second
+- Insecure: users could inspect the page source and get our API key
+- No throttling: someone could write a bot to hit the page thousands of times a second
 
 You'll need to balance these risks in a real-world app so choose carefully!
 
@@ -152,9 +152,11 @@ We've got the zip code in our `onSubmit` handler so it makes sense to simply mak
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
-  fetch('https://api.openweathermap.org/data/2.5/weather?zip=66952,us&appid=YOUR_API_KEY')
-    .then(response => response.json())
-    .then(json => console.info(json))
+  fetch(
+    'https://api.openweathermap.org/data/2.5/weather?zip=66952,us&appid=YOUR_API_KEY'
+  )
+    .then((response) => response.json())
+    .then((json) => console.info(json))
 }
 ```
 
@@ -166,9 +168,11 @@ Well that was easy! We have the zip code hardcoded into that URL so let's replac
 
 ```jsx title="web/src/pages/HomePage/HomePage.js"
 const onSubmit = (data) => {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`)
-    .then(response => response.json())
-    .then(json => console.info(json))
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`
+  )
+    .then((response) => response.json())
+    .then((json) => console.info(json))
 }
 ```
 
@@ -185,7 +189,7 @@ const HomePage = () => {
 
   const onSubmit = (data) => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?zip={data.zip},us&appid=YOUR_API_KEY`
+      `https://api.openweathermap.org/data/2.5/weather?zip=${data.zip},us&appid=YOUR_API_KEY`
     )
       .then((response) => response.json())
       .then((json) => setWeather(json))
@@ -357,7 +361,7 @@ export const getWeather = async ({ zip }) => {
     city: json.name,
     conditions: json.weather[0].main,
     temp: Math.round(((json.main.temp - 273.15) * 9) / 5 + 32),
-    icon: `http://openweathermap.org/img/wn/${json.weather[0].icon}@2x.png`
+    icon: `http://openweathermap.org/img/wn/${json.weather[0].icon}@2x.png`,
   }
 }
 ```
@@ -501,7 +505,9 @@ export const getWeather = async ({ zip }) => {
   const json = await response.json()
 
   if (json.cod === '404') {
-    throw new UserInputError(`${zip} isn't a valid US zip code, please try again`)
+    throw new UserInputError(
+      `${zip} isn't a valid US zip code, please try again`
+    )
   }
 
   return {

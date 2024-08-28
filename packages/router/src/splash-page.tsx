@@ -9,7 +9,7 @@ interface SplashPageProps {
   >
 }
 
-const SplashPage = ({
+export const SplashPage = ({
   hasGeneratedRoutes,
   allStandardRoutes: routesMap,
 }: SplashPageProps) => {
@@ -574,7 +574,7 @@ const useVersion = () => {
             body: JSON.stringify({
               query: 'query RedwoodVersion { redwood { version } }',
             }),
-          }
+          },
         )
 
         const versionData = await response.json()
@@ -592,5 +592,3 @@ const useVersion = () => {
   }, [])
   return version
 }
-
-export { SplashPage }

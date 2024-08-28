@@ -1,23 +1,33 @@
-// import terminalLink from 'terminal-link'
+import path from 'path'
+
 import { Listr } from 'listr2'
 
+import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import { getPaths, printSetupNotes, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
-import { printSetupNotes, updateApiURLTask } from '../helpers'
+import { updateApiURLTask } from '../helpers'
 
 export const command = 'vercel'
 export const description = 'Setup Vercel deploy'
 
-const notes = [
-  'You are ready to deploy to Vercel!',
-  'See: https://redwoodjs.com/docs/deploy#vercel-deploy',
-]
-
-export const handler = async () => {
-  const tasks = new Listr([updateApiURLTask('/api'), printSetupNotes(notes)], {
-    rendererOptions: { collapseSubtasks: false },
+export async function handler(options) {
+  recordTelemetryAttributes({
+    command: 'setup deploy vercel',
   })
+
+  const tasks = new Listr(
+    [
+      updateApiURLTask('/api'),
+      writeVercelConfigTask({ overwriteExisting: options.force }),
+      printSetupNotes(notes),
+    ],
+    {
+      rendererOptions: { collapseSubtasks: false },
+    },
+  )
+
   try {
     await tasks.run()
   } catch (e) {
@@ -26,3 +36,30 @@ export const handler = async () => {
     process.exit(e?.exitCode || 1)
   }
 }
+
+function writeVercelConfigTask({ overwriteExisting = false } = {}) {
+  return {
+    title: 'Writing vercel.json...',
+    task: (_ctx, task) => {
+      writeFile(
+        path.join(getPaths().base, 'vercel.json'),
+        JSON.stringify(vercelConfig, null, 2),
+        { overwriteExisting },
+        task,
+      )
+    },
+  }
+}
+
+const vercelConfig = {
+  build: {
+    env: {
+      ENABLE_EXPERIMENTAL_COREPACK: '1',
+    },
+  },
+}
+
+const notes = [
+  'You are ready to deploy to Vercel!',
+  'See: https://redwoodjs.com/docs/deploy#vercel-deploy',
+]

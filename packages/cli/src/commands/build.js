@@ -1,7 +1,9 @@
 import terminalLink from 'terminal-link'
 
+import c from '../lib/colors'
+import { exitWithError } from '../lib/exit'
 import { sides } from '../lib/project'
-import checkForBabelConfig from '../middleware/checkForBabelConfig'
+import { checkNodeVersion } from '../middleware/checkNodeVersion'
 
 export const command = 'build [side..]'
 export const description = 'Build for production'
@@ -15,14 +17,6 @@ export const builder = (yargs) => {
       default: choices,
       description: 'Which side(s) to build',
       type: 'array',
-    })
-    .option('stats', {
-      default: false,
-      description: `Use ${terminalLink(
-        'Webpack Bundle Analyzer',
-        'https://github.com/webpack-contrib/webpack-bundle-analyzer'
-      )}`,
-      type: 'boolean',
     })
     .option('verbose', {
       alias: 'v',
@@ -41,22 +35,27 @@ export const builder = (yargs) => {
       default: true,
       description: 'Generate the Prisma client',
     })
-    .option('performance', {
-      alias: 'perf',
-      type: 'boolean',
-      default: false,
-      description: 'Measure build performance',
+    .middleware(() => {
+      const check = checkNodeVersion()
+
+      if (check.ok) {
+        return
+      }
+
+      exitWithError(undefined, {
+        message: `${c.error('Error')}: ${check.message}`,
+        includeEpilogue: false,
+      })
     })
-    .middleware(checkForBabelConfig)
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#build'
-      )}`
+        'https://redwoodjs.com/docs/cli-commands#build',
+      )}`,
     )
 }
 
 export const handler = async (options) => {
-  const { handler } = await import('./buildHandler')
+  const { handler } = await import('./buildHandler.js')
   return handler(options)
 }

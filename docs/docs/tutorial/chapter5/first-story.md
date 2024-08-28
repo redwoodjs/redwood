@@ -7,7 +7,7 @@ First let's update the `Article` component to contain that functionality:
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/Article/Article.js"
+```jsx title="web/src/components/Article/Article.jsx"
 import { Link, routes } from '@redwoodjs/router'
 
 // highlight-start
@@ -80,7 +80,6 @@ export default Article
 </TabItem>
 </Tabs>
 
-
 We'll pass an additional `summary` prop to the component to let it know if it should show just the summary or the whole thing. We default it to `false` to preserve the existing behavior—always showing the full body.
 
 Now in the Storybook story let's create a `summary` story that uses the `Article` component the same way that `generated` does, but adds the new `summary` prop. We'll take the content of the sample post and put that in a constant that both stories will use. We'll also rename `generated` to `full` to make it clear what's different between the two:
@@ -88,7 +87,7 @@ Now in the Storybook story let's create a `summary` story that uses the `Article
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/components/Article/Article.stories.js"
+```jsx title="web/components/Article/Article.stories.jsx"
 import Article from './Article'
 
 // highlight-start
@@ -157,7 +156,7 @@ Great! Now to complete the picture let's use the summary in our home page displa
 <Tabs groupId="js-ts">
 <TabItem value="js" label="JavaScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.js"
+```jsx title="web/src/components/ArticlesCell/ArticlesCell.jsx"
 import Article from 'src/components/Article'
 
 export const QUERY = gql`

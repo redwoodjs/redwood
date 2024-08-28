@@ -1,10 +1,14 @@
 // @WARN: This export is going to cause memory problems in the CLI.
 // We need to split this into smaller packages, or use export aliasing (like in packages/testing/cache)
 
-export * from './lib'
-export * from './lib/colors'
-export * from './lib/paths'
-export * from './lib/project'
-export * from './auth/setupHelpers'
+export * from './lib/index.js'
+export * from './lib/colors.js'
+export * from './lib/paths.js'
+export * from './lib/project.js'
+export * from './lib/version.js'
+export * from './auth/setupHelpers.js'
+export type { AuthHandlerArgs } from './auth/setupHelpers.js'
 
-export * from './lib/installHelpers'
+export * from './lib/installHelpers.js'
+
+export * from './telemetry/index.js'

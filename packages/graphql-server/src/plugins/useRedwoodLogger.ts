@@ -1,16 +1,17 @@
-import {
+import type {
   DefinitionNode,
   ExecutionResult,
-  Kind,
   OperationDefinitionNode,
 } from 'graphql'
-import { Plugin, handleStreamOrSingleExecutionResult } from 'graphql-yoga'
+import { Kind } from 'graphql'
+import type { Plugin } from 'graphql-yoga'
+import { handleStreamOrSingleExecutionResult } from 'graphql-yoga'
 import { v4 as uuidv4 } from 'uuid'
 
 import type { Logger, LevelWithSilent } from '@redwoodjs/api/logger'
 
 import { AuthenticationError, ForbiddenError } from '../errors'
-import { RedwoodGraphQLContext } from '../types'
+import type { RedwoodGraphQLContext } from '../types'
 
 /**
  * Options for request and response information to include in the log statements
@@ -141,7 +142,7 @@ const logResult =
 
             `'${error?.extensions?.code || 'authentication'}' error '${
               error.message
-            }' occurred in ${operationName}`
+            }' occurred in ${operationName}`,
           )
         } else {
           envelopLogger.error(
@@ -149,7 +150,7 @@ const logResult =
 
             error?.originalError?.message ||
               error.message ||
-              `Error in GraphQL execution: ${operationName}`
+              `Error in GraphQL execution: ${operationName}`,
           )
         }
       })
@@ -172,7 +173,7 @@ const logResult =
         {
           ...options,
         },
-        `GraphQL execution completed: ${operationName}`
+        `GraphQL execution completed: ${operationName}`,
       )
     }
   }
@@ -192,7 +193,7 @@ const logResult =
  * @returns
  */
 export const useRedwoodLogger = (
-  loggerConfig: LoggerConfig
+  loggerConfig: LoggerConfig,
 ): Plugin<RedwoodGraphQLContext> => {
   const logger = loggerConfig.logger
   const level = loggerConfig.options?.level || logger.level || 'warn'
@@ -218,7 +219,7 @@ export const useRedwoodLogger = (
       })
     },
     onParse({ params }) {
-      const options = params.options as any
+      const options = params.options
 
       const envelopLogger = childLogger.child({
         ...options,
@@ -231,7 +232,7 @@ export const useRedwoodLogger = (
       }
     },
     onValidate({ params }) {
-      const options = params.options as any
+      const options = params.options
 
       const envelopLogger = childLogger.child({
         ...options,
@@ -239,14 +240,16 @@ export const useRedwoodLogger = (
 
       return ({ result }) => {
         result.forEach((item) => {
-          item.message && envelopLogger.error(item.message)
+          if (item.message) {
+            envelopLogger.error(item.message)
+          }
         })
       }
     },
     onExecute({ args }) {
       const options = {} as any
       const rootOperation = args.document.definitions.find(
-        (o: DefinitionNode) => o.kind === Kind.OPERATION_DEFINITION
+        (o: DefinitionNode) => o.kind === Kind.OPERATION_DEFINITION,
       ) as OperationDefinitionNode
 
       const operationName =

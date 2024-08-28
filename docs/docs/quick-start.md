@@ -6,7 +6,7 @@ description: Redwood quick start
 
 :::info Prerequisites
 
-- Redwood requires [Node.js](https://nodejs.org/en/) (=18.x) and [Yarn](https://yarnpkg.com/) (>=1.15)
+- Redwood requires [Node.js](https://nodejs.org/en/) (=20.x) and [Yarn](https://yarnpkg.com/) (>=1.22.21)
 - Are you on Windows? For best results, follow our [Windows development setup](how-to/windows-development-setup.md) guide
 
 :::
@@ -44,10 +44,18 @@ Your browser should automatically open to [http://localhost:8910](http://localho
 Congratulations on running your first Redwood CLI command!
 From dev to deploy, the CLI is with you the whole way.
 And there's quite a few commands at your disposal:
+
 ```
 yarn redwood --help
 ```
+
 For all the details, see the [CLI reference](cli-commands.md).
+
+### GitPod
+
+The fastest way to start a new Redwood project is to use GitPod ([additional documentation for working with GitPod](./how-to/using-gitpod)).
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/redwoodjs/starter)
 
 ## Prisma and the database
 
@@ -102,7 +110,17 @@ Mockup, build, and verify your React components, even in complete isolation from
 yarn rw storybook
 ```
 
-Before you start, see if the CLI's `setup ui` command has your favorite styling library:
+Seeing "Couldn't find any stories"?
+That's because you need a `*.stories.{tsx,jsx}` file.
+The Redwood CLI makes getting one easy enough—try generating a [Cell](./cells), Redwood's data-fetching abstraction:
+
+```
+yarn rw generate cell examplePosts
+```
+
+The Storybook server should hot reload and now you'll have four stories to work with.
+They'll probably look a little bland since there's no styling.
+See if the Redwood CLI's `setup ui` command has your favorite styling library:
 
 ```
 yarn rw setup ui --help
@@ -117,7 +135,7 @@ Redwood fully integrates Jest with both the front- and back-ends, and makes it e
 yarn rw test
 ```
 
-To make the integration even more seamless, Redwood augments Jest with database [scenarios](testing.md#scenarios)  and [GraphQL mocking](testing.md#mocking-graphql-calls).
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](testing.md#scenarios) and [GraphQL mocking](testing.md#mocking-graphql-calls).
 
 ## Ship it
 

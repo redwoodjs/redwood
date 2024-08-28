@@ -1,15 +1,24 @@
 import type _React from 'react'
 
-import type _gql from 'graphql-tag'
-import type _PropTypes from 'prop-types'
+import type { DocumentNode } from 'graphql'
 
 // These are the global types exposed to a user's project
 // For "internal" global types see ambient.d.ts
 
 declare global {
-  const React: typeof _React
-  const PropTypes: typeof _PropTypes
-  const gql: typeof _gql
+  // This type is used for both regular RW projects and projects that have
+  // enabled Trusted Documents. For regular RW projects, this could have been
+  // typed just by importing gql from `graphql-tag`. But for Trusted Documents
+  // the type should be imported from `web/src/graphql/gql` in the user's
+  // project. The type here is generic enough to cover both cases.
+  const gql: (
+    source: string | TemplateStringsArray | readonly string[],
+    ...args: any[]
+  ) => DocumentNode
+
+  // Having this as a type instead of a const allows us to augment/override it
+  // in other packages
+  type React = typeof _React
 
   interface Window {
     /** URL or absolute path to the GraphQL serverless function */
@@ -17,18 +26,15 @@ declare global {
     /** URL or absolute path to serverless functions */
     RWJS_API_URL: string
     __REDWOOD__APP_TITLE: string
-
-    // Used by FatalErrorPage to determine how to import the DevFatalErrorPage
-    RWJS_WEB_BUNDLER: string
   }
 
   type GraphQLOperationVariables = Record<string, any>
 
-  /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   // Overridable graphQL hook return types
   interface QueryOperationResult<
     TData = any,
-    TVariables = GraphQLOperationVariables
+    TVariables = GraphQLOperationVariables,
   > {
     data: TData | undefined
     loading: boolean
@@ -37,6 +43,7 @@ declare global {
   }
 
   // not defining it here, because it gets overridden by Apollo provider anyway
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface MutationOperationResult<TData, TVariables> {}
 
   // Overridable useQuery and useMutation hooks
