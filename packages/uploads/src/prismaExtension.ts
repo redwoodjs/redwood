@@ -32,6 +32,10 @@ export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
   [K in MNames]?: UploadConfigForModel<K>
 }
 
+type WithSignedUrlArgs = {
+  expiresIn?: number
+}
+
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
   storageAdapter: StorageAdapter,
@@ -53,7 +57,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs: Record<string, boolean>
         compute: (
           modelData: Record<string, unknown>,
-        ) => <T>(this: T, { expiresIn }: { expiresIn?: number }) => Promise<T>
+        ) => <T>(this: T, signArgs?: WithSignedUrlArgs) => Promise<T>
       }
     }
   }
@@ -173,7 +177,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       withSignedUrl: {
         needs,
         compute(modelData) {
-          return ({ expiresIn }: { expiresIn?: number }) => {
+          return ({ expiresIn }: WithSignedUrlArgs = {}) => {
             if (!urlSigner) {
               throw new Error(
                 'Please supply signed url settings in setupUpload()',
