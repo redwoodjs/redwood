@@ -10,7 +10,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# No top level permissions are required for this workflows
+# No top level permissions are required for this workflow
 permissions: {}
 
 jobs:
