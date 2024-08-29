@@ -54,7 +54,9 @@ describe('Result extensions', () => {
         },
       })
 
-      const signedUrlDumbo = await dumbo.withSignedUrl(254)
+      const signedUrlDumbo = await dumbo.withSignedUrl({
+        expiresIn: 254,
+      })
       expect(signedUrlDumbo.firstUpload).toContain(
         '/.redwood/functions/signed-url',
       )
