@@ -1,0 +1,78 @@
+{
+  "name": "@redwoodjs/uploads",
+  "version": "7.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/uploads"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./FileSystemStorage": {
+      "require": "./dist/cjs/FileSystemStorage.js",
+      "import": "./dist/FileSystemStorage.js"
+    },
+    "./MemoryStorage": {
+      "require": "./dist/cjs/MemoryStorage.js",
+      "import": "./dist/MemoryStorage.js"
+    },
+    "./signedUrl": {
+      "require": "./dist/cjs/signedUrls.js",
+      "import": "./dist/signedUrls.js"
+    },
+    "./prisma": {
+      "require": {
+        "types": "./dist/cjs/prismaExtension.d.ts",
+        "default": "./dist/cjs/prismaExtension.js"
+      },
+      "import": {
+        "types": "./dist/prismaExtension.d.ts",
+        "default": "./dist/prismaExtension.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.d.*"
+  ],
+  "scripts": {
+    "build": "yarn setup:test && tsx ./build.mts",
+    "build:pack": "yarn pack -o redwoodjs-uploads.tgz",
+    "build:types": "tsc --build --verbose",
+    "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
+    "check:attw": "tsx attw.ts",
+    "check:package": "concurrently npm:check:attw yarn publint",
+    "setup:test": "npx prisma db push --accept-data-loss --schema ./src/__tests__/unit-test-schema.prisma",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@redwoodjs/project-config": "workspace:*",
+    "mime-types": "2.1.35",
+    "ulid": "2.3.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.15.4",
+    "@prisma/client": "5.18.0",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/mime-types": "2.1.4",
+    "concurrently": "8.2.2",
+    "esbuild": "0.23.0",
+    "publint": "0.2.10",
+    "tsx": "4.17.0",
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

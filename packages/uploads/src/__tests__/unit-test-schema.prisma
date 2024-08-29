@@ -1,0 +1,40 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:for_unit_test.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./prisma-client" // <-- we generated a local prisma client so it doesn't interfere with the mono repo
+}
+
+model Dummy {
+  id          Int    @id @default(autoincrement())
+  uploadField String
+}
+
+model Dumbo {
+  id           Int     @id @default(autoincrement())
+  firstUpload  String
+  secondUpload String
+  message      String?
+}
+
+model NoUploadFields {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Book {
+  id      Int       @id @default(autoincrement())
+  coverId Int       @unique
+  cover   BookCover @relation(fields: [coverId], references: [id])
+  name    String
+}
+
+model BookCover {
+  id Int @id @default(autoincrement())
+  // This is the upload field,
+  photo String
+  book Book?
+}
