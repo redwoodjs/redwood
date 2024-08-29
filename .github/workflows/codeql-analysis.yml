@@ -26,13 +26,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  security-events: write
+permissions: {}
 
 jobs:
   analyze:
     name: 🔬 Analyze
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
 
     strategy:
       fail-fast: false
