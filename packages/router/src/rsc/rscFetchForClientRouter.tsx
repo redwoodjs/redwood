@@ -39,13 +39,13 @@ export function rscFetch(rscId: string, props: RscFetchProps) {
     // element). So for now at least we need to send it with every RSC
     // request, so React knows what `callServer` method to use for server
     // actions inside the RSC.
-    callServer: async function (rsfId: string, args: unknown[]) {
+    callServer: async function (rsaId: string, args: unknown[]) {
       // `args` is often going to be an array with just a single element,
       // and that element will be FormData
-      console.log('ClientRouter.ts :: callServer rsfId', rsfId, 'args', args)
+      console.log('ClientRouter.ts :: callServer rsfId', rsaId, 'args', args)
 
       const searchParams = new URLSearchParams()
-      searchParams.set('action_id', rsfId)
+      searchParams.set('action_id', rsaId)
       const id = '_'
 
       const response = fetch(BASE_PATH + id + '?' + searchParams, {
