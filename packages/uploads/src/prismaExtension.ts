@@ -137,7 +137,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         }
       },
 
-      async delete({ model, query, args }) {
+      async delete({ query, args }) {
         const deleteResult = await query(args)
         await removeUploadedFiles(
           uploadFields,
