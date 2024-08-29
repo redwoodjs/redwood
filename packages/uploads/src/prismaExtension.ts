@@ -139,8 +139,6 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
 
       async delete({ model, query, args }) {
         const deleteResult = await query(args)
-        storageAdapter.remove(args.where.id)
-
         await removeUploadedFiles(
           uploadFields,
           // We don't know the exact type here
