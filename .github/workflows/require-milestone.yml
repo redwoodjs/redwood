@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# No top level permissions are required for this workflows
+permissions: {}
+
 jobs:
   require-milestone:
     name: 🚩 Require milestone
