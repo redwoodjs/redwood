@@ -198,6 +198,33 @@ describe('Query extensions', () => {
       expect(fs.unlink).toHaveBeenCalledWith('/tmp/second.txt')
     })
 
+    it('delete will not remove any uploads if the delete fails', async () => {
+      const bookWithCover = await prismaClient.book.create({
+        data: {
+          name: 'Prisma extensions for dummies',
+          cover: {
+            create: {
+              photo: '/tmp/book-covers/prisma-for-dummies.jpg',
+            },
+          },
+        },
+      })
+
+      // This delete will fail because the book is associated with a cover BUTTTT
+      // test serves more as documentation (and to prevent regression if Prisma changes behavior)
+      // Because Prisma will throw the validation __before__ the delete in the extension is called
+
+      try {
+        await prismaClient.bookCover.delete({
+          where: {
+            id: bookWithCover.coverId,
+          },
+        })
+      } catch {}
+
+      expect(fs.unlink).not.toHaveBeenCalled()
+    })
+
     it('Should handle if a bad path is provided', async () => {
       ;(fs.unlink as MockedFunction<typeof fs.unlink>).mockRejectedValueOnce(
         new Error('unlink error'),

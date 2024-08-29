@@ -138,14 +138,16 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       },
 
       async delete({ model, query, args }) {
-        /** Delete args are the same as findFirst, essentially a where clause */
-        const record =
-          // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
-          await prismaInstance[model as ModelNames].findFirstOrThrow(args)
+        const deleteResult = await query(args)
+        storageAdapter.remove(args.where.id)
 
-        await removeUploadedFiles(uploadFields, record)
+        await removeUploadedFiles(
+          uploadFields,
+          // We don't know the exact type here
+          deleteResult as Record<string, string>,
+        )
 
-        return query(args)
+        return deleteResult
       },
     }
 
