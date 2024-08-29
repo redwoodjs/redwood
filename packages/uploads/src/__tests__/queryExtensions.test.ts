@@ -220,6 +220,7 @@ describe('Query extensions', () => {
             id: bookWithCover.coverId,
           },
         })
+        // eslint-disable-next-line no-empty
       } catch {}
 
       expect(fs.unlink).not.toHaveBeenCalled()
