@@ -10,6 +10,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   detect-changes:
     if: github.repository == 'redwoodjs/redwood'
@@ -39,6 +41,8 @@ jobs:
     if: needs.detect-changes.outputs.code == 'true'
     name: Check test project fixture
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - uses: actions/checkout@v4
 
