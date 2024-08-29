@@ -195,8 +195,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         }
       },
       async upsert({ query, model, args }) {
-        // null if we don't know yet
-        let isUpdate: boolean | null = null
+        let isUpdate: boolean | undefined
         const uploadFieldsToUpdate = uploadFields.filter(
           (field) =>
             typeof args.update === 'object' &&
