@@ -384,7 +384,7 @@ function getBundlerConfig(config: ConfigType) {
 }
 
 async function renderRsc(input: RenderInput): Promise<PipeableStream> {
-  if (input.rsfId || !input.args) {
+  if (input.rsaId || !input.args) {
     throw new Error(
       "Unexpected input. Can't request both RSCs and execute RSAs at the same time.",
     )
@@ -424,11 +424,11 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 async function handleRsa(input: RenderInput): Promise<PipeableStream> {
   console.log('handleRsa input', input)
 
-  if (!input.rsfId || !input.args) {
+  if (!input.rsaId || !input.args) {
     throw new Error('Unexpected input')
   }
 
-  const [fileName, actionName] = input.rsfId.split('#')
+  const [fileName, actionName] = input.rsaId.split('#')
   console.log('Server Action fileName', fileName, 'actionName', actionName)
   const module = await loadServerFile(fileName)
 
