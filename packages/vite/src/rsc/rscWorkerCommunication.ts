@@ -26,7 +26,7 @@ const worker = new Worker(workerPath, {
 export type RenderInput = {
   rscId?: string | undefined
   props: RscFetchProps | Record<string, unknown>
-  rsfId?: string | undefined
+  rsaId?: string | undefined
   args?: unknown[] | undefined
   serverState: {
     headersInit: Record<string, string>
