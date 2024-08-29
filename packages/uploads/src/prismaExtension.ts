@@ -318,6 +318,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
    * This function deletes files from the storage adapter, but importantly,
    * it does NOT throw, because if the file is already gone, that's fine,
    * no need to stop the actual db operation
+   *
    */
   async function removeUploadedFiles(
     fieldsToDelete: string[],
@@ -334,7 +335,9 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         try {
           await storageAdapter.remove(uploadLocation)
         } catch {
-          // Swallow the error, we don't want to stop the delete operation
+          // Swallow the error, we don't want to stop the db operation
+          // It also means that if one of the files in fieldsToDelete is gone, its ok
+          // we still want to delete the rest of the files
         }
       }
     }
