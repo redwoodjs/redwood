@@ -21,7 +21,7 @@ export const flightcontrolConfig = {
           port: 8911,
           healthCheckPath: '/graphql/health',
           ci: {
-            type: 'ec2'
+            type: 'ec2',
           },
           envVariables: {
             REDWOOD_WEB_URL: {
@@ -38,7 +38,7 @@ export const flightcontrolConfig = {
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
           ci: {
-            type: 'ec2'
+            type: 'ec2',
           },
           envVariables: {
             REDWOOD_API_URL: {
