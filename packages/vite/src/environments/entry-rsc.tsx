@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { renderToReadableStream } from "react-server-dom-webpack/server.edge";
+import { renderToReadableStream } from 'react-server-dom-webpack/server.edge'
 
-import { Page } from './Page.jsx'
+// TODO: Define a proper entry point.
+import { Page } from './__example__/Page.jsx'
 
-export async function handler(req: Request) {
+export async function rscHandler(req: Request) {
   const stream = renderToReadableStream(<Page />, {})
   return { stream }
-
 }
