@@ -26,6 +26,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  security-events: write
+
 jobs:
   analyze:
     name: 🔬 Analyze

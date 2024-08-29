@@ -10,10 +10,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# No top level permissions are required for this workflow
+permissions: {}
+
 jobs:
   require-release-label:
     name: 🏷 Require release label
     runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: read
     steps:
       - uses: mheap/github-action-required-labels@v5
         with:
