@@ -252,7 +252,7 @@ describe('Query extensions', () => {
   })
 
   describe('upsert', () => {
-    it('will remove old files and save new ones on upsert, if it exists', async () => {
+    it('will remove old files and save new ones on upsert, if it exists [UPDATE]', async () => {
       const ogDumbo = await prismaClient.dumbo.create({
         data: {
           firstUpload: '/tmp/oldFirst.txt',
@@ -265,8 +265,9 @@ describe('Query extensions', () => {
           firstUpload: '/tmp/newFirst.txt',
         },
         create: {
-          firstUpload: '/tmp/newFirst.txt',
-          secondUpload: '/tmp/oldSecond.txt',
+          // won't be used
+          firstUpload: 'x',
+          secondUpload: 'x',
         },
         where: {
           id: ogDumbo.id,
@@ -279,7 +280,24 @@ describe('Query extensions', () => {
       expect(fs.unlink).toHaveBeenCalledWith('/tmp/oldFirst.txt')
     })
 
-    it('will remove processed files if upsert creation fails', async () => {
+    it('will create a new record (findOrCreate)', async () => {
+      const newDumbo = await prismaClient.dumbo.upsert({
+        create: {
+          firstUpload: '/tmp/first.txt',
+          secondUpload: '/bazinga/second.txt',
+        },
+        update: {},
+        where: {
+          id: 444444444,
+        },
+      })
+
+      expect(newDumbo.firstUpload).toBe('/tmp/first.txt')
+      expect(newDumbo.secondUpload).toBe('/bazinga/second.txt')
+    })
+
+    it('will remove processed files if upsert CREATION fails (findOrCreate)', async () => {
+      // This is essentially findOrCreate, because update is empty
       try {
         await prismaClient.dumbo.upsert({
           create: {
@@ -296,6 +314,52 @@ describe('Query extensions', () => {
 
       expect.assertions(2)
     })
+
+    it('will remove processed files if upsert UPDATE fails', async () => {
+      // Bit of a contrived case... why would you ever have different values for update and create...
+
+      const ogDumbo = await prismaClient.dumbo.create({
+        data: {
+          firstUpload: '/tmp/oldFirst.txt',
+          secondUpload: '/tmp/oldSecond.txt',
+        },
+      })
+
+      try {
+        await prismaClient.dumbo.upsert({
+          where: {
+            id: ogDumbo.id,
+          },
+          update: {
+            firstUpload: '/tmp/newFirst.txt',
+            secondUpload: '/tmp/newSecond.txt',
+            // @ts-expect-error Intentionally causing an error
+            id: 'this-should-cause-an-error',
+          },
+          create: {
+            firstUpload: '/tmp/createFirst.txt',
+            secondUpload: '/tmp/createSecond.txt',
+          },
+        })
+      } catch (error) {
+        expect(fs.unlink).toHaveBeenCalledTimes(2)
+        expect(fs.unlink).not.toHaveBeenCalledWith('/tmp/createFirst.txt')
+        expect(fs.unlink).not.toHaveBeenCalledWith('/tmp/createSecond.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(1, '/tmp/newFirst.txt')
+        expect(fs.unlink).toHaveBeenNthCalledWith(2, '/tmp/newSecond.txt')
+        expect(error).toBeDefined()
+      }
+
+      // Verify the original files weren't deleted
+      const unchangedDumbo = await prismaClient.dumbo.findUnique({
+        where: { id: ogDumbo.id },
+      })
+      expect(unchangedDumbo?.firstUpload).toBe('/tmp/oldFirst.txt')
+      expect(unchangedDumbo?.secondUpload).toBe('/tmp/oldSecond.txt')
+
+      expect.assertions(8)
+    })
+
   })
 
   describe('createMany', () => {

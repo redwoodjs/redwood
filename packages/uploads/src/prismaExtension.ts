@@ -194,6 +194,48 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           }
         }
       },
+      async upsert({ query, model, args }) {
+        // null if we don't know yet
+        let isUpdate: boolean | null = null
+        const uploadFieldsToUpdate = uploadFields.filter(
+          (field) =>
+            typeof args.update === 'object' &&
+            args.update !== null &&
+            field in args.update,
+        )
+
+        try {
+          // We only need to check for existing records if we're updating
+          let existingRecord: Record<string, string> | undefined
+          if (args.update) {
+            existingRecord = await prismaInstance[
+              model as ModelNames
+              // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
+            ].findUnique({
+              where: args.where,
+            })
+            isUpdate = !!existingRecord
+          }
+
+          const result = await query(args)
+
+          if (isUpdate && existingRecord) {
+            // If the record existed, remove old uploaded files
+            await removeUploadedFiles(uploadFieldsToUpdate, existingRecord)
+          }
+
+          return result
+        } catch (e) {
+          // If the upsert fails, we need to delete any newly uploaded files
+          await removeUploadedFiles(
+            // Only delete files we're updating on update
+            isUpdate ? uploadFieldsToUpdate : uploadFields,
+            (isUpdate ? args.update : args.create) as Record<string, string>,
+          )
+
+          throw e
+        }
+      },
 
       async delete({ query, args }) {
         const deleteResult = await query(args)
@@ -273,6 +315,11 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
     })
   })
 
+  /**
+   * This function deletes files from the storage adapter, but importantly,
+   * it does NOT throw, because if the file is already gone, that's fine,
+   * no need to stop the actual db operation
+   */
   async function removeUploadedFiles(
     fieldsToDelete: string[],
     data: Record<string, string>,
