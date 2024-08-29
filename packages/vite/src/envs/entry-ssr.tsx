@@ -1,17 +1,24 @@
 import React from 'react'
 
+import memoize from 'lodash/memoize.js'
 import { renderToReadableStream } from 'react-dom/server.edge'
 import ReactClient from 'react-server-dom-webpack/client.edge'
 import { injectRSCPayload } from 'rsc-html-stream/server'
 import type { ModuleRunner } from 'vite/module-runner'
 
+import { moduleMap } from './register/ssr.js'
+
 export async function ssrHandler(
   req: Request,
-  { viteEnvRscRunner }: { viteEnvRscRunner: ModuleRunner },
+  { viteEnvRunnerRSC }: { viteEnvRunnerRSC: ModuleRunner },
 ) {
-  const { rscHandler } = await viteEnvRscRunner.import(
-    'src/environments/entry-rsc.tsx',
+  globalThis.__webpack_require__ = memoize(
+    (id: string) => import(/* @vite-ignore */ id),
   )
+
+  console.log(req.url)
+
+  const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
   const rscResult = await rscHandler()
 
   const [rscStream1, rscStream2] = rscResult.stream.tee()
@@ -21,7 +28,7 @@ export async function ssrHandler(
       data ??
       ReactClient.createFromReadableStream(rscStream1, {
         ssrManifest: {
-          moduleMap: {},
+          moduleMap: moduleMap(),
           moduleLoading: null,
         },
       })

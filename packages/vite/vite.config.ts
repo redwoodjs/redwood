@@ -13,19 +13,19 @@ import type { ModuleRunner } from 'vite/module-runner'
 
 await init
 
-let viteEnvRscRunner: ModuleRunner
+let viteEnvRunnerRSC: ModuleRunner
 
 export function vitePluginSSR(): PluginOption {
   const plugin: Plugin = {
     name: vitePluginSSR.name,
     async configureServer(server) {
-      const runner = createServerModuleRunner(server.environments.ssr)
+      const viteEnvRunnerSSR = createServerModuleRunner(server.environments.ssr)
       const handler: Connect.NextHandleFunction = async (req, res, next) => {
-        const { ssrHandler } = await runner.import(
-          'src/environments/entry-ssr.tsx',
+        const { ssrHandler } = await viteEnvRunnerSSR.import(
+          'src/envs/entry-ssr.tsx',
         )
         createMiddleware((ctx) =>
-          ssrHandler(ctx.request, { viteEnvRscRunner }),
+          ssrHandler(ctx.request, { viteEnvRunnerRSC }),
         )(req, res, next)
       }
       return () => server.middlewares.use(handler)
@@ -38,10 +38,7 @@ function vitePluginRSC(): PluginOption {
   const setupEnvironmentPlugin: Plugin = {
     name: vitePluginRSC.name + ':setupEnvironment',
     config(config, _env) {
-      if (!config.environments) {
-        throw new Error('config.environments is undefined')
-      }
-
+      config.environments = config.environments ?? {}
       config.environments['react-server'] = {
         resolve: {
           conditions: ['react-server'],
@@ -68,7 +65,7 @@ function vitePluginRSC(): PluginOption {
       if (!envs['react-server']) {
         throw new Error('"react-server" environment is undefined.')
       }
-      viteEnvRscRunner = createServerModuleRunner(envs['react-server'])
+      viteEnvRunnerRSC = createServerModuleRunner(envs['react-server'])
     },
     hotUpdate(_ctx) {
       // TODO: Implement later.
@@ -81,22 +78,24 @@ function vitePluginRSC(): PluginOption {
 function vitePluginRSC_UseClient(): PluginOption {
   return [
     {
-      name: vitePluginRSC_UseClient.name,
+      name: vitePluginRSC_UseClient.name + ':transform',
       async transform(code, id) {
         if (this.environment.name !== 'react-server') {
           return
         }
-        // TODO: Implement proper AST parsing & modification.
-        // TODO: Implement module map.
-        if (code.includes('"use client') || code.includes('"use client"')) {
-          let newCode =
-            'import { registerClientReference } from "/src/register/client.ts";'
+
+        console.log(this.environment.name, id)
+        // TODO: Implement AST parsing & modification.
+        if (code.includes('"use client"') || code.includes("'use client'")) {
+          let c =
+            'import { registerClientReference } from "/src/envs/register/client.ts";'
           const [_, exports] = parse(code)
           for (const e of exports) {
-            newCode += `export const ${e.ln} = registerClientReference(${JSON.stringify(id)}, ${JSON.stringify(e.ln)});`
+            c += `export const ${e.ln} = registerClientReference(${JSON.stringify(id)}, ${JSON.stringify(e.ln)});`
           }
-          return newCode
+          return c
         }
+        return
       },
     },
   ]
@@ -104,8 +103,7 @@ function vitePluginRSC_UseClient(): PluginOption {
 
 export default defineConfig({
   appType: 'custom',
-  environments: {
-    'react-server': {},
-  },
+  base: '/',
+  clearScreen: false,
   plugins: [vitePluginReact(), vitePluginSSR(), vitePluginRSC()],
 })
