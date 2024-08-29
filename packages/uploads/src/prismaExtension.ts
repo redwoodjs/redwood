@@ -205,9 +205,9 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         )
 
         try {
-          // We only need to check for existing records if we're updating
           let existingRecord: Record<string, string> | undefined
           if (args.update) {
+            // We only need to check for existing records if we're updating
             existingRecord = await prismaInstance[
               model as ModelNames
               // @ts-expect-error TS in strict mode will error due to union type. We cannot narrow it down here.
