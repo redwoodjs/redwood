@@ -30,6 +30,13 @@ declare module 'react-server-dom-webpack/server.edge' {
     webpackMap: ClientManifest,
     options?: Options,
   ): ReadableStream
+
+  // https://github.com/facebook/react/blob/0711ff17638ed41f9cdea712a19b92f01aeda38f/packages/react-server-dom-webpack/src/ReactFlightWebpackReferences.js#L36
+  export function registerClientReference<T>(
+    proxyImplementation: T,
+    id: string,
+    exportName: string,
+  ): T
 }
 
 // Should be able to use just react-dom/server, but right now we can't
