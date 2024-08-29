@@ -487,6 +487,16 @@ Removes any associated uploaded files, once delete operation completes.
 <!--INCOMPLETE -->
 <!--INCOMPLETE -->
 
+### Signed URLs
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+
+### Data URIs
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+<!--INCOMPLETE -->
+
 
 ## Configuring the server further
 Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic - that's exactly what the [Server File](server-file.md) is for!
