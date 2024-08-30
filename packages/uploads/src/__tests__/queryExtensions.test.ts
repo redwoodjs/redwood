@@ -411,7 +411,7 @@ describe('Query extensions', () => {
             },
           ],
         })
-      } catch (e) {
+      } catch {
         // This one doesn't actually get created!
         expect(
           prismaClient.dumbo.findUnique({ where: { id: 9158125 } }),
