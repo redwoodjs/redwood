@@ -7,7 +7,7 @@ type AuthLayoutProps = {
   children?: React.ReactNode
 }
 
-const NavigationLayout = ({ children }: AuthLayoutProps) => {
+const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
     <div className="auth-layout">
       <nav>
@@ -44,4 +44,4 @@ const NavigationLayout = ({ children }: AuthLayoutProps) => {
   )
 }
 
-export default NavigationLayout
+export default AuthLayout

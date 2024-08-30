@@ -9,32 +9,33 @@ export class RscCache {
   private cache = new Map<string, Thenable<React.ReactElement>>()
   private socket: WebSocket
   private sendRetries = 0
-  private isEnabled = true
+  // Turn the cache off for now. We can turn it on later if we decide we need it
+  private isEnabled = false
 
   constructor() {
     this.socket = new WebSocket('ws://localhost:18998')
 
     // Event listener for WebSocket connection open
     this.socket.addEventListener('open', () => {
-      console.log('Connected to WebSocket server.')
+      // console.log('Connected to WebSocket server.')
     })
 
     // Event listener for incoming messages
     this.socket.addEventListener('message', (event) => {
-      console.log('Incomming message', event)
+      // console.log('Incomming message', event)
       if (event.data.startsWith('{')) {
         const data = JSON.parse(event.data)
 
-        console.log('Incomming message id', data.id)
-        console.log('Incomming message key', data.key)
+        // console.log('Incomming message id', data.id)
+        // console.log('Incomming message key', data.key)
 
         if (data.id === 'rsc-cache-delete') {
           if (!this.cache.has(data.key)) {
-            console.error('')
-            console.error(
-              'RscCache::message::rsc-cache-delete key not found in cache',
-            )
-            console.error('')
+            // console.error('')
+            // console.error(
+            //   'RscCache::message::rsc-cache-delete key not found in cache',
+            // )
+            // console.error('')
           }
           this.cache.delete(data.key)
 
@@ -43,14 +44,14 @@ export class RscCache {
           this.cache.clear()
           this.sendToWebSocket('update', { fullCache: {} })
         } else if (data.id === 'rsc-cache-enable') {
-          console.log('RscCache::message::rsc-cache-enable')
+          // console.log('RscCache::message::rsc-cache-enable')
           this.isEnabled = true
           this.sendUpdateToWebSocket()
         } else if (data.id === 'rsc-cache-disable') {
-          console.log('RscCache::message::rsc-cache-disable')
+          // console.log('RscCache::message::rsc-cache-disable')
           this.isEnabled = false
         } else if (data.id === 'rsc-cache-read') {
-          console.log('RscCache::message::rsc-cache-read')
+          // console.log('RscCache::message::rsc-cache-read')
           this.sendUpdateToWebSocket()
         }
       }
@@ -75,9 +76,9 @@ export class RscCache {
 
     // There's no point in sending a Promise over the WebSocket, so we wait for
     // it to resolve before sending the value.
-    value.then((resolvedValue) => {
-      console.log('RscCache.set key:', key)
-      console.log('RscCache.set resolved value:', resolvedValue)
+    value.then((_resolvedValue) => {
+      // console.log('RscCache.set key:', key)
+      // console.log('RscCache.set resolved value:', resolvedValue)
       this.sendToWebSocket('set', {
         updatedKey: key,
         fullCache: Object.fromEntries(
@@ -91,7 +92,7 @@ export class RscCache {
   }
 
   private sendToWebSocket(action: string, payload: Record<string, any>) {
-    console.log('RscCache::sendToWebSocket action', action, 'payload', payload)
+    // console.log('RscCache::sendToWebSocket action', action, 'payload', payload)
 
     if (this.socket.readyState === WebSocket?.OPEN) {
       this.sendRetries = 0
