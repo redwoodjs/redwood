@@ -2,12 +2,12 @@ import { AdapterNotFoundError } from '../errors.js'
 import type {
   Adapters,
   BasicLogger,
+  CreateSchedulerArgs,
   CreateSchedulerConfig,
   Job,
   JobDefinition,
   JobManagerConfig,
   QueueNames,
-  ScheduleJobOptions,
   WorkerConfig,
 } from '../types.js'
 
@@ -53,12 +53,17 @@ export class JobManager<
       logger: this.logger,
     })
 
-    return <T extends Job<TQueues, any[]>>(
-      job: T,
-      jobArgs?: Parameters<T['perform']>,
-      jobOptions?: ScheduleJobOptions,
+    return <TJob extends Job<TQueues, any[]>>(
+      job: TJob,
+      ...argsAndOptions: CreateSchedulerArgs<TJob>
     ) => {
-      return scheduler.schedule({ job, jobArgs, jobOptions })
+      const [possibleArgs, possibleOptions] = argsAndOptions
+      const didPassArgs = Array.isArray(possibleArgs)
+
+      const args = didPassArgs ? possibleArgs : []
+      const options = didPassArgs ? possibleOptions : possibleArgs
+
+      return scheduler.schedule({ job, args, options })
     }
   }
 

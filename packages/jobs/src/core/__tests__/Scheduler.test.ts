@@ -94,7 +94,7 @@ describe('buildPayload()', () => {
       perform: vi.fn(),
     }
     const args = [{ foo: 'bar' }]
-    const payload = scheduler.buildPayload(job, args)
+    const payload = scheduler.buildPayload({ job, args })
 
     expect(payload.name).toEqual(job.name)
     expect(payload.path).toEqual(job.path)
@@ -117,7 +117,7 @@ describe('buildPayload()', () => {
 
       perform: vi.fn(),
     }
-    const payload = scheduler.buildPayload(job)
+    const payload = scheduler.buildPayload({ job, args: [] })
 
     expect(payload.priority).toEqual(DEFAULT_PRIORITY)
   })
@@ -137,7 +137,7 @@ describe('buildPayload()', () => {
       perform: vi.fn(),
     }
     const options = { wait: 10 }
-    const payload = scheduler.buildPayload(job, [], options)
+    const payload = scheduler.buildPayload({ job, args: [], options })
 
     expect(payload.runAt).toEqual(new Date(Date.now() + options.wait * 1000))
   })
@@ -157,7 +157,7 @@ describe('buildPayload()', () => {
       perform: vi.fn(),
     }
     const options = { waitUntil: new Date(2030, 0, 1, 12, 34, 56) }
-    const payload = scheduler.buildPayload(job, [], options)
+    const payload = scheduler.buildPayload({ job, args: [], options })
 
     expect(payload.runAt).toEqual(options.waitUntil)
   })
@@ -177,7 +177,7 @@ describe('buildPayload()', () => {
     }
 
     // @ts-expect-error testing error case
-    expect(() => scheduler.buildPayload(job)).toThrow(
+    expect(() => scheduler.buildPayload({ job, args: [] })).toThrow(
       errors.QueueNotDefinedError,
     )
   })
@@ -208,7 +208,7 @@ describe('schedule()', () => {
       wait: 10,
     }
 
-    await scheduler.schedule({ job, jobArgs: args, jobOptions: options })
+    await scheduler.schedule({ job, args, options })
 
     expect(mockAdapter.schedule).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -240,8 +240,8 @@ describe('schedule()', () => {
       wait: 10,
     }
 
-    await expect(
-      scheduler.schedule({ job, jobArgs: args, jobOptions: options }),
-    ).rejects.toThrow(errors.SchedulingError)
+    await expect(scheduler.schedule({ job, args, options })).rejects.toThrow(
+      errors.SchedulingError,
+    )
   })
 })

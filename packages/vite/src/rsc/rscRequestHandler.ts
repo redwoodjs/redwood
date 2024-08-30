@@ -34,8 +34,6 @@ export function createRscRequestHandler(
 ) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
 
-  // above this line is for ALL users ☝️, not a per request basis
-  // -------------
   return async (
     req: ExpressRequest,
     res: ExpressResponse,
@@ -96,15 +94,15 @@ export function createRscRequestHandler(
     const props: RscFetchProps = JSON.parse(
       url.searchParams.get('props') || '{}',
     )
-    let rsfId: string | undefined
+    let rsaId: string | undefined
     let args: unknown[] = []
 
     if (url.pathname.startsWith(basePath)) {
       rscId = url.pathname.split('/').pop()
-      rsfId = url.searchParams.get('action_id') || undefined
+      rsaId = url.searchParams.get('action_id') || undefined
 
       console.log('rscId', rscId)
-      console.log('rsfId', rsfId)
+      console.log('rsaId', rsaId)
 
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
@@ -112,7 +110,7 @@ export function createRscRequestHandler(
         rscId = undefined
       }
 
-      if (rsfId) {
+      if (rsaId) {
         // TODO (RSC): For React Server Actions we need to limit the request
         // size somehow
         // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
@@ -167,7 +165,7 @@ export function createRscRequestHandler(
 
     console.log('rscRequestHandler: args', args)
 
-    if (rscId || rsfId) {
+    if (rscId || rsaId) {
       const handleError = (err: unknown) => {
         if (hasStatusCode(err)) {
           res.statusCode = err.statusCode
@@ -198,7 +196,7 @@ export function createRscRequestHandler(
         const pipeable = renderRsc({
           rscId,
           props,
-          rsfId,
+          rsaId,
           args,
           // Pass the serverState from server to the worker
           // Inside the worker, we'll use this to re-initalize the server state (because workers are stateless)
@@ -212,7 +210,7 @@ export function createRscRequestHandler(
         await sendRscFlightToStudio({
           rscId,
           props,
-          rsfId,
+          rsaId,
           args,
           basePath,
           req,

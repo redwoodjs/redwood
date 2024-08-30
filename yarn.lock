@@ -8712,6 +8712,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/uploads@workspace:packages/uploads":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/uploads@workspace:packages/uploads"
+  dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.4"
+    "@prisma/client": "npm:5.18.0"
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/project-config": "workspace:*"
+    "@types/mime-types": "npm:2.1.4"
+    concurrently: "npm:8.2.2"
+    esbuild: "npm:0.23.0"
+    mime-types: "npm:2.1.35"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.17.0"
+    typescript: "npm:5.5.4"
+    ulid: "npm:2.3.0"
+    vitest: "npm:2.0.5"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/vite@workspace:packages/vite":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
@@ -8754,6 +8774,7 @@ __metadata:
     glob: "npm:11.0.0"
     http-proxy-middleware: "npm:3.0.0"
     isbot: "npm:5.1.16"
+    memfs: "npm:4.11.1"
     publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
     react-server-dom-webpack: "npm:19.0.0-rc-8269d55d-20240802"
@@ -29013,6 +29034,15 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10c0/8b7fcdca69deb284fed7d2025b73eb747ce37f9aca6af53422844f46427152d5440601b6e2a033e77856a2f0591e4167153d5a21b68674ad11f662034ec13ced
+  languageName: node
+  linkType: hard
+
+"ulid@npm:2.3.0":
+  version: 2.3.0
+  resolution: "ulid@npm:2.3.0"
+  bin:
+    ulid: ./bin/cli.js
+  checksum: 10c0/070d237502781085e59cf3d8ece752ff96cd3a0990cf1c1be57273f4550597daeb72e9a7db8e5a320de31102509bb3321d280b54bfc44e98025e4628a9629773
   languageName: node
   linkType: hard
 

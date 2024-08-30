@@ -34,7 +34,7 @@ export type QueueNames = readonly [string, ...string[]]
 export interface WorkerConfig<
   TAdapters extends Adapters,
   TQueues extends QueueNames,
-> {
+> extends WorkerSharedOptions {
   /**
    * The name of the adapter to use for this worker. This must be one of the keys
    * in the `adapters` object when you created the `JobManager`.
@@ -48,6 +48,21 @@ export interface WorkerConfig<
    */
   queue: '*' | TQueues[number] | TQueues[number][]
 
+  /**
+   * The number of workers to spawn for this worker configuration.
+   *
+   * @default 1
+   */
+  count?: number
+
+  /**
+   * The logger to use for this worker. If not provided, the logger from the
+   * `JobManager` will be used.
+   */
+  logger?: BasicLogger
+}
+
+export interface WorkerSharedOptions {
   /**
    * The maximum number of retries to attempt for a job before giving up.
    *
@@ -73,6 +88,15 @@ export interface WorkerConfig<
   deleteFailedJobs?: boolean
 
   /**
+   * Whether to keep succeeded jobs in the database after they have completed
+   * successfully.
+   *
+   * @default true
+   *
+   */
+  deleteSuccessfulJobs?: boolean
+
+  /**
    * The amount of time in seconds to wait between polling the queue for new
    * jobs. Some adapters may not need this if they do not poll the queue and
    * instead rely on a subscription model.
@@ -80,19 +104,6 @@ export interface WorkerConfig<
    * @default 5
    */
   sleepDelay?: number
-
-  /**
-   * The number of workers to spawn for this worker configuration.
-   *
-   * @default 1
-   */
-  count?: number
-
-  /**
-   * The logger to use for this worker. If not provided, the logger from the
-   * `JobManager` will be used.
-   */
-  logger?: BasicLogger
 }
 
 export interface JobManagerConfig<
@@ -205,4 +216,14 @@ export type ScheduleJobOptions =
       waitUntil: Date
     }
 
-type PriorityValue = IntRange<0, 101>
+type PriorityValue = IntRange<1, 101>
+
+// If the job has no arguments:
+//  - you may pass an empty array for the arguments and then optionally pass the scheduler options
+//  - you may optionally pass the scheduler options
+// If the job has arguments:
+//  - you must pass the arguments and then optionally pass the scheduler options
+export type CreateSchedulerArgs<TJob extends Job<QueueNames>> =
+  Parameters<TJob['perform']> extends []
+    ? [ScheduleJobOptions?] | [[], ScheduleJobOptions?]
+    : [Parameters<TJob['perform']>, ScheduleJobOptions?]
