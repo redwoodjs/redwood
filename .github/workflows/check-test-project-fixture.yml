@@ -41,8 +41,6 @@ jobs:
     if: needs.detect-changes.outputs.code == 'true'
     name: Check test project fixture
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
