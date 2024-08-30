@@ -9,7 +9,7 @@ import { vi, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../auth0'
+import { createAuth } from '../auth0.js'
 
 const user: User = {
   sub: 'unique_user_id',

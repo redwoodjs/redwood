@@ -1,1 +1,1 @@
-export { createAuth } from './supabase'
+export { createAuth } from './supabase.js'

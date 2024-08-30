@@ -114,7 +114,13 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-vite-dev',
     )
 
-    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+    expect(
+      apiCommand.command
+        .replace(/\s+/g, ' ')
+        // Remove the --max-old-space-size flag, as it's not consistent across
+        // test environments (vite sets this in their vite-ecosystem-ci tests)
+        .replace(/--max-old-space-size=\d+\s/, ''),
+    ).toEqual(
       'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
 
@@ -153,7 +159,13 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-dev-fe',
     )
 
-    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
+    expect(
+      apiCommand.command
+        .replace(/\s+/g, ' ')
+        // Remove the --max-old-space-size flag, as it's not consistent across
+        // test environments (vite sets this in their vite-ecosystem-ci tests)
+        .replace(/--max-old-space-size=\d+\s/, ''),
+    ).toEqual(
       'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
 

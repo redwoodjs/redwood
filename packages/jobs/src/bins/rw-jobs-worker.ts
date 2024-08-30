@@ -3,7 +3,6 @@
 // The process that actually starts an instance of Worker to process jobs.
 // Can be run independently with `yarn rw-jobs-worker` but by default is forked
 // by `yarn rw-jobs` and either monitored, or detached to run independently.
-import console from 'node:console'
 import process from 'node:process'
 
 import { hideBin } from 'yargs/helpers'
@@ -11,11 +10,10 @@ import yargs from 'yargs/yargs'
 
 import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
 
-import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
+import { PROCESS_TITLE_PREFIX } from '../consts.js'
 import type { Worker } from '../core/Worker.js'
 import { WorkerConfigIndexNotFoundError } from '../errors.js'
 import { loadJobsManager } from '../loaders.js'
-import type { BasicLogger } from '../types.js'
 
 loadEnvFiles()
 
@@ -49,28 +47,22 @@ const parseArgs = (argv: string[]) => {
     .help().argv
 }
 
-const setProcessTitle = ({
+export const processName = ({
   id,
-  queue,
+  queues,
 }: {
   id: number
-  queue: string | string[]
+  queues: string | string[]
 }) => {
-  process.title = `${PROCESS_TITLE_PREFIX}.${[queue].flat().join('-')}.${id}`
+  return `${PROCESS_TITLE_PREFIX}.${[queues].flat().join('-')}.${id}`
 }
 
-const setupSignals = ({
-  worker,
-  logger,
-}: {
-  worker: Worker
-  logger: BasicLogger
-}) => {
+const setupSignals = ({ worker }: { worker: Worker }) => {
   // if the parent itself receives a ctrl-c it'll pass that to the workers.
   // workers will exit gracefully by setting `forever` to `false` which will tell
   // it not to pick up a new job when done with the current one
   process.on('SIGINT', () => {
-    logger.warn(
+    worker.logger.warn(
       `[${process.title}] SIGINT received at ${new Date().toISOString()}, finishing work...`,
     )
     worker.forever = false
@@ -80,16 +72,24 @@ const setupSignals = ({
   // instead in which case we exit immediately no matter what state the worker is
   // in
   process.on('SIGTERM', () => {
-    logger.warn(
+    worker.logger.warn(
       `[${process.title}] SIGTERM received at ${new Date().toISOString()}, exiting now!`,
     )
     process.exit(0)
   })
 }
 
-const main = async () => {
-  const { index, id, clear, workoff } = await parseArgs(process.argv)
-
+export const getWorker = async ({
+  index,
+  id,
+  clear,
+  workoff,
+}: {
+  index: number
+  id: number
+  clear: boolean
+  workoff: boolean
+}) => {
   let manager
 
   try {
@@ -104,20 +104,27 @@ const main = async () => {
     throw new WorkerConfigIndexNotFoundError(index)
   }
 
-  const logger = workerConfig.logger ?? manager.logger ?? DEFAULT_LOGGER
-  logger.warn(
-    `[${process.title}] Starting work at ${new Date().toISOString()}...`,
-  )
+  return manager.createWorker({
+    index,
+    clear,
+    workoff,
+    processName: processName({ id, queues: workerConfig.queue }),
+  })
+}
 
-  setProcessTitle({ id, queue: workerConfig.queue })
+const main = async () => {
+  const { index, id, clear, workoff } = await parseArgs(process.argv)
 
-  const worker = manager.createWorker({ index, clear, workoff })
+  const worker = await getWorker({ index, id, clear, workoff })
+
+  process.title = processName({ id, queues: worker.queues })
+
   worker.run().then(() => {
-    logger.info(`[${process.title}] Worker finished, shutting down.`)
+    worker.logger.info(`[${process.title}] Worker finished, shutting down.`)
     process.exit(0)
   })
 
-  setupSignals({ worker, logger })
+  setupSignals({ worker })
 }
 
 // Don't actaully run the worker if we're in a test environment

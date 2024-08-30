@@ -1,6 +1,6 @@
 import fsPath from 'node:path'
 
-import type { PluginObj, types } from '@babel/core'
+import type { PluginObj, types as babelTypes } from '@babel/core'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -8,7 +8,7 @@ import { getPaths } from '@redwoodjs/project-config'
 // into the object that is passed to createJob. This is later used by adapters
 // and workers to import the job.
 
-export default function ({ types: _t }: { types: typeof types }): PluginObj {
+export default function ({ types }: { types: typeof babelTypes }): PluginObj {
   const paths = getPaths()
   return {
     name: 'babel-plugin-redwood-job-path-injector',
@@ -93,15 +93,15 @@ export default function ({ types: _t }: { types: typeof types }): PluginObj {
         }
         // Add a property to the object expression
         firstArg.properties.push(
-          _t.objectProperty(
-            _t.identifier('path'),
-            _t.stringLiteral(importPathWithoutExtension),
+          types.objectProperty(
+            types.identifier('path'),
+            types.stringLiteral(importPathWithoutExtension),
           ),
         )
         firstArg.properties.push(
-          _t.objectProperty(
-            _t.identifier('name'),
-            _t.stringLiteral(importName),
+          types.objectProperty(
+            types.identifier('name'),
+            types.stringLiteral(importName),
           ),
         )
       },

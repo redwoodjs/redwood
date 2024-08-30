@@ -13,7 +13,12 @@ import {
   QueueNotDefinedError,
   SchedulingError,
 } from '../errors.js'
-import type { BasicLogger, Job, ScheduleJobOptions } from '../types.js'
+import type {
+  BasicLogger,
+  Job,
+  QueueNames,
+  ScheduleJobOptions,
+} from '../types.js'
 
 interface SchedulerConfig<TAdapter extends BaseAdapter> {
   adapter: TAdapter
@@ -43,11 +48,15 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  buildPayload<T extends Job<string[], unknown[]>>(
-    job: T,
-    args?: Parameters<T['perform']>,
-    options?: ScheduleJobOptions,
-  ): SchedulePayload {
+  buildPayload<TJob extends Job<QueueNames, unknown[]>>({
+    job,
+    args,
+    options,
+  }: {
+    job: TJob
+    args: Parameters<TJob['perform']> | never[]
+    options?: ScheduleJobOptions
+  }): SchedulePayload {
     const queue = job.queue
     const priority = job.priority ?? DEFAULT_PRIORITY
     const wait = options?.wait ?? DEFAULT_WAIT
@@ -67,16 +76,20 @@ export class Scheduler<TAdapter extends BaseAdapter> {
     }
   }
 
-  async schedule<T extends Job<string[], unknown[]>>({
+  async schedule<TJob extends Job<QueueNames, unknown[]>>({
     job,
-    jobArgs,
-    jobOptions,
+    args,
+    options,
   }: {
-    job: T
-    jobArgs?: Parameters<T['perform']>
-    jobOptions?: ScheduleJobOptions
+    job: TJob
+    args: Parameters<TJob['perform']> | never[]
+    options?: ScheduleJobOptions
   }) {
-    const payload = this.buildPayload(job, jobArgs, jobOptions)
+    const payload = this.buildPayload({
+      job,
+      args,
+      options,
+    })
 
     this.logger.info(payload, `[RedwoodJob] Scheduling ${job.name}`)
 

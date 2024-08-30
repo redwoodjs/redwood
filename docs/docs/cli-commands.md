@@ -45,15 +45,15 @@ Create a Redwood project using the yarn create command:
 yarn create redwood-app <project directory> [option]
 ```
 
-| Arguments & Options    | Description                                                                                                             |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| `project directory`    | Specify the project directory [Required]                                                                                |
-| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior |
-| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                    |
-| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
-| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
-| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
-| `--git-init`, `--git`  | Initialize a git repo during the install process, disabled by default                                                   |
+| Arguments & Options    | Description                                                                                                                                               |
+| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `project directory`    | Specify the project directory [Required]                                                                                                                  |
+| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior                                   |
+| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                                                      |
+| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                                                    |
+| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: [https://telemetry.redwoodjs.com](https://telemetry.redwoodjs.com) |
+| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                                                              |
+| `--git-init`, `--git`  | Initialize a git repo during the install process, disabled by default                                                                                     |
 
 If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
 
@@ -248,7 +248,7 @@ yarn redwood deploy <target>
 
 | Commands                      | Description                              |
 | :---------------------------- | :--------------------------------------- |
-| `serverless `                 | Deploy to AWS using Serverless framework |
+| `serverless`                  | Deploy to AWS using Serverless framework |
 | `netlify [...commands]`       | Build command for Netlify deploy         |
 | `render <side> [...commands]` | Build command for Render deploy          |
 | `vercel [...commands]`        | Build command for Vercel deploy          |
@@ -437,6 +437,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 | `dbAuth`               | Generate sign in, sign up and password reset pages for dbAuth                                         |
 | `deploy <provider>`    | Generate a deployment configuration                                                                   |
 | `function <name>`      | Generate a Function                                                                                   |
+| `job <name>`           | Generate a background job                                                                             |
 | `layout <name>`        | Generate a layout component                                                                           |
 | `page <name> [path]`   | Generate a page component                                                                             |
 | `scaffold <model>`     | Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts `<path/model>` |
@@ -734,6 +735,35 @@ $ /redwood-app/node_modules/.bin/dev-server
 17:21:49 api | ► http://localhost:8911/graphql/
 17:21:49 api | ► http://localhost:8911/user/
 ```
+
+### generate job
+
+Generate a background job file (and optional tests) in `api/src/jobs`.
+
+```bash
+yarn redwood generate job <name>
+```
+
+| Arguments & Options  | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `name`               | Name of the job ("Job" suffix is optional)                                            |
+| `--force, -f`        | Overwrite existing files                                                              |
+| `--typescript, --ts` | Generate TypeScript files. Enabled by default if we detect your project is TypeScript |
+| `--tests`            | Generate test files [default: true]                                                   |
+
+#### Example
+
+```bash
+yarn redwood generate job WelcomeEmail
+# or
+yarn rw g job WelcomeEmail
+```
+
+:::info Job naming
+By convention a job filename and exported code ends in `Job` and the generate command enforces this. If you don't include "Job" at the end of the name, the generator will add it. For example, with the above command, the file generated would be `api/src/jobs/WelcomeEmailJob/WelcomeEmailJob.{js|ts}`.
+:::
+
+Learn more about jobs in the [Background Jobs docs](background-jobs).
 
 ### generate layout
 
@@ -1755,6 +1785,7 @@ yarn redwood setup <category>
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
 | `i18n`             | Set up i18n                                                                                |
+| `jobs`             | Set up background job creation and processing                                              |
 | `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
@@ -1895,6 +1926,18 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 - if you wish to share your local server with others, you can run `netlify dev --live`
 
 > Note: To detect the RedwoodJS framework, please use netlify-cli v3.34.0 or greater.
+
+### setup jobs
+
+This command adds the necessary packages and files defining the configuration for Redwood's [Background Jobs](background-jobs) processing.
+
+```
+yarn redwood setup jobs
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `--force, -f`       | Overwrite existing files |
 
 ### setup mailer
 

@@ -12,26 +12,39 @@ import {
   DEFAULT_SLEEP_DELAY,
 } from '../consts.js'
 import { AdapterRequiredError, QueuesRequiredError } from '../errors.js'
-import type { BasicLogger } from '../types.js'
+import type { BasicLogger, WorkerSharedOptions } from '../types.js'
 
 import { Executor } from './Executor.js'
 
-export interface WorkerOptions {
+export interface WorkerOptions extends WorkerSharedOptions {
   // required
+
   adapter: BaseAdapter
+  /** Used to set the `lockedBy` field in the database */
   processName: string
+  /** If not given a queue name then will work on jobs in any queue */
   queues: string[]
+
   // optional
+
   logger?: BasicLogger
+  /** If true, will clear the queue of all jobs and then exit */
   clear?: boolean
-  maxAttempts?: number
-  maxRuntime?: number
-  deleteSuccessfulJobs?: boolean
-  deleteFailedJobs?: boolean
-  sleepDelay?: number
+
+  /**
+   * Set to `false` and the work loop will quit when the current job is done
+   * running (regardless of how many outstanding jobs there are to be worked
+   * on). The worker process will set this to `false` as soon as the user hits
+   * ctrl-c so any current job will complete before exiting.
+   */
   workoff?: boolean
-  // Makes testing much easier: we can set to false to NOT run in an infinite
-  // loop by default during tests
+
+  /**
+   * If set to `true` will run the worker forever looking for new jobs. Otherwise
+   * will only look for jobs one time and then exit.
+   *
+   * Useful for testing to avoid infinite loops!
+   */
   forever?: boolean
 }
 
@@ -102,8 +115,10 @@ export class Worker {
 
     // the amount of time to wait in milliseconds between checking for jobs.
     // the time it took to run a job is subtracted from this time, so this is a
-    // maximum wait time. Do an `undefined` check here so we can set to 0
-    this.sleepDelay = this.options.sleepDelay * 1000
+    // maximum wait time.
+    // To handle both 0 and `undefined` we do the `?? DEFAULT_OPTIONS` thing
+    this.sleepDelay =
+      (this.options.sleepDelay ?? DEFAULT_OPTIONS.sleepDelay) * 1000
 
     // Set to `false` and the work loop will quit when the current job is done
     // running (regardless of how many outstanding jobs there are to be worked
@@ -159,8 +174,9 @@ export class Worker {
       })
 
       if (job) {
-        // TODO add timeout handling if runs for more than `this.maxRuntime`
-        // will need to run Executor in a separate process with a timeout
+        // TODO add timeout handling if a job runs for more than
+        // `this.maxRuntime`. Will need to run Executor in a separate process
+        // with a timeout for this to work
         await new Executor({
           adapter: this.adapter,
           logger: this.logger,
