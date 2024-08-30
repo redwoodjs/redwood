@@ -359,7 +359,6 @@ describe('Query extensions', () => {
 
       expect.assertions(8)
     })
-
   })
 
   describe('createMany', () => {
