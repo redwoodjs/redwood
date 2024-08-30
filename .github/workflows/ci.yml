@@ -11,6 +11,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
@@ -27,7 +29,7 @@ jobs:
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -47,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -73,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -99,7 +101,7 @@ jobs:
         if: matrix.os != 'ubuntu-latest'
         run: echo "echo "::remove-matcher owner=tsc::""
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -115,7 +117,7 @@ jobs:
       - name: Get number of CPU cores
         if: always()
         id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v2
+        uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
       - name: 🧪 Test
         run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
@@ -141,7 +143,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -169,7 +171,7 @@ jobs:
         working-directory: ${{ steps.crwa.outputs.project-path }}
 
       - name: 🌲 Run Cypress
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@df7484c5ba85def7eef30db301afa688187bc378 # v6
         env:
           CYPRESS_RW_PATH: ${{ steps.crwa.outputs.project-path }}
         with:
@@ -181,7 +183,7 @@ jobs:
           spec: |
             cypress/e2e/01-tutorial/*.cy.js
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4
         if: always()
         with:
           name: logs
@@ -215,7 +217,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -305,7 +307,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -413,7 +415,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -521,7 +523,7 @@ jobs:
       REDWOOD_REDIRECT_TELEMETRY: 'http://127.0.0.1:48619' # Random port
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -563,7 +565,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -658,7 +660,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -729,7 +731,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -806,7 +808,7 @@ jobs:
       REDWOOD_DISABLE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -847,7 +849,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
         with:
           node-version: 18
 
@@ -858,7 +860,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
         with:
           node-version: 21
 
@@ -885,7 +887,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -917,7 +919,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 

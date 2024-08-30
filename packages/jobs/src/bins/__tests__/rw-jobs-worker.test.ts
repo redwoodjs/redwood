@@ -50,7 +50,7 @@ describe('getWorker', () => {
             test: new MockAdapter(),
           },
           logger: mockLogger,
-          queues: ['default'],
+          queues: ['default'] as const,
           workers: [
             {
               adapter: 'test',
@@ -81,7 +81,7 @@ describe('getWorker', () => {
             test: mockAdapter,
           },
           logger: mockLogger,
-          queues: ['default'],
+          queues: ['default'] as const,
           workers: [
             {
               adapter: 'test',
