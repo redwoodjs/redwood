@@ -48,14 +48,14 @@ function fetchRSC(
     // element). So for now at least we need to send it with every RSC
     // request, so React knows what `callServer` method to use for server
     // actions inside the RSC.
-    callServer: async function (rsfId: string, args: unknown[]) {
+    callServer: async function (rsaId: string, args: unknown[]) {
       // `args` is often going to be an array with just a single element,
       // and that element will be FormData
-      console.log('client.ts :: callServer rsfId', rsfId, 'args', args)
+      console.log('client.ts :: callServer rsfId', rsaId, 'args', args)
 
       const isMutating = !!mutationMode
       const searchParams = new URLSearchParams()
-      searchParams.set('action_id', rsfId)
+      searchParams.set('action_id', rsaId)
       let id: string
 
       if (isMutating) {

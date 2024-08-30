@@ -7145,9 +7145,9 @@ __metadata:
   linkType: hard
 
 "loader-utils@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "loader-utils@npm:3.2.0"
-  checksum: 10c0/573f7059f283b24b2b68cd230d9f0ba87315da8ecc7885734ea5f108fc83c7882e4eb8f8feab65f7db1661ab540f5aea778f48d18b7aadc24c37be77b2ff70a0
+  version: 3.3.1
+  resolution: "loader-utils@npm:3.3.1"
+  checksum: 10c0/f2af4eb185ac5bf7e56e1337b666f90744e9f443861ac521b48f093fb9e8347f191c8960b4388a3365147d218913bc23421234e7788db69f385bacfefa0b4758
   languageName: node
   linkType: hard
 
