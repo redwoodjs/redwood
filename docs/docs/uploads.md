@@ -3,7 +3,7 @@
 Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
 
 There's two parts to this:
-1. Setting up the frontend and GraphQL schema to send to send files - Uploads
+1. Setting up the frontend and GraphQL schema to send and receive files - Uploads
 
 2. Manipulate the data inside services, and pass it to Prisma, for persistence - Storage
 
