@@ -1,4 +1,4 @@
-# `@redwoodjs/uploads`
+# `@redwoodjs/storage`
 
 This package houses
 
@@ -14,13 +14,12 @@ In `api/src/uploads.ts` - setup uploads - processors, storage and the prisma ext
 
 ```ts
 // api/src/lib/uploads.ts
+nua
+import { setupUploads, UploadsConfig } from '@redwoodjs/storage'
+import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
+import { UrlSigner } from '@redwoodjs/storage/UrlSigner'
 
-import { UploadsConfig } from '@redwoodjs/uploads'
-import { setupUploads } from '@redwoodjs/uploads'
-import { FileSystemStorage } from '@redwoodjs/uploads/FileSystemStorage'
-import { UrlSigner } from '@redwoodjs/uploads/signedUrl'
-
-const uploadConfig: UploadsConfig = {
+const uploadsConfig: UploadsConfig = {
   // 👇 prisma model
   profile: {
     // 👇 pass in fields that are going to be File uploads
@@ -30,7 +29,7 @@ const uploadConfig: UploadsConfig = {
 }
 
 // 👇 exporting these allows you access elsewhere on the api side
-export const storage = new FileSystemStorage({
+export const fsStorage = new FileSystemStorage({
   baseDir: './uploads',
 })
 
@@ -40,13 +39,15 @@ export const urlSigner = new UrlSigner({
   endpoint: '/signedUrl',
 })
 
-const { uploadsProcessors, prismaExtension, fileListProcessor } = setupUploads(
-  uploadConfig,
-  storage,
-  urlSigner,
+const { fileToStorage, storagePrismaExtension } = setupStorage(
+  {
+    uploadsConfig,
+    storageAdapter: fsStorage,
+    urlSigner,
+  }
 )
 
-export { uploadsProcessors, prismaExtension, fileListProcessor }
+export { fileToStorage, storagePrismaExtension }
 ```
 
 ### Configuring db to use the prisma extension
@@ -59,7 +60,7 @@ import { PrismaClient } from '@prisma/client'
 import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 
 import { logger } from './logger'
-import { prismaExtension } from './uploads'
+import { storagePrismaExtension } from './uploads'
 
 // 👇 Notice here we create prisma client, and don't export it yet
 export const prismaClient = new PrismaClient({
@@ -73,7 +74,7 @@ handlePrismaLogging({
 })
 
 // 👇 Export db after adding uploads extension
-export const db = prismaClient.$extends(prismaExtension)
+export const db = prismaClient.$extends(storagePrismaExtension)
 ```
 
 ## Using Prisma extension

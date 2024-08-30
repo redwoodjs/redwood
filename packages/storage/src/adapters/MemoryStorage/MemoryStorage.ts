@@ -2,10 +2,13 @@ import path from 'node:path'
 
 import mime from 'mime-types'
 
-import { StorageAdapter } from './StorageAdapter.js'
-import type { SaveOptionsOverride } from './StorageAdapter.js'
+import { BaseStorageAdapter } from '../BaseStorageAdapter.js'
+import type { SaveOptionsOverride } from '../BaseStorageAdapter.js'
 
-export class MemoryStorage extends StorageAdapter implements StorageAdapter {
+export class MemoryStorage
+  extends BaseStorageAdapter
+  implements BaseStorageAdapter
+{
   store: Record<string, any> = {}
 
   async save(file: File, saveOpts?: SaveOptionsOverride) {

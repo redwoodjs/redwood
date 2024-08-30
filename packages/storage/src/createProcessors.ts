@@ -1,13 +1,16 @@
 import { ulid } from 'ulid'
 
-import type { SaveOptionsOverride, StorageAdapter } from './StorageAdapter.js'
+import type {
+  SaveOptionsOverride,
+  BaseStorageAdapter,
+} from './adapters/BaseStorageAdapter.js'
 
 // Assumes you pass in the graphql type
 type MakeFilesString<T> = {
   [K in keyof T]: T[K] extends File ? string : T[K]
 }
 
-export const createFileListProcessor = (storage: StorageAdapter) => {
+export const createFileListProcessor = (storage: BaseStorageAdapter) => {
   return async (files: File[] = [], pathOverrideOnly?: { path?: string }) => {
     const locations = await Promise.all(
       files.map(async (file) => {
@@ -28,12 +31,12 @@ export const createUploadProcessors = <
   TUploadConfig extends Record<string, any>,
 >(
   uploadConfig: TUploadConfig,
-  storage: StorageAdapter,
+  storage: BaseStorageAdapter,
 ) => {
   type modelNamesInUploadConfig = keyof TUploadConfig
 
   type uploadProcessorNames =
-    `process${Capitalize<string & modelNamesInUploadConfig>}Uploads`
+    `for${Capitalize<string & modelNamesInUploadConfig>}`
 
   // @TODO(TS): Is there a way to make the type of data more specific?
   type Processors = {
@@ -59,7 +62,7 @@ export const createUploadProcessors = <
       : [currentModelConfig.fields]
 
     const capitalCaseModel = `${model.charAt(0).toUpperCase() + model.slice(1)}`
-    const processorKey = `process${capitalCaseModel}Uploads` as keyof Processors
+    const processorKey = `for${capitalCaseModel}` as keyof Processors
 
     processors[processorKey] = async (data, overrideSaveOptions) => {
       const updatedFields = {} as Record<string, string>

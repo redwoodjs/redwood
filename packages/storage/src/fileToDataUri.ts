@@ -1,6 +1,9 @@
-import type { StorageAdapter } from './StorageAdapter.js'
+import type { BaseStorageAdapter } from './adapters/BaseStorageAdapter.js'
 
-export async function fileToDataUri(filePath: string, storage: StorageAdapter) {
+export async function fileToDataUri(
+  filePath: string,
+  storage: BaseStorageAdapter,
+) {
   const { contents, type: mimeType } = await storage.read(filePath)
 
   const base64Data = Buffer.from(contents).toString('base64')

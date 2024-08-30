@@ -1,10 +1,10 @@
 {
-  "name": "@redwoodjs/uploads",
+  "name": "@redwoodjs/storage",
   "version": "7.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
-    "directory": "packages/uploads"
+    "directory": "packages/storage"
   },
   "license": "MIT",
   "type": "module",
@@ -20,26 +20,20 @@
       }
     },
     "./FileSystemStorage": {
-      "require": "./dist/cjs/FileSystemStorage.js",
-      "import": "./dist/FileSystemStorage.js"
+      "require": "./dist/cjs/adapters/FileSystemStorage/FileSystemStorage.js",
+      "import": "./dist/adapters/FileSystemStorage/FileSystemStorage.js"
     },
     "./MemoryStorage": {
-      "require": "./dist/cjs/MemoryStorage.js",
-      "import": "./dist/MemoryStorage.js"
+      "require": "./dist/cjs/adapters/MemoryStorage/MemoryStorage.js",
+      "import": "./dist/adapters/MemoryStorage/MemoryStorage.js"
     },
-    "./signedUrl": {
-      "require": "./dist/cjs/signedUrls.js",
-      "import": "./dist/signedUrls.js"
+    "./BaseStorageAdapter": {
+      "require": "./dist/cjs/adapters/BaseStorageAdapter.js",
+      "import": "./dist/adapters/BaseStorageAdapter.js"
     },
-    "./prisma": {
-      "require": {
-        "types": "./dist/cjs/prismaExtension.d.ts",
-        "default": "./dist/cjs/prismaExtension.js"
-      },
-      "import": {
-        "types": "./dist/prismaExtension.d.ts",
-        "default": "./dist/prismaExtension.js"
-      }
+    "./UrlSigner": {
+      "require": "./dist/cjs/UrlSigner.js",
+      "import": "./dist/UrlSigner.js"
     }
   },
   "files": [
@@ -48,7 +42,7 @@
   ],
   "scripts": {
     "build": "yarn setup:test && tsx ./build.mts",
-    "build:pack": "yarn pack -o redwoodjs-uploads.tgz",
+    "build:pack": "yarn pack -o redwoodjs-storage.tgz",
     "build:types": "tsc --build --verbose",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "tsx attw.ts",

@@ -5,8 +5,8 @@ import { describe, it, vi, expect, beforeEach, beforeAll } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { FileSystemStorage } from '../FileSystemStorage.js'
-import { setupUploads } from '../index.js'
+import { FileSystemStorage } from '../adapters/FileSystemStorage/FileSystemStorage.js'
+import { setupStorage } from '../index.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
 // @MARK: use the local prisma client in the test
@@ -31,7 +31,7 @@ vi.mock('node:fs', () => ({
 }))
 
 describe('Query extensions', () => {
-  const uploadConfig: UploadsConfig = {
+  const uploadsConfig: UploadsConfig = {
     dummy: {
       fields: 'uploadField',
     },
@@ -40,14 +40,14 @@ describe('Query extensions', () => {
     },
   }
 
-  const { prismaExtension, uploadsProcessors } = setupUploads(
-    uploadConfig,
-    new FileSystemStorage({
+  const { storagePrismaExtension, filesToStorage } = setupStorage({
+    uploadsConfig: uploadsConfig,
+    storageAdapter: new FileSystemStorage({
       baseDir: '/tmp',
     }),
-  )
+  })
 
-  const prismaClient = new PrismaClient().$extends(prismaExtension)
+  const prismaClient = new PrismaClient().$extends(storagePrismaExtension)
 
   beforeEach(() => {
     vi.resetAllMocks()
@@ -59,7 +59,7 @@ describe('Query extensions', () => {
 
   describe('create', () => {
     it('create will save files', async () => {
-      const processedData = await uploadsProcessors.processDummyUploads({
+      const processedData = await filesToStorage.forDummy({
         uploadField: sampleFile,
       })
 
