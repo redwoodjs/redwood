@@ -90,4 +90,9 @@ const LocationAwareRouter = ({
   return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
 }
 
-export type { RscFetchProps } from './rscFetchForClientRouter.js'
+export interface RscFetchProps extends Record<string, unknown> {
+  location: {
+    pathname: string
+    search: string
+  }
+}
