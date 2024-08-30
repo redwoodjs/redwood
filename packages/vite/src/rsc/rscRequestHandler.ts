@@ -29,6 +29,8 @@ interface CreateRscRequestHandlerOptions {
   viteDevServer?: ViteDevServer
 }
 
+const BASE_PATH = '/rw-rsc/'
+
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
 ) {
@@ -39,9 +41,7 @@ export function createRscRequestHandler(
     res: ExpressResponse,
     next: () => void,
   ) => {
-    const basePath = '/rw-rsc/'
-
-    console.log('basePath', basePath)
+    console.log('BASE_PATH', BASE_PATH)
     console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
     console.log('req.headers.host', req.headers.host)
     console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
@@ -97,7 +97,7 @@ export function createRscRequestHandler(
     let rsaId: string | undefined
     let args: unknown[] = []
 
-    if (url.pathname.startsWith(basePath)) {
+    if (url.pathname.startsWith(BASE_PATH)) {
       rscId = url.pathname.split('/').pop()
       rsaId = url.searchParams.get('action_id') || undefined
 
@@ -124,8 +124,6 @@ export function createRscRequestHandler(
           args = await reply
 
           // TODO (RSC): Loop over args (to not only look at args[0])
-          // TODO (RSC): Verify that this works with node16 (MDN says FormData is
-          // only supported in node18 and up)
           if (args[0] instanceof FormData) {
             const serializedFormData: Record<string, any> = {}
 
@@ -212,7 +210,7 @@ export function createRscRequestHandler(
           props,
           rsaId,
           args,
-          basePath,
+          basePath: BASE_PATH,
           req,
           handleError,
         })
