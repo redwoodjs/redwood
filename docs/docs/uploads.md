@@ -467,7 +467,9 @@ The extension is determined by the name of the uploaded file.
 This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
 
 
+:::note
 The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-processors-and-prisma-extension).
+:::
 
 ### `create` & `createMany` operations
 If your create operation fails, it removes any uploaded files to avoid orphaned files (so you can retry the request)
@@ -479,23 +481,131 @@ If your create operation fails, it removes any uploaded files to avoid orphaned 
 ### `delete` operations
 Removes any associated uploaded files, once delete operation completes.
 
+### `upsert` operations
+Depending on whether it's updating or creating, performs the same actions as create or update.
+
 
 
 ## Result Extensions
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
+When you add the storage prisma extension, it also configures your prisma objects to have special helper methods.
+
+These will only appear on fields that you configure in your `UploadConfig`. 
+
+```typescript
+const profile = await db.profile.update(/*...*/)
+
+// The result of your prisma query contains the helpers
+profile?.withSignedUrl() // ✅
+
+// Incorrect: you need to await the result of your prisma query first!
+db.profile.update(/*...*/).withSignedUrl() // 🛑
+
+// Assuming the comment model does not have an upload field
+// the helper won't appear
+db.comment.findMany(/*..*/).withSignedUrl() // 🛑
+```
+
+
+
 
 ### Signed URLs
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
+When you setup uploads, we also generate an API function (and endpoint) for you - by default at `/signedUrl`. You can use this in conjunction with the `.withSignedUrl` helper. For example:
+
+```ts title="api/src/services/profiles.ts"
+import { EXPIRES_IN } from '@redwoodjs/storage/UrlSigner'
+
+export const profile = async ({ id }) => {
+  const profile = await db.profile.findUnique({
+    where: { id },
+  })
+
+  // Convert the avatar field to signed URLs
+  // highlight-start
+  return profile?.withSignedUrl({
+    expiresIn: EXPIRES_IN.days(2),
+  })
+  // highlight-end
+}
+```
+
+The object being returned will look like:
+
+```ts
+{
+  id: 125,
+  avatar: '/.redwood/functions/signedUrl?s=s1gnatur3&expiry=1725190749613&path=path.png'
+}
+```
+
+This will generate a URL that will expire in 2 days (from the point of query). Let's breakdown the URL:
+
+| URL Component |  |
+|---------------|-------------|
+| `/.redwood/functions/signedUrl` | Point to the API server, and the endpoint configured |
+| `s=s1gnatur3` | The signature that we'll validate |
+| `expiry=1725190749613` | Time stamp for when it expires |
+| `path=path.png` | The key to look up the file on your storage |
+
+
+<details>
+<summary>How the signedUrl function validates</summary>
+
+This function is automatically generated for you, but let's take a quick look at how it works:
+
+```ts title="api/src/functions/signedUrl/signedUrl.ts"
+import type { SignatureValidationArgs } from '@redwoodjs/storage/UrlSigner'
+
+// The urlSigner and fsStorage instances were configured when we setup uploads
+// highlight-next-line
+import { urlSigner, fsStorage } from 'src/lib/uploads'
+
+export const handler = async (event) => {
+
+// Validate the signature using the urlSigner instance
+// highlight-next-line
+  const fileToReturn = urlSigner.validateSignature(
+    // Pass the params {s, path, expiry}
+    // highlight-next-line 
+    event.queryStringParameters as SignatureValidationArgs
+  )
+
+  // Use the returned value to lookup the file in your storage
+  // highlight-next-line
+  const { contents, type } = await fsStorage.read(fileToReturn)
+
+  return {
+    statusCode: 200,
+    headers: {
+      // You also get the type from the read
+      'Content-Type': type,
+    },
+    // Return the contents of the file
+    body: contents,
+  }
+}
+
+```
+</details>
+
+
 
 ### Data URIs
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
-<!--INCOMPLETE -->
+When you have smaller files, you can choose instead to return a Base64 DataURI string that you can render directly into your html. 
+
+```ts title="api/src/services/profiles.ts"
+export const profile = async ({ id }) => {
+  const profile = await db.profile.findUnique({
+    where: { id },
+  })
+
+// highlight-next-line
+  return profile?.withDataUri()
+}
+```
+
+:::tip
+The `withDataUri` extension is an `async` function. Remember to await, if you are doing additional manipulation before returning your result object from the service.
+:::
 
 
 ## Configuring the server further
