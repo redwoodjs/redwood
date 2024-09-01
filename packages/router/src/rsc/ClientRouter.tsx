@@ -49,7 +49,7 @@ const LocationAwareRouter = ({
     //     'defined for the root of your React app.',
     // )
     const rscProps = { location: { pathname, search } }
-    return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
+    return <RscFetcher rscProps={rscProps} />
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -80,7 +80,7 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
+          <RscFetcher rscProps={rscProps} />
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
@@ -91,7 +91,7 @@ const LocationAwareRouter = ({
   // re-initializes RscFetcher. I wonder if there's an optimization to be made
   // here. Maybe we can lift RscFetcher up so we can keep the same instance
   // around and reuse it everywhere
-  return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
+  return <RscFetcher rscProps={rscProps} />
 }
 
 export interface RscFetchProps extends Record<string, unknown> {

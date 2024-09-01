@@ -36,21 +36,18 @@ function onStreamFinished(
   )
 }
 
-function rscFetch(rscId: string, serializedProps: string) {
+function rscFetchRoutes(serializedProps: string) {
   console.log(
-    'rscFetch :: args:\n    rscId: ' +
-      rscId +
-      '\n    serializedProps: ' +
-      serializedProps,
+    'rscFetchRoutes :: args:\n    serializedProps: ' + serializedProps,
   )
-  const rscCacheKey = `${rscId}::${serializedProps}`
+  const rscCacheKey = serializedProps
 
   const cached = rscCache.get(rscCacheKey)
   if (cached) {
-    console.log('rscFetch :: cache hit for', rscCacheKey)
+    console.log('rscFetchRoutes :: cache hit for', rscCacheKey)
     return cached
   } else {
-    console.log('rscFetch :: cache miss for', rscCacheKey)
+    console.log('rscFetchRoutes :: cache miss for', rscCacheKey)
   }
 
   const searchParams = new URLSearchParams()
@@ -58,7 +55,7 @@ function rscFetch(rscId: string, serializedProps: string) {
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
-  const responsePromise = fetch(BASE_PATH + rscId + '?' + searchParams, {
+  const responsePromise = fetch(BASE_PATH + '__rwjs__Routes?' + searchParams, {
     headers: {
       'rw-rsc': '1',
     },
@@ -82,7 +79,7 @@ function rscFetch(rscId: string, serializedProps: string) {
       // a new cache key that will trigger a rerender.
       // TODO (RSC): What happens if you call the same RSA twice in a row?
       // Like `increment()`
-      const rscCacheKey = `${rscId}::${serializedProps}::${rsaId}::${new Date()}`
+      const rscCacheKey = `${serializedProps}::${rsaId}::${new Date()}`
 
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsaId)
@@ -150,17 +147,16 @@ function rscFetch(rscId: string, serializedProps: string) {
 }
 
 interface Props {
-  rscId: string
   rscProps: RscProps
 }
 
-export const RscFetcher = ({ rscId, rscProps }: Props) => {
+export const RscFetcher = ({ rscProps }: Props) => {
   const serializedProps = JSON.stringify(rscProps)
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
     console.log('RscFetcher :: useState initial value')
-    // Calling rscFetch here to prime the cache
-    rscFetch(rscId, serializedProps)
-    return `${rscId}::${serializedProps}`
+    // Calling rscFetchRoutes here to prime the cache
+    rscFetchRoutes(serializedProps)
+    return serializedProps
   })
 
   useEffect(() => {
@@ -173,19 +169,13 @@ export const RscFetcher = ({ rscId, rscProps }: Props) => {
   }, [])
 
   useEffect(() => {
-    console.log('RscFetcher :: useEffect about to call rscFetch')
-    // rscFetch will update rscCache with the fetched component
-    rscFetch(rscId, serializedProps)
-    setCurrentRscCacheKey(`${rscId}::${serializedProps}`)
-  }, [rscId, serializedProps])
+    console.log('RscFetcher :: useEffect about to call rscFetchRoutes')
+    // rscFetchRoutes will update rscCache with the fetched component
+    rscFetchRoutes(serializedProps)
+    setCurrentRscCacheKey(serializedProps)
+  }, [serializedProps])
 
-  console.log(
-    'RscFetcher :: current props\n' +
-      '    rscId: ' +
-      rscId +
-      '\n    rscProps: ' +
-      serializedProps,
-  )
+  console.log('RscFetcher :: current props\n    rscProps: ' + serializedProps)
   console.log('RscFetcher :: rendering cache entry for\n' + currentRscCacheKey)
 
   const component = rscCache.get(currentRscCacheKey)
