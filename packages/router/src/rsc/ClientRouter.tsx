@@ -7,7 +7,7 @@ import { namedRoutes } from '../namedRoutes.js'
 import { RouterContextProvider } from '../router-context.js'
 import type { RouterProps } from '../router.js'
 
-import { RscFetcher } from './RscFetcher.js'
+import { RscRoutes } from './RscRoutes.js'
 
 export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
@@ -48,8 +48,8 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    const rscProps = { location: { pathname, search } }
-    return <RscFetcher rscProps={rscProps} />
+    const routesProps = { location: { pathname, search } }
+    return <RscRoutes routesProps={routesProps} />
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -70,7 +70,7 @@ const LocationAwareRouter = ({
       )
     }
 
-    const rscProps = { location: { pathname, search } }
+    const routesProps = { location: { pathname, search } }
 
     return (
       <RouterContextProvider
@@ -80,18 +80,18 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          <RscFetcher rscProps={rscProps} />
+          <RscRoutes routesProps={routesProps} />
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
   }
 
-  const rscProps = { location: { pathname, search } }
+  const routesProps = { location: { pathname, search } }
   // TODO (RSC): I think that moving between private and public routes
   // re-initializes RscFetcher. I wonder if there's an optimization to be made
   // here. Maybe we can lift RscFetcher up so we can keep the same instance
   // around and reuse it everywhere
-  return <RscFetcher rscProps={rscProps} />
+  return <RscRoutes routesProps={routesProps} />
 }
 
 export interface RscFetchProps extends Record<string, unknown> {
