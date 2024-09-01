@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import React, { useMemo } from 'react'
 
 import { analyzeRoutes } from '../analyzeRoutes.js'
@@ -8,7 +7,7 @@ import { namedRoutes } from '../namedRoutes.js'
 import { RouterContextProvider } from '../router-context.js'
 import type { RouterProps } from '../router.js'
 
-import { rscFetch } from './rscFetchForClientRouter.js'
+import { RscFetcher } from './RscFetcher.js'
 
 export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
@@ -49,9 +48,8 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    return rscFetch('__rwjs__Routes', {
-      location: { pathname, search },
-    }) as unknown as ReactNode
+    const rscProps = { location: { pathname, search } }
+    return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -72,6 +70,8 @@ const LocationAwareRouter = ({
       )
     }
 
+    const rscProps = { location: { pathname, search } }
+
     return (
       <RouterContextProvider
         useAuth={useAuth}
@@ -80,16 +80,19 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
+          <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
   }
 
-  // TODO (RSC): Our types dont fully handle async components
-  return rscFetch('__rwjs__Routes', {
-    location: { pathname, search },
-  }) as unknown as ReactNode
+  const rscProps = { location: { pathname, search } }
+  return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
 }
 
-export type { RscFetchProps } from './rscFetchForClientRouter.js'
+export interface RscFetchProps extends Record<string, unknown> {
+  location: {
+    pathname: string
+    search: string
+  }
+}

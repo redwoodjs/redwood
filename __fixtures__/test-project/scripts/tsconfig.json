@@ -9,6 +9,8 @@
     "paths": {
       "$api/*": ["../api/*"],
       "api/*": ["../api/*"],
+      "$api/src/*": ["../api/src/*", "../.redwood/types/mirror/api/src/*"],
+      "api/src/*": ["../api/src/*", "../.redwood/types/mirror/api/src/*"],
       "$web/*": ["../web/*"],
       "web/*": ["../web/*"],
       "$web/src/*": ["../web/src/*", "../.redwood/types/mirror/web/src/*"],
