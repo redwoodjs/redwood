@@ -57,7 +57,7 @@ function rscFetchRoutes(serializedProps: string) {
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
-  const responsePromise = fetch(BASE_PATH + rscId + searchParams, {
+  const responsePromise = fetch(BASE_PATH + rscId + '?' + searchParams, {
     headers: {
       'rw-rsc': '1',
     },
