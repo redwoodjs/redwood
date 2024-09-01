@@ -53,9 +53,11 @@ function rscFetchRoutes(serializedProps: string) {
   const searchParams = new URLSearchParams()
   searchParams.set('props', serializedProps)
 
+  const rscId = '__rwjs__Routes'
+
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
-  const responsePromise = fetch(BASE_PATH + '__rwjs__Routes?' + searchParams, {
+  const responsePromise = fetch(BASE_PATH + rscId + searchParams, {
     headers: {
       'rw-rsc': '1',
     },
@@ -70,21 +72,18 @@ function rscFetchRoutes(serializedProps: string) {
     callServer: async function (rsaId: string, args: unknown[]) {
       // `args` is often going to be an array with just a single element,
       // and that element will be FormData
-      console.log('RscFetcher :: callServer rsaId', rsaId, 'args', args)
+      console.log('RscRoutes :: callServer rsaId', rsaId, 'args', args)
 
-      // Including rsaId here to make sure the page rerenders when calling RSAs
-      // Calling a RSA doesn't change the url (i.e. `serializedProps`), and it
-      // also doesn't change the rscId, so React would not detect a state change
-      // that would trigger a rerender. So we include the rsaId here to make
-      // a new cache key that will trigger a rerender.
-      // TODO (RSC): What happens if you call the same RSA twice in a row?
-      // Like `increment()`
+      // Including rsaId here for debugging reasons only, what's important is
+      // `new Date()`, to make sure the cache key is unique so we trigger a
+      // rerender. It's needed to handle calling RSAs multiple times with the
+      // same arguments
       const rscCacheKey = `${serializedProps}::${rsaId}::${new Date()}`
 
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsaId)
       searchParams.set('props', serializedProps)
-      const id = '_'
+      const rscId = '_'
 
       let body: Awaited<ReturnType<typeof encodeReply>> = ''
 
@@ -94,7 +93,7 @@ function rscFetchRoutes(serializedProps: string) {
         console.error('Error encoding Server Action arguments', e)
       }
 
-      const responsePromise = fetch(BASE_PATH + id + '?' + searchParams, {
+      const responsePromise = fetch(BASE_PATH + rscId + '?' + searchParams, {
         method: 'POST',
         body,
         headers: {
@@ -118,7 +117,7 @@ function rscFetchRoutes(serializedProps: string) {
       // rscCache.set(rscCacheKey, dataPromise)
 
       const dataValue = await dataPromise
-      console.log('RscFetcher :: callServer dataValue', dataValue)
+      console.log('RscRoutes :: callServer dataValue', dataValue)
       // TODO (RSC): Fix the types for `createFromFetch`
       // @ts-expect-error The type is wrong for createFromFetch
       const Routes = dataValue.Routes?.[0]
@@ -147,36 +146,36 @@ function rscFetchRoutes(serializedProps: string) {
 }
 
 interface Props {
-  rscProps: RscProps
+  routesProps: RscProps
 }
 
-export const RscFetcher = ({ rscProps }: Props) => {
-  const serializedProps = JSON.stringify(rscProps)
+export const RscRoutes = ({ routesProps }: Props) => {
+  const serializedProps = JSON.stringify(routesProps)
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
-    console.log('RscFetcher :: useState initial value')
+    console.log('RscRoutes :: useState initial value')
     // Calling rscFetchRoutes here to prime the cache
     rscFetchRoutes(serializedProps)
     return serializedProps
   })
 
   useEffect(() => {
-    console.log('RscFetcher :: useEffect set updateCurrentRscCacheKey')
+    console.log('RscRoutes :: useEffect set updateCurrentRscCacheKey')
     updateCurrentRscCacheKey = (key: string) => {
-      console.log('RscFetcher inside updateCurrentRscCacheKey', key)
+      console.log('RscRoutes inside updateCurrentRscCacheKey', key)
 
       setCurrentRscCacheKey(key)
     }
   }, [])
 
   useEffect(() => {
-    console.log('RscFetcher :: useEffect about to call rscFetchRoutes')
+    console.log('RscRoutes :: useEffect about to call rscFetchRoutes')
     // rscFetchRoutes will update rscCache with the fetched component
     rscFetchRoutes(serializedProps)
     setCurrentRscCacheKey(serializedProps)
   }, [serializedProps])
 
-  console.log('RscFetcher :: current props\n    rscProps: ' + serializedProps)
-  console.log('RscFetcher :: rendering cache entry for\n' + currentRscCacheKey)
+  console.log('RscRoutes :: current props\n    routesProps: ' + serializedProps)
+  console.log('RscRoutes :: rendering cache entry for\n' + currentRscCacheKey)
 
   const component = rscCache.get(currentRscCacheKey)
 
