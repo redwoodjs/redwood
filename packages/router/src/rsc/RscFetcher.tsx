@@ -10,17 +10,6 @@ const BASE_PATH = '/rw-rsc/'
 
 const rscCache = new RscCache()
 
-const initialRscProps = {
-  location: {
-    pathname: window.location.pathname,
-    search: window.location.search,
-  },
-}
-const initialSerializedProps = JSON.stringify(initialRscProps)
-const initialRscId = '__rwjs__Routes'
-// Prime the cache with the initial RSC response
-rscFetch(initialRscId, initialSerializedProps)
-
 export interface RscProps extends Record<string, unknown> {
   location: {
     pathname: string
@@ -48,14 +37,20 @@ function onStreamFinished(
 }
 
 function rscFetch(rscId: string, serializedProps: string) {
-  console.log('rscFetch :: rscId', rscId)
-  console.log('rscFetch :: props', serializedProps)
+  console.log(
+    'rscFetch :: args:\n    rscId: ' +
+      rscId +
+      '\n    serializedProps: ' +
+      serializedProps,
+  )
   const rscCacheKey = `${rscId}::${serializedProps}`
 
   const cached = rscCache.get(rscCacheKey)
   if (cached) {
     console.log('rscFetch :: cache hit for', rscCacheKey)
     return cached
+  } else {
+    console.log('rscFetch :: cache miss for', rscCacheKey)
   }
 
   const searchParams = new URLSearchParams()
@@ -110,14 +105,7 @@ function rscFetch(rscId: string, serializedProps: string) {
         },
       })
 
-      onStreamFinished(responsePromise, (text: string) => {
-        console.log(
-          'RscFetcher :: callServer response text\n' +
-            text
-              .replace(/.*__rwjs__rsa_data.*?\s\w+\s\w+\s\w+\s\w+\s\w+"}./s, '')
-              .slice(0, 40),
-        )
-
+      onStreamFinished(responsePromise, () => {
         updateCurrentRscCacheKey(rscCacheKey)
       })
 
@@ -156,6 +144,8 @@ function rscFetch(rscId: string, serializedProps: string) {
 
   rscCache.set(rscCacheKey, componentPromise)
 
+  // TODO (RSC): Figure out if this is ever used, or if it's better to return
+  // the cache key
   return componentPromise
 }
 
@@ -166,11 +156,12 @@ interface Props {
 
 export const RscFetcher = ({ rscId, rscProps }: Props) => {
   const serializedProps = JSON.stringify(rscProps)
-  const [currentRscCacheKey, setCurrentRscCacheKey] = useState(
-    // TODO (RSC): This should be synced with initialRscId and
-    // initialSerializedProps
-    `${rscId}::${serializedProps}`,
-  )
+  const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
+    console.log('RscFetcher :: useState initial value')
+    // Calling rscFetch here to prime the cache
+    rscFetch(rscId, serializedProps)
+    return `${rscId}::${serializedProps}`
+  })
 
   useEffect(() => {
     console.log('RscFetcher :: useEffect set updateCurrentRscCacheKey')
@@ -181,26 +172,26 @@ export const RscFetcher = ({ rscId, rscProps }: Props) => {
     }
   }, [])
 
-  console.log('RscFetcher rerender rscId', rscId, 'rscProps', rscProps)
-
   useEffect(() => {
-    async function fetchRsc() {
-      console.log('RscFetcher :: useEffect about to call rscFetch')
-      // rscFetch will update the rscCache with the fetched component
-      await rscFetch(rscId, serializedProps)
-      setCurrentRscCacheKey(`${rscId}::${serializedProps}`)
-    }
-
-    fetchRsc()
+    console.log('RscFetcher :: useEffect about to call rscFetch')
+    // rscFetch will update rscCache with the fetched component
+    rscFetch(rscId, serializedProps)
+    setCurrentRscCacheKey(`${rscId}::${serializedProps}`)
   }, [rscId, serializedProps])
 
-  console.log('RscFetcher :: rendering cache entry for', currentRscCacheKey)
+  console.log(
+    'RscFetcher :: current props\n' +
+      '    rscId: ' +
+      rscId +
+      '\n    rscProps: ' +
+      serializedProps,
+  )
+  console.log('RscFetcher :: rendering cache entry for\n' + currentRscCacheKey)
 
   const component = rscCache.get(currentRscCacheKey)
 
   if (!component) {
-    console.log('RscFetcher :: no component for', currentRscCacheKey)
-    return null
+    throw new Error('Missing RSC cache entry for ' + currentRscCacheKey)
   }
 
   return use(component)
