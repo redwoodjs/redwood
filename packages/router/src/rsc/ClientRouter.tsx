@@ -87,6 +87,10 @@ const LocationAwareRouter = ({
   }
 
   const rscProps = { location: { pathname, search } }
+  // TODO (RSC): I think that moving between private and public routes
+  // re-initializes RscFetcher. I wonder if there's an optimization to be made
+  // here. Maybe we can lift RscFetcher up so we can keep the same instance
+  // around and reuse it everywhere
   return <RscFetcher rscId="__rwjs__Routes" rscProps={rscProps} />
 }
 
