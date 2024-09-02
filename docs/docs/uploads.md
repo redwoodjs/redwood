@@ -292,6 +292,7 @@ The `$extends` method returns a new instance of the Prisma client with the exten
 What this configures is:
 
 **A) CRUD operations**
+
 - when the record is deleted, the associated upload is removed from storage
 - when a record is updated, the associated upload file is also replaced
 
@@ -367,7 +368,7 @@ return filesWhereQuery.map((file) => file.withSignedUrl())
 
 ## Upload savers
 
-You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to write your `File` objects to storage, for Prisma to save the path into the database. The savers, and storage adapters configured in `api/src/lib/uploads` determine where the file is saved.
+You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to write your `File` objects to storage, for Prisma to save the path into the database. The savers, and storage adapters configured in `api/src/lib/uploads`, determine where the file is saved.
 
 ```ts title="api/src/services/profiles/profiles.ts"
 // highlight-next-line
@@ -381,7 +382,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
   const processedInput = await saveFiles.forProfile(input)
 
   // input.avatar (File) becomes a string 👇
-  // The configuration on where it was saved is passed when we setup uploads in src/lib/uploads.ts
+  // Settings in src/lib/uploads.ts configures where the upload is saved
   // processedInput.avatar -> '/mySavePath/profile/avatar/generatedId.jpg'
 
   return db.profile.update({
@@ -456,11 +457,11 @@ export const updateAlbum = async ({
 
   const mappedPhotos = processedInput.map((path) => ({ path }))
   /* Will make `mappedPhotos` be an array of objects like this:
-   [
-    { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
-    { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
-   ]
-   */
+  [
+   { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
+   { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
+  ]
+  */
 
   return db.album.update({
     data: {
