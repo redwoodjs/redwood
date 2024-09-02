@@ -278,7 +278,7 @@ export const db = prismaClient.$extends(storagePrismaExtension)
 The `$extends` method is used to extend the functionality of your Prisma client by adding -[Query extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query): which will intercept your `create`, `update`, `delete` operations
 and
 
-- [Result extension](<[Link](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query)>) for uploads - which gives you helper methods on the result of your prisma query
+- [Result extension](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result) for uploads - which gives you helper methods on the result of your prisma query
 
 <details>
 <summary>
