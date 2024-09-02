@@ -1,5 +1,5 @@
 import type { BaseStorageAdapter } from './adapters/BaseStorageAdapter.js'
-import { createUploadProcessors } from './createProcessors.js'
+import { createUploadSavers } from './createProcessors.js'
 import type { ModelNames, UploadsConfig } from './prismaExtension.js'
 import { createUploadsExtension } from './prismaExtension.js'
 import type { UrlSigner } from './UrlSigner.js'
@@ -21,11 +21,11 @@ export const setupStorage = <MNames extends ModelNames>({
     urlSigner,
   )
 
-  const filesToStorage = createUploadProcessors(uploadsConfig, storageAdapter)
+  const saveFiles = createUploadSavers(uploadsConfig, storageAdapter)
 
   return {
     storagePrismaExtension: prismaExtension,
-    filesToStorage,
+    saveFiles,
   }
 }
 

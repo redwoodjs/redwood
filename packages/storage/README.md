@@ -39,7 +39,7 @@ export const urlSigner = new UrlSigner({
   endpoint: '/signedUrl',
 })
 
-const { fileToStorage, storagePrismaExtension } = setupStorage(
+const { saveFiles, storagePrismaExtension } = setupStorage(
   {
     uploadsConfig,
     storageAdapter: fsStorage,
@@ -47,7 +47,7 @@ const { fileToStorage, storagePrismaExtension } = setupStorage(
   }
 )
 
-export { fileToStorage, storagePrismaExtension }
+export { saveFiles, storagePrismaExtension }
 ```
 
 ### Configuring db to use the prisma extension
@@ -100,9 +100,9 @@ export const profile: QueryResolvers['profile'] = async ({ id }) => {
 }
 ```
 
-## Using processors
+## Using `saveFiles`
 
-In your services, you can use the preconfigured "processors" to convert Files to strings for Prisma to save into the database. The processors, and storage adapters determine where the file is saved.
+In your services, you can use the preconfigured "processors" - exported as `saveFiles` to convert Files to paths on storage, for Prisma to save into the database. The processors, and storage adapters determine where the file is saved.
 
 ```ts
 // api/src/services/profiles/profiles.ts
@@ -111,7 +111,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
   id,
   input,
 }) => {
-  const processedInput = await uploadsProcessors.processProfileUploads(input)
+  const processedInput = await saveFiles.forProfile(input)
 
   // This becomes a string 👇
   // The configuration on where it was saved is passed when we setup uploads in src/lib/uploads.ts

@@ -40,7 +40,7 @@ describe('Query extensions', () => {
     },
   }
 
-  const { storagePrismaExtension, filesToStorage } = setupStorage({
+  const { storagePrismaExtension, saveFiles } = setupStorage({
     uploadsConfig: uploadsConfig,
     storageAdapter: new FileSystemStorage({
       baseDir: '/tmp',
@@ -59,7 +59,7 @@ describe('Query extensions', () => {
 
   describe('create', () => {
     it('create will save files', async () => {
-      const processedData = await filesToStorage.forDummy({
+      const processedData = await saveFiles.forDummy({
         uploadField: sampleFile,
       })
 

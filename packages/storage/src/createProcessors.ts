@@ -4,13 +4,14 @@ import type {
   SaveOptionsOverride,
   BaseStorageAdapter,
 } from './adapters/BaseStorageAdapter.js'
+import type { ModelNames, UploadsConfig } from './prismaExtension.js'
 
 // Assumes you pass in the graphql type
 type MakeFilesString<T> = {
   [K in keyof T]: T[K] extends File ? string : T[K]
 }
 
-export const createFileListProcessor = (storage: BaseStorageAdapter) => {
+export const createFileListSaver = (storage: BaseStorageAdapter) => {
   return async (files: File[] = [], pathOverrideOnly?: { path?: string }) => {
     const locations = await Promise.all(
       files.map(async (file) => {
@@ -24,29 +25,24 @@ export const createFileListProcessor = (storage: BaseStorageAdapter) => {
 }
 
 /*
-This creates a processor for each model in the uploads config (i.e. tied to a model in the prisma schema)
-The processor will only handle single file uploads, not file lists.
+This creates a "saver" for each model in the uploads config (i.e. tied to a model in the prisma schema)
+The saver will only handle single file uploads, not file lists.
 */
-export const createUploadProcessors = <
-  TUploadConfig extends Record<string, any>,
->(
-  uploadConfig: TUploadConfig,
+export const createUploadSavers = <MNames extends ModelNames = ModelNames>(
+  uploadConfig: UploadsConfig<MNames>,
   storage: BaseStorageAdapter,
 ) => {
-  type modelNamesInUploadConfig = keyof TUploadConfig
-
-  type uploadProcessorNames =
-    `for${Capitalize<string & modelNamesInUploadConfig>}`
+  type uploadSaverNames = `for${Capitalize<string & MNames>}`
 
   // @TODO(TS): Is there a way to make the type of data more specific?
-  type Processors = {
-    [K in uploadProcessorNames]: <T extends Record<string, any>>(
+  type Savers = {
+    [K in uploadSaverNames]: <T extends Record<string, any>>(
       data: T,
       overrideSaveOptions?: SaveOptionsOverride,
     ) => Promise<MakeFilesString<T>>
   }
 
-  const processors = {} as Processors
+  const savers = {} as Savers
 
   Object.keys(uploadConfig).forEach((model) => {
     const modelKey = model as keyof typeof uploadConfig
@@ -57,14 +53,16 @@ export const createUploadProcessors = <
       return
     }
 
-    const currentModelUploadFields = Array.isArray(currentModelConfig.fields)
-      ? currentModelConfig.fields
-      : [currentModelConfig.fields]
+    const currentModelUploadFields = (
+      Array.isArray(currentModelConfig.fields)
+        ? currentModelConfig.fields
+        : [currentModelConfig.fields]
+    ) as string[]
 
     const capitalCaseModel = `${model.charAt(0).toUpperCase() + model.slice(1)}`
-    const processorKey = `for${capitalCaseModel}` as keyof Processors
+    const saverKey = `for${capitalCaseModel}` as keyof Savers
 
-    processors[processorKey] = async (data, overrideSaveOptions) => {
+    savers[saverKey] = async (data, overrideSaveOptions) => {
       const updatedFields = {} as Record<string, string>
       for await (const field of currentModelUploadFields) {
         if (data[field]) {
@@ -86,7 +84,7 @@ export const createUploadProcessors = <
   })
 
   return {
-    ...processors,
-    processFileList: createFileListProcessor(storage),
+    ...savers,
+    inList: createFileListSaver(storage),
   }
 }
