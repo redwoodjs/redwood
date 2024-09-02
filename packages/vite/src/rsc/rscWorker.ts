@@ -399,11 +399,12 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   const config = await getViteConfig()
 
   const serverRoutes = await getRoutesComponent()
+  const element = createElement(serverRoutes, input.props)
 
-  return renderToPipeableStream(
-    createElement(serverRoutes, input.props),
-    getBundlerConfig(config),
-  )
+  console.log('rscWorker.ts renderRsc renderRsc props', input.props)
+  console.log('rscWorker.ts renderRsc element', element)
+
+  return renderToPipeableStream(element, getBundlerConfig(config))
   // TODO (RSC): We used to transform() the stream here to remove
   // "prefixToRemove", which was the common base path to all filenames. We
   // then added it back in handleRsa with a simple
@@ -453,7 +454,18 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
   console.log('rscWorker.ts args', ...input.args)
 
   const data = await method(...input.args)
+  console.log('rscWorker.ts rsa return data', data)
   const config = await getViteConfig()
 
-  return renderToPipeableStream(data, getBundlerConfig(config))
+  const serverRoutes = await getRoutesComponent()
+  console.log('rscWorker.ts handleRsa serverRoutes', serverRoutes)
+  const elements = {
+    Routes: createElement(serverRoutes, {
+      location: { pathname: '/', search: '' },
+    }),
+    __rwjs__rsa_data: data,
+  }
+  console.log('rscWorker.ts handleRsa elements', elements)
+
+  return renderToPipeableStream(elements, getBundlerConfig(config))
 }
