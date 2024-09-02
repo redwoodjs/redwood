@@ -19,7 +19,10 @@ export async function ssrHandler(
 
   // Determine if there's a valid page to render for the given URL.
   const url = new URL(req.url)
-  const Page = await getPageForRoute(url.pathname)
+  // This has to be imported by the viteEnvRunner.
+  const Page = await getPageForRoute(url.pathname, {
+    viteEnvRunner: viteEnvRunnerRSC,
+  })
   if (!Page) {
     return new Response('404', { status: 404 })
   }

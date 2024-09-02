@@ -80,11 +80,12 @@ function vitePluginRSC_UseClient(): PluginOption {
     {
       name: vitePluginRSC_UseClient.name + ':transform',
       async transform(code, id) {
+        console.log(this.environment.name, id)
+
         if (this.environment.name !== 'react-server') {
           return
         }
 
-        console.log(this.environment.name, id)
         // TODO: Implement AST parsing & modification.
         if (code.includes('"use client"') || code.includes("'use client'")) {
           let c =
@@ -93,9 +94,11 @@ function vitePluginRSC_UseClient(): PluginOption {
           for (const e of exports) {
             c += `export const ${e.ln} = registerClientReference(${JSON.stringify(id)}, ${JSON.stringify(e.ln)});`
           }
+
+          console.log('❌', this.environment.name, id)
+
           return c
         }
-        return
       },
     },
   ]
