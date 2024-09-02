@@ -22,7 +22,7 @@ export type AdapterOptions = {
   baseDir: string
 }
 
-export abstract class StorageAdapter {
+export abstract class BaseStorageAdapter {
   adapterOpts: AdapterOptions
   constructor(adapterOpts: AdapterOptions) {
     this.adapterOpts = adapterOpts

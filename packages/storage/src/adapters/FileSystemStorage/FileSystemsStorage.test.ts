@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { FileSystemStorage } from '../FileSystemStorage.js'
+import { FileSystemStorage } from './FileSystemStorage.js'
 
 // Mock the entire fs module
 vi.mock('node:fs', async () => {

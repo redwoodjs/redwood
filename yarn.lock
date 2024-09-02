@@ -8602,6 +8602,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/storage@workspace:packages/storage":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/storage@workspace:packages/storage"
+  dependencies:
+    "@arethetypeswrong/cli": "npm:0.15.4"
+    "@prisma/client": "npm:5.18.0"
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/project-config": "workspace:*"
+    "@types/mime-types": "npm:2.1.4"
+    concurrently: "npm:8.2.2"
+    esbuild: "npm:0.23.0"
+    mime-types: "npm:2.1.35"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.17.0"
+    typescript: "npm:5.5.4"
+    ulid: "npm:2.3.0"
+    vitest: "npm:2.0.5"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/structure@workspace:*, @redwoodjs/structure@workspace:packages/structure":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
@@ -8709,26 +8729,6 @@ __metadata:
     stdout-update: "npm:1.6.8"
     tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
-  languageName: unknown
-  linkType: soft
-
-"@redwoodjs/uploads@workspace:packages/uploads":
-  version: 0.0.0-use.local
-  resolution: "@redwoodjs/uploads@workspace:packages/uploads"
-  dependencies:
-    "@arethetypeswrong/cli": "npm:0.15.4"
-    "@prisma/client": "npm:5.18.0"
-    "@redwoodjs/framework-tools": "workspace:*"
-    "@redwoodjs/project-config": "workspace:*"
-    "@types/mime-types": "npm:2.1.4"
-    concurrently: "npm:8.2.2"
-    esbuild: "npm:0.23.0"
-    mime-types: "npm:2.1.35"
-    publint: "npm:0.2.10"
-    tsx: "npm:4.17.0"
-    typescript: "npm:5.5.4"
-    ulid: "npm:2.3.0"
-    vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
 

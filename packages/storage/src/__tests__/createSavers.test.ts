@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { createUploadProcessors } from '../createProcessors.js'
-import { MemoryStorage } from '../MemoryStorage.js'
+import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
+import { createUploadSavers } from '../createSavers.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
 const memStore = new MemoryStorage({
@@ -19,12 +19,16 @@ const uploadsConfig: UploadsConfig = {
   },
 }
 
-describe('Create processors', () => {
-  const processors = createUploadProcessors(uploadsConfig, memStore)
+describe('Create savers', () => {
+  const fileToStorage = createUploadSavers(uploadsConfig, memStore)
 
-  it('should create processors with CapitalCased model name', () => {
-    expect(processors.processDumboUploads).toBeDefined()
-    expect(processors.processDummyUploads).toBeDefined()
+  it('should create savers with CapitalCased model name', () => {
+    expect(fileToStorage.forDumbo).toBeDefined()
+    expect(fileToStorage.forDummy).toBeDefined()
+
+    // These are in the schema but not in the config
+    expect(fileToStorage.forBook).not.toBeDefined()
+    expect(fileToStorage.forNoUploadFields).not.toBeDefined()
   })
 
   it('Should replace file types with location strings', async () => {
@@ -37,7 +41,7 @@ describe('Create processors', () => {
       }),
     }
 
-    const result = await processors.processDumboUploads(data)
+    const result = await fileToStorage.forDumbo(data)
 
     // Location strings in this format: {baseDir/{model}-{field}-{ulid}.{ext}
     expect(ensurePosixPath(result.firstUpload)).toMatch(
@@ -63,15 +67,15 @@ describe('Create processors', () => {
       }),
     }
 
-    const fileNameOverrideOnly = await processors.processDummyUploads(data, {
+    const fileNameOverrideOnly = await fileToStorage.forDummy(data, {
       fileName: 'overridden',
     })
 
-    const pathOverrideOnly = await processors.processDummyUploads(data, {
+    const pathOverrideOnly = await fileToStorage.forDummy(data, {
       path: '/bazinga',
     })
 
-    const bothOverride = await processors.processDummyUploads(data, {
+    const bothOverride = await fileToStorage.forDummy(data, {
       path: '/bazinga',
       fileName: 'overridden',
     })
@@ -98,14 +102,14 @@ describe('Create processors', () => {
       }),
     }
 
-    const noOverride = await processors.processDummyUploads(data)
+    const noOverride = await fileToStorage.forDummy(data)
 
     // No extension
     expect(ensurePosixPath(noOverride.uploadField)).toMatch(
       /\/memory_store_basedir\/.*[^.]+$/,
     )
 
-    const withOverride = await processors.processDummyUploads(data, {
+    const withOverride = await fileToStorage.forDummy(data, {
       fileName: 'hello',
     })
 
@@ -119,7 +123,7 @@ describe('Create processors', () => {
 // Problem is - in the database world, a string[] is not a thing
 // so we need a generic way of doing this
 describe('FileList processing', () => {
-  const processors = createUploadProcessors(uploadsConfig, memStore)
+  const savers = createUploadSavers(uploadsConfig, memStore)
 
   const notPrismaData = [
     new File(['Hello'], 'hello.png', {
@@ -131,7 +135,7 @@ describe('FileList processing', () => {
   ]
 
   it('Should handle FileLists', async () => {
-    const result = await processors.processFileList(notPrismaData)
+    const result = await savers.inList(notPrismaData)
 
     expect(result).toHaveLength(2)
 
@@ -144,7 +148,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle FileLists with SaveOptions', async () => {
-    const result = await processors.processFileList(notPrismaData, {
+    const result = await savers.inList(notPrismaData, {
       path: '/bazinga_not_mem_store',
     })
 
@@ -158,7 +162,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle empty FileLists', async () => {
-    const promise = processors.processFileList()
+    const promise = savers.inList()
 
     await expect(promise).resolves.not.toThrow()
   })

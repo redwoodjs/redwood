@@ -6,12 +6,12 @@ import mime from 'mime-types'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import type { SaveOptionsOverride } from './StorageAdapter.js'
-import { StorageAdapter } from './StorageAdapter.js'
+import type { SaveOptionsOverride } from '../BaseStorageAdapter.js'
+import { BaseStorageAdapter } from '../BaseStorageAdapter.js'
 
 export class FileSystemStorage
-  extends StorageAdapter
-  implements StorageAdapter
+  extends BaseStorageAdapter
+  implements BaseStorageAdapter
 {
   constructor(opts: { baseDir: string }) {
     super(opts)

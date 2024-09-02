@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { MemoryStorage } from '../MemoryStorage.js'
+import { MemoryStorage } from './MemoryStorage.js'
 
 describe('MemoryStorage', () => {
   const storage = new MemoryStorage({ baseDir: 'uploads' })

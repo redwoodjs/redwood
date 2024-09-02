@@ -3,9 +3,9 @@ import type { Prisma } from '@prisma/client'
 import { Prisma as PrismaExtension } from '@prisma/client/extension'
 import type * as runtime from '@prisma/client/runtime/library'
 
-import { fileToDataUri } from './fileHandling.js'
-import type { UrlSigner } from './signedUrls.js'
-import type { StorageAdapter } from './StorageAdapter.js'
+import type { BaseStorageAdapter } from './adapters/BaseStorageAdapter.js'
+import { fileToDataUri } from './fileToDataUri.js'
+import type { UrlSigner } from './UrlSigner.js'
 
 type FilterOutDollarPrefixed<T> = T extends `$${string}`
   ? never
@@ -38,7 +38,7 @@ type WithSignedUrlArgs = {
 
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
-  storageAdapter: StorageAdapter,
+  storageAdapter: BaseStorageAdapter,
   urlSigner?: UrlSigner,
 ) => {
   // @TODO I think we can use Prisma.getExtensionContext(this)

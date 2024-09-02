@@ -1,6 +1,6 @@
 import { describe, expect, beforeEach, afterEach, vi, it, test } from 'vitest'
 
-import { EXPIRES_IN, UrlSigner } from '../signedUrls.js'
+import { EXPIRES_IN, UrlSigner } from '../UrlSigner.js'
 
 const signer = new UrlSigner({
   // Doing this means we don't need to mock getConfig
@@ -97,7 +97,7 @@ describe('UrlSigner', () => {
 })
 
 describe('Expired signature', () => {
-  // Seprate, so we can mock the times
+  // Separate, so we can mock the times
   beforeEach(() => {
     vi.useFakeTimers()
   })
