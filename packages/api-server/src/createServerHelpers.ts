@@ -59,7 +59,7 @@ export const DEFAULT_CREATE_SERVER_OPTIONS: DefaultCreateServerOptions = {
   },
   fastifyServerOptions: {
     requestTimeout: 15_000,
-    bodyLimit: 1024 * 1024 * 15, // 15MB
+    bodyLimit: 1024 * 1024 * 100, // 100MB
   },
   configureApiServer: () => {},
   parseArgs: true,

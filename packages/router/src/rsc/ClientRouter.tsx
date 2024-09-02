@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 import React, { useMemo } from 'react'
 
 import { analyzeRoutes } from '../analyzeRoutes.js'
@@ -8,7 +7,7 @@ import { namedRoutes } from '../namedRoutes.js'
 import { RouterContextProvider } from '../router-context.js'
 import type { RouterProps } from '../router.js'
 
-import { rscFetch } from './rscFetchForClientRouter.js'
+import { RscRoutes } from './RscRoutes.js'
 
 export const Router = ({ useAuth, paramTypes, children }: RouterProps) => {
   return (
@@ -49,9 +48,8 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    return rscFetch('__rwjs__Routes', {
-      location: { pathname, search },
-    }) as unknown as ReactNode
+    const routesProps = { location: { pathname, search } }
+    return <RscRoutes routesProps={routesProps} />
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -72,6 +70,8 @@ const LocationAwareRouter = ({
       )
     }
 
+    const routesProps = { location: { pathname, search } }
+
     return (
       <RouterContextProvider
         useAuth={useAuth}
@@ -80,16 +80,23 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          {rscFetch('__rwjs__Routes', { location: { pathname, search } })}
+          <RscRoutes routesProps={routesProps} />
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
   }
 
-  // TODO (RSC): Our types dont fully handle async components
-  return rscFetch('__rwjs__Routes', {
-    location: { pathname, search },
-  }) as unknown as ReactNode
+  const routesProps = { location: { pathname, search } }
+  // TODO (RSC): I think that moving between private and public routes
+  // re-initializes RscFetcher. I wonder if there's an optimization to be made
+  // here. Maybe we can lift RscFetcher up so we can keep the same instance
+  // around and reuse it everywhere
+  return <RscRoutes routesProps={routesProps} />
 }
 
-export type { RscFetchProps } from './rscFetchForClientRouter.js'
+export interface RscFetchProps extends Record<string, unknown> {
+  location: {
+    pathname: string
+    search: string
+  }
+}
