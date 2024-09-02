@@ -482,8 +482,8 @@ yarn why @supabase/supabase-js
 
 In this case, it looks like it's ultimately because of our auth provider, `@supabase/supabase-js`.
 
-
 ## Using the server file
-Sometimes you will want additional control over the API server, perhaps adding content type parsers, or Fastify plugins. 
+
+Sometimes you will want additional control over the API server, perhaps adding content type parsers, or Fastify plugins.
 
 Refer to our [Server File](server-file.md) for details on how to make use of this.

@@ -1,4 +1,5 @@
 # Server File
+
 Redwood v7 introduced a new entry point to Redwood's api server: the server file at `api/src/server.ts`.
 
 It allows you to:
