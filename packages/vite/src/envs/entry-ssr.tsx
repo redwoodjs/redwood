@@ -6,6 +6,7 @@ import ReactClient from 'react-server-dom-webpack/client.edge'
 import { injectRSCPayload } from 'rsc-html-stream/server'
 import type { ModuleRunner } from 'vite/module-runner'
 
+import { getPageForRoute } from './__example__/routes.js'
 import { moduleMap } from './register/ssr.js'
 
 export async function ssrHandler(
@@ -16,10 +17,15 @@ export async function ssrHandler(
     (id: string) => import(/* @vite-ignore */ id),
   )
 
-  console.log(req.url)
+  // Determine if there's a valid page to render for the given URL.
+  const url = new URL(req.url)
+  const Page = await getPageForRoute(url.pathname)
+  if (!Page) {
+    return new Response('404', { status: 404 })
+  }
 
   const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
-  const rscResult = await rscHandler()
+  const rscResult = await rscHandler(req, { Page })
 
   const [rscStream1, rscStream2] = rscResult.stream.tee()
   let data: React.Usable<React.ReactNode>
