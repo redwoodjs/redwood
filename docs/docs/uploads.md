@@ -370,7 +370,7 @@ return filesWhereQuery.map((file) => file.withSignedUrl())
 
 ## Upload savers
 
-You'll also need a way to convert the incoming `File` to a path on storage. In your services, you can use the preconfigured "savers" to convert Files to strings for Prisma to save into the database. The savers, and storage adapters configured in `api/src/lib/uploads` determine where the file is saved.
+You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to convert Files to strings for Prisma to save into the database. The savers, and storage adapters configured in `api/src/lib/uploads` determine where the file is saved.
 
 ```ts title="api/src/services/profiles/profiles.ts"
 // highlight-next-line
