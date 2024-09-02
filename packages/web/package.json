@@ -143,7 +143,6 @@
   "dependencies": {
     "@apollo/client": "3.11.1",
     "@babel/runtime-corejs3": "7.25.0",
-    "@n1ru4l/graphql-live-query": "0.10.0",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@whatwg-node/fetch": "0.9.20",
