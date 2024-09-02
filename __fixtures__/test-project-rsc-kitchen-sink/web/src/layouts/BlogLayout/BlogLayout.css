@@ -1,0 +1,11 @@
+.blog-layout {
+  display: flex;
+  flex-direction: row;
+
+  nav {
+    width: 12rem;
+    border-right: 1px solid gray;
+    height: 100vh;
+    margin-right: 1rem;
+  }
+}
