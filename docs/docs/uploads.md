@@ -127,7 +127,7 @@ export const updateProfile = async ({ id, input }) => {
   //  ...
   // }
 
-  // Example without the built-in helpers and processors
+  // Example without the built-in helpers
   await fs.writeFile('/test/profile.jpg', Buffer.from(await input.avatar.arrayBuffer()))
 
 ```
@@ -227,7 +227,7 @@ The shape of `UploadsConfig` looks like this:
 **2. Storage Adapter**
 We create a storage adapter, in this case `FileSystemStorage` - that will save your uploads to the `./uploads` folder.
 
-This just sets the base path, and the actual filenames and folders are determined by processors, but can be overridden!
+This just sets the base path, and the actual filenames and folders are determined by the saveFiles utility functions, but can be overridden!
 
 **3. Url Signer instance**
 This is an optional class that will help you generate signed urls for your files, so you can limit access to these files.
@@ -292,10 +292,6 @@ The `$extends` method returns a new instance of the Prisma client with the exten
 What this configures is:
 
 **A) CRUD operations**
-No need to do anything here, but you have to use processors to supply Prisma with data in the correct format.
-
-What this will ensure is:
-
 - when the record is deleted, the associated upload is removed from storage
 - when a record is updated, the associated upload file is also replaced
 
@@ -322,11 +318,11 @@ export const profile = async ({ id }) => {
 :::tip
 It's very important to note limitations around what Prisma extensions can do:
 
-**a) The CRUD operations will not run on nested read and write operations** <br/>
+**a) The CRUD operation extensions will not run on nested read and write operations** <br/>
 For example:
 
 ```js
-const savedFiles = saveFile.inList(input.files)
+const savedFiles = saveFiles.inList(input.files)
 
 db.folder.update({
   data: {
@@ -440,7 +436,7 @@ input UpdateAlbumInput {
 }
 ```
 
-You can use the file list processor like this:
+You can use the `.inList` function like this:
 
 ```ts title="api/src/services/albums.ts"
 export const updateAlbum = async ({
@@ -514,7 +510,7 @@ The extension is determined by the name of the uploaded file.
 This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
 
 :::note
-The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-processors-and-prisma-extension).
+The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-savers-and-prisma-extension).
 :::
 
 ### `create` & `createMany` operations
