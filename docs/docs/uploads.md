@@ -381,7 +381,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
   const processedInput = await saveFiles.forProfile(input)
 
   // input.avatar (File) becomes a string 👇
-  // The configuration on where it was saved is passed when we setup uploads in src/lib/uploads.ts
+  // Configuration in src/lib/uploads.ts determine where the upload is saved
   // processedInput.avatar -> '/mySavePath/profile/avatar/generatedId.jpg'
 
   return db.profile.update({
