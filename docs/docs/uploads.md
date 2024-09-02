@@ -427,9 +427,9 @@ In essence, these utility functions expect to take an object very similar to the
 If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as-is.
 :::
 
-### Processing File lists
+### Saving File lists - `saveFiles.inList()`
 
-If you would like to upload FileLists (or an arrays of Files), use this special utility to save your Files to storage. This is necessary because String arrays aren't supported on databases - you probably want to save them to a different table, or specific fields.
+If you would like to upload FileLists (or an arrays of Files), use this special utility to persist your Files to storage. This is necessary because String arrays aren't supported on databases - you probably want to save them to a different table, or specific fields.
 
 Let's say you define in your SDL, a way to send an Array of files.
 
