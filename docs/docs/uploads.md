@@ -307,14 +307,14 @@ What this will ensure is:
 **B) Result extensions**
 
 ```ts title="api/src/services/profiles/profiles.ts"
-export const profile: QueryResolvers['profile'] = async ({ id }) => {
+export const profile = async ({ id }) => {
   // 👇 await the result from your prisma query
   const profile = await db.profile.findUnique({
     where: { id },
   })
 
-  // Convert the avatar field (which is a path) to data uri string
-  // Note that you still need to add an api endpoint to handle these signed urls
+  // Convert the avatar field (which was persisted as a path) to data uri string
+  // highlight-next-line
   return profile?.withDataUri()
 }
 ```
