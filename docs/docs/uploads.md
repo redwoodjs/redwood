@@ -423,7 +423,7 @@ You might have already noticed that the saver functions sort-of tie your GraphQL
 
 In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `document` instead of strings.
 
-If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as is.
+If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as-is.
 :::
 
 ### Processing File lists
@@ -452,12 +452,19 @@ export const updateAlbum = async ({
   const processedInput = await saveFiles.inList(input.photos)
   /* Returns an array like this:
   [
-  '/baseStoragePath/AG1258019MAFGK.jpg',
-  '/baseStoragePath/BG1059149NAKKE.jpg',
+    '/baseStoragePath/AG1258019MAFGK.jpg',
+    '/baseStoragePath/BG1059149NAKKE.jpg',
   ]
   */
 
   const mappedPhotos = processedInput.map((path) => ({ path }))
+  /* Will make `mappedPhotos` be an array of objects like this:
+   [
+    { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
+    { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
+   ]
+   */
+
 
   return db.album.update({
     data: {
