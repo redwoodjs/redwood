@@ -27,6 +27,7 @@ export const schema = gql`
   scalar JSON
   scalar JSONObject
   scalar Byte
+  scalar File
 
   """
   The RedwoodJS Root Schema

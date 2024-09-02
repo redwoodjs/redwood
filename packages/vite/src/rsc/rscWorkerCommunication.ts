@@ -6,7 +6,7 @@ import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
-import type { RscFetchProps } from '../../../router/src/rsc/rscFetchForClientRouter.jsx'
+import type { RscFetchProps } from '../../../router/src/rsc/ClientRouter.tsx'
 
 const workerPath = path.join(
   // __dirname. Use fileURLToPath for windows compatibility
@@ -26,7 +26,7 @@ const worker = new Worker(workerPath, {
 export type RenderInput = {
   rscId?: string | undefined
   props: RscFetchProps | Record<string, unknown>
-  rsfId?: string | undefined
+  rsaId?: string | undefined
   args?: unknown[] | undefined
   serverState: {
     headersInit: Record<string, string>
