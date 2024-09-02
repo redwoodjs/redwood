@@ -2,22 +2,20 @@
 
 Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
 
-There's two parts to this:
-1. Setting up the frontend and GraphQL schema to send and receive files - Uploads
+There are two parts to this:
 
+1. Setting up the frontend and GraphQL schema to send and receive files - Uploads
 2. Manipulate the data inside services, and pass it to Prisma, for persistence - Storage
 
 We can roughly breakdown the flow as follows
 
 ![Redwood Uploads Flow Diagram](/img/uploads/uploads-flow.png)
 
-
-
 ## Uploading Files
 
 ### 1. Setting up the File scalar
 
-Before we start sending files via GraphQL we need to tell Redwood how to handle them. Redwood and GraphQL Yoga are pre-configured to handle the `File` scalar. 
+Before we start sending files via GraphQL we need to tell Redwood how to handle them. Redwood and GraphQL Yoga are pre-configured to handle the `File` scalar.
 
 In your mutations, use the `File` scalar for the fields where you are submitting an upload
 
@@ -43,7 +41,6 @@ Assuming you've built a [Form](forms.md) for profile
 // highlight-next-line
 import { FileField, TextField, FieldError } from '@redwoodjs/forms'
 
-
 export const ProfileForm = ({ onSubmit }) => {
   return {
     <Form onSubmit={onSubmit}>
@@ -51,13 +48,13 @@ export const ProfileForm = ({ onSubmit }) => {
         <Label name="firstName" /*...*/ >
           First name
         </Label>
-          <TextField name="firstName" /*...*/ />
-          <FieldError name="firstName"  />
+        <TextField name="firstName" /*...*/ />
+        <FieldError name="firstName"  />
         <Label name="lastName" /*...*/ >
           Last name
         </Label>
-          <TextField name="lastName" /*...*/ />
-          <FieldError name="lastName"  />
+        <TextField name="lastName" /*...*/ />
+        <FieldError name="lastName"  />
       </div>
       // highlight-next-line
       <FileField name="avatar" /*...*/ />
@@ -99,7 +96,7 @@ const EditProfile = ({ profile }) => {
     const input = {
       ...formData,
       // highlight-next-line
-      avatar: formData.avatar?.[0], // FileField returns an array, we want the first file
+      avatar: formData.avatar?.[0], // FileField returns an array, we want the first and only file
     }
 
     updateProfile({ variables: { input } })
@@ -169,9 +166,9 @@ model Profile {
 
 This is because Prisma doesn't have a native File type. Instead, we store the file path or URL as a string in the database. The actual file processing and storage will be handled in your service layer, and pass the path to Prisma to save.
 
-### Setting up Storage processors and Prisma extension
+### Setting up Storage savers and Prisma extension
 
-To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of "processing" your uploads (i.e. save to storage) and a prisma extension that will handle deletion and updates automatically for you. The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system.
+To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of "saving" your uploads (i.e. write to storage) and a prisma extension that will handle deletion and updates automatically for you. The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system.
 
 Let's first run the setup command:
 
@@ -182,9 +179,9 @@ yarn rw setup uploads
 In
 
 ```ts title="api/src/lib/uploads.ts"
-import { UploadsConfig, setupUploads } from '@redwoodjs/uploads'
-import { FileSystemStorage } from '@redwoodjs/uploads/FileSystemStorage'
-import { UrlSigner } from '@redwoodjs/uploads/signedUrl'
+import { UploadsConfig, setupUploads } from '@redwoodjs/storage'
+import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
+import { UrlSigner } from '@redwoodjs/storage/signedUrl'
 
 // ⭐ (1)
 const uploadConfig: UploadsConfig = {
@@ -194,7 +191,7 @@ const uploadConfig: UploadsConfig = {
 }
 
 // ⭐ (2)
-export const storage = new FileSystemStorage({
+export const fsStorage = new FileSystemStorage({
   baseDir: './uploads',
 })
 
@@ -205,13 +202,13 @@ export const urlSigner = new UrlSigner({
 })
 
 // ⭐ (4)
-const { uploadsProcessors, prismaExtension } = setupUploads(
-  uploadConfig,
-  storage,
-  urlSigner
-)
+const { saveFiles, storagePrismaExtension } = setupStorage({
+  uploadsConfig,
+  storageAdapter: fsStorage,
+  urlSigner,
+})
 
-export { uploadsProcessors, prismaExtension }
+export { saveFiles, storagePrismaExtension }
 ```
 
 Let's break down the key components of this configuration:
@@ -238,11 +235,11 @@ This is an optional class that will help you generate signed urls for your files
 **4. Grab your utilities**
 Get your utilities, and export them from this file to be used elsewhere.
 
-- `uploadsProcessors` - object containing functions to convert your GraphQL inputs with Files to path strings, after saving to storage.
+- `saveFiles` - object containing functions to convert your GraphQL inputs with Files to path strings, after saving to storage.
   For example:
 
 ```
-uploadsProcessors.processProfileUploads(gqlInput)
+saveFiles.forProfile(gqlInput)
 ```
 
 We'll be using these in services.
@@ -260,7 +257,7 @@ import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 
 import { logger } from './logger'
 // highlight-next-line
-import { prismaExtension } from './uploads'
+import { storagePrismaExtension } from './uploads'
 
 // 👇 Notice here we create prisma client, and don't export it yet
 export const prismaClient = new PrismaClient({
@@ -275,13 +272,13 @@ handlePrismaLogging({
 
 // 👇 Export db after adding uploads extension
 // highlight-next-line
-export const db = prismaClient.$extends(prismaExtension)
+export const db = prismaClient.$extends(storagePrismaExtension)
 ```
 
-The `$extends` method is used to extend the functionality of your Prisma client by adding 
--[Query extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query): which will intercept your `create`, `update`, `delete` operations
-and 
-- [Result extension]([Link](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query)) for uploads - which gives you helper methods on the result of your prisma query
+The `$extends` method is used to extend the functionality of your Prisma client by adding -[Query extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query): which will intercept your `create`, `update`, `delete` operations
+and
+
+- [Result extension](<[Link](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query)>) for uploads - which gives you helper methods on the result of your prisma query
 
 <details>
 <summary>
@@ -298,13 +295,14 @@ What this configures is:
 No need to do anything here, but you have to use processors to supply Prisma with data in the correct format.
 
 What this will ensure is:
+
 - when the record is deleted, the associated upload is removed from storage
 - when a record is updated, the associated upload file is also replaced
 
 ...and negative cases such as:
-- processed uploads are removed if creation fails
-- processed uploads are removed if update fails (while keeping the original)
 
+- saved uploads are removed if creation fails
+- saved uploads are removed if update fails (while keeping the original)
 
 **B) Result extensions**
 
@@ -316,33 +314,74 @@ export const profile: QueryResolvers['profile'] = async ({ id }) => {
   })
 
   // Convert the avatar field (which is a path) to data uri string
-  // Note that you still need to add a api endpoint to handle these signed urls
+  // Note that you still need to add an api endpoint to handle these signed urls
   return profile?.withDataUri()
 }
 ```
 
 :::tip
-It's important to note limitations around what Prisma extensions can do:
+It's very important to note limitations around what Prisma extensions can do:
 
-a) The CRUD operations will not run on nested read and write operations <br/>
-b) Result extensions are not available on relations
+**a) The CRUD operations will not run on nested read and write operations** <br/>
+For example:
 
+```js
+const savedFiles = saveFile.inList(input.files)
+
+db.folder.update({
+    data: {
+      ...input,
+      files: {
+        // highlight-start
+        createMany: {
+          data: savedFiles, // if the createMany fails, the saved files will _not_ be deleted
+        },
+        // highlight-end
+      },
+    },
+    where: { id },
+  })
+```
+
+
+**b) Result extensions are not available on relations.**
+
+You can often rewrite the query in a different way though. For example, when looking up files :
+```ts
+const filesViaRelation = await db.folder
+  .findUnique({ where: { id: root?.id } })
+  .files()
+
+const filesWhereQuery = await db.file.findMany({
+    where: {
+      folderId: root?.id,
+    },
+  })
+
+// 🛑 Will not work, because files accessed via relation
+// highlight-next-line
+return filesViaRelation.map((file) => file.withSignedUrl())
+
+// ✅ OK, because direct lookup
+// highlight-next-line
+return filesWhereQuery.map((file) => file.withSignedUrl())
+```
 :::
 
-## Upload processors
+## Upload savers
 
-You'll also need a way to convert the incoming `File` to a path on disk. In your services, you can use the preconfigured "processors" to convert Files to strings for Prisma to save into the database. The processors, and storage adapters configured in `api/src/lib/uploads` determine where the file is saved.
+You'll also need a way to convert the incoming `File` to a path on storage. In your services, you can use the preconfigured "savers" to convert Files to strings for Prisma to save into the database. The savers, and storage adapters configured in `api/src/lib/uploads` determine where the file is saved.
 
 ```ts title="api/src/services/profiles/profiles.ts"
 // highlight-next-line
-import { uploadsProcessors } from 'src/lib/uploads'
+import { saveFiles } from 'src/lib/uploads'
 
 export const updateProfile: MutationResolvers['updateProfile'] = async ({
   id,
   input,
 }) => {
   // highlight-next-line
-  const processedInput = await uploadsProcessors.processProfileUploads(input)
+  const processedInput = await saveFiles.forProfile(input)
 
   // input.avatar (File) becomes a string 👇
   // The configuration on where it was saved is passed when we setup uploads in src/lib/uploads.ts
@@ -355,7 +394,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
 }
 ```
 
-For each of the models you configure when you setup uploads (in `UploadConfig`) - you have processors for them.
+For each of the models you configure when you setup uploads (in `UploadConfig`) - you have savers for them.
 
 So if you passed:
 
@@ -365,30 +404,31 @@ const uploadConfig: UploadsConfig = {
     fields: ['avatar'],
   },
   anotherModel: {
-    fields: ['signedDocument'],
+    fields: ['document'],
   },
 }
 
-const { uploadProcessors } = setupUploads(uploadConfig)
+const { saveFiles } = setupUploads(uploadConfig)
 
 // Available methods 👇
-uploadProcessors.processProfileUploads(profileGqlInput)
-uploadProcessors.processAnotherModelUploads(anotherModelGqlInput)
+saveFiles.forProfile(profileGqlInput)
+saveFiles.forAnotherModel(anotherModelGqlInput)
 
-uploadProcessors.processFileList(arrayOfFiles)
+// Special case - not mapped to prisma model
+saveFiles.inList(arrayOfFiles)
 ```
 
 :::info
-You might have already noticed that the processors sort-of tie your GraphQL inputs to your Prisma model.
+You might have already noticed that the saver functions sort-of tie your GraphQL inputs to your Prisma model.
 
-In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `signedDocument` instead of strings. 
+In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `document` instead of strings.
 
 If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as is.
 :::
 
 ### Processing File lists
 
-If you would like to upload FileLists (or an arrays of Files), use this special processor to save your Files to path strings. This is necessary because String arrays aren't supported on databases - you probably want to save them to a different table, or specific fields.
+If you would like to upload FileLists (or an arrays of Files), use this special utility to save your Files to storage. This is necessary because String arrays aren't supported on databases - you probably want to save them to a different table, or specific fields.
 
 Let's say you define in your SDL, a way to send an Array of files.
 
@@ -409,7 +449,7 @@ export const updateAlbum = async ({
 
   // notice we're passing in the file list, and not the input!
   // highlight-next-line
-  const processedInput = await uploadProcessors.processFileList(input.photos)
+  const processedInput = await saveFiles.inList(input.photos)
   /* Returns an array like this:
   [
   '/baseStoragePath/AG1258019MAFGK.jpg',
@@ -435,10 +475,10 @@ export const updateAlbum = async ({
 
 ### Customizing save file name or save path
 
-If you'd like to customize the filename that a processor will save to you can override it when calling it. For example, you could name your files by the User's id
+If you'd like to customize the filename that a saver will write to you can override it when calling it. For example, you could name your files by the User's id
 
-```ts 
-await processors.processProfileUploads(data, {
+```ts
+await saveFiles.forProfile(data, {
   // highlight-next-line
   fileName: 'profilePhoto-' + context.currentUser.id,
 })
@@ -450,10 +490,10 @@ await processors.processProfileUploads(data, {
 If you'd like to customize where files are saved, perhaps you want to put it in a specific folder, so you can make those files [publicly available](#making-a-folder-public), you can override the folder to use too (skipping the base path of your Storage adapter):
 
 ```ts
-await processors.processProfileUploads(data, {
+await saveFiles.forProfile(data, {
   fileName: 'profilePhoto-' + context.currentUser.id,
   // highlight-next-line
-  path: '/public_avatar'
+  path: '/public_avatar',
 })
 
 // Will save files to
@@ -466,30 +506,32 @@ The extension is determined by the name of the uploaded file.
 
 This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
 
-
 :::note
 The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-processors-and-prisma-extension).
 :::
 
 ### `create` & `createMany` operations
+
 If your create operation fails, it removes any uploaded files to avoid orphaned files (so you can retry the request)
 
 ### `update` & `updateMany` operations
+
 1. If update operation is successful, removes the old uploaded files
 2. If it fails, removes any newly uploaded files (so you can retry the request)
 
 ### `delete` operations
+
 Removes any associated uploaded files, once delete operation completes.
 
 ### `upsert` operations
+
 Depending on whether it's updating or creating, performs the same actions as create or update.
 
-
-
 ## Result Extensions
+
 When you add the storage prisma extension, it also configures your prisma objects to have special helper methods.
 
-These will only appear on fields that you configure in your `UploadConfig`. 
+These will only appear on fields that you configure in your `UploadConfig`.
 
 ```typescript
 const profile = await db.profile.update(/*...*/)
@@ -505,11 +547,9 @@ db.profile.update(/*...*/).withSignedUrl() // 🛑
 db.comment.findMany(/*..*/).withSignedUrl() // 🛑
 ```
 
-
-
-
 ### Signed URLs
-When you setup uploads, we also generate an API function (and endpoint) for you - by default at `/signedUrl`. You can use this in conjunction with the `.withSignedUrl` helper. For example:
+
+When you setup uploads, we also generate an API function (an endpoint) for you - by default at `/signedUrl`. You can use this in conjunction with the `.withSignedUrl` helper. For example:
 
 ```ts title="api/src/services/profiles.ts"
 import { EXPIRES_IN } from '@redwoodjs/storage/UrlSigner'
@@ -539,13 +579,12 @@ The object being returned will look like:
 
 This will generate a URL that will expire in 2 days (from the point of query). Let's breakdown the URL:
 
-| URL Component |  |
-|---------------|-------------|
+| URL Component                   |                                                      |
+| ------------------------------- | ---------------------------------------------------- |
 | `/.redwood/functions/signedUrl` | Point to the API server, and the endpoint configured |
-| `s=s1gnatur3` | The signature that we'll validate |
-| `expiry=1725190749613` | Time stamp for when it expires |
-| `path=path.png` | The key to look up the file on your storage |
-
+| `s=s1gnatur3`                   | The signature that we'll validate                    |
+| `expiry=1725190749613`          | Time stamp for when it expires                       |
+| `path=path.png`                 | The key to look up the file on your storage          |
 
 <details>
 <summary>How the signedUrl function validates</summary>
@@ -560,12 +599,11 @@ import type { SignatureValidationArgs } from '@redwoodjs/storage/UrlSigner'
 import { urlSigner, fsStorage } from 'src/lib/uploads'
 
 export const handler = async (event) => {
-
-// Validate the signature using the urlSigner instance
-// highlight-next-line
+  // Validate the signature using the urlSigner instance
+  // highlight-next-line
   const fileToReturn = urlSigner.validateSignature(
     // Pass the params {s, path, expiry}
-    // highlight-next-line 
+    // highlight-next-line
     event.queryStringParameters as SignatureValidationArgs
   )
 
@@ -583,14 +621,13 @@ export const handler = async (event) => {
     body: contents,
   }
 }
-
 ```
+
 </details>
 
-
-
 ### Data URIs
-When you have smaller files, you can choose instead to return a Base64 DataURI string that you can render directly into your html. 
+
+When you have smaller files, you can choose instead to return a Base64 DataURI string that you can render directly into your html.
 
 ```ts title="api/src/services/profiles.ts"
 export const profile = async ({ id }) => {
@@ -598,7 +635,7 @@ export const profile = async ({ id }) => {
     where: { id },
   })
 
-// highlight-next-line
+  // highlight-next-line
   return profile?.withDataUri()
 }
 ```
@@ -607,15 +644,13 @@ export const profile = async ({ id }) => {
 The `withDataUri` extension is an `async` function. Remember to await, if you are doing additional manipulation before returning your result object from the service.
 :::
 
-
 ## Configuring the server further
-Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic - that's exactly what the [Server File](server-file.md) is for!
 
+Sometimes, you may need more control over how the Redwood API server behaves. This could include customizing the body limit for requests, redirects, or implementing additional logic - that's exactly what the [Server File](server-file.md) is for!
 
 ### Making a folder public
 
-
-While you can always create a function to access certain files publicly, similar to the `/signedUrl` function that gets generated for you - another way could be to configure the API server with the [fastify-static](https://github.com/fastify/fastify-static) plugin to make a specific folder publicly accessible. 
+While you can always create a function to access certain files publicly, similar to the `/signedUrl` function that gets generated for you - another way could be to configure the API server with the [fastify-static](https://github.com/fastify/fastify-static) plugin to make a specific folder publicly accessible.
 
 ```js title="api/server.js"
 import path from 'path'
@@ -630,18 +665,17 @@ async function main() {
     logger,
   })
 
-// highlight-start
+  // highlight-start
   server.register(fastifyStatic, {
     root: path.join(process.cwd() + '/uploads/public_profile_photos'),
     prefix: '/public_uploads',
   })
-// highlight-end
+  // highlight-end
 
   await server.start()
 }
 
 main()
-
 ```
 
 Based on the above, you'll be able to access your files at:
@@ -654,23 +688,22 @@ OR directly
 http://localhost:8911/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg
 
 ```
-Where you are only exposing __part__ of your uploads directory publicly
 
+Where you are only exposing **part** of your uploads directory publicly
 
+### Customizing the body limit for requests
 
-
-### Customising the body limit for requests
 Depending on the sizes of files you're uploading, especially in the case of multiple files, if you receive errors like this:
 
 ```json
 {
-"code":"FST_ERR_CTP_BODY_TOO_LARGE",
-"error":"Payload Too Large",
-"message":"Request body is too large"
+  "code": "FST_ERR_CTP_BODY_TOO_LARGE",
+  "error": "Payload Too Large",
+  "message": "Request body is too large"
 }
 ```
-The default body size limit for the Redwood API server is 100MB (per request). 
 
+The default body size limit for the Redwood API server is 100MB (per request).
 
 ```js title="api/server.js"
 import { createServer } from '@redwoodjs/api-server'
