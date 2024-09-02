@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import { createUploadSavers } from '../createProcessors.js'
+import { createUploadSavers } from '../createSavers.js'
 import type { UploadsConfig } from '../prismaExtension.js'
 
 const memStore = new MemoryStorage({
@@ -19,10 +19,10 @@ const uploadsConfig: UploadsConfig = {
   },
 }
 
-describe('Create processors', () => {
+describe('Create savers', () => {
   const fileToStorage = createUploadSavers(uploadsConfig, memStore)
 
-  it('should create processors with CapitalCased model name', () => {
+  it('should create savers with CapitalCased model name', () => {
     expect(fileToStorage.forDumbo).toBeDefined()
     expect(fileToStorage.forDummy).toBeDefined()
 
@@ -123,7 +123,7 @@ describe('Create processors', () => {
 // Problem is - in the database world, a string[] is not a thing
 // so we need a generic way of doing this
 describe('FileList processing', () => {
-  const processors = createUploadSavers(uploadsConfig, memStore)
+  const savers = createUploadSavers(uploadsConfig, memStore)
 
   const notPrismaData = [
     new File(['Hello'], 'hello.png', {
@@ -135,7 +135,7 @@ describe('FileList processing', () => {
   ]
 
   it('Should handle FileLists', async () => {
-    const result = await processors.inList(notPrismaData)
+    const result = await savers.inList(notPrismaData)
 
     expect(result).toHaveLength(2)
 
@@ -148,7 +148,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle FileLists with SaveOptions', async () => {
-    const result = await processors.inList(notPrismaData, {
+    const result = await savers.inList(notPrismaData, {
       path: '/bazinga_not_mem_store',
     })
 
@@ -162,7 +162,7 @@ describe('FileList processing', () => {
   })
 
   it('Should handle empty FileLists', async () => {
-    const promise = processors.inList()
+    const promise = savers.inList()
 
     await expect(promise).resolves.not.toThrow()
   })
