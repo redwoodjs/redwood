@@ -186,7 +186,7 @@ import { UrlSigner } from '@redwoodjs/storage/signedUrl'
 // ⭐ (1)
 const uploadConfig: UploadsConfig = {
   profile: {
-    fields: ['avatar'], // 👈 the fields that will contain your File
+    fields: ['avatar'], // 👈 the fields that will contain your `File`s
   },
 }
 
@@ -244,7 +244,7 @@ saveFiles.forProfile(gqlInput)
 
 We'll be using these in services.
 
-- `prismaExtension` - The prisma client extension we'll use in `api/src/lib/db.ts` to automatically handle updates, deletion of uploaded files (including when the prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
+- `prismaExtension` - The Prisma client extension we'll use in `api/src/lib/db.ts` to automatically handle updates, deletion of uploaded files (including when the Prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
 
 ### Attaching the Prisma extension
 
@@ -381,7 +381,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
   // highlight-next-line
   const processedInput = await saveFiles.forProfile(input)
 
-  // input.avatar (File) becomes a string 👇
+  // input.avatar (File) becomes a path string 👇
   // Settings in src/lib/uploads.ts configures where the upload is saved
   // processedInput.avatar -> '/mySavePath/profile/avatar/generatedId.jpg'
 
@@ -458,8 +458,8 @@ export const updateAlbum = async ({
   const mappedPhotos = processedInput.map((path) => ({ path }))
   /* Will make `mappedPhotos` be an array of objects like this:
   [
-   { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
-   { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
+    { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
+    { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
   ]
   */
 
