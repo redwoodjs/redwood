@@ -329,34 +329,34 @@ For example:
 const savedFiles = saveFile.inList(input.files)
 
 db.folder.update({
-    data: {
-      ...input,
-      files: {
-        // highlight-start
-        createMany: {
-          data: savedFiles, // if the createMany fails, the saved files will _not_ be deleted
-        },
-        // highlight-end
+  data: {
+    ...input,
+    files: {
+      // highlight-start
+      createMany: {
+        data: savedFiles, // if the createMany fails, the saved files will _not_ be deleted
       },
+      // highlight-end
     },
-    where: { id },
-  })
+  },
+  where: { id },
+})
 ```
-
 
 **b) Result extensions are not available on relations.**
 
 You can often rewrite the query in a different way though. For example, when looking up files :
+
 ```ts
 const filesViaRelation = await db.folder
   .findUnique({ where: { id: root?.id } })
   .files()
 
 const filesWhereQuery = await db.file.findMany({
-    where: {
-      folderId: root?.id,
-    },
-  })
+  where: {
+    folderId: root?.id,
+  },
+})
 
 // 🛑 Will not work, because files accessed via relation
 // highlight-next-line
@@ -366,6 +366,7 @@ return filesViaRelation.map((file) => file.withSignedUrl())
 // highlight-next-line
 return filesWhereQuery.map((file) => file.withSignedUrl())
 ```
+
 :::
 
 ## Upload savers
@@ -464,7 +465,6 @@ export const updateAlbum = async ({
     { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
    ]
    */
-
 
   return db.album.update({
     data: {
