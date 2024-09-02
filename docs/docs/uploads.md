@@ -456,11 +456,11 @@ export const updateAlbum = async ({
 
   const mappedPhotos = processedInput.map((path) => ({ path }))
   /* Will make `mappedPhotos` be an array of objects like this:
-   [
+  [
     { path: '/baseStoragePath/AG1258019MAFGK.jpg' },
     { path: '/baseStoragePath/BG1059149NAKKE.jpg' },
-   ]
-   */
+  ]
+  */
 
   return db.album.update({
     data: {
