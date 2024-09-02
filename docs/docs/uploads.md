@@ -186,7 +186,7 @@ import { UrlSigner } from '@redwoodjs/storage/signedUrl'
 // ⭐ (1)
 const uploadConfig: UploadsConfig = {
   profile: {
-    fields: ['avatar'], // 👈 the fields that will contain your File
+    fields: ['avatar'], // 👈 the fields that will contain your `File`s
   },
 }
 
