@@ -179,7 +179,7 @@ yarn rw setup uploads
 In
 
 ```ts title="api/src/lib/uploads.ts"
-import { UploadsConfig, setupUploads } from '@redwoodjs/storage'
+import { UploadsConfig, setupStorage } from '@redwoodjs/storage'
 import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
 import { UrlSigner } from '@redwoodjs/storage/signedUrl'
 
@@ -408,7 +408,7 @@ const uploadConfig: UploadsConfig = {
   },
 }
 
-const { saveFiles } = setupUploads(uploadConfig)
+const { saveFiles } = setupStorage(uploadConfig)
 
 // Available methods 👇
 saveFiles.forProfile(profileGqlInput)
