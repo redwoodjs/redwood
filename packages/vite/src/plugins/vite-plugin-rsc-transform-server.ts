@@ -71,7 +71,7 @@ export function rscTransformUseServerPlugin(): Plugin {
           filename: id,
           // presets: ['@babel/preset-typescript', '@babel/preset-react'],
           presets: ['@babel/preset-typescript'],
-          plugins: [[babelPluginTransformServerFunction, { url: id }]],
+          plugins: [[babelPluginTransformServerAction, { url: id }]],
         })
 
         if (!result) {
@@ -188,7 +188,7 @@ interface PluginPass {
   }
 }
 
-function babelPluginTransformServerFunction({
+function babelPluginTransformServerAction({
   types: t,
 }: {
   types: typeof types
@@ -200,7 +200,7 @@ function babelPluginTransformServerFunction({
   const topLevelFunctions: string[] = []
 
   return {
-    name: 'babel-plugin-redwood-transform-server-function',
+    name: 'babel-plugin-redwood-transform-server-action',
     visitor: {
       Program: {
         enter(path) {
@@ -254,31 +254,25 @@ function babelPluginTransformServerFunction({
             return
           }
 
-          const importDeclaration = t.importDeclaration(
-            [
-              t.importSpecifier(
-                t.identifier('registerServerReference'),
-                t.identifier('registerServerReference'),
-              ),
-            ],
-            t.stringLiteral('react-server-dom-webpack/server'),
+          const body = path.node.body
+
+          body.push(
+            t.importDeclaration(
+              [
+                t.importSpecifier(
+                  t.identifier('registerServerReference'),
+                  t.identifier('registerServerReference'),
+                ),
+              ],
+              t.stringLiteral('react-server-dom-webpack/server'),
+            ),
           )
 
-          path.node.body.push(importDeclaration)
-
           serverActionNodes.forEach((functionDeclaration) => {
-            path.node.body.push(t.exportNamedDeclaration(functionDeclaration))
+            body.push(t.exportNamedDeclaration(functionDeclaration))
             const name = functionDeclaration.id?.name || ''
 
-            path.node.body.push(
-              t.expressionStatement(
-                t.callExpression(t.identifier('registerServerReference'), [
-                  t.identifier(name),
-                  t.stringLiteral(state.opts.url),
-                  t.stringLiteral(name),
-                ]),
-              ),
-            )
+            body.push(registerServerRef(name, state.opts.url, name))
           })
 
           localNames.forEach((exportedName, localName) => {
@@ -288,30 +282,18 @@ function babelPluginTransformServerFunction({
 
             const localType = localTypes.get(localName)
             if (localType === 'function') {
-              path.node.body.push(
-                t.expressionStatement(
-                  t.callExpression(t.identifier('registerServerReference'), [
-                    t.identifier(localName),
-                    t.stringLiteral(state.opts.url),
-                    t.stringLiteral(exportedName),
-                  ]),
-                ),
+              body.push(
+                registerServerRef(localName, state.opts.url, exportedName),
               )
             } else {
-              path.node.body.push(
+              body.push(
                 t.ifStatement(
                   t.binaryExpression(
                     '===',
                     t.unaryExpression('typeof', t.identifier(localName)),
                     t.stringLiteral('function'),
                   ),
-                  t.expressionStatement(
-                    t.callExpression(t.identifier('registerServerReference'), [
-                      t.identifier(localName),
-                      t.stringLiteral(state.opts.url),
-                      t.stringLiteral(exportedName),
-                    ]),
-                  ),
+                  registerServerRef(localName, state.opts.url, exportedName),
                 ),
               )
             }
@@ -333,15 +315,13 @@ function babelPluginTransformServerFunction({
               localTypes.set(identifier, 'function')
             }
           } else {
+            const body = declaration.body
+
             // exported named function that might have a server action inside
-            const serverActionNodeIndex = indexOfServerActionNode(
-              t,
-              declaration.body,
-            )
+            const serverActionNodeIndex = indexOfServerActionNode(body)
 
             if (serverActionNodeIndex >= 0) {
-              const serverActionNode =
-                declaration.body.body[serverActionNodeIndex]
+              const serverActionNode = body.body[serverActionNodeIndex]
 
               if (
                 serverActionNode &&
@@ -376,10 +356,7 @@ function babelPluginTransformServerFunction({
               }
             } else {
               // exported arrow function that might have a server action inside
-              const serverActionNodeIndex = indexOfServerActionNode(
-                t,
-                init.body,
-              )
+              const serverActionNodeIndex = indexOfServerActionNode(init.body)
 
               if (serverActionNodeIndex >= 0) {
                 const serverActionNode = init.body.body[serverActionNodeIndex]
@@ -432,15 +409,13 @@ function babelPluginTransformServerFunction({
               localTypes.set(identifier, 'function')
             }
           } else {
+            const body = declaration.body
+
             // Default-exported function that might have a server action inside
-            const serverActionNodeIndex = indexOfServerActionNode(
-              t,
-              declaration.body,
-            )
+            const serverActionNodeIndex = indexOfServerActionNode(body)
 
             if (serverActionNodeIndex >= 0) {
-              const serverActionNode =
-                declaration.body.body[serverActionNodeIndex]
+              const serverActionNode = body.body[serverActionNodeIndex]
 
               if (
                 serverActionNode &&
@@ -456,13 +431,15 @@ function babelPluginTransformServerFunction({
                 serverActionNode.id = t.identifier(uniqueName)
                 serverActionNodes.push(serverActionNode)
 
-                declaration.body.body[serverActionNodeIndex] =
-                  t.variableDeclaration('const', [
+                body.body[serverActionNodeIndex] = t.variableDeclaration(
+                  'const',
+                  [
                     t.variableDeclarator(
                       t.identifier(name),
                       t.identifier(uniqueName),
                     ),
-                  ])
+                  ],
+                )
               }
             }
           }
@@ -470,29 +447,42 @@ function babelPluginTransformServerFunction({
       },
     },
   }
-}
 
-function hasUseServerDirective(
-  statement:
-    | types.FunctionDeclaration
-    | types.ArrowFunctionExpression
-    | types.FunctionExpression,
-) {
-  return (
-    'directives' in statement.body &&
-    statement.body.directives.some(
-      (directive) => directive.value.value === 'use server',
+  function hasUseServerDirective(
+    statement:
+      | types.FunctionDeclaration
+      | types.ArrowFunctionExpression
+      | types.FunctionExpression,
+  ) {
+    return (
+      'directives' in statement.body &&
+      statement.body.directives.some(
+        (directive) => directive.value.value === 'use server',
+      )
     )
-  )
-}
+  }
 
-function indexOfServerActionNode(
-  t: typeof types,
-  blockStatement: types.BlockStatement,
-): number {
-  return blockStatement.body.findIndex(
-    (node): node is types.FunctionDeclaration => {
-      return t.isFunctionDeclaration(node) && hasUseServerDirective(node)
-    },
-  )
+  function indexOfServerActionNode(
+    blockStatement: types.BlockStatement,
+  ): number {
+    return blockStatement.body.findIndex(
+      (node): node is types.FunctionDeclaration => {
+        return t.isFunctionDeclaration(node) && hasUseServerDirective(node)
+      },
+    )
+  }
+
+  function registerServerRef(
+    localName: string,
+    url: string,
+    exportedName: string,
+  ) {
+    return t.expressionStatement(
+      t.callExpression(t.identifier('registerServerReference'), [
+        t.identifier(localName),
+        t.stringLiteral(url),
+        t.stringLiteral(exportedName),
+      ]),
+    )
+  }
 }
