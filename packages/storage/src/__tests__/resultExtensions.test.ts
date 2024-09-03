@@ -32,11 +32,13 @@ describe('Result extensions', () => {
     },
   }
 
+  const memStorage = new MemoryStorage({
+    baseDir: '/tmp',
+  })
+
   const { storagePrismaExtension } = setupStorage({
     uploadsConfig,
-    storageAdapter: new MemoryStorage({
-      baseDir: '/tmp',
-    }),
+    storageAdapter: memStorage,
     urlSigner: new UrlSigner({
       endpoint: '/signed-url',
       secret: 'my-sekret',
@@ -45,25 +47,75 @@ describe('Result extensions', () => {
 
   const prismaClient = new PrismaClient().$extends(storagePrismaExtension)
 
-  describe('withSignedUrl', () => {
-    it('Generates signed urls for each upload field', async () => {
-      const dumbo = await prismaClient.dumbo.create({
-        data: {
-          firstUpload: '/dumbo/first.txt',
-          secondUpload: '/dumbo/second.txt',
-        },
-      })
-
-      const signedUrlDumbo = await dumbo.withSignedUrl({
-        expiresIn: 254,
-      })
-      expect(signedUrlDumbo.firstUpload).toContain(
-        '/.redwood/functions/signed-url',
-      )
-      expect(signedUrlDumbo.firstUpload).toContain('path=%2Fdumbo%2Ffirst.txt')
-      expect(signedUrlDumbo.secondUpload).toContain(
-        'path=%2Fdumbo%2Fsecond.txt',
-      )
+  it('Adds signedURL and dataURI extensions', async () => {
+    const dummy = await prismaClient.dummy.create({
+      data: {
+        uploadField: '/dummy/upload.txt',
+      },
     })
+
+    expect(dummy).toHaveProperty('withSignedUrl')
+    expect(dummy).toHaveProperty('withDataUri')
   })
+
+  it('Does not add it to models without upload fields', async () => {
+    const noUpload = await prismaClient.noUploadFields.create({
+      data: {
+        name: 'no-upload',
+      },
+    })
+
+    expect(noUpload).not.toHaveProperty('withSignedUrl')
+    expect(noUpload).not.toHaveProperty('withDataUri')
+  })
+
+  it('Generates signed urls for each upload field', async () => {
+    const dumbo = await prismaClient.dumbo.create({
+      data: {
+        firstUpload: '/dumbo/first.txt',
+        secondUpload: '/dumbo/second.txt',
+      },
+    })
+
+    // Note that this is not async!
+    const signedUrlDumbo = dumbo.withSignedUrl({
+      expiresIn: 254,
+    })
+
+    expect(signedUrlDumbo.firstUpload).toContain(
+      '/.redwood/functions/signed-url',
+    )
+    expect(signedUrlDumbo.firstUpload).toContain('path=%2Fdumbo%2Ffirst.txt')
+    expect(signedUrlDumbo.secondUpload).toContain('path=%2Fdumbo%2Fsecond.txt')
+  })
+
+  it('Generates data uris for each upload field', async () => {
+    memStorage.save(new File(['SOFT_KITTENS'], 'first.txt'), {
+      fileName: 'first.txt',
+      path: '/dumbo',
+    })
+    memStorage.save(new File(['PURR_PURR'], 'second.txt'), {
+      fileName: 'second.txt',
+      path: '/dumbo',
+    })
+
+    const dumbo = await prismaClient.dumbo.create({
+      data: {
+        firstUpload: '/dumbo/first.txt',
+        secondUpload: '/dumbo/second.txt',
+      },
+    })
+
+    // Note that this is async!
+    const signedUrlDumbo = await dumbo.withDataUri()
+
+    expect(signedUrlDumbo.firstUpload).toMatch(
+      `data:text/plain;base64,${Buffer.from('SOFT_KITTENS').toString('base64')}`,
+    )
+
+    expect(signedUrlDumbo.secondUpload).toMatch(
+      `data:text/plain;base64,${Buffer.from('PURR_PURR').toString('base64')}`,
+    )
+  })
+
 })
