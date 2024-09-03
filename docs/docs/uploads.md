@@ -129,7 +129,7 @@ export const updateProfile = async ({ id, input }) => {
 
   // Example without the built-in helpers
   await fs.writeFile('/test/profile.jpg', Buffer.from(await input.avatar.arrayBuffer()))
-
+}
 ```
 
 You'll see that you are receiving an instance of [File](https://developer.mozilla.org/en-US/docs/Web/API/File).
