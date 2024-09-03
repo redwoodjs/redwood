@@ -25,6 +25,9 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
     pathname === routes.resetPassword() ||
     pathname === routes.profile()
 
+  const isBlogRoute =
+    pathname === routes.blog() || pathname.startsWith(routes.blog() + '/')
+
   return (
     <div className="navigation-layout">
       <nav>
@@ -45,6 +48,9 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
             <Link to={routes.multiCell()}>Multi Cell</Link>
           </li>
           <li>
+            <Link to={routes.blog()}>Blog</Link>
+          </li>
+          <li>
             <NavLink
               to={isAuthenticated ? routes.profile() : routes.login()}
               activeClassName="active"
@@ -62,7 +68,7 @@ const NavigationLayout = ({ children, rnd }: NavigationLayoutProps) => {
           </li>
         </ul>
       </nav>
-      {!isAuthRoute && (
+      {!isAuthRoute && !isBlogRoute && (
         <>
           <div id="rnd">{Math.round(rnd * 100)}</div>
           <ReadFileServerCell />
