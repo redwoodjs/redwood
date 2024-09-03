@@ -1,6 +1,6 @@
 import { Metadata } from '@redwoodjs/web/Metadata'
 
-import { savePost } from './actions'
+import { savePost } from 'src/lib/actions'
 
 import './NewBlogPostPage.css'
 

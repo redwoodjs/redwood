@@ -4,6 +4,7 @@ import { namedRoutes as routes } from '@redwoodjs/router/namedRoutes'
 import { getLocation } from '@redwoodjs/server-store'
 
 import BlogPostsNavCell from 'src/components/BlogPostsNavCell/BlogPostsNavCell'
+import { deletePost } from 'src/lib/actions'
 
 import './BlogLayout.css'
 
@@ -29,13 +30,16 @@ const BlogLayout = ({ children }: BlogLayoutProps) => {
           <li className="new-post">
             <Link to={routes.newBlogPost()}>New Blog Post</Link>
           </li>
-          {slug && (
+          {slug && slug !== 'new' && (
             <>
               <li>
                 <Link to={routes.editBlogPost({ slug })}>Edit Blog Post</Link>
               </li>
               <li>
-                <button type="button">Delete Blog Post</button>
+                <form action={deletePost} method="post">
+                  <input type="hidden" name="slug" value={slug} />
+                  <button type="submit">Delete Blog Post</button>
+                </form>
               </li>
             </>
           )}
