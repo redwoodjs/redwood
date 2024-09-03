@@ -27,7 +27,9 @@ const Routes = () => {
 
         <Set wrap={BlogLayout}>
           <Route path="/blog" page={BlogPage} name="blog" />
-          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />+{' '}
+          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />
+          <Route path="/blog/{slug}/edit" page={EditBlogPostPage} name="editBlogPost" />
+          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />
         </Set>
 
         <Set wrap={AuthLayout}>
