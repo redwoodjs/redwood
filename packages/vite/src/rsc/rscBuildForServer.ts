@@ -84,7 +84,7 @@ export async function rscBuildForServer(
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
-      rscTransformUseServerPlugin(),
+      rscTransformUseServerPlugin(serverEntryFiles),
       rscRoutesImports(),
     ],
     build: {

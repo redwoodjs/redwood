@@ -3,7 +3,9 @@ import type { PluginObj, types } from '@babel/core'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
-export function rscTransformUseServerPlugin(): Plugin {
+export function rscTransformUseServerPlugin(
+  serverEntryFiles: Record<string, string>,
+): Plugin {
   return {
     name: 'rsc-transform-use-server-plugin',
     transform: async function (code, id) {
@@ -60,18 +62,26 @@ export function rscTransformUseServerPlugin(): Plugin {
         )
       }
 
+      const builtFileName = Object.entries(serverEntryFiles).find(
+        ([_key, value]) => value === id,
+      )?.[0]
+
+      if (!builtFileName) {
+        throw new Error(
+          `Could not find ${id} in serverEntryFiles: ` +
+            JSON.stringify(serverEntryFiles),
+        )
+      }
+
       let transformedCode = code
 
       if (moduleScopedUseServer) {
-        transformedCode = transformServerModule(mod, id, code)
+        transformedCode = transformServerModule(mod, builtFileName, code)
       } else {
-        // transformedCode = transformServerFunction(mod, id, code)
-
         const result = babel.transformSync(code, {
           filename: id,
-          // presets: ['@babel/preset-typescript', '@babel/preset-react'],
           presets: ['@babel/preset-typescript'],
-          plugins: [[babelPluginTransformServerAction, { url: id }]],
+          plugins: [[babelPluginTransformServerAction, { url: builtFileName }]],
         })
 
         if (!result) {
