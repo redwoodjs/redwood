@@ -2,7 +2,8 @@ import type { HttpOptions } from '@apollo/client'
 import type { Operation, FetchResult } from '@apollo/client/core'
 import { ApolloLink } from '@apollo/client/link/core/core.cjs'
 import { Observable } from '@apollo/client/utilities/utilities.cjs'
-import { print } from 'graphql'
+import type { DefinitionNode } from 'graphql'
+import { Kind, OperationTypeNode, print } from 'graphql'
 import type { ClientOptions, Client, RequestParams, Sink } from 'graphql-sse'
 import { createClient } from 'graphql-sse'
 interface SSELinkOptions extends Partial<ClientOptions> {
@@ -62,6 +63,26 @@ const mapReferrerPolicyHeader = (
 // by checking if the operation has an `extensions` property and if it has a `persistedQuery` property.
 const hasTrustedDocument = (operation: Operation) => {
   return operation.extensions?.persistedQuery?.sha256Hash
+}
+
+const isSubscription = (definition: DefinitionNode) => {
+  return (
+    definition.kind === Kind.OPERATION_DEFINITION &&
+    definition.operation === OperationTypeNode.SUBSCRIPTION
+  )
+}
+
+// This is a simplified version of the `@n1ru4l/graphql-live-query`.
+// See discussion in https://github.com/redwoodjs/redwood/pull/11375
+const isLiveQuery = (definition: DefinitionNode) => {
+  if (
+    definition.kind !== Kind.OPERATION_DEFINITION ||
+    definition.operation !== OperationTypeNode.QUERY
+  ) {
+    return false
+  }
+
+  return !!definition.directives?.find((d) => d.name.value === 'live')
 }
 
 /**
@@ -125,4 +146,4 @@ class SSELink extends ApolloLink {
   }
 }
 
-export { SSELink }
+export { SSELink, isSubscription, isLiveQuery }

@@ -28,7 +28,6 @@ import {
   useSuspenseQuery,
 } from '@apollo/client/react/hooks/hooks.cjs'
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
-import { Kind, OperationTypeNode } from 'graphql'
 import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
@@ -51,7 +50,7 @@ import * as SSELinkExports from './sseLink.js'
 import { useCache } from './useCache.js'
 
 // Not sure why we need to import it this way for legacy builds to work
-const { SSELink } = SSELinkExports
+const { SSELink, isSubscription, isLiveQuery } = SSELinkExports
 
 export type {
   CacheKey,
@@ -240,10 +239,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
           ({ query }) => {
             const definition = getMainDefinition(query)
 
-            return (
-              definition.kind === Kind.OPERATION_DEFINITION &&
-              definition.operation === OperationTypeNode.SUBSCRIPTION
-            )
+            return isSubscription(definition) || isLiveQuery(definition)
           },
           new SSELink({
             url: uri,
