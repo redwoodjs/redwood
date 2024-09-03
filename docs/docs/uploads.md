@@ -128,7 +128,10 @@ export const updateProfile = async ({ id, input }) => {
   // }
 
   // Example without the built-in helpers
-  await fs.writeFile('/test/profile.jpg', Buffer.from(await input.avatar.arrayBuffer()))
+  await fs.writeFile(
+    '/test/profile.jpg',
+    Buffer.from(await input.avatar.arrayBuffer())
+  )
 }
 ```
 
