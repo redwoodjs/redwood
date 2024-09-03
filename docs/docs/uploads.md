@@ -144,7 +144,7 @@ That's part 1 done - you can receive uploaded files. In the next steps, we'll ta
 
 Once you send the request, and open up your Network Inspect Panel, you'll notice that the graphql request looks slightly different - it has a different Content-Type (instead of the regular `application/json`).
 
-That's because when you send a [File](https://developer.mozilla.org/en-US/docs/Web/API/File) - the Redwood Apollo client will switch the request to a multipart form request, using [GraphQL Multipart Request Spec](https://github.com/jaydenseric/graphql-multipart-request-spec). This is the case whether you send a `File`, `FileList` or `Blob` (which is a less specialised File).
+That's because when you send a [File](https://developer.mozilla.org/en-US/docs/Web/API/File) - the Redwood Apollo client will switch the request to a multipart form request, using [GraphQL Multipart Request Spec](https://github.com/jaydenseric/graphql-multipart-request-spec). This is the case whether you send a `File`, `FileList` or `Blob` (which is a less specialized File).
 
 On the backend, GraphQL Yoga is pre-configured to handle multipart form requests, _as long as_ you specify the `File` scalar in your SDL.
 
