@@ -26,8 +26,10 @@ const Routes = () => {
         <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
 
         <Set wrap={BlogLayout}>
+          <Route path="/blog/new" page={NewBlogPostPage} name="newBlogPost" />
+          <Route path="/blog/{slug}/edit" page={EditBlogPostPage} name="editBlogPost" />
+          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />
           <Route path="/blog" page={BlogPage} name="blog" />
-          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />+{' '}
         </Set>
 
         <Set wrap={AuthLayout}>
