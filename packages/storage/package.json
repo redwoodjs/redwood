@@ -49,7 +49,7 @@
     "check:package": "concurrently npm:check:attw yarn publint",
     "setup:test": "npx prisma db push --accept-data-loss --schema ./src/__tests__/unit-test-schema.prisma",
     "test": "vitest run",
-    "test:types": "tstyche",
+    "test:types": "yarn setup:test && tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
