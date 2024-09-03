@@ -49,6 +49,7 @@
     "check:package": "concurrently npm:check:attw yarn publint",
     "setup:test": "npx prisma db push --accept-data-loss --schema ./src/__tests__/unit-test-schema.prisma",
     "test": "vitest run",
+    "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -64,6 +65,7 @@
     "concurrently": "8.2.2",
     "esbuild": "0.23.0",
     "publint": "0.2.10",
+    "tstyche": "2.1.1",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
