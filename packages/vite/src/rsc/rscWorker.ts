@@ -4,7 +4,6 @@
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
 import type { Buffer } from 'node:buffer'
-import { Server } from 'node:http'
 import path from 'node:path'
 import { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
@@ -13,7 +12,7 @@ import { createElement } from 'react'
 
 import RSDWServer from 'react-server-dom-webpack/server'
 import type { ResolvedConfig } from 'vite'
-import { createServer, resolveConfig } from 'vite'
+import { resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 import {
@@ -24,10 +23,6 @@ import {
 import { getEntriesFromDist } from '../lib/entries.js'
 import { registerFwGlobalsAndShims } from '../lib/registerFwGlobalsAndShims.js'
 import { StatusError } from '../lib/StatusError.js'
-import { rscReloadPlugin } from '../plugins/vite-plugin-rsc-reload.js'
-import { rscRoutesAutoLoader } from '../plugins/vite-plugin-rsc-routes-auto-loader.js'
-import { rscTransformUseClientPlugin } from '../plugins/vite-plugin-rsc-transform-client.js'
-import { rscTransformUseServerPlugin } from '../plugins/vite-plugin-rsc-transform-server.js'
 
 import type {
   MessageReq,
@@ -132,49 +127,7 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // server. So we have to register them here again.
 registerFwGlobalsAndShims()
 
-// TODO (RSC): this was copied from waku; they have a todo to remove it.
-// We need this to fix a WebSocket error in dev, `WebSocket server error: Port
-// is already in use`.
-const dummyServer = new Server()
-
-// TODO (RSC): `createServer` is mostly used to create a dev server. Is it OK
-// to use it like a production server like this?
-// TODO (RSC): Do we need to pass `define` here with RWJS_ENV etc? What about
-// `envFile: false`?
-// TODO (RSC): Do we need to care about index.html as it says in the docs
-// https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#middleware-mode
-const vitePromise = createServer({
-  plugins: [
-    rscReloadPlugin((type) => {
-      if (!parentPort) {
-        throw new Error('parentPort is undefined')
-      }
-
-      const message: MessageRes = { type }
-      parentPort.postMessage(message)
-    }),
-    rscTransformUseClientPlugin({}),
-    rscTransformUseServerPlugin('', {}),
-    rscRoutesAutoLoader(),
-  ],
-  ssr: {
-    resolve: {
-      // TODO (RSC): Do we need `conditions` too?
-      // conditions: ['react-server'],
-      externalConditions: ['react-server'],
-    },
-  },
-  // Need to run in middlewareMode so that `buildStart` gets called for all
-  // plugins. Specifically vite's own vite:css plugin needs this to initialize
-  // the cssModulesCache WeakMap
-  // See https://github.com/vitejs/vite/issues/3798#issuecomment-862185554
-  server: { middlewareMode: true, hmr: { server: dummyServer } },
-  appType: 'custom',
-})
-
 const shutdown = async () => {
-  const vite = await vitePromise
-  await vite.close()
   if (!parentPort) {
     throw new Error('parentPort is undefined')
   }
