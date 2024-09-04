@@ -102,9 +102,37 @@ function vitePluginRSC_UseClient(): PluginOption {
   ]
 }
 
+function vitePlugin_Redwood_Router_NotFoundPage(): PluginOption {
+  return [
+    {
+      name: vitePlugin_Redwood_Router_NotFoundPage.name,
+      resolveId(source) {
+        if (source === 'virtual:redwoodjs-not-found-page') {
+          return `\0virtual:redwoodjs-not-found-page`
+        }
+      },
+      load(id) {
+        if (id === '\0virtual:redwoodjs-not-found-page') {
+          // resolve the actual 404 page.
+          // 1. find the Routes.tsx file
+          // 2. Parse the AST, find all the <Route /> entities
+          // 3. Find the route with the "notfound" attribute.
+          // 4. Re-export that as a module.
+          return 'export const Page = () => "page not found"'
+        }
+      },
+    },
+  ]
+}
+
 export default defineConfig({
   appType: 'custom',
   base: '/',
   clearScreen: false,
-  plugins: [vitePluginReact(), vitePluginRSC(), vitePluginSSR()],
+  plugins: [
+    vitePluginReact(),
+    vitePluginRSC(),
+    vitePluginSSR(),
+    vitePlugin_Redwood_Router_NotFoundPage(),
+  ],
 })

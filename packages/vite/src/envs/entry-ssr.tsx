@@ -22,12 +22,17 @@ export async function ssrHandler(opts: {
   // Show off idea of "everything is a plugin."
   // Determine if there's a valid page to render for the given URL.
   const url = new URL(req.url)
-  const Page = await getPageForRoute({
+  let notfound = false
+  let Page = await getPageForRoute({
     pathname: url.pathname,
     viteEnvRunner: viteEnvRunnerRSC,
   })
   if (!Page) {
-    return new Response('404', { status: 404 })
+    notfound = true
+    const mod = await viteEnvRunnerRSC.import(
+      'virtual:redwoodjs-not-found-page',
+    )
+    Page = mod.Page
   }
   const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
   const rscResult = await rscHandler({ req, Page })
@@ -48,5 +53,8 @@ export async function ssrHandler(opts: {
 
   const htmlStream = await renderToReadableStream(<Content />)
   const html = htmlStream.pipeThrough(injectRSCPayload(rscStream2))
-  return new Response(html, { headers: { 'content-type': 'text/html' } })
+  return new Response(html, {
+    headers: { 'content-type': 'text/html' },
+    status: notfound ? 404 : 200,
+  })
 }
