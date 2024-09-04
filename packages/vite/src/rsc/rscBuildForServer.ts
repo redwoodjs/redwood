@@ -32,7 +32,7 @@ export async function rscBuildForServer(
   }
 
   /** Base path for where to place built artifacts */
-  const outDir = rwPaths.web.dist
+  const outDir = rwPaths.web.distRsc
 
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
