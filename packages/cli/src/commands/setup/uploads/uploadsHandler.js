@@ -1,15 +1,16 @@
-import path, { format } from 'path'
+import path from 'node:path'
 
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
+import { format } from 'prettier'
 
 import { addApiPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { runTransform } from '../../../../lib/runTransform'
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
+import { runTransform } from '../../../lib/runTransform'
 
 export const handler = async ({ force }) => {
   const projectIsTypescript = isTypeScriptProject()
@@ -49,8 +50,12 @@ export const handler = async ({ force }) => {
         },
       },
       {
+        title: 'Modifying api/src/lib/db to add uploads prisma extension..',
         task: async () => {
-          const dbPath = getPaths().api.db
+          const dbPath = path.join(
+            getPaths().api.lib,
+            `db.${projectIsTypescript ? 'ts' : 'js'}`,
+          )
 
           const transformResult = await runTransform({
             transformPath: path.join(__dirname, 'dbCodemod.js'),
@@ -70,15 +75,17 @@ export const handler = async ({ force }) => {
         title: 'Prettifying changed files',
         task: async (_ctx, task) => {
           const prettifyPaths = [
-            getPaths().api.db,
+            path.join(getPaths().api.lib, 'db.js'),
+            path.join(getPaths().api.lib, 'db.ts'),
             path.join(getPaths().api.lib, 'uploads.js'),
             path.join(getPaths().api.lib, 'uploads.ts'),
           ]
+
           for (const prettifyPath of prettifyPaths) {
-            if (prettifyPath === null) {
-              throw new Error('Could not find the file to be prettified')
-            }
             try {
+              if (!fs.existsSync(prettifyPath)) {
+                continue
+              }
               const source = fs.readFileSync(prettifyPath, 'utf-8')
               const prettierOptions = await getPrettierOptions()
               const prettifiedApp = await format(source, {
