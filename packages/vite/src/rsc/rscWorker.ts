@@ -154,7 +154,7 @@ const vitePromise = createServer({
       parentPort.postMessage(message)
     }),
     rscTransformUseClientPlugin({}),
-    rscTransformUseServerPlugin({}),
+    rscTransformUseServerPlugin('', {}),
     rscRoutesAutoLoader(),
   ],
   ssr: {
