@@ -241,7 +241,7 @@ const getRoutesComponent: any = async () => {
     throw new StatusError('No entry found for __rwjs__Routes', 404)
   }
 
-  const routes = await import(routesPath)
+  const routes = await import(`file://${routesPath}`)
 
   return routes.default
 }
