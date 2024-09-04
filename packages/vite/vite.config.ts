@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import { createMiddleware } from '@hattip/adapter-node'
 import vitePluginReact from '@vitejs/plugin-react'
 import { init, parse } from 'es-module-lexer'
@@ -106,20 +108,48 @@ function vitePlugin_Redwood_Router_NotFoundPage(): PluginOption {
   return [
     {
       name: vitePlugin_Redwood_Router_NotFoundPage.name,
-      resolveId(source) {
+      async resolveId(source) {
         if (source === 'virtual:redwoodjs-not-found-page') {
-          return `\0virtual:redwoodjs-not-found-page`
+          // TODO(jgmw): We must set the env var so this function picks up the mock project directory
+          process.env.RWJS_CWD = path.join(
+            import.meta.dirname,
+            'src',
+            'envs',
+            '__example__',
+          )
+
+          // Extract the routes from the router
+          const { getProjectRoutes } = await import('@redwoodjs/internal')
+          const routes = getProjectRoutes()
+          const notFoundRoute = routes.find((spec) => spec.isNotFound)
+          if (!notFoundRoute) {
+            // We fallback to loading the resolved virtual module which will provide a default implementation
+            return `\0virtual:redwoodjs-not-found-page`
+          }
+
+          // Extract the pages from the project structure
+          // TODO(jgmw): Not thrilled about using the deprecated function
+          const { processPagesDir } = await import('@redwoodjs/project-config')
+          const pages = processPagesDir()
+          const notFoundPage = pages.find(
+            (page) => page.constName === notFoundRoute.pageIdentifier,
+          )
+          if (!notFoundPage) {
+            // We fallback to loading the resolved virtual module which will provide a default implementation
+            return `\0virtual:redwoodjs-not-found-page`
+          }
+
+          // We return the path to page the user specified to handle 404s
+          return notFoundPage.path
         }
+        return undefined
       },
+      // Load provides a fallback to a default 404 page
       load(id) {
         if (id === '\0virtual:redwoodjs-not-found-page') {
-          // resolve the actual 404 page.
-          // 1. find the Routes.tsx file
-          // 2. Parse the AST, find all the <Route /> entities
-          // 3. Find the route with the "notfound" attribute.
-          // 4. Re-export that as a module.
-          return 'export const Page = () => "page not found"'
+          return 'export default () => "default 404 page"'
         }
+        return undefined
       },
     },
   ]

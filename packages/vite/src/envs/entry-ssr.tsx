@@ -29,10 +29,10 @@ export async function ssrHandler(opts: {
   })
   if (!Page) {
     notfound = true
-    const mod = await viteEnvRunnerRSC.import(
+    const { default: notFoundPage } = await viteEnvRunnerRSC.import(
       'virtual:redwoodjs-not-found-page',
     )
-    Page = mod.Page
+    Page = notFoundPage
   }
   const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
   const rscResult = await rscHandler({ req, Page })
