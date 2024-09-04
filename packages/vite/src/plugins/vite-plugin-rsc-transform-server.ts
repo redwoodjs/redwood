@@ -78,6 +78,10 @@ export function rscTransformUseServerPlugin(
         // We output server actions in the `assets` subdirectory, and add a .mjs
         // extension to the file name
         builtFileName = path.join(outDir, 'assets', serverEntryKey + '.mjs')
+
+        if (process.platform === 'win32') {
+          builtFileName = builtFileName.replaceAll('\\', '/')
+        }
       }
 
       console.log('windows paths')
