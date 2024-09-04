@@ -1,91 +1,22 @@
 import React from 'react'
 
-import { Router, Route, Private, Set } from '@redwoodjs/router'
-
-import BlogLayout from 'src/layouts/BlogLayout'
-import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
-import HomePage from 'src/pages/HomePage'
+import { Router, Route } from '@redwoodjs/router'
 
 import { useAuth } from './auth'
+
+// NOTE(jgmw): These are typically injected by a babel plugin
+import HomePage from './pages/HomePage/HomePage.jsx'
+// import NotFoundPage from './pages/NotFoundPage/NotFoundPage.jsx'
+import Test1Page from './pages/Test1Page/Test1Page.jsx'
+import Test2Page from './pages/Test2Page/Test2Page.jsx'
 
 const Routes = () => {
   return (
     <Router useAuth={useAuth}>
-      <Route path="/double" page={DoublePage} name="double" prerender />
-      <Route path="/login" page={LoginPage} name="login" />
-      <Route path="/signup" page={SignupPage} name="signup" />
-      <Route
-        path="/forgot-password"
-        page={ForgotPasswordPage}
-        name="forgotPassword"
-      />
-      <Route
-        path="/reset-password"
-        page={ResetPasswordPage}
-        name="resetPassword"
-      />
-      <Set
-        wrap={ScaffoldLayout}
-        title="Contacts"
-        titleTo="contacts"
-        buttonLabel="New Contact"
-        buttonTo="newContact"
-      >
-        <Route
-          path="/contacts/new"
-          page={ContactNewContactPage}
-          name="newContact"
-          prerender
-        />
-        <Route
-          path="/contacts/{id:Int}/edit"
-          page={ContactEditContactPage}
-          name="editContact"
-        />
-        <Route
-          path="/contacts/{id:Int}"
-          page={ContactContactPage}
-          name="contact"
-        />
-        <Route path="/contacts" page={ContactContactsPage} name="contacts" />
-      </Set>
-      <Set
-        wrap={ScaffoldLayout}
-        title="Posts"
-        titleTo="posts"
-        buttonLabel="New Post"
-        buttonTo="newPost"
-      >
-        <Route path="/posts/new" page={PostNewPostPage} name="newPost" />
-        <Route
-          path="/posts/{id:Int}/edit"
-          page={PostEditPostPage}
-          name="editPost"
-        />
-        <Route path="/posts/{id:Int}" page={PostPostPage} name="post" />
-        <Route path="/posts" page={PostPostsPage} name="posts" />
-      </Set>
-      <Set wrap={BlogLayout}>
-        <Route
-          path="/waterfall/{id:Int}"
-          page={WaterfallPage}
-          prerender
-          name="waterfall"
-        />
-        <Private unauthenticated="login">
-          <Route path="/profile" page={ProfilePage} name="profile" />
-        </Private>
-        <Route
-          path="/blog-post/{id:Int}"
-          page={BlogPostPage}
-          name="blogPost"
-          prerender
-        />
-        <Route path="/contact" page={ContactUsPage} name="contactUs" />
-        <Route path="/about" page={AboutPage} name="about" prerender />
-        <Route path="/" page={HomePage} name="home" prerender />
-        {/* <Route notfound page={NotFoundPage} prerender /> */}
-      </Set>
+      <Route path="/test-2" page={Test2Page} name="test-2" />
+      <Route path="/test-1" page={Test1Page} name="test-1" />
+      <Route path="/" page={HomePage} name="home" />
+      {/* <Route notfound page={NotFoundPage} /> */}
     </Router>
   )
 }

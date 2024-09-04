@@ -105,51 +105,116 @@ function vitePluginRSC_UseClient(): PluginOption {
 }
 
 function vitePlugin_Redwood_Router_NotFoundPage(): PluginOption {
+  const virtualModuleId = 'virtual:redwoodjs-not-found-page'
+  const resolvedVirtualModuleId = '\0' + virtualModuleId
   return [
     {
       name: vitePlugin_Redwood_Router_NotFoundPage.name,
       async resolveId(source) {
-        if (source === 'virtual:redwoodjs-not-found-page') {
-          // TODO(jgmw): We must set the env var so this function picks up the mock project directory
-          process.env.RWJS_CWD = path.join(
-            import.meta.dirname,
-            'src',
-            'envs',
-            '__example__',
-          )
-
-          // Extract the routes from the router
-          const { getProjectRoutes } = await import('@redwoodjs/internal')
-          const routes = getProjectRoutes()
-          const notFoundRoute = routes.find((spec) => spec.isNotFound)
-          if (!notFoundRoute) {
-            // We fallback to loading the resolved virtual module which will provide a default implementation
-            return `\0virtual:redwoodjs-not-found-page`
-          }
-
-          // Extract the pages from the project structure
-          // TODO(jgmw): Not thrilled about using the deprecated function
-          const { processPagesDir } = await import('@redwoodjs/project-config')
-          const pages = processPagesDir()
-          const notFoundPage = pages.find(
-            (page) => page.constName === notFoundRoute.pageIdentifier,
-          )
-          if (!notFoundPage) {
-            // We fallback to loading the resolved virtual module which will provide a default implementation
-            return `\0virtual:redwoodjs-not-found-page`
-          }
-
-          // We return the path to page the user specified to handle 404s
-          return notFoundPage.path
+        if (source !== virtualModuleId) {
+          return undefined
         }
-        return undefined
+
+        // TODO(jgmw): We must set the env var so this function picks up the mock project directory
+        process.env.RWJS_CWD = path.join(
+          import.meta.dirname,
+          'src',
+          'envs',
+          '__example__',
+        )
+
+        // Extract the routes from the AST of the Routes.tsx file
+        const { getProjectRoutes } = await import('@redwoodjs/internal')
+        const routes = getProjectRoutes()
+
+        // Find the not found route
+        const notFoundRoute = routes.find((route) => route.isNotFound)
+        if (!notFoundRoute) {
+          return resolvedVirtualModuleId
+        }
+
+        // Extract the pages from the project structure
+        // TODO(jgmw): Not thrilled about using the deprecated function
+        const { processPagesDir } = await import('@redwoodjs/project-config')
+        const pages = processPagesDir()
+
+        const notFoundPage = pages.find(
+          (page) => page.constName === notFoundRoute.pageIdentifier,
+        )
+        if (!notFoundPage) {
+          return resolvedVirtualModuleId
+        }
+
+        // We return the path to page the user specified to handle 404s
+        return notFoundPage.path
       },
       // Load provides a fallback to a default 404 page
       load(id) {
-        if (id === '\0virtual:redwoodjs-not-found-page') {
-          return 'export default () => "default 404 page"'
+        if (id !== resolvedVirtualModuleId) {
+          return undefined
         }
-        return undefined
+        // This is the most basic 404 page
+        return 'export default () => "404"'
+      },
+    },
+  ]
+}
+
+function vitePlugin_Redwood_LoadPageForRoute(): PluginOption {
+  const virtualModuleId = 'virtual:redwoodjs-load-page-for-route'
+  return [
+    {
+      name: vitePlugin_Redwood_LoadPageForRoute.name,
+      async resolveId(source) {
+        if (!source.startsWith(virtualModuleId)) {
+          return undefined
+        }
+
+        // TODO(jgmw): We must set the env var so this function picks up the mock project directory
+        process.env.RWJS_CWD = path.join(
+          import.meta.dirname,
+          'src',
+          'envs',
+          '__example__',
+        )
+
+        // Get the route from the pathname
+        const searchParams = new URLSearchParams(
+          source.substring(virtualModuleId.length),
+        )
+        const pathname = searchParams.get('pathname')
+        if (!pathname) {
+          throw new Error('No pathname provided')
+        }
+
+        // Extract the routes from the AST of the Routes.tsx file
+        const { getProjectRoutes } = await import('@redwoodjs/internal')
+        const routes = getProjectRoutes()
+
+        const { processPagesDir } = await import('@redwoodjs/project-config')
+        const pages = processPagesDir()
+
+        const { matchPath } = await import('@redwoodjs/router')
+
+        for (const route of routes) {
+          // TODO(jgmw): Handle route params
+          const { match } = matchPath(route.pathDefinition, pathname)
+          if (match) {
+            const page = pages.find(
+              (page) => page.constName === route.pageIdentifier,
+            )
+            if (!page) {
+              throw new Error(
+                `Could not find page for route: ${route.pageIdentifier}`,
+              )
+            }
+
+            return page.path
+          }
+        }
+
+        // Fallback to switching the id to the not-found page module
+        return this.resolve('virtual:redwoodjs-not-found-page')
       },
     },
   ]
@@ -163,6 +228,7 @@ export default defineConfig({
     vitePluginReact(),
     vitePluginRSC(),
     vitePluginSSR(),
+    vitePlugin_Redwood_LoadPageForRoute(),
     vitePlugin_Redwood_Router_NotFoundPage(),
   ],
 })
