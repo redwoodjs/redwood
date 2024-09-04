@@ -80,6 +80,13 @@ export function rscTransformUseServerPlugin(
         builtFileName = path.join(outDir, 'assets', serverEntryKey + '.mjs')
       }
 
+      console.log('windows paths')
+      console.log('windows paths, outDir:', outDir)
+      console.log('windows paths, severEntryFiles:', serverEntryFiles)
+      console.log('windows paths, severEntryKey:', serverEntryKey)
+      console.log('windows paths, builtFileName:', builtFileName)
+      console.log('windows paths')
+
       if (!builtFileName) {
         throw new Error(
           `Could not find ${id} in serverEntryFiles: ` +
