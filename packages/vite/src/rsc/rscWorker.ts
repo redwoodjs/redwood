@@ -154,7 +154,7 @@ const vitePromise = createServer({
       parentPort.postMessage(message)
     }),
     rscTransformUseClientPlugin({}),
-    rscTransformUseServerPlugin(),
+    rscTransformUseServerPlugin('', {}),
     rscRoutesAutoLoader(),
   ],
   ssr: {
@@ -182,11 +182,8 @@ const shutdown = async () => {
   parentPort.close()
 }
 
-const loadServerFile = async (fname: string) => {
-  const vite = await vitePromise
-  // TODO (RSC): In prod we shouldn't need this. We should be able to just
-  // import the built files
-  return vite.ssrLoadModule(fname)
+async function loadServerFile(filePath: string) {
+  return import(`file://${filePath}`)
 }
 
 if (!parentPort) {
