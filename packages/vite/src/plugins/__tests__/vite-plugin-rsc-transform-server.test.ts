@@ -27,10 +27,8 @@ afterAll(() => {
   process.env.RWJS_CWD = RWJS_CWD
 })
 
-function getPluginTransform() {
-  const plugin = rscTransformUseServerPlugin({
-    'some/dist/path/to/rsa-actions.ts-0.mjs': 'some/path/to/actions.ts',
-  })
+function getPluginTransform(serverEntryFiles: Record<string, string>) {
+  const plugin = rscTransformUseServerPlugin(serverEntryFiles)
 
   if (typeof plugin.transform !== 'function') {
     throw new Error('Plugin does not have a transform function')
@@ -43,7 +41,10 @@ function getPluginTransform() {
   return plugin.transform.bind({} as TransformPluginContext)
 }
 
-const pluginTransform = getPluginTransform()
+const id = 'rw-app/web/src/some/path/to/actions.ts'
+const pluginTransform = getPluginTransform({
+  'some/dist/path/to/rsa-actions.ts-0.mjs': id,
+})
 
 describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   afterEach(() => {
@@ -51,7 +52,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle one function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -85,7 +85,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle two functions', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -134,7 +133,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle arrow function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -168,7 +166,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle exports with two consts', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -203,7 +200,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle named function and arrow function with separate export', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -256,7 +252,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle separate renamed export', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -309,7 +304,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it.todo('should handle default exported arrow function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -343,7 +337,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle default exported named function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       "use server"
 
@@ -381,7 +374,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle default exported inline-named function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
         "use server"
 
@@ -415,7 +407,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it.todo('should handle default exported anonymous function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 

@@ -33,7 +33,7 @@ function getPluginTransform(serverEntryFiles: Record<string, string>) {
   return plugin.transform.bind({} as TransformPluginContext)
 }
 
-const id = 'some/path/to/actions.ts'
+const id = 'rw-app/web/src/some/path/to/actions.ts'
 const pluginTransform = getPluginTransform({
   'some/dist/path/to/rsa-actions.ts-0.mjs': id,
 })
@@ -585,7 +585,7 @@ describe('rscTransformUseServerPlugin function scoped "use server"', () => {
 
   describe('actions inside components', async () => {
     it('should handle self-contained named function inside default exported component', async () => {
-      const id = 'some/path/to/Component.tsx'
+      const id = 'rw-app/web/src/some/path/to/Component.tsx'
       const pluginTransform = getPluginTransform({
         'some/dist/path/to/rsa-Component.tsx-0.mjs': id,
       })
