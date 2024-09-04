@@ -182,13 +182,6 @@ const shutdown = async () => {
   parentPort.close()
 }
 
-const loadServerFile = async (fname: string) => {
-  const vite = await vitePromise
-  // TODO (RSC): In prod we shouldn't need this. We should be able to just
-  // import the built files
-  return vite.ssrLoadModule(fname)
-}
-
 if (!parentPort) {
   throw new Error('parentPort is undefined')
 }
@@ -248,7 +241,7 @@ const getRoutesComponent: any = async () => {
     throw new StatusError('No entry found for __rwjs__Routes', 404)
   }
 
-  const routes = await loadServerFile(routesPath)
+  const routes = await import(routesPath)
 
   return routes.default
 }
@@ -305,7 +298,7 @@ async function setClientEntries(): Promise<void> {
 
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
-  const { clientEntries } = await loadServerFile(entriesFile)
+  const { clientEntries } = await import(entriesFile)
   console.log('setClientEntries :: clientEntries', clientEntries)
   if (!clientEntries) {
     throw new Error('Failed to load clientEntries')
@@ -431,7 +424,7 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 
   const [fileName, actionName] = input.rsaId.split('#')
   console.log('Server Action fileName', fileName, 'actionName', actionName)
-  const module = await loadServerFile(fileName)
+  const module = await import(fileName)
 
   if (isSerializedFormData(input.args[0])) {
     const formData = new FormData()

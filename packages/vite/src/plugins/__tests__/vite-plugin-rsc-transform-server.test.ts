@@ -28,7 +28,7 @@ afterAll(() => {
 })
 
 function getPluginTransform(serverEntryFiles: Record<string, string>) {
-  const plugin = rscTransformUseServerPlugin(serverEntryFiles)
+  const plugin = rscTransformUseServerPlugin('some/dist/path', serverEntryFiles)
 
   if (typeof plugin.transform !== 'function') {
     throw new Error('Plugin does not have a transform function')
@@ -43,7 +43,7 @@ function getPluginTransform(serverEntryFiles: Record<string, string>) {
 
 const id = 'rw-app/web/src/some/path/to/actions.ts'
 const pluginTransform = getPluginTransform({
-  'some/dist/path/to/rsa-actions.ts-0.mjs': id,
+  'rsa-actions.ts-0': id,
 })
 
 describe('rscTransformUseServerPlugin module scoped "use server"', () => {
@@ -79,7 +79,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
+      registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -126,8 +126,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction1,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction1");
-      registerServerReference(formAction2,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction2");
+      registerServerReference(formAction1,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction1");
+      registerServerReference(formAction2,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction2");
       "
     `)
   })
@@ -160,7 +160,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -193,8 +193,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/dist/path/to/rsa-actions.ts-0.mjs","fortyTwo");
-      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
+      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/dist/path/assets/rsa-actions.ts-0.mjs","fortyTwo");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -245,8 +245,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/to/rsa-actions.ts-0.mjs","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
@@ -297,8 +297,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction as fA, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","fA");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/to/rsa-actions.ts-0.mjs","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","fA");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
@@ -331,7 +331,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(default,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
+      registerServerReference(default,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
@@ -368,7 +368,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export default formAction
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
@@ -401,7 +401,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
               }
 
         import {registerServerReference} from "react-server-dom-webpack/server";
-        registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
+        registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
         "
       `)
   })
@@ -434,7 +434,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
+      registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })

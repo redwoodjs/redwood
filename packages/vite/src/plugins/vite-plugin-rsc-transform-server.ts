@@ -1,9 +1,12 @@
+import path from 'node:path'
+
 import * as babel from '@babel/core'
 import type { PluginObj, types } from '@babel/core'
 import * as swc from '@swc/core'
 import type { Plugin } from 'vite'
 
 export function rscTransformUseServerPlugin(
+  outDir: string,
   serverEntryFiles: Record<string, string>,
 ): Plugin {
   return {
@@ -62,14 +65,20 @@ export function rscTransformUseServerPlugin(
         )
       }
 
-      // TODO (RSC): We need a more robust check here. Or maybe we can just
-      // always check, and fall back to passing `id` through if we can't find
-      // it in `serverEntryFiles`.
-      const builtFileName = id.includes('/web/src/')
-        ? Object.entries(serverEntryFiles).find(
-            ([_key, value]) => value === id,
-          )?.[0]
-        : id
+      // We need to handle both urls (`id`s) to files in node_modules, files
+      // already built by Vite (at least for now, with our hybrid dev/prod
+      // setup), and files in /src that will be built
+      let builtFileName = id
+
+      const serverEntryKey = Object.entries(serverEntryFiles).find(
+        ([_key, value]) => value === id,
+      )?.[0]
+
+      if (serverEntryKey) {
+        // We output server actions in the `assets` subdirectory, and add a .mjs
+        // extension to the file name
+        builtFileName = path.join(outDir, 'assets', serverEntryKey + '.mjs')
+      }
 
       if (!builtFileName) {
         throw new Error(
