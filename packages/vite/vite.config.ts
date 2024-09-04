@@ -25,7 +25,7 @@ export function vitePluginSSR(): PluginOption {
           'src/envs/entry-ssr.tsx',
         )
         createMiddleware((ctx) =>
-          ssrHandler(ctx.request, { viteEnvRunnerRSC }),
+          ssrHandler({ req: ctx.request, viteEnvRunnerRSC }),
         )(req, res, next)
       }
       return () => server.middlewares.use(handler)
@@ -95,8 +95,6 @@ function vitePluginRSC_UseClient(): PluginOption {
             c += `export const ${e.ln} = registerClientReference(${JSON.stringify(id)}, ${JSON.stringify(e.ln)});`
           }
 
-          console.log('❌', this.environment.name, id)
-
           return c
         }
       },
@@ -108,5 +106,5 @@ export default defineConfig({
   appType: 'custom',
   base: '/',
   clearScreen: false,
-  plugins: [vitePluginReact(), vitePluginSSR(), vitePluginRSC()],
+  plugins: [vitePluginReact(), vitePluginRSC(), vitePluginSSR()],
 })

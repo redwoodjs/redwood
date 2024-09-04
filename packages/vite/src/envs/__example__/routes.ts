@@ -2,10 +2,13 @@ import path from 'node:path'
 
 import type { ModuleRunner } from 'vite/module-runner'
 
-export async function getPageForRoute(
-  pathname: string,
-  { viteEnvRunner }: { viteEnvRunner: ModuleRunner },
-) {
+export async function getPageForRoute({
+  pathname,
+  viteEnvRunner,
+}: {
+  pathname: string
+  viteEnvRunner: ModuleRunner
+}) {
   let p = routes[pathname]
   if (!p) {
     return

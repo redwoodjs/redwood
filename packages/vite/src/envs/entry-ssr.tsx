@@ -9,26 +9,28 @@ import type { ModuleRunner } from 'vite/module-runner'
 import { getPageForRoute } from './__example__/routes.js'
 import { moduleMap } from './register/ssr.js'
 
-export async function ssrHandler(
-  req: Request,
-  { viteEnvRunnerRSC }: { viteEnvRunnerRSC: ModuleRunner },
-) {
+export async function ssrHandler(opts: {
+  req: Request
+  viteEnvRunnerRSC: ModuleRunner
+}) {
+  const { req, viteEnvRunnerRSC } = opts
   globalThis.__webpack_require__ = memoize(
     (id: string) => import(/* @vite-ignore */ id),
   )
 
+  // TODO: Make this a Plugin.
+  // Show off idea of "everything is a plugin."
   // Determine if there's a valid page to render for the given URL.
   const url = new URL(req.url)
-  // This has to be imported by the viteEnvRunner.
-  const Page = await getPageForRoute(url.pathname, {
+  const Page = await getPageForRoute({
+    pathname: url.pathname,
     viteEnvRunner: viteEnvRunnerRSC,
   })
   if (!Page) {
     return new Response('404', { status: 404 })
   }
-
   const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
-  const rscResult = await rscHandler(req, { Page })
+  const rscResult = await rscHandler({ req, Page })
 
   const [rscStream1, rscStream2] = rscResult.stream.tee()
   let data: React.Usable<React.ReactNode>
