@@ -62,9 +62,14 @@ export function rscTransformUseServerPlugin(
         )
       }
 
-      const builtFileName = Object.entries(serverEntryFiles).find(
-        ([_key, value]) => value === id,
-      )?.[0]
+      // TODO (RSC): We need a more robust check here. Or maybe we can just
+      // always check, and fall back to passing `id` through if we can't find
+      // it in `serverEntryFiles`.
+      const builtFileName = id.includes('/web/src/')
+        ? Object.entries(serverEntryFiles).find(
+            ([_key, value]) => value === id,
+          )?.[0]
+        : id
 
       if (!builtFileName) {
         throw new Error(

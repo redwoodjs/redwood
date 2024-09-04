@@ -28,7 +28,9 @@ afterAll(() => {
 })
 
 function getPluginTransform() {
-  const plugin = rscTransformUseServerPlugin()
+  const plugin = rscTransformUseServerPlugin({
+    'some/dist/path/to/rsa-actions.ts-0.mjs': 'some/path/to/actions.ts',
+  })
 
   if (typeof plugin.transform !== 'function') {
     throw new Error('Plugin does not have a transform function')
@@ -77,7 +79,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -125,8 +127,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction1,"some/path/to/actions.ts","formAction1");
-      registerServerReference(formAction2,"some/path/to/actions.ts","formAction2");
+      registerServerReference(formAction1,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction1");
+      registerServerReference(formAction2,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction2");
       "
     `)
   })
@@ -160,7 +162,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -194,8 +196,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/path/to/actions.ts","fortyTwo");
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/dist/path/to/rsa-actions.ts-0.mjs","fortyTwo");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
@@ -247,8 +249,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/to/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
@@ -300,8 +302,8 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction as fA, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","fA");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","fA");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/to/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
@@ -335,7 +337,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(default,"some/path/to/actions.ts","default");
+      registerServerReference(default,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
@@ -373,7 +375,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export default formAction
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","default");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
@@ -407,7 +409,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
               }
 
         import {registerServerReference} from "react-server-dom-webpack/server";
-        registerServerReference(formAction,"some/path/to/actions.ts","default");
+        registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","default");
         "
       `)
   })
@@ -441,7 +443,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      registerServerReference(formAction,"some/dist/path/to/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
