@@ -50,6 +50,32 @@ export const handler = async ({ force }) => {
         },
       },
       {
+        title: `Adding signedUrl function...`,
+        task: async () => {
+          const templatePath = path.resolve(
+            __dirname,
+            'templates',
+            'signedUrl.ts.template',
+          )
+          const templateContent = fs.readFileSync(templatePath, {
+            encoding: 'utf8',
+            flag: 'r',
+          })
+
+          const uploadsPath = path.join(
+            getPaths().api.functions,
+            `signedUrl.${projectIsTypescript ? 'ts' : 'js'}`,
+          )
+          const uploadsContent = projectIsTypescript
+            ? templateContent
+            : await transformTSToJS(uploadsPath, templateContent)
+
+          return writeFile(uploadsPath, uploadsContent, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
         ...addApiPackages([`@redwoodjs/storage@${redwoodVersion}`]),
         title: 'Adding dependencies to your api side...',
       },
