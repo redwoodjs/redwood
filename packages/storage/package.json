@@ -43,7 +43,7 @@
   "scripts": {
     "build": "yarn setup:test && tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-storage.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "tsx attw.ts",
     "check:package": "concurrently npm:check:attw yarn publint",
