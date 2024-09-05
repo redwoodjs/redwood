@@ -34,10 +34,12 @@ export const setupStorage = <MNames extends ModelNames>({
 }
 
 /**
- * This is utility function to make sure you get accurate types for your savers.
+ * This utility function ensures that you receive accurate type suggestions for your savers.
+ * If you use the type UploadsConfig directly, you may receive suggestions for saveFiles.forY where Y hasn't been configured.
+ * By using this utility function, you will only receive suggestions for the models that you have configured.
  *
- * @param UploadsConfig
- * @returns UploadsConfig
+ * @param uploadsConfig The uploads configuration object.
+ * @returns The same uploads configuration object, but with filtered types
  */
 export function createUploadsConfig<
   T extends Partial<{
