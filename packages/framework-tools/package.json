@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@arethetypeswrong/cli": "0.15.4",
-    "esbuild": "0.23.0",
+    "esbuild": "0.23.1",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "zx": "8.1.4"
