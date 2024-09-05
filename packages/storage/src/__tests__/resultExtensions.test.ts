@@ -1,8 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import { setupStorage } from '../index.js'
-import type { UploadsConfig } from '../prismaExtension.js'
+import { createUploadsConfig, setupStorage } from '../index.js'
 import { UrlSigner } from '../UrlSigner.js'
 
 // @MARK: use the local prisma client in the test
@@ -23,14 +22,14 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
 })
 
 describe('Result extensions', () => {
-  const uploadsConfig: UploadsConfig = {
+  const uploadsConfig = createUploadsConfig({
     dummy: {
       fields: 'uploadField',
     },
     dumbo: {
       fields: ['firstUpload', 'secondUpload'],
     },
-  }
+  })
 
   const memStorage = new MemoryStorage({
     baseDir: '/tmp',
@@ -117,5 +116,4 @@ describe('Result extensions', () => {
       `data:text/plain;base64,${Buffer.from('PURR_PURR').toString('base64')}`,
     )
   })
-
 })

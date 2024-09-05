@@ -36,14 +36,6 @@ type WithSignedUrlArgs = {
   expiresIn?: number
 }
 
-export function createUploadsConfig<
-  T extends Partial<{
-    [K in ModelNames]?: UploadConfigForModel<K>
-  }>,
->(config: T): T {
-  return config
-}
-
 export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
   config: UploadsConfig<MNames>,
   storageAdapter: BaseStorageAdapter,
