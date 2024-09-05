@@ -6381,14 +6381,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:1.46.0":
-  version: 1.46.0
-  resolution: "@playwright/test@npm:1.46.0"
+"@playwright/test@npm:1.47.0":
+  version: 1.47.0
+  resolution: "@playwright/test@npm:1.47.0"
   dependencies:
-    playwright: "npm:1.46.0"
+    playwright: "npm:1.47.0"
   bin:
     playwright: cli.js
-  checksum: 10c0/dced91081efc8b063267626059b37923f44f98132edba906f30281277d919de27c6acf6de082d390ad263112a983f856e7f4bf37722a33cc42f62c5be308bf87
+  checksum: 10c0/8fcfcb36b3aef3171d5db6c6b5a505823b50fbb09d571f1b176acc032c08d406e7fe441e3816e6955383a07fb9808f555ab6264fa580f5e7bb15a20b8c2a0f31
   languageName: node
   linkType: hard
 
@@ -8444,7 +8444,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/ogimage-gen@workspace:packages/ogimage-gen"
   dependencies:
-    "@playwright/test": "npm:1.46.0"
+    "@playwright/test": "npm:1.47.0"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -24862,27 +24862,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.46.0":
-  version: 1.46.0
-  resolution: "playwright-core@npm:1.46.0"
+"playwright-core@npm:1.47.0":
+  version: 1.47.0
+  resolution: "playwright-core@npm:1.47.0"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/2d2d163dc22a424a86765b25c5523e932748f38d071f49ac6c41f14c8c10c0874b3854a290057e9988c5e876bb8be8aa52fe40ee8c57b3390b9c01593074e3df
+  checksum: 10c0/70fdd2e62849176ff5403ec530a69d0ef07e6bebc8486f1f4bf49bc4b8a34ab27be0f91950f74a448db13b383d2ba6d934041493f286603de190937ebd0e7508
   languageName: node
   linkType: hard
 
-"playwright@npm:1.46.0":
-  version: 1.46.0
-  resolution: "playwright@npm:1.46.0"
+"playwright@npm:1.47.0":
+  version: 1.47.0
+  resolution: "playwright@npm:1.47.0"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.46.0"
+    playwright-core: "npm:1.47.0"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/fa4192af99908c2c02ae20880e27f51efa6694348c2496d1c2818908eb394c4b21947edd0c5ce2a83f471f5399ac3f0cee8a7be8a35cd80d32d32875184962c7
+  checksum: 10c0/fa47134246baf0951db435ae004a0ee98d5d1cfbb675d07a2c5dd3709866e69c092a568f0e8ec652e9e9fcb45e77335a44cd74b03d15369a7acb9c6e7a0a88d0
   languageName: node
   linkType: hard
 
@@ -26639,7 +26639,7 @@ __metadata:
     "@babel/runtime-corejs3": "npm:7.25.0"
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.5.4"
-    "@playwright/test": "npm:1.46.0"
+    "@playwright/test": "npm:1.47.0"
     "@testing-library/jest-dom": "npm:6.4.8"
     "@testing-library/react": "npm:14.3.1"
     "@testing-library/user-event": "npm:14.5.2"
