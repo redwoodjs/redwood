@@ -28,7 +28,7 @@ export type UploadConfigForModel<TPrismaModelName extends ModelNames> = {
     | PrismaModelFields<TPrismaModelName>[]
 }
 
-export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
+export type UploadsConfig<MNames extends ModelNames> = {
   [K in MNames]?: UploadConfigForModel<K>
 }
 
@@ -57,7 +57,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs: Record<string, boolean>
         compute: (
           modelData: Record<string, unknown>,
-        ) => <T>(this: T, signArgs?: WithSignedUrlArgs) => Promise<T>
+        ) => <T>(this: T, signArgs?: WithSignedUrlArgs) => T
       }
     }
   }
