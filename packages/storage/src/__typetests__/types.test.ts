@@ -1,11 +1,10 @@
 import { expect, test } from 'tstyche'
 
-import { setupStorage } from 'src/index.js'
+import { createUploadsConfig, setupStorage } from 'src/index.js'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import { createUploadsConfig, type UploadsConfig } from '../prismaExtension.js'
+import { type UploadsConfig } from '../prismaExtension.js'
 
-// Define uploadsConfig with suggestions for keys
 const uploadsConfig = createUploadsConfig({
   dummy: {
     fields: 'uploadField',
