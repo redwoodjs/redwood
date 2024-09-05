@@ -55,7 +55,7 @@ export const handler = async ({ force }) => {
       },
       {
         title: 'Modifying api/src/lib/db to add uploads prisma extension..',
-        task: async (_ctx, task) => {
+        task: async () => {
           const dbPath = path.join(
             getPaths().api.lib,
             `db.${projectIsTypescript ? 'ts' : 'js'}`,
