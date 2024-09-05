@@ -3,14 +3,13 @@
 // `--condition react-server`. If we did try to do that the main process
 // couldn't do SSR because it would be missing client-side React functions
 // like `useState` and `createContext`.
-import type { Buffer } from 'node:buffer'
+import { Buffer } from 'node:buffer'
 import path from 'node:path'
-import { Writable } from 'node:stream'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
 
-import RSDWServer from 'react-server-dom-webpack/server'
+import { renderToReadableStream } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 import {
@@ -28,15 +27,8 @@ import type {
   RenderInput,
 } from './rscWorkerCommunication.js'
 
-// TODO (RSC): We should look into importing renderToReadableStream from
-// 'react-server-dom-webpack/server.browser' so that we can respond with web
-// streams
-const { renderToPipeableStream } = RSDWServer
-
 let absoluteClientEntries: Record<string, string> = {}
 const serverStorage = createServerStorage()
-
-type PipeableStream = { pipe<T extends Writable>(destination: T): T }
 
 const handleSetClientEntries = async ({
   id,
@@ -73,21 +65,17 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
   serverStorage.run(reqMap, async () => {
     try {
       // @MARK run render with map initialised
-      const pipeable = input.rscId
+      const readable = input.rscId
         ? await renderRsc(input)
         : await handleRsa(input)
 
-      const writable = new Writable({
-        write(chunk, encoding, callback) {
-          if (encoding !== ('buffer' as any)) {
-            throw new Error('Unknown encoding')
-          }
-
+      const writable = new WritableStream({
+        write(chunk) {
           if (!parentPort) {
             throw new Error('parentPort is undefined')
           }
 
-          const buffer: Buffer = chunk
+          const buffer = Buffer.from(chunk)
           const message: MessageRes = {
             id,
             type: 'buf',
@@ -96,20 +84,18 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
             len: buffer.length,
           }
           parentPort.postMessage(message, [message.buf])
-          callback()
         },
-        final(callback) {
+        close() {
           if (!parentPort) {
             throw new Error('parentPort is undefined')
           }
 
           const message: MessageRes = { id, type: 'end' }
           parentPort.postMessage(message)
-          callback()
         },
       })
 
-      pipeable.pipe(writable)
+      readable.pipeTo(writable)
     } catch (err) {
       if (!parentPort) {
         throw new Error('parentPort is undefined')
@@ -223,7 +209,7 @@ function getBundlerConfig() {
   return bundlerConfig
 }
 
-async function renderRsc(input: RenderInput): Promise<PipeableStream> {
+async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   if (input.rsaId || !input.args) {
     throw new Error(
       "Unexpected input. Can't request both RSCs and execute RSAs at the same time.",
@@ -237,12 +223,13 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
   console.log('renderRsc input', input)
 
   const serverRoutes = await getRoutesComponent()
-  const element = createElement(serverRoutes, input.props)
+  // TODO (RSC): Should this have the same shape as for handleRsa?
+  const model = createElement(serverRoutes, input.props)
 
   console.log('rscWorker.ts renderRsc renderRsc props', input.props)
-  console.log('rscWorker.ts renderRsc element', element)
+  console.log('rscWorker.ts renderRsc model', model)
 
-  return renderToPipeableStream(element, getBundlerConfig())
+  return renderToReadableStream(model, getBundlerConfig())
   // TODO (RSC): We used to transform() the stream here to remove
   // "prefixToRemove", which was the common base path to all filenames. We
   // then added it back in handleRsa with a simple
@@ -260,7 +247,7 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
   return !!data && (data as SerializedFormData)?.__formData__
 }
 
-async function handleRsa(input: RenderInput): Promise<PipeableStream> {
+async function handleRsa(input: RenderInput): Promise<ReadableStream> {
   console.log('handleRsa input', input)
 
   if (!input.rsaId || !input.args) {
@@ -296,13 +283,13 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscWorker.ts handleRsa serverRoutes', serverRoutes)
-  const elements = {
+  const model = {
     Routes: createElement(serverRoutes, {
       location: { pathname: '/', search: '' },
     }),
     __rwjs__rsa_data: data,
   }
-  console.log('rscWorker.ts handleRsa elements', elements)
+  console.log('rscWorker.ts handleRsa model', model)
 
-  return renderToPipeableStream(elements, getBundlerConfig())
+  return renderToReadableStream(model, getBundlerConfig())
 }
