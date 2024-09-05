@@ -29,6 +29,9 @@ describe('FileSystemStorage', () => {
 
   beforeEach(() => {
     vol.reset()
+    // Avoiding printing on stdout
+    vi.spyOn(console, 'log').mockImplementation(() => {})
+
     storage = new FileSystemStorage({ baseDir })
   })
 
