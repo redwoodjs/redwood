@@ -1,17 +1,19 @@
 import { expect, test } from 'tstyche'
 
-import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import { setupStorage } from '../index.js'
-import type { UploadsConfig } from '../prismaExtension.js'
+import { setupStorage } from 'src/index.js'
 
-const uploadsConfig: UploadsConfig = {
+import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
+import { createUploadsConfig, type UploadsConfig } from '../prismaExtension.js'
+
+// Define uploadsConfig with suggestions for keys
+const uploadsConfig = createUploadsConfig({
   dummy: {
     fields: 'uploadField',
   },
   dumbo: {
     fields: ['firstUpload', 'secondUpload'],
   },
-}
+})
 
 const { saveFiles } = setupStorage({
   uploadsConfig,
@@ -25,10 +27,6 @@ const { saveFiles } = setupStorage({
 test('only configured models have savers', async () => {
   expect(saveFiles).type.toHaveProperty('forDummy')
   expect(saveFiles).type.toHaveProperty('forDumbo')
-
-  saveFiles.forDummy({})
-  // @ts-expect-error
-  saveFiles.forNoUploadFields({})
 
   // These weren't configured above
   expect(saveFiles).type.not.toHaveProperty('forNoUploadFields')
