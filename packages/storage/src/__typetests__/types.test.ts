@@ -3,7 +3,6 @@ import { expect, test } from 'tstyche'
 import { createUploadsConfig, setupStorage } from 'src/index.js'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import type { ModelNames } from '../prismaExtension.js'
 import { type UploadsConfig } from '../prismaExtension.js'
 
 // Use the createUplodsConfig helper here....
@@ -54,28 +53,26 @@ test('inline config for save files is OK!', () => {
 })
 
 test('UploadsConfig accepts all available models with their fields', async () => {
-  type ConfiguredUploadsConfig = UploadsConfig<ModelNames>
+  expect<UploadsConfig>().type.toHaveProperty('dummy')
+  expect<UploadsConfig>().type.toHaveProperty('dumbo')
+  expect<UploadsConfig>().type.toHaveProperty('book')
+  expect<UploadsConfig>().type.toHaveProperty('bookCover')
+  expect<UploadsConfig>().type.toHaveProperty('noUploadFields')
 
-  expect<ConfiguredUploadsConfig>().type.toHaveProperty('dummy')
-  expect<ConfiguredUploadsConfig>().type.toHaveProperty('dumbo')
-  expect<ConfiguredUploadsConfig>().type.toHaveProperty('book')
-  expect<ConfiguredUploadsConfig>().type.toHaveProperty('bookCover')
-  expect<ConfiguredUploadsConfig>().type.toHaveProperty('noUploadFields')
-
-  expect<ConfiguredUploadsConfig['dumbo']>().type.toBeAssignableWith<{
+  expect<UploadsConfig['dumbo']>().type.toBeAssignableWith<{
     fields: ['firstUpload'] // one of the fields, but not all of them
   }>()
 
-  expect<ConfiguredUploadsConfig['dumbo']>().type.toBeAssignableWith<{
+  expect<UploadsConfig['dumbo']>().type.toBeAssignableWith<{
     fields: ['firstUpload', 'secondUpload'] // one of the fields, but not all of them
   }>()
 
-  expect<ConfiguredUploadsConfig['bookCover']>().type.toBeAssignableWith<{
-    fields: ['photo']
+  expect<UploadsConfig['bookCover']>().type.toBeAssignableWith<{
+    fields: 'photo'
   }>()
 
   // If you give it something else, it won't accept it
-  expect<ConfiguredUploadsConfig['bookCover']>().type.not.toBeAssignableWith<{
+  expect<UploadsConfig['bookCover']>().type.not.toBeAssignableWith<{
     fields: ['bazinga']
   }>()
 })

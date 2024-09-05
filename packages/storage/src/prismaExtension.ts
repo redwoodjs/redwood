@@ -28,7 +28,7 @@ export type UploadConfigForModel<TPrismaModelName extends ModelNames> = {
     | PrismaModelFields<TPrismaModelName>[]
 }
 
-export type UploadsConfig<MNames extends ModelNames> = {
+export type UploadsConfig<MNames extends ModelNames = ModelNames> = {
   [K in MNames]?: UploadConfigForModel<K>
 }
 
