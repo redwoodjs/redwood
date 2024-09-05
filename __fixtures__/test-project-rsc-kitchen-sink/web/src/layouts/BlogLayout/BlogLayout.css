@@ -1,0 +1,29 @@
+.blog-layout {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+
+  & > nav {
+    width: 12rem;
+    border-right: 1px solid gray;
+    margin-right: 1rem;
+
+    button {
+      background: none;
+      border: none;
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+    }
+
+    li.new-post {
+      margin-bottom: 0.8rem;
+    }
+  }
+
+  & > section {
+    flex-grow: 1;
+  }
+}
