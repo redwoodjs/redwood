@@ -13,6 +13,7 @@ import { Set, PrivateSet } from '@redwoodjs/router/Set'
 
 import { useAuth } from './auth'
 import AuthLayout from './layouts/AuthLayout/AuthLayout'
+import BlogLayout from './layouts/BlogLayout/BlogLayout'
 import NavigationLayout from './layouts/NavigationLayout/NavigationLayout'
 import ScaffoldLayout from './layouts/ScaffoldLayout/ScaffoldLayout'
 
@@ -23,6 +24,13 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" />
         <Route path="/about" page={AboutPage} name="about" />
         <Route path="/multi-cell" page={MultiCellPage} name="multiCell" />
+
+        <Set wrap={BlogLayout}>
+          <Route path="/blog/new" page={NewBlogPostPage} name="newBlogPost" />
+          <Route path="/blog/{slug}/edit" page={EditBlogPostPage} name="editBlogPost" />
+          <Route path="/blog/{slug}" page={BlogPostPage} name="blogPost" />
+          <Route path="/blog" page={BlogPage} name="blog" />
+        </Set>
 
         <Set wrap={AuthLayout}>
           <Route path="/request" page={RequestPage} name="request" />

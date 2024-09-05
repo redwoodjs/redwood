@@ -27,8 +27,8 @@ afterAll(() => {
   process.env.RWJS_CWD = RWJS_CWD
 })
 
-function getPluginTransform() {
-  const plugin = rscTransformUseServerPlugin()
+function getPluginTransform(serverEntryFiles: Record<string, string>) {
+  const plugin = rscTransformUseServerPlugin('some/dist/path', serverEntryFiles)
 
   if (typeof plugin.transform !== 'function') {
     throw new Error('Plugin does not have a transform function')
@@ -41,7 +41,10 @@ function getPluginTransform() {
   return plugin.transform.bind({} as TransformPluginContext)
 }
 
-const pluginTransform = getPluginTransform()
+const id = 'rw-app/web/src/some/path/to/actions.ts'
+const pluginTransform = getPluginTransform({
+  'rsa-actions.ts-0': id,
+})
 
 describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   afterEach(() => {
@@ -49,7 +52,6 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
   })
 
   it('should handle one function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -77,13 +79,12 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
 
   it('should handle two functions', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -125,14 +126,13 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction1,"some/path/to/actions.ts","formAction1");
-      registerServerReference(formAction2,"some/path/to/actions.ts","formAction2");
+      registerServerReference(formAction1,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction1");
+      registerServerReference(formAction2,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction2");
       "
     `)
   })
 
   it('should handle arrow function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -160,13 +160,12 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
 
   it('should handle exports with two consts', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -194,14 +193,13 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/path/to/actions.ts","fortyTwo");
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      if (typeof fortyTwo === "function") registerServerReference(fortyTwo,"some/dist/path/assets/rsa-actions.ts-0.mjs","fortyTwo");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })
 
   it('should handle named function and arrow function with separate export', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -247,14 +245,13 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","formAction");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
 
   it('should handle separate renamed export', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -300,14 +297,13 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export { formAction as fA, arrowAction }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","fA");
-      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/path/to/actions.ts","arrowAction");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","fA");
+      if (typeof arrowAction === "function") registerServerReference(arrowAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","arrowAction");
       "
     `)
   })
 
   it.todo('should handle default exported arrow function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -335,13 +331,12 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(default,"some/path/to/actions.ts","default");
+      registerServerReference(default,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
 
   it('should handle default exported named function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       "use server"
 
@@ -373,13 +368,12 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             export default formAction
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      if (typeof formAction === "function") registerServerReference(formAction,"some/path/to/actions.ts","default");
+      if (typeof formAction === "function") registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
       "
     `)
   })
 
   it('should handle default exported inline-named function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
         "use server"
 
@@ -407,13 +401,12 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
               }
 
         import {registerServerReference} from "react-server-dom-webpack/server";
-        registerServerReference(formAction,"some/path/to/actions.ts","default");
+        registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","default");
         "
       `)
   })
 
   it.todo('should handle default exported anonymous function', async () => {
-    const id = 'some/path/to/actions.ts'
     const input = `
       'use server'
 
@@ -441,7 +434,7 @@ describe('rscTransformUseServerPlugin module scoped "use server"', () => {
             }
 
       import {registerServerReference} from "react-server-dom-webpack/server";
-      registerServerReference(formAction,"some/path/to/actions.ts","formAction");
+      registerServerReference(formAction,"some/dist/path/assets/rsa-actions.ts-0.mjs","formAction");
       "
     `)
   })

@@ -35,7 +35,7 @@ echo 'n' \
   | yarn lerna publish "${args[@]}" 2>&1 \
     > publish_output
 cat publish_output \
-  | grep '\-canary\.' \
+  | grep -E '\-canary\.|\-next\.' \
   | tail -n 1 \
   | sed 's/.*=> //' \
   | sed 's/\+.*//' \
