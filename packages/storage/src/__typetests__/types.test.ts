@@ -5,6 +5,8 @@ import { createUploadsConfig, setupStorage } from 'src/index.js'
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
 import { type UploadsConfig } from '../prismaExtension.js'
 
+// Use the createUplodsConfig helper here....
+// otherwise the types won't be accurate
 const uploadsConfig = createUploadsConfig({
   dummy: {
     fields: 'uploadField',
@@ -30,7 +32,24 @@ test('only configured models have savers', async () => {
   // These weren't configured above
   expect(saveFiles).type.not.toHaveProperty('forNoUploadFields')
   expect(saveFiles).type.not.toHaveProperty('forBook')
-  // expect(saveFiles).type.not.toHaveProperty('forBookCover')
+  expect(saveFiles).type.not.toHaveProperty('forBookCover')
+})
+
+test('inline config for save files is OK!', () => {
+  const { saveFiles } = setupStorage({
+    uploadsConfig: {
+      bookCover: {
+        fields: 'photo',
+      },
+    },
+    storageAdapter: new MemoryStorage({
+      baseDir: '/tmp',
+    }),
+  })
+
+  expect(saveFiles).type.toHaveProperty('forBookCover')
+  expect(saveFiles).type.not.toHaveProperty('forDummy')
+  expect(saveFiles).type.not.toHaveProperty('forDumbo')
 })
 
 test('UploadsConfig accepts all available models with their fields', async () => {
