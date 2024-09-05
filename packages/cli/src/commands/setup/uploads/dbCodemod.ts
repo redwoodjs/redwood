@@ -20,6 +20,14 @@ module.exports = function transform(fileInfo: j.FileInfo) {
     .find(j.VariableDeclaration, { declarations: [{ id: { name: 'db' } }] })
     .forEach((path) => {
       const dbDeclaration = path.node.declarations[0]
+
+      if (
+        j.VariableDeclarator.check(dbDeclaration) &&
+        j.NewExpression.check(dbDeclaration.init)
+      ) {
+        throw new Error('RW_CODEMOD_ERR_OLD_FORMAT')
+      }
+
       if (
         j.VariableDeclarator.check(dbDeclaration) &&
         j.Expression.check(dbDeclaration.init)

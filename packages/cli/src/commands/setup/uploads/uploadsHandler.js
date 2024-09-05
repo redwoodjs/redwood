@@ -50,8 +50,12 @@ export const handler = async ({ force }) => {
         },
       },
       {
+        ...addApiPackages([`@redwoodjs/storage@${redwoodVersion}`]),
+        title: 'Adding dependencies to your api side...',
+      },
+      {
         title: 'Modifying api/src/lib/db to add uploads prisma extension..',
-        task: async () => {
+        task: async (_ctx, task) => {
           const dbPath = path.join(
             getPaths().api.lib,
             `db.${projectIsTypescript ? 'ts' : 'js'}`,
@@ -63,13 +67,17 @@ export const handler = async ({ force }) => {
           })
 
           if (transformResult.error) {
-            throw new Error(transformResult.error)
+            if (transformResult.error === 'RW_CODEMOD_ERR_OLD_FORMAT') {
+              throw new Error(
+                'It looks like your src/lib/db file is using the old format. Please update it as per the v8 upgrade guide: https://redwoodjs.com/upgrade/v8#database-file-structure-change. And run again. \n\nYou can also manually modify your api/src/lib/db to include the prisma extension: https://docs.redwoodjs.com/docs/uploads/#attaching-the-prisma-extension',
+              )
+            }
+
+            throw new Error(
+              'Could not add the prisma extension. \n Please modify your api/src/lib/db to include the prisma extension: https://docs.redwoodjs.com/docs/uploads/#attaching-the-prisma-extension',
+            )
           }
         },
-      },
-      {
-        ...addApiPackages([`@redwoodjs/storage@${redwoodVersion}`]),
-        title: 'Adding dependencies to your api side...',
       },
       {
         title: 'Prettifying changed files',
