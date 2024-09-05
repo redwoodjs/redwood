@@ -80,7 +80,6 @@ describe('Result extensions', () => {
       expiresIn: 254,
     })
 
-
     expect(signedUrlDumbo.firstUpload).toContain(
       '/.redwood/functions/signed-url',
     )
