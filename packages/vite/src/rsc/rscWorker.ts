@@ -125,14 +125,6 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 // server. So we have to register them here again.
 registerFwGlobalsAndShims()
 
-const shutdown = async () => {
-  if (!parentPort) {
-    throw new Error('parentPort is undefined')
-  }
-
-  parentPort.close()
-}
-
 async function loadServerFile(filePath: string) {
   return import(`file://${filePath}`)
 }
@@ -144,9 +136,7 @@ if (!parentPort) {
 parentPort.on('message', (message: MessageReq) => {
   console.log('message', message)
 
-  if (message.type === 'shutdown') {
-    shutdown()
-  } else if (message.type === 'setClientEntries') {
+  if (message.type === 'setClientEntries') {
     handleSetClientEntries(message)
   } else if (message.type === 'render') {
     handleRender(message)
