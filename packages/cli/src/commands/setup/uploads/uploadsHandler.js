@@ -135,6 +135,22 @@ export const handler = async ({ force }) => {
           }
         },
       },
+      {
+        title: 'One more thing...',
+        task: (_ctx, task) => {
+          task.title = `One more thing...
+
+          ${c.success('\nUploads and storage configured!\n')}
+
+          Remember to add UPLOADS_SECRET to your .env file. You can generate one with ${c.highlight('yarn rw generate secret')}
+
+
+          Check out the docs for more info:
+          ${c.link('https://docs.redwoodjs.com/docs/uploads')}
+
+        `
+        },
+      },
     ],
     {
       rendererOptions: { collapseSubtasks: false },
