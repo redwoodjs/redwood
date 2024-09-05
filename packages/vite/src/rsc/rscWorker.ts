@@ -11,8 +11,6 @@ import { parentPort } from 'node:worker_threads'
 import { createElement } from 'react'
 
 import RSDWServer from 'react-server-dom-webpack/server'
-import type { ResolvedConfig } from 'vite'
-import { resolveConfig } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 import {
@@ -155,44 +153,14 @@ parentPort.on('message', (message: MessageReq) => {
   }
 })
 
-// Let me re-assign root
-type ConfigType = Omit<ResolvedConfig, 'root'> & { root: string }
-
-/**
- * Gets the Vite config.
- * Makes sure root is configured properly and then caches the result
- */
-async function getViteConfig() {
-  let cachedConfig: ConfigType | null = null
-
-  return (async () => {
-    if (cachedConfig) {
-      return cachedConfig
-    }
-
-    cachedConfig = await resolveConfig({}, 'serve')
-    setRootInConfig(cachedConfig)
-
-    return cachedConfig
-  })()
-}
-
 const getRoutesComponent: any = async () => {
-  // TODO (RSC): Get rid of this when we only use the worker in dev mode
-  const isDev = Object.keys(absoluteClientEntries).length === 0
+  const serverEntries = await getEntriesFromDist()
+  console.log('rscWorker.ts serverEntries', serverEntries)
 
-  let routesPath: string | undefined
-  if (isDev) {
-    routesPath = getPaths().web.routes
-  } else {
-    const serverEntries = await getEntriesFromDist()
-    console.log('rscWorker.ts serverEntries', serverEntries)
-
-    routesPath = path.join(
-      getPaths().web.distRsc,
-      serverEntries['__rwjs__Routes'],
-    )
-  }
+  const routesPath = path.join(
+    getPaths().web.distRsc,
+    serverEntries['__rwjs__Routes'],
+  )
 
   if (!routesPath) {
     throw new StatusError('No entry found for __rwjs__Routes', 404)
@@ -203,56 +171,7 @@ const getRoutesComponent: any = async () => {
   return routes.default
 }
 
-function resolveClientEntryForProd(
-  filePath: string,
-  config: Awaited<ReturnType<typeof resolveConfig>>,
-) {
-  const filePathSlash = filePath.replaceAll('\\', '/')
-  const clientEntry = absoluteClientEntries[filePathSlash]
-
-  console.log('absoluteClientEntries', absoluteClientEntries)
-  console.log('filePath', filePathSlash)
-
-  if (!clientEntry) {
-    if (absoluteClientEntries['*'] === '*') {
-      return config.base + path.relative(config.root, filePathSlash)
-    }
-
-    throw new Error('No client entry found for ' + filePathSlash)
-  }
-
-  return clientEntry
-}
-
-function fileURLToFilePath(fileURL: string) {
-  if (!fileURL.startsWith('file://')) {
-    throw new Error('Not a file URL')
-  }
-  return decodeURI(fileURL.slice('file://'.length))
-}
-
-const ABSOLUTE_WIN32_PATH_REGEXP = /^\/[a-zA-Z]:\//
-
-function encodeFilePathToAbsolute(filePath: string) {
-  if (ABSOLUTE_WIN32_PATH_REGEXP.test(filePath)) {
-    throw new Error('Unsupported absolute file path')
-  }
-  if (filePath.startsWith('/')) {
-    return filePath
-  }
-  return '/' + filePath
-}
-
-function resolveClientEntryForDev(id: string, config: { base: string }) {
-  console.log('resolveClientEntryForDev config.base', config.base)
-  const filePath = id.startsWith('file://') ? fileURLToFilePath(id) : id
-  // HACK this relies on Vite's internal implementation detail.
-  return config.base + '@fs' + encodeFilePathToAbsolute(filePath)
-}
-
 async function setClientEntries(): Promise<void> {
-  const config = await getViteConfig()
-
   const entriesFile = getPaths().web.distRscEntries
   console.log('setClientEntries :: entriesFile', entriesFile)
   const { clientEntries } = await loadServerFile(entriesFile)
@@ -271,7 +190,7 @@ async function setClientEntries(): Promise<void> {
         fullKey = fullKey.replaceAll('\\', '/')
       }
 
-      return [fullKey, config.base + val]
+      return [fullKey, '/' + val]
     }),
   )
 
@@ -281,25 +200,7 @@ async function setClientEntries(): Promise<void> {
   )
 }
 
-function setRootInConfig(config: ConfigType) {
-  const rwPaths = getPaths()
-
-  // TODO (RSC): Should root be configurable by the user? We probably need it
-  // to be different values in different contexts. Should we introduce more
-  // config options?
-  // config.root currently comes from the user's project, where it in turn
-  // comes from our `redwood()` vite plugin defined in index.ts. By default
-  // (i.e. in the redwood() plugin) it points to <base>/web/src. But we need it
-  // to be just <base>/, so for now we override it here.
-  config.root =
-    process.platform === 'win32'
-      ? rwPaths.base.replaceAll('\\', '/')
-      : rwPaths.base
-  console.log('config.root', config.root)
-  console.log('rwPaths.base', rwPaths.base)
-}
-
-function getBundlerConfig(config: ConfigType) {
+function getBundlerConfig() {
   // TODO (RSC): Try removing the proxy here and see if it's really necessary.
   // Looks like it'd work to just have a regular object with a getter.
   // Remove the proxy and see what breaks.
@@ -312,15 +213,14 @@ function getBundlerConfig(config: ConfigType) {
         // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
         // name Counter
 
-        // TODO (RSC): Get rid of this when we only use the worker in dev mode
-        const isDev = Object.keys(absoluteClientEntries).length === 0
+        const filePathSlash = filePath.replaceAll('\\', '/')
+        const id = absoluteClientEntries[filePathSlash]
 
-        let id: string
-        if (isDev) {
-          id = resolveClientEntryForDev(filePath, config)
-        } else {
-          // Needs config.root to be set properly
-          id = resolveClientEntryForProd(filePath, config)
+        console.log('absoluteClientEntries', absoluteClientEntries)
+        console.log('filePath', filePathSlash)
+
+        if (!id) {
+          throw new Error('No client entry found for ' + filePathSlash)
         }
 
         console.log('rscWorker proxy id', id)
@@ -346,15 +246,13 @@ async function renderRsc(input: RenderInput): Promise<PipeableStream> {
 
   console.log('renderRsc input', input)
 
-  const config = await getViteConfig()
-
   const serverRoutes = await getRoutesComponent()
   const element = createElement(serverRoutes, input.props)
 
   console.log('rscWorker.ts renderRsc renderRsc props', input.props)
   console.log('rscWorker.ts renderRsc element', element)
 
-  return renderToPipeableStream(element, getBundlerConfig(config))
+  return renderToPipeableStream(element, getBundlerConfig())
   // TODO (RSC): We used to transform() the stream here to remove
   // "prefixToRemove", which was the common base path to all filenames. We
   // then added it back in handleRsa with a simple
@@ -405,7 +303,6 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
 
   const data = await method(...input.args)
   console.log('rscWorker.ts rsa return data', data)
-  const config = await getViteConfig()
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscWorker.ts handleRsa serverRoutes', serverRoutes)
@@ -417,5 +314,5 @@ async function handleRsa(input: RenderInput): Promise<PipeableStream> {
   }
   console.log('rscWorker.ts handleRsa elements', elements)
 
-  return renderToPipeableStream(elements, getBundlerConfig(config))
+  return renderToPipeableStream(elements, getBundlerConfig())
 }
