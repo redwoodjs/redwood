@@ -4,9 +4,7 @@ import { PassThrough } from 'node:stream'
 import { fileURLToPath } from 'node:url'
 import { Worker } from 'node:worker_threads'
 
-import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
-
-import type { RscFetchProps } from '../../../router/src/rsc/ClientRouter.tsx'
+import type { RenderInput } from './rscRenderer.js'
 
 const workerPath = path.join(
   // __dirname. Use fileURLToPath for windows compatibility
@@ -22,18 +20,6 @@ const worker = new Worker(workerPath, {
     '@redwoodjs/vite/react-node-loader',
   ],
 })
-
-export type RenderInput = {
-  rscId?: string | undefined
-  props: RscFetchProps | Record<string, unknown>
-  rsaId?: string | undefined
-  args?: unknown[] | undefined
-  serverState: {
-    headersInit: Record<string, string>
-    fullUrl: string
-    serverAuthState: ServerAuthState
-  }
-}
 
 export type MessageReq =
   | {
