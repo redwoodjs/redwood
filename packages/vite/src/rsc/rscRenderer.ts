@@ -125,16 +125,16 @@ export async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   console.log('renderRsc input', input)
 
   const serverRoutes = await getRoutesComponent()
-  // TODO (RSC): Should this have the same shape as for handleRsa?
+  // TODO (RSC): Should this have the same shape as for executeRsa?
   const model = createElement(serverRoutes, input.props)
 
-  console.log('rscRenderer.ts renderRsc renderRsc props', input.props)
+  console.log('rscRenderer.ts renderRsc props', input.props)
   console.log('rscRenderer.ts renderRsc model', model)
 
   return renderToReadableStream(model, getBundlerConfig())
   // TODO (RSC): We used to transform() the stream here to remove
   // "prefixToRemove", which was the common base path to all filenames. We
-  // then added it back in handleRsa with a simple
+  // then added it back in handleRsc with a simple
   // `path.join(config.root, fileId)`. I removed all of that for now to
   // simplify the code. But if we wanted to add it back in the future to save
   // some bytes in all the Flight data we could.
@@ -150,7 +150,7 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
 }
 
 export async function executeRsa(input: RenderInput): Promise<ReadableStream> {
-  console.log('handleRsa input', input)
+  console.log('executeRsa input', input)
 
   if (!input.rsaId || !input.args) {
     throw new Error('Unexpected input')
@@ -184,14 +184,14 @@ export async function executeRsa(input: RenderInput): Promise<ReadableStream> {
   console.log('rscRenderer.ts rsa return data', data)
 
   const serverRoutes = await getRoutesComponent()
-  console.log('rscRenderer.ts handleRsa serverRoutes', serverRoutes)
+  console.log('rscRenderer.ts executeRsa serverRoutes', serverRoutes)
   const model = {
     Routes: createElement(serverRoutes, {
       location: { pathname: '/', search: '' },
     }),
     __rwjs__rsa_data: data,
   }
-  console.log('rscRenderer.ts handleRsa model', model)
+  console.log('rscRenderer.ts executeRsa model', model)
 
   return renderToReadableStream(model, getBundlerConfig())
 }
