@@ -176,7 +176,12 @@ This is because Prisma doesn't have a native File type. Instead, we store the fi
 ### 2. Configuring the Upload savers and Uploads extension
 
 To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of saving your uploads (i.e. write to storage) by using what we call "savers," along with our custom Uploads extension that will handle deletion and updates automatically for you.
-:::note The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system. :::
+
+:::note 
+
+The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system. 
+
+:::
 
 Let's first run the setup command:
 
