@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -96,11 +96,11 @@
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "@sdl-codegen/node": "1.0.2",
+    "@sdl-codegen/node": "2.0.1",
     "chalk": "4.1.2",
     "core-js": "3.38.0",
     "deepmerge": "4.3.1",
-    "esbuild": "0.23.0",
+    "esbuild": "0.23.1",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "graphql": "16.9.0",

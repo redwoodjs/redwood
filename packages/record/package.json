@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/record",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@prisma/internals": "5.18.0",
     "@redwoodjs/framework-tools": "workspace:*",
-    "esbuild": "0.23.0",
+    "esbuild": "0.23.1",
     "publint": "0.2.10",
     "tsx": "4.17.0",
     "vitest": "2.0.5"

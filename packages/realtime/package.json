@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/realtime",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -34,7 +34,7 @@
     "graphql": "16.9.0"
   },
   "devDependencies": {
-    "@envelop/core": "5.0.1",
+    "@envelop/core": "5.0.2",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "workspace:*",

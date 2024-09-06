@@ -4,20 +4,20 @@ import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
 import { createUploadSavers } from '../createSavers.js'
-import type { UploadsConfig } from '../prismaExtension.js'
+import { createUploadsConfig } from '../index.js'
 
 const memStore = new MemoryStorage({
   baseDir: '/memory_store_basedir',
 })
 
-const uploadsConfig: UploadsConfig = {
+const uploadsConfig = createUploadsConfig({
   dumbo: {
     fields: ['firstUpload', 'secondUpload'],
   },
   dummy: {
     fields: 'uploadField',
   },
-}
+})
 
 describe('Create savers', () => {
   const fileToStorage = createUploadSavers(uploadsConfig, memStore)
@@ -27,7 +27,9 @@ describe('Create savers', () => {
     expect(fileToStorage.forDummy).toBeDefined()
 
     // These are in the schema but not in the config
+    // @ts-expect-error - testing!
     expect(fileToStorage.forBook).not.toBeDefined()
+    // @ts-expect-error - testing!
     expect(fileToStorage.forNoUploadFields).not.toBeDefined()
   })
 
