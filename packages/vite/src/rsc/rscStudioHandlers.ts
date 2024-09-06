@@ -8,7 +8,7 @@ import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
 
 import { getFullUrlForFlightRequest } from '../utils.js'
 
-import type { RenderInput } from './rscWorkerCommunication.js'
+import type { RenderInput } from './rscRenderer.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
 const isTest = () => {
