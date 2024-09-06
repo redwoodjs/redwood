@@ -24,18 +24,19 @@ import { getFullUrlForFlightRequest } from '../utils.js'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
 import { renderRsc } from './rscWorkerCommunication.js'
 
+const BASE_PATH = '/rw-rsc/'
+
 interface CreateRscRequestHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
   viteDevServer?: ViteDevServer
 }
-
-const BASE_PATH = '/rw-rsc/'
 
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
 ) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
 
+  // TODO (RSC): Switch from Express to Web compatible Request and Response
   return async (
     req: ExpressRequest,
     res: ExpressResponse,
@@ -165,6 +166,8 @@ export function createRscRequestHandler(
 
     if (rscId || rsaId) {
       const handleError = (err: unknown) => {
+        console.log('handleError() err', err)
+
         if (hasStatusCode(err)) {
           res.statusCode = err.statusCode
         } else {
@@ -205,6 +208,7 @@ export function createRscRequestHandler(
           },
         })
 
+        // TODO (RSC): Can we reuse `pipeable` here somehow?
         await sendRscFlightToStudio({
           rscId,
           props,
