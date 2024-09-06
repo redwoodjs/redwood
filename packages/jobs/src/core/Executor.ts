@@ -11,7 +11,7 @@ import { AdapterRequiredError, JobRequiredError } from '../errors.js'
 import { loadJob } from '../loaders.js'
 import type { BaseJob, BasicLogger } from '../types.js'
 
-interface Options {
+export interface ExecutorOptions {
   adapter: BaseAdapter
   job: BaseJob
   logger?: BasicLogger
@@ -28,15 +28,15 @@ export const DEFAULTS = {
 }
 
 export class Executor {
-  options: Required<Options>
-  adapter: Options['adapter']
-  logger: NonNullable<Options['logger']>
+  options: Required<ExecutorOptions>
+  adapter: ExecutorOptions['adapter']
+  logger: NonNullable<ExecutorOptions['logger']>
   job: BaseJob
-  maxAttempts: NonNullable<Options['maxAttempts']>
-  deleteFailedJobs: NonNullable<Options['deleteFailedJobs']>
-  deleteSuccessfulJobs: NonNullable<Options['deleteSuccessfulJobs']>
+  maxAttempts: NonNullable<ExecutorOptions['maxAttempts']>
+  deleteFailedJobs: NonNullable<ExecutorOptions['deleteFailedJobs']>
+  deleteSuccessfulJobs: NonNullable<ExecutorOptions['deleteSuccessfulJobs']>
 
-  constructor(options: Options) {
+  constructor(options: ExecutorOptions) {
     this.options = { ...DEFAULTS, ...options }
 
     // validate that everything we need is available
@@ -68,7 +68,7 @@ export class Executor {
 
       await this.adapter.success({
         job: this.job,
-        deleteJob: DEFAULT_DELETE_SUCCESSFUL_JOBS,
+        deleteJob: this.deleteSuccessfulJobs,
       })
     } catch (error: any) {
       this.logger.error(
