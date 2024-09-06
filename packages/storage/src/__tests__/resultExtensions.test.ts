@@ -89,19 +89,25 @@ describe('Result extensions', () => {
 
   it('Generates data uris for each upload field', async () => {
     // Save these files to disk
-    memStorage.save(new File(['SOFT_KITTENS'], 'first.txt'), {
-      fileName: 'first.txt',
-      path: '/dumbo',
-    })
-    memStorage.save(new File(['PURR_PURR'], 'second.txt'), {
-      fileName: 'second.txt',
-      path: '/dumbo',
-    })
+    const { location: firstUploadLocation } = await memStorage.save(
+      new File(['SOFT_KITTENS'], 'first.txt'),
+      {
+        fileName: 'first.txt',
+        path: '/dumbo',
+      },
+    )
+    const { location: secondUploadLocation } = await memStorage.save(
+      new File(['PURR_PURR'], 'second.txt'),
+      {
+        fileName: 'second.txt',
+        path: '/dumbo',
+      },
+    )
 
     const dumbo = await prismaClient.dumbo.create({
       data: {
-        firstUpload: '/dumbo/first.txt',
-        secondUpload: '/dumbo/second.txt',
+        firstUpload: firstUploadLocation,
+        secondUpload: secondUploadLocation,
       },
     })
 
