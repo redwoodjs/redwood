@@ -327,7 +327,11 @@ The runner is a sort of overseer that doesn't do any work itself, but spawns wor
 
 It checks the `BackgroundJob` table every few seconds for a new job and, if it finds one, locks it so that no other workers can have it, then calls your `perform()` function, passing it the arguments you gave when you scheduled it.
 
-If the job succeeds then by default it's removed from the database (using the `PrismaAdapter`, other adapters behavior may vary). If the job fails, the job is un-locked in the database, the `runAt` is set to an incremental backoff time in the future, and `lastError` is updated with the error that occurred. The job will now be picked up in the future once the `runAt` time has passed and it'll try again.
+**Locking** a job consists of setting two fields: `lockedBy` which contains the process name of the worker, and `lockedAt` which is a timestamp. As long as these are set no other workers will pick up that same job.
+
+In addition to locking the job, the `attempts` column is incremented so it can keep track of how many times this job has been attempted and can properly reschedule it in the future if it errors out (see [Job Errors & Failure](#job-errors--failure) below).
+
+If the job succeeds then by default it's removed from the database (using the `PrismaAdapter`, other adapters' behavior may vary). If the job fails, the job is un-locked in the database, the `runAt` is set to an incremental backoff time in the future, and `lastError` is updated with the error that occurred. The job will now be picked up in the future once the `runAt` time has passed and a worker will lock it and try again. Again, see [Job Errors & Failure](#job-errors--failure) for details.
 
 To stop the runner (and the workers it started), press `Ctrl-C` (or send `SIGINT`). The workers will gracefully shut down, waiting for their work to complete before exiting. If you don't wait to wait, hit `Ctrl-C` again (or send `SIGTERM`).
 
