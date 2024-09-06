@@ -363,7 +363,7 @@ If your `File` is in a different key (or a key did you did not configure in the 
 This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
 
 :::note
-The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-savers-and-prisma-extension).
+The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#2-configuring-the-upload-savers-and-uploads-extension).
 :::
 
 What this configures is:
