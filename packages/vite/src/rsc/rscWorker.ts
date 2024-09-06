@@ -5,6 +5,7 @@
 // like `useState` and `createContext`.
 import { Buffer } from 'node:buffer'
 import path from 'node:path'
+import type { ReadableStream } from 'node:stream/web'
 import { parentPort } from 'node:worker_threads'
 
 import { createElement } from 'react'
@@ -112,6 +113,7 @@ const handleRender = async ({ id, input }: MessageReq & { type: 'render' }) => {
 registerFwGlobalsAndShims()
 
 async function loadServerFile(filePath: string) {
+  console.log('rscWorker.ts loadServerFile filePath', filePath)
   return import(`file://${filePath}`)
 }
 

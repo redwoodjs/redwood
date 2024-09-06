@@ -68,7 +68,32 @@ export function convertExpressHeaders(
 }
 
 export const getFullUrl = (req: ExpressRequest) => {
-  return req.protocol + '://' + req.get('host') + req.originalUrl
+  // For a standard request:
+  //
+  // req.originalUrl /about
+  // req.protocol http
+  // req.headers.host localhost:8910
+  // req.get('host') localhost:8910
+  // baseUrl http://localhost:8910
+  //
+  // For an RSC request:
+  //
+  // req.originalUrl /rw-rsc/__rwjs__Routes?props=%7B%22location%22%3A%7B%22pathname%22%3A%22%2Fabout%22%2C%22search%22%3A%22%22%7D%7D
+  // req.protocol http
+  // req.headers.host localhost:8910
+  // req.get('host') localhost:8910
+  // baseUrl http://localhost:8910
+
+  console.log('getFullUrl req.originalUrl', req.originalUrl)
+  console.log('getFullUrl req.protocol', req.protocol)
+  console.log('getFullUrl req.headers.host', req.headers.host)
+  console.log("getFullUrl req.get('host')", req.get('host'))
+
+  const baseUrl = req.protocol + '://' + req.headers.host
+
+  console.log('getFullUrl baseUrl', baseUrl)
+
+  return baseUrl + req.originalUrl
 }
 
 function isRscFetchProps(
