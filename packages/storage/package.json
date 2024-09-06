@@ -43,12 +43,13 @@
   "scripts": {
     "build": "yarn setup:test && tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-storage.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "build:types-cjs": "tsc --build --verbose tsconfig.types-cjs.json",
     "check:attw": "tsx attw.ts",
     "check:package": "concurrently npm:check:attw yarn publint",
     "setup:test": "npx prisma db push --accept-data-loss --schema ./src/__tests__/unit-test-schema.prisma",
     "test": "vitest run",
+    "test:types": "yarn setup:test && tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
@@ -64,6 +65,7 @@
     "concurrently": "8.2.2",
     "esbuild": "0.23.1",
     "publint": "0.2.10",
+    "tstyche": "2.1.1",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
