@@ -29,6 +29,7 @@ export const defaultIgnorePatterns = [
   '**/__fixtures__',
   '**/testUtils',
   '**/__testfixtures__',
+  '**/__typetests__',
 ]
 
 interface BuildOptions {

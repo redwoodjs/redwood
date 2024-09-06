@@ -8615,6 +8615,7 @@ __metadata:
     esbuild: "npm:0.23.1"
     mime-types: "npm:2.1.35"
     publint: "npm:0.2.10"
+    tstyche: "npm:2.1.1"
     tsx: "npm:4.17.0"
     typescript: "npm:5.5.4"
     ulid: "npm:2.3.0"

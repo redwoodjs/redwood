@@ -1,0 +1,11 @@
+// This file is here so we don't build types for tests
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__mocks__",
+    "**/__tests__",
+    "**/__typetests__"
+  ]
+}
