@@ -5,7 +5,6 @@ import { createElement } from 'react'
 
 import { renderToReadableStream } from 'react-server-dom-webpack/server.edge'
 
-import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 import { getPaths } from '@redwoodjs/project-config'
 
 import type { RscFetchProps } from '../../../router/src/rsc/ClientRouter.tsx'
@@ -17,14 +16,13 @@ export type RenderInput = {
   props: RscFetchProps | Record<string, unknown>
   rsaId?: string | undefined
   args?: unknown[] | undefined
-  serverState: {
-    headersInit: Record<string, string>
-    fullUrl: string
-    serverAuthState: ServerAuthState
-  }
 }
 
 let absoluteClientEntries: Record<string, string> = {}
+
+export function renderRscToStream(input: RenderInput): Promise<ReadableStream> {
+  return input.rscId ? renderRsc(input) : executeRsa(input)
+}
 
 async function loadServerFile(filePath: string) {
   console.log('rscRenderer.ts loadServerFile filePath', filePath)
@@ -111,7 +109,7 @@ function getBundlerConfig() {
   return bundlerConfig
 }
 
-export async function renderRsc(input: RenderInput): Promise<ReadableStream> {
+async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   if (input.rsaId || !input.args) {
     throw new Error(
       "Unexpected input. Can't request both RSCs and execute RSAs at the same time.",
@@ -149,7 +147,7 @@ function isSerializedFormData(data?: unknown): data is SerializedFormData {
   return !!data && (data as SerializedFormData)?.__formData__
 }
 
-export async function executeRsa(input: RenderInput): Promise<ReadableStream> {
+async function executeRsa(input: RenderInput): Promise<ReadableStream> {
   console.log('executeRsa input', input)
 
   if (!input.rsaId || !input.args) {
