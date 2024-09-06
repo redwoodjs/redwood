@@ -718,7 +718,7 @@ The default body size limit for the Redwood API server is 100MB (per request). D
 }
 ```
 
-You can configure the `bodyLimit` option to increase or decrease the default limit. 
+You can configure the `bodyLimit` option to increase or decrease the default limit.
 
 ```js title="api/server.js"
 import { createServer } from '@redwoodjs/api-server'
