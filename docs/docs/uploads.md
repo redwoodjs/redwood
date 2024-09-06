@@ -638,6 +638,14 @@ export const handler = async (event) => {
 }
 ```
 
+We created and exported the `urlSigner` instance and `fsStorage` adapter in `src/lib/uploads`.
+
+The details to validate come through as query parameters, which we pass to the `urlSigner.validateSignature` parameter.
+
+If it's valid, you will receive a path (or key) to the file - which you can then lookup in your storage.
+
+The `read` function also returns the mime-type of the file (based on the extension) - which you pass as a response header. This ensures that browsers know how to read your response!
+
 </details>
 
 ### Data URIs
@@ -658,6 +666,20 @@ export const profile = async ({ id }) => {
 :::tip
 The `withDataUri` extension is an `async` function. Remember to await, if you are doing additional manipulation before returning your result object from the service.
 :::
+
+The output of `withDataUri` would be your profile object, with the upload fields transformed into a data uri. For example:
+
+```js
+{
+  // other fields
+  id: 12355,
+  name: 'Danny'
+  email: '...'
+  // Because configured avatar as an upload field:
+  // highlight-next-line
+  avatar: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAJ/...Q0MgUHJvZmlsZQAAKJF1kL='
+}
+```
 
 ## Configuring the server further
 
