@@ -88,6 +88,7 @@ describe('Result extensions', () => {
   })
 
   it('Generates data uris for each upload field', async () => {
+    // Save these files to disk
     memStorage.save(new File(['SOFT_KITTENS'], 'first.txt'), {
       fileName: 'first.txt',
       path: '/dumbo',
