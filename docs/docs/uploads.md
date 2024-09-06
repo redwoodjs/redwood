@@ -185,10 +185,10 @@ yarn rw setup uploads
 ```
 
 This will do three things:
-1. Generate a configuration file in `api/src/lib/uploads.{ts,js}` 
+
+1. Generate a configuration file in `api/src/lib/uploads.{ts,js}`
 2. Configure your Prisma client with the storage extension
 3. Generate a signedUrl function
-
 
 Let's break down the key components of the configuration.
 
@@ -224,7 +224,6 @@ const { saveFiles, storagePrismaExtension } = setupStorage({
 
 export { saveFiles, storagePrismaExtension }
 ```
-
 
 **1. Upload Configuration**
 This is where you configure the fields that will receive uploads. In our case, it's the profile.avatar field.
@@ -687,6 +686,7 @@ The output of `withDataUri` would be your profile object, with the upload fields
 ```
 
 ## Storage Adapters
+
 Storage adapters are crucial for abstracting the underlying storage mechanism, allowing for flexibility in how files are managed. The BaseStorageAdapter defines a standard interface for all storage adapters, and looks like this:
 
 ```ts
@@ -702,14 +702,14 @@ export abstract class BaseStorageAdapter {
 
   generateFileNameWithExtension(
     saveOpts: SaveOptionsOverride | undefined,
-    file: File,
+    file: File
   ) {
     /** We give you an easy way to generate file names **/
   }
 
   abstract save(
     file: File,
-    saveOpts?: SaveOptionsOverride,
+    saveOpts?: SaveOptionsOverride
   ): Promise<AdapterResult>
 
   abstract remove(fileLocation: AdapterResult['location']): Promise<void>
@@ -724,12 +724,10 @@ export abstract class BaseStorageAdapter {
 Types of Storage Adapters
 MemoryStorage: This adapter stores files in memory, making it ideal for temporary storage needs or testing scenarios. It offers faster access times but does not persist data across application restarts.
 
+We build in two storage adapters:
 
-We build in two storage adapters: 
 - [FileSystemStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/FileSystemStorage/FileSystemStorage.ts) - This adapter interacts with the file system, enabling the storage of files on disk.
 - [MemoryStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/MemoryStorage/MemoryStorage.ts) - this adapter stores files in memory, making it ideal for temporary storage needs or testing scenarios. It offers faster access times but does not persist data across application restarts.
-
-
 
 ## Configuring the server further
 
