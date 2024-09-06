@@ -20,6 +20,7 @@ export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
   forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
   forRsc?: boolean
+  forJavaScriptLinting?: boolean // will enable presets to supporting linting in the absence of typescript related presets/plugins/parsers
 }
 
 export const getWebSideBabelPlugins = (
@@ -166,7 +167,7 @@ export const getWebSideOverrides = (
 export const getWebSideBabelPresets = (options: Flags) => {
   // When we perform prerendering we don't use vite, so we need to add the
   // appropriate presets for react, env, and typescript, etc.
-  if (options.forPrerender || options.forJest) {
+  if (options.forPrerender || options.forJest || options.forJavaScriptLinting) {
     let reactPresetConfig: babel.PluginItem = { runtime: 'automatic' }
 
     // This is a special case, where @babel/preset-react needs config
