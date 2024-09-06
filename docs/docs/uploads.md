@@ -31,7 +31,7 @@ input UpdateProfileInput {
 
 You're now ready to receive files!
 
-### 2. UI
+### 2. Configuring the UI
 
 Let's setup a basic form to add avatar images to your profile.
 
@@ -77,6 +77,7 @@ const UPDATE_PROFILE_MUTATION = gql`
     updateProfile(input: $input) {
       firstName
       lastName
+  // highlight-next-line
       avatar
     }
   }
@@ -96,7 +97,7 @@ const EditProfile = ({ profile }) => {
     const input = {
       ...formData,
       // highlight-next-line
-      avatar: formData.avatar?.[0], // FileField returns an array, we want the first and only file
+      avatar: formData.avatar?.[0], // FileField returns an array, we want the first and only file; Multi-file uploads are available
     }
 
     updateProfile({ variables: { input } })
@@ -113,12 +114,15 @@ const EditProfile = ({ profile }) => {
 }
 ```
 
-When the form is submitted, we process the data to ensure the avatar field contains a single file instead of an array (because that's how we setup the UpdateProfileInput). The onSave function then calls the updateProfile mutation. The mutation automatically handles the file upload because we've set up the File scalar and configured our backend to process file inputs.
+While [multi-file uploads are possible](#saving-file-lists---savefilesinlist), when our example form is submitted we process the data to ensure the avatar field contains a single file instead of an array (because that's how we setup the UpdateProfileInput). The onSave function then calls the updateProfile mutation. The mutation automatically handles the file upload because we've set up the File scalar and configured our backend to process file inputs.
+
+### 3. Logging the Item Details
 
 Try uploading your avatar photo now, and if you log the `avatar` field in your service:
 
 ```ts title="api/src/services/profile.ts"
 export const updateProfile = async ({ id, input }) => {
+  // highlight-next-line
   console.log(input.avatar)
   // File {
   //   filename: 'profile-picture.jpg',
@@ -127,7 +131,7 @@ export const updateProfile = async ({ id, input }) => {
   //  ...
   // }
 
-  // Example without the built-in helpers
+  // Example without using the built-in helpers
   await fs.writeFile(
     '/test/profile.jpg',
     Buffer.from(await input.avatar.arrayBuffer())
@@ -152,9 +156,9 @@ On the backend, GraphQL Yoga is pre-configured to handle multipart form requests
 
 ## Storage
 
-### Prisma schema configuration
+Great, now you can receive Files from GraphQL - but how do you go about saving them, and tracking them, in your database? Well, Redwood has the answers for you! Keep going to find out how!
 
-Great now you can receive Files from GraphQL - but how do you go about saving them, and tracking them in your database?
+### 1. Configuring the Prisma schema
 
 In your Prisma schema, the `avatar` field should be defined as a string:
 
@@ -169,9 +173,10 @@ model Profile {
 
 This is because Prisma doesn't have a native File type. Instead, we store the file path or URL as a string in the database. The actual file processing and storage will be handled in your service layer, and pass the path to Prisma to save.
 
-### Setting up Storage savers and Prisma extension
+### 2. Configuring the Upload savers and Uploads extension
 
-To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of saving your uploads (i.e. write to storage) and a Prisma extension that will handle deletion and updates automatically for you. The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system.
+To make it easier (and more consistent) dealing with file uploads, Redwood gives you a standardized way of saving your uploads (i.e. write to storage) by using what we call "savers," along with our custom Uploads extension that will handle deletion and updates automatically for you.
+:::note The rest of the doc assumes you are running a "Serverful" configuration for your deployments, as it involves the file system. :::
 
 Let's first run the setup command:
 
@@ -179,7 +184,7 @@ Let's first run the setup command:
 yarn rw setup uploads
 ```
 
-In
+Which generates the following configuration file:
 
 ```ts title="api/src/lib/uploads.ts"
 import { UploadsConfig, setupStorage } from '@redwoodjs/storage'
@@ -214,7 +219,7 @@ const { saveFiles, storagePrismaExtension } = setupStorage({
 export { saveFiles, storagePrismaExtension }
 ```
 
-Let's break down the key components of this configuration:
+Let's break down the key components of this configuration.
 
 **1. Upload Configuration**
 This is where you configure the fields that will receive uploads. In our case, it's the profile.avatar field.
@@ -228,15 +233,15 @@ The shape of `UploadsConfig` looks like this:
 ```
 
 **2. Storage Adapter**
-We create a storage adapter, in this case `FileSystemStorage` - that will save your uploads to the `./uploads` folder.
+We create a storage adapter, in this case `FileSystemStorage`, that will save your uploads to the `./uploads` folder.
 
-This just sets the base path, and the actual filenames and folders are determined by the saveFiles utility functions, but can be overridden!
+This just sets the base path. The actual filenames and folders are determined by the saveFiles utility functions, but [can be overridden!](#customizing-save-file-name-or-save-path)
 
 **3. Url Signer instance**
-This is an optional class that will help you generate signed urls for your files, so you can limit access to these files.
+This is an optional class that will help you generate signed urls for your files, so you can limit access to these files. Generate a secret with `yarn rw g secret` and add to your .env as `UPLOADS_SECRET`.
 
-**4. Grab your utilities**
-Get your utilities, and export them from this file to be used elsewhere.
+**4. Utility Functions**
+We provide utility functions that can be exported from this file to be used elsewhere, such as services.
 
 - `saveFiles` - object containing functions to save File objects to storage, and return a path.
   For example:
@@ -245,11 +250,9 @@ Get your utilities, and export them from this file to be used elsewhere.
 saveFiles.forProfile(gqlInput)
 ```
 
-We'll be using these in services.
+- `storagePrismaExtension` - The Prisma client extension we'll use in `api/src/lib/db.ts` to automatically handle updates, deletion of uploaded files (including when the Prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
 
-- `prismaExtension` - The Prisma client extension we'll use in `api/src/lib/db.ts` to automatically handle updates, deletion of uploaded files (including when the Prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
-
-### Attaching the Prisma extension
+### 3. Attaching the Uploads extension
 
 Now we need to extend our db client in `api/src/lib/db.ts` to use the configured prisma client.
 
@@ -283,6 +286,8 @@ The `$extends` method is used to extend the functionality of your Prisma client 
 - [Query extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/query) which will intercept your `create`, `update`, `delete` operations <br/>
 - [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result) for your stored files - which gives you helper methods on the result of your prisma query
 
+More details on these extensions can be found [here](#storage-prisma-extension).
+
 <details>
 <summary>
 __Why Export This Way__ 
@@ -291,6 +296,75 @@ __Why Export This Way__
 The `$extends` method returns a new instance of the Prisma client with the extensions applied. By exporting this new instance as db, you ensure that any additional functionality provided by the uploads extension is available throughout your application, without needing to change where you import. Note one of the [limitations](https://www.prisma.io/docs/orm/prisma-client/client-extensions#limitations) of using extensions is you have to use `$on` on your prisma client (as we do in handlePrismaLogging), it needs to happen before you use `$extends`
 
 </details>
+
+### 4. Implementing Upload savers
+
+You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to write your `File` objects to storage. Prisma will automatically save the path into the database. The savers and storage adapters, configured in `api/src/lib/uploads`, determine where the file is saved.
+
+```ts title="api/src/services/profiles/profiles.ts"
+// highlight-next-line
+import { saveFiles } from 'src/lib/uploads'
+
+export const updateProfile: MutationResolvers['updateProfile'] = async ({
+  id,
+  input,
+}) => {
+  // highlight-next-line
+  const processedInput = await saveFiles.forProfile(input)
+
+  // input.avatar (File) becomes a path string 👇
+  // Settings in src/lib/uploads.ts configures where the upload is saved
+  // processedInput.avatar -> '/mySavePath/profile/avatar/generatedId.jpg'
+
+  return db.profile.update({
+    data: processedInput,
+    where: { id },
+  })
+}
+```
+
+For each of the models you configured when you setup uploads (in `UploadConfig`) - you have savers for them.
+
+So if you passed:
+
+```ts
+const uploadConfig: UploadsConfig = {
+  profile: {
+    fields: ['avatar'],
+  },
+  anotherModel: {
+    fields: ['document'],
+  },
+}
+
+const { saveFiles } = setupStorage(uploadConfig)
+
+// Available methods 👇
+saveFiles.forProfile(profileGqlInput)
+saveFiles.forAnotherModel(anotherModelGqlInput)
+
+// Special case - not mapped to prisma model
+saveFiles.inList(arrayOfFiles)
+```
+
+:::info
+You might have already noticed that the saver functions sort-of tie your GraphQL inputs to your Prisma model.
+
+In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `document` instead of strings.
+
+If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as-is.
+
+:::
+
+## Informational/Utilities
+
+## Storage Prisma Extension
+
+This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
+
+:::note
+The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-savers-and-prisma-extension).
+:::
 
 What this configures is:
 
@@ -303,6 +377,43 @@ What this configures is:
 
 - saved uploads are removed if creation fails
 - saved uploads are removed if update fails (while keeping the original)
+
+### `create` & `createMany` operations
+
+If your create operation fails, it removes any uploaded files to avoid orphaned files (so you can retry the request)
+
+### `update` & `updateMany` operations
+
+1. If update operation is successful, removes the old uploaded files
+2. If it fails, removes any newly uploaded files (so you can retry the request)
+
+### `delete` operations
+
+Removes any associated uploaded files, once delete operation completes.
+
+### `upsert` operations
+
+Depending on whether it's updating or creating, performs the same actions as create or update.
+
+## Result Extensions
+
+When you add the storage prisma extension, it also configures your prisma objects to have special helper methods.
+
+These will only appear on fields that you configure in your `UploadConfig`.
+
+```typescript
+const profile = await db.profile.update(/*...*/)
+
+// The result of your prisma query contains the helpers
+profile?.withSignedUrl() // ✅
+
+// Incorrect: you need to await the result of your prisma query first!
+db.profile.update(/*...*/).withSignedUrl() // 🛑
+
+// Assuming the comment model does not have an upload field
+// the helper won't appear
+db.comment.findMany(/*..*/).withSignedUrl() // 🛑
+```
 
 **B) Result extensions**
 
@@ -367,64 +478,6 @@ return filesViaRelation.map((file) => file.withSignedUrl())
 return filesWhereQuery.map((file) => file.withSignedUrl())
 ```
 
-:::
-
-## Upload savers
-
-You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to write your `File` objects to storage, for Prisma to save the path into the database. The savers, and storage adapters configured in `api/src/lib/uploads`, determine where the file is saved.
-
-```ts title="api/src/services/profiles/profiles.ts"
-// highlight-next-line
-import { saveFiles } from 'src/lib/uploads'
-
-export const updateProfile: MutationResolvers['updateProfile'] = async ({
-  id,
-  input,
-}) => {
-  // highlight-next-line
-  const processedInput = await saveFiles.forProfile(input)
-
-  // input.avatar (File) becomes a path string 👇
-  // Settings in src/lib/uploads.ts configures where the upload is saved
-  // processedInput.avatar -> '/mySavePath/profile/avatar/generatedId.jpg'
-
-  return db.profile.update({
-    data: processedInput,
-    where: { id },
-  })
-}
-```
-
-For each of the models you configure when you setup uploads (in `UploadConfig`) - you have savers for them.
-
-So if you passed:
-
-```ts
-const uploadConfig: UploadsConfig = {
-  profile: {
-    fields: ['avatar'],
-  },
-  anotherModel: {
-    fields: ['document'],
-  },
-}
-
-const { saveFiles } = setupStorage(uploadConfig)
-
-// Available methods 👇
-saveFiles.forProfile(profileGqlInput)
-saveFiles.forAnotherModel(anotherModelGqlInput)
-
-// Special case - not mapped to prisma model
-saveFiles.inList(arrayOfFiles)
-```
-
-:::info
-You might have already noticed that the saver functions sort-of tie your GraphQL inputs to your Prisma model.
-
-In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `document` instead of strings.
-
-If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as-is.
 :::
 
 ### Saving File lists - `saveFiles.inList()`
@@ -508,51 +561,6 @@ await saveFiles.forProfile(data, {
 ```
 
 The extension is determined by the name of the uploaded file.
-
-## Storage Prisma Extension
-
-This Prisma extension is designed to handle file uploads and deletions in conjunction with database operations. The goal here is for you as the developer to not have to think too much in terms of files, rather just as Prisma operations. The extension ensures that file uploads are properly managed alongside database operations, preventing orphaned files and maintaining consistency between the database and the storage.
-
-:::note
-The extension will _only_ operate on fields and models configured in your `UploadConfig` which you configure in [`api/src/lib/uploads.{js,ts}`](#setting-up-storage-savers-and-prisma-extension).
-:::
-
-### `create` & `createMany` operations
-
-If your create operation fails, it removes any uploaded files to avoid orphaned files (so you can retry the request)
-
-### `update` & `updateMany` operations
-
-1. If update operation is successful, removes the old uploaded files
-2. If it fails, removes any newly uploaded files (so you can retry the request)
-
-### `delete` operations
-
-Removes any associated uploaded files, once delete operation completes.
-
-### `upsert` operations
-
-Depending on whether it's updating or creating, performs the same actions as create or update.
-
-## Result Extensions
-
-When you add the storage prisma extension, it also configures your prisma objects to have special helper methods.
-
-These will only appear on fields that you configure in your `UploadConfig`.
-
-```typescript
-const profile = await db.profile.update(/*...*/)
-
-// The result of your prisma query contains the helpers
-profile?.withSignedUrl() // ✅
-
-// Incorrect: you need to await the result of your prisma query first!
-db.profile.update(/*...*/).withSignedUrl() // 🛑
-
-// Assuming the comment model does not have an upload field
-// the helper won't appear
-db.comment.findMany(/*..*/).withSignedUrl() // 🛑
-```
 
 ### Signed URLs
 
@@ -700,7 +708,7 @@ Where you are only exposing **part** of your uploads directory publicly
 
 ### Customizing the body limit for requests
 
-Depending on the sizes of files you're uploading, especially in the case of multiple files, if you receive errors like this:
+The default body size limit for the Redwood API server is 100MB (per request). Depending on the sizes of files you're uploading, especially in the case of multiple files, you may receive errors like this:
 
 ```json
 {
@@ -710,7 +718,7 @@ Depending on the sizes of files you're uploading, especially in the case of mult
 }
 ```
 
-The default body size limit for the Redwood API server is 100MB (per request).
+You can configure the `bodyLimit` option to increase or decrease the default limit. 
 
 ```js title="api/server.js"
 import { createServer } from '@redwoodjs/api-server'
