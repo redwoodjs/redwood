@@ -1,11 +1,11 @@
-import { UploadsConfig, setupStorage } from '@redwoodjs/storage'
+import { createUploadsConfig, setupStorage } from '@redwoodjs/storage'
 import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
 import { UrlSigner } from '@redwoodjs/storage/UrlSigner'
 
-const uploadsConfig: UploadsConfig = {
+const uploadsConfig = createUploadsConfig({
   // Configure your fields here
   // e.g. modelName: { fields: ['fieldWithUpload']}
-}
+})
 
 export const fsStorage = new FileSystemStorage({
   baseDir: './uploads',
