@@ -7609,10 +7609,9 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.38.0"
     firebase: "npm:10.13.0"
-    jest: "npm:29.7.0"
-    jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.1"
     typescript: "npm:5.5.4"
+    vitest: "npm:2.0.5"
   peerDependencies:
     firebase: 10.13.0
   languageName: unknown
