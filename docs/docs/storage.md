@@ -1,6 +1,6 @@
-# Uploads & Storage
+# Storage and Uploads
 
-Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
+Getting started with file storage and uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
 
 There are two parts to this:
 
@@ -198,12 +198,12 @@ This will do three things:
 Let's break down the key components of the configuration.
 
 ```ts title="api/src/lib/uploads.ts"
-import { createUploadsConfig, setupStorage } from '@redwoodjs/storage'
+import { createStorageConfig, setupStorage } from '@redwoodjs/storage'
 import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
 import { UrlSigner } from '@redwoodjs/storage/signedUrl'
 
 // ⭐ (1)
-const uploadConfig = createUploadsConfig({
+const storageConfig = createStorageConfig({
   profile: {
     fields: ['avatar'], // 👈 the fields that will contain your `File`s
   },
@@ -222,7 +222,7 @@ export const urlSigner = new UrlSigner({
 
 // ⭐ (4)
 const { saveFiles, storagePrismaExtension } = setupStorage({
-  uploadsConfig,
+  storageConfig,
   storageAdapter: fsStorage,
   urlSigner,
 })
@@ -230,8 +230,9 @@ const { saveFiles, storagePrismaExtension } = setupStorage({
 export { saveFiles, storagePrismaExtension }
 ```
 
-**1. Upload Configuration**
-This is where you configure the fields that will receive uploads. In our case, it's the profile.avatar field.
+**1. Storage Configuration**
+This is where you configure the fields that will receive files to store.
+In our case, it's the `profile.avatar` field.
 
 The shape of the config looks like this:
 
@@ -242,7 +243,7 @@ The shape of the config looks like this:
 ```
 
 **2. Storage Adapter**
-We create a storage adapter, in this case `FileSystemStorage`, that will save your uploads to the `./uploads` folder.
+We create a storage adapter, in this case `FileSystemStorage`, that will save your file to the `./uploads` folder.
 
 This just sets the base path. The actual filenames and folders are determined by the saveFiles utility functions, but [can be overridden!](#customizing-save-file-name-or-save-path)
 
@@ -306,7 +307,7 @@ The `$extends` method returns a new instance of the Prisma client with the exten
 
 </details>
 
-### 4. Implementing Upload savers
+### 4. Implementing Storage savers
 
 You'll also need a way to actually save the incoming `File` object to a file persisted on storage. In your services, you can use the pre-configured "savers" to write your `File` objects to storage. Prisma will automatically save the path into the database. The savers and storage adapters, configured in `api/src/lib/uploads`, determine where the file is saved.
 
@@ -337,7 +338,7 @@ For each of the models you configured when you setup uploads (in `UploadConfig`)
 So if you passed:
 
 ```ts
-const uploadConfig = createUploadsConfig({
+const storageConfig = createStorageConfig({
   profile: {
     fields: ['avatar'],
   },
@@ -346,7 +347,7 @@ const uploadConfig = createUploadsConfig({
   },
 })
 
-const { saveFiles } = setupStorage(uploadConfig)
+const { saveFiles } = setupStorage(storageConfig)
 
 // Available methods 👇
 saveFiles.forProfile(profileGqlInput)
@@ -594,13 +595,10 @@ export const profile = async ({ id }) => {
 
 The object being returned will look like:
 
-```ts
+````ts
 {
   id: 125,
   avatar: '/.redwood/functions/signedUrl?s=s1gnatur3&expiry=1725190749613&path=path.png'
-}
-```
-
 This will generate a URL that will expire in 2 days (from the point of query). Let's breakdown the URL:
 
 | URL Component                   |                                                      |
@@ -616,36 +614,48 @@ This will generate a URL that will expire in 2 days (from the point of query). L
 This function is automatically generated for you, but let's take a quick look at how it works:
 
 ```ts title="api/src/functions/signedUrl/signedUrl.ts"
+import type { APIGatewayEvent, Context } from 'aws-lambda'
+
 import type { SignatureValidationArgs } from '@redwoodjs/storage/UrlSigner'
 
-// The urlSigner and fsStorage instances were configured when we setup uploads
-// highlight-next-line
+import { logger } from 'src/lib/logger'
 import { urlSigner, fsStorage } from 'src/lib/uploads'
 
-export const handler = async (event) => {
-  // Validate the signature using the urlSigner instance
-  // highlight-next-line
-  const fileToReturn = urlSigner.validateSignature(
-    // Pass the params {s, path, expiry}
-    // highlight-next-line
-    event.queryStringParameters as SignatureValidationArgs
-  )
+export const handler = async (event: APIGatewayEvent, _context: Context) => {
+  try {
+    const fileToReturn = urlSigner.validateSignature(
+      event.queryStringParameters as SignatureValidationArgs
+    )
 
-  // Use the returned value to lookup the file in your storage
-  // highlight-next-line
-  const { contents, type } = await fsStorage.read(fileToReturn)
+    const { contents, type } = await fsStorage.read(fileToReturn)
 
-  return {
-    statusCode: 200,
-    headers: {
-      // You also get the type from the read
-      'Content-Type': type,
-    },
-    // Return the contents of the file
-    body: contents,
+    // Generate an ETag from the file contents
+    const etag = Buffer.from(contents).toString('base64').substring(0, 27)
+
+    // Add cache headers
+    return {
+      statusCode: 200,
+      headers: {
+        'Content-Type': type,
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        ETag: `"${etag}"`,
+        Date: new Date().toUTCString(),
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Max-Age': '86400',
+      },
+      body: contents,
+    }
+  } catch (error) {
+    logger.error(error, 'Error reading file')
+    return {
+      statusCode: 404,
+      body: 'Not found',
+    }
   }
 }
-```
+````
 
 We created and exported the `urlSigner` instance and `fsStorage` adapter in `src/lib/uploads`.
 
@@ -654,6 +664,8 @@ The details to validate come through as query parameters, which we pass to the `
 If it's valid, you will receive a path (or key) to the file - which you can then lookup in your storage.
 
 The `read` function also returns the mime-type of the file (based on the extension) - which you pass as a response header. This ensures that browsers know how to read your response!
+
+Cache headers are also added for you as well.
 
 </details>
 
@@ -726,10 +738,9 @@ export abstract class BaseStorageAdapter {
 }
 ```
 
-Types of Storage Adapters
-MemoryStorage: This adapter stores files in memory, making it ideal for temporary storage needs or testing scenarios. It offers faster access times but does not persist data across application restarts.
+### Types of Storage Adapters
 
-We build in two storage adapters:
+There are currently two storage adapters:
 
 - [FileSystemStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/FileSystemStorage/FileSystemStorage.ts) - This adapter interacts with the file system, enabling the storage of files on disk.
 - [MemoryStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/MemoryStorage/MemoryStorage.ts) - this adapter stores files in memory, making it ideal for temporary storage needs or testing scenarios. It offers faster access times but does not persist data across application restarts.
