@@ -6,8 +6,8 @@ import { vi, beforeAll, beforeEach, describe, it, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import type { FirebaseClient } from '../firebase'
-import { createAuth } from '../firebase'
+import type { FirebaseClient } from '../firebase.js'
+import { createAuth } from '../firebase.js'
 
 const user: User = {
   uid: 'unique_user_id',
