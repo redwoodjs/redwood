@@ -8,7 +8,7 @@ const storageConfig = createStorageConfig({
 })
 
 export const fsStorage = new FileSystemStorage({
-  baseDir: './uploads',
+  baseDir: './storage',
 })
 
 export const urlSigner = new UrlSigner({

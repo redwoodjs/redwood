@@ -85,8 +85,8 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
           const result = await query(args)
           return result
         } catch (e) {
-          // If the create fails, we need to delete the Storageed files
-          await removeStoredFiles(
+          // If the create fails, we need to delete the Storage files
+          await removeStorageFiles(
             StorageFields,
             args.data as Record<string, string>,
           )
@@ -102,7 +102,7 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
 
           // If the create fails, we need to delete the Storageed files
           for await (const createData of createDatas) {
-            await removeStoredFiles(StorageFields, createData)
+            await removeStorageFiles(StorageFields, createData)
           }
 
           throw e
@@ -137,13 +137,13 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
             const result = await query(args)
 
             // **After** we've updated the record, we need to delete the old file.
-            await removeStoredFiles(StorageFieldsToUpdate, originalRecord)
+            await removeStorageFiles(StorageFieldsToUpdate, originalRecord)
 
             return result
           } catch (e) {
             // If the update fails, we need to delete the newly Storageed files
             // but not the ones that already exist!
-            await removeStoredFiles(
+            await removeStorageFiles(
               StorageFieldsToUpdate,
               args.data as Record<string, string>,
             )
@@ -177,16 +177,16 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
           try {
             const result = await query(args)
 
-            // Remove the Storageed files from each of the original records
+            // Remove the Storage files from each of the original records
             for await (const originalRecord of originalRecords) {
-              await removeStoredFiles(StorageFieldsToUpdate, originalRecord)
+              await removeStorageFiles(StorageFieldsToUpdate, originalRecord)
             }
 
             return result
           } catch (e) {
-            // If the update many fails, we need to delete the newly Storageed files
+            // If the update many fails, we need to delete the newly Storage files
             // but not the ones that already exist!
-            await removeStoredFiles(
+            await removeStorageFiles(
               StorageFieldsToUpdate,
               args.data as Record<string, string>,
             )
@@ -219,14 +219,14 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
           const result = await query(args)
 
           if (isUpdate && existingRecord) {
-            // If the record existed, remove old Storageed files
-            await removeStoredFiles(StorageFieldsToUpdate, existingRecord)
+            // If the record existed, remove old Storage files
+            await removeStorageFiles(StorageFieldsToUpdate, existingRecord)
           }
 
           return result
         } catch (e) {
-          // If the upsert fails, we need to delete any newly Storageed files
-          await removeStoredFiles(
+          // If the upsert fails, we need to delete any newly Storage files
+          await removeStorageFiles(
             // Only delete files we're updating on update
             isUpdate ? StorageFieldsToUpdate : StorageFields,
             (isUpdate ? args.update : args.create) as Record<string, string>,
@@ -238,7 +238,7 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
 
       async delete({ query, args }) {
         const deleteResult = await query(args)
-        await removeStoredFiles(
+        await removeStorageFiles(
           StorageFields,
           // We don't know the exact type here
           deleteResult as Record<string, string>,
@@ -310,7 +310,7 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
 
   return PrismaExtension.defineExtension((client) => {
     return client.$extends({
-      name: 'redwood-Storage-prisma-plugin',
+      name: 'redwood-storage-prisma-plugin',
       query: queryExtends,
       result: resultExtends,
     })
@@ -322,12 +322,12 @@ export const createStorageExtension = <MNames extends ModelNames = ModelNames>(
    * no need to stop the actual db operation
    *
    */
-  async function removeStoredFiles(
+  async function removeStorageFiles(
     fieldsToDelete: string[],
     data: Record<string, string>,
   ) {
     if (!data) {
-      console.warn('Empty data object passed to removeStoredFiles')
+      console.warn('Empty data object passed to removeStoraFiles')
       return
     }
 
