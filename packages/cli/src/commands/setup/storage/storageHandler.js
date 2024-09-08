@@ -22,29 +22,29 @@ export const handler = async ({ force }) => {
   const tasks = new Listr(
     [
       {
-        title: `Adding api/src/lib/uploads.${
+        title: `Adding api/src/lib/storage.${
           projectIsTypescript ? 'ts' : 'js'
         }...`,
         task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            'srcLibUploads.ts.template',
+            'srcLibStorage.ts.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
             flag: 'r',
           })
 
-          const uploadsPath = path.join(
+          const storagePath = path.join(
             getPaths().api.lib,
-            `uploads.${projectIsTypescript ? 'ts' : 'js'}`,
+            `storage.${projectIsTypescript ? 'ts' : 'js'}`,
           )
-          const uploadsContent = projectIsTypescript
+          const storageContent = projectIsTypescript
             ? templateContent
-            : await transformTSToJS(uploadsPath, templateContent)
+            : await transformTSToJS(storagePath, templateContent)
 
-          return writeFile(uploadsPath, uploadsContent, {
+          return writeFile(storagePath, storageContent, {
             overwriteExisting: force,
           })
         },
@@ -62,15 +62,15 @@ export const handler = async ({ force }) => {
             flag: 'r',
           })
 
-          const uploadsPath = path.join(
+          const signedUrlPath = path.join(
             getPaths().api.functions,
             `signedUrl.${projectIsTypescript ? 'ts' : 'js'}`,
           )
-          const uploadsContent = projectIsTypescript
+          const signedUrlContent = projectIsTypescript
             ? templateContent
-            : await transformTSToJS(uploadsPath, templateContent)
+            : await transformTSToJS(signedUrlPath, templateContent)
 
-          return writeFile(uploadsPath, uploadsContent, {
+          return writeFile(signedUrlPath, signedUrlContent, {
             overwriteExisting: force,
           })
         },
@@ -80,7 +80,7 @@ export const handler = async ({ force }) => {
         title: 'Adding dependencies to your api side...',
       },
       {
-        title: 'Modifying api/src/lib/db to add uploads prisma extension..',
+        title: 'Modifying api/src/lib/db to add prisma storage extension..',
         task: async () => {
           const dbPath = path.join(
             getPaths().api.lib,
@@ -111,8 +111,8 @@ export const handler = async ({ force }) => {
           const prettifyPaths = [
             path.join(getPaths().api.lib, 'db.js'),
             path.join(getPaths().api.lib, 'db.ts'),
-            path.join(getPaths().api.lib, 'uploads.js'),
-            path.join(getPaths().api.lib, 'uploads.ts'),
+            path.join(getPaths().api.lib, 'storage.js'),
+            path.join(getPaths().api.lib, 'storage.ts'),
           ]
 
           for (const prettifyPath of prettifyPaths) {
@@ -142,11 +142,11 @@ export const handler = async ({ force }) => {
 
           ${c.success('\nUploads and storage configured!\n')}
 
-          Remember to add UPLOADS_SECRET to your .env file. You can generate one with ${c.highlight('yarn rw generate secret')}
+          Remember to add STORAGE_SECRET to your .env file. You can generate one with ${c.highlight('yarn rw generate secret')}
 
 
           Check out the docs for more info:
-          ${c.link('https://docs.redwoodjs.com/docs/uploads')}
+          ${c.link('https://docs.redwoodjs.com/docs/storage')}
 
         `
         },

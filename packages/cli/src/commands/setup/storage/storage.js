@@ -16,10 +16,10 @@ export const builder = (yargs) => {
 
 export const handler = async (options) => {
   recordTelemetryAttributes({
-    command: 'setup uploads',
+    command: 'setup storage',
     force: options.force,
     skipExamples: options.skipExamples,
   })
-  const { handler } = await import('./uploadsHandler.js')
+  const { handler } = await import('./storageHandler.js')
   return handler(options)
 }

@@ -2,7 +2,7 @@
 
 This package houses
 
-- Prisma extension for handling uploads. Currently
+- Prisma extension for handling storage. Currently
   a) Query Extension: will save, delete, replace files on disk during CRUD
   b) Result Extension: gives you functions like `.withSignedUri` on configured prisma results - which will take the paths, and convert it to a signed url
 - Storage adapters e.g. FS and Memory to use with the prisma extension
@@ -10,19 +10,18 @@ This package houses
 
 ## Usage
 
-In `api/src/uploads.ts` - setup uploads - processors, storage and the prisma extension.
+In `api/src/storage.ts` - setup storage - processors, storage and the prisma extension.
 
 ```ts
-// api/src/lib/uploads.ts
-nua
-import { setupUploads, UploadsConfig } from '@redwoodjs/storage'
+// api/src/lib/storage.ts
+import { setupStorage, StorageConfig } from '@redwoodjs/storage'
 import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
 import { UrlSigner } from '@redwoodjs/storage/UrlSigner'
 
-const uploadsConfig: UploadsConfig = {
+const storageConfig: StorageConfig = {
   // 👇 prisma model
   profile: {
-    // 👇 pass in fields that are going to be File uploads
+    // 👇 pass in fields that are going to be File storage uploads
     // these should be configured as string in the Prisma.schema
     fields: ['avatar', 'coverPhoto'],
   },
@@ -30,17 +29,17 @@ const uploadsConfig: UploadsConfig = {
 
 // 👇 exporting these allows you access elsewhere on the api side
 export const fsStorage = new FileSystemStorage({
-  baseDir: './uploads',
+  baseDir: './storage',
 })
 
 // Optional
 export const urlSigner = new UrlSigner({
-  secret: process.env.UPLOADS_SECRET,
+  secret: process.env.STORAGE_SECRET,
   endpoint: '/signedUrl',
 })
 
 const { saveFiles, storagePrismaExtension } = setupStorage({
-  uploadsConfig,
+  storageConfig,
   storageAdapter: fsStorage,
   urlSigner,
 })
@@ -58,7 +57,7 @@ import { PrismaClient } from '@prisma/client'
 import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 
 import { logger } from './logger'
-import { storagePrismaExtension } from './uploads'
+import { storagePrismaExtension } from './storage'
 
 // 👇 Notice here we create prisma client, and don't export it yet
 export const prismaClient = new PrismaClient({
@@ -71,7 +70,7 @@ handlePrismaLogging({
   logLevels: ['info', 'warn', 'error'],
 })
 
-// 👇 Export db after adding uploads extension
+// 👇 Export db after adding storage extension
 export const db = prismaClient.$extends(storagePrismaExtension)
 ```
 
@@ -100,7 +99,7 @@ export const profile: QueryResolvers['profile'] = async ({ id }) => {
 
 ## Using `saveFiles`
 
-In your services, you can use the preconfigured "processors" - exported as `saveFiles` to convert Files to paths on storage, for Prisma to save into the database. The processors, and storage adapters determine where the file is saved.
+In your services, you can use the pre-configured "processors" - exported as `saveFiles` to convert Files to paths on storage, for Prisma to save into the database. The processors, and storage adapters determine where the file is saved.
 
 ```ts
 // api/src/services/profiles/profiles.ts
@@ -112,7 +111,7 @@ export const updateProfile: MutationResolvers['updateProfile'] = async ({
   const processedInput = await saveFiles.forProfile(input)
 
   // This becomes a string 👇
-  // The configuration on where it was saved is passed when we setup uploads in src/lib/uploads.ts
+  // The configuration on where it was saved is passed when we setup storage in src/lib/storage.ts
   // processedInput.avatar = '/mySavePath/profile/avatar/generatedId.jpg'
 
   return db.profile.update({

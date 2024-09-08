@@ -768,7 +768,7 @@ async function main() {
 
   // highlight-start
   server.register(fastifyStatic, {
-    root: path.join(process.cwd() + '/uploads/public_profile_photos'),
+    root: path.join(process.cwd() + '/storage/public_profile_photos'),
     prefix: '/public_uploads',
   })
   // highlight-end
