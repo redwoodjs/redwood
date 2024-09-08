@@ -3,14 +3,14 @@ import { describe, it, expect } from 'vitest'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
-import { createUploadSavers } from '../createSavers.js'
-import { createUploadsConfig } from '../index.js'
+import { createStorageSavers } from '../createSavers.js'
+import { createStorageConfig } from '../index.js'
 
 const memStore = new MemoryStorage({
   baseDir: '/memory_store_basedir',
 })
 
-const uploadsConfig = createUploadsConfig({
+const storageConfig = createStorageConfig({
   dumbo: {
     fields: ['firstUpload', 'secondUpload'],
   },
@@ -20,7 +20,7 @@ const uploadsConfig = createUploadsConfig({
 })
 
 describe('Create savers', () => {
-  const fileToStorage = createUploadSavers(uploadsConfig, memStore)
+  const fileToStorage = createStorageSavers(storageConfig, memStore)
 
   it('should create savers with CapitalCased model name', () => {
     expect(fileToStorage.forDumbo).toBeDefined()
@@ -125,7 +125,7 @@ describe('Create savers', () => {
 // Problem is - in the database world, a string[] is not a thing
 // so we need a generic way of doing this
 describe('FileList processing', () => {
-  const savers = createUploadSavers(uploadsConfig, memStore)
+  const savers = createStorageSavers(storageConfig, memStore)
 
   const notPrismaData = [
     new File(['Hello'], 'hello.png', {

@@ -1,31 +1,31 @@
 import type { BaseStorageAdapter } from './adapters/BaseStorageAdapter.js'
-import { createUploadSavers } from './createSavers.js'
+import { createStorageSavers } from './createSavers.js'
 import type {
   ModelNames,
-  UploadConfigForModel,
-  UploadsConfig,
+  StorageConfig,
+  StorageConfigForModel,
 } from './prismaExtension.js'
-import { createUploadsExtension } from './prismaExtension.js'
+import { createStorageExtension } from './prismaExtension.js'
 import type { UrlSigner } from './UrlSigner.js'
 
 type SetupStorageOptions<MNames extends ModelNames> = {
-  uploadsConfig: UploadsConfig<MNames>
+  storageConfig: StorageConfig<MNames>
   storageAdapter: BaseStorageAdapter
   urlSigner?: UrlSigner
 }
 
 export const setupStorage = <MNames extends ModelNames>({
-  uploadsConfig,
+  storageConfig,
   storageAdapter,
   urlSigner,
 }: SetupStorageOptions<MNames>) => {
-  const prismaExtension = createUploadsExtension(
-    uploadsConfig,
+  const prismaExtension = createStorageExtension(
+    storageConfig,
     storageAdapter,
     urlSigner,
   )
 
-  const saveFiles = createUploadSavers(uploadsConfig, storageAdapter)
+  const saveFiles = createStorageSavers(storageConfig, storageAdapter)
 
   return {
     storagePrismaExtension: prismaExtension,
@@ -38,15 +38,15 @@ export const setupStorage = <MNames extends ModelNames>({
  * If you use the type UploadsConfig directly, you may receive suggestions for saveFiles.forY where Y hasn't been configured.
  * By using this utility function, you will only receive suggestions for the models that you have configured.
  *
- * @param uploadsConfig The uploads configuration object.
- * @returns The same uploads configuration object, but with filtered types
+ * @param storageConfig The storage configuration object.
+ * @returns The same storage configuration object, but with filtered types
  */
-export function createUploadsConfig<
+export function createStorageConfig<
   T extends Partial<{
-    [K in ModelNames]?: UploadConfigForModel<K>
+    [K in ModelNames]?: StorageConfigForModel<K>
   }>,
 >(uploadsConfig: T): T {
   return uploadsConfig
 }
 
-export type { ModelNames, UploadsConfig } from './prismaExtension.js'
+export type { ModelNames, StorageConfig } from './prismaExtension.js'

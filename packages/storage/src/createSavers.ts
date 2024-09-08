@@ -4,7 +4,7 @@ import type {
   SaveOptionsOverride,
   BaseStorageAdapter,
 } from './adapters/BaseStorageAdapter.js'
-import type { ModelNames, UploadsConfig } from './prismaExtension.js'
+import type { ModelNames, StorageConfig } from './prismaExtension.js'
 
 // Assumes you pass in the graphql type
 type MakeFilesString<T> = {
@@ -28,15 +28,15 @@ export const createFileListSaver = (storage: BaseStorageAdapter) => {
 This creates a "saver" for each model in the uploads config (i.e. tied to a model in the prisma schema)
 The saver will only handle single file uploads, not file lists.
 */
-export const createUploadSavers = <MNames extends ModelNames = ModelNames>(
-  uploadConfig: UploadsConfig<MNames>,
+export const createStorageSavers = <MNames extends ModelNames = ModelNames>(
+  storageConfig: StorageConfig<MNames>,
   storage: BaseStorageAdapter,
 ) => {
-  type uploadSaverNames = `for${Capitalize<string & MNames>}`
+  type storageSaverNames = `for${Capitalize<string & MNames>}`
 
   // @TODO(TS): Is there a way to make the type of data more specific?
   type Savers = {
-    [K in uploadSaverNames]: <T extends Record<string, any>>(
+    [K in storageSaverNames]: <T extends Record<string, any>>(
       data: T,
       overrideSaveOptions?: SaveOptionsOverride,
     ) => Promise<MakeFilesString<T>>
@@ -44,10 +44,10 @@ export const createUploadSavers = <MNames extends ModelNames = ModelNames>(
 
   const savers = {} as Savers
 
-  Object.keys(uploadConfig).forEach((model) => {
-    const modelKey = model as keyof typeof uploadConfig
+  Object.keys(storageConfig).forEach((model) => {
+    const modelKey = model as keyof typeof storageConfig
 
-    const currentModelConfig = uploadConfig[modelKey]
+    const currentModelConfig = storageConfig[modelKey]
 
     if (!currentModelConfig) {
       return

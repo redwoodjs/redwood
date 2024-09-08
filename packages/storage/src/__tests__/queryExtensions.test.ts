@@ -6,7 +6,7 @@ import { describe, it, vi, expect, beforeEach, beforeAll } from 'vitest'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
 import { FileSystemStorage } from '../adapters/FileSystemStorage/FileSystemStorage.js'
-import { createUploadsConfig, setupStorage } from '../index.js'
+import { createStorageConfig, setupStorage } from '../index.js'
 
 // @MARK: use the local prisma client in the test
 import type { Dumbo, Dummy } from './prisma-client/index.js'
@@ -30,7 +30,7 @@ vi.mock('node:fs', () => ({
 }))
 
 describe('Query extensions', () => {
-  const uploadsConfig = createUploadsConfig({
+  const storageConfig = createStorageConfig({
     dummy: {
       fields: 'uploadField',
     },
@@ -40,7 +40,7 @@ describe('Query extensions', () => {
   })
 
   const { storagePrismaExtension, saveFiles } = setupStorage({
-    uploadsConfig: uploadsConfig,
+    storageConfig: storageConfig,
     storageAdapter: new FileSystemStorage({
       baseDir: '/tmp',
     }),

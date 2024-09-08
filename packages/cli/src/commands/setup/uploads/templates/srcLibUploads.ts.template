@@ -1,8 +1,8 @@
-import { createUploadsConfig, setupStorage } from '@redwoodjs/storage'
+import { createStorageConfig, setupStorage } from '@redwoodjs/storage'
 import { FileSystemStorage } from '@redwoodjs/storage/FileSystemStorage'
 import { UrlSigner } from '@redwoodjs/storage/UrlSigner'
 
-const uploadsConfig = createUploadsConfig({
+const storageConfig = createStorageConfig({
   // Configure your fields here
   // e.g. modelName: { fields: ['fieldWithUpload']}
 })
@@ -17,7 +17,7 @@ export const urlSigner = new UrlSigner({
 })
 
 const { saveFiles, storagePrismaExtension } = setupStorage({
-  uploadsConfig,
+  storageConfig,
   storageAdapter: fsStorage,
   urlSigner,
 })
