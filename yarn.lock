@@ -7812,7 +7812,7 @@ __metadata:
     "@testing-library/react": "npm:14.3.1"
     concurrently: "npm:8.2.2"
     core-js: "npm:3.38.0"
-    msw: "npm:1.3.3"
+    msw: "npm:1.3.4"
     publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
     tsx: "npm:4.17.0"
@@ -8708,7 +8708,7 @@ __metadata:
     jest-environment-jsdom: "npm:29.7.0"
     jest-watch-typeahead: "npm:2.2.2"
     jsdom: "npm:24.1.3"
-    msw: "npm:1.3.3"
+    msw: "npm:1.3.4"
     publint: "npm:0.2.10"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.17.0"
@@ -23127,9 +23127,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"msw@npm:1.3.3":
-  version: 1.3.3
-  resolution: "msw@npm:1.3.3"
+"msw@npm:1.3.4":
+  version: 1.3.4
+  resolution: "msw@npm:1.3.4"
   dependencies:
     "@mswjs/cookies": "npm:^0.2.2"
     "@mswjs/interceptors": "npm:^0.17.10"
@@ -23157,7 +23157,7 @@ __metadata:
       optional: true
   bin:
     msw: cli/index.js
-  checksum: 10c0/0c63b282a53a1a69194729bf9cb77005a682dfbbb1dac6b1a33c9bfecde7f6df1dfaabdff9336b97ed6c29ebd52d6debdae7e506d7baa8eb8fd1e05683dbc398
+  checksum: 10c0/8e7e0f2aa0f571cc77fc21830a07535118c956f113efed8ac0538da75b4c0eff666b322a62b90efc62e25431bbb8820f42adbfafcf9d1d02954e0cc01b8971f6
   languageName: node
   linkType: hard
 
@@ -26664,7 +26664,7 @@ __metadata:
     lerna: "npm:8.1.8"
     listr2: "npm:6.6.1"
     make-dir-cli: "npm:4.0.0"
-    msw: "npm:1.3.3"
+    msw: "npm:1.3.4"
     ncp: "npm:2.0.0"
     nodemon: "npm:3.1.4"
     npm-packlist: "npm:8.0.2"
