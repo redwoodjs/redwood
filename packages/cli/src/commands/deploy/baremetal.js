@@ -55,6 +55,12 @@ export const builder = (yargs) => {
     type: 'boolean',
   })
 
+  yargs.option('df', {
+    describe: 'Check available disk space',
+    default: true,
+    type: 'boolean',
+  })
+
   yargs.option('update', {
     describe: 'Update code to latest revision',
     default: true,
@@ -361,6 +367,50 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
 
   tasks.push(
     commandWithLifecycleEvents({
+      name: 'df',
+      config: { ...config, cmdPath: serverConfig.path },
+      skip: !yargs.df,
+      command: {
+        title: `Checking available disk space...`,
+        task: async (_ctx, task) => {
+          const { stdout } = await ssh.exec(serverConfig.path, 'df', [
+            serverConfig.path,
+            '|',
+            'awk',
+            '\'NR == 2 {print "df:"$4}\'',
+          ])
+
+          // I'm doing this because on my machine "stdout" was:
+          // 'Non-interactive shell detected\n4102880'
+          // Other machines might have different output
+          const df = stdout.split('\n').find((line) => line.startsWith('df:'))
+
+          if (!df || !df.startsWith('df:') || df === 'df:') {
+            throw new Error('Could not get disk space information')
+          }
+
+          const dfMb = parseInt(df.replace('df:', ''), 10) / 1024
+
+          if (isNaN(dfMb)) {
+            throw new Error('Could not parse disk space information')
+          }
+
+          // This will only show if --verbose is passed
+          task.output = `Available disk space: ${dfMb}MB`
+
+          if (dfMb < 2048) {
+            // Not enough space (less than 2GB)
+            throw new Error(
+              'Not enough disk space. You need at least 2GB free space to continue.',
+            )
+          }
+        },
+      },
+    }),
+  )
+
+  tasks.push(
+    commandWithLifecycleEvents({
       name: 'update',
       config: { ...config, cmdPath: serverConfig.path },
       skip: !yargs.update,
@@ -661,6 +711,7 @@ export const handler = async (yargs) => {
   recordTelemetryAttributes({
     command: 'deploy baremetal',
     firstRun: yargs.firstRun,
+    df: yargs.df,
     update: yargs.update,
     install: yargs.install,
     migrate: yargs.migrate,
