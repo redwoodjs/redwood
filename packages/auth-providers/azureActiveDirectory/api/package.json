@@ -50,7 +50,7 @@
     "@types/jsonwebtoken": "9.0.6",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

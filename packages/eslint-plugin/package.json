@@ -31,7 +31,7 @@
     "@types/estree": "1.0.5",
     "@typescript-eslint/parser": "8.2.0",
     "@typescript-eslint/rule-tester": "8.2.0",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },
