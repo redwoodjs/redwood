@@ -29,13 +29,13 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@prisma/client": "5.18.0",
+    "@prisma/client": "5.19.1",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "camelcase": "6.3.0"
   },
   "devDependencies": {
-    "@prisma/internals": "5.18.0",
+    "@prisma/internals": "5.19.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "esbuild": "0.23.1",
     "publint": "0.2.10",
