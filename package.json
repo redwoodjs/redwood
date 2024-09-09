@@ -120,7 +120,7 @@
     "nodemon": "3.1.4",
     "npm-packlist": "8.0.2",
     "nx": "19.6.0",
-    "ora": "8.0.1",
+    "ora": "8.1.0",
     "prettier": "3.3.3",
     "prettier-plugin-curly": "0.2.2",
     "prettier-plugin-packagejson": "2.5.2",
