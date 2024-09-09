@@ -2869,8 +2869,8 @@ __metadata:
   linkType: hard
 
 "knip@npm:^5.26.0":
-  version: 5.27.2
-  resolution: "knip@npm:5.27.2"
+  version: 5.30.1
+  resolution: "knip@npm:5.30.1"
   dependencies:
     "@nodelib/fs.walk": "npm:1.2.8"
     "@snyk/github-codeowners": "npm:1.1.0"
@@ -2894,7 +2894,7 @@ __metadata:
   bin:
     knip: bin/knip.js
     knip-bun: bin/knip-bun.js
-  checksum: 10c0/24bc334edbd705cfd0d78dc66517d806161974b45f707555ddc88887772022bc949dca84b06f42573a8fd49ede206f7611e6753349a9f98086fe29ee15ca3f5e
+  checksum: 10c0/1c470266d7967dad0f2fb1b1f6c8a797bc7bea6c1f0021c52dce40e067ae87217eb17ff11a4164e3a5244bf3d0672f9e8678e4c3898260c48b9c020132ebb29a
   languageName: node
   linkType: hard
 
