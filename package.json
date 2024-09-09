@@ -97,10 +97,10 @@
     "concurrently": "8.2.2",
     "core-js": "3.38.0",
     "cross-env": "7.0.3",
-    "cypress": "13.13.3",
+    "cypress": "13.14.2",
     "cypress-fail-fast": "7.1.1",
     "cypress-wait-until": "3.0.2",
-    "dependency-cruiser": "16.3.10",
+    "dependency-cruiser": "16.4.1",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
     "eslint-plugin-react": "7.35.2",
@@ -119,7 +119,7 @@
     "ncp": "2.0.0",
     "nodemon": "3.1.4",
     "npm-packlist": "8.0.2",
-    "nx": "19.6.0",
+    "nx": "19.6.6",
     "ora": "8.1.0",
     "prettier": "3.3.3",
     "prettier-plugin-curly": "0.2.2",
@@ -132,7 +132,7 @@
     "typescript": "5.5.4",
     "vitest": "2.0.5",
     "yargs": "17.7.2",
-    "zx": "8.1.4"
+    "zx": "8.1.5"
   },
   "packageManager": "yarn@4.4.0",
   "npmClient": "yarn"
