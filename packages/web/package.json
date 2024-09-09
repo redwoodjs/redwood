@@ -166,7 +166,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
-    "@testing-library/jest-dom": "6.4.8",
+    "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "14.3.1",
     "@types/apollo-upload-client": "^18",
     "@types/react": "^18.2.55",
