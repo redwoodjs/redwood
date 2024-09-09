@@ -23,8 +23,25 @@ export async function ssrHandler(opts: {
     `virtual:redwoodjs-load-page-for-route?pathname=${url.pathname}`,
   )
 
+  const { default: App } = await viteEnvRunnerRSC.import(
+    'src/envs/__example__/web/src/App.tsx',
+  )
+
   const { rscHandler } = await viteEnvRunnerRSC.import('src/envs/entry-rsc.tsx')
-  const rscResult = await rscHandler({ req, Page })
+  const rscResult = await rscHandler({
+    req,
+    Page: () => (
+      <App>
+        <Page />
+      </App>
+    ),
+  })
+
+  if (new URL(req.url).searchParams.has('__rsc')) {
+    return new Response(rscResult.stream, {
+      headers: { 'content-type': 'text/x-component; charset=utf-8' },
+    })
+  }
 
   const [rscStream1, rscStream2] = rscResult.stream.tee()
   let data: React.Usable<React.ReactNode>
