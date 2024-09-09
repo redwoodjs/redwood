@@ -7538,7 +7538,7 @@ __metadata:
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.33"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     jest: "npm:29.7.0"
     jest-environment-node: "npm:29.7.0"
     prompts: "npm:2.4.2"
@@ -7558,7 +7558,7 @@ __metadata:
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/react": "npm:^18.2.55"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:19.0.0-rc-8269d55d-20240802"
@@ -7812,7 +7812,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:6.5.0"
     "@testing-library/react": "npm:14.3.1"
     concurrently: "npm:8.2.2"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     msw: "npm:1.3.4"
     publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
@@ -7849,7 +7849,7 @@ __metadata:
     babel-plugin-graphql-tag: "npm:3.3.0"
     babel-plugin-module-resolver: "npm:5.0.2"
     babel-plugin-tester: "npm:11.0.4"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     fast-glob: "npm:3.3.2"
     graphql: "npm:16.9.0"
     tsx: "npm:4.19.0"
@@ -7971,7 +7971,7 @@ __metadata:
     ci-info: "npm:4.0.0"
     concurrently: "npm:8.2.2"
     configstore: "npm:3.1.5"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     cross-env: "npm:7.0.3"
     decamelize: "npm:5.0.1"
     dotenv-defaults: "npm:5.0.2"
@@ -8032,7 +8032,7 @@ __metadata:
     "@vscode/ripgrep": "npm:1.15.9"
     "@whatwg-node/fetch": "npm:0.9.21"
     cheerio: "npm:1.0.0"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     deepmerge: "npm:4.3.1"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
@@ -8262,7 +8262,7 @@ __metadata:
     "@types/lodash": "npm:4.17.7"
     "@types/uuid": "npm:10.0.0"
     "@whatwg-node/fetch": "npm:0.9.21"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
     graphql-tag: "npm:2.12.6"
@@ -8308,7 +8308,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     chalk: "npm:4.1.2"
     concurrently: "npm:8.2.2"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     deepmerge: "npm:4.3.1"
     esbuild: "npm:0.23.1"
     fast-glob: "npm:3.3.2"
@@ -8572,7 +8572,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/react-dom": "npm:^18.2.19"
     concurrently: "npm:8.2.2"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     publint: "npm:0.2.10"
     react: "npm:19.0.0-rc-8269d55d-20240802"
     react-dom: "npm:19.0.0-rc-8269d55d-20240802"
@@ -8638,7 +8638,7 @@ __metadata:
     "@types/node": "npm:20.16.5"
     "@types/vscode": "npm:1.93.0"
     camelcase: "npm:6.3.0"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     deepmerge: "npm:4.3.1"
     dotenv-defaults: "npm:5.0.2"
     enquirer: "npm:2.4.1"
@@ -8766,7 +8766,7 @@ __metadata:
     chokidar: "npm:3.6.0"
     concurrently: "npm:8.2.2"
     cookie: "npm:0.6.0"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     dotenv-defaults: "npm:5.0.2"
     execa: "npm:5.1.1"
     express: "npm:4.19.2"
@@ -8843,7 +8843,7 @@ __metadata:
     "@whatwg-node/fetch": "npm:0.9.21"
     apollo-upload-client: "npm:18.0.1"
     concurrently: "npm:8.2.2"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     graphql: "npm:16.9.0"
     graphql-sse: "npm:2.5.3"
     graphql-tag: "npm:2.12.6"
@@ -14564,10 +14564,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.38.0, core-js@npm:^3.27.2, core-js@npm:^3.30.2":
-  version: 3.38.0
-  resolution: "core-js@npm:3.38.0"
-  checksum: 10c0/3218ae19bfe0c6560663012cbd3e7f3dc1b36d50fc71e8c365f3b119185e8a35ac4e8bb9698ae510b3c201ef93f40bdc29f9215716ccf31aca28f77969bb4ed0
+"core-js@npm:3.38.1, core-js@npm:^3.27.2, core-js@npm:^3.30.2":
+  version: 3.38.1
+  resolution: "core-js@npm:3.38.1"
+  checksum: 10c0/7df063b6f13a54e46515817ac3e235c6c598a4d3de65cd188a061fc250642be313b895fb9fb2f36e1e31890a1bb4ef61d82666a340413f540b7ce3c65689739b
   languageName: node
   linkType: hard
 
@@ -26671,7 +26671,7 @@ __metadata:
     babel-plugin-remove-code: "npm:0.0.6"
     boxen: "npm:5.1.2"
     concurrently: "npm:8.2.2"
-    core-js: "npm:3.38.0"
+    core-js: "npm:3.38.1"
     cross-env: "npm:7.0.3"
     cypress: "npm:13.14.2"
     cypress-fail-fast: "npm:7.1.1"
