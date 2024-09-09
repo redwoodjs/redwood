@@ -43,7 +43,7 @@
     "type-fest": "4.24.0"
   },
   "devDependencies": {
-    "@prisma/client": "5.18.0",
+    "@prisma/client": "5.19.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
