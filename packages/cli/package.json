@@ -52,7 +52,7 @@
     "ci-info": "4.0.0",
     "concurrently": "8.2.2",
     "configstore": "3.1.5",
-    "core-js": "3.38.0",
+    "core-js": "3.38.1",
     "cross-env": "7.0.3",
     "decamelize": "5.0.1",
     "dotenv-defaults": "5.0.2",
