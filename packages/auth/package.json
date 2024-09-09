@@ -91,7 +91,7 @@
     "react": "19.0.0-rc-8269d55d-20240802"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
+    "@arethetypeswrong/cli": "0.16.2",
     "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "14.3.1",

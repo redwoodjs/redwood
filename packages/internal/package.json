@@ -115,7 +115,7 @@
     "typescript": "5.5.4"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
+    "@arethetypeswrong/cli": "0.16.2",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "concurrently": "8.2.2",
