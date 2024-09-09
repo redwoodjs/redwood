@@ -7677,7 +7677,7 @@ __metadata:
     "@arethetypeswrong/cli": "npm:0.15.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
-    "@supabase/ssr": "npm:0.4.0"
+    "@supabase/ssr": "npm:0.5.1"
     "@types/aws-lambda": "npm:8.10.145"
     "@types/jsonwebtoken": "npm:9.0.6"
     concurrently: "npm:8.2.2"
@@ -7700,7 +7700,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"
     "@redwoodjs/web": "workspace:*"
-    "@supabase/ssr": "npm:0.4.0"
+    "@supabase/ssr": "npm:0.5.1"
     "@types/aws-lambda": "npm:8.10.145"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
@@ -7732,7 +7732,7 @@ __metadata:
   dependencies:
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
-    "@supabase/ssr": "npm:0.4.0"
+    "@supabase/ssr": "npm:0.5.1"
     "@supabase/supabase-js": "npm:2.45.3"
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
@@ -9007,7 +9007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.21.2, @rollup/rollup-linux-x64-gnu@npm:^4.9.5":
+"@rollup/rollup-linux-x64-gnu@npm:4.21.2":
   version: 4.21.2
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.21.2"
   conditions: os=linux & cpu=x64 & libc=glibc
@@ -9956,18 +9956,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@supabase/ssr@npm:0.4.0":
-  version: 0.4.0
-  resolution: "@supabase/ssr@npm:0.4.0"
+"@supabase/ssr@npm:0.5.1":
+  version: 0.5.1
+  resolution: "@supabase/ssr@npm:0.5.1"
   dependencies:
-    "@rollup/rollup-linux-x64-gnu": "npm:^4.9.5"
     cookie: "npm:^0.6.0"
   peerDependencies:
     "@supabase/supabase-js": ^2.43.4
-  dependenciesMeta:
-    "@rollup/rollup-linux-x64-gnu":
-      optional: true
-  checksum: 10c0/378f92e271eeed700dfc509f7f6398b4e0984a4845de91467b5ac211f50c690548fd32eb72f80b9600963084a947b4573a370b3419df15ca6fdf87df8252de09
+  checksum: 10c0/f0aaca9e013ff8c0e1ed2729245cd7cae89e380fdc08ff63175ebd0bac185800575377e10348590997297cb4fa436989851013df25461d6b468bb3325d238b87
   languageName: node
   linkType: hard
 
