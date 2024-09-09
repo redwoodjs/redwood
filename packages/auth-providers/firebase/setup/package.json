@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-firebase-setup",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -42,12 +42,12 @@
     "@redwoodjs/cli-helpers": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
+    "@arethetypeswrong/cli": "0.16.2",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/yargs": "17.0.33",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

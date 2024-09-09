@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-auth0-api",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -43,13 +43,13 @@
     "jwks-rsa": "3.1.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
+    "@arethetypeswrong/cli": "0.16.2",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/jsonwebtoken": "9.0.6",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

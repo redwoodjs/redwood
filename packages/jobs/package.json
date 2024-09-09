@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/jobs",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -40,14 +40,14 @@
   "dependencies": {
     "@redwoodjs/cli-helpers": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
-    "type-fest": "4.24.0"
+    "type-fest": "4.26.1"
   },
   "devDependencies": {
-    "@prisma/client": "5.18.0",
+    "@prisma/client": "5.19.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   }

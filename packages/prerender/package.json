@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/prerender",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "RedwoodJS prerender",
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
     "@redwoodjs/router": "workspace:*",
     "@redwoodjs/structure": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@whatwg-node/fetch": "0.9.20",
+    "@whatwg-node/fetch": "0.9.21",
     "babel-plugin-ignore-html-and-css-imports": "0.1.0",
     "cheerio": "1.0.0",
     "graphql": "16.9.0",
@@ -57,7 +57,7 @@
     "babel-plugin-tester": "11.0.4",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

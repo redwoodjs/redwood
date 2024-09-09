@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url'
 import type { Request as ExpressRequest } from 'express'
 import type { ViteDevServer } from 'vite'
 
-import { getPaths } from '@redwoodjs/project-config'
+import { getConfig, getPaths } from '@redwoodjs/project-config'
 import type { RscFetchProps } from '@redwoodjs/router/RscRouter'
 
 import type { EntryServer } from './types.js'
@@ -68,7 +68,54 @@ export function convertExpressHeaders(
 }
 
 export const getFullUrl = (req: ExpressRequest) => {
-  return req.protocol + '://' + req.get('host') + req.originalUrl
+  const rscEnabled = getConfig().experimental?.rsc?.enabled
+
+  // For a standard request:
+  //
+  // req.originalUrl /about
+  // req.protocol http
+  // req.headers.host localhost:8910
+  // req.get('host') localhost:8910
+  // baseUrl http://localhost:8910
+  // url.href http://localhost:8910/about
+  // props {}
+  //
+  // For an RSC request:
+  //
+  // req.originalUrl /rw-rsc/__rwjs__Routes?props=%7B%22location%22%3A%7B%22pathname%22%3A%22%2Fabout%22%2C%22search%22%3A%22%22%7D%7D
+  // req.protocol http
+  // req.headers.host localhost:8910
+  // req.get('host') localhost:8910
+  // baseUrl http://localhost:8910
+  // url.href http://localhost:8910/rw-rsc/__rwjs__Routes?props=%7B%22location%22%3A%7B%22pathname%22%3A%22%2Fabout%22%2C%22search%22%3A%22%22%7D%7D
+  // props { location: { pathname: '/about', search: '' } }
+
+  console.log('getFullUrl req.originalUrl', req.originalUrl)
+  console.log('getFullUrl req.protocol', req.protocol)
+  console.log('getFullUrl req.headers.host', req.headers.host)
+  console.log("getFullUrl req.get('host')", req.get('host'))
+
+  const baseUrl = req.protocol + '://' + req.headers.host
+
+  console.log('getFullUrl baseUrl', baseUrl)
+
+  // Properly parsing search params is difficult, so let's construct a URL
+  // object and have it do the parsing for us.
+  const url = new URL(req.originalUrl || '', baseUrl)
+
+  // `props` will be something like:
+  // "location":{"pathname":"/about","search":""}
+  const props: RscFetchProps = JSON.parse(url.searchParams.get('props') || '{}')
+
+  console.log('getFullUrl url.href', url.href)
+  console.log('getFullUrl props', props)
+
+  const pathPlusSearch =
+    rscEnabled && isRscFetchProps(props)
+      ? props.location.pathname + props.location.search
+      : req.originalUrl
+
+  return baseUrl + pathPlusSearch
 }
 
 function isRscFetchProps(
@@ -79,23 +126,4 @@ function isRscFetchProps(
     typeof rscPropsMaybe.location === 'object' &&
     'pathname' in rscPropsMaybe.location
   )
-}
-
-export const getFullUrlForFlightRequest = (
-  req: ExpressRequest,
-  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
-): string => {
-  if (isRscFetchProps(rscPropsMaybe)) {
-    return (
-      req.protocol +
-      '://' +
-      req.get('host') +
-      rscPropsMaybe.location.pathname +
-      rscPropsMaybe.location.search
-    )
-  } else {
-    // If it's not an RscFetchProps, then the url can be returned as is (for
-    // RSA requests)
-    return getFullUrl(req)
-  }
 }

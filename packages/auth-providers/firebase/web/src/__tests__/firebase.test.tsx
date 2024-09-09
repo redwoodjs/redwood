@@ -2,11 +2,12 @@ import { renderHook, act } from '@testing-library/react'
 import type FirebaseAuthNamespace from 'firebase/auth'
 import type { User, OAuthProvider, Auth } from 'firebase/auth'
 import { OperationType } from 'firebase/auth'
+import { vi, beforeAll, beforeEach, describe, it, expect } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import type { FirebaseClient } from '../firebase'
-import { createAuth } from '../firebase'
+import type { FirebaseClient } from '../firebase.js'
+import { createAuth } from '../firebase.js'
 
 const user: User = {
   uid: 'unique_user_id',
@@ -117,7 +118,7 @@ const firebaseMockClient: FirebaseClient = {
   firebaseAuth: firebaseAuth as typeof FirebaseAuthNamespace,
 }
 
-const fetchMock = jest.fn()
+const fetchMock = vi.fn()
 fetchMock.mockImplementation(async (_url, options) => {
   const body = options?.body ? JSON.parse(options.body) : {}
 

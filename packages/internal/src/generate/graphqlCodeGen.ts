@@ -43,7 +43,7 @@ export const generateTypeDefGraphQLApi = async (): Promise<TypeDefResult> => {
     const dtsFiles: string[] = []
 
     try {
-      const output = sdlCodegen.runFullCodegen('redwood', { paths })
+      const output = await sdlCodegen.runFullCodegen('redwood', { paths })
       dtsFiles.concat(output.paths)
     } catch (e: unknown) {
       if (e instanceof Error) {

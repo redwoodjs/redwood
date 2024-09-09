@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-netlify-web",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -58,7 +58,7 @@
     "concurrently": "8.2.2",
     "publint": "0.2.10",
     "react": "19.0.0-rc-8269d55d-20240802",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },

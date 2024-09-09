@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/framework-tools",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -31,16 +31,16 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
-    "esbuild": "0.23.0",
+    "@arethetypeswrong/cli": "0.16.2",
+    "esbuild": "0.23.1",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "zx": "8.1.4"
+    "zx": "8.1.5"
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "tsx": "4.17.0",
-    "type-fest": "4.24.0",
+    "tsx": "4.19.0",
+    "type-fest": "4.26.1",
     "typescript": "5.5.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

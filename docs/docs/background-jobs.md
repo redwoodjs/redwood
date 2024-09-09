@@ -687,6 +687,18 @@ export const redisLater = jobs.createScheduler({
 
 :::
 
+## Job Errors & Failure
+
+Jobs sometimes don't complete as expected, either because of an error in our code (unlikely, of course) or because a third party service that's being accessed responds in an unexpected way. Luckily, the job system is ready to handle these problems gracefully.
+
+If you're using the `PrismaAdapter` and an uncaught error occurs while the worker is executing your `perform` function, three things happen:
+
+1. The job's `runAt` time is set to a new time in the future, based on an incremental backoff computed from the number of previous attempts at running the job (by default it's `attempts ** 4`)
+2. The error message and backtrace is recorded in the `lastError` field
+3. The job is unlocked so that it's available for another worker to pick up when the time comes
+
+By checking the `lastError` field in the database you can see what the last error was and attempt to correct it, if possible. If the retry occurs and another error is thrown, the same sequence above will happen _unless_ the number of attempts is equal to the `maxAttempts` config variable set in the jobs config. If `maxAttempts` is reached then the job is considered **failed** and will not be rescheduled. `runAt` is set to `NULL`, the `failedAt` timestamp is set to now and, assuming you have `deleteFailedJobs` set to `false`, the job will remain in the database so you can inspect it and potentially correct the problem.
+
 ## Deployment
 
 For many use cases you may simply be able to rely on the job runner to start your job workers, which will run forever:

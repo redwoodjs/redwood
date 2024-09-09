@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

@@ -1,0 +1,19 @@
+.edit-blog-post-page {
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  input {
+    display: block;
+    width: 20rem;
+    max-width: calc(100% - 1.3rem);
+  }
+
+  textarea {
+    display: block;
+    width: calc(100% - 1.3rem);
+    max-width: 48rem;
+    height: 20rem;
+  }
+}

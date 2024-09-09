@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/project-config",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -42,12 +42,12 @@
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
+    "@arethetypeswrong/cli": "0.16.2",
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
     "rimraf": "6.0.1",
-    "tsx": "4.17.0",
+    "tsx": "4.19.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },
