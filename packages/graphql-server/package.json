@@ -27,7 +27,7 @@
     "@envelop/depth-limit": "4.0.0",
     "@envelop/disable-introspection": "6.0.0",
     "@envelop/filter-operation-type": "6.0.0",
-    "@envelop/on-resolve": "4.1.0",
+    "@envelop/on-resolve": "4.1.1",
     "@escape.tech/graphql-armor": "3.0.1",
     "@graphql-tools/merge": "9.0.5",
     "@graphql-tools/schema": "10.0.5",
