@@ -46,7 +46,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.143",
+    "@types/aws-lambda": "8.10.145",
     "@types/jsonwebtoken": "9.0.6",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
