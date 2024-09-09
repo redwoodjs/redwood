@@ -45,7 +45,7 @@
     "@arethetypeswrong/cli": "0.15.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.143",
+    "@types/aws-lambda": "8.10.145",
     "concurrently": "8.2.2",
     "publint": "0.2.10",
     "tsx": "4.17.0",
