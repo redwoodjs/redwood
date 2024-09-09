@@ -93,7 +93,7 @@
     "@babel/runtime-corejs3": "7.25.0",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "core-js": "3.38.0",
+    "core-js": "3.38.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
