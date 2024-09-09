@@ -59,7 +59,7 @@
     "unplugin-auto-import": "0.18.2"
   },
   "devDependencies": {
-    "@types/node": "20.14.15",
+    "@types/node": "20.16.5",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "vite": "5.4.3"
