@@ -25,7 +25,7 @@
     "@envelop/live-query": "7.0.0",
     "@graphql-tools/schema": "10.0.6",
     "@graphql-tools/utils": "10.5.4",
-    "@graphql-yoga/plugin-defer-stream": "3.6.3",
+    "@graphql-yoga/plugin-defer-stream": "3.7.0",
     "@graphql-yoga/plugin-graphql-sse": "3.7.0",
     "@graphql-yoga/redis-event-target": "3.0.1",
     "@graphql-yoga/subscription": "5.0.1",
