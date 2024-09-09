@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@prisma/client": "5.18.0",
-    "@whatwg-node/fetch": "0.9.20",
+    "@whatwg-node/fetch": "0.9.21",
     "cookie": "0.6.0",
     "humanize-string": "2.1.0",
     "jsonwebtoken": "9.0.2",
