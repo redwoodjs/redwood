@@ -150,7 +150,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
             messageSections.push(
               `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
                 `Redwood community discussion`,
-                `https://community.redwoodjs.com/search?q=${version}%23announcements`,
+                `https://community.redwoodjs.com/c/announcements/releases-and-upgrade-guides/`,
               )}\n   ❖ ${terminalLink(
                 `GitHub Release notes`,
                 `https://github.com/redwoodjs/redwood/releases`, // intentionally not linking to specific version
