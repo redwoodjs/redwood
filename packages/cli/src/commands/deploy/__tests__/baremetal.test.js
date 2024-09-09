@@ -553,6 +553,17 @@ describe('deployTasks', () => {
     expect(tasks[8].skip()).toEqual(false)
   })
 
+  it('skips the available space check if --no-df is passed', () => {
+    const tasks = baremetal.deployTasks(
+      { ...defaultYargs, df: false },
+      {}, // ssh
+      defaultServerConfig,
+      {}, // lifecycle
+    )
+
+    expect(tasks[0].skip()).toBeTruthy()
+  })
+
   it('throws an error if there is not enough available space on the server', () => {
     const ssh = {
       exec: () => ({ stdout: 'df:1875' }),
