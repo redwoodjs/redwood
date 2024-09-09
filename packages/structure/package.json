@@ -56,7 +56,7 @@
     "@types/fs-extra": "11.0.4",
     "@types/lodash": "4.17.7",
     "@types/node": "20.16.5",
-    "@types/vscode": "1.92.0",
+    "@types/vscode": "1.93.0",
     "typescript": "5.5.4",
     "vitest": "2.0.5"
   },
