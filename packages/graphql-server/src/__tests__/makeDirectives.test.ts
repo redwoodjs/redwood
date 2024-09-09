@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { describe, it, test, expect } from 'vitest'
 
 import type { DirectiveParams } from '..'
 import {

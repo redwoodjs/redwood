@@ -5,6 +5,7 @@ import { join } from 'path'
 import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
+import { describe, it, expect } from 'vitest'
 
 import type { Logger, LoggerOptions } from '@redwoodjs/api/logger'
 import { createLogger } from '@redwoodjs/api/logger'
