@@ -1,5 +1,5 @@
 import { Listr } from 'listr2'
-import { vi, describe, it, expect } from 'vitest'
+import { vi, beforeEach, describe, it, expect } from 'vitest'
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {
   const originalProjectConfig = await importOriginal()
@@ -67,12 +67,110 @@ describe('verifyServerConfig', () => {
     )
   })
 
+  it('throws an error if freeSpaceRequired is a string of letters', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: 'not a number',
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('throws an error if freeSpaceRequired is a float (as a string)', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: '100.5',
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('throws an error if freeSpaceRequired is a float', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: 100.5,
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('throws an error if freeSpaceRequired includes a unit', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: '3GB',
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: '2048 MB',
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('throws an error if freeSpaceRequired is negative (as a string)', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: '-1',
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('throws an error if freeSpaceRequired is negative', () => {
+    expect(() =>
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: -1,
+      }),
+    ).toThrow('"freeSpaceRequired" must be an integer >= 0')
+  })
+
+  it('allows freeSpaceRequired to be 0 (as a string)', () => {
+    expect(
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: '0',
+      }),
+    ).toEqual(true)
+  })
+
+  it('allows freeSpaceRequired to be 0', () => {
+    expect(
+      baremetal.verifyServerConfig({
+        host: 'host.test',
+        path: '/var/www/app',
+        repo: 'git://github.com',
+        freeSpaceRequired: 0,
+      }),
+    ).toEqual(true)
+  })
+
   it('returns true if no problems', () => {
     expect(
       baremetal.verifyServerConfig({
         host: 'host.test',
         path: '/var/www/app',
         repo: 'git://github.com',
+        freeSpaceRequired: 2024,
       }),
     ).toEqual(true)
   })
@@ -140,6 +238,7 @@ describe('serverConfigWithDefaults', () => {
       monitorCommand: 'god',
       sides: ['native', 'cli'],
       keepReleases: 2,
+      freeSpaceRequired: 1000,
     }
     const config = baremetal.serverConfigWithDefaults(serverConfig, {})
     expect(config).toEqual(serverConfig)
@@ -166,6 +265,11 @@ describe('serverConfigWithDefaults', () => {
       { branch: 'moon' },
     )
     expect(config.branch).toEqual('moon')
+  })
+
+  it('provides default freeSpaceRequired', () => {
+    const config = baremetal.serverConfigWithDefaults({}, {})
+    expect(config.freeSpaceRequired).toEqual(2048)
   })
 })
 
@@ -522,7 +626,16 @@ describe('deployTasks', () => {
     path: '/var/www/app',
     processNames: ['serve'],
     sides: ['api'],
+    freeSpaceRequired: 2048,
   }
+
+  const mockTask = {
+    skip: vi.fn(),
+  }
+
+  beforeEach(() => {
+    vi.resetAllMocks()
+  })
 
   it('provides a default list of tasks', () => {
     const tasks = baremetal.deployTasks(
@@ -564,6 +677,17 @@ describe('deployTasks', () => {
     expect(tasks[0].skip()).toBeTruthy()
   })
 
+  it('skips the available space check if freeSpaceRequired is set to 0', () => {
+    const tasks = baremetal.deployTasks(
+      { ...defaultYargs },
+      {}, // ssh
+      { ...defaultServerConfig, freeSpaceRequired: 0 },
+      {}, // lifecycle
+    )
+
+    expect(tasks[0].skip()).toBeTruthy()
+  })
+
   it('throws an error if there is not enough available space on the server', () => {
     const ssh = {
       exec: () => ({ stdout: 'df:1875' }),
@@ -581,7 +705,7 @@ describe('deployTasks', () => {
     )
   })
 
-  it("throws an error if it can't get the available space", () => {
+  it("warns if it can't get the available space", async () => {
     const ssh = {
       exec: () => ({ stdout: '', stderr: 'df: command not found' }),
     }
@@ -593,12 +717,14 @@ describe('deployTasks', () => {
       {}, // lifecycle
     )
 
-    expect(() => tasks[0].task({}, {})).rejects.toThrowError(
-      /Could not get disk space information/,
+    await tasks[0].task({}, mockTask)
+
+    expect(mockTask.skip).toHaveBeenCalledWith(
+      expect.stringContaining('Warning: Could not get disk space information'),
     )
   })
 
-  it("throws an error if it can't parse the output of the ssh command", () => {
+  it("warns if it can't parse the output of the ssh command", async () => {
     const ssh = {
       exec: () => ({ stdout: 'df:/dev/sda1' }),
     }
@@ -610,8 +736,12 @@ describe('deployTasks', () => {
       {}, // lifecycle
     )
 
-    expect(() => tasks[0].task({}, {})).rejects.toThrowError(
-      /Could not parse disk space information/,
+    await tasks[0].task({}, mockTask)
+
+    expect(mockTask.skip).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Warning: Could not parse disk space information',
+      ),
     )
   })
 

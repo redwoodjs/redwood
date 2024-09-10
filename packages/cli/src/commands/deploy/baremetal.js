@@ -26,6 +26,7 @@ export const DEFAULT_SERVER_CONFIG = {
   monitorCommand: 'pm2',
   sides: ['api', 'web'],
   keepReleases: 5,
+  freeSpaceRequired: 2048,
 }
 
 export const command = 'baremetal [environment]'
@@ -170,6 +171,10 @@ export const verifyServerConfig = (config) => {
 
   if (!config.repo) {
     throwMissingConfig('repo')
+  }
+
+  if (!/^\d+$/.test(config.freeSpaceRequired)) {
+    throw new Error('"freeSpaceRequired" must be an integer >= 0')
   }
 
   return true
@@ -369,7 +374,10 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
     commandWithLifecycleEvents({
       name: 'df',
       config: { ...config, cmdPath: serverConfig.path },
-      skip: !yargs.df,
+      skip:
+        !yargs.df ||
+        serverConfig.freeSpaceRequired === 0 ||
+        serverConfig.freeSpaceRequired === '0',
       command: {
         title: `Checking available disk space...`,
         task: async (_ctx, task) => {
@@ -386,22 +394,28 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           const df = stdout.split('\n').find((line) => line.startsWith('df:'))
 
           if (!df || !df.startsWith('df:') || df === 'df:') {
-            throw new Error('Could not get disk space information')
+            return task.skip(
+              c.warning('Warning: Could not get disk space information'),
+            )
           }
 
           const dfMb = parseInt(df.replace('df:', ''), 10) / 1024
 
           if (isNaN(dfMb)) {
-            throw new Error('Could not parse disk space information')
+            return task.skip(
+              c.warning('Warning: Could not parse disk space information'),
+            )
           }
 
           // This will only show if --verbose is passed
           task.output = `Available disk space: ${dfMb}MB`
 
-          if (dfMb < 2048) {
-            // Not enough space (less than 2GB)
+          const freeSpaceRequired = parseInt(serverConfig.freeSpaceRequired, 10)
+
+          if (dfMb < freeSpaceRequired) {
             throw new Error(
-              'Not enough disk space. You need at least 2GB free space to continue.',
+              `Not enough disk space. You need at least ${freeSpaceRequired}` +
+                'MB free space to continue.',
             )
           }
         },
