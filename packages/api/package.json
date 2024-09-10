@@ -73,7 +73,7 @@
     "split2": "4.2.0",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.19.0",
-    "typescript": "5.5.4",
+    "typescript": "5.6.2",
     "vitest": "2.0.5"
   },
   "peerDependencies": {

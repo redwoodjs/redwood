@@ -41,7 +41,7 @@
     "@types/fs-extra": "11.0.4",
     "tsx": "4.19.0",
     "type-fest": "4.26.1",
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
