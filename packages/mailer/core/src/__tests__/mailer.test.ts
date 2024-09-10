@@ -24,8 +24,8 @@ class MockMailHandler extends AbstractMailHandler {
   send(
     _renderedContent: MailRenderedContent,
     _sendOptions: MailSendOptionsComplete,
-    _handlerOptions?: Record<string | number | symbol, unknown> | undefined,
-    _utilities?: MailUtilities | undefined,
+    _handlerOptions?: Record<string | number | symbol, unknown>,
+    _utilities?: MailUtilities,
   ): MailResult | Promise<MailResult> {
     // do nothing
     return {}
@@ -39,7 +39,7 @@ class MockMailRenderer extends AbstractMailRenderer {
   render(
     _template: unknown,
     _options: MailRendererOptions<unknown>,
-    _utilities?: MailUtilities | undefined,
+    _utilities?: MailUtilities,
   ): MailRenderedContent {
     // do nothing
     return {
