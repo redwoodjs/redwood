@@ -109,6 +109,11 @@ function getBundlerConfig() {
   return bundlerConfig
 }
 
+interface RscModel {
+  __rwjs__Routes: React.ReactElement
+  __rwjs__rsa_data?: unknown
+}
+
 async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   if (input.rsaId || !input.args) {
     throw new Error(
@@ -183,8 +188,8 @@ async function executeRsa(input: RenderInput): Promise<ReadableStream> {
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscRenderer.ts executeRsa serverRoutes', serverRoutes)
-  const model = {
-    Routes: createElement(serverRoutes, {
+  const model: RscModel = {
+    __rwjs__Routes: createElement(serverRoutes, {
       location: { pathname: '/', search: '' },
     }),
     __rwjs__rsa_data: data,
