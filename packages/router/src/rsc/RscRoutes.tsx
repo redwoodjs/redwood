@@ -108,7 +108,7 @@ function rscFetchRoutes(serializedProps: string) {
       // I'm not sure this recursive use of `options` is needed. I briefly
       // tried without it, and things seemed to work. But keeping it for
       // now, until we learn more.
-      const dataPromise = createFromFetch(responsePromise, options)
+      const modelPromise = createFromFetch(responsePromise, options)
 
       // TODO (RSC): This is where we want to update the RSA cache, but first we
       // need to normalize the data that comes back from the server. We need to
@@ -116,33 +116,30 @@ function rscFetchRoutes(serializedProps: string) {
       // for the flight data
       // rscCache.set(rscCacheKey, dataPromise)
 
-      const dataValue = await dataPromise
-      console.log('RscRoutes :: callServer dataValue', dataValue)
+      const model = await modelPromise
+
       // TODO (RSC): Fix the types for `createFromFetch`
       // @ts-expect-error The type is wrong for createFromFetch
-      const Routes = dataValue.Routes?.[0]
-      console.log('Routes', Routes)
-
-      rscCache.set(rscCacheKey, Promise.resolve(Routes))
+      rscCache.set(rscCacheKey, Promise.resolve(model.__rwjs__Routes?.[0]))
 
       // TODO (RSC): Fix the types for `createFromFetch`
       // @ts-expect-error The type is wrong for createFromFetch. It can really
       // return anything, not just React.ReactElement. It all depends on what
       // the server sends back.
-      return dataValue.__rwjs__rsa_data
+      return model.__rwjs__rsa_data
     },
   }
 
-  const componentPromise = createFromFetch<never, React.ReactElement>(
+  const modelPromise = createFromFetch<never, React.ReactElement>(
     responsePromise,
     options,
   )
 
-  rscCache.set(rscCacheKey, componentPromise)
+  rscCache.set(rscCacheKey, modelPromise)
 
   // TODO (RSC): Figure out if this is ever used, or if it's better to return
   // the cache key
-  return componentPromise
+  return modelPromise
 }
 
 interface Props {
@@ -177,11 +174,11 @@ export const RscRoutes = ({ routesProps }: Props) => {
   console.log('RscRoutes :: current props\n    routesProps: ' + serializedProps)
   console.log('RscRoutes :: rendering cache entry for\n' + currentRscCacheKey)
 
-  const component = rscCache.get(currentRscCacheKey)
+  const rscModelPromise = rscCache.get(currentRscCacheKey)
 
-  if (!component) {
+  if (!rscModelPromise) {
     throw new Error('Missing RSC cache entry for ' + currentRscCacheKey)
   }
 
-  return use(component)
+  return use(rscModelPromise)
 }
