@@ -29014,11 +29014,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A5.6.1-rc#optional!builtin<compat/typescript>":
   version: 5.6.1-rc
-  resolution: "typescript@patch:typescript@npm%3A5.6.1-rc#optional!builtin<compat/typescript>::version=5.6.1-rc&hash=74658d"
+  resolution: "typescript@patch:typescript@npm%3A5.6.1-rc#optional!builtin<compat/typescript>::version=5.6.1-rc&hash=8c6c40"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/7849a6f82731f33d05dc9401252eeed78cec227aa9b23c316638c12c15ff7ec0903d62aa8718ea0ab5aad2e155a74edcd0c8053b8fdf8020bd1652720d89db7c
+  checksum: 10c0/9c6f8d864bc2efc964d1bfc94bf2e14f35cd2ad3df5e92d5304c8759674ba77ae927078a5fc06a527c087953615465dd5decc2d4d28ca8e13c11f9b29e068d93
   languageName: node
   linkType: hard
 
