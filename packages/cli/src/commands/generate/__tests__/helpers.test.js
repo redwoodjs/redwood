@@ -246,7 +246,7 @@ test('templateForComponentFile creates a template', async () => {
   })
 
   expect(output[1]).toMatchInlineSnapshot(`
-    "import { Link, routes } from '@redwoodjs/router'
+    "// import { Link, routes } from '@redwoodjs/router'
     import { Metadata } from '@redwoodjs/web'
 
     const FooBarPage = () => {
@@ -259,8 +259,8 @@ test('templateForComponentFile creates a template', async () => {
             Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
           </p>
           {/*
-              My default route is named <code>fooBar</code>, link to me with \`
-              <Link to={routes.fooBar()}>FooBar</Link>\`
+              My default route is named \`fooBar\`, link to me with:
+              \`<Link to={routes.fooBar()}>FooBar</Link>\`
           */}
         </>
       )
