@@ -1,3 +1,8 @@
+export interface RscModel {
+  __rwjs__Routes: [React.ReactElement]
+  __rwjs__rsa_data?: unknown
+}
+
 /**
  * This cache is used for RSC fetches, so that we don't re-fetch the same
  * component (i.e. page) multiple times and get stuck in a loop.
@@ -6,7 +11,7 @@
  * `value`: A Promise that resolves to a React element.
  */
 export class RscCache {
-  private cache = new Map<string, Thenable<React.ReactElement>>()
+  private cache = new Map<string, Thenable<RscModel>>()
   private socket: WebSocket
   private sendRetries = 0
   // Turn the cache off for now. We can turn it on later if we decide we need it
@@ -58,13 +63,13 @@ export class RscCache {
     })
   }
 
-  get(key: string): Thenable<React.ReactElement> | undefined {
+  get(key: string): Thenable<RscModel> | undefined {
     const value = this.cache.get(key)
     console.log('RscCache.get', key, value)
     return value
   }
 
-  set(key: string, value: Thenable<React.ReactElement>) {
+  set(key: string, value: Thenable<RscModel>) {
     console.log('RscCache.set', key, value)
 
     if (!this.isEnabled) {

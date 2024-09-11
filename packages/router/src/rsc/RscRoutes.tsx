@@ -1,10 +1,10 @@
-import type React from 'react'
 import { use, useState, useEffect } from 'react'
 
 import type { Options } from 'react-server-dom-webpack/client'
 import { createFromFetch, encodeReply } from 'react-server-dom-webpack/client'
 
 import { RscCache } from './RscCache.js'
+import type { RscModel } from './RscCache.js'
 
 const BASE_PATH = '/rw-rsc/'
 
@@ -63,12 +63,14 @@ function rscFetchRoutes(serializedProps: string) {
     },
   })
 
-  const options: Options<unknown[], React.ReactElement> = {
+  const options: Options<unknown[], RscModel> = {
     // React will hold on to `callServer` and use that when it detects a
     // server action is invoked (like `action={onSubmit}` in a <form>
     // element). So for now at least we need to send it with every RSC
     // request, so React knows what `callServer` method to use for server
     // actions inside the RSC.
+    // TODO (RSC): Need to figure out the types for callServer
+    // @ts-expect-error types
     callServer: async function (rsaId: string, args: unknown[]) {
       // `args` is often going to be an array with just a single element,
       // and that element will be FormData
@@ -110,27 +112,15 @@ function rscFetchRoutes(serializedProps: string) {
       // now, until we learn more.
       const modelPromise = createFromFetch(responsePromise, options)
 
-      // TODO (RSC): This is where we want to update the RSA cache, but first we
-      // need to normalize the data that comes back from the server. We need to
-      // always send an object with a `__rwjs__rsa_data` key and some key
-      // for the flight data
-      // rscCache.set(rscCacheKey, dataPromise)
+      rscCache.set(rscCacheKey, modelPromise)
 
       const model = await modelPromise
 
-      // TODO (RSC): Fix the types for `createFromFetch`
-      // @ts-expect-error The type is wrong for createFromFetch
-      rscCache.set(rscCacheKey, Promise.resolve(model.__rwjs__Routes?.[0]))
-
-      // TODO (RSC): Fix the types for `createFromFetch`
-      // @ts-expect-error The type is wrong for createFromFetch. It can really
-      // return anything, not just React.ReactElement. It all depends on what
-      // the server sends back.
       return model.__rwjs__rsa_data
     },
   }
 
-  const modelPromise = createFromFetch<never, React.ReactElement>(
+  const modelPromise = createFromFetch<never, RscModel>(
     responsePromise,
     options,
   )
@@ -146,6 +136,14 @@ interface Props {
   routesProps: RscProps
 }
 
+// TODO (RSC): This only works as long as we only have one RscRoutes component.
+// We should look at having this be a (Weak?) Map or maybe just a `useRef` thing
+// It needs to be a stable promise. Can't re-create it on every render
+let externalPromiseResolver = (_component: React.ReactElement) => {}
+let externalPromise = new Promise<React.ReactElement>((resolve) => {
+  externalPromiseResolver = resolve
+})
+
 export const RscRoutes = ({ routesProps }: Props) => {
   const serializedProps = JSON.stringify(routesProps)
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
@@ -160,6 +158,9 @@ export const RscRoutes = ({ routesProps }: Props) => {
     updateCurrentRscCacheKey = (key: string) => {
       console.log('RscRoutes inside updateCurrentRscCacheKey', key)
 
+      externalPromise = new Promise<React.ReactElement>((resolve) => {
+        externalPromiseResolver = resolve
+      })
       setCurrentRscCacheKey(key)
     }
   }, [])
@@ -168,10 +169,13 @@ export const RscRoutes = ({ routesProps }: Props) => {
     console.log('RscRoutes :: useEffect about to call rscFetchRoutes')
     // rscFetchRoutes will update rscCache with the fetched component
     rscFetchRoutes(serializedProps)
+
+    externalPromise = new Promise<React.ReactElement>((resolve) => {
+      externalPromiseResolver = resolve
+    })
     setCurrentRscCacheKey(serializedProps)
   }, [serializedProps])
 
-  console.log('RscRoutes :: current props\n    routesProps: ' + serializedProps)
   console.log('RscRoutes :: rendering cache entry for\n' + currentRscCacheKey)
 
   const rscModelPromise = rscCache.get(currentRscCacheKey)
@@ -180,5 +184,10 @@ export const RscRoutes = ({ routesProps }: Props) => {
     throw new Error('Missing RSC cache entry for ' + currentRscCacheKey)
   }
 
-  return use(rscModelPromise)
+  rscModelPromise.then((resolvedModel) => {
+    console.log('RscRoutes :: resolvedModel', resolvedModel)
+    externalPromiseResolver(resolvedModel.__rwjs__Routes[0])
+  })
+
+  return use(externalPromise)
 }
