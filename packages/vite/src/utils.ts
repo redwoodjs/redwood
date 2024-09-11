@@ -3,8 +3,7 @@ import { pathToFileURL } from 'node:url'
 import type { Request as ExpressRequest } from 'express'
 import type { ViteDevServer } from 'vite'
 
-import { getConfig, getPaths } from '@redwoodjs/project-config'
-import type { RscFetchProps } from '@redwoodjs/router/RscRouter'
+import { getPaths } from '@redwoodjs/project-config'
 
 import type { EntryServer } from './types.js'
 
@@ -67,9 +66,7 @@ export function convertExpressHeaders(
   return headers
 }
 
-export const getFullUrl = (req: ExpressRequest) => {
-  const rscEnabled = getConfig().experimental?.rsc?.enabled
-
+export const getFullUrl = (req: ExpressRequest, rscEnabled: boolean) => {
   // For a standard request:
   //
   // req.originalUrl /about
@@ -104,26 +101,29 @@ export const getFullUrl = (req: ExpressRequest) => {
   const url = new URL(req.originalUrl || '', baseUrl)
 
   // `props` will be something like:
-  // "location":{"pathname":"/about","search":""}
-  const props: RscFetchProps = JSON.parse(url.searchParams.get('props') || '{}')
+  // "__rwjs__pathname=/about&__rwjs__search=
+  const props = url.searchParams.get('props') || ''
 
   console.log('getFullUrl url.href', url.href)
   console.log('getFullUrl props', props)
 
-  const pathPlusSearch =
-    rscEnabled && isRscFetchProps(props)
-      ? props.location.pathname + props.location.search
-      : req.originalUrl
+  let pathnamePlusSearch = req.originalUrl
 
-  return baseUrl + pathPlusSearch
-}
+  if (
+    rscEnabled &&
+    props.includes('__rwjs__pathname') &&
+    props.includes('__rwjs__search')
+  ) {
+    const matches = props.match(
+      /^__rwjs__pathname=(.*?)&__rwjs__search=(.*?)(?:::)?/,
+    )
+    const pathname = matches?.[1]
+    const search = matches?.[2]
 
-function isRscFetchProps(
-  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
-): rscPropsMaybe is RscFetchProps {
-  return (
-    !!rscPropsMaybe.location &&
-    typeof rscPropsMaybe.location === 'object' &&
-    'pathname' in rscPropsMaybe.location
-  )
+    if (pathname && (search === '' || search)) {
+      pathnamePlusSearch = pathname + search
+    }
+  }
+
+  return baseUrl + pathnamePlusSearch
 }

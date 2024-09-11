@@ -10,14 +10,7 @@ const BASE_PATH = '/rw-rsc/'
 
 const rscCache = new RscCache()
 
-export interface RscProps extends Record<string, unknown> {
-  location: {
-    pathname: string
-    search: string
-  }
-}
-
-let updateCurrentRscCacheKey = (key: string) => {
+let updateCurrentRscCacheKey = (key: SerializedFetchProps) => {
   console.error('updateCurrentRscCacheKey called before it was set')
   console.error('updateCurrentRscCacheKey key', key)
 }
@@ -36,7 +29,11 @@ function onStreamFinished(
   )
 }
 
-function rscFetchRoutes(serializedProps: string) {
+type SerializedFetchProps =
+  | `__rwjs__pathname=${string}&__rwjs__search=${string}`
+  | `__rwjs__pathname=${string}&__rwjs__search=${string}::${string}`
+
+function rscFetchRoutes(serializedProps: SerializedFetchProps) {
   console.log(
     'rscFetchRoutes :: args:\n    serializedProps: ' + serializedProps,
   )
@@ -80,7 +77,7 @@ function rscFetchRoutes(serializedProps: string) {
       // `new Date()`, to make sure the cache key is unique so we trigger a
       // rerender. It's needed to handle calling RSAs multiple times with the
       // same arguments
-      const rscCacheKey = `${serializedProps}::${rsaId}::${new Date()}`
+      const rscCacheKey: SerializedFetchProps = `${serializedProps}::${rsaId}::${new Date()}`
 
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsaId)
@@ -133,7 +130,8 @@ function rscFetchRoutes(serializedProps: string) {
 }
 
 interface Props {
-  routesProps: RscProps
+  pathname: string
+  search: string
 }
 
 // TODO (RSC): This only works as long as we only have one RscRoutes component.
@@ -144,8 +142,8 @@ let externalPromise = new Promise<React.ReactElement>((resolve) => {
   externalPromiseResolver = resolve
 })
 
-export const RscRoutes = ({ routesProps }: Props) => {
-  const serializedProps = JSON.stringify(routesProps)
+export const RscRoutes = ({ pathname, search }: Props) => {
+  const serializedProps: SerializedFetchProps = `__rwjs__pathname=${pathname}&__rwjs__search=${search}`
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
     console.log('RscRoutes :: useState initial value')
     // Calling rscFetchRoutes here to prime the cache
@@ -155,7 +153,7 @@ export const RscRoutes = ({ routesProps }: Props) => {
 
   useEffect(() => {
     console.log('RscRoutes :: useEffect set updateCurrentRscCacheKey')
-    updateCurrentRscCacheKey = (key: string) => {
+    updateCurrentRscCacheKey = (key: SerializedFetchProps) => {
       console.log('RscRoutes inside updateCurrentRscCacheKey', key)
 
       externalPromise = new Promise<React.ReactElement>((resolve) => {
