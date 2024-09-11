@@ -4,7 +4,10 @@
   "workbench.colorCustomizations": {
     "statusBar.background": "#b85833",
     "statusBarItem.hoverBackground": "#ce7350",
-    "statusBar.foreground": "#e7e7e7"
+    "statusBar.foreground": "#e7e7e7",
+    "activityBar.background": "#4A2126",
+    "titleBar.activeBackground": "#682E35",
+    "titleBar.activeForeground": "#FEFCFC"
   },
   "search.exclude": {
     "**/dist": true,

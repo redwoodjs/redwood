@@ -213,10 +213,10 @@ You may have noticed that when trying to view the new single-article page that y
         <p>
           Find me in <code>./web/src/pages/ArticlePage/ArticlePage.js</code>
         </p>
-        <p>
+        {/*
           My default route is named <code>article</code>, link to me with `
--         <Link to={routes.article()}>Article</Link>`
-        </p>
+          <Link to={routes.article()}>Article</Link>`
+        */}
       </>
     )
   }
@@ -240,10 +240,10 @@ You may have noticed that when trying to view the new single-article page that y
         <p>
           Find me in <code>./web/src/pages/ArticlePage/ArticlePage.tsx</code>
         </p>
-        <p>
+        {/*
           My default route is named <code>article</code>, link to me with `
--         <Link to={routes.article()}>Article</Link>`
-        </p>
+          <Link to={routes.article()}>Article</Link>`
+        */}
       </>
     )
   }

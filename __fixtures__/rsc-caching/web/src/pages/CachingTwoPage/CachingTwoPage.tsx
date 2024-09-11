@@ -12,10 +12,10 @@ const CachingTwoPage = () => {
         Find me in{' '}
         <code>./web/src/pages/CachingTwoPage/CachingTwoPage.tsx</code>
       </p>
-      <p>
+      {/*
         My default route is named <code>cachingTwo</code>, link to me with `
         <Link to={routes.cachingTwo()}>CachingTwo</Link>`
-      </p>
+      */}
     </>
   )
 }

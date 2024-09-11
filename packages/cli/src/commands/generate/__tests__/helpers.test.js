@@ -22,10 +22,10 @@ const FooBarPage = () => {
       <p>
         Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
       </p>
-      <p>
-        My default route is named <code>fooBar</code>, link to me with \`
-        <Link to={routes.fooBar()}>FooBar</Link>\`
-      </p>
+      {/*
+          My default route is named <code>fooBar</code>, link to me with \`
+          <Link to={routes.fooBar()}>FooBar</Link>\`
+      */}
     </>
   )
 }
