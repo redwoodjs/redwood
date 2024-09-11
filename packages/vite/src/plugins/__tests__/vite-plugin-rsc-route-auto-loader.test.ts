@@ -105,8 +105,8 @@ describe('rscRoutesAutoLoader', () => {
     )
 
     // What we are interested in seeing here is:
-    // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
-    // - The call to `renderFromRscServer` for each page that wasn't already imported
+    // - Creation of `const EmptyUserNewEmptyUserPage = () => null;` etc for each page
+    // - The import of `dummyComponent` from `@redwoodjs/router/dist/dummyComponent`
     expect(output).toMatchInlineSnapshot(`
       "const EmptyUserNewEmptyUserPage = () => null;
       const EmptyUserEmptyUsersPage = () => null;
@@ -364,9 +364,8 @@ describe('rscRoutesAutoLoader', () => {
       undefined,
     )
 
-    // We don't have to add calls for the AboutPage as it was already imported
-    expect(output).not.toContain('renderFromDist("AboutPage")')
-    expect(output).not.toContain('renderFromRscServer("AboutPage")')
+    // We should't create a stub component for the AboutPage as it was already imported
+    expect(output).not.toContain('const AboutPage = () => null')
   })
 })
 
