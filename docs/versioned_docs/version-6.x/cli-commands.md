@@ -916,11 +916,11 @@ const QuotePage = ({ id }) => {
     <>
       <h1>QuotePage</h1>
       <p>Find me in "./web/src/pages/QuotePage/QuotePage.js"</p>
-      {/*
+      <p>
         My default route is named "quote", link to me with `
         <Link to={routes.quote({ id: 42 })}>Quote 42</Link>`
-        The parameter passed to me is {id}
-      */}
+      </p>
+      <p>The parameter passed to me is {id}</p>
     </>
   )
 }
