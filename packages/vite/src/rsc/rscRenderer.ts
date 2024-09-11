@@ -128,8 +128,9 @@ async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   console.log('renderRsc input', input)
 
   const serverRoutes = await getRoutesComponent()
-  // TODO (RSC): Should this have the same shape as for executeRsa?
-  const model = createElement(serverRoutes, input.props)
+  const model: RscModel = {
+    __rwjs__Routes: createElement(serverRoutes, input.props),
+  }
 
   console.log('rscRenderer.ts renderRsc props', input.props)
   console.log('rscRenderer.ts renderRsc model', model)
