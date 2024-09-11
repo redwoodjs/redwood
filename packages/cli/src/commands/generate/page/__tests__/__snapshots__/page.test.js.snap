@@ -15,7 +15,6 @@ const CatsPage = () => {
       {/*
            My default route is named <code>cats</code>, link to me with \`
            <Link to={routes.cats()}>Cats</Link>\`
-           
         */}
     </>
   )
@@ -40,7 +39,6 @@ const HomePage = () => {
       {/*
            My default route is named <code>home</code>, link to me with \`
            <Link to={routes.home()}>Home</Link>\`
-           
         */}
     </>
   )
@@ -102,7 +100,6 @@ const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
       {/*
           My default route is named <code>tsParamFiles</code>, link to me with \`
           <Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
-          
           The parameter passed to me is {id}
       */}
     </>
@@ -136,7 +133,6 @@ const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
       {/*
           My default route is named <code>tsParamTypeFiles</code>, link to me with \`
           <Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
-          
           The parameter passed to me is {id}
       */}
     </>
@@ -163,7 +159,6 @@ const TsFilesPage = () => {
       {/*
           My default route is named <code>tsFiles</code>, link to me with \`
           <Link to={routes.tsFiles()}>TsFiles</Link>\`
-          
       */}
     </>
   )
@@ -261,7 +256,6 @@ const HomePage = () => {
       {/*
            My default route is named <code>home</code>, link to me with \`
            <Link to={routes.home()}>Home</Link>\`
-           
         */}
     </>
   )
@@ -345,7 +339,6 @@ const PostPage = ({ id }) => {
       {/*
            My default route is named <code>post</code>, link to me with \`
            <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
-           
            The parameter passed to me is {id}
         */}
     </>
@@ -392,7 +385,6 @@ const ContactUsPage = () => {
       {/*
            My default route is named <code>contactUs</code>, link to me with \`
            <Link to={routes.contactUs()}>ContactUs</Link>\`
-           
         */}
     </>
   )
@@ -448,7 +440,6 @@ const PostPage = ({ id }) => {
       {/*
            My default route is named <code>post</code>, link to me with \`
            <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
-           
            The parameter passed to me is {id}
         */}
     </>

@@ -261,7 +261,6 @@ test('templateForComponentFile creates a template', async () => {
           {/*
               My default route is named <code>fooBar</code>, link to me with \`
               <Link to={routes.fooBar()}>FooBar</Link>\`
-
           */}
         </>
       )
