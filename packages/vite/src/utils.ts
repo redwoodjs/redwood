@@ -67,34 +67,7 @@ export function convertExpressHeaders(
 }
 
 export const getFullUrl = (req: ExpressRequest, rscEnabled: boolean) => {
-  // For a standard request:
-  //
-  // req.originalUrl /about
-  // req.protocol http
-  // req.headers.host localhost:8910
-  // req.get('host') localhost:8910
-  // baseUrl http://localhost:8910
-  // url.href http://localhost:8910/about
-  // props {}
-  //
-  // For an RSC request:
-  //
-  // req.originalUrl /rw-rsc/__rwjs__Routes?props=%7B%22location%22%3A%7B%22pathname%22%3A%22%2Fabout%22%2C%22search%22%3A%22%22%7D%7D
-  // req.protocol http
-  // req.headers.host localhost:8910
-  // req.get('host') localhost:8910
-  // baseUrl http://localhost:8910
-  // url.href http://localhost:8910/rw-rsc/__rwjs__Routes?props=%7B%22location%22%3A%7B%22pathname%22%3A%22%2Fabout%22%2C%22search%22%3A%22%22%7D%7D
-  // props { location: { pathname: '/about', search: '' } }
-
-  console.log('getFullUrl req.originalUrl', req.originalUrl)
-  console.log('getFullUrl req.protocol', req.protocol)
-  console.log('getFullUrl req.headers.host', req.headers.host)
-  console.log("getFullUrl req.get('host')", req.get('host'))
-
   const baseUrl = req.protocol + '://' + req.headers.host
-
-  console.log('getFullUrl baseUrl', baseUrl)
 
   // Properly parsing search params is difficult, so let's construct a URL
   // object and have it do the parsing for us.
@@ -102,10 +75,6 @@ export const getFullUrl = (req: ExpressRequest, rscEnabled: boolean) => {
 
   const pathname = url.searchParams.get('__rwjs__pathname')
   const search = url.searchParams.get('__rwjs__search')
-
-  console.log('getFullUrl url.href', url.href)
-  console.log('getFullUrl pathname', pathname)
-  console.log('getFullUrl search', search)
 
   let pathnamePlusSearch = req.originalUrl
 
