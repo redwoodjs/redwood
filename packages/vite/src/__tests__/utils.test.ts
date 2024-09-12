@@ -21,25 +21,24 @@ describe('getFullUrl', () => {
     const rscEnabled = true
 
     it("returns the original URL if the request's searchParams don't include rsc request props", () => {
-      const req = mockExpressRequest(
-        '/rw-rsc/__rwjs__Routes?props=' +
-          encodeURIComponent('__rwjs__pathname=/about&__rwjs__search='),
-      )
+      const req = mockExpressRequest('/foo/bar?extra=baz')
 
       const result = getFullUrl(req, rscEnabled)
 
-      expect(result).toBe('http://localhost:8910/about')
+      expect(result).toBe('http://localhost:8910/foo/bar?extra=baz')
     })
 
     it("reads pathname and search parameters from the request's searchParams if they're available", () => {
       const req = mockExpressRequest(
-        '/rw-rsc/__rwjs__Routes?props=' +
-          encodeURIComponent('__rwjs__pathname=/about&__rwjs__search='),
+        '/rw-rsc/__rwjs__Routes?__rwjs__pathname=' +
+          encodeURIComponent('/cux/cuux') +
+          '&__rwjs__search=' +
+          encodeURIComponent('extra=corge'),
       )
 
       const result = getFullUrl(req, rscEnabled)
 
-      expect(result).toBe('http://localhost:8910/about')
+      expect(result).toBe('http://localhost:8910/cux/cuux?extra=corge')
     })
   })
 })

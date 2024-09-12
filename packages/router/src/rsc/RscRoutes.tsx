@@ -10,7 +10,7 @@ const BASE_PATH = '/rw-rsc/'
 
 const rscCache = new RscCache()
 
-let updateCurrentRscCacheKey = (key: SerializedFetchProps) => {
+let updateCurrentRscCacheKey = (key: SerializedLocation) => {
   console.error('updateCurrentRscCacheKey called before it was set')
   console.error('updateCurrentRscCacheKey key', key)
 }
@@ -29,15 +29,15 @@ function onStreamFinished(
   )
 }
 
-type SerializedFetchProps =
+type SerializedLocation =
   | `__rwjs__pathname=${string}&__rwjs__search=${string}`
   | `__rwjs__pathname=${string}&__rwjs__search=${string}::${string}`
 
-function rscFetchRoutes(serializedProps: SerializedFetchProps) {
+function rscFetchRoutes(serializedLocation: SerializedLocation) {
   console.log(
-    'rscFetchRoutes :: args:\n    serializedProps: ' + serializedProps,
+    'rscFetchRoutes :: args:\n    serializedProps: ' + serializedLocation,
   )
-  const rscCacheKey = serializedProps
+  const rscCacheKey = serializedLocation
 
   const cached = rscCache.get(rscCacheKey)
   if (cached) {
@@ -47,14 +47,11 @@ function rscFetchRoutes(serializedProps: SerializedFetchProps) {
     console.log('rscFetchRoutes :: cache miss for', rscCacheKey)
   }
 
-  const searchParams = new URLSearchParams()
-  searchParams.set('props', serializedProps)
-
   const rscId = '__rwjs__Routes'
 
   // TODO (RSC): During SSR we should not fetch (Is this function really
   // called during SSR?)
-  const responsePromise = fetch(BASE_PATH + rscId + '?' + searchParams, {
+  const responsePromise = fetch(BASE_PATH + rscId + '?' + serializedLocation, {
     headers: {
       'rw-rsc': '1',
     },
@@ -77,11 +74,11 @@ function rscFetchRoutes(serializedProps: SerializedFetchProps) {
       // `new Date()`, to make sure the cache key is unique so we trigger a
       // rerender. It's needed to handle calling RSAs multiple times with the
       // same arguments
-      const rscCacheKey: SerializedFetchProps = `${serializedProps}::${rsaId}::${new Date()}`
+      const rscCacheKey: SerializedLocation = `${serializedLocation}::${rsaId}::${new Date()}`
 
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsaId)
-      searchParams.set('props', serializedProps)
+      searchParams.set('props', serializedLocation)
       const rscId = '_'
 
       let body: Awaited<ReturnType<typeof encodeReply>> = ''
@@ -143,17 +140,17 @@ let externalPromise = new Promise<React.ReactElement>((resolve) => {
 })
 
 export const RscRoutes = ({ pathname, search }: Props) => {
-  const serializedProps: SerializedFetchProps = `__rwjs__pathname=${pathname}&__rwjs__search=${search}`
+  const serializedLocation: SerializedLocation = `__rwjs__pathname=${pathname}&__rwjs__search=${search}`
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
     console.log('RscRoutes :: useState initial value')
     // Calling rscFetchRoutes here to prime the cache
-    rscFetchRoutes(serializedProps)
-    return serializedProps
+    rscFetchRoutes(serializedLocation)
+    return serializedLocation
   })
 
   useEffect(() => {
     console.log('RscRoutes :: useEffect set updateCurrentRscCacheKey')
-    updateCurrentRscCacheKey = (key: SerializedFetchProps) => {
+    updateCurrentRscCacheKey = (key: SerializedLocation) => {
       console.log('RscRoutes inside updateCurrentRscCacheKey', key)
 
       externalPromise = new Promise<React.ReactElement>((resolve) => {
@@ -166,13 +163,13 @@ export const RscRoutes = ({ pathname, search }: Props) => {
   useEffect(() => {
     console.log('RscRoutes :: useEffect about to call rscFetchRoutes')
     // rscFetchRoutes will update rscCache with the fetched component
-    rscFetchRoutes(serializedProps)
+    rscFetchRoutes(serializedLocation)
 
     externalPromise = new Promise<React.ReactElement>((resolve) => {
       externalPromiseResolver = resolve
     })
-    setCurrentRscCacheKey(serializedProps)
-  }, [serializedProps])
+    setCurrentRscCacheKey(serializedLocation)
+  }, [serializedLocation])
 
   console.log('RscRoutes :: rendering cache entry for\n' + currentRscCacheKey)
 

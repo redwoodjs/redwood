@@ -100,29 +100,17 @@ export const getFullUrl = (req: ExpressRequest, rscEnabled: boolean) => {
   // object and have it do the parsing for us.
   const url = new URL(req.originalUrl || '', baseUrl)
 
-  // `props` will be something like:
-  // "__rwjs__pathname=/about&__rwjs__search=
-  const props = url.searchParams.get('props') || ''
+  const pathname = url.searchParams.get('__rwjs__pathname')
+  const search = url.searchParams.get('__rwjs__search')
 
   console.log('getFullUrl url.href', url.href)
-  console.log('getFullUrl props', props)
+  console.log('getFullUrl pathname', pathname)
+  console.log('getFullUrl search', search)
 
   let pathnamePlusSearch = req.originalUrl
 
-  if (
-    rscEnabled &&
-    props.includes('__rwjs__pathname') &&
-    props.includes('__rwjs__search')
-  ) {
-    const matches = props.match(
-      /^__rwjs__pathname=(.*?)&__rwjs__search=(.*?)(?:::)?/,
-    )
-    const pathname = matches?.[1]
-    const search = matches?.[2]
-
-    if (pathname && (search === '' || search)) {
-      pathnamePlusSearch = pathname + search
-    }
+  if (rscEnabled && pathname !== null && search !== null) {
+    pathnamePlusSearch = pathname + '?' + search
   }
 
   return baseUrl + pathnamePlusSearch
