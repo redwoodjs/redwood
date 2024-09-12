@@ -78,7 +78,6 @@ function rscFetchRoutes(serializedLocation: SerializedLocation) {
 
       const searchParams = new URLSearchParams()
       searchParams.set('action_id', rsaId)
-      searchParams.set('props', serializedLocation)
       const rscId = '_'
 
       let body: Awaited<ReturnType<typeof encodeReply>> = ''
@@ -89,13 +88,16 @@ function rscFetchRoutes(serializedLocation: SerializedLocation) {
         console.error('Error encoding Server Action arguments', e)
       }
 
-      const responsePromise = fetch(BASE_PATH + rscId + '?' + searchParams, {
-        method: 'POST',
-        body,
-        headers: {
-          'rw-rsc': '1',
+      const responsePromise = fetch(
+        BASE_PATH + rscId + '?' + searchParams + '&' + serializedLocation,
+        {
+          method: 'POST',
+          body,
+          headers: {
+            'rw-rsc': '1',
+          },
         },
-      })
+      )
 
       onStreamFinished(responsePromise, () => {
         updateCurrentRscCacheKey(rscCacheKey)
