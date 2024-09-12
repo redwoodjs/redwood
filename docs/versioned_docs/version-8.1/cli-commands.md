@@ -871,15 +871,15 @@ from `name` and the route parameter, if specified, will be added to the end.
 
 This also updates `Routes.js` in `./web/src`.
 
-| Arguments & Options  | Description                                                                           |
-| -------------------- | ------------------------------------------------------------------------------------- |
-| `name`               | Name of the page                                                                      |
-| `path`               | URL path to the page. Defaults to `name`                                              |
-| `--force, -f`        | Overwrite existing files                                                              |
-| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript  |
-| `--tests`            | Generate test files [default: true]                                                   |
-| `--stories`          | Generate Storybook files [default: true]                                              |
-| `--rollback`         | Rollback changes if an error occurs [default: true]                                   |
+| Arguments & Options  | Description                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `name`               | Name of the page                                                                     |
+| `path`               | URL path to the page. Defaults to `name`                                             |
+| `--force, -f`        | Overwrite existing files                                                             |
+| `--typescript, --ts` | Generate TypeScript files Enabled by default if we detect your project is TypeScript |
+| `--tests`            | Generate test files [default: true]                                                  |
+| `--stories`          | Generate Storybook files [default: true]                                             |
+| `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
 **Destroying**
 
