@@ -358,12 +358,13 @@ export const makeMergedSchema = ({
   schemaOptions = {},
   directives,
   subscriptions = [],
+  includeUploadSchema = true,
 }: {
   sdls: SdlGlobImports
   services: ServicesGlobImports
   directives: RedwoodDirective[]
   subscriptions: RedwoodSubscription[]
-
+  includeUploadSchema?: boolean
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
    */
@@ -371,9 +372,13 @@ export const makeMergedSchema = ({
 }) => {
   const sdlSchemas = Object.values(sdls).map(({ schema }) => schema)
 
+  const rootSchemas = includeUploadSchema
+    ? [rootGqlSchema.schema, rootGqlSchema.uploadSchema]
+    : [rootGqlSchema.schema]
+
   const typeDefs = mergeTypes(
     [
-      rootGqlSchema.schema,
+      ...rootSchemas,
       ...directives.map((directive) => directive.schema), // pick out schemas from directives
       ...subscriptions.map((subscription) => subscription.schema), // pick out schemas from subscriptions
       ...sdlSchemas, // pick out the schemas from sdls

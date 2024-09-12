@@ -274,24 +274,37 @@ async function getPluginConfig(side: CodegenSide) {
       `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
   })
 
+  // there are cases where projects will have defined their own File type and therefore we should not include the scalar
+  // if they want to opt out of the scalar they can do so by setting the scalars.File to false in their redwood.toml
+  // the File scalar is included by default based on the config
+  const config = getConfig()
+  const includeFileScalar = config.graphql.scalars.File
+
+  const rootScalars = {
+    // We need these, otherwise these scalars are mapped to any
+    BigInt: 'number',
+    // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
+    DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    JSON: 'Prisma.JsonValue',
+    JSONObject: 'Prisma.JsonObject',
+    Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    Byte: 'Buffer',
+  }
+
+  const fileScalar = {
+    File: 'File',
+  }
+
+  const scalars = includeFileScalar
+    ? { ...rootScalars, ...fileScalar }
+    : rootScalars
+
   const pluginConfig: CodegenTypes.PluginConfig &
     rwTypescriptResolvers.TypeScriptResolversPluginConfig = {
     makeResolverTypeCallable: true,
     namingConvention: 'keep', // to allow camelCased query names
-    scalars: {
-      // We need these, otherwise these scalars are mapped to any
-      BigInt: 'number',
-      // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
-      DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      JSON: 'Prisma.JsonValue',
-      JSONObject: 'Prisma.JsonObject',
-      Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Byte: 'Buffer',
-      File: 'File',
-    },
-    // prevent type names being PetQueryQuery, RW generators already append
-    // Query/Mutation/etc
+    scalars,
     omitOperationSuffix: true,
     showUnusedMappers: false,
     customResolverFn: getResolverFnType(),

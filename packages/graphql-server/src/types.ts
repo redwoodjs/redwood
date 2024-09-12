@@ -248,6 +248,15 @@ export type GraphQLYogaOptions = {
    * @description Configure OpenTelemetry plugin behaviour
    */
   openTelemetryOptions?: RedwoodOpenTelemetryConfig
+
+  /**
+   * @description Include the File scalar in merged GraphQL schema.
+   *
+   * File is included by default.
+   *
+   * See also project config `getConfig().graphql.scalars.File` to opt out of including it in the merged schema.
+   */
+  includeUploadSchema?: boolean
 }
 
 /**

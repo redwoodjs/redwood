@@ -13,8 +13,6 @@ scalar Date
 
 scalar DateTime
 
-scalar File
-
 scalar JSON
 
 scalar JSONObject
@@ -85,8 +83,6 @@ scalar Byte
 scalar Date
 
 scalar DateTime
-
-scalar File
 
 scalar JSON
 

@@ -27,7 +27,6 @@ export const schema = gql`
   scalar JSON
   scalar JSONObject
   scalar Byte
-  scalar File
 
   """
   The RedwoodJS Root Schema
@@ -50,6 +49,10 @@ export const schema = gql`
     "Fetches the Redwood root schema."
     redwood: Redwood
   }
+`
+
+export const uploadSchema = gql`
+  scalar File
 `
 
 export interface Resolvers {

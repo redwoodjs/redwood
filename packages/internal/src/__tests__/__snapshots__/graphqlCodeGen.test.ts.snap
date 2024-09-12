@@ -36,7 +36,6 @@ export type Scalars = {
   Byte: Buffer;
   Date: Date | string;
   DateTime: Date | string;
-  File: File;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
   Time: Date | string;
@@ -165,7 +164,6 @@ export type ResolversTypes = {
   Byte: ResolverTypeWrapper<Scalars['Byte']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
-  File: ResolverTypeWrapper<Scalars['File']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']>;
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>;
@@ -184,7 +182,6 @@ export type ResolversParentTypes = {
   Byte: Scalars['Byte'];
   Date: Scalars['Date'];
   DateTime: Scalars['DateTime'];
-  File: Scalars['File'];
   Int: Scalars['Int'];
   JSON: Scalars['JSON'];
   JSONObject: Scalars['JSONObject'];
@@ -220,10 +217,6 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
-}
-
-export interface FileScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['File'], any> {
-  name: 'File';
 }
 
 export interface JSONScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
@@ -297,7 +290,6 @@ export type Resolvers<ContextType = RedwoodGraphQLContext> = {
   Byte: GraphQLScalarType;
   Date: GraphQLScalarType;
   DateTime: GraphQLScalarType;
-  File: GraphQLScalarType;
   JSON: GraphQLScalarType;
   JSONObject: GraphQLScalarType;
   Mutation: MutationResolvers<ContextType>;
@@ -332,7 +324,6 @@ export type Scalars = {
   Byte: Buffer;
   Date: string;
   DateTime: string;
-  File: File;
   JSON: Prisma.JsonValue;
   JSONObject: Prisma.JsonObject;
   Time: string;

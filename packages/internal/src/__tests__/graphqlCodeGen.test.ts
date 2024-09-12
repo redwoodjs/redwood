@@ -58,6 +58,7 @@ test('Generate gql typedefs web', async () => {
   )
 
   const { typeDefFiles, errors } = await generateTypeDefGraphQLWeb()
+  console.log('errors', errors)
   expect(errors).toHaveLength(0)
 
   expect(typeDefFiles).toHaveLength(1)
