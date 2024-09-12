@@ -34,20 +34,21 @@ If you're new to connecting to remote servers, check out the [Intro to Servers](
 
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
-1. `git clone --depth=1` to retrieve the latest code
-2. Symlink the latest deploy `.env` to the shared `.env` in the app dir
-3. `yarn install` - installs dependencies
-4. Runs prisma DB migrations
-5. Generate Prisma client libs
-6. Runs [data migrations](/docs/data-migrations)
-7. Builds the web and/or api sides
-8. Symlink the latest deploy dir to `current` in the app dir
-9. Restart the serving process(es)
-10. Remove older deploy directories
+1. `df` to make sure there is enough free disk space on the server
+2. `git clone --depth=1` to retrieve the latest code
+3. Symlink the latest deploy `.env` to the shared `.env` in the app dir
+4. `yarn install` - installs dependencies
+5. Runs prisma DB migrations
+6. Generate Prisma client libs
+7. Runs [data migrations](/docs/data-migrations)
+8. Builds the web and/or api sides
+9. Symlink the latest deploy dir to `current` in the app dir
+10. Restart the serving process(es)
+11. Remove older deploy directories
 
 ### First Run Lifecycle
 
-If the `--first-run` flag is specified then step 6 above will execute the following commands instead:
+If the `--first-run` flag is specified then step 7 above will execute the following commands instead:
 
 - `pm2 start [service]` - starts the serving process(es)
 - `pm2 save` - saves the running services to the deploy users config file for future startup. See [Starting on Reboot](#starting-on-reboot) for further information
@@ -173,6 +174,7 @@ This lists a single server, in the `production` environment, providing the hostn
 - `repo` - The path to the git repo to clone
 - `branch` - [optional] The branch to deploy (defaults to `main`)
 - `keepReleases` - [optional] The number of previous releases to keep on the server, including the one currently being served (defaults to 5)
+- `freeSpaceRequired` - [optional] The amount of free space required on the server in MB (defaults to 2048 MB). You can set this to `0` to skip checking.
 
 The easiest connection method is generally to include your own public key in the server's `~/.ssh/authorized_keys` mannually or by running `ssh-copy-id user@server.com` from your local machine, [enable agent forwarding](https://docs.github.com/en/developers/overview/using-ssh-agent-forwarding), and then set `agentForward = true` in `deploy.toml`. This will allow you to use your own credentials when pulling code from GitHub (required for private repos). Otherwise you can create a [deploy key](https://docs.github.com/en/developers/overview/managing-deploy-keys) and keep it on the server.
 
@@ -453,14 +455,15 @@ Run `yarn rw deploy baremetal --help` for the full list of flags. You can set th
 
 Baremetal supports running your own custom commands before or after the regular deploy commands. You can run commands **before** and/or **after** the built-in commands. Your custom commands are defined in the `deploy.toml` config file. The existing commands that you can hook into are:
 
-1. `update` - cloning the codebase
-2. `symlinkEnv` - symlink the new deploy's `.env` to shared one in the app dir
-3. `install` - `yarn install`
-4. `migrate` - database migrations
-5. `build` - `yarn build` (your custom before/after command is run for each side being built)
-6. `symlinkCurrent` - symlink the new deploy dir to `current` in the app dir
-7. `restart` - (re)starting any pm2 processes (your custom command will run before/after each process is restarted)
-8. `cleanup` - cleaning up any old releases
+1. `df` - Checking for free disk space
+2. `update` - cloning the codebase
+3. `symlinkEnv` - symlink the new deploy's `.env` to shared one in the app dir
+4. `install` - `yarn install`
+5. `migrate` - database migrations
+6. `build` - `yarn build` (your custom before/after command is run for each side being built)
+7. `symlinkCurrent` - symlink the new deploy dir to `current` in the app dir
+8. `restart` - (re)starting any pm2 processes (your custom command will run before/after each process is restarted)
+9. `cleanup` - cleaning up any old releases
 
 You can define your before/after commands in three different places:
 
