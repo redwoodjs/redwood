@@ -123,19 +123,14 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     console.debug('Studio is not enabled')
     return
   }
-  const { rscId, props, rsaId, args, basePath, req, handleError } = input
+  const { rscId, rsaId, args, basePath, req, handleError } = input
 
   try {
     // surround renderRsc with performance metrics
     const startedAt = Date.now()
     const start = performance.now()
 
-    const readable = await renderRscToStream({
-      rscId,
-      props,
-      rsaId,
-      args,
-    })
+    const readable = await renderRscToStream({ rscId, rsaId, args })
     const endedAt = Date.now()
     const end = performance.now()
     const duration = end - start
@@ -145,7 +140,6 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
       rsc: {
         rscId,
         rsaId,
-        props,
         args,
       },
       request: {

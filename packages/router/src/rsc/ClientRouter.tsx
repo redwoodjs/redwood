@@ -48,8 +48,7 @@ const LocationAwareRouter = ({
     //   'No route found for the current URL. Make sure you have a route ' +
     //     'defined for the root of your React app.',
     // )
-    const routesProps = { location: { pathname, search } }
-    return <RscRoutes routesProps={routesProps} />
+    return <RscRoutes pathname={pathname} search={search} />
   }
 
   const requestedRoute = pathRouteMap[activeRoutePath]
@@ -70,8 +69,6 @@ const LocationAwareRouter = ({
       )
     }
 
-    const routesProps = { location: { pathname, search } }
-
     return (
       <RouterContextProvider
         useAuth={useAuth}
@@ -80,23 +77,15 @@ const LocationAwareRouter = ({
         activeRouteName={requestedRoute.name}
       >
         <AuthenticatedRoute unauthenticated={unauthenticated}>
-          <RscRoutes routesProps={routesProps} />
+          <RscRoutes pathname={pathname} search={search} />
         </AuthenticatedRoute>
       </RouterContextProvider>
     )
   }
 
-  const routesProps = { location: { pathname, search } }
   // TODO (RSC): I think that moving between private and public routes
-  // re-initializes RscFetcher. I wonder if there's an optimization to be made
-  // here. Maybe we can lift RscFetcher up so we can keep the same instance
+  // re-initializes RscRoutes. I wonder if there's an optimization to be made
+  // here. Maybe we can lift RscRoutes up so we can keep the same instance
   // around and reuse it everywhere
-  return <RscRoutes routesProps={routesProps} />
-}
-
-export interface RscFetchProps extends Record<string, unknown> {
-  location: {
-    pathname: string
-    search: string
-  }
+  return <RscRoutes pathname={pathname} search={search} />
 }
