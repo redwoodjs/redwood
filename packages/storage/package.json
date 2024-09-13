@@ -19,6 +19,10 @@
         "default": "./dist/index.js"
       }
     },
+    "./S3Storage": {
+      "require": "./dist/cjs/adapters/S3Storage/S3Storage.js",
+      "import": "./dist/adapters/S3Storage/S3Storage.js"
+    },
     "./FileSystemStorage": {
       "require": "./dist/cjs/adapters/FileSystemStorage/FileSystemStorage.js",
       "import": "./dist/adapters/FileSystemStorage/FileSystemStorage.js"
@@ -53,6 +57,9 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.651.0",
+    "@aws-sdk/lib-storage": "3.651.0",
+    "@aws-sdk/s3-request-presigner": "3.651.0",
     "@redwoodjs/project-config": "workspace:*",
     "mime-types": "2.1.35",
     "ulid": "2.3.0"

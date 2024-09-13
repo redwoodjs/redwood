@@ -8,7 +8,9 @@ import type {
 import { createUploadsExtension } from './prismaExtension.js'
 import type { UrlSigner } from './UrlSigner.js'
 
-type SetupStorageOptions<MNames extends ModelNames> = {
+export type { BaseStorageAdapter } from './adapters/BaseStorageAdapter.js'
+
+export type SetupStorageOptions<MNames extends ModelNames> = {
   uploadsConfig: UploadsConfig<MNames>
   storageAdapter: BaseStorageAdapter
   urlSigner?: UrlSigner
