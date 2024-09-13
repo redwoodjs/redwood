@@ -122,8 +122,25 @@ export class S3Storage
     }
 
     const result = await upload.done()
-
-    return { location: key, ...result }
+    // The result looks like:
+    //    {
+    //  '$metadata': {
+    //    httpStatusCode: 200,
+    //    requestId: '992625086802962799',
+    //      extendedRequestId: undefined,
+    //        cfId: undefined,
+    //      attempts: 1,
+    //      totalRetryDelay: 0
+    //   },
+    //   ETag: '"a17fabeb1fcf56b1022a8d236374066e"',
+    //   Bucket: 'bucket',
+    //   Key: 'baseDir/path/fileName.png',
+    //   Location: 'https://fly.storage.tigris.dev/rw-showcases/baseDir/path/fileName.png'
+    // }
+    // We save key because that what the S3UrlSigner and the S3 client expects when signing or reading
+    // The result location is the url in S3 but for private buckets you cannot access that without the signed url
+    // So, therefore we save the key and return that as the location
+    return { location: result.Key || key, ...result }
   }
 
   async read(fileLocation: string) {
