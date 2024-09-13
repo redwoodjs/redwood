@@ -60,6 +60,8 @@ export class S3Storage
 
     const upload = new Upload({
       params: {
+        ContentType: file.type,
+        CacheControl: 'max-age=31536000',
         Bucket: this.bucket,
         Key: key,
         Body: file,
@@ -103,12 +105,14 @@ export class S3Storage
     await this.s3Client.send(command)
   }
 
-  async sign(fileLocation: string, expiresIn = 3600) {
+  async sign(fileLocation: string, expiresIn = 3600): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: this.bucket,
       Key: fileLocation,
     })
 
-    return getSignedUrl(this.s3Client, command, { expiresIn })
+    return await getSignedUrl(this.s3Client, command, { expiresIn })
   }
 }
+
+export { S3UrlSigner } from './S3UrlSigner.js'

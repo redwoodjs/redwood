@@ -76,7 +76,7 @@ describe('Result extensions', () => {
       },
     })
 
-    const signedUrlDumbo = dumbo.withSignedUrl({
+    const signedUrlDumbo = await dumbo.withSignedUrl({
       expiresIn: 254,
     })
 

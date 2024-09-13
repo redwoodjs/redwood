@@ -121,7 +121,7 @@ export class UrlSigner {
     return decodeURIComponent(path)
   }
 
-  generateSignedUrl(filePath: string, expiresIn?: number) {
+  async generateSignedUrl(filePath: string, expiresIn?: number) {
     const { signature, expiry } = this.generateSignature({
       filePath,
       expiresInMs: expiresIn,

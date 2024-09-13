@@ -129,8 +129,8 @@ describe('Expired signature', () => {
   })
 })
 
-test('Generates a signed url', () => {
-  const signedUrl = signer.generateSignedUrl(
+test('Generates a signed url', async () => {
+  const signedUrl = await signer.generateSignedUrl(
     '/files/bazinga',
     EXPIRES_IN.days(1),
   )
