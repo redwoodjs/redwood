@@ -7,13 +7,11 @@ import { renderToReadableStream } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { RscFetchProps } from '../../../router/src/rsc/ClientRouter.tsx'
 import { getEntriesFromDist } from '../lib/entries.js'
 import { StatusError } from '../lib/StatusError.js'
 
 export type RenderInput = {
   rscId?: string | undefined
-  props: RscFetchProps | Record<string, unknown>
   rsaId?: string | undefined
   args?: unknown[] | undefined
 }
@@ -109,6 +107,11 @@ function getBundlerConfig() {
   return bundlerConfig
 }
 
+interface RscModel {
+  __rwjs__Routes: React.ReactElement
+  __rwjs__rsa_data?: unknown
+}
+
 async function renderRsc(input: RenderInput): Promise<ReadableStream> {
   if (input.rsaId || !input.args) {
     throw new Error(
@@ -116,17 +119,17 @@ async function renderRsc(input: RenderInput): Promise<ReadableStream> {
     )
   }
 
-  if (!input.rscId || !input.props) {
+  if (!input.rscId) {
     throw new Error('Unexpected input. Missing rscId or props.')
   }
 
   console.log('renderRsc input', input)
 
   const serverRoutes = await getRoutesComponent()
-  // TODO (RSC): Should this have the same shape as for executeRsa?
-  const model = createElement(serverRoutes, input.props)
+  const model: RscModel = {
+    __rwjs__Routes: createElement(serverRoutes),
+  }
 
-  console.log('rscRenderer.ts renderRsc props', input.props)
   console.log('rscRenderer.ts renderRsc model', model)
 
   return renderToReadableStream(model, getBundlerConfig())
@@ -183,10 +186,8 @@ async function executeRsa(input: RenderInput): Promise<ReadableStream> {
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscRenderer.ts executeRsa serverRoutes', serverRoutes)
-  const model = {
-    Routes: createElement(serverRoutes, {
-      location: { pathname: '/', search: '' },
-    }),
+  const model: RscModel = {
+    __rwjs__Routes: createElement(serverRoutes),
     __rwjs__rsa_data: data,
   }
   console.log('rscRenderer.ts executeRsa model', model)

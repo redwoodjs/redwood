@@ -109,14 +109,14 @@ export const addApiConfig = ({
   }
 
   const hasCurrentUserImport =
-    /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from 'src\/lib\/auth')/s.test(
+    /(^import {.*?getCurrentUser(?!getCurrentUser).*?} from ['"]src\/lib\/auth['"])/s.test(
       newContent,
     )
 
   if (!hasCurrentUserImport) {
     // add import statement
     newContent = newContent.replace(
-      /^(import { db } from 'src\/lib\/db')$/m,
+      /^(import { db } from ['"]src\/lib\/db['"])$/m,
       `import { getCurrentUser } from 'src/lib/auth'\n$1`,
     )
 
@@ -140,7 +140,7 @@ const addAuthImportToApp = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
   const importIndex = contentLines.findLastIndex((line: string) =>
-    /^\s*import (?!.*(?:.css'|.scss'))/.test(line),
+    /^\s*import (?!.*(?:.css['"]|.scss['"]))/.test(line),
   )
 
   // After the import found above, insert a blank line followed by the
@@ -154,7 +154,7 @@ const addAuthImportToRoutes = (content: string) => {
   const contentLines = content.split('\n')
   // Find the last import line that's not a .css or .scss import
   const importIndex = contentLines.findLastIndex((line: string) =>
-    /^\s*import (?!.*(?:.css'|.scss'))/.test(line),
+    /^\s*import (?!.*(?:.css['"]|.scss['"]))/.test(line),
   )
 
   // After the import found above, insert a blank line followed by the

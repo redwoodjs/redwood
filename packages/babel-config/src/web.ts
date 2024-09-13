@@ -19,7 +19,6 @@ import {
 export interface Flags {
   forJest?: boolean // will change the alias for module-resolver plugin
   forPrerender?: boolean // changes what babel-plugin-redwood-routes-auto-loader does
-  forRsc?: boolean
   forJavaScriptLinting?: boolean // will enable presets to supporting linting in the absence of typescript related presets/plugins/parsers
 }
 
@@ -117,10 +116,7 @@ export const getWebSideBabelPlugins = (
 }
 
 export const getWebSideOverrides = (
-  { forPrerender, forRsc }: Flags = {
-    forPrerender: false,
-    forRsc: false,
-  },
+  { forPrerender }: Flags = { forPrerender: false },
 ): TransformOptions[] => {
   // Have to use a readonly array here because of a limitation in TS
   // See https://stackoverflow.com/a/70763406/88106
@@ -131,9 +127,7 @@ export const getWebSideOverrides = (
     },
     // Automatically import files in `./web/src/pages/*` in to
     // the `./web/src/Routes.[ts|jsx]` file.
-    // We do not do this for RSC because there are differences between server and client
-    // so each specific build stage handles the auto-importing of routes
-    !forRsc && {
+    {
       test: /Routes.(js|tsx|jsx)$/,
       plugins: [
         [
@@ -143,6 +137,7 @@ export const getWebSideOverrides = (
           {
             forPrerender,
           } satisfies RoutesAutoLoaderOptions,
+          'babel-plugin-redwood-routes-auto-loader',
         ],
       ],
     },

@@ -19,8 +19,8 @@
     "@redwoodjs/eslint-plugin": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
-    "@typescript-eslint/eslint-plugin": "8.2.0",
-    "@typescript-eslint/parser": "8.2.0",
+    "@typescript-eslint/eslint-plugin": "8.5.0",
+    "@typescript-eslint/parser": "8.5.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-import-resolver-babel-module": "5.3.2",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.24.8",
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

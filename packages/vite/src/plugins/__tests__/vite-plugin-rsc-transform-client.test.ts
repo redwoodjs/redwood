@@ -107,9 +107,10 @@ describe('rscRoutesAutoLoader', () => {
     )
 
     // What we are interested in seeing here is:
-    // - There's a CLIENT_REFERENCE
+    // - There's a registerClientReference import
     // - There's a Link export
-    // - There's a proper $$id
+    // - There's a registerClientReference call with the path to the built link
+    //   component dist file
     expect(output).toMatchInlineSnapshot(`
         "import {registerClientReference} from "react-server-dom-webpack/server";
         export const Link = registerClientReference(function() {throw new Error("Attempted to call Link() from the server but Link is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},"/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-link.js-13.mjs","Link")
@@ -155,8 +156,8 @@ describe('rscRoutesAutoLoader', () => {
     )
 
     // What we are interested in seeing here is:
-    // - The import of `renderFromRscServer` from `@redwoodjs/vite/client`
-    // - The call to `renderFromRscServer` for each page that wasn't already imported
+    // - The import of `registerClientReference` from `react-server-dom-webpack/server`
+    // - The export of all of the individual components
     expect(output).toMatchInlineSnapshot(`
         "import {registerClientReference} from "react-server-dom-webpack/server";
         export const CheckmarkIcon = registerClientReference(function() {throw new Error("Attempted to call CheckmarkIcon() from the server but CheckmarkIcon is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.");},"/Users/tobbe/rw-app/web/dist/rsc/assets/rsc-index.js-15.mjs","CheckmarkIcon")
