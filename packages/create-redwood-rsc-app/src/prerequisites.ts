@@ -1,10 +1,10 @@
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
-
 import semver from 'semver'
 import which from 'which'
 
 import type { Config } from './config.js'
+
 import { ExitCodeError } from './error.js'
 
 export function checkNodeVersion(config: Config) {
