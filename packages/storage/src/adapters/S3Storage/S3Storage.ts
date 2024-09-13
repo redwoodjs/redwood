@@ -1,3 +1,4 @@
+import type { Tag } from '@aws-sdk/client-s3'
 import {
   GetObjectCommand,
   DeleteObjectCommand,
@@ -23,23 +24,44 @@ export type S3StorageOptions = {
   secretAccessKey: string
   // Optional: Custom endpoint URL for S3-compatible storage services (e.g., Fly/Tigris or MinIO)
   endpoint?: string
-  // Optional: Number of concurrent uploads
+  // Optional: Cache control header value. Defaults to 1 week.
+  cacheControl?: string
+  // Optional: Tags to apply to the object
+  tags?: Tag[]
+  /**
+   * OptionThe size of the concurrent queue manager to upload parts in parallel. Set to 1 for synchronous uploading of parts. Note that the uploader will buffer at most queueSize * partSize bytes into memory at any given time.
+   * default: 4
+   */
   queueSize?: number
+  /**
+   * Optional: The size in bytes for each individual part to be uploaded. Adjust the part size to ensure the number of parts does not exceed maxTotalParts.
+   * See 5mb is the minimum allowed part size.
+   */
+  partSize?: number
   // Optional: Log progress of the upload
   showProgress?: boolean
 }
-
 export class S3Storage
   extends BaseStorageAdapter
   implements BaseStorageAdapter
 {
   private s3Client: S3Client
   private bucket: string
-  private queueSize?: number
+  // Defaults to 1 week
+  private cacheControl?: string
   private showProgress?: boolean
+  private queueSize?: number
+  private partSize?: number
+  /**
+   * The tags to apply to the object.
+   */
+  private tags: Tag[]
 
   constructor(opts: S3StorageOptions) {
     super(opts)
+
+    const { queueSize, partSize, tags } = opts
+
     this.s3Client = new S3Client({
       region: opts.region,
       credentials: {
@@ -50,10 +72,31 @@ export class S3Storage
       forcePathStyle: !!opts.endpoint,
     })
     this.bucket = opts.bucket
-    this.queueSize = opts.queueSize || 3
+    this.cacheControl = opts.cacheControl
+    this.tags = tags || []
+    this.queueSize = queueSize
+    this.partSize = partSize
+    this.tags = opts.tags || []
     this.showProgress = opts.showProgress || false
   }
 
+  /**
+   * Saves a file to the S3 storage.
+   *
+   * The key is the path to the file in the S3 bucket and is constructed from
+   * the baseDir, the file name, and the path override.
+   *
+   * Use the `saveOverride` parameter to specify a path override to organize
+   * your files in a specific folder in the bucket.
+   *
+   * Default params:
+   * - ContentType: The MIME type of the file.
+   * - CacheControl: 'max-age=604800' // 1 week
+   *
+   * @param file - The file to save.
+   * @param saveOverride - Optional overrides for the save operation.
+   * @returns The location of the saved file.
+   */
   async save(file: File, saveOverride?: SaveOptionsOverride) {
     const fileName = this.generateFileNameWithExtension(saveOverride, file)
     const key = `${saveOverride?.path || this.adapterOpts.baseDir}/${fileName}`
@@ -61,13 +104,15 @@ export class S3Storage
     const upload = new Upload({
       params: {
         ContentType: file.type,
-        CacheControl: 'max-age=31536000',
+        CacheControl: this.cacheControl || 'max-age=604800',
         Bucket: this.bucket,
         Key: key,
         Body: file,
       },
       client: this.s3Client,
       queueSize: this.queueSize,
+      partSize: this.partSize,
+      tags: this.tags,
     })
 
     if (this.showProgress) {
