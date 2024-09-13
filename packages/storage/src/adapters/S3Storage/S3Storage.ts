@@ -10,7 +10,7 @@ import mime from 'mime-types'
 import type { SaveOptionsOverride } from '../BaseStorageAdapter.js'
 import { BaseStorageAdapter } from '../BaseStorageAdapter.js'
 
-type S3StorageOptions = {
+export type S3StorageOptions = {
   // The base directory within the S3 bucket where files will be stored
   baseDir: string
   // The name of the S3 bucket to use for storage
@@ -23,6 +23,10 @@ type S3StorageOptions = {
   secretAccessKey: string
   // Optional: Custom endpoint URL for S3-compatible storage services (e.g., Fly/Tigris or MinIO)
   endpoint?: string
+  // Optional: Number of concurrent uploads
+  queueSize?: number
+  // Optional: Log progress of the upload
+  showProgress?: boolean
 }
 
 export class S3Storage
@@ -31,6 +35,8 @@ export class S3Storage
 {
   private s3Client: S3Client
   private bucket: string
+  private queueSize?: number
+  private showProgress?: boolean
 
   constructor(opts: S3StorageOptions) {
     super(opts)
@@ -40,18 +46,17 @@ export class S3Storage
         accessKeyId: opts.accessKeyId,
         secretAccessKey: opts.secretAccessKey,
       },
-      endpoint: opts.endpoint, // Add this line
-      forcePathStyle: !!opts.endpoint, // Add this line
+      endpoint: opts.endpoint,
+      forcePathStyle: !!opts.endpoint,
     })
     this.bucket = opts.bucket
+    this.queueSize = opts.queueSize || 3
+    this.showProgress = opts.showProgress || false
   }
 
   async save(file: File, saveOverride?: SaveOptionsOverride) {
     const fileName = this.generateFileNameWithExtension(saveOverride, file)
     const key = `${saveOverride?.path || this.adapterOpts.baseDir}/${fileName}`
-    console.log('key', key)
-    console.log('file', file)
-    console.log('this.bucket', this.bucket)
 
     const upload = new Upload({
       params: {
@@ -60,21 +65,21 @@ export class S3Storage
         Body: file,
       },
       client: this.s3Client,
-      queueSize: 3,
+      queueSize: this.queueSize,
     })
 
-    upload.on('httpUploadProgress', (progress) => {
-      console.log(progress)
-    })
+    if (this.showProgress) {
+      upload.on('httpUploadProgress', (progress) => {
+        console.log(progress)
+      })
+    }
 
     const result = await upload.done()
-    console.log(result)
 
-    return { location: key }
+    return { location: key, ...result }
   }
 
   async read(fileLocation: string) {
-    console.log('fileLocation', fileLocation)
     const command = new GetObjectCommand({
       Bucket: this.bucket,
       Key: fileLocation,
