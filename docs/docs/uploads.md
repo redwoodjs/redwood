@@ -414,7 +414,7 @@ These will only appear on fields that you configure in your `UploadConfig`.
 const profile = await db.profile.update(/*...*/)
 
 // The result of your prisma query contains the helpers
-profile?.withSignedUrl() // ✅
+await profile?.withSignedUrl() // ✅
 
 // Incorrect: you need to await the result of your prisma query first!
 db.profile.update(/*...*/).withSignedUrl() // 🛑
@@ -480,11 +480,11 @@ const filesWhereQuery = await db.file.findMany({
 
 // 🛑 Will not work, because files accessed via relation
 // highlight-next-line
-return filesViaRelation.map((file) => file.withSignedUrl())
+return filesViaRelation.map(async (file) => await file.withSignedUrl())
 
 // ✅ OK, because direct lookup
 // highlight-next-line
-return filesWhereQuery.map((file) => file.withSignedUrl())
+return filesWhereQuery.map(async (file) => await file.withSignedUrl())
 ```
 
 :::
