@@ -274,22 +274,37 @@ async function getPluginConfig(side: CodegenSide) {
       `MergePrismaWithSdlTypes<Prisma${key}, MakeRelationsOptional<${key}, AllMappedModels>, AllMappedModels>`
   })
 
+  type ScalarKeys =
+    | 'BigInt'
+    | 'DateTime'
+    | 'Date'
+    | 'JSON'
+    | 'JSONObject'
+    | 'Time'
+    | 'Byte'
+    | 'File'
+  const scalars: Partial<Record<ScalarKeys, string>> = {
+    // We need these, otherwise these scalars are mapped to any
+    BigInt: 'number',
+    // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
+    DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    JSON: 'Prisma.JsonValue',
+    JSONObject: 'Prisma.JsonObject',
+    Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
+    Byte: 'Buffer',
+  }
+
+  const config = getConfig()
+  if (config.graphql.includeScalars.File) {
+    scalars.File = 'File'
+  }
+
   const pluginConfig: CodegenTypes.PluginConfig &
     rwTypescriptResolvers.TypeScriptResolversPluginConfig = {
     makeResolverTypeCallable: true,
     namingConvention: 'keep', // to allow camelCased query names
-    scalars: {
-      // We need these, otherwise these scalars are mapped to any
-      BigInt: 'number',
-      // @Note: DateTime fields can be valid Date-strings, or the Date object in the api side. They're always strings on the web side.
-      DateTime: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Date: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      JSON: 'Prisma.JsonValue',
-      JSONObject: 'Prisma.JsonObject',
-      Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
-      Byte: 'Buffer',
-      File: 'File',
-    },
+    scalars,
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
     omitOperationSuffix: true,

@@ -52,6 +52,7 @@ export const createGraphQLYoga = ({
   realtime,
   trustedDocuments,
   openTelemetryOptions,
+  includeScalars,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -85,6 +86,7 @@ export const createGraphQLYoga = ({
       directives: projectDirectives,
       subscriptions: projectSubscriptions,
       schemaOptions,
+      includeScalars,
     })
   } catch (e) {
     logger.fatal(e as Error, '\n ⚠️ GraphQL server crashed \n')

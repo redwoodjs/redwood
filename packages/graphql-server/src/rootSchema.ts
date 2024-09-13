@@ -27,7 +27,6 @@ export const schema = gql`
   scalar JSON
   scalar JSONObject
   scalar Byte
-  scalar File
 
   """
   The RedwoodJS Root Schema
@@ -51,6 +50,13 @@ export const schema = gql`
     redwood: Redwood
   }
 `
+
+export const scalarSchemas = {
+  File: gql`
+    scalar File
+  `,
+}
+export type ScalarSchemaKeys = keyof typeof scalarSchemas
 
 export interface Resolvers {
   BigInt: typeof BigIntResolver

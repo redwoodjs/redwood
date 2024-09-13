@@ -9,9 +9,9 @@ import { generateGraphQLSchema } from '../generate/graphqlSchema'
 
 const { mockedGetConfig } = vi.hoisted(() => {
   return {
-    mockedGetConfig: vi
-      .fn()
-      .mockReturnValue({ graphql: { trustedDocuments: false } }),
+    mockedGetConfig: vi.fn().mockReturnValue({
+      graphql: { trustedDocuments: false, includeScalars: { File: true } },
+    }),
   }
 })
 
@@ -34,12 +34,16 @@ beforeEach(() => {
 
 afterEach(() => {
   delete process.env.RWJS_CWD
-  mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: false } })
+  mockedGetConfig.mockReturnValue({
+    graphql: { trustedDocuments: false, includeScalars: { File: true } },
+  })
 })
 
 describe('Generate client preset', () => {
   test('for web side', async () => {
-    mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: true } })
+    mockedGetConfig.mockReturnValue({
+      graphql: { trustedDocuments: true, includeScalars: { File: true } },
+    })
     await generateGraphQLSchema()
 
     const { clientPresetFiles, errors } = await generateClientPreset()
@@ -62,7 +66,9 @@ describe('Generate client preset', () => {
   })
 
   test('for api side', async () => {
-    mockedGetConfig.mockReturnValue({ graphql: { trustedDocuments: true } })
+    mockedGetConfig.mockReturnValue({
+      graphql: { trustedDocuments: true, includeScalars: { File: true } },
+    })
     await generateGraphQLSchema()
 
     const { trustedDocumentsStoreFile, errors } = await generateClientPreset()

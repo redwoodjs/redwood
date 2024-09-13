@@ -87,6 +87,9 @@ export interface Config {
   graphql: {
     fragments: boolean
     trustedDocuments: boolean
+    includeScalars: {
+      File: boolean
+    }
   }
   notifications: {
     versionUpdates: string[]
@@ -145,7 +148,11 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
-  graphql: { fragments: false, trustedDocuments: false },
+  graphql: {
+    fragments: false,
+    trustedDocuments: false,
+    includeScalars: { File: true },
+  },
   browser: {
     open: false,
   },
