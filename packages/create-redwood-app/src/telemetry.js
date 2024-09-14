@@ -109,9 +109,8 @@ export async function shutdownTelemetry() {
     await traceProvider?.shutdown()
     await traceProcessor?.shutdown()
     await traceExporter?.shutdown()
-  } catch (error) {
-    console.error('Telemetry error')
-    console.error(error)
+  } catch {
+    // We silence this error for user experience
   }
 }
 
