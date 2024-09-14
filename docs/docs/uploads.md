@@ -732,7 +732,7 @@ Redwood Storage currently supports the following storage adapters:
 
 - [FileSystemStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/FileSystemStorage/FileSystemStorage.ts) - This adapter interacts with the file system, enabling the storage of files on disk.
 - [MemoryStorage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/MemoryStorage/MemoryStorage.ts) - this adapter stores files in memory, making it ideal for temporary storage needs or testing scenarios. It offers faster access times but does not persist data across application restarts.
-- [S3Storage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/S3Storage/S3Storage.ts) - this adapter stores files in AWS S3 or compatible service like Fly's Tigris. When using S3Storage you do not need a 'signedUrl' endpoint to validate your signed urls because the S3 sdk can generate signed urls for you.
+- [S3Storage](https://github.com/redwoodjs/redwood/blob/main/packages/storage/src/adapters/S3Storage/S3Storage.ts) - this adapter stores files in AWS S3 or compatible service like Fly's Tigris. When using S3Storage you do not need a `signedUrl` endpoint to validate your signed urls because the S3 sdk can generate signed urls for you.
 
 ## Configuring the server further
 
