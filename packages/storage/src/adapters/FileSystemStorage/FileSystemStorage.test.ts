@@ -48,7 +48,7 @@ describe('FileSystemStorage', () => {
     expect(vol.existsSync(result.location)).toBe(true)
   })
 
-  test('remove should delete a file fron ', async () => {
+  test('remove should delete a file from the file system', async () => {
     const { location } = await storage.save(plainFile)
 
     await storage.remove(location)

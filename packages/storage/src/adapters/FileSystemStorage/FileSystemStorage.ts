@@ -30,6 +30,9 @@ export class FileSystemStorage
     )
     const nodeBuffer = await file.arrayBuffer()
 
+    // Create directory if it doesn't exist
+    await fs.mkdir(path.dirname(location), { recursive: true })
+
     await fs.writeFile(location, Buffer.from(nodeBuffer))
     return { location }
   }
