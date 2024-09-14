@@ -7988,7 +7988,7 @@ __metadata:
     decamelize: "npm:5.0.1"
     dotenv-defaults: "npm:5.0.2"
     enquirer: "npm:2.4.1"
-    envinfo: "npm:7.13.0"
+    envinfo: "npm:7.14.0"
     execa: "npm:5.1.1"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
@@ -8685,7 +8685,7 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@whatwg-node/fetch": "npm:0.9.21"
     ci-info: "npm:4.0.0"
-    envinfo: "npm:7.13.0"
+    envinfo: "npm:7.14.0"
     systeminformation: "npm:5.23.5"
     tsx: "npm:4.19.0"
     typescript: "npm:5.6.2"
@@ -14724,7 +14724,7 @@ __metadata:
     chalk: "npm:4.1.2"
     check-node-version: "npm:4.2.1"
     ci-info: "npm:4.0.0"
-    envinfo: "npm:7.13.0"
+    envinfo: "npm:7.14.0"
     execa: "npm:5.1.1"
     fs-extra: "npm:11.2.0"
     klaw-sync: "npm:6.0.0"
@@ -16008,12 +16008,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"envinfo@npm:7.13.0, envinfo@npm:^7.7.3":
+"envinfo@npm:7.13.0":
   version: 7.13.0
   resolution: "envinfo@npm:7.13.0"
   bin:
     envinfo: dist/cli.js
   checksum: 10c0/9c279213cbbb353b3171e8e333fd2ed564054abade08ab3d735fe136e10a0e14e0588e1ce77e6f01285f2462eaca945d64f0778be5ae3d9e82804943e36a4411
+  languageName: node
+  linkType: hard
+
+"envinfo@npm:7.14.0, envinfo@npm:^7.7.3":
+  version: 7.14.0
+  resolution: "envinfo@npm:7.14.0"
+  bin:
+    envinfo: dist/cli.js
+  checksum: 10c0/059a031eee101e056bd9cc5cbfe25c2fab433fe1780e86cf0a82d24a000c6931e327da6a8ffb3dce528a24f83f256e7efc0b36813113eff8fdc6839018efe327
   languageName: node
   linkType: hard
 
