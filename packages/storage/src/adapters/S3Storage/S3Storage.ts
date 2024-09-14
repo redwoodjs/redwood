@@ -122,6 +122,7 @@ export class S3Storage
     }
 
     const result = await upload.done()
+
     // The result looks like:
     //    {
     //  '$metadata': {
@@ -140,7 +141,13 @@ export class S3Storage
     // We save key because that what the S3UrlSigner and the S3 client expects when signing or reading
     // The result location is the url in S3 but for private buckets you cannot access that without the signed url
     // So, therefore we save the key and return that as the location
-    // TODO: Should we check the status code and throw an error if it's not 200?
+
+    if (result?.$metadata?.httpStatusCode !== 200) {
+      throw new Error(
+        `S3 upload failed with status code ${result.$metadata.httpStatusCode}`,
+      )
+    }
+
     return { location: result.Key || key, ...result }
   }
 
