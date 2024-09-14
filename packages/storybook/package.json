@@ -56,7 +56,7 @@
     "@storybook/react": "7.6.17",
     "magic-string": "0.30.11",
     "react-docgen": "7.0.3",
-    "unplugin-auto-import": "0.18.2"
+    "unplugin-auto-import": "0.18.3"
   },
   "devDependencies": {
     "@types/node": "20.16.5",
