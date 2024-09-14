@@ -12,23 +12,25 @@ import { createUploadsConfig, setupStorage } from '../index.js'
 import type { Dumbo, Dummy } from './prisma-client/index.js'
 import { PrismaClient } from './prisma-client/index.js'
 
+// Mock node:fs/promises to control file system operations in tests
 vi.mock('node:fs/promises', () => ({
   default: {
-    writeFile: vi.fn(),
-    unlink: vi.fn(),
+    writeFile: vi.fn(), // Mock file writing
+    unlink: vi.fn(), // Mock file deletion
     readFile: vi.fn(() => {
-      return 'MOCKED_FILE_CONTENT'
+      return 'MOCKED_FILE_CONTENT' // Mock file reading with constant content
     }),
-    copyFile: vi.fn(),
+    copyFile: vi.fn(), // Mock file copying
   },
 }))
 
-// For creation of FS adapter
+// Mock node:fs for FileSystemStorage adapter creation
 vi.mock('node:fs', () => ({
-  existsSync: vi.fn(() => true),
-  mkdirSync: vi.fn(),
+  existsSync: vi.fn(() => true), // Always return true for file/directory existence checks
+  mkdirSync: vi.fn(), // Mock directory creation
 }))
 
+// Mock fs/promises (legacy API) to ensure all fs operations are controlled
 vi.mock('fs/promises')
 
 describe('Query extensions', () => {
