@@ -61,7 +61,7 @@ describe('Query extensions', () => {
   describe('create', () => {
     it('create will save files', async () => {
       // Mock the fs.mkdir function
-      ;(fs.mkdir as jest.Mock).mockResolvedValue(undefined)
+      vi.mocked(fs.mkdir).mockResolvedValue(undefined)
 
       const processedData = await saveFiles.forDummy({
         uploadField: sampleFile,
