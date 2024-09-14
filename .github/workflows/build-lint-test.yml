@@ -1,0 +1,55 @@
+name: 🏗 Build, lint, test
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: The target to run on.
+        type: string
+        required: true
+      skip:
+        description: Whether to skip all jobs.
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  build-lint-test:
+    name: node 20 latest
+    runs-on: ${{ inputs.target }}
+    if: ${{ !inputs.skip }}
+
+    steps:
+      - name: Remove the tsc problem matcher if not ubuntu-latest
+        if: inputs.target != 'ubuntu-latest'
+        run: echo "echo "::remove-matcher owner=tsc::""
+
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+
+      - name: 🔎 Lint
+        run: yarn lint
+
+      # TODO(jgmw): Re-enable when it doesn't hang
+      # - name: 🥡 Check packaging and attw
+      #   run: yarn check:package
+
+      - name: 🌡 Test Types
+        run: yarn test:types
+
+      - name: Get number of CPU cores
+        if: always()
+        id: cpu-cores
+        uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
+
+      - name: 🧪 Test
+        run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
+
+  skipped:
+    name: node 20 latest
+    runs-on: ${{ inputs.target }}
+    if: ${{ inputs.skip }}
+    steps:
+      - name: Skip
+        run: echo "Skipping as requested from caller"

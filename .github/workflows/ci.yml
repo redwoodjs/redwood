@@ -87,55 +87,18 @@ jobs:
         run: yarn format:check
 
   build-lint-test:
-    needs: check
+    needs: [check, detect-changes]
 
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
 
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
-    runs-on: ${{ matrix.os }}
+    name: 🏗 Build, lint, test / ${{ matrix.os }}
 
-    steps:
-      - name: Remove the tsc problem matcher if not ubuntu-latest
-        if: matrix.os != 'ubuntu-latest'
-        run: echo "echo "::remove-matcher owner=tsc::""
-
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - name: Set up job
-        uses: ./.github/actions/set-up-job
-
-      - name: 🔎 Lint
-        run: yarn lint
-
-      # TODO(jgmw): Re-enable when it doesn't hang
-      # - name: 🥡 Check packaging and attw
-      #   run: yarn check:package
-
-      - name: 🌡 Test Types
-        run: yarn test:types
-
-      - name: Get number of CPU cores
-        if: always()
-        id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
-
-      - name: 🧪 Test
-        run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
-
-  build-lint-test-skip:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.code == 'false'
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-
-    name: 🏗 Build, lint, test / ${{ matrix.os }} / node 20 latest
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - run: echo "Skipped"
+    uses: ./.github/workflows/build-lint-test.yml
+    with:
+      target: ${{ matrix.os }}
+      skip: ${{ needs.detect-changes.outputs.code == 'false' }}
 
   tutorial-e2e:
     needs: check
