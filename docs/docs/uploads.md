@@ -33,9 +33,8 @@ You're now ready to receive files!
 
 ### 2. Configuring the UI
 
-Let's setup a basic form to add avatar images to your profile.
-
-Assuming you've built a [Form](forms.md) for profile
+Assuming you've built a [Form](forms.md) for your profile let's add a
+`FileField` to it.
 
 ```tsx title="web/src/components/ProfileForm.tsx"
 // highlight-next-line
@@ -44,18 +43,18 @@ import { FileField, TextField, FieldError } from '@redwoodjs/forms'
 export const ProfileForm = ({ onSubmit }) => {
   return {
     <Form onSubmit={onSubmit}>
-      <div>
-        <Label name="firstName" /*...*/ >
-          First name
-        </Label>
-        <TextField name="firstName" /*...*/ />
-        <FieldError name="firstName"  />
-        <Label name="lastName" /*...*/ >
-          Last name
-        </Label>
-        <TextField name="lastName" /*...*/ />
-        <FieldError name="lastName"  />
-      </div>
+      <Label name="firstName" /*...*/ >
+        First name
+      </Label>
+      <TextField name="firstName" /*...*/ />
+      <FieldError name="firstName"  />
+
+      <Label name="lastName" /*...*/ >
+        Last name
+      </Label>
+      <TextField name="lastName" /*...*/ />
+      <FieldError name="lastName"  />
+
       // highlight-next-line
       <FileField name="avatar" /*...*/ />
     </Form>
@@ -71,13 +70,13 @@ Now we need to send the file as a mutation!
 import { useMutation } from '@redwoodjs/web'
 
 const UPDATE_PROFILE_MUTATION = gql`
-  // This is the Input type we setup with File earlier! 
-  //  highlight-next-line
+  // This is the Input type we setup with File earlier!
+  // highlight-next-line
   mutation UpdateProfileMutation($input: UpdateProfileInput!) {
     updateProfile(input: $input) {
       firstName
       lastName
-  // highlight-next-line
+      // highlight-next-line
       avatar
     }
   }
@@ -96,8 +95,10 @@ const EditProfile = ({ profile }) => {
 
     const input = {
       ...formData,
+      // FileField returns an array, we want the first and only file; Multi-file
+      // uploads are available
       // highlight-next-line
-      avatar: formData.avatar?.[0], // FileField returns an array, we want the first and only file; Multi-file uploads are available
+      avatar: formData.avatar?.[0],
     }
 
     updateProfile({ variables: { input } })
@@ -299,7 +300,7 @@ More details on these extensions can be found [here](#storage-prisma-extension).
 
 <details>
 <summary>
-__Why Export This Way__ 
+__Why Export This Way__
 </summary>
 
 The `$extends` method returns a new instance of the Prisma client with the extensions applied. By exporting this new instance as db, you ensure that any additional functionality provided by the uploads extension is available throughout your application, without needing to change where you import. Note one of the [limitations](https://www.prisma.io/docs/orm/prisma-client/client-extensions#limitations) of using extensions is you have to use `$on` on your prisma client (as we do in handlePrismaLogging), it needs to happen before you use `$extends`
