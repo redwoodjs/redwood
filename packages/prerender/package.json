@@ -59,7 +59,7 @@
     "publint": "0.2.10",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
-    "vitest": "2.0.5"
+    "vitest": "2.1.1"
   },
   "peerDependencies": {
     "react": "19.0.0-rc-8269d55d-20240802",
