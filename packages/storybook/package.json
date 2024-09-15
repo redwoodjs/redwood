@@ -56,13 +56,13 @@
     "@storybook/react": "7.6.17",
     "magic-string": "0.30.11",
     "react-docgen": "7.0.3",
-    "unplugin-auto-import": "0.18.2"
+    "unplugin-auto-import": "0.18.3"
   },
   "devDependencies": {
     "@types/node": "20.16.5",
     "tsx": "4.19.0",
     "typescript": "5.6.2",
-    "vite": "5.4.3"
+    "vite": "5.4.5"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
