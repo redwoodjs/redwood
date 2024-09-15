@@ -4378,8 +4378,8 @@ __metadata:
   linkType: hard
 
 "zx@npm:^8.1.4":
-  version: 8.1.5
-  resolution: "zx@npm:8.1.5"
+  version: 8.1.6
+  resolution: "zx@npm:8.1.6"
   dependencies:
     "@types/fs-extra": "npm:>=11"
     "@types/node": "npm:>=20"
@@ -4390,6 +4390,6 @@ __metadata:
       optional: true
   bin:
     zx: build/cli.js
-  checksum: 10c0/9b525dcd703d708d249844d00359aadf0be6e8ba0d128d8aee28aa00ffc78a91b94bc2155f53c4c7e8831624bae17014bde3033a33b5e12139e163c3c3603dea
+  checksum: 10c0/ce565a9a04e43752be98e0b1ffef8be2c7539dc7de3934b220924387334a4b045fae9ba163ce041464a8a05c2239f71095ef1339309e7e90c687184bb572b367
   languageName: node
   linkType: hard
