@@ -3,9 +3,9 @@ import { Toaster } from '@redwoodjs/web/toast'
 
 type LayoutProps = {
   title: string
-  titleTo: string
+  titleTo: keyof typeof routes
   buttonLabel: string
-  buttonTo: string
+  buttonTo: keyof typeof routes
   children: React.ReactNode
 }
 
