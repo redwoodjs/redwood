@@ -59,7 +59,8 @@ Now that you have the file, let's add the `generateToken` function.
 
 ```javascript {21} title="/api/src/services/users/users.js"
 // add this import to the top of the file
-import { hashPassword } from "@redwoodjs/auth-dbauth-api"
+import CryptoJS from 'crypto-js'
+import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 // add this to the bottom of the file
 export const generateLoginToken = async ({ email }) => {
   try {
