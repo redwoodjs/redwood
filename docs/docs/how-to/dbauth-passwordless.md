@@ -84,7 +84,7 @@ export const generateLoginToken = async ({ email }) => {
       return sixDigitNumber.toString()
     })()
     console.log({ randomNumber }) // email the user this number
-    const [loginToken, salt] = hashPassword(randomNumber)
+    let [loginToken, salt] = hashPassword(randomNumber)
     // now we'll update the user with the new salt and loginToken
     let loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
