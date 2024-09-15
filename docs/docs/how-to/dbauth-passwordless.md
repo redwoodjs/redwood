@@ -57,24 +57,25 @@ yarn rw g service users
 
 Now that you have the file, let's add the `generateToken` function.
 
-```javascript {21} title="/api/src/services/users/users.js"
-// add this import to the top of the file
+```javascript title="/api/src/services/users/users.js"
+// add the following two imports to the top of the file
 import CryptoJS from 'crypto-js'
 import { hashPassword } from '@redwoodjs/auth-dbauth-api'
+
 // add this to the bottom of the file
 export const generateLoginToken = async ({ email }) => {
   try {
     // look up if the user exists
-    let lookupUser = await db.user.findFirst({ where: { email } })
+    const lookupUser = await db.user.findFirst({ where: { email } })
 
     if (!lookupUser) {
       return { message: 'Login Request received' }
     }
+
     // here we're going to generate a random password of 6 numbers
-    // here we're going to generate a random password of 6 numbers
-    let randomNumber = (() => {
-      let random = CryptoJS.lib.WordArray.random(6)
-      let randomString = random.toString()
+    const randomNumber = (() => {
+      const random = CryptoJS.lib.WordArray.random(6)
+      const randomString = random.toString()
       let sixDigitNumber = randomString.replace(/\D/g, '')
       if (sixDigitNumber.length < 6) {
         sixDigitNumber = sixDigitNumber.padStart(6, '0')
@@ -85,11 +86,11 @@ export const generateLoginToken = async ({ email }) => {
       return sixDigitNumber.toString()
     })()
     console.log({ randomNumber }) // email the user this number
-    let [loginToken, salt] = hashPassword(randomNumber)
+    const [loginToken, salt] = hashPassword(randomNumber)
     // now we'll update the user with the new salt and loginToken
-    let loginTokenExpiresAt = new Date()
+    const loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
-    let data = {
+    const data = {
       salt,
       loginToken,
       loginTokenExpiresAt,
@@ -111,7 +112,7 @@ export const generateLoginToken = async ({ email }) => {
 
 In addition to the new function, we need to add it to the sdl file. While we're here let's also ensure we do not expose the loginToken. This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
 
-```javascript {21} title="/api/src/graphql/users.sdl.js"
+```javascript title="/api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
