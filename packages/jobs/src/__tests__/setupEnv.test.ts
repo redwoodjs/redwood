@@ -19,8 +19,8 @@ describe('setupEnv', () => {
     expect(process.env.NODE_ENV).toEqual(ORIGNAL_NODE_ENV)
   })
 
-  it.skip('sets NODE_ENV to development if it starts undefined', () => {
-    process.env.NODE_ENV = undefined
+  it('sets NODE_ENV to development if it starts undefined', () => {
+    delete process.env.NODE_ENV
 
     setupEnv()
 
