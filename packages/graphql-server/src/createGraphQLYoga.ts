@@ -211,6 +211,7 @@ export const createGraphQLYoga = ({
 
     return { yoga, logger }
   } catch (e) {
+    logger.error(e)
     if (onException) {
       onException()
     }
