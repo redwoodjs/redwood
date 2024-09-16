@@ -727,6 +727,20 @@ Of course if you have a process monitor system watching your workers you'll want
 
 :::
 
+### NODE_ENV
+
+You'll need to explicitly set your `NODE_ENV` when in environments other than development or test. We like having a `.env` file in a serverfull production environment, and you just include:
+
+```bash
+NODE_ENV=production
+```
+
+If you're using Docker, make sure you have an `ENV` declaration for it:
+
+```docker
+ENV NODE_ENV="production"
+```
+
 ## Advanced Job Workers
 
 As noted above, although the workers are started and detached using the `yarn rw jobs start` command, there is nothing to monitor those workers to make sure they keep running. To do that, you'll want to start the workers yourself (or have your process monitor start them) using command line flags.
