@@ -59,7 +59,7 @@ Now that you have the file, let's add the `generateToken` function.
 
 ```javascript title="/api/src/services/users/users.js"
 // add the following two imports to the top of the file
-import CryptoJS from 'crypto-js'
+import crypto from 'node:crypto'
 import { hashPassword } from '@redwoodjs/auth-dbauth-api'
 
 // add this to the bottom of the file
@@ -73,19 +73,12 @@ export const generateLoginToken = async ({ email }) => {
     }
 
     // here we're going to generate a random password of 6 numbers
-    const randomNumber = (() => {
-      const random = CryptoJS.lib.WordArray.random(6)
-      const randomString = random.toString()
-      let sixDigitNumber = randomString.replace(/\D/g, '')
-      if (sixDigitNumber.length < 6) {
-        sixDigitNumber = sixDigitNumber.padStart(6, '0')
-      }
-      if (sixDigitNumber.length > 6) {
-        sixDigitNumber = sixDigitNumber.slice(0, 6)
-      }
-      return sixDigitNumber.toString()
-    })()
+    const randomNumber = crypto
+      .randomInt(0, 1_000_000)
+      .toString()
+      .padStart(6, '0')
     console.log({ randomNumber }) // email the user this number
+
     const [loginToken, salt] = hashPassword(randomNumber)
     // now we'll update the user with the new salt and loginToken
     const loginTokenExpiresAt = new Date()
