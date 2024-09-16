@@ -705,7 +705,7 @@ By checking the `lastError` field in the database you can see what the last erro
 
 ## Deployment
 
-For many use cases you may simply be able to rely on the job runner to start your job workers, which will run forever:
+For many use cases you may be able to rely on the job runner to start and detatch your job workers, which will then run forever:
 
 ```bash
 yarn rw jobs start
