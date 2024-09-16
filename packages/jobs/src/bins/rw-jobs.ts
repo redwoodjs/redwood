@@ -13,10 +13,9 @@ import { setTimeout } from 'node:timers'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
-
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
 import { loadJobsManager } from '../loaders.js'
+import { setupEnv } from '../setupEnv.js'
 import type {
   Adapters,
   BasicLogger,
@@ -26,7 +25,7 @@ import type {
 
 export type NumWorkersConfig = [number, number][]
 
-loadEnvFiles()
+setupEnv()
 
 process.title = 'rw-jobs'
 

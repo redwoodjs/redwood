@@ -8,14 +8,19 @@ import process from 'node:process'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
-
 import { PROCESS_TITLE_PREFIX } from '../consts.js'
 import type { Worker } from '../core/Worker.js'
 import { WorkerConfigIndexNotFoundError } from '../errors.js'
 import { loadJobsManager } from '../loaders.js'
+import { setupEnv } from '../setupEnv.js'
 
-loadEnvFiles()
+setupEnv()
+
+// If even after loading `.env` we find that `NODE_ENV` is `undefined` default
+// to `development` to mimic what the other CLI tools to
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'development'
+}
 
 const parseArgs = (argv: string[]) => {
   return yargs(hideBin(argv))
