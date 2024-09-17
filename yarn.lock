@@ -7364,7 +7364,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7419,7 +7419,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7471,7 +7471,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7573,7 +7573,7 @@ __metadata:
     core-js: "npm:3.38.1"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     typescript: "npm:5.6.2"
   languageName: unknown
   linkType: soft
@@ -7621,7 +7621,7 @@ __metadata:
     concurrently: "npm:8.2.2"
     firebase: "npm:10.13.1"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7674,7 +7674,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7750,7 +7750,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -7805,7 +7805,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     supertokens-auth-react: "npm:0.39.1"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
@@ -7827,7 +7827,7 @@ __metadata:
     core-js: "npm:3.38.1"
     msw: "npm:1.3.4"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
     tsx: "npm:4.19.1"
     type-fest: "npm:4.26.1"
     typescript: "npm:5.6.2"
@@ -8215,14 +8215,14 @@ __metadata:
     nodemon: "npm:3.1.4"
     pascalcase: "npm:1.0.0"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
-    react-dom: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
+    react-dom: "npm:19.0.0-rc-f2df5694-20240916"
     react-hook-form: "npm:7.53.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
   languageName: unknown
   linkType: soft
 
@@ -8464,8 +8464,8 @@ __metadata:
     "@redwoodjs/web": "workspace:*"
     fast-glob: "npm:3.3.2"
     lodash: "npm:4.17.21"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
-    react-dom: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
+    react-dom: "npm:19.0.0-rc-f2df5694-20240916"
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
@@ -8497,8 +8497,8 @@ __metadata:
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
-    react-dom: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
+    react-dom: 19.0.0-rc-f2df5694-20240916
   languageName: unknown
   linkType: soft
 
@@ -8586,15 +8586,15 @@ __metadata:
     concurrently: "npm:8.2.2"
     core-js: "npm:3.38.1"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
-    react-dom: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
+    react-dom: "npm:19.0.0-rc-f2df5694-20240916"
     tstyche: "npm:2.1.1"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
-    react-dom: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
+    react-dom: 19.0.0-rc-f2df5694-20240916
   languageName: unknown
   linkType: soft
 
@@ -8789,8 +8789,8 @@ __metadata:
     isbot: "npm:5.1.17"
     memfs: "npm:4.11.1"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
-    react-server-dom-webpack: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
+    react-server-dom-webpack: "npm:19.0.0-rc-f2df5694-20240916"
     rimraf: "npm:6.0.1"
     rollup: "npm:4.21.2"
     tsx: "npm:4.19.1"
@@ -8861,8 +8861,8 @@ __metadata:
     graphql-tag: "npm:2.12.6"
     nodemon: "npm:3.1.4"
     publint: "npm:0.2.10"
-    react: "npm:19.0.0-rc-8269d55d-20240802"
-    react-dom: "npm:19.0.0-rc-8269d55d-20240802"
+    react: "npm:19.0.0-rc-f2df5694-20240916"
+    react-dom: "npm:19.0.0-rc-f2df5694-20240916"
     react-helmet-async: "npm:2.0.5"
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
@@ -8872,8 +8872,8 @@ __metadata:
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
-    react-dom: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
+    react-dom: 19.0.0-rc-f2df5694-20240916
   bin:
     cross-env: ./dist/cjs/bins/cross-env.js
     msw: ./dist/cjs/bins/msw.js
@@ -25644,14 +25644,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.0.0-rc-8269d55d-20240802":
-  version: 19.0.0-rc-8269d55d-20240802
-  resolution: "react-dom@npm:19.0.0-rc-8269d55d-20240802"
+"react-dom@npm:19.0.0-rc-f2df5694-20240916":
+  version: 19.0.0-rc-f2df5694-20240916
+  resolution: "react-dom@npm:19.0.0-rc-f2df5694-20240916"
   dependencies:
-    scheduler: "npm:0.25.0-rc-8269d55d-20240802"
+    scheduler: "npm:0.25.0-rc-f2df5694-20240916"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
-  checksum: 10c0/03c7f2e19128b0583a910cbbc77db3a431af40c31365f1dca98ce4eef8f36992336341a714cc160e7e2c492b54c578c9c189f30a6b4b1bb1a578052e4e291e23
+    react: 19.0.0-rc-f2df5694-20240916
+  checksum: 10c0/43577e8aa0a69095bce3821c370d0f73be2d87fe7f01de48ef91166373221daa13898e093ea9e0e3c31a3967579d768c69045197b139c1182c2f15e680c49e20
   languageName: node
   linkType: hard
 
@@ -25812,17 +25812,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-server-dom-webpack@npm:19.0.0-rc-8269d55d-20240802":
-  version: 19.0.0-rc-8269d55d-20240802
-  resolution: "react-server-dom-webpack@npm:19.0.0-rc-8269d55d-20240802"
+"react-server-dom-webpack@npm:19.0.0-rc-f2df5694-20240916":
+  version: 19.0.0-rc-f2df5694-20240916
+  resolution: "react-server-dom-webpack@npm:19.0.0-rc-f2df5694-20240916"
   dependencies:
     acorn-loose: "npm:^8.3.0"
     neo-async: "npm:^2.6.1"
+    webpack-sources: "npm:^3.2.0"
   peerDependencies:
-    react: 19.0.0-rc-8269d55d-20240802
-    react-dom: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
+    react-dom: 19.0.0-rc-f2df5694-20240916
     webpack: ^5.59.0
-  checksum: 10c0/b483cecdd77d0ba1aada0b00d8cede2fad4d010c97022ad859e2094bb3aa9cd5c16c5267806ef4fa21777250c4bb6ae3c9b0f4c6578b24d1af9f8bb23e172d74
+  checksum: 10c0/ff1890ceca1306df12073fdac579077c35cd411d1a21c6f43bf60065e0121fdfe860f1befccb9e367ba73a37c99add0233780af07528dde77c43d35e641faaf7
   languageName: node
   linkType: hard
 
@@ -25843,10 +25844,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.0.0-rc-8269d55d-20240802":
-  version: 19.0.0-rc-8269d55d-20240802
-  resolution: "react@npm:19.0.0-rc-8269d55d-20240802"
-  checksum: 10c0/d54efddedb7c2bd21dc0510b56a87bd3e871090d26f49c4f263f4469db7b55747a9490add9bf04b019009150b1fb04f4e1704f7c62866564f6915f8e9d18098e
+"react@npm:19.0.0-rc-f2df5694-20240916":
+  version: 19.0.0-rc-f2df5694-20240916
+  resolution: "react@npm:19.0.0-rc-f2df5694-20240916"
+  checksum: 10c0/15ea40edcea5f14b702e971f7aefbb87f8644be2e0480d563b4e21ee8d6dcc5332d608941c5c69889c035d9d80601fbd6ab303be4ed9f716e6c7ace441ea527a
   languageName: node
   linkType: hard
 
@@ -26873,10 +26874,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0-rc-8269d55d-20240802":
-  version: 0.25.0-rc-8269d55d-20240802
-  resolution: "scheduler@npm:0.25.0-rc-8269d55d-20240802"
-  checksum: 10c0/e9d5e6beaabdcf91837b84fb68e1db2f8fdd815767f5fc5f94ba9c4b634db2a8c239bc413943021999da3a7f58a3eb01076fb97eb9776c82bffcd2a71943b9fe
+"scheduler@npm:0.25.0-rc-f2df5694-20240916":
+  version: 0.25.0-rc-f2df5694-20240916
+  resolution: "scheduler@npm:0.25.0-rc-f2df5694-20240916"
+  checksum: 10c0/f8a59d85497ccb97a4e1408fcfd2c48a179608c531bd6a10ca1e41d3830c3f5557a02b2aab63e302c42052f70f8ca089ce38a8496efe44edf17f604e098fb531
   languageName: node
   linkType: hard
 
@@ -27630,8 +27631,8 @@ __metadata:
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
-    react: 19.0.0-rc-8269d55d-20240802
-    react-dom: 19.0.0-rc-8269d55d-20240802
+    react: 19.0.0-rc-f2df5694-20240916
+    react-dom: 19.0.0-rc-f2df5694-20240916
     storybook: 7.6.17
   languageName: unknown
   linkType: soft
@@ -29930,6 +29931,13 @@ __metadata:
   version: 7.0.0
   resolution: "webidl-conversions@npm:7.0.0"
   checksum: 10c0/228d8cb6d270c23b0720cb2d95c579202db3aaf8f633b4e9dd94ec2000a04e7e6e43b76a94509cdb30479bd00ae253ab2371a2da9f81446cc313f89a4213a2c4
+  languageName: node
+  linkType: hard
+
+"webpack-sources@npm:^3.2.0":
+  version: 3.2.3
+  resolution: "webpack-sources@npm:3.2.3"
+  checksum: 10c0/2ef63d77c4fad39de4a6db17323d75eb92897b32674e97d76f0a1e87c003882fc038571266ad0ef581ac734cbe20952912aaa26155f1905e96ce251adbb1eb4e
   languageName: node
   linkType: hard
 
