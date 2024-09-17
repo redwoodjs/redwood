@@ -20,7 +20,7 @@ After running `yarn start`, you should be able to see your changes in the local 
 
 #### Internal linking
 
-For links to other docs inside the `tutorials` directory you need to use *relative* links.
+For links to other docs inside the `tutorials` directory you need to use _relative_ links.
 
 ```
 In [previous section](./first-page) we....
@@ -35,6 +35,7 @@ Fork the repo, make your changes and open a PR on GitHub. That will build and la
 Double check that your changes look good!
 
 ### Updating Doc Images
+
 To update any images in the doc, first upload your screenshot into a comment textbox in your PR. Once it's uploaded, you can open the image in a new tab and use the github url as a image link in your docs.
 
 ## Contributors

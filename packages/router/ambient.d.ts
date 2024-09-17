@@ -1,4 +1,6 @@
 /* eslint-disable no-var */
+/* eslint-disable no-var */
+/// <reference types="react/experimental" />
 
 declare global {
   var __REDWOOD__PRERENDERING: boolean

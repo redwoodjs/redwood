@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 
-import type { GeneratedRoutesMap } from './analyzeRoutes'
-import { namedRoutes } from './namedRoutes'
-import { Redirect } from './redirect'
-import { useRouterState } from './router-context'
+import type { GeneratedRoutesMap } from './analyzeRoutes.js'
+import { namedRoutes } from './namedRoutes.js'
+import { Redirect } from './redirect.js'
+import { useRouterState } from './router-context.js'
 
 interface AuthenticatedRouteProps {
-  children: React.ReactNode
+  children: React.ReactNode | Thenable<React.ReactNode>
   roles?: string | string[]
   unauthenticated: keyof GeneratedRoutesMap
   whileLoadingAuth?: () => React.ReactElement | null
@@ -29,7 +29,6 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
     return !(isAuthenticated && (!roles || hasRole(roles)))
   }, [isAuthenticated, roles, hasRole])
 
-  // Make sure `wrappers` is always an array with at least one wrapper component
   if (unauthorized()) {
     if (authLoading) {
       return whileLoadingAuth?.() || null

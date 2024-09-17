@@ -47,7 +47,7 @@ const processRenderRscStream = async (
 
     pipeable.on('end', () => {
       const resultBuffer = Buffer.concat(chunks)
-      const resultString = resultBuffer.toString('utf-8') as string
+      const resultString = resultBuffer.toString('utf-8')
       resolve(resultString)
     })
 
@@ -129,7 +129,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     console.debug('Studio is not enabled')
     return
   }
-  const { rscId, props, rsfId, args, basePath, req, handleError } = input
+  const { rscId, props, rsaId, args, basePath, req, handleError } = input
 
   try {
     // surround renderRsc with performance metrics
@@ -141,10 +141,10 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     // becomes http://localhost:8910/about?foo=bar
     const fullUrl = getFullUrlForFlightRequest(req, props)
 
-    const pipeable = await renderRsc({
+    const pipeable = renderRsc({
       rscId,
       props,
-      rsfId,
+      rsaId,
       args,
       serverState: {
         headersInit: Object.fromEntries(getRequestHeaders().entries()),
@@ -160,7 +160,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     const metadata = {
       rsc: {
         rscId,
-        rsfId,
+        rsaId,
         props,
         args,
       },

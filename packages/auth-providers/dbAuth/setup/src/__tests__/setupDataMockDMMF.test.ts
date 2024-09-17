@@ -54,18 +54,24 @@ jest.mock('@redwoodjs/cli-helpers', () => {
         }
 
         for (const task of args.extraTasks) {
-          if (task && task.task) {
+          if (task?.task) {
             await task.task(ctx, undefined)
           }
         }
       }
 
-      args.notes && console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      if (args.notes) {
+        console.log(`\n   ${args.notes.join('\n   ')}\n`)
+      }
     },
   }
 })
 
 jest.mock('@prisma/internals', () => ({
+  getSchema: () => {
+    const fs = require('node:fs')
+    return fs.readFileSync(dbSchemaPath, 'utf-8')
+  },
   getDMMF: () => {
     const fs = require('node:fs')
     const schema: string = fs.readFileSync(dbSchemaPath, 'utf-8')

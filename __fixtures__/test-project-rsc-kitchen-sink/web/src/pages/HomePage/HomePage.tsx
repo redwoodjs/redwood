@@ -3,7 +3,6 @@ import { RscForm } from '@tobbe.dev/rsc-test'
 import { Counter } from '../../components/Counter/Counter'
 
 import { onSend } from './actions'
-// @ts-expect-error no types
 import styles from './HomePage.module.css'
 
 import './HomePage.css'

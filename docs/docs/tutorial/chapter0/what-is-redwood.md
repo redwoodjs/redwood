@@ -1,18 +1,18 @@
 # What is Redwood?
 
-*What follows is a high-level description of Redwood and how it works. If you want to get right to the meat and potatoes of building something, skip ahead to [Chapter 1](../chapter1/prerequisites.md).*
+_What follows is a high-level description of Redwood and how it works. If you want to get right to the meat and potatoes of building something, skip ahead to [Chapter 1](../chapter1/prerequisites.md)._
 
 Redwood is a React framework with lots of pre-installed packages and configuration that makes it easy to build full-stack web applications.
 
-Now that the elevator pitch is out of the way, what does that actually *mean*? At its core, Redwood is React plus a bunch of stuff that makes your life as a developer easier. Some of that stuff includes:
+Now that the elevator pitch is out of the way, what does that actually _mean_? At its core, Redwood is React plus a bunch of stuff that makes your life as a developer easier. Some of that stuff includes:
 
-* GraphQL
-* Prisma
-* Jest
-* Storybook
-* vite
-* Babel
-* Typescript
+- GraphQL
+- Prisma
+- Jest
+- Storybook
+- vite
+- Babel
+- Typescript
 
 What do we mean when we say a "full-stack web application?" We're talking about your classic web app: a UI that's visible in the browser (the frontend), backed by a server and database (the backend). Until React Server Components came along (more on those later) React had no idea a server and/or database existed: it was up to you to somehow get data into your app. Maybe this was done with a `fetch()` or in a build step which would pre-bake some of the data needed right into your components. However the data got there, it wasn't an ideal solution.
 
@@ -70,13 +70,13 @@ The `<PrivateSet>` route limits access to users that are authenticated, but how 
 
 Once authenticated, how do you know what a user is allowed to do or not do? Redwood includes helpers for [role-based access control](https://redwoodjs.com/docs/how-to/role-based-access-control-rbac) that integrates on both the front- and backend.
 
-The homepage is accessible *without* being logged in, browsing to `/` will load the `HomePage` page (component) which itself is just composed of more React components, nothing special there. But, what if the homepage, say, displayed some testimonials from the database? Ahh, now things are getting interesting. Here's where Redwood's handpicked selection of technologies start to take the spotlight.
+The homepage is accessible _without_ being logged in, browsing to `/` will load the `HomePage` page (component) which itself is just composed of more React components, nothing special there. But, what if the homepage, say, displayed some testimonials from the database? Ahh, now things are getting interesting. Here's where Redwood's handpicked selection of technologies start to take the spotlight.
 
 ### GraphQL
 
 Redwood uses GraphQL as the glue between the front- and backends: whenever you want data from the server/database, you're going to retrieve it via GraphQL. Now, we could have just given you raw access to some GraphQL library and let you make those calls yourself. We use [Apollo Client](https://www.apollographql.com/apollo-client) on the frontend and Apollo provides hooks like [useQuery()](https://www.apollographql.com/tutorials/lift-off-part1/10-the-usequery-hook) and [useMutation()](https://www.apollographql.com/tutorials/lift-off-part4/08-the-usemutation-hook) to retrieve and set data, respectively. But Redwood has a much deeper integration.
 
-What if you could have a component that was not only responsible for its own display *but even its own data retrieval*? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
+What if you could have a component that was not only responsible for its own display _but even its own data retrieval_? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
 
 ### Cells
 
@@ -130,7 +130,7 @@ Oh, and prerendering also works with cells! At build time, Redwood will start up
 
 ### Apollo Cache
 
-The Apollo Client library also intelligently caches the results of that `QUERY` above, and so if the user browses away and returns to the homepage, the `Success` component is now rendered *immediately* from the cache! Simultaneously, the query is made to the server again to see if any data has changed since the cache was populated. If so, the new data is merged into the cache and the component will re-render to show any new testimonials since the last time it was viewed.
+The Apollo Client library also intelligently caches the results of that `QUERY` above, and so if the user browses away and returns to the homepage, the `Success` component is now rendered _immediately_ from the cache! Simultaneously, the query is made to the server again to see if any data has changed since the cache was populated. If so, the new data is merged into the cache and the component will re-render to show any new testimonials since the last time it was viewed.
 
 So, you get performance benefits of an instant display of cached data, but with the guarantee that you won't only see stale data: it's constantly being kept in sync with the latest from the server.
 
@@ -234,7 +234,7 @@ export const schema = gql`
 `
 ```
 
-The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should *not* be limited to authenticated users. However, the critical `createTestimonial` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
+The `testimonials` query is marked with the [GraphQL directive](../../directives.md) `@skipAuth` meaning that requests here should _not_ be limited to authenticated users. However, the critical `createTestimonial` and `deleteTestimonial` mutations are marked `@requireAuth`, and so can only be called by a logged in user.
 
 Redwood's backend GraphQL server is powered by [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server) and so you have access to everything that makes Yoga secure and performant: rate and depth limiting, logging, directives, and a ton more.
 
@@ -250,7 +250,9 @@ export const createTestimonial = ({ data }) => {
   if (context.currentUser.roles.includes('admin')) {
     return db.testimonial.create({ data })
   } else {
-    throw new AuthenticationError("You are not authorized to create testimonials")
+    throw new AuthenticationError(
+      'You are not authorized to create testimonials'
+    )
   }
 }
 ```
@@ -279,9 +281,9 @@ Being able to develop a full-stack application this easily is great, but how do 
 
 Redwood includes several Jest helpers and matchers, allowing you to mock out GraphQL requests, database data, logged in users, and more.
 
-* [Scenarios](../../testing#scenarios) accept a simple JSON object and pre-populate your database with just that data so it's in a known state that you can test against.
-* [Mock Service Worker](../../testing#mock-service-worker) allow you to simulate the response from API calls, including GraphQL
-* `mockCurrentUser()` is a helper that allows you to stub out the user that's logged in on either the `web` or `api` codebase, without having to worry about actually passing them through your auth provider
+- [Scenarios](../../testing#scenarios) accept a simple JSON object and pre-populate your database with just that data so it's in a known state that you can test against.
+- [Mock Service Worker](../../testing#mock-service-worker) allow you to simulate the response from API calls, including GraphQL
+- `mockCurrentUser()` is a helper that allows you to stub out the user that's logged in on either the `web` or `api` codebase, without having to worry about actually passing them through your auth provider
 
 ![image](https://github.com/redwoodjs/redwood/assets/300/614d9867-9765-474f-8b8b-c9217f3f7dcf)
 
@@ -323,11 +325,11 @@ You can even deploy to your own server via SSH commands (we call that our [Barem
 
 Redwood is still in active development, and we're working on some [features](https://community.redwoodjs.com/c/experimental-features/25) that are on the cutting edge of the React ecosystem:
 
-* [React Server Components](https://community.redwoodjs.com/t/react-server-components-rsc/5081) and a new transparent, non-GraphQL API
-* [SSR/Streaming](https://community.redwoodjs.com/t/render-modes-ssr-streaming-experimental/4858)
-* [Realtime and GraphQL Subscriptions](https://community.redwoodjs.com/t/redwoodjs-realtime/5002)
-* [Redwood Studio](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) for getting runtime insights into your project
-* [Mailer](https://github.com/redwoodjs/redwood/pull/9058)
+- [React Server Components](https://community.redwoodjs.com/t/react-server-components-rsc/5081) and a new transparent, non-GraphQL API
+- [SSR/Streaming](https://community.redwoodjs.com/t/render-modes-ssr-streaming-experimental/4858)
+- [Realtime and GraphQL Subscriptions](https://community.redwoodjs.com/t/redwoodjs-realtime/5002)
+- [Redwood Studio](https://community.redwoodjs.com/t/redwood-studio-experimental/4771) for getting runtime insights into your project
+- [Mailer](https://github.com/redwoodjs/redwood/pull/9058)
 
 These are just a few highlights from our current [Bighorn Epoch](https://tom.preston-werner.com/2023/05/30/redwoods-next-epoch-all-in-on-rsc). You can see the full list and follow along via our Roadmap project board at [www.redwoodjs.com/roadmap](https://redwoodjs.com/roadmap).
 

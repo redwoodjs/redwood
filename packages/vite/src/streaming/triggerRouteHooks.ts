@@ -1,6 +1,6 @@
 import type { ViteDevServer } from 'vite'
 
-import { parseSearch } from '@redwoodjs/router/dist/util.js'
+import { parseSearch } from '@redwoodjs/router/util'
 import type {
   MetaHook,
   RouteHookEvent,
@@ -55,7 +55,7 @@ export const triggerRouteHooks = async ({
 }
 
 interface LoadAndRunRouteHooks {
-  paths: Array<string | null | undefined> // will run in order of the array
+  paths: (string | null | undefined)[] // will run in order of the array
   reqMeta: {
     req: Request
     parsedParams?: Record<string, any>

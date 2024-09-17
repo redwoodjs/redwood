@@ -54,7 +54,7 @@ module.exports = {
       NODE_MODULES_PATH,
       '@redwoodjs/testing/dist/web/MockRouter.js',
     ),
-    '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web'),
+    '^@redwoodjs/web$': path.join(NODE_MODULES_PATH, '@redwoodjs/web/dist/cjs'),
 
     // This allows us to mock `createAuthentication` which is used by auth
     // clients, which in turn lets us mock `useAuth` in tests
@@ -88,4 +88,5 @@ module.exports = {
     ],
   },
   resolver: path.resolve(__dirname, './resolver.js'),
+  testPathIgnorePatterns: ['.(stories|mock).[jt]sx?$'],
 }

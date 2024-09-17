@@ -1,6 +1,6 @@
 import type { PluginOption } from 'vite'
 
-type ModulesToExclude = Array<{ id: RegExp }>
+type ModulesToExclude = { id: RegExp }[]
 
 /**
  *
@@ -9,8 +9,9 @@ type ModulesToExclude = Array<{ id: RegExp }>
  * Only applies on build, not on dev.
  *
  */
-export default function removeFromBundle(
+export function removeFromBundle(
   modulesToExclude: ModulesToExclude,
+  exportNames?: string[],
 ): PluginOption {
   const isMissingIdToExclude = modulesToExclude.some(
     (module) => module.id === undefined,
@@ -24,19 +25,24 @@ export default function removeFromBundle(
     name: 'remove-from-bundle',
     apply: 'build', // <-- @MARK important
     load: (id) => {
-      return excludeOnMatch(modulesToExclude, id)
+      return excludeOnMatch(modulesToExclude, id, exportNames)
     },
   }
 }
 
-const EMPTY_MODULE = {
-  code: `export default {};`,
+function generateModuleWithExports(exportNames: string[]) {
+  return {
+    code: `export default {}; ${exportNames.map((name) => `export const ${name} = undefined;`).join('\n')}`,
+  }
 }
 
-export function excludeOnMatch(modulesToExclude: ModulesToExclude, id: string) {
+export function excludeOnMatch(
+  modulesToExclude: ModulesToExclude,
+  id: string,
+  exportNames: string[] = [],
+) {
   if (modulesToExclude.some((module) => module.id.test(id))) {
-    // Return an empty module
-    return EMPTY_MODULE
+    return generateModuleWithExports(exportNames)
   }
 
   // Fallback to regular loaders

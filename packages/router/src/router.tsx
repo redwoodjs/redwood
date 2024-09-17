@@ -1,21 +1,21 @@
 import type { ReactNode } from 'react'
 import React, { useMemo, memo } from 'react'
 
-import { ActiveRouteLoader } from './active-route-loader'
-import { analyzeRoutes } from './analyzeRoutes'
-import type { Wrappers } from './analyzeRoutes'
-import { AuthenticatedRoute } from './AuthenticatedRoute'
-import { LocationProvider, useLocation } from './location'
-import { namedRoutes } from './namedRoutes'
-import { normalizePage } from './page'
-import { PageLoadingContextProvider } from './PageLoadingContext'
-import { ParamsProvider } from './params'
-import { Redirect } from './redirect'
-import type { RouterContextProviderProps } from './router-context'
-import { RouterContextProvider } from './router-context'
-import { SplashPage } from './splash-page'
-import { matchPath, parseSearch, replaceParams, validatePath } from './util'
-import type { TrailingSlashesTypes } from './util'
+import { ActiveRouteLoader } from './active-route-loader.js'
+import { analyzeRoutes } from './analyzeRoutes.js'
+import type { Wrappers } from './analyzeRoutes.js'
+import { AuthenticatedRoute } from './AuthenticatedRoute.js'
+import { LocationProvider, useLocation } from './location.js'
+import { namedRoutes } from './namedRoutes.js'
+import { normalizePage } from './page.js'
+import { PageLoadingContextProvider } from './PageLoadingContext.js'
+import { ParamsProvider } from './params.js'
+import { Redirect } from './redirect.js'
+import type { RouterContextProviderProps } from './router-context.js'
+import { RouterContextProvider } from './router-context.js'
+import { SplashPage } from './splash-page.js'
+import { matchPath, parseSearch, replaceParams, validatePath } from './util.js'
+import type { TrailingSlashesTypes } from './util.js'
 
 export interface RouterProps
   extends Omit<RouterContextProviderProps, 'routes' | 'activeRouteName'> {
@@ -139,7 +139,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
   let redirectPath: string | undefined = undefined
 
   if (redirect) {
-    if (redirect[0] === '/') {
+    if (redirect.startsWith('/')) {
       redirectPath = replaceParams(redirect, allParams)
     } else {
       const redirectRouteObject = Object.values(pathRouteMap).find(
@@ -186,7 +186,7 @@ const LocationAwareRouter: React.FC<RouterProps> = ({
 
 interface WrappedPageProps {
   children: ReactNode
-  sets: Array<{
+  sets: {
     id: string
     wrappers: Wrappers
     isPrivate: boolean
@@ -194,7 +194,7 @@ interface WrappedPageProps {
       private?: boolean
       [key: string]: unknown
     }
-  }>
+  }[]
 }
 
 /**

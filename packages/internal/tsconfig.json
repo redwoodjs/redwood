@@ -3,12 +3,15 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": ["src/**/*", "./ambient.d.ts"],
   "references": [
     { "path": "../babel-config" },
     { "path": "../graphql-server" }, // ODD, but we do this so we dont have to have internal as a runtime dependency
     { "path": "../project-config" },
-    { "path": "../router" },
+    { "path": "../router/tsconfig.build.json" }
   ]
 }

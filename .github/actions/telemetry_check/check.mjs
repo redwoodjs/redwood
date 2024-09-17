@@ -6,7 +6,7 @@ import path from 'path'
 import { exec } from '@actions/exec'
 
 console.log(
-  `Telemetry is being redirected to ${process.env.REDWOOD_REDIRECT_TELEMETRY}`
+  `Telemetry is being redirected to ${process.env.REDWOOD_REDIRECT_TELEMETRY}`,
 )
 
 // Setup fake telemetry server
@@ -37,23 +37,21 @@ try {
   switch (mode) {
     case 'crwa':
       exitCode = await exec(
-        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false --no-yarn-install`
+        `yarn node ./packages/create-redwood-app/dist/create-redwood-app.js ../project-for-telemetry --typescript true --git false --no-yarn-install`,
       )
       if (exitCode) {
         process.exit(1)
       }
       break
     case 'cli':
-      exitCode = await exec(
-        `yarn install`, null, {
-          cwd: path.join(process.cwd(), '../project-for-telemetry')
-        }
-      )
+      exitCode = await exec(`yarn install`, null, {
+        cwd: path.join(process.cwd(), '../project-for-telemetry'),
+      })
       if (exitCode) {
         process.exit(1)
       }
       exitCode = await exec(
-        `yarn --cwd ../project-for-telemetry node ../redwood/packages/cli/dist/index.js info`
+        `yarn --cwd ../project-for-telemetry node ../redwood/packages/cli/dist/index.js info`,
       )
       if (exitCode) {
         process.exit(1)

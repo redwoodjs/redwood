@@ -65,5 +65,13 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
-  return root.find(j.TryStatement).insertBefore(createPosts).toSource()
+  let newSource = root.find(j.TryStatement).insertBefore(createPosts).toSource()
+
+  // Uncomment the db import line
+  newSource = newSource.replace(
+    "// import { db } from 'api/src/lib/db'",
+    "import { db } from 'api/src/lib/db'",
+  )
+
+  return newSource
 }

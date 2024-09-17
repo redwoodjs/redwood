@@ -7,18 +7,18 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   // Check that the blog posts load. We're deliberately not checking their titles because we edit them in other tests.
   await expect(
     page.getByText(
-      'Meh waistcoat succulents umami asymmetrical, hoodie post-ironic paleo chillwave '
-    )
+      'Meh waistcoat succulents umami asymmetrical, hoodie post-ironic paleo chillwave ',
+    ),
   ).toBeVisible()
   await expect(
     page.getByText(
-      'Raclette shoreditch before they sold out lyft. Ethical bicycle rights meh prism '
-    )
+      'Raclette shoreditch before they sold out lyft. Ethical bicycle rights meh prism ',
+    ),
   ).toBeVisible()
   await expect(
     page.getByText(
-      "I'm baby single- origin coffee kickstarter lo - fi paleo skateboard.Tumblr hasht"
-    )
+      "I'm baby single- origin coffee kickstarter lo - fi paleo skateboard.Tumblr hasht",
+    ),
   ).toBeVisible()
 
   // CSS checks. We saw this break when we switched bundlers, so while it's not comprehensive, it's at least something.
@@ -26,20 +26,20 @@ export async function smokeTest({ page }: PlaywrightTestArgs) {
   const bgBlue700 = 'rgb(29, 78, 216)'
   expect(page.locator('#redwood-app > header')).toHaveCSS(
     'background-color',
-    bgBlue700
+    bgBlue700,
   )
 
   const textBlue400 = 'rgb(96, 165, 250)'
   expect(await page.getByRole('link', { name: 'Redwood Blog' })).toHaveCSS(
     'color',
-    textBlue400
+    textBlue400,
   )
 
   // Check the about page.
   await page.getByRole('link', { name: 'About', exact: true }).click()
   expect(page.url()).toBe('http://localhost:8910/about')
   await page.getByText(
-    'This site was created to demonstrate my mastery of Redwood: Look on my works, ye'
+    'This site was created to demonstrate my mastery of Redwood: Look on my works, ye',
   )
 
   // Check the contact us page.
@@ -56,6 +56,7 @@ interface AuthUtilsParams {
   password?: string
   fullName?: string
   page: PlaywrightTestArgs['page']
+  redirectUrl?: string
 }
 
 export const signUpTestUser = async ({
@@ -78,7 +79,7 @@ export const signUpTestUser = async ({
   await Promise.race([
     page.waitForURL('/'),
     expect(
-      page.getByText(`Username \`${email}\` already in use`)
+      page.getByText(`Username \`${email}\` already in use`),
     ).toBeVisible(),
   ])
 }
@@ -87,13 +88,16 @@ export const loginAsTestUser = async ({
   page,
   email = 'testuser@bazinga.com',
   password = 'test123',
+  redirectUrl = '/',
 }: AuthUtilsParams) => {
   await page.goto('/login')
 
   await page.getByLabel('Username').fill(email)
   await page.getByLabel('Password').fill(password)
 
+  await page.waitForTimeout(300)
+
   await page.getByRole('button', { name: 'Login' }).click()
 
-  await page.waitForURL('/')
+  await page.waitForURL(redirectUrl)
 }

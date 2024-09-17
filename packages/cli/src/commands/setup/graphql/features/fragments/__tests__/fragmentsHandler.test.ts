@@ -1,24 +1,5 @@
-let mockExecutedTaskTitles: Array<string> = []
-let mockSkippedTaskTitles: Array<string> = []
-
-vi.mock('fs', async () => {
-  const memfs = await import('memfs')
-  return {
-    ...memfs.fs,
-    default: {
-      ...memfs.fs,
-    },
-  }
-})
-vi.mock('node:fs', async () => {
-  const memfs = await import('memfs')
-  return {
-    ...memfs.fs,
-    default: {
-      ...memfs.fs,
-    },
-  }
-})
+vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
+vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa')
 // The jscodeshift parts are tested by another test
 vi.mock('../../../../../../lib/runTransform', () => {
@@ -29,36 +10,15 @@ vi.mock('../../../../../../lib/runTransform', () => {
   }
 })
 
-vi.mock('listr2', () => {
-  return {
-    // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
-      return {
-        run: async () => {
-          mockExecutedTaskTitles = []
-          mockSkippedTaskTitles = []
-
-          for (const task of tasks) {
-            const skip =
-              typeof task.skip === 'function' ? task.skip : () => task.skip
-
-            if (skip()) {
-              mockSkippedTaskTitles.push(task.title)
-            } else {
-              mockExecutedTaskTitles.push(task.title)
-              await task.task()
-            }
-          }
-        },
-      }
-    }),
-  }
-})
-
-import { vol } from 'memfs'
+import { vol, fs as memfsFs } from 'memfs'
 import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
+import { Listr2Mock } from '../../../../../../__tests__/Listr2Mock'
 import { handler } from '../fragmentsHandler'
+
+vi.mock('listr2', () => ({
+  Listr: Listr2Mock,
+}))
 
 // Set up RWJS_CWD
 let original_RWJS_CWD: string | undefined
@@ -80,7 +40,7 @@ test('all tasks are being called', async () => {
 
   await handler({ force: false })
 
-  expect(mockExecutedTaskTitles).toMatchInlineSnapshot(`
+  expect(Listr2Mock.executedTaskTitles).toMatchInlineSnapshot(`
     [
       "Update Redwood Project Configuration to enable GraphQL Fragments",
       "Generate possibleTypes.ts",
@@ -101,7 +61,7 @@ test('redwood.toml update is skipped if fragments are already enabled', async ()
 
   await handler({ force: false })
 
-  expect(mockExecutedTaskTitles).toMatchInlineSnapshot(`
+  expect(Listr2Mock.executedTaskTitles).toMatchInlineSnapshot(`
     [
       "Generate possibleTypes.ts",
       "Import possibleTypes in App.tsx",
@@ -109,9 +69,9 @@ test('redwood.toml update is skipped if fragments are already enabled', async ()
     ]
   `)
 
-  expect(mockSkippedTaskTitles).toMatchInlineSnapshot(`
+  expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
     [
-      "Update Redwood Project Configuration to enable GraphQL Fragments",
+      "GraphQL Fragments are already enabled.",
     ]
   `)
 })
@@ -126,9 +86,9 @@ fragments = true
 
   await handler({ force: false })
 
-  expect(mockSkippedTaskTitles).toMatchInlineSnapshot(`
+  expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
     [
-      "Update Redwood Project Configuration to enable GraphQL Fragments",
+      "GraphQL Fragments are already enabled.",
     ]
   `)
 

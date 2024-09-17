@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // vscode is a compile-time only dependency
 // we only use it in type declarations
 // (we can't use "import type" since we need to do use it in some typeof expressions)
@@ -224,11 +222,11 @@ export class RemoteTreeDataProviderImpl implements RemoteTreeDataProvider {
   }
 
   // ----- start TreeDataProvider impl
-  private listeners: Array<(e: string | undefined) => void> = []
+  private listeners: ((e: string | undefined) => void)[] = []
   onDidChangeTreeData(listener: (e: string | undefined) => void) {
     this.lazyInit()
     this.listeners.push(listener)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     return null as any // TODO: disposable (we're not using it for now)
   }
 
@@ -280,7 +278,7 @@ export function RemoteTreeDataProvider_publishOverLSPConnection(
     lazyInit()
     try {
       return await ProviderResult_normalize(tdp.getChildren(id))
-    } catch (e) {
+    } catch {
       return []
     }
   })
@@ -342,7 +340,6 @@ export function Command_cli(cmd: string, title = 'run...'): Command {
   return { command: 'redwoodjs.cli', arguments: [cmd], title }
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type ReplacePropTypes<T extends {}, Replacements extends {}> = {
+type ReplacePropTypes<T extends object, Replacements extends object> = {
   [K in keyof T]: K extends keyof Replacements ? Replacements[K] : T[K]
 }

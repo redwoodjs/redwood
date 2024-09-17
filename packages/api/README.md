@@ -12,23 +12,24 @@ We also plan to make Functions platform-agnostic. At the moment, we're targeting
 
 [@peterp](https://github.com/peterp/)
 [@dthyresson](https://github.com/dthyresson/)
+
 ### Logging
 
-RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed  -- with ease.
+RedwoodJS provides an opinionated logger with sensible, practical defaults that grants you visibility into the JAMStack applications you're developing and have deployed -- with ease.
 
 Logging in the serverless ecosystem is not trivial and neither is its configuration.
 
 When choosing a Node.js logger to add to the framework, RedwoodJS required that it:
 
-* Have a low-overhead, and be fast
-* Output helpful, readable information in development
-* Be highly configurable to set log levels, time formatting, and more
-* Support key redaction to prevent passwords or tokens from leaking out
-* Save to a file in local (or other) environments that can write to the file system
-* Stream to third-party log and application monitoring services vital to production logging in serverless environments like [logFlare](https://logflare.app/) and [Datadog](https://www.datadoghq.com/)
-* Hook into [Prisma logging](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging) to give visibility into connection issues, slow queries, and any unexpected errors
-* Have a solid Developer experience (DX) to get logging out-of-the-gate quickly
-* Use a compact configuration to set how to log (its `options`) and where to log -- file, stdout, or remote transport stream -- (its `destination`)
+- Have a low-overhead, and be fast
+- Output helpful, readable information in development
+- Be highly configurable to set log levels, time formatting, and more
+- Support key redaction to prevent passwords or tokens from leaking out
+- Save to a file in local (or other) environments that can write to the file system
+- Stream to third-party log and application monitoring services vital to production logging in serverless environments like [logFlare](https://logflare.app/) and [Datadog](https://www.datadoghq.com/)
+- Hook into [Prisma logging](https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/logging) to give visibility into connection issues, slow queries, and any unexpected errors
+- Have a solid Developer experience (DX) to get logging out-of-the-gate quickly
+- Use a compact configuration to set how to log (its `options`) and where to log -- file, stdout, or remote transport stream -- (its `destination`)
 
 With those criteria in mind, Redwood includes [pino](https://github.com/pinojs/pino) with its rich [features](https://github.com/pinojs/pino/blob/master/docs/api.md), [ecosystem](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md) and [community](https://github.com/pinojs/pino/blob/master/docs/ecosystem.md#community).
 

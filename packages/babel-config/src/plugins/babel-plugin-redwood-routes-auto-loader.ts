@@ -12,7 +12,6 @@ import {
 
 export interface PluginOptions {
   forPrerender?: boolean
-  forVite?: boolean
 }
 
 /**
@@ -38,7 +37,7 @@ export const withRelativeImports = (page: PagesDependency) => {
 
 export default function (
   { types: t }: { types: typeof types },
-  { forPrerender = false, forVite = false }: PluginOptions,
+  { forPrerender = false }: PluginOptions,
 ): PluginObj {
   // @NOTE: This var gets mutated inside the visitors
   let pages = processPagesDir().map(withRelativeImports)
@@ -78,9 +77,12 @@ export default function (
           importStatementPath(p.node.source?.value),
         )
 
-        const defaultSpecifier = p.node.specifiers.filter((specifiers) =>
+        const defaultSpecifier = p.node.specifiers.find((specifiers) =>
           t.isImportDefaultSpecifier(specifiers),
-        )[0]
+        )
+        if (!defaultSpecifier) {
+          return
+        }
 
         // Remove Page imports in prerender mode (see babel-preset)
         // The removed imports will be replaced further down in this file
@@ -152,7 +154,7 @@ export default function (
             //  const <importName> = {
             //     name: <importName>,
             //     prerenderLoader: (name) => prerenderLoaderImpl
-            //     LazyComponent: lazy(() => import(/* webpackChunkName: "..." */ <relativeImportPath>)
+            //     LazyComponent: lazy(() => import(<relativeImportPath>)
             //   }
 
             //
@@ -160,15 +162,9 @@ export default function (
             // const LoginPage = {
             //   name: "LoginPage",
             //   prerenderLoader: () => __webpack_require__(require.resolveWeak("./pages/LoginPage/LoginPage")),
-            //   LazyComponent: lazy(() => import("/* webpackChunkName: "LoginPage" *//pages/LoginPage/LoginPage.tsx"))
+            //   LazyComponent: lazy(() => import("/pages/LoginPage/LoginPage.tsx"))
             // }
             //
-            importArgument.leadingComments = [
-              {
-                type: 'CommentBlock',
-                value: ` webpackChunkName: "${importName}" `,
-              },
-            ]
 
             nodes.push(
               t.variableDeclaration('const', [
@@ -186,12 +182,7 @@ export default function (
                       t.identifier('prerenderLoader'),
                       t.arrowFunctionExpression(
                         [t.identifier('name')],
-                        prerenderLoaderImpl(
-                          forPrerender,
-                          forVite,
-                          relativeImport,
-                          t,
-                        ),
+                        prerenderLoaderImpl(forPrerender, relativeImport, t),
                       ),
                     ),
                     t.objectProperty(
@@ -221,12 +212,10 @@ export default function (
 
 function prerenderLoaderImpl(
   forPrerender: boolean,
-  forVite: boolean,
   relativeImport: string,
   t: typeof types,
 ) {
   if (forPrerender) {
-    // This works for both vite and webpack
     return t.callExpression(t.identifier('require'), [
       t.stringLiteral(relativeImport),
     ])
@@ -238,26 +227,14 @@ function prerenderLoaderImpl(
   // first load of a prerendered page
   // Manually imported pages will be bundled in the main bundle and will be
   // loaded by the code in `normalizePage` in util.ts
-  let implForBuild
-  if (forVite) {
-    implForBuild = t.objectExpression([
-      t.objectProperty(
-        t.identifier('default'),
-        t.memberExpression(
-          t.identifier('globalThis.__REDWOOD__PRERENDER_PAGES'),
-          t.identifier('name'),
-          true,
-        ),
+  return t.objectExpression([
+    t.objectProperty(
+      t.identifier('default'),
+      t.memberExpression(
+        t.identifier('globalThis.__REDWOOD__PRERENDER_PAGES'),
+        t.identifier('name'),
+        true,
       ),
-    ])
-  } else {
-    // Use __webpack_require__ otherwise all pages will be bundled
-    implForBuild = t.callExpression(t.identifier('__webpack_require__'), [
-      t.callExpression(t.identifier('require.resolveWeak'), [
-        t.stringLiteral(relativeImport),
-      ]),
-    ])
-  }
-
-  return implForBuild
+    ),
+  ])
 }

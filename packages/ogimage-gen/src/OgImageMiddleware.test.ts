@@ -7,7 +7,7 @@ import { vi, describe, beforeEach, afterEach, test, expect } from 'vitest'
 
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import { ensurePosixPath } from '@redwoodjs/project-config'
-import { MiddlewareResponse } from '@redwoodjs/vite/middleware'
+import { MiddlewareResponse } from '@redwoodjs/web/middleware'
 
 import OgImageMiddleware from './OgImageMiddleware'
 
@@ -139,7 +139,7 @@ describe('OgImageMiddleware', () => {
     expect(result).toEqual(passthroughRes)
   })
 
-  test('getOgComponentPath should return the correct OG image file path', async () => {
+  test('getOgComponentPath should return the correct OG image file path', () => {
     const commonRouteInfo = {
       name: 'contact',
       bundle: 'assets/ContactPage-DjZx8IRT.js',

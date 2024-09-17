@@ -3,11 +3,11 @@ import React from 'react'
 import { render, waitFor } from '@testing-library/react'
 import { test, beforeEach, expect } from 'vitest'
 
-import { getFocus } from '../a11yUtils'
-import { namedRoutes as routes } from '../namedRoutes'
-import { Route } from '../Route'
-import RouteFocus from '../route-focus'
-import { Router } from '../router'
+import { getFocus } from '../a11yUtils.js'
+import { namedRoutes as routes } from '../namedRoutes.js'
+import RouteFocus from '../route-focus.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
 
 // SETUP
 const RouteFocusPage = () => (

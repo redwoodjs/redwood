@@ -12,7 +12,7 @@ import { createSuspendingCell } from './createSuspendingCell.js'
 type ReadQueryHook = typeof useReadQuery
 type BgQueryHook = typeof useBackgroundQuery
 
-vi.mock('@apollo/client', () => {
+vi.mock('@apollo/client/react/hooks/hooks.cjs', () => {
   return {
     useApolloClient: vi.fn(),
   }
@@ -37,7 +37,7 @@ describe('createSuspendingCell', () => {
 
   const mockedQueryHook = () => ({ data: {} })
 
-  test('Renders a static Success component', async () => {
+  test('Renders a static Success component', () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -55,7 +55,7 @@ describe('createSuspendingCell', () => {
     screen.getByText(/^Great success!$/)
   })
 
-  test('Renders Success with data', async () => {
+  test('Renders Success with data', () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -86,7 +86,7 @@ describe('createSuspendingCell', () => {
     screen.getByText(/^42$/)
   })
 
-  test('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+  test('Renders Success if any of the fields have data (i.e. not just the first)', () => {
     const TestCell = createSuspendingCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { users { name } posts { title } }',

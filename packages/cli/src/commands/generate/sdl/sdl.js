@@ -107,6 +107,15 @@ const inputSDL = (model, required, types = {}, docs = false) => {
     .map((field) => modelFieldToSDL({ field, required, types, docs }))
 }
 
+const idInputSDL = (idType, docs) => {
+  if (!Array.isArray(idType)) {
+    return []
+  }
+  return idType.map((field) =>
+    modelFieldToSDL({ field, required: true, types: {}, docs }),
+  )
+}
+
 // creates the CreateInput type (all fields are required)
 const createInputSDL = (model, types = {}, docs = false) => {
   return inputSDL(model, true, types, docs)
@@ -122,7 +131,14 @@ const idType = (model, crud) => {
     return undefined
   }
 
+  // When using a composite primary key, we need to return an array of fields
+  if (model.primaryKey?.fields.length) {
+    const { fields: fieldNames } = model.primaryKey
+    return fieldNames.map((name) => model.fields.find((f) => f.name === name))
+  }
+
   const idField = model.fields.find((field) => field.isId)
+
   if (!idField) {
     missingIdConsoleMessage()
     throw new Error('Failed: Could not generate SDL')
@@ -174,12 +190,15 @@ const sdlFromSchemaModel = async (name, crud, docs = false) => {
   const modelDescription =
     model.documentation || `Representation of ${modelName}.`
 
+  const idTypeRes = idType(model, crud)
+
   return {
     modelName,
     modelDescription,
     query: querySDL(model, docs).join('\n    '),
     createInput: createInputSDL(model, types, docs).join('\n    '),
     updateInput: updateInputSDL(model, types, docs).join('\n    '),
+    idInput: idInputSDL(idTypeRes, docs).join('\n    '),
     idType: idType(model, crud),
     idName: idName(model, crud),
     relations: relationsForModel(model),
@@ -200,6 +219,7 @@ export const files = async ({
     query,
     createInput,
     updateInput,
+    idInput,
     idType,
     idName,
     relations,
@@ -221,6 +241,7 @@ export const files = async ({
     query,
     createInput,
     updateInput,
+    idInput,
     idType,
     idName,
     enums,

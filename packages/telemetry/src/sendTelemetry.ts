@@ -8,7 +8,7 @@ import envinfo from 'envinfo'
 import system from 'systeminformation'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getConfig, getRawConfig } from '@redwoodjs/project-config'
+import { getRawConfig } from '@redwoodjs/project-config'
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 // circular dependency when trying to import @redwoodjs/structure so lets do it
@@ -18,34 +18,34 @@ const { RWProject } = require('@redwoodjs/structure/dist/model/RWProject')
 
 interface SensitiveArgPositions {
   exec: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly: Array<string>
+    redactWith: string[]
+    allowOnly: string[]
   }
   g: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    redactWith: string[]
+    allowOnly?: string[]
   }
   generate: {
-    positions: Array<number>
+    positions: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    redactWith: string[]
+    allowOnly?: string[]
   }
   prisma: {
     positions?: never
-    options: Array<string>
-    redactWith: Array<string>
-    allowOnly?: Array<string>
+    options: string[]
+    redactWith: string[]
+    allowOnly?: string[]
   }
   lint: {
-    positions?: Array<number>
+    positions?: number[]
     options?: never
-    redactWith: Array<string>
-    allowOnly: Array<string>
+    redactWith: string[]
+    allowOnly: string[]
   }
 }
 
@@ -105,20 +105,9 @@ const getInfo = async (presets: Args = {}) => {
   const cpu = await system.cpu()
   const mem = await system.mem()
 
-  // Must only call getConfig() once the project is setup - so not within telemetry for CRWA
-  // Default to 'webpack' for new projects
-  const webBundler = presets.command?.startsWith('create redwood-app')
-    ? 'webpack'
-    : getConfig().web.bundler
-
   // Returns a list of all enabled experiments
   // This detects all top level [experimental.X] and returns all X's, ignoring all Y's for any [experimental.X.Y]
   const experiments = Object.keys(getRawConfig()['experimental'] || {})
-
-  // NOTE: Added this way to avoid the need to disturb the existing toml structure
-  if (webBundler !== 'webpack') {
-    experiments.push(webBundler)
-  }
 
   return {
     os: info.System?.OS?.split(' ')[0],
@@ -131,7 +120,7 @@ const getInfo = async (presets: Args = {}) => {
     redwoodVersion:
       presets.redwoodVersion || info.npmPackages['@redwoodjs/core']?.installed,
     system: `${cpu.physicalCores}.${Math.round(mem.total / 1073741824)}`,
-    webBundler,
+    webBundler: 'vite', // Hardcoded as this is now the only supported bundler
     experiments,
   }
 }
@@ -149,7 +138,7 @@ export const sanitizeArgv = (
     if (sensitiveCommand.positions) {
       sensitiveCommand.positions.forEach((pos: number, index: number) => {
         // only redact if the text in the given position is not a --flag
-        if (args[pos] && !/--/.test(args[pos])) {
+        if (args[pos] && !args[pos].includes('--')) {
           args[pos] = sensitiveCommand.redactWith[index]
         }
       })
@@ -276,7 +265,7 @@ const uniqueId = (rootDir: string | null) => {
         fs.mkdirSync(path.dirname(telemetryCachePath), { recursive: true })
       }
       fs.writeFileSync(telemetryCachePath, uuid)
-    } catch (error) {
+    } catch {
       console.error('\nCould not create telemetry.txt file\n')
     }
   } else {

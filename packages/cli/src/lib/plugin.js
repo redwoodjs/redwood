@@ -14,7 +14,7 @@ const { Select } = require('enquirer')
 /**
  * The file inside .redwood which will contain cached plugin command mappings
  */
-const PLUGIN_CACHE_FILENAME = 'commandCache.json'
+export const PLUGIN_CACHE_FILENAME = 'commandCache.json'
 
 /**
  * A cache of yargs information for redwood commands that are available from plugins.
@@ -24,18 +24,11 @@ const PLUGIN_CACHE_FILENAME = 'commandCache.json'
  * incorrect.
  */
 export const PLUGIN_CACHE_DEFAULT = {
-  '@redwoodjs/cli-storybook': {
+  '@redwoodjs/cli-storybook-vite': {
     storybook: {
       aliases: ['sb'],
       description:
         'Launch Storybook: a tool for building UI components and pages in isolation',
-    },
-  },
-  '@redwoodjs/cli-storybook-vite': {
-    'storybook-vite': {
-      aliases: ['storybook-vite', 'sbv'],
-      description:
-        'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite!)',
     },
   },
   '@redwoodjs/cli-data-migrate': {

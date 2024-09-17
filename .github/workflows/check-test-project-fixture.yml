@@ -10,6 +10,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   detect-changes:
     if: github.repository == 'redwoodjs/redwood'
@@ -22,7 +24,7 @@ jobs:
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -40,7 +42,7 @@ jobs:
     name: Check test project fixture
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Set up job
         if: "!contains(github.event.pull_request.labels.*.name, 'fixture-ok')"
@@ -69,6 +71,9 @@ jobs:
             echo 'Untracked files:'
             git status --porcelain | grep '^?? ' | awk '{print "        " $2}'
             echo
+            echo
+            echo 'Full diff:'
+            git diff
             exit 1;
           fi
 

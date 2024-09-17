@@ -1,5 +1,12 @@
+<% if (rscEnabled) { %>
+import { Link } from '@redwoodjs/router/Link'
+import { namedRoutes as routes } from '@redwoodjs/router/namedRoutes'
+import { Metadata } from '@redwoodjs/web/Metadata'
+<% } else { %>
 import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
+<% } %>
+
 <% if (paramName !== '') { %>
 type ${pascalName}PageProps = {
   ${paramName}: ${paramType}

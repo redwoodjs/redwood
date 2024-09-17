@@ -1,6 +1,7 @@
 # ESLint Config
 
 <!-- toc -->
+
 - [ESLint Config](#eslint-config)
   - [Purpose and Vision](#purpose-and-vision)
   - [Package Leads](#package-leads)
@@ -17,7 +18,7 @@ Our configuration uses recommended rule presets, including those from [ESLint](h
 - [No semicolons](https://eslint.org/docs/rules/semi) at the end of statements
 - [Trailing commas](https://eslint.org/docs/rules/comma-dangle) in object and array literals
 - [Use single quotes](https://eslint.org/docs/rules/quotes) on strings wherever possible
-- [Use parentheses](https://eslint.org/docs/rules/arrow-parens)  around arrow function parameters
+- [Use parentheses](https://eslint.org/docs/rules/arrow-parens) around arrow function parameters
 - [Sort import declarations](https://eslint.org/docs/rules/sort-imports) by name
 - [Wrap block statements](https://eslint.org/docs/rules/curly) in curly braces
 
@@ -52,7 +53,7 @@ If you need script in your configuration, you can remove the `eslintConfig` bloc
 // redwood-app/.eslintrc.js
 module.exports = {
   extends: ['@redwoodjs/eslint-config'],
-  'root': true,
+  root: true,
   rules: {
     'jsx-a11y/no-onchange': 'off',
   },

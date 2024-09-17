@@ -1,14 +1,16 @@
 'use client'
 import React from 'react'
 
-import { createNamedContext } from './createNamedContext'
-import { gHistory } from './history'
-import type { TrailingSlashesTypes } from './util'
+import { createNamedContext } from './createNamedContext.js'
+import { gHistory } from './history.js'
+import type { TrailingSlashesTypes } from './util.js'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LocationContextType extends URL {}
 
 const LocationContext = createNamedContext<LocationContextType>('Location')
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface Location extends URL {}
 
 interface LocationProviderProps {

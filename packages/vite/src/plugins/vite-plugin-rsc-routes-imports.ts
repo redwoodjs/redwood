@@ -1,8 +1,11 @@
 import path from 'path'
 
-import generate from '@babel/generator'
-import { parse as babelParse } from '@babel/parser'
-import traverse from '@babel/traverse'
+// Babel 7 packages are CJS, and need to be imported as such
+import babelGenerator from '@babel/generator'
+const { default: generate } = babelGenerator
+import { parse as babelParse } from '@babel/parser/index.cjs'
+import babelTraverse from '@babel/traverse'
+const { default: traverse } = babelTraverse
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'

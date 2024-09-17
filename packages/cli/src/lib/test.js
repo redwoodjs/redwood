@@ -42,6 +42,7 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
           ), // this folder
           generators: path.join(BASE_PATH, './api/generators'),
           src: path.join(BASE_PATH, './api/src'),
+          jobs: path.join(BASE_PATH, './api/src/jobs'),
           services: path.join(BASE_PATH, './api/src/services'),
           directives: path.join(BASE_PATH, './api/src/directives'),
           graphql: path.join(BASE_PATH, './api/src/graphql'),
@@ -69,6 +70,15 @@ vi.mock('@redwoodjs/project-config', async (importOriginal) => {
         },
       }
     },
+  }
+})
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
   }
 })
 

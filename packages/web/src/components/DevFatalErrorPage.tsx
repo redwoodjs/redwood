@@ -3,16 +3,12 @@
 // making it fine for embedding inside this project.
 
 // Stacktracey requires buffer, which Vite does not polyfill by default
-if (typeof window !== 'undefined') {
-  window.Buffer = window.Buffer || require('buffer').Buffer
-}
-
 import React, { useState } from 'react'
 
 import type { GraphQLError } from 'graphql'
 import StackTracey from 'stacktracey'
 
-// RWJS_SRC_ROOT is defined and defaulted in webpack+vite to the base path
+// RWJS_SRC_ROOT is defined and defaulted in vite to the base path
 let srcRoot = ''
 if (typeof RWJS_DEBUG_ENV !== 'undefined') {
   srcRoot = RWJS_DEBUG_ENV?.RWJS_SRC_ROOT
@@ -61,9 +57,7 @@ export const DevFatalErrorPage = (props: { error?: ErrorWithRequestMeta }) => {
   const stack = new StackTracey(err).withSources()
 
   const typeName = String(
-    (err as any)['type'] ||
-      (err.constructor && err.constructor.name) ||
-      typeof err,
+    (err as any)['type'] || err.constructor?.name || typeof err,
   )
   const msg = String(err && err.message)
 
@@ -217,7 +211,7 @@ function StackEntry({
 
 function toVSCodeURL(entry: StackTracey.Entry) {
   // To account for folks using vscode-insiders etc
-  // This is defined by webpack and vite from .env
+  // This is defined by vite from .env
   const scheme = RWJS_DEBUG_ENV.REDWOOD_ENV_EDITOR || 'vscode'
   return `${scheme}://file/${entry.fileShort}:${entry.line}:${entry.column}`
 }

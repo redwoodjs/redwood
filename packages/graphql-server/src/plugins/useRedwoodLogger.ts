@@ -219,7 +219,7 @@ export const useRedwoodLogger = (
       })
     },
     onParse({ params }) {
-      const options = params.options as any
+      const options = params.options
 
       const envelopLogger = childLogger.child({
         ...options,
@@ -232,7 +232,7 @@ export const useRedwoodLogger = (
       }
     },
     onValidate({ params }) {
-      const options = params.options as any
+      const options = params.options
 
       const envelopLogger = childLogger.child({
         ...options,
@@ -240,7 +240,9 @@ export const useRedwoodLogger = (
 
       return ({ result }) => {
         result.forEach((item) => {
-          item.message && envelopLogger.error(item.message)
+          if (item.message) {
+            envelopLogger.error(item.message)
+          }
         })
       }
     },

@@ -4,8 +4,8 @@ import type { ReactNode } from 'react'
 import { act, render } from '@testing-library/react'
 import { beforeEach, beforeAll, afterAll, test, expect, vi } from 'vitest'
 
-import { navigate, Route, Router } from '../'
-import { Private, Set } from '../Set'
+import { navigate, Route, Router } from '../index.js'
+import { Private, Set } from '../Set.js'
 
 // Heads-up, in this test we're not mocking LazyComponent because all the tests
 // explicitly define the pages in the router.

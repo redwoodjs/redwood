@@ -3,19 +3,28 @@
 
 import os from 'node:os'
 import path from 'node:path'
-import url from "node:url"
+import url from 'node:url'
 
 import chalk from 'chalk'
-import execa, { ExecaChildProcess } from 'execa'
+import type { ExecaChildProcess } from 'execa'
+import execa from 'execa'
 import fg from 'fast-glob'
 import fs from 'fs-extra'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { buildRedwoodFramework, addFrameworkDepsToProject, cleanUp, copyFrameworkPackages, createRedwoodJSApp, initGit, runYarnInstall } from "./util/util.mjs"
+import {
+  buildRedwoodFramework,
+  addFrameworkDepsToProject,
+  cleanUp,
+  copyFrameworkPackages,
+  createRedwoodJSApp,
+  initGit,
+  runYarnInstall,
+} from './util/util.mjs'
 
 // useful consts
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 // Parse input
 const args = yargs(hideBin(process.argv))
@@ -38,7 +47,7 @@ const REDWOOD_PROJECT_DIRECTORY =
     os.tmpdir(),
     'redwood-k6-test',
     // ":" is problematic with paths
-    new Date().toISOString().split(':').join('-')
+    new Date().toISOString().split(':').join('-'),
   )
 
 const SETUPS_DIR = path.join(__dirname, 'setups')
@@ -50,7 +59,7 @@ const API_SERVER_COMMANDS = [
   },
   {
     cmd: `node ${path.resolve(REDWOOD_PROJECT_DIRECTORY, 'node_modules/@redwoodjs/api-server/dist/bin.js')} api`,
-    host: 'http://localhost:8911'
+    host: 'http://localhost:8911',
   },
 ]
 let cleanUpExecuted = false
@@ -173,9 +182,10 @@ async function main() {
     // import the setup
     const setupFile = path.join(SETUPS_DIR, setup, 'setup.mjs')
     const setupModule = await import(setupFile)
-    const runForTests = args.test.length === 0 ?
-      setupModule.validForTests :
-      args.test.filter((test) => setupModule.validForTests.includes(test))
+    const runForTests =
+      args.test.length === 0
+        ? setupModule.validForTests
+        : args.test.filter((test) => setupModule.validForTests.includes(test))
 
     console.log(`\n${divider}\nPreparing setup: ${setup}\n${divider}`)
 
@@ -213,20 +223,34 @@ async function main() {
       // Run for different server commands
       for (let j = 0; j < API_SERVER_COMMANDS.length; j++) {
         console.log(`\n${divider}`)
-        console.log(`Running test ${i * API_SERVER_COMMANDS.length + j + 1}/${runForTests.length * API_SERVER_COMMANDS.length}: ${runForTests[i]}`)
+        console.log(
+          `Running test ${i * API_SERVER_COMMANDS.length + j + 1}/${runForTests.length * API_SERVER_COMMANDS.length}: ${runForTests[i]}`,
+        )
         console.log(chalk.dim(API_SERVER_COMMANDS[j].cmd))
         console.log(`${divider}`)
 
         // Start the server
-        await startServer(API_SERVER_COMMANDS[j].cmd, setupModule.startupGracePeriod)
+        await startServer(
+          API_SERVER_COMMANDS[j].cmd,
+          setupModule.startupGracePeriod,
+        )
 
         // Run k6 test
         let passed = false
         try {
-          await execa('k6', ['run', path.join(TESTS_DIR, `${runForTests[i]}.js`), '--env', `TEST_HOST=${API_SERVER_COMMANDS[j].host}`], {
-            cwd: REDWOOD_PROJECT_DIRECTORY,
-            stdio: 'inherit',
-          })
+          await execa(
+            'k6',
+            [
+              'run',
+              path.join(TESTS_DIR, `${runForTests[i]}.js`),
+              '--env',
+              `TEST_HOST=${API_SERVER_COMMANDS[j].host}`,
+            ],
+            {
+              cwd: REDWOOD_PROJECT_DIRECTORY,
+              stdio: 'inherit',
+            },
+          )
           passed = true
         } catch (_error) {
           // ignore
@@ -234,12 +258,17 @@ async function main() {
 
         results[setup] ??= {}
         results[setup][runForTests[i]] ??= {}
-        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd] = fs.readJSONSync(path.join(REDWOOD_PROJECT_DIRECTORY, 'summary.json'), {
-          throws: false,
-          flag: 'r',
-          encoding: 'utf-8',
-        }) ?? {}
-        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd].passed = passed
+        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd] =
+          fs.readJSONSync(
+            path.join(REDWOOD_PROJECT_DIRECTORY, 'summary.json'),
+            {
+              throws: false,
+              flag: 'r',
+              encoding: 'utf-8',
+            },
+          ) ?? {}
+        results[setup][runForTests[i]][API_SERVER_COMMANDS[j].cmd].passed =
+          passed
 
         // Stop the server
         await stopServer()
@@ -258,9 +287,15 @@ async function main() {
         const bgPrefix = bgColor(' ')
         console.log(passed ? bgColor(' PASS ') : bgColor(' FAIL '))
         console.log(`${bgPrefix} Test: ${test} [${serverCommand}]`)
-        console.log(`${bgPrefix}   Requests: ${results[setup][test][serverCommand].metrics?.http_reqs.values.count}`)
-        console.log(`${bgPrefix}   Duration (p90): ${results[setup][test][serverCommand].metrics?.http_req_duration.values['p(90)'].toFixed(3)}`)
-        console.log(`${bgPrefix}   TTFB (p90): ${results[setup][test][serverCommand].metrics?.http_req_waiting.values['p(90)'].toFixed(3)}`)
+        console.log(
+          `${bgPrefix}   Requests: ${results[setup][test][serverCommand].metrics?.http_reqs.values.count}`,
+        )
+        console.log(
+          `${bgPrefix}   Duration (p90): ${results[setup][test][serverCommand].metrics?.http_req_duration.values['p(90)'].toFixed(3)}`,
+        )
+        console.log(
+          `${bgPrefix}   TTFB (p90): ${results[setup][test][serverCommand].metrics?.http_req_waiting.values['p(90)'].toFixed(3)}`,
+        )
         console.log()
       }
     }

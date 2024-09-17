@@ -1,15 +1,20 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Children } from 'react'
 
-import type { PageType } from './page'
+import type { PageType } from './page.js'
 import {
   isNotFoundRoute,
   isRedirectRoute,
   isStandardRoute,
   isValidRoute,
-} from './route-validators'
-import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set'
-import { matchPath, replaceParams, validatePath, type ParamType } from './util'
+} from './route-validators.js'
+import { isPrivateNode, isPrivateSetNode, isSetNode } from './Set.js'
+import {
+  matchPath,
+  replaceParams,
+  validatePath,
+  type ParamType,
+} from './util.js'
 
 type WhileLoadingPage = () => ReactElement | null
 
@@ -21,7 +26,7 @@ export type GeneratedRoutesMap = {
   ) => string
 }
 
-export type Wrappers = Array<(props: any) => ReactNode>
+export type Wrappers = ((props: any) => ReactNode)[]
 
 interface Set {
   id: string
@@ -46,7 +51,7 @@ interface AnalyzedRoute {
   whileLoadingPage?: WhileLoadingPage
   page: PageType | null
   redirect: string | null
-  sets: Array<Set>
+  sets: Set[]
 }
 
 interface AnalyzeRoutesOptions {
@@ -67,7 +72,7 @@ export function analyzeRoutes(
   interface RecurseParams {
     nodes: ReturnType<typeof Children.toArray>
     whileLoadingPageFromSet?: WhileLoadingPage
-    sets?: Array<Set>
+    sets?: Set[]
   }
 
   // Assign ids to all sets found.
@@ -231,7 +236,7 @@ export function analyzeRoutes(
   }
 }
 
-function createSetId(nextSetId: number, previousSets: Array<Set>) {
+function createSetId(nextSetId: number, previousSets: Set[]) {
   const firstLevel = previousSets.length === 0
 
   if (firstLevel) {

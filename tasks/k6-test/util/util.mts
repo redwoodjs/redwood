@@ -1,12 +1,18 @@
-import path from "node:path"
+import path from 'node:path'
 
-import fg from "fast-glob"
-import fs from "fs-extra"
-import execa from "execa"
+import chalk from 'chalk'
+import execa from 'execa'
+import fg from 'fast-glob'
+import fs from 'fs-extra'
 import { rimrafSync } from 'rimraf'
-import chalk from "chalk"
 
-export function buildRedwoodFramework({frameworkPath, verbose}: {frameworkPath: string, verbose: boolean}) {
+export function buildRedwoodFramework({
+  frameworkPath,
+  verbose,
+}: {
+  frameworkPath: string
+  verbose: boolean
+}) {
   try {
     const files = fg.sync('packages/**/dist', {
       onlyDirectories: true,
@@ -19,8 +25,8 @@ export function buildRedwoodFramework({frameworkPath, verbose}: {frameworkPath: 
       {
         cwd: frameworkPath,
         shell: true,
-        stdio: verbose ? 'inherit': 'ignore',
-      }
+        stdio: verbose ? 'inherit' : 'ignore',
+      },
     )
   } catch (e) {
     if (e.signal !== 'SIGINT') {
@@ -31,7 +37,17 @@ export function buildRedwoodFramework({frameworkPath, verbose}: {frameworkPath: 
   }
 }
 
-export function createRedwoodJSApp({ frameworkPath, projectPath, typescript, verbose }: { frameworkPath: string, projectPath: string, typescript: boolean, verbose: boolean }) {
+export function createRedwoodJSApp({
+  frameworkPath,
+  projectPath,
+  typescript,
+  verbose,
+}: {
+  frameworkPath: string
+  projectPath: string
+  typescript: boolean
+  verbose: boolean
+}) {
   try {
     execa.sync(
       'yarn node dist/create-redwood-app.js',
@@ -47,7 +63,7 @@ export function createRedwoodJSApp({ frameworkPath, projectPath, typescript, ver
         env: { REDWOOD_CI: '1' },
         shell: true,
         stdio: verbose ? 'inherit' : 'ignore',
-      }
+      },
     )
 
     // Add prisma resolutions
@@ -56,7 +72,7 @@ export function createRedwoodJSApp({ frameworkPath, projectPath, typescript, ver
 
     const getVersionFrmRwPkg = (dep, pkg) => {
       return fs.readJSONSync(
-        path.join(frameworkPath, 'packages', pkg, 'package.json')
+        path.join(frameworkPath, 'packages', pkg, 'package.json'),
       ).dependencies[dep]
     }
 
@@ -80,7 +96,7 @@ export function createRedwoodJSApp({ frameworkPath, projectPath, typescript, ver
 export function addFrameworkDepsToProject({
   frameworkPath,
   projectPath,
-  verbose
+  verbose,
 }: {
   frameworkPath: string
   projectPath: string
@@ -99,7 +115,7 @@ export function addFrameworkDepsToProject({
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'Error: Could not add Redwood Framework dependencies to project'
+        'Error: Could not add Redwood Framework dependencies to project',
       )
       console.error(e)
     }
@@ -110,7 +126,7 @@ export function addFrameworkDepsToProject({
 export function copyFrameworkPackages({
   frameworkPath,
   projectPath,
-  verbose
+  verbose,
 }: {
   frameworkPath: string
   projectPath: string
@@ -137,7 +153,7 @@ export function copyFrameworkPackages({
 
 export function runYarnInstall({
   projectPath,
-  verbose
+  verbose,
 }: {
   projectPath: string
   verbose: boolean
@@ -159,7 +175,7 @@ export function runYarnInstall({
 
 export function initGit({
   projectPath,
-  verbose
+  verbose,
 }: {
   projectPath: string
   verbose: boolean
@@ -179,7 +195,7 @@ export function initGit({
   } catch (e) {
     if (e.signal !== 'SIGINT') {
       console.error(
-        'There was an error with the `git init` or `git commit` step:'
+        'There was an error with the `git init` or `git commit` step:',
       )
       console.error(e)
     }
@@ -187,11 +203,7 @@ export function initGit({
   }
 }
 
-export function cleanUp({
-  projectPath,
-}: {
-  projectPath: string
-}) {
+export function cleanUp({ projectPath }: { projectPath: string }) {
   const divider = chalk.blue('~'.repeat(process.stdout.columns))
   console.log(`\n${divider}`)
   console.log('Cleaning up files (may take a few seconds)...')

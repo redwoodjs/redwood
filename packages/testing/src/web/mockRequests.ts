@@ -1,4 +1,4 @@
-// MSW is shared by Jest (NodeJS) and Storybook (Webpack)
+// MSW is used by Jest (NodeJS)
 import { setupWorker, graphql } from 'msw'
 import type {
   StartOptions as StartMSWWorkerOptions,
@@ -114,9 +114,7 @@ const mockGraphQL = (
       // We wrap the original context return values and store them `ctxForResponse`,
       // so that we can provide them to the final `res()` call at the end of this
       // function.
-      const captureTransform = <T extends Array<any>, U>(
-        fn: (...args: T) => U,
-      ) => {
+      const captureTransform = <T extends any[], U>(fn: (...args: T) => U) => {
         return (...args: T): U => {
           const resTransform = fn(...args)
           responseTransforms = [...responseTransforms, resTransform]
@@ -147,7 +145,6 @@ const mockGraphQL = (
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   registerHandler(graphql[type](operation, resolver))
   return data
 }

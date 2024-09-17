@@ -1,13 +1,20 @@
 import path from 'node:path'
 import type { Readable } from 'node:stream'
 import { PassThrough } from 'node:stream'
+import { fileURLToPath } from 'node:url'
 import { Worker } from 'node:worker_threads'
 
 import type { ServerAuthState } from '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
 
-import type { RscFetchProps } from './rscFetchForClientRouter'
+import type { RscFetchProps } from '../../../router/src/rsc/ClientRouter.tsx'
 
-const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
+const workerPath = path.join(
+  // __dirname. Use fileURLToPath for windows compatibility
+  path.dirname(fileURLToPath(import.meta.url)),
+  'rscWorker.js',
+)
+
+const worker = new Worker(workerPath, {
   execArgv: [
     '--conditions',
     'react-server',
@@ -19,7 +26,7 @@ const worker = new Worker(path.join(__dirname, 'rscWorker.js'), {
 export type RenderInput = {
   rscId?: string | undefined
   props: RscFetchProps | Record<string, unknown>
-  rsfId?: string | undefined
+  rsaId?: string | undefined
   args?: unknown[] | undefined
   serverState: {
     headersInit: Record<string, string>
@@ -28,12 +35,7 @@ export type RenderInput = {
   }
 }
 
-type CustomModules = {
-  [name: string]: string
-}
-
 export type MessageReq =
-  | { type: 'shutdown' }
   | {
       id: number
       type: 'setClientEntries'
@@ -43,21 +45,12 @@ export type MessageReq =
       type: 'render'
       input: RenderInput
     }
-  | {
-      id: number
-      type: 'getCustomModules'
-    }
-  | {
-      id: number
-      type: 'build'
-    }
 
 export type MessageRes =
   | { type: 'full-reload' }
   | { id: number; type: 'buf'; buf: ArrayBuffer; offset: number; len: number }
   | { id: number; type: 'end' }
   | { id: number; type: 'err'; err: unknown }
-  | { id: number; type: 'customModules'; modules: CustomModules }
 
 const messageCallbacks = new Map<number, (message: MessageRes) => void>()
 
@@ -77,15 +70,6 @@ export function registerReloadCallback(fn: (type: 'full-reload') => void) {
   worker.on('message', listener)
 
   return () => worker.off('message', listener)
-}
-
-export function shutdown() {
-  return new Promise<void>((resolve) => {
-    worker.on('close', resolve)
-
-    const message: MessageReq = { type: 'shutdown' }
-    worker.postMessage(message)
-  })
 }
 
 let nextId = 1
@@ -138,38 +122,4 @@ export function renderRsc(input: RenderInput): Readable {
   worker.postMessage(message)
 
   return passthrough
-}
-
-export function getCustomModulesRSC(): Promise<CustomModules> {
-  return new Promise<CustomModules>((resolve, reject) => {
-    const id = nextId++
-    messageCallbacks.set(id, (message) => {
-      if (message.type === 'customModules') {
-        resolve(message.modules)
-        messageCallbacks.delete(id)
-      } else if (message.type === 'err') {
-        reject(message.err)
-        messageCallbacks.delete(id)
-      }
-    })
-    const message: MessageReq = { id, type: 'getCustomModules' }
-    worker.postMessage(message)
-  })
-}
-
-export function buildRSC(): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    const id = nextId++
-    messageCallbacks.set(id, (message) => {
-      if (message.type === 'end') {
-        resolve()
-        messageCallbacks.delete(id)
-      } else if (message.type === 'err') {
-        reject(message.err)
-        messageCallbacks.delete(id)
-      }
-    })
-    const message: MessageReq = { id, type: 'build' }
-    worker.postMessage(message)
-  })
 }

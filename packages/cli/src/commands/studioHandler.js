@@ -17,7 +17,7 @@ export const handler = async (options) => {
       console.log(
         'The studio package is not installed, installing it for you, this may take a moment...',
       )
-      await installModule('@redwoodjs/studio', '11')
+      await installModule('@redwoodjs/studio', '12')
       console.log('Studio package installed successfully.')
 
       const installedRealtime = await installModule('@redwoodjs/realtime')

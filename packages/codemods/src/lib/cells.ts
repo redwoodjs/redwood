@@ -13,7 +13,7 @@ import type {
   OperationDefinitionNode,
   OperationTypeNode,
 } from 'graphql'
-import { parse, visit } from 'graphql'
+import { Kind, parse, visit } from 'graphql'
 
 import { getPaths } from '@redwoodjs/project-config'
 
@@ -113,7 +113,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
       if (declaration.type === 'VariableDeclaration') {
         const id = declaration.declarations[0].id as types.Identifier
         namedExports.push({
-          name: id.name as string,
+          name: id.name,
           type: 'variable',
         })
       } else if (declaration.type === 'FunctionDeclaration') {
@@ -196,7 +196,7 @@ export const parseGqlQueryToAst = (gqlQuery: string) => {
 }
 
 export const parseDocumentAST = (document: DocumentNode) => {
-  const operations: Array<Operation> = []
+  const operations: Operation[] = []
 
   visit(document, {
     OperationDefinition(node: OperationDefinitionNode) {
@@ -220,11 +220,11 @@ export const parseDocumentAST = (document: DocumentNode) => {
 interface Operation {
   operation: OperationTypeNode
   name: string | undefined
-  fields: Array<string | Field>
+  fields: (string | Field)[]
 }
 
 interface Field {
-  string: Array<string | Field>
+  string: (string | Field)[]
 }
 
 const getFields = (field: FieldNode): any => {
@@ -239,13 +239,13 @@ const getFields = (field: FieldNode): any => {
     const lookAtFieldNode = (node: FieldNode | InlineFragmentNode): void => {
       node.selectionSet?.selections.forEach((subField) => {
         switch (subField.kind) {
-          case 'Field':
-            obj[field.name.value].push(getFields(subField as FieldNode))
+          case Kind.FIELD:
+            obj[field.name.value].push(getFields(subField))
             break
-          case 'FragmentSpread':
+          case Kind.FRAGMENT_SPREAD:
             // TODO: Maybe this will also be needed, right now it's accounted for to not crash in the tests
             break
-          case 'InlineFragment':
+          case Kind.INLINE_FRAGMENT:
             lookAtFieldNode(subField)
         }
       })

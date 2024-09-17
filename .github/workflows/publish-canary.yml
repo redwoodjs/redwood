@@ -14,6 +14,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   publish-canary:
     name: 🦜 Publish Canary
@@ -22,7 +24,7 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
         #  This is required because lerna uses tags to determine the version.
         with:
@@ -47,7 +49,7 @@ jobs:
 
       - name: 🏷 Get version
         id: get-version
-        uses: sergeysova/jq-action@v2.3.0
+        uses: sergeysova/jq-action@a3f0d4ff59cc1dddf023fc0b325dd75b10deec58 # v2.3.0
         with:
           cmd: 'jq .version packages/core/package.json -r'
 
@@ -58,11 +60,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:
-          title: "🦜 Canary Packages"
+          title: '🦜 Canary Packages'
           status: ${{ needs.publish-canary.result }}
           version: ${{ needs.publish-canary.outputs.version }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

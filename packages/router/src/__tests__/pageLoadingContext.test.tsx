@@ -1,5 +1,5 @@
 let mockDelay = 0
-vi.mock('../page', async (importOriginal) => {
+vi.mock('../page.js', async (importOriginal) => {
   const actualUtil = await importOriginal<Page>()
   const { lazy } = await vi.importActual<typeof React>('react')
 
@@ -34,11 +34,11 @@ import {
   Router,
   Set,
   useParams,
-} from '..'
-import { useLocation } from '../location'
-import type Page from '../page'
-import type { Spec } from '../page'
-import { usePageLoadingContext } from '../PageLoadingContext'
+} from '../index.js'
+import { useLocation } from '../location.js'
+import type Page from '../page.js'
+import type { Spec } from '../page.js'
+import { usePageLoadingContext } from '../PageLoadingContext.js'
 
 // Running into intermittent test timeout behavior in
 // https://github.com/redwoodjs/redwood/pull/4992

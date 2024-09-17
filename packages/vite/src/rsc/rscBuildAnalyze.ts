@@ -11,7 +11,7 @@ import { rscAnalyzePlugin } from '../plugins/vite-plugin-rsc-analyze.js'
  * buildFeServer -> buildRscFeServer -> rscBuildAnalyze
  * Uses rscAnalyzePlugin to collect client and server entry points
  * Starts building the AST in entries.ts
- * Doesn't output any files, only collects a list of RSCs and RSFs
+ * Doesn't output any files, only collects a list of RSCs and RSAs
  */
 export async function rscBuildAnalyze() {
   console.log('\n')

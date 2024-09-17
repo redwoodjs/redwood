@@ -6,13 +6,15 @@ import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'
 
-import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import {
+  recordTelemetryAttributes,
+  isTypeScriptProject,
+} from '@redwoodjs/cli-helpers'
 import { getConfig, ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
 import c from '../../lib/colors'
-import { isTypeScriptProject } from '../../lib/project'
 import { prepareForRollback } from '../../lib/rollback'
 import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
 

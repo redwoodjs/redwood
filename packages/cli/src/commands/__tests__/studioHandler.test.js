@@ -1,5 +1,5 @@
 // Have to use `var` here to avoid "Temporal Dead Zone" issues
-// eslint-disable-next-line
+
 var mockedRedwoodVersion = '0.0.0'
 
 vi.mock('@redwoodjs/project-config', async (importOriginal) => {

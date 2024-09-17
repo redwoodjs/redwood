@@ -205,7 +205,6 @@ export abstract class BaseNode {
   }
 
   @lazy() get closestContainingUri(): string | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { uri } = this as any
     if (uri) {
       return uri
@@ -266,7 +265,7 @@ export abstract class FileNode extends BaseNode {
     if (typeof this.text === 'undefined') {
       throw new Error('undefined file ' + this.filePath)
     }
-    return createTSMSourceFile_cached(this.filePath, this.text!)
+    return createTSMSourceFile_cached(this.filePath, this.text)
   }
   @lazy() get basenameNoExt() {
     return basenameNoExt(this.filePath)

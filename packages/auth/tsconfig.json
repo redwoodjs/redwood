@@ -6,15 +6,7 @@
     "module": "NodeNext",
     "outDir": "dist"
   },
-  "include": [
-    "src",
-    "ambient.d.ts",
-    "modules.d.ts",
-    "./vitest.setup.ts",
-    "__tests__"
-  ],
+  "inclue": ["."],
   "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
-  "references": [
-    { "path": "../framework-tools" }
-  ]
+  "references": [{ "path": "../framework-tools" }]
 }

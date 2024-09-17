@@ -15,7 +15,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadDocuments, loadSchemaSync } from '@graphql-tools/load'
 import type { LoadTypedefsOptions } from '@graphql-tools/load'
 import execa from 'execa'
-import type { DocumentNode } from 'graphql'
+import { Kind, type DocumentNode } from 'graphql'
 
 import { getPaths, getConfig } from '@redwoodjs/project-config'
 
@@ -288,6 +288,7 @@ async function getPluginConfig(side: CodegenSide) {
       JSONObject: 'Prisma.JsonObject',
       Time: side === CodegenSide.WEB ? 'string' : 'Date | string',
       Byte: 'Buffer',
+      File: 'File',
     },
     // prevent type names being PetQueryQuery, RW generators already append
     // Query/Mutation/etc
@@ -346,7 +347,7 @@ const printMappedModelsPlugin: CodegenPlugin = {
     // this way we can make sure relation types are not required
     const sdlTypesWhichAreMapped = Object.values(schema.getTypeMap())
       .filter((type) => {
-        return type.astNode?.kind === 'ObjectTypeDefinition'
+        return type.astNode?.kind === Kind.OBJECT_TYPE_DEFINITION
       })
       .filter((objectDefType) => {
         const modelName = objectDefType.astNode?.name.value

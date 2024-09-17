@@ -56,7 +56,7 @@ const OUTPUT_PROJECT_PATH = resumePath
       os.tmpdir(),
       'redwood-test-project',
       // ":" is problematic with paths
-      new Date().toISOString().split(':').join('-')
+      new Date().toISOString().split(':').join('-'),
     )
 
 let startStep = resumeStep || ''
@@ -66,7 +66,7 @@ if (!startStep) {
   try {
     const stepTxt = fs.readFileSync(
       path.join(OUTPUT_PROJECT_PATH, 'step.txt'),
-      'utf-8'
+      'utf-8',
     )
 
     if (stepTxt) {
@@ -137,12 +137,12 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
     if (e instanceof ExecaError) {
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
-        'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+        'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr,
       )
     } else {
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
-        e.message
+        e.message,
       )
     }
 
@@ -158,12 +158,12 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
       if (e instanceof ExecaError) {
         tui.displayError(
           'Failed ' + title.toLowerCase().replace('...', ''),
-          'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr
+          'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr,
         )
       } else {
         tui.displayError(
           'Failed ' + title.toLowerCase().replace('...', ''),
-          e.message
+          e.message,
         )
       }
 
@@ -218,8 +218,8 @@ if (resume) {
   console.error(
     chalk.red.bold(
       '\n`resume` option is not supported yet. ' +
-        'Please use `resumePath` instead.\n'
-    )
+        'Please use `resumePath` instead.\n',
+    ),
   )
 
   process.exit(1)
@@ -230,8 +230,8 @@ if (resumePath && !fs.existsSync(path.join(resumePath, 'redwood.toml'))) {
     chalk.red.bold(
       `
       No redwood.toml file found at the given path: ${resumePath}
-      `
-    )
+      `,
+    ),
   )
   process.exit(1)
 }
@@ -243,7 +243,7 @@ const createProject = () => {
     cmd,
     // We create a ts project and convert using ts-to-js at the end if typescript flag is false
     ['--no-yarn-install', '--typescript', '--overwrite', '--no-git'],
-    getExecaOptions(RW_FRAMEWORK_PATH)
+    getExecaOptions(RW_FRAMEWORK_PATH),
   )
 
   return subprocess
@@ -287,7 +287,7 @@ async function runCommand() {
       return exec(
         'yarn build:clean && yarn build',
         [],
-        getExecaOptions(RW_FRAMEWORK_PATH)
+        getExecaOptions(RW_FRAMEWORK_PATH),
       )
     },
   })
@@ -300,7 +300,7 @@ async function runCommand() {
       return addFrameworkDepsToProject(
         RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
-        'pipe' // TODO: Remove this when everything is using @rwjs/tui
+        'pipe', // TODO: Remove this when everything is using @rwjs/tui
       )
     },
   })
@@ -328,12 +328,12 @@ async function runCommand() {
 
       newRedwoodToml = newRedwoodToml.replace(
         /\port = 8910/,
-        'port = "${WEB_DEV_PORT:8910}"'
+        'port = "${WEB_DEV_PORT:8910}"',
       )
 
       newRedwoodToml = newRedwoodToml.replace(
         /\port = 8911/,
-        'port = "${API_DEV_PORT:8911}"'
+        'port = "${API_DEV_PORT:8911}"',
       )
 
       fs.writeFileSync(REDWOOD_TOML_PATH, newRedwoodToml)
@@ -347,7 +347,7 @@ async function runCommand() {
       return copyFrameworkPackages(
         RW_FRAMEWORK_PATH,
         OUTPUT_PROJECT_PATH,
-        'pipe'
+        'pipe',
       )
     },
   })
@@ -388,18 +388,34 @@ async function runCommand() {
 
   await tuiTask({
     step: 9,
-    title: 'Running prisma migrate reset',
+    title: 'Add scripts',
     task: () => {
-      return exec(
-        'yarn rw prisma migrate reset',
-        ['--force'],
-        getExecaOptions(OUTPUT_PROJECT_PATH)
+      const nestedPath = path.join(OUTPUT_PROJECT_PATH, 'scripts', 'one', 'two')
+
+      fs.mkdirSync(nestedPath, { recursive: true })
+      fs.writeFileSync(
+        path.join(nestedPath, 'myNestedScript.ts'),
+        'export default async () => {\n' +
+          "  console.log('Hello from myNestedScript.ts')\n" +
+          '}\n\n',
       )
     },
   })
 
   await tuiTask({
     step: 10,
+    title: 'Running prisma migrate reset',
+    task: () => {
+      return exec(
+        'yarn rw prisma migrate reset',
+        ['--force'],
+        getExecaOptions(OUTPUT_PROJECT_PATH),
+      )
+    },
+  })
+
+  await tuiTask({
+    step: 11,
     title: 'Lint --fix all the things',
     task: async () => {
       try {
@@ -431,7 +447,7 @@ async function runCommand() {
   })
 
   await tuiTask({
-    step: 11,
+    step: 12,
     title: 'Replace and Cleanup Fixture',
     task: async () => {
       // @TODO: This only works on UNIX, we should use path.join everywhere
@@ -449,6 +465,7 @@ async function runCommand() {
       await rimraf(`${OUTPUT_PROJECT_PATH}/.env`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/yarn.lock`)
       await rimraf(`${OUTPUT_PROJECT_PATH}/step.txt`)
+      await rimraf(`${OUTPUT_PROJECT_PATH}/.nx`)
 
       // Copy over package.json from template, so we remove the extra dev dependencies, and rwfw postinstall script
       // that we added in "Adding framework dependencies to project"
@@ -456,9 +473,9 @@ async function runCommand() {
       fs.copyFileSync(
         path.join(
           __dirname,
-          '../../packages/create-redwood-app/templates/ts/package.json'
+          '../../packages/create-redwood-app/templates/ts/package.json',
         ),
-        path.join(OUTPUT_PROJECT_PATH, 'package.json')
+        path.join(OUTPUT_PROJECT_PATH, 'package.json'),
       )
 
       // removes existing Fixture and replaces with newly built project,
@@ -468,7 +485,7 @@ async function runCommand() {
   })
 
   await tuiTask({
-    step: 12,
+    step: 13,
     title: 'All done!',
     task: () => {
       console.log('-'.repeat(30))

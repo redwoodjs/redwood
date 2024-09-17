@@ -45,8 +45,8 @@ async function main() {
   for (const smokeTest of smokeTests) {
     console.log(
       `Running ${chalk.magenta(smokeTest)} smoke test against ${chalk.magenta(
-        testProjectPath
-      )}\n`
+        testProjectPath,
+      )}\n`,
     )
 
     await within(async () => {
@@ -83,7 +83,7 @@ async function parseArgs() {
   const options = {
     testProjectPath: {
       description: `Path to the test project. Defaults to the ${chalk.magenta(
-        'REDWOOD_TEST_PROJECT_PATH'
+        'REDWOOD_TEST_PROJECT_PATH',
       )} env var`,
       short: 'p',
       type: /** @type {const} */ ('string'),
@@ -132,7 +132,7 @@ async function parseArgs() {
           '',
           getHelp(options),
           '',
-        ].join('\n')
+        ].join('\n'),
       )
     }
 
@@ -154,13 +154,13 @@ async function parseArgs() {
         chalk.red('Error: No test project to run smoke tests against.'),
         '',
         `If you haven't generated a test project, do so first: ${chalk.green(
-          'yarn build:test-project --link <path>'
+          'yarn build:test-project --link <path>',
         )}.`,
         `Then set the ${chalk.magenta(
-          'REDWOOD_TEST_PROJECT_PATH'
+          'REDWOOD_TEST_PROJECT_PATH',
         )} env var to the path of your test project.`,
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -178,16 +178,16 @@ async function parseArgs() {
         chalk.red("Error: Test project doesn't exist."),
         '',
         `The test project path you specified (${chalk.magenta(
-          testProjectPath
+          testProjectPath,
         )}) doesn't exist.`,
         `Make sure you've generated a test project: ${chalk.green(
-          'yarn build:test-project --link <path>'
+          'yarn build:test-project --link <path>',
         )}.`,
         `Then set the ${chalk.magenta(
-          'REDWOOD_TEST_PROJECT_PATH'
+          'REDWOOD_TEST_PROJECT_PATH',
         )} env var to the path of your test project.`,
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -207,7 +207,7 @@ async function parseArgs() {
     .map((dirent) => dirent.name)
 
   const invalidSmokeTest = smokeTests.find(
-    (smokeTest) => !availableSmokeTests.includes(smokeTest)
+    (smokeTest) => !availableSmokeTests.includes(smokeTest),
   )
 
   // Error if the user passed an invalid smoke test.
@@ -223,7 +223,7 @@ async function parseArgs() {
         '',
         getHelp(options),
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -234,8 +234,8 @@ async function parseArgs() {
   if (!isProjectSyncRunning) {
     console.warn(
       chalk.yellow(
-        'Warning: If you want to test against the framework, you must have `yarn rwfw project:sync` running in your test project.'
-      )
+        'Warning: If you want to test against the framework, you must have `yarn rwfw project:sync` running in your test project.',
+      ),
     )
   }
 
@@ -276,7 +276,7 @@ async function parseArgs() {
           process.exitCode = 1
           throw new Error()
         },
-      }
+      },
     )
 
     smokeTests = answer.smokeTests
@@ -289,7 +289,7 @@ async function parseArgs() {
 
   if (
     smokeTests.some((smokeTest) =>
-      ['prerender', 'serve'].includes(smokeTest)
+      ['prerender', 'serve'].includes(smokeTest),
     ) &&
     !isTestProjectBuilt
   ) {
@@ -297,13 +297,13 @@ async function parseArgs() {
     throw new Error(
       [
         chalk.red(
-          'Error: You must build the test project before running the prerender or serve smoke tests.'
+          'Error: You must build the test project before running the prerender or serve smoke tests.',
         ),
         '',
         chalk.green(`  cd ${testProjectPath}`),
         chalk.green(`  yarn rw build`),
         '',
-      ].join('\n')
+      ].join('\n'),
     )
   }
 
@@ -318,7 +318,7 @@ function getHelp(options) {
   // Find the length of the longest option and justify the text based on it.
   const longestOptionLength = Object.entries(options).reduce(
     (max, [name]) => Math.max(max, name.length),
-    0
+    0,
   )
 
   const justifiedOptions = Object.entries(options).map(([name, config]) => {
@@ -343,10 +343,10 @@ function getHelp(options) {
     chalk.green('  yarn smoke-tests [options] [smoke-test..]'),
     '',
     `Make sure you've got a test project. (You can make one via ${chalk.green(
-      'yarn build:test-project --link <path>'
+      'yarn build:test-project --link <path>',
     )}.)`,
     `Then set the ${chalk.magenta(
-      'REDWOOD_TEST_PROJECT_PATH'
+      'REDWOOD_TEST_PROJECT_PATH',
     )} env var to the path of your test project.`,
     '',
     chalk.dim('  # Let this script prompt you for which smoke test to run'),
@@ -356,10 +356,10 @@ function getHelp(options) {
     chalk.cyan('  REDWOOD_TEST_PROJECT_PATH=<path> yarn smoke-tests dev'),
     '',
     chalk.dim(
-      '  # Pass flags to `npx playwright test` (see `npx playwright test --help`)'
+      '  # Pass flags to `npx playwright test` (see `npx playwright test --help`)',
     ),
     chalk.cyan(
-      '  REDWOOD_TEST_PROJECT_PATH=<path> yarn smoke-tests --playwrightOptions="--debug"'
+      '  REDWOOD_TEST_PROJECT_PATH=<path> yarn smoke-tests --playwrightOptions="--debug"',
     ),
     '',
     chalk.bold('## Options'),

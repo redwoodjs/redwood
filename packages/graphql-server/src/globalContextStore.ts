@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import { AsyncLocalStorage } from 'async_hooks'
 
 import type { GlobalContext } from './globalContext'
@@ -15,5 +13,5 @@ export const getAsyncStoreInstance = () => {
   if (!CONTEXT_STORAGE) {
     CONTEXT_STORAGE = new AsyncLocalStorage<Map<string, GlobalContext>>()
   }
-  return CONTEXT_STORAGE as AsyncLocalStorage<Map<string, GlobalContext>>
+  return CONTEXT_STORAGE
 }

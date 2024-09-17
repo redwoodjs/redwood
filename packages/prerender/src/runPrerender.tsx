@@ -12,7 +12,7 @@ import {
   registerApiSideBabelHook,
   registerWebSideBabelHook,
 } from '@redwoodjs/babel-config'
-import { getConfig, getPaths, ensurePosixPath } from '@redwoodjs/project-config'
+import { getPaths, ensurePosixPath } from '@redwoodjs/project-config'
 import { LocationProvider } from '@redwoodjs/router'
 import { matchPath } from '@redwoodjs/router/dist/util'
 import type { QueryInfo } from '@redwoodjs/web'
@@ -26,13 +26,6 @@ import {
 } from './errors'
 import { executeQuery, getGqlHandler } from './graphql/graphql'
 import { getRootHtmlPath, registerShims, writeToDist } from './internal'
-
-interface ChunkReference {
-  name?: string
-  id: string | number
-  files: Array<string>
-  referencedChunks: Array<string | number>
-}
 
 // Create an apollo client that we can use to prepopulate the cache and restore it client-side
 const prerenderApolloClient = new ApolloClient({ cache: new InMemoryCache() })
@@ -161,11 +154,14 @@ async function recursivelyRender(
 function insertChunkLoadingScript(
   indexHtmlTree: CheerioAPI,
   renderPath: string,
-  forVite: boolean,
 ) {
   const prerenderRoutes = detectPrerenderRoutes()
 
-  const route = prerenderRoutes.find((route: any) => {
+  const route = prerenderRoutes.find((route) => {
+    if (!route.routePath) {
+      return false
+    }
+
     return matchPath(route.routePath, renderPath).match
   })
 
@@ -184,53 +180,9 @@ function insertChunkLoadingScript(
     ),
   )
 
-  const chunkPaths: Array<string> = []
+  const chunkPaths: string[] = []
 
-  if (!forVite) {
-    // Webpack
-
-    const pageChunkPath = buildManifest[`${route?.pageIdentifier}.js`]
-
-    if (pageChunkPath) {
-      chunkPaths.push(pageChunkPath)
-
-      const chunkReferencesJson: Array<ChunkReference> = JSON.parse(
-        fs.readFileSync(
-          path.join(getPaths().web.dist, 'chunk-references.json'),
-          'utf-8',
-        ),
-      )
-
-      const chunkReferences = chunkReferencesJson.find((chunkRef) => {
-        return chunkRef.name === route?.pageIdentifier
-      })
-
-      if (chunkReferences?.referencedChunks) {
-        chunkReferences.referencedChunks.forEach((chunkId) => {
-          const chunkRef = chunkReferencesJson.find((chunkRef) => {
-            return chunkRef.id === chunkId
-          })
-
-          // Some chunks also produces css files, and maybe other files as well
-          // We're only interested in the .js files
-          const chunkRefJsFiles: string[] =
-            chunkRef?.files.filter((file) => {
-              return file.endsWith('.js')
-            }) || []
-
-          chunkRefJsFiles.forEach((file) => {
-            chunkPaths.push(file)
-          })
-
-          const chunkPath = buildManifest[`${chunkId}.js`]
-
-          if (chunkPath) {
-            chunkPaths.push(chunkPath)
-          }
-        })
-      }
-    }
-  } else if (forVite && route?.filePath) {
+  if (route?.filePath) {
     const pagesIndex =
       route.filePath.indexOf(path.join('web', 'src', 'pages')) + 8
     const pagePath = ensurePosixPath(route.filePath.slice(pagesIndex))
@@ -246,8 +198,7 @@ function insertChunkLoadingScript(
   if (chunkPaths.length === 0) {
     // This happens when the page is manually imported in Routes.tsx
     // (as opposed to being auto-imported)
-    // It also happens for the page at '/' with Webpack
-    // It could also be that Webpack or Vite for some reason didn't create a
+    // It could also be that Vite for some reason didn't create a
     // chunk for this page. In that case it'd be nice to throw an error, but
     // there's no easy way to differentiate between the two cases.
     return
@@ -255,17 +206,9 @@ function insertChunkLoadingScript(
 
   chunkPaths.forEach((chunkPath) => {
     indexHtmlTree('head').prepend(
-      `<script defer="defer" src="${chunkPath}" ${
-        forVite ? 'type="module"' : ''
-      }></script>`,
+      `<script defer="defer" src="${chunkPath}" type="module"></script>`,
     )
   })
-
-  if (!forVite) {
-    return
-  }
-
-  // This is not needed for WebPack
 
   chunkPaths.forEach((chunkPath) => {
     const fullChunkPath = path.join(getPaths().web.dist, chunkPath)
@@ -334,20 +277,21 @@ export const runPrerender = async ({
   })
 
   const gqlHandler = await getGqlHandler()
-  const forVite = getConfig().web.bundler !== 'webpack'
 
   // Prerender specific configuration
   // extends projects web/babelConfig
   registerWebSideBabelHook({
-    forVite,
     overrides: [
       {
         plugins: [
           ['ignore-html-and-css-imports'], // webpack/postcss handles CSS imports
-          [mediaImportsPlugin, { bundler: getConfig().web.bundler }],
+          [mediaImportsPlugin],
         ],
       },
     ],
+    options: {
+      forPrerender: true,
+    },
   })
 
   const indexContent = fs.readFileSync(getRootHtmlPath()).toString()
@@ -413,7 +357,7 @@ export const runPrerender = async ({
   // or possible cache merge conflicts
   prerenderApolloClient.resetStore()
 
-  insertChunkLoadingScript(indexHtmlTree, renderPath, forVite)
+  insertChunkLoadingScript(indexHtmlTree, renderPath)
 
   indexHtmlTree('#redwood-app').append(componentAsHtml)
 

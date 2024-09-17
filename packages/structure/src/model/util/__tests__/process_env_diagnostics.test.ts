@@ -36,12 +36,11 @@ describe('process_env_findInFile', () => {
     expect(r.length).toEqual(0)
   })
 
-  test('process_env_findAll', async () => {
+  test('process_env_findAll', () => {
     const pp = getFixtureDir('example-todo-main-with-errors')
     //const webRoot = join(pp, 'web')
     const apiRoot = join(pp, 'api')
-    const r = process_env_findAll(apiRoot)
-    r //?
+    process_env_findAll(apiRoot)
   })
 })
 

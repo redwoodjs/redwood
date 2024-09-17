@@ -101,7 +101,7 @@ function wrapExportNamedDeclaration(
     if (param.type === 'ObjectPattern') {
       const objectProperties = param.properties.filter(
         (p) => p.type === 'ObjectProperty',
-      ) as types.ObjectProperty[]
+      )
       originalFunctionArgumentsWithoutDefaults.push(
         t.objectExpression(
           objectProperties.map((p) => {
@@ -122,7 +122,7 @@ function wrapExportNamedDeclaration(
       } else if (param.left.type === 'ObjectPattern') {
         const objectProperties = param.left.properties.filter(
           (p) => p.type === 'ObjectProperty',
-        ) as types.ObjectProperty[]
+        )
         originalFunctionArgumentsWithoutDefaults.push(
           t.objectExpression(
             objectProperties.map((p) => {
