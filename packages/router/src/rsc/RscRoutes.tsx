@@ -133,14 +133,6 @@ interface Props {
   search: string
 }
 
-// TODO (RSC): This only works as long as we only have one RscRoutes component.
-// We should look at having this be a (Weak?) Map or maybe just a `useRef` thing
-// It needs to be a stable promise. Can't re-create it on every render
-let externalPromiseResolver = (_component: React.ReactElement) => {}
-let externalPromise = new Promise<React.ReactElement>((resolve) => {
-  externalPromiseResolver = resolve
-})
-
 export const RscRoutes = ({ pathname, search }: Props) => {
   const serializedLocation: SerializedLocation = `__rwjs__pathname=${pathname}&__rwjs__search=${search}`
   const [currentRscCacheKey, setCurrentRscCacheKey] = useState(() => {
@@ -155,9 +147,6 @@ export const RscRoutes = ({ pathname, search }: Props) => {
     updateCurrentRscCacheKey = (key: SerializedLocation) => {
       console.log('RscRoutes inside updateCurrentRscCacheKey', key)
 
-      externalPromise = new Promise<React.ReactElement>((resolve) => {
-        externalPromiseResolver = resolve
-      })
       setCurrentRscCacheKey(key)
     }
   }, [])
@@ -166,10 +155,6 @@ export const RscRoutes = ({ pathname, search }: Props) => {
     console.log('RscRoutes :: useEffect about to call rscFetchRoutes')
     // rscFetchRoutes will update rscCache with the fetched component
     rscFetchRoutes(serializedLocation)
-
-    externalPromise = new Promise<React.ReactElement>((resolve) => {
-      externalPromiseResolver = resolve
-    })
     setCurrentRscCacheKey(serializedLocation)
   }, [serializedLocation])
 
@@ -181,10 +166,5 @@ export const RscRoutes = ({ pathname, search }: Props) => {
     throw new Error('Missing RSC cache entry for ' + currentRscCacheKey)
   }
 
-  rscModelPromise.then((resolvedModel) => {
-    console.log('RscRoutes :: resolvedModel', resolvedModel)
-    externalPromiseResolver(resolvedModel.__rwjs__Routes[0])
-  })
-
-  return use(externalPromise)
+  return use(rscModelPromise).__rwjs__Routes[0]
 }
