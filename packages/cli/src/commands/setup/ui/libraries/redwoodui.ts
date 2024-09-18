@@ -109,7 +109,8 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
 
         const newTailwindConfigContent =
           addDarkModeConfigToProjectTailwindConfig(
-            rwuiTailwindConfigData.darkModeConfig || rwuiTWDarkModeConfig,
+            // we can safely cast to string because we know it's not null — if it is, something went wrong
+            rwuiTailwindConfigData.darkModeConfig as string,
             projectTailwindConfigData.darkModeConfig,
             projectTailwindConfigContent,
           )
@@ -238,38 +239,3 @@ const addDarkModeConfigToProjectTailwindConfig = (
   }
   return projectTailwindConfig
 }
-
-// The below are provided in case there's a problem getting them from the RedwoodUI repo
-const rwuiTWDarkModeConfig = `['selector', '[data-mode="dark"]']`
-const rwuiTWColorsConfig =
-  '{\n' +
-  '        /*\n' +
-  "         * Modify the below to control your app's color scheme.\n" +
-  '         * See here for built in options: https://tailwindcss.com/docs/customizing-colors#default-color-palette\n' +
-  '         * To create your own color scheme, you must include the same keys as the built in color.\n' +
-  '         * To do this, follow the following steps:\n' +
-  '         * - Pick a base color for the scale you want to create. Something that looks good as a button background is a good starting point\n' +
-  '         * - Then, pick your darkest and lightest shades. These should be different enough to work together as text and background colors.\n' +
-  '         * - Then, fill in the gaps.\n' +
-  '         *\n' +
-  '         * Note: rather than doing this by adjusting brightness, start by shifting the hue. One blog post on this here: https://medium.muz.li/natural-color-palettes-7769e5b38ecd\n' +
-  '         */\n' +
-  '        /*\n' +
-  '         * Change this to your primary color scheme.\n' +
-  '         */\n' +
-  '        primary: colors.blue,\n' +
-  '        /*\n' +
-  '         * Change this to the color scheme you want to use for neutral colors.\n' +
-  '         * Suggested to be something close to gray, such as slate, gray, zinc, neutral, or stone.\n' +
-  '         */\n' +
-  '        neutral: colors.gray,\n' +
-  '        /*\n' +
-  '         * Change this to the color you want to use for primary surface in light mode\n' +
-  '         */\n' +
-  '        light: colors.white,\n' +
-  '        /*\n' +
-  '         * Change this to the color you want to use for primary surface in dark mode\n' +
-  '         */\n' +
-  '        dark: colors.gray[900],\n' +
-  '      }'
-const rwuiTWPluginsConfig = "[require('@tailwindcss/typography')]"
