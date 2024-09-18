@@ -65,26 +65,24 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         const indexCSSPath = path.join(rwPaths.web.src, 'index.css')
 
         // if the config already exists, don't need to set up, so skip
-        if (fs.existsSync(tailwindConfigPath && indexCSSPath)) {
+        if (fs.existsSync(tailwindConfigPath) && fs.existsSync(indexCSSPath)) {
           return 'TailwindCSS is already set up.'
         } else {
           return false
         }
       },
       task: async () => {
-        const setupTailwindProcess = execa('yarn', [
-          'rw',
-          'setup',
-          'ui',
-          'tailwindcss',
-          force ? '-f' : '',
-          install ? '-i' : '',
-        ])
-        setupTailwindProcess.stdout?.pipe(process.stdout)
-        ;(async () => {
-          const { stdout } = await setupTailwindProcess
-          console.log(stdout)
-        })()
+        const argsToInclude: string[] = [force && '-f', install && '-i'].filter(
+          (item) => item != false,
+        )
+        await execa(
+          'yarn',
+          ['rw', 'setup', 'ui', 'tailwindcss', ...argsToInclude],
+          // this is needed so that the output is shown in the terminal.
+          // TODO: still, it's not perfect, because the output is shown below the others
+          // and seems to be swallowing, for example, part of the suggested extensions message.
+          { stdio: 'inherit' },
+        )
       },
     },
     {
