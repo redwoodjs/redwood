@@ -96,6 +96,10 @@ export interface RedwoodOpenTelemetryConfig {
   result: boolean
 }
 
+export interface RedwoodScalarConfig {
+  File?: boolean
+}
+
 /**
  * GraphQLYogaOptions
  */
@@ -248,6 +252,14 @@ export type GraphQLYogaOptions = {
    * @description Configure OpenTelemetry plugin behaviour
    */
   openTelemetryOptions?: RedwoodOpenTelemetryConfig
+
+  /**
+   * @description Configure which scalars to include in the schema. This should match your
+   * `graphql.includeScalars` configuration in `redwood.toml`.
+   *
+   * The default is to include. You must set to `false` to exclude.
+   */
+  includeScalars?: RedwoodScalarConfig
 }
 
 /**
