@@ -1,4 +1,4 @@
-const JOBS_CONFIG_FILENAME = 'jobs.ts/js'
+const JOBS_CONFIG_FILENAME = 'jobs.{ts,js}'
 
 /**
  * Parent class for any RedwoodJob-related error
@@ -71,7 +71,7 @@ export class JobExportNotFoundError extends RedwoodJobError {
 export class JobsLibNotFoundError extends RedwoodJobError {
   constructor() {
     super(
-      `api/src/lib/${JOBS_CONFIG_FILENAME} not found. Run \`yarn rw setup jobs\` to create this file and configure background jobs`,
+      `api/src/lib/${JOBS_CONFIG_FILENAME} not found. Run \`yarn rw setup jobs\` to create this file and configure background jobs. Already did that? You'll need to run \`yarn rw dev\` or \`yarn rw build\` before you can start the job workers!`,
     )
   }
 }
