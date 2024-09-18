@@ -701,7 +701,7 @@ By checking the `lastError` field in the database you can see what the last erro
 
 ## Deployment
 
-For many use cases you may simply be able to rely on the job runner to start your job workers, which will run forever:
+For many use cases you may be able to rely on the job runner to start and detach your job workers, which will then run forever:
 
 ```bash
 yarn rw jobs start
@@ -722,6 +722,20 @@ For maximum reliability you should take a look at the [Advanced Job Workers](#ad
 Of course if you have a process monitor system watching your workers you'll want to use the process monitor's version of the `restart` command each time you deploy!
 
 :::
+
+### NODE_ENV
+
+You'll need to explicitly set your `NODE_ENV` when in environments other than development or test. We like having a `.env` file in a serverfull production environment, and you just include:
+
+```bash
+NODE_ENV=production
+```
+
+If you're using Docker, make sure you have an `ENV` declaration for it:
+
+```docker
+ENV NODE_ENV="production"
+```
 
 ## Advanced Job Workers
 
