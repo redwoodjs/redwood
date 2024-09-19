@@ -13,6 +13,7 @@ import c from '../../../../lib/colors'
 
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
+import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
   force: boolean
@@ -58,7 +59,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
   const tasks = new Listr(
     [
       {
-        options: { persistentOutput: true },
+        options: { persistentOutput: true, bottomBar: Infinity },
         title: 'Setting up TailwindCSS...',
         // first, check that Tailwind has been setup.
         // there's already a setup command for this,
@@ -120,7 +121,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             [
               {
                 options: { persistentOutput: true },
-                title: "Adding RedwoodUI's darkMode configuration",
+                title: "Add RedwoodUI's darkMode configuration",
                 task: async (_ctx, task) => {
                   newTailwindConfigContent =
                     addDarkModeConfigToProjectTailwindConfig(
@@ -134,7 +135,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               },
               {
                 options: { persistentOutput: true },
-                title: "Adding RedwoodUI's color theme configuration",
+                title: "Add RedwoodUI's color theme configuration",
                 task: async (_ctx, task) => {
                   newTailwindConfigContent =
                     addColorsConfigToProjectTailwindConfig(
@@ -148,7 +149,21 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               },
               {
                 options: { persistentOutput: true },
-                title: 'Writing out new TailwindCSS configuration',
+                title: "Add RedwoodUI's plugins configuration",
+                task: async (_ctx, task) => {
+                  newTailwindConfigContent =
+                    await addPluginsConfigToProjectTailwindConfig(
+                      task,
+                      // we can safely cast to string because we know it's not null — if it is, something went wrong
+                      rwuiTailwindConfigData.pluginsConfig as string,
+                      projectTailwindConfigData.pluginsConfig,
+                      newTailwindConfigContent,
+                    )
+                },
+              },
+              {
+                options: { persistentOutput: true },
+                title: 'Write out new TailwindCSS configuration',
                 task: async () => {
                   // After all transformations, write the new config to the file
                   fs.writeFileSync(
@@ -163,15 +178,6 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               exitOnError: false,
             },
           )
-
-          // // then, add the plugins config
-          // newTailwindConfigContent =
-          //   await addPluginsConfigToProjectTailwindConfig(
-          //     // we can safely cast to string because we know it's not null — if it is, something went wrong
-          //     rwuiTailwindConfigData.pluginsConfig as string,
-          //     projectTailwindConfigData.pluginsConfig,
-          //     newTailwindConfigContent,
-          //   )
         },
       },
       // {

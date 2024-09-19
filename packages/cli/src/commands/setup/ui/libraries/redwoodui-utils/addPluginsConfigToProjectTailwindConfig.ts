@@ -1,4 +1,5 @@
 import execa from 'execa'
+import type { ListrTaskWrapper } from 'listr2'
 
 import c from '../../../../../lib/colors'
 
@@ -12,6 +13,7 @@ import c from '../../../../../lib/colors'
  * of these transformations can be easily chained together.
  */
 const addPluginsConfigToProjectTailwindConfig = async (
+  task: ListrTaskWrapper<any, any>,
   rwuiPluginsConfig: string,
   projectPluginsConfig: string | null,
   projectTailwindConfig: string,
@@ -40,10 +42,8 @@ const addPluginsConfigToProjectTailwindConfig = async (
     // We need to check for both this case and the case where there is no plugins config at all.
     // projectPluginsConfig should be null for both of these cases.
 
-    console.log(
-      c.info(
-        "Looks like you don't yet have any TailwindCSS plugins configured. Adding all required ones now...",
-      ),
+    task.output = c.info(
+      "Looks like you don't yet have any TailwindCSS plugins configured. Adding all required ones now...",
     )
 
     // Check if the project config has a plugins key, ignoring commented lines
@@ -69,10 +69,8 @@ const addPluginsConfigToProjectTailwindConfig = async (
       `plugins: [${requiredPluginsWithRequire}]`,
     )
 
-    console.log(
-      c.success(
-        `Added the following TailwindCSS plugins to your config: ${requiredPlugins.join(', ')}`,
-      ),
+    task.output += c.success(
+      `\nAdded the following TailwindCSS plugins to your config: ${requiredPlugins.join(', ')}`,
     )
 
     // We know we're just installing all required plugins.
@@ -84,10 +82,8 @@ const addPluginsConfigToProjectTailwindConfig = async (
     // We need to check if it includes all the required plugins.
     // If it doesn't, we'll add the missing plugins to the end of the plugins array.
 
-    console.log(
-      c.info(
-        "Looks like you've already got some TailwindCSS plugins configured. Checking what's still required...",
-      ),
+    task.output = c.info(
+      "Looks like you've already got some TailwindCSS plugins configured. Checking what's still required...",
     )
 
     // Determine which required plugins are missing from the existing plugins
@@ -107,10 +103,8 @@ const addPluginsConfigToProjectTailwindConfig = async (
         (match, p1) => `plugins: [${p1}, ${missingPluginsWithRequire}]`,
       )
 
-      console.log(
-        c.success(
-          `Added the following TailwindCSS plugins to your config: ${missingPlugins.join(', ')}`,
-        ),
+      task.output += c.success(
+        `\nAdded the following TailwindCSS plugins to your config: ${missingPlugins.join(', ')}`,
       )
 
       // Add the missing plugins to the pluginsToInstall array
@@ -118,22 +112,18 @@ const addPluginsConfigToProjectTailwindConfig = async (
         pluginsToInstall.push(plugin)
       })
     } else {
-      console.log(
-        c.success(
-          `Your project's TailwindCSS configuration already includes all the required plugins.`,
-        ),
+      task.output += c.success(
+        `\nYour project's TailwindCSS configuration already includes all the required plugins.`,
       )
     }
   }
 
   // Now, if we've added any plugins to the config, we need to install them.
   if (pluginsToInstall.length > 0) {
-    console.log(
-      c.info(
-        `Installing the following TailwindCSS plugins that we just added to your config: ${pluginsToInstall.join(
-          ', ',
-        )}...`,
-      ),
+    task.output += c.info(
+      `\nInstalling the following TailwindCSS plugins that we just added to your config: ${pluginsToInstall.join(
+        ', ',
+      )}...`,
     )
     // TODO: We aren't currently checking for any version numbers, because our plugins config
     // is very light and we don't expect any versioning issues with the ones we're using.
@@ -141,14 +131,16 @@ const addPluginsConfigToProjectTailwindConfig = async (
     // by grabbing them from the RWUI web/package.json file.
     try {
       await execa('yarn', ['workspace', 'web', 'add', ...pluginsToInstall])
-      console.log(c.success(`Successfully installed the TailwindCSS plugins.`))
+      task.output += c.success(
+        `\nSuccessfully installed the TailwindCSS plugins.`,
+      )
     } catch {
-      console.error(
-        c.error(
-          `There was an error installing the TailwindCSS plugins. Please try running the command manually: yarn workspace web add ${pluginsToInstall.join(
-            ' ',
-          )}`,
-        ),
+      // Adding this to the task output instead of failing the whole task because
+      // the config should still be valid even if the plugins didn't install.
+      task.output += c.error(
+        `\nThere was an error with installing the TailwindCSS plugin packages, though your config should be complete. Please try running the command manually: yarn workspace web add ${pluginsToInstall.join(
+          ' ',
+        )}`,
       )
     }
   }
