@@ -11,8 +11,7 @@ import c from '../../../../../lib/colors'
  * Rather than writing the new config to the file, it will return the new config as a string.
  * This is so that we can iteratively build up the new config and then write it to the file at the end.
  *
- * Regardless of whether it was modified, it will return the new config so that multiple
- * of these transformations can be easily chained together.
+ * Will return the new config if it succeeds, and throw an error if it fails.
  */
 const addDarkModeConfigToProjectTailwindConfig = (
   task: ListrTaskWrapper<any, any>,
@@ -27,29 +26,29 @@ const addDarkModeConfigToProjectTailwindConfig = (
       /module.exports = {/,
       `module.exports = {\n  darkMode: ${rwuiDarkModeConfig},`,
     )
-    task.output =
-      "Added RedwoodUI's darkMode configuration to your project's TailwindCSS configuration."
+    task.output = c.success(
+      "Added RedwoodUI's darkMode configuration to your project's TailwindCSS configuration.",
+    )
 
     return newConfig
-  }
-
-  // if the project does have a darkMode config, check if it matches the rwuiDarkModeConfig
-  // if it doesn't match, print a warning that the user should check their darkMode config
-  // and possibly update it to match the rwuiDarkModeConfig
-  if (projectDarkModeConfig !== rwuiDarkModeConfig) {
-    console.warn(
-      c.warning(
-        `Warning: Your project's TailwindCSS configuration has a different darkMode setting than RedwoodUI's.\nPlease check your darkMode setting and ensure it matches RedwoodUI's.\n\nRedwoodUI darkMode setting: ${rwuiDarkModeConfig}\nYour project's darkMode setting: ${projectDarkModeConfig}\n\nMore info here: https://tailwindcss.com/docs/dark-mode#customizing-the-selector`,
-      ),
-    )
   } else {
-    console.log(
-      c.success(
+    // if the project does have a darkMode config, check if it matches the rwuiDarkModeConfig
+    // if it doesn't match, print a warning that the user should check their darkMode config
+    // and possibly update it to match the rwuiDarkModeConfig
+    if (projectDarkModeConfig !== rwuiDarkModeConfig) {
+      task.output = c.warning(
+        `Warning: Your project's TailwindCSS configuration already has a darkMode config that is different from RedwoodUI's, and may not work.\nPlease check your darkMode setting and ensure it matches RedwoodUI's.\n\nRedwoodUI darkMode setting: ${rwuiDarkModeConfig}\nYour project's darkMode setting: ${projectDarkModeConfig}\n\nMore info here: https://tailwindcss.com/docs/dark-mode#customizing-the-selector`,
+      )
+      throw new Error(
+        "Ran into a conflict setting the project's TailwindCSS darkMode configuration.",
+      )
+    } else {
+      task.output = c.info(
         `Your project's TailwindCSS configuration already has the correct darkMode setting.`,
-      ),
-    )
+      )
+      return projectTailwindConfig
+    }
   }
-  return projectTailwindConfig
 }
 
 export default addDarkModeConfigToProjectTailwindConfig

@@ -1,3 +1,5 @@
+import type { ListrTaskWrapper } from 'listr2'
+
 import c from '../../../../../lib/colors'
 
 /**
@@ -13,6 +15,7 @@ import c from '../../../../../lib/colors'
  * of these transformations can be easily chained together.
  */
 const addColorsConfigToProjectTailwindConfig = (
+  task: ListrTaskWrapper<any, any>,
   rwuiColorsConfig: string,
   projectColorsConfig: string | null,
   projectTailwindConfig: string,
@@ -36,10 +39,8 @@ const addColorsConfigToProjectTailwindConfig = (
 
     if (themeExtendConfig) {
       // If theme.extend exists, add the colors to it
-      console.log(
-        c.info(
-          '`theme.extend` exists in your TailwindCSS config. Adding the required colors to it...',
-        ),
+      task.output = c.info(
+        '`theme.extend` exists in your TailwindCSS config. Adding the required colors to it...',
       )
       configToReturn = projectTailwindConfig.replace(
         /theme:\s*{\s*extend:\s*{[^}]*}/s,
@@ -52,10 +53,8 @@ const addColorsConfigToProjectTailwindConfig = (
       )
     } else {
       // If theme.extend does not exist, add theme.extend with colors
-      console.log(
-        c.info(
-          '`theme.extend` does not exist in your TailwindCSS config. Adding it with the required colors...',
-        ),
+      task.output = c.info(
+        '`theme.extend` does not exist in your TailwindCSS config. Adding it with the required colors...',
       )
       configToReturn = projectTailwindConfig.replace(
         /module.exports = {/,
@@ -63,10 +62,8 @@ const addColorsConfigToProjectTailwindConfig = (
       )
     }
 
-    console.log(
-      c.success(
-        `Added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
-      ),
+    task.output += c.success(
+      `\nAdded RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
     )
     needToAddTWColorsImport = true
   } else {
@@ -106,21 +103,15 @@ const addColorsConfigToProjectTailwindConfig = (
     const missingKeys = requiredKeys.filter((key) => !projectKeys.includes(key))
 
     if (missingKeys.length === 0) {
-      console.log(
-        c.success(
-          `Your project's TailwindCSS configuration already includes all required colors.`,
-        ),
+      task.output = c.info(
+        `Your project's TailwindCSS configuration already includes all required colors.`,
       )
     } else if (missingKeys.length === requiredKeys.length) {
       // If all keys are missing, add the entire RWUI colors config to the bottom of the project colors config
       const rwuiColorsConfigWithoutBraces = rwuiColorsConfig
         .replace(/^{|}$/g, '')
         .trim()
-      console.log('rwuicolorsconfig', rwuiColorsConfig)
-      console.log(
-        'rwuicolorsconfigwithoutbraces',
-        rwuiColorsConfigWithoutBraces,
-      )
+
       configToReturn = projectTailwindConfig.replace(
         /colors:\s*{[^}]*}/s,
         (match) => {
@@ -132,19 +123,18 @@ const addColorsConfigToProjectTailwindConfig = (
           })
         },
       )
-      console.log(
-        c.success(
-          `Looks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
-        ),
+      task.output += c.success(
+        `\nLooks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
       )
       needToAddTWColorsImport = true
     } else {
       // If there are only some missing keys, warn the user to consult the RedwoodUI
       // config and add the missing keys to their project's config
-      console.warn(
-        c.warning(
-          `Warning: Your project's TailwindCSS configuration is missing some required colors.\nIf this happened, it's likely you're already using some of the color names required by RedwoodUI, so we haven't overwritten them. Please check your colors configuration and ensure it also includes the following keys:\n${missingKeys.join(', ')}`,
-        ),
+      task.output = c.warning(
+        `Your project's TailwindCSS configuration is missing some required colors.\nIf this happened, it's likely you're already using some of the color names required by RedwoodUI, so we haven't overwritten them.\nPlease check your colors configuration and ensure it also includes the following keys:\n${missingKeys.join(', ')}`,
+      )
+      throw new Error(
+        "Ran into a conflict setting the project's TailwindCSS colors configuration.",
       )
     }
   }
@@ -157,16 +147,12 @@ const addColorsConfigToProjectTailwindConfig = (
     if (!configToReturn.includes(colorsImport)) {
       // Add the colors import to the top of the file
       configToReturn = colorsImport + configToReturn
-      console.log(
-        c.success(
-          'Added TailwindCSS color pallette import to your config (used by TWUI default colors).',
-        ),
+      task.output += c.success(
+        '\nAdded TailwindCSS color pallette import (used by TWUI default colors) to your config.',
       )
     } else {
-      console.log(
-        c.info(
-          'Your TailwindCSS config already includes the TailwindCSS color pallette import, so we did not add it again (used by TWUI default colors).',
-        ),
+      task.output += c.info(
+        '\nYour TailwindCSS config already includes the TailwindCSS color pallette import (used by TWUI default colors), so we did not add it again.',
       )
     }
   }

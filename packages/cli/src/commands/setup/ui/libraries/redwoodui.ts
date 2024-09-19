@@ -11,6 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../../../../lib/colors'
 
+import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
@@ -95,7 +96,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       },
       {
         options: { persistentOutput: true },
-        title: "Adding RedwoodUI's TailwindCSS configuration...",
+        title: 'Merging your TailwindCSS configuration with that of RedwoodUI',
         task: async (_ctx, task) => {
           const rwuiTailwindConfigContent = await fetchFromRWUIRepo(
             'web/config/tailwind.config.js',
@@ -119,8 +120,8 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             [
               {
                 options: { persistentOutput: true },
-                title: "Adding RedwoodUI's darkMode configuration...",
-                task: async (ctx, task) => {
+                title: "Adding RedwoodUI's darkMode configuration",
+                task: async (_ctx, task) => {
                   newTailwindConfigContent =
                     addDarkModeConfigToProjectTailwindConfig(
                       task,
@@ -133,7 +134,21 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               },
               {
                 options: { persistentOutput: true },
-                title: 'Writing out new TailwindCSS configuration...',
+                title: "Adding RedwoodUI's color theme configuration",
+                task: async (_ctx, task) => {
+                  newTailwindConfigContent =
+                    addColorsConfigToProjectTailwindConfig(
+                      task,
+                      // we can safely cast to string because we know it's not null — if it is, something went wrong
+                      rwuiTailwindConfigData.colorsConfig as string,
+                      projectTailwindConfigData.colorsConfig,
+                      newTailwindConfigContent,
+                    )
+                },
+              },
+              {
+                options: { persistentOutput: true },
+                title: 'Writing out new TailwindCSS configuration',
                 task: async () => {
                   // After all transformations, write the new config to the file
                   fs.writeFileSync(
@@ -143,15 +158,11 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
                 },
               },
             ],
-            { concurrent: false, rendererOptions: { collapseSubtasks: false } },
+            {
+              rendererOptions: { collapseSubtasks: false },
+              exitOnError: false,
+            },
           )
-
-          // newTailwindConfigContent = addColorsConfigToProjectTailwindConfig(
-          //   // we can safely cast to string because we know it's not null — if it is, something went wrong
-          //   rwuiTailwindConfigData.colorsConfig as string,
-          //   projectTailwindConfigData.colorsConfig,
-          //   newTailwindConfigContent,
-          // )
 
           // // then, add the plugins config
           // newTailwindConfigContent =
@@ -164,7 +175,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         },
       },
       // {
-      //   title: "Adding RedwoodUI's CSS rules to index.css...",
+      //   title: "Adding RedwoodUI's CSS rules to index.css",
       //   task: async () => {
       //     const rwuiIndexCSSContent = await fetchFromRWUIRepo('web/src/index.css')
       //     const projectIndexCSSContent = fs.readFileSync(
@@ -176,7 +187,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       //   },
       // },
     ],
-    { concurrent: false, rendererOptions: { collapseSubtasks: false } },
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: false },
   )
 
   try {
