@@ -144,6 +144,8 @@ const addColorsConfigToProjectTailwindConfig = (
   }
 
   if (needToAddTWColorsImport) {
+    // Rather than extracting this from the RWUI colors config, we'll just hardcode it
+    // because it's unlikely to change unless we fundamentally change how we do the default theme.
     const colorsImport = "const colors = require('tailwindcss/colors')\n\n"
     // Check if the project has the colors import
     if (!configToReturn.includes(colorsImport)) {
