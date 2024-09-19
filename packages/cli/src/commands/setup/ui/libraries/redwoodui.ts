@@ -138,6 +138,18 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         fs.writeFileSync(projectTailwindConfigPath, newTailwindConfigContent)
       },
     },
+    {
+      title: "Adding RedwoodUI's CSS rules to index.css...",
+      task: async () => {
+        const rwuiIndexCSSContent = await fetchFromRWUIRepo('web/src/index.css')
+        const projectIndexCSSContent = fs.readFileSync(
+          projectIndexCSSPath,
+          'utf-8',
+        )
+        console.log('rwui index css content', rwuiIndexCSSContent)
+        console.log('project index css content', projectIndexCSSContent)
+      },
+    },
   ])
 
   try {
