@@ -63,7 +63,7 @@
     "uuid": "10.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@simplewebauthn/server": "7.4.0",

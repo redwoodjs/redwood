@@ -242,11 +242,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@arethetypeswrong/cli@npm:0.16.2":
-  version: 0.16.2
-  resolution: "@arethetypeswrong/cli@npm:0.16.2"
+"@arethetypeswrong/cli@npm:0.16.4":
+  version: 0.16.4
+  resolution: "@arethetypeswrong/cli@npm:0.16.4"
   dependencies:
-    "@arethetypeswrong/core": "npm:0.16.2"
+    "@arethetypeswrong/core": "npm:0.16.4"
     chalk: "npm:^4.1.2"
     cli-table3: "npm:^0.6.3"
     commander: "npm:^10.0.1"
@@ -255,13 +255,13 @@ __metadata:
     semver: "npm:^7.5.4"
   bin:
     attw: dist/index.js
-  checksum: 10c0/451a184b5bfedae5429fec5324a0457a17655f2f1d03add44db82210fd84b8506629d83b27a4c0caf09f35424bf425497d72afaddaa4f9c1898a1dbd1ebb2c3e
+  checksum: 10c0/8cd5cfff23c8432dfbfbd2b68ca96bffe4d1e84f7612f5c1e70c53945ebce69f9347b32c7d77903c875718db544bd4dc268749e7283691f8850be2a72de8eb2f
   languageName: node
   linkType: hard
 
-"@arethetypeswrong/core@npm:0.16.2":
-  version: 0.16.2
-  resolution: "@arethetypeswrong/core@npm:0.16.2"
+"@arethetypeswrong/core@npm:0.16.4":
+  version: 0.16.4
+  resolution: "@arethetypeswrong/core@npm:0.16.4"
   dependencies:
     "@andrewbranch/untar.js": "npm:^1.0.3"
     cjs-module-lexer: "npm:^1.2.3"
@@ -270,7 +270,7 @@ __metadata:
     semver: "npm:^7.5.4"
     typescript: "npm:5.6.1-rc"
     validate-npm-package-name: "npm:^5.0.0"
-  checksum: 10c0/ae294d3de2f4d4519735119a8d2868c5fb18a2ccb5696108b39c7947e26298b0294b20c239bcb47ea7c53a48c4860610200a4821d59877b51ababa02d3ad717e
+  checksum: 10c0/fc89dfb9d10bbde659774329a32790a3916c38fbb7911467226d67b63fff4b7141d32a47a75bd7461666b1c37a817efaa7e2ac4ec6b61f5c0e623e0a2606e130
   languageName: node
   linkType: hard
 
@@ -7324,7 +7324,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-api@workspace:packages/auth-providers/auth0/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/jsonwebtoken": "npm:9.0.6"
@@ -7342,7 +7342,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-auth0-setup@workspace:packages/auth-providers/auth0/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7377,7 +7377,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-api@workspace:packages/auth-providers/azureActiveDirectory/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
@@ -7396,7 +7396,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-azure-active-directory-setup@workspace:packages/auth-providers/azureActiveDirectory/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7432,7 +7432,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-api@workspace:packages/auth-providers/clerk/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@clerk/clerk-sdk-node": "npm:4.13.21"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -7449,7 +7449,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-setup@workspace:packages/auth-providers/clerk/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7484,7 +7484,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-custom-setup@workspace:packages/auth-providers/custom/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7500,7 +7500,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-api@workspace:packages/auth-providers/dbAuth/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -7522,7 +7522,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-middleware@workspace:packages/auth-providers/dbAuth/middleware"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/auth-dbauth-api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -7582,7 +7582,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-firebase-api@workspace:packages/auth-providers/firebase/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
@@ -7599,7 +7599,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-firebase-setup@workspace:packages/auth-providers/firebase/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7634,7 +7634,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-netlify-api@workspace:packages/auth-providers/netlify/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
@@ -7652,7 +7652,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-netlify-setup@workspace:packages/auth-providers/netlify/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7687,7 +7687,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-api@workspace:packages/auth-providers/supabase/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@supabase/ssr": "npm:0.5.1"
@@ -7706,7 +7706,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-middleware@workspace:packages/auth-providers/supabase/middleware"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/auth-supabase-api": "workspace:*"
@@ -7728,7 +7728,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supabase-setup@workspace:packages/auth-providers/supabase/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7763,7 +7763,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supertokens-api@workspace:packages/auth-providers/supertokens/api"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/api": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/jsonwebtoken": "npm:9.0.6"
@@ -7783,7 +7783,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-supertokens-setup@workspace:packages/auth-providers/supertokens/setup"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
@@ -7819,7 +7819,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth@workspace:packages/auth"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/framework-tools": "workspace:*"
     "@testing-library/jest-dom": "npm:6.5.0"
     "@testing-library/react": "npm:14.3.1"
@@ -8069,7 +8069,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/framework-tools": "workspace:*"
     concurrently: "npm:8.2.2"
     publint: "npm:0.2.10"
@@ -8230,7 +8230,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/framework-tools@workspace:packages/framework-tools"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@types/fs-extra": "npm:11.0.4"
     esbuild: "npm:0.23.1"
     fast-glob: "npm:3.3.2"
@@ -8292,7 +8292,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/parser": "npm:^7.22.16"
     "@babel/plugin-transform-react-jsx": "npm:^7.22.15"
@@ -8506,7 +8506,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@redwoodjs/framework-tools": "workspace:*"
     concurrently: "npm:8.2.2"
     deepmerge: "npm:4.3.1"
@@ -8573,7 +8573,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.0"
@@ -8618,7 +8618,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/storage@workspace:packages/storage"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@prisma/client": "npm:5.19.1"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -8749,7 +8749,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/generator": "npm:7.25.0"
     "@babel/parser": "npm:^7.22.16"
     "@babel/traverse": "npm:^7.22.20"
@@ -8836,7 +8836,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.11.1"
     "@apollo/client-react-streaming": "npm:0.10.0"
-    "@arethetypeswrong/cli": "npm:0.16.2"
+    "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/cli": "npm:7.24.8"
     "@babel/core": "npm:^7.22.20"
     "@babel/plugin-transform-runtime": "npm:7.24.7"

@@ -43,7 +43,7 @@
     "jwks-rsa": "3.1.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/aws-lambda": "8.10.145",
