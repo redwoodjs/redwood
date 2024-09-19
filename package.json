@@ -9,6 +9,8 @@
     "packages/mailer/core",
     "packages/mailer/handlers/*",
     "packages/mailer/renderers/*",
+    "packages/storage/core",
+    "packages/storage/adapters/*",
     "!packages/create-redwood-rsc-app"
   ],
   "scripts": {

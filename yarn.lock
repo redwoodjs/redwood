@@ -8614,23 +8614,44 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/storage@workspace:packages/storage":
+"@redwoodjs/storage-adapter-filesystem@workspace:packages/storage/adapters/filesystem":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/storage@workspace:packages/storage"
+  resolution: "@redwoodjs/storage-adapter-filesystem@workspace:packages/storage/adapters/filesystem"
   dependencies:
-    "@arethetypeswrong/cli": "npm:0.16.4"
-    "@prisma/client": "npm:5.19.1"
     "@redwoodjs/framework-tools": "workspace:*"
-    "@redwoodjs/project-config": "workspace:*"
-    "@types/mime-types": "npm:2.1.4"
     concurrently: "npm:8.2.2"
     esbuild: "npm:0.23.1"
-    mime-types: "npm:2.1.35"
     publint: "npm:0.2.10"
-    tstyche: "npm:2.1.1"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
-    ulid: "npm:2.3.0"
+    vitest: "npm:2.0.5"
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/storage-adapter-s3@workspace:packages/storage/adapters/s3":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/storage-adapter-s3@workspace:packages/storage/adapters/s3"
+  dependencies:
+    "@redwoodjs/framework-tools": "workspace:*"
+    concurrently: "npm:8.2.2"
+    esbuild: "npm:0.23.1"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.19.1"
+    typescript: "npm:5.6.2"
+    vitest: "npm:2.0.5"
+  languageName: unknown
+  linkType: soft
+
+"@redwoodjs/storage-core@workspace:packages/storage/core":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/storage-core@workspace:packages/storage/core"
+  dependencies:
+    "@redwoodjs/framework-tools": "workspace:*"
+    concurrently: "npm:8.2.2"
+    esbuild: "npm:0.23.1"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.19.1"
+    typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
@@ -29060,15 +29081,6 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10c0/8b7fcdca69deb284fed7d2025b73eb747ce37f9aca6af53422844f46427152d5440601b6e2a033e77856a2f0591e4167153d5a21b68674ad11f662034ec13ced
-  languageName: node
-  linkType: hard
-
-"ulid@npm:2.3.0":
-  version: 2.3.0
-  resolution: "ulid@npm:2.3.0"
-  bin:
-    ulid: ./bin/cli.js
-  checksum: 10c0/070d237502781085e59cf3d8ece752ff96cd3a0990cf1c1be57273f4550597daeb72e9a7db8e5a320de31102509bb3321d280b54bfc44e98025e4628a9629773
   languageName: node
   linkType: hard
 
