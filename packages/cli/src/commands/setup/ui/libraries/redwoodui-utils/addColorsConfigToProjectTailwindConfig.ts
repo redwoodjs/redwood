@@ -65,7 +65,7 @@ const addColorsConfigToProjectTailwindConfig = (
 
     console.log(
       c.success(
-        `Added RedwoodUI's colors configuration to your project's TailwindCSS configuration.`,
+        `Added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
       ),
     )
     needToAddTWColorsImport = true
@@ -105,7 +105,13 @@ const addColorsConfigToProjectTailwindConfig = (
     // Check if the project colors config has all the required keys
     const missingKeys = requiredKeys.filter((key) => !projectKeys.includes(key))
 
-    if (missingKeys.length === requiredKeys.length) {
+    if (missingKeys.length === 0) {
+      console.log(
+        c.success(
+          `Your project's TailwindCSS configuration already includes all required colors.`,
+        ),
+      )
+    } else if (missingKeys.length === requiredKeys.length) {
       // If all keys are missing, add the entire RWUI colors config to the bottom of the project colors config
       const rwuiColorsConfigWithoutBraces = rwuiColorsConfig
         .replace(/^{|}$/g, '')
@@ -128,7 +134,7 @@ const addColorsConfigToProjectTailwindConfig = (
       )
       console.log(
         c.success(
-          `Looks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.`,
+          `Looks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
         ),
       )
       needToAddTWColorsImport = true

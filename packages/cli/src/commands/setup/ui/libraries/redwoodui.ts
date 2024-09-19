@@ -13,6 +13,7 @@ import c from '../../../../lib/colors'
 
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
+import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
   force: boolean
@@ -125,6 +126,13 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         )
 
         // then, add the plugins config
+        newTailwindConfigContent =
+          await addPluginsConfigToProjectTailwindConfig(
+            // we can safely cast to string because we know it's not null — if it is, something went wrong
+            rwuiTailwindConfigData.pluginsConfig as string,
+            projectTailwindConfigData.pluginsConfig,
+            newTailwindConfigContent,
+          )
 
         // After all transformations, write the new config to the file
         fs.writeFileSync(projectTailwindConfigPath, newTailwindConfigContent)
