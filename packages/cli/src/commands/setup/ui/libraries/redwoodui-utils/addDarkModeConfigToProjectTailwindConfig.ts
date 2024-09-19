@@ -1,3 +1,5 @@
+import type { ListrTaskWrapper } from 'listr2'
+
 import c from '../../../../../lib/colors'
 
 /**
@@ -13,6 +15,7 @@ import c from '../../../../../lib/colors'
  * of these transformations can be easily chained together.
  */
 const addDarkModeConfigToProjectTailwindConfig = (
+  task: ListrTaskWrapper<any, any>,
   rwuiDarkModeConfig: string,
   projectDarkModeConfig: string | null,
   projectTailwindConfig: string,
@@ -24,11 +27,9 @@ const addDarkModeConfigToProjectTailwindConfig = (
       /module.exports = {/,
       `module.exports = {\n  darkMode: ${rwuiDarkModeConfig},`,
     )
-    console.log(
-      c.success(
-        `Added RedwoodUI's darkMode configuration to your project's TailwindCSS configuration.`,
-      ),
-    )
+    task.output =
+      "Added RedwoodUI's darkMode configuration to your project's TailwindCSS configuration."
+
     return newConfig
   }
 

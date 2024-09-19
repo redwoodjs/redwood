@@ -11,9 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../../../../lib/colors'
 
-import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
-import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
   force: boolean
@@ -56,101 +54,130 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
   )
   const projectIndexCSSPath = path.join(rwPaths.web.src, 'index.css')
 
-  const tasks = new Listr([
-    {
-      title: 'Setting up TailwindCSS...',
-      // first, check that Tailwind has been setup.
-      // there's already a setup command for this,
-      // so if it's not setup, we can just run that command.
-      skip: async () => {
-        // if force is true, never skip
-        if (force) {
-          return false
-        }
+  const tasks = new Listr(
+    [
+      {
+        options: { persistentOutput: true },
+        title: 'Setting up TailwindCSS...',
+        // first, check that Tailwind has been setup.
+        // there's already a setup command for this,
+        // so if it's not setup, we can just run that command.
+        skip: async () => {
+          // if force is true, never skip
+          if (force) {
+            return false
+          }
 
-        // if the config already exists, don't need to set up, so skip
-        if (
-          fs.existsSync(projectTailwindConfigPath) &&
-          fs.existsSync(projectIndexCSSPath)
-        ) {
-          return 'TailwindCSS is already set up.'
-        } else {
-          return false
-        }
+          // if the config already exists, don't need to set up, so skip
+          if (
+            fs.existsSync(projectTailwindConfigPath) &&
+            fs.existsSync(projectIndexCSSPath)
+          ) {
+            return 'TailwindCSS is already set up.'
+          } else {
+            return false
+          }
+        },
+        task: async () => {
+          const argsToInclude: string[] = [
+            force && '-f',
+            install && '-i',
+          ].filter((item) => item != false)
+          await execa(
+            'yarn',
+            ['rw', 'setup', 'ui', 'tailwindcss', ...argsToInclude],
+            // this is needed so that the output is shown in the terminal.
+            // TODO: still, it's not perfect, because the output is shown below the others
+            // and seems to be swallowing, for example, part of the suggested extensions message.
+            { stdio: 'inherit' },
+          )
+        },
       },
-      task: async () => {
-        const argsToInclude: string[] = [force && '-f', install && '-i'].filter(
-          (item) => item != false,
-        )
-        await execa(
-          'yarn',
-          ['rw', 'setup', 'ui', 'tailwindcss', ...argsToInclude],
-          // this is needed so that the output is shown in the terminal.
-          // TODO: still, it's not perfect, because the output is shown below the others
-          // and seems to be swallowing, for example, part of the suggested extensions message.
-          { stdio: 'inherit' },
-        )
-      },
-    },
-    {
-      title: "Adding RedwoodUI's TailwindCSS configuration...",
-      task: async () => {
-        const rwuiTailwindConfigContent = await fetchFromRWUIRepo(
-          'web/config/tailwind.config.js',
-        )
-
-        const projectTailwindConfigContent = fs.readFileSync(
-          projectTailwindConfigPath,
-          'utf-8',
-        )
-
-        const rwuiTailwindConfigData = extractTailwindConfigData(
-          rwuiTailwindConfigContent,
-        )
-        const projectTailwindConfigData = extractTailwindConfigData(
-          projectTailwindConfigContent,
-        )
-
-        let newTailwindConfigContent = addDarkModeConfigToProjectTailwindConfig(
-          // we can safely cast to string because we know it's not null — if it is, something went wrong
-          rwuiTailwindConfigData.darkModeConfig as string,
-          projectTailwindConfigData.darkModeConfig,
-          projectTailwindConfigContent,
-        )
-
-        newTailwindConfigContent = addColorsConfigToProjectTailwindConfig(
-          // we can safely cast to string because we know it's not null — if it is, something went wrong
-          rwuiTailwindConfigData.colorsConfig as string,
-          projectTailwindConfigData.colorsConfig,
-          newTailwindConfigContent,
-        )
-
-        // then, add the plugins config
-        newTailwindConfigContent =
-          await addPluginsConfigToProjectTailwindConfig(
-            // we can safely cast to string because we know it's not null — if it is, something went wrong
-            rwuiTailwindConfigData.pluginsConfig as string,
-            projectTailwindConfigData.pluginsConfig,
-            newTailwindConfigContent,
+      {
+        options: { persistentOutput: true },
+        title: "Adding RedwoodUI's TailwindCSS configuration...",
+        task: async (_ctx, task) => {
+          const rwuiTailwindConfigContent = await fetchFromRWUIRepo(
+            'web/config/tailwind.config.js',
           )
 
-        // After all transformations, write the new config to the file
-        fs.writeFileSync(projectTailwindConfigPath, newTailwindConfigContent)
+          const projectTailwindConfigContent = fs.readFileSync(
+            projectTailwindConfigPath,
+            'utf-8',
+          )
+
+          const rwuiTailwindConfigData = extractTailwindConfigData(
+            rwuiTailwindConfigContent,
+          )
+          const projectTailwindConfigData = extractTailwindConfigData(
+            projectTailwindConfigContent,
+          )
+
+          let newTailwindConfigContent = projectTailwindConfigContent
+
+          return task.newListr(
+            [
+              {
+                options: { persistentOutput: true },
+                title: "Adding RedwoodUI's darkMode configuration...",
+                task: async (ctx, task) => {
+                  newTailwindConfigContent =
+                    addDarkModeConfigToProjectTailwindConfig(
+                      task,
+                      // we can safely cast to string because we know it's not null — if it is, something went wrong
+                      rwuiTailwindConfigData.darkModeConfig as string,
+                      projectTailwindConfigData.darkModeConfig,
+                      newTailwindConfigContent,
+                    )
+                },
+              },
+              {
+                options: { persistentOutput: true },
+                title: 'Writing out new TailwindCSS configuration...',
+                task: async () => {
+                  // After all transformations, write the new config to the file
+                  fs.writeFileSync(
+                    projectTailwindConfigPath,
+                    newTailwindConfigContent,
+                  )
+                },
+              },
+            ],
+            { concurrent: false, rendererOptions: { collapseSubtasks: false } },
+          )
+
+          // newTailwindConfigContent = addColorsConfigToProjectTailwindConfig(
+          //   // we can safely cast to string because we know it's not null — if it is, something went wrong
+          //   rwuiTailwindConfigData.colorsConfig as string,
+          //   projectTailwindConfigData.colorsConfig,
+          //   newTailwindConfigContent,
+          // )
+
+          // // then, add the plugins config
+          // newTailwindConfigContent =
+          //   await addPluginsConfigToProjectTailwindConfig(
+          //     // we can safely cast to string because we know it's not null — if it is, something went wrong
+          //     rwuiTailwindConfigData.pluginsConfig as string,
+          //     projectTailwindConfigData.pluginsConfig,
+          //     newTailwindConfigContent,
+          //   )
+        },
       },
-    },
-    {
-      title: "Adding RedwoodUI's CSS rules to index.css...",
-      task: async () => {
-        const rwuiIndexCSSContent = await fetchFromRWUIRepo('web/src/index.css')
-        const projectIndexCSSContent = fs.readFileSync(
-          projectIndexCSSPath,
-          'utf-8',
-        )
-        console.log('rwui index css content', rwuiIndexCSSContent)
-        console.log('project index css content', projectIndexCSSContent)
-      },
-    },
-  ])
+      // {
+      //   title: "Adding RedwoodUI's CSS rules to index.css...",
+      //   task: async () => {
+      //     const rwuiIndexCSSContent = await fetchFromRWUIRepo('web/src/index.css')
+      //     const projectIndexCSSContent = fs.readFileSync(
+      //       projectIndexCSSPath,
+      //       'utf-8',
+      //     )
+      //     console.log('rwui index css content', rwuiIndexCSSContent)
+      //     console.log('project index css content', projectIndexCSSContent)
+      //   },
+      // },
+    ],
+    { concurrent: false, rendererOptions: { collapseSubtasks: false } },
+  )
 
   try {
     await tasks.run()
