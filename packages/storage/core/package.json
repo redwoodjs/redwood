@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "yarn tsx ./build.mts && yarn build:types",
-    "build:pack": "yarn pack -o redwoodjs-storage.tgz",
+    "build:pack": "yarn pack -o redwoodjs-storage-core.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "check:attw": "yarn rw-fwtools-attw",
     "check:package": "concurrently npm:check:attw yarn:publint",

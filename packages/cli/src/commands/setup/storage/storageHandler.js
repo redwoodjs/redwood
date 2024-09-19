@@ -1,18 +1,18 @@
+import crypto from 'node:crypto'
 import path from 'node:path'
 
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { addApiPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
+import { getPrettierOptions, addEnvVarTask } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
-import { runTransform } from '../../../lib/runTransform'
 
-export const handler = async ({ force }) => {
+export const handler = async ({ force, skipExamples }) => {
   const projectIsTypescript = isTypeScriptProject()
   const redwoodVersion =
     require(path.join(getPaths().base, 'package.json')).devDependencies[
@@ -22,97 +22,76 @@ export const handler = async ({ force }) => {
   const tasks = new Listr(
     [
       {
-        title: `Adding api/src/lib/uploads.${
+        title: `Adding api/src/lib/storage.${
           projectIsTypescript ? 'ts' : 'js'
         }...`,
         task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            'srcLibUploads.ts.template',
+            'storage.ts.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
             flag: 'r',
           })
 
-          const uploadsPath = path.join(
+          const storagePath = path.join(
             getPaths().api.lib,
-            `uploads.${projectIsTypescript ? 'ts' : 'js'}`,
+            `storage.${projectIsTypescript ? 'ts' : 'js'}`,
           )
-          const uploadsContent = projectIsTypescript
+          const storageContent = projectIsTypescript
             ? templateContent
-            : await transformTSToJS(uploadsPath, templateContent)
+            : await transformTSToJS(storagePath, templateContent)
 
-          return writeFile(uploadsPath, uploadsContent, {
+          return writeFile(storagePath, storageContent, {
             overwriteExisting: force,
           })
         },
       },
       {
         title: `Adding signedUrl function...`,
+        skip: () => skipExamples,
         task: async () => {
           const templatePath = path.resolve(
             __dirname,
             'templates',
-            'signedUrl.ts.template',
+            'storageFunction.ts.template',
           )
           const templateContent = fs.readFileSync(templatePath, {
             encoding: 'utf8',
             flag: 'r',
           })
 
-          const uploadsPath = path.join(
+          const storagePath = path.join(
             getPaths().api.functions,
-            `signedUrl.${projectIsTypescript ? 'ts' : 'js'}`,
+            `storage.${projectIsTypescript ? 'ts' : 'js'}`,
           )
-          const uploadsContent = projectIsTypescript
+          const storageContent = projectIsTypescript
             ? templateContent
-            : await transformTSToJS(uploadsPath, templateContent)
+            : await transformTSToJS(storagePath, templateContent)
 
-          return writeFile(uploadsPath, uploadsContent, {
+          return writeFile(storagePath, storageContent, {
             overwriteExisting: force,
           })
         },
       },
-      {
-        ...addApiPackages([`@redwoodjs/storage@${redwoodVersion}`]),
-        title: 'Adding dependencies to your api side...',
-      },
-      {
-        title: 'Modifying api/src/lib/db to add uploads prisma extension..',
-        task: async () => {
-          const dbPath = path.join(
-            getPaths().api.lib,
-            `db.${projectIsTypescript ? 'ts' : 'js'}`,
-          )
-
-          const transformResult = await runTransform({
-            transformPath: path.join(__dirname, 'dbCodemod.js'),
-            targetPaths: [dbPath],
-          })
-
-          if (transformResult.error) {
-            if (transformResult.error === 'RW_CODEMOD_ERR_OLD_FORMAT') {
-              throw new Error(
-                'It looks like your src/lib/db file is using the old format. Please update it as per the v8 upgrade guide: https://redwoodjs.com/upgrade/v8#database-file-structure-change. And run again. \n\nYou can also manually modify your api/src/lib/db to include the prisma extension: https://docs.redwoodjs.com/docs/uploads/#attaching-the-prisma-extension',
-              )
-            }
-
-            throw new Error(
-              'Could not add the prisma extension. \n Please modify your api/src/lib/db to include the prisma extension: https://docs.redwoodjs.com/docs/uploads/#attaching-the-prisma-extension',
-            )
-          }
-        },
-      },
+      // TODO(jgmw): Enable this once these packages have been published otherwise it will fail
+      // {
+      //   ...addApiPackages([
+      //     `@redwoodjs/storage-core@${redwoodVersion}`,
+      //     `@redwoodjs/storage-adapter-filesystem@${redwoodVersion}`,
+      //   ]),
+      //   title: 'Adding required dependencies to your api side...',
+      // },
       {
         title: 'Prettifying changed files',
         task: async (_ctx, task) => {
           const prettifyPaths = [
-            path.join(getPaths().api.lib, 'db.js'),
-            path.join(getPaths().api.lib, 'db.ts'),
-            path.join(getPaths().api.lib, 'uploads.js'),
-            path.join(getPaths().api.lib, 'uploads.ts'),
+            path.join(getPaths().api.lib, 'storage.js'),
+            path.join(getPaths().api.lib, 'storage.ts'),
+            path.join(getPaths().api.functions, 'storage.js'),
+            path.join(getPaths().api.functions, 'storage.ts'),
           ]
 
           for (const prettifyPath of prettifyPaths) {
@@ -135,18 +114,25 @@ export const handler = async ({ force }) => {
           }
         },
       },
+      addEnvVarTask(
+        'STORAGE_SIGNING_SECRET',
+        crypto.randomBytes(32).toString('base64'),
+        'Secret for securely signing tokens used in the self hosted storage function',
+      ),
+      addEnvVarTask(
+        'STORAGE_SIGNING_BASE_URL',
+        'http://localhost:8911/storage',
+        'Base URL for the self hosted storage function',
+      ),
       {
         title: 'One more thing...',
         task: (_ctx, task) => {
           task.title = `One more thing...
 
-          ${c.success('\nUploads and storage configured!\n')}
-
-          Remember to add UPLOADS_SECRET to your .env file. You can generate one with ${c.highlight('yarn rw generate secret')}
-
+          ${c.success('\nStorage setup complete!\n')}
 
           Check out the docs for more info:
-          ${c.link('https://docs.redwoodjs.com/docs/uploads')}
+          ${c.link('https://docs.redwoodjs.com/docs/storage')}
 
         `
         },

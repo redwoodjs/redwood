@@ -24,15 +24,21 @@
   ],
   "scripts": {
     "build": "yarn tsx ./build.mts && yarn build:types",
-    "build:pack": "yarn pack -o redwoodjs-storage.tgz",
+    "build:pack": "yarn pack -o redwoodjs-storage-adapter-filesystem.tgz",
     "build:types": "tsc --build --verbose ./tsconfig.build.json",
     "check:attw": "yarn rw-fwtools-attw",
     "check:package": "concurrently npm:check:attw yarn:publint",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
+  "dependencies": {
+    "@redwoodjs/storage-core": "workspace:*",
+    "mime-types": "2.1.35",
+    "uuid": "10.0.0"
+  },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
+    "@types/uuid": "10.0.0",
     "concurrently": "8.2.2",
     "esbuild": "0.23.1",
     "publint": "0.2.10",

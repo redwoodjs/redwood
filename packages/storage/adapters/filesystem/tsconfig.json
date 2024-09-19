@@ -2,14 +2,13 @@
   "extends": "../../../../tsconfig.compilerOption.json",
   "compilerOptions": {
     "moduleResolution": "Node16",
-    "module": "Node16",
-    "emitDeclarationOnly": false,
-    "noEmit": true
+    "module": "Node16"
   },
   "include": ["."],
   "exclude": ["dist", "node_modules"],
   "references": [
     { "path": "../../../framework-tools" },
-    { "path": "../../../project-config" }
+    { "path": "../../../project-config" },
+    { "path": "../../core" }
   ]
 }
