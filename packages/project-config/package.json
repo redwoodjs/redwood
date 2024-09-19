@@ -42,7 +42,7 @@
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
     "publint": "0.2.10",

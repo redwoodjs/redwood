@@ -58,7 +58,7 @@
     "ulid": "2.3.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@prisma/client": "5.19.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/mime-types": "2.1.4",
