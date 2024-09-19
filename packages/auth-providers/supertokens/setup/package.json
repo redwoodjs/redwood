@@ -42,7 +42,7 @@
     "@redwoodjs/cli-helpers": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/yargs": "17.0.33",
     "concurrently": "8.2.2",
