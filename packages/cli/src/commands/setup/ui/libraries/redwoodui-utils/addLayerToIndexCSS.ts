@@ -43,13 +43,18 @@ const addLayerToIndexCSS = (
   } else {
     // If the project does have the layer, check whether its classes have the same name as those of the RWUI layer.
     // Note that in the base layer, these are HTML tags, not classes. Therefore, they won't start with a dot.
-    // In the components layer, they will start with a dot.
+    // In the components layer, they will start with a dot, and can also be concatenated with other classes (e.g. `.rw-button .primary`).
     const classPattern =
       layerName === 'base'
         ? /[a-zA-Z0-9_-]+(?=\s*\{)/g
-        : /\.[a-zA-Z0-9_-]+(?=\s*\{)/g
-    const classesToAdd: string[] =
+        : /\.([a-zA-Z0-9_-]+(?:\s+\.[a-zA-Z0-9_-]+)*)(?=\s*\{)/g
+
+    // Creating two lists here: one to iterate over, and one that we can safely
+    // remove items from without affecting the iteration.
+    // If we don't do this, it'll skip items when doing the .forEach loop.
+    const potentialClassesToAdd: string[] =
       rwuiLayerContentToAdd.match(classPattern) || []
+    const classesToAdd = [...potentialClassesToAdd]
 
     // For each class that we want to add, check if it already exists in the project's layer.
     // If it does, check if it's the same as the RWUI layer class.
@@ -57,7 +62,7 @@ const addLayerToIndexCSS = (
     // If it's not, add it to a list of conflicting classes.
     const conflictingClasses: string[] = []
 
-    classesToAdd.forEach((className) => {
+    potentialClassesToAdd.forEach((className) => {
       const classRegex = new RegExp(`(${className}\\s*{[^}]*})`, 's')
       const rwuiClassMatch = rwuiLayerContentToAdd.match(classRegex)
       const projectClassMatch = projectLayerContent.match(classRegex)
@@ -100,19 +105,19 @@ const addLayerToIndexCSS = (
         projectIndexCSS,
       )
       task.output = c.success(
-        `Added the following new classes to your project's ${layerName} layer in index.css:\n` +
+        `Added the following missing classes to your project's ${layerName} layer in index.css:\n` +
           `${classesToAdd.join(', ')}`,
       )
       if (conflictingClasses.length > 0) {
         task.output += c.warning(
-          `Some classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
+          `\nSome classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
             `${conflictingClasses.join(', ')}`,
         )
       }
     } else {
       // If there are no classes to add, but there are conflicting classes, throw an error.
       throw new Error(
-        `Added no new classes to your project's ${layerName} layer, because they all conflicted with your existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
+        `Added no classes to your project's ${layerName} layer, because they all conflicted with your existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
           `${conflictingClasses.join(', ')}`,
       )
     }
