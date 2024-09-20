@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { mockLogger } from '../../core/__tests__/mocks.js'
-import { buildNumWorkers, startWorkers } from '../rw-jobs.js'
+import { buildNumWorkers, clearQueue, startWorkers } from '../rw-jobs.js'
 
 vi.mock('@redwoodjs/cli-helpers/loadEnvFiles', () => {
   return {
@@ -120,6 +120,27 @@ describe('startWorkers()', () => {
       expect.stringContaining('rw-jobs-worker.js'),
       ['--index', '0', '--id', '1'],
       expect.any(Object),
+    )
+  })
+})
+
+describe('clearQueue()', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+  })
+
+  it('forks a single worker', () => {
+    const mockWorker = {
+      on: () => {},
+    }
+    mocks.fork.mockImplementation(() => mockWorker)
+
+    clearQueue({ logger: mockLogger })
+
+    // single worker only
+    expect(mocks.fork).toHaveBeenCalledWith(
+      expect.stringContaining('rw-jobs-worker.js'),
+      ['--clear', '--index', '0', '--id', '0'],
     )
   })
 })

@@ -1,5 +1,15 @@
 # Uploads & Storage
 
+:::warning Experimental
+
+The storage and upload functionality is currently experimental.
+
+While we believe this feature will be included in the framework the interface is currently subject to significant change. Breaking changes will be made in minor and patch releases until the feature is released as stable after which normal SemVer rules will apply.
+
+We'd love to hear any feedback you might have on our [community forum](https://community.redwoodjs.com/).
+
+:::
+
 Getting started with file uploads can open up a world of possibilities for your application. Whether you're enhancing user profiles with custom avatars, allowing document sharing, or enabling image galleries - Redwood has an integrated way of uploading files and storing them.
 
 There are two parts to this:
@@ -33,9 +43,8 @@ You're now ready to receive files!
 
 ### 2. Configuring the UI
 
-Let's setup a basic form to add avatar images to your profile.
-
-Assuming you've built a [Form](forms.md) for profile
+Assuming you've built a [Form](forms.md) for your profile let's add a
+`FileField` to it.
 
 ```tsx title="web/src/components/ProfileForm.tsx"
 // highlight-next-line
@@ -44,18 +53,18 @@ import { FileField, TextField, FieldError } from '@redwoodjs/forms'
 export const ProfileForm = ({ onSubmit }) => {
   return {
     <Form onSubmit={onSubmit}>
-      <div>
-        <Label name="firstName" /*...*/ >
-          First name
-        </Label>
-        <TextField name="firstName" /*...*/ />
-        <FieldError name="firstName"  />
-        <Label name="lastName" /*...*/ >
-          Last name
-        </Label>
-        <TextField name="lastName" /*...*/ />
-        <FieldError name="lastName"  />
-      </div>
+      <Label name="firstName" /*...*/ >
+        First name
+      </Label>
+      <TextField name="firstName" /*...*/ />
+      <FieldError name="firstName"  />
+
+      <Label name="lastName" /*...*/ >
+        Last name
+      </Label>
+      <TextField name="lastName" /*...*/ />
+      <FieldError name="lastName"  />
+
       // highlight-next-line
       <FileField name="avatar" /*...*/ />
     </Form>
@@ -71,13 +80,13 @@ Now we need to send the file as a mutation!
 import { useMutation } from '@redwoodjs/web'
 
 const UPDATE_PROFILE_MUTATION = gql`
-  // This is the Input type we setup with File earlier! 
-  //  highlight-next-line
+  // This is the Input type we setup with File earlier!
+  // highlight-next-line
   mutation UpdateProfileMutation($input: UpdateProfileInput!) {
     updateProfile(input: $input) {
       firstName
       lastName
-  // highlight-next-line
+      // highlight-next-line
       avatar
     }
   }
@@ -96,8 +105,10 @@ const EditProfile = ({ profile }) => {
 
     const input = {
       ...formData,
+      // FileField returns an array, we want the first and only file; Multi-file
+      // uploads are available
       // highlight-next-line
-      avatar: formData.avatar?.[0], // FileField returns an array, we want the first and only file; Multi-file uploads are available
+      avatar: formData.avatar?.[0],
     }
 
     updateProfile({ variables: { input } })
@@ -120,7 +131,7 @@ While [multi-file uploads are possible](#saving-file-lists---savefilesinlist), w
 
 Try uploading your avatar photo now, and if you log the `avatar` field in your service:
 
-```ts title="api/src/services/profile.ts"
+```ts title="api/src/services/profiles/profiles.ts"
 export const updateProfile = async ({ id, input }) => {
   // highlight-next-line
   console.log(input.avatar)
@@ -156,7 +167,7 @@ On the backend, GraphQL Yoga is pre-configured to handle multipart form requests
 
 ## Storage
 
-Great, now you can receive Files from GraphQL - but how do you go about saving them, and tracking them, in your database? Well, Redwood has the answers for you! Keep going to find out how!
+Great, now you can receive Files from GraphQL - but how do you go about saving them to disk, while also tracking them in your database? Well, Redwood has the answers for you! Keep going to find out how!
 
 ### 1. Configuring the Prisma schema
 
@@ -171,7 +182,7 @@ model Profile {
 }
 ```
 
-This is because Prisma doesn't have a native File type. Instead, we store the file path or URL as a string in the database. The actual file processing and storage will be handled in your service layer, and pass the path to Prisma to save.
+This is because Prisma doesn't have a native File type. Instead, we store the file path or URL as a string in the database. The actual file processing and storage will be handled in your service layer, and then the path to the uploaded file is passed to Prisma to save.
 
 ### 2. Configuring the Upload savers and Uploads extension
 
@@ -191,9 +202,9 @@ yarn rw setup uploads
 
 This will do three things:
 
-1. Generate a configuration file in `api/src/lib/uploads.{ts,js}`
+1. Generate a configuration file in `api/src/lib/uploads.{js,ts}`
 2. Configure your Prisma client with the storage extension
-3. Generate a signedUrl function
+3. Generate a `signedUrl` function
 
 Let's break down the key components of the configuration.
 
@@ -231,7 +242,7 @@ export { saveFiles, storagePrismaExtension }
 ```
 
 **1. Upload Configuration**
-This is where you configure the fields that will receive uploads. In our case, it's the profile.avatar field.
+This is where you configure the fields that will receive uploads. In our case, it's the `profile.avatar` field.
 
 The shape of the config looks like this:
 
@@ -259,11 +270,11 @@ We provide utility functions that can be exported from this file to be used else
 saveFiles.forProfile(gqlInput)
 ```
 
-- `storagePrismaExtension` - The Prisma client extension we'll use in `api/src/lib/db.ts` to automatically handle updates, deletion of uploaded files (including when the Prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
+- `storagePrismaExtension` - The Prisma client extension we'll use in `api/src/lib/db.{js,ts}` to automatically handle updates, deletion of uploaded files (including when the Prisma operation fails). It also configures [Result extensions](https://www.prisma.io/docs/orm/prisma-client/client-extensions/result), to give you utilities like `profile.withSignedUrl()`.
 
 ### 3. Attaching the Uploads extension
 
-Now we need to extend our db client in `api/src/lib/db.ts` to use the configured prisma client.
+Now we need to extend our db client in `api/src/lib/db.{js,ts}` to use the configured prisma client.
 
 ```ts title="api/src/lib/db.ts"
 import { PrismaClient } from '@prisma/client'
@@ -274,8 +285,8 @@ import { logger } from './logger'
 // highlight-next-line
 import { storagePrismaExtension } from './uploads'
 
-// 👇 Notice here we create prisma client, and don't export it yet
-export const prismaClient = new PrismaClient({
+// 👇 Notice here we create prisma client, but don't export it yet
+const prismaClient = new PrismaClient({
   log: emitLogLevels(['info', 'warn', 'error']),
 })
 
@@ -299,10 +310,11 @@ More details on these extensions can be found [here](#storage-prisma-extension).
 
 <details>
 <summary>
-__Why Export This Way__ 
+__Why Export This Way__
 </summary>
 
-The `$extends` method returns a new instance of the Prisma client with the extensions applied. By exporting this new instance as db, you ensure that any additional functionality provided by the uploads extension is available throughout your application, without needing to change where you import. Note one of the [limitations](https://www.prisma.io/docs/orm/prisma-client/client-extensions#limitations) of using extensions is you have to use `$on` on your prisma client (as we do in handlePrismaLogging), it needs to happen before you use `$extends`
+The `$extends` method returns a new instance of the Prisma client with the extensions applied. By exporting this new instance as `db`, you ensure that any additional functionality provided by the uploads extension is available throughout your application, without needing to change where you import.
+Note one of the [limitations](https://www.prisma.io/docs/orm/prisma-client/client-extensions#limitations) of using extensions is if you have to use `$on` on your prisma client (as we do in handlePrismaLogging), it needs to happen before you use `$extends`
 
 </details>
 
@@ -361,7 +373,7 @@ You might have already noticed that the saver functions sort-of tie your GraphQL
 
 In essence, these utility functions expect to take an object very similar to the Prisma data argument (the data you're passing to your `create`, `update`), but with File objects at fields `avatar`, and `document` instead of strings.
 
-If your `File` is in a different key (or a key did you did not configure in the upload config), it will be ignored and left as-is.
+If your `File` is in a different key (or a key you did not configure in the upload config), it will be ignored and left as-is.
 
 :::
 
@@ -575,7 +587,7 @@ The extension is determined by the name of the uploaded file.
 
 When you setup uploads, we also generate an API function (an endpoint) for you - by default at `/signedUrl`. You can use this in conjunction with the `.withSignedUrl` helper. For example:
 
-```ts title="api/src/services/profiles.ts"
+```ts title="api/src/services/profiles/profiles.ts"
 import { EXPIRES_IN } from '@redwoodjs/storage/UrlSigner'
 
 export const profile = async ({ id }) => {
@@ -770,16 +782,22 @@ main()
 
 Based on the above, you'll be able to access your files at:
 
-```
-http://localhost:8910/.redwood/functions/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg
+`http://localhost:8910/.redwood/functions/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg`
 
 OR directly
 
-http://localhost:8911/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg
-
-```
+`http://localhost:8911/public_uploads/01J6AF89Y89WTWZF12DRC72Q2A.jpeg`
 
 Where you are only exposing **part** of your uploads directory publicly
+
+In your web side code you can construct the URL like this:
+
+```ts
+const publicUrl = `${global.RWJS_API_URL}/${profile.avatar.replace(
+  'uploads/public_profile_photos/',
+  'public_uploads/'
+)}`
+```
 
 ### Customizing the body limit for requests
 

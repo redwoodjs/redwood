@@ -689,6 +689,43 @@ api | - deletePost Mutation
 
 To fix these errors, simple declare with `@requireAuth` to enforce authentication or `@skipAuth` to keep the operation public on each as appropriate for your app's permissions needs.
 
+## Default Scalars
+
+Redwood includes a selection of scalar types by default.
+
+Currently we allow you to control whether or not the `File` scalar is included automatically or not. By default we include the `File` scalar which maps to the standard `File` type. To disable this scalar you should add config to two places:
+
+1. In your `redwood.toml` file like so:
+
+   ```toml
+   [graphql]
+     includeScalars.File = false
+   ```
+
+2. In your `functions/graphql.ts` like so:
+
+   ```typescript
+   export const handler = createGraphQLHandler({
+     authDecoder,
+     getCurrentUser,
+     loggerConfig: { logger, options: {} },
+     directives,
+     sdls,
+     services,
+     onException: () => {
+       // Disconnect from your database with an unhandled exception.
+       db.$disconnect()
+     },
+     // highlight-start
+     includeScalars: {
+       File: false,
+     },
+     // highlight-end
+   })
+   ```
+
+With those two config values added your schema will no longer contain the `File` scalar by default and you are free to add your own or continue without one.
+
 ## Custom Scalars
 
 GraphQL scalar types give data meaning and validate that their values makes sense. Out of the box, GraphQL comes with `Int`, `Float`, `String`, `Boolean` and `ID`. While those can cover a wide variety of use cases, you may need more specific scalar types to better describe and validate your application's data.

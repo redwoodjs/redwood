@@ -158,7 +158,7 @@
   },
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@babel/cli": "7.24.8",
     "@babel/core": "^7.22.20",
     "@babel/plugin-transform-runtime": "7.24.7",
@@ -174,16 +174,16 @@
     "concurrently": "8.2.2",
     "nodemon": "3.1.4",
     "publint": "0.2.10",
-    "react": "19.0.0-rc-8269d55d-20240802",
-    "react-dom": "19.0.0-rc-8269d55d-20240802",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916",
     "tstyche": "2.1.1",
-    "tsx": "4.19.0",
+    "tsx": "4.19.1",
     "typescript": "5.6.2",
     "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "react": "19.0.0-rc-8269d55d-20240802",
-    "react-dom": "19.0.0-rc-8269d55d-20240802"
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

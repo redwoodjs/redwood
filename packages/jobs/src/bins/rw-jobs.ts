@@ -13,10 +13,9 @@ import { setTimeout } from 'node:timers'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
-
 import { DEFAULT_LOGGER, PROCESS_TITLE_PREFIX } from '../consts.js'
 import { loadJobsManager } from '../loaders.js'
+import { setupEnv } from '../setupEnv.js'
 import type {
   Adapters,
   BasicLogger,
@@ -26,9 +25,11 @@ import type {
 
 export type NumWorkersConfig = [number, number][]
 
-loadEnvFiles()
+setupEnv()
 
 process.title = 'rw-jobs'
+
+const WORKER_PATH = path.join(__dirname, 'rw-jobs-worker.js')
 
 const parseArgs = (argv: string[]) => {
   const commandString = hideBin(argv)
@@ -126,7 +127,7 @@ export const startWorkers = ({
     }
 
     // fork the worker process
-    const worker = fork(path.join(__dirname, 'rw-jobs-worker.js'), workerArgs, {
+    const worker = fork(WORKER_PATH, workerArgs, {
       detached: detach,
       stdio: detach ? 'ignore' : 'inherit',
       env: process.env,
@@ -144,7 +145,7 @@ export const startWorkers = ({
 }
 
 // TODO add support for stopping with SIGTERM or SIGKILL?
-const stopWorkers = async ({
+export const stopWorkers = async ({
   numWorkers,
   signal = 'SIGINT',
   logger,
@@ -175,9 +176,9 @@ const stopWorkers = async ({
   }
 }
 
-const clearQueue = ({ logger }: { logger: BasicLogger }) => {
+export const clearQueue = ({ logger }: { logger: BasicLogger }) => {
   logger.warn(`Starting worker to clear job queue...`)
-  fork(path.join(__dirname, 'rw-jobs-worker.js'), ['--clear'])
+  fork(WORKER_PATH, ['--clear', '--index', '0', '--id', '0'])
 }
 
 const signalSetup = ({

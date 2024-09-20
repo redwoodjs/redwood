@@ -1,13 +1,18 @@
+import type { SpawnSyncOptions } from 'node:child_process'
+
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
+import process from 'node:process'
 
 import type { Config } from './config.js'
 
 import { ExitCodeError } from './error.js'
+import { getCrwrscaVersion } from './version.js'
 
 export function shouldRelaunch(config: Config) {
   if (config.verbose) {
     console.log('shouldRelaunch process.argv', process.argv)
+    console.log('shouldRelaunch crwrsca version', getCrwrscaVersion())
   }
 
   if (process.argv.includes('--no-check-latest')) {
@@ -86,13 +91,16 @@ export function relaunchOnLatest(config: Config) {
     }
   }
 
-  const spawnOpts = {
+  const spawnOpts: SpawnSyncOptions = {
     stdio: 'inherit',
+    // On Windows, `npx` isn't an executable, so we need to run it in a shell
+    shell: process.platform === 'win32',
     env: {
       ...process.env,
+      // Install without asking for confirmation
       npm_config_yes: 'true',
     },
-  } as const
+  }
 
   let result: ReturnType<typeof spawnSync>
 

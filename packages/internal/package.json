@@ -115,13 +115,13 @@
     "typescript": "5.6.2"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
     "concurrently": "8.2.2",
     "graphql-tag": "2.12.6",
     "publint": "0.2.10",
-    "tsx": "4.19.0",
+    "tsx": "4.19.1",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

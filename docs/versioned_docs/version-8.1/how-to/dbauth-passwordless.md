@@ -226,7 +226,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 const GENERATE_LOGIN_TOKEN = gql`
   mutation generateLoginToken($email: String!) {
@@ -259,7 +259,7 @@ const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
 
   return (
     <>
-      <MetaTags title="Login" />
+      <Metadata title="Login" />
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
@@ -339,7 +339,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -366,7 +366,7 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
 
   return (
     <>
-      <MetaTags title="Login" />
+      <Metadata title="Login" />
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
@@ -460,7 +460,7 @@ yarn rw g page LoginPasswordless
 import { useEffect, useState } from 'react'
 
 import { useLocation } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 import LoginPasswordlessForm from 'src/components/LoginPasswordlessForm/LoginPasswordlessForm'
 import LoginPasswordlessTokenForm from 'src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm'
@@ -488,7 +488,7 @@ const LoginPasswordlessPage = () => {
 
   return (
     <>
-      <MetaTags
+      <Metadata
         title="LoginPasswordless"
         description="LoginPasswordless page"
       />
@@ -530,7 +530,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -577,7 +577,7 @@ const SignupPage = () => {
 
   return (
     <>
-      <MetaTags title="Signup" />
+      <Metadata title="Signup" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />

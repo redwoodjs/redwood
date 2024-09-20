@@ -81,6 +81,9 @@ describe('getConfig', () => {
         },
         "graphql": {
           "fragments": false,
+          "includeScalars": {
+            "File": true,
+          },
           "trustedDocuments": false,
         },
         "notifications": {
