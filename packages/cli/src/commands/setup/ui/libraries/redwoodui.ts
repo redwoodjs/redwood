@@ -60,8 +60,8 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
   const tasks = new Listr(
     [
       {
-        options: { persistentOutput: true, bottomBar: Infinity },
-        title: 'Setting up TailwindCSS...',
+        options: { persistentOutput: true },
+        title: 'Setting up TailwindCSS',
         // first, check that Tailwind has been setup.
         // there's already a setup command for this,
         // so if it's not setup, we can just run that command.
@@ -76,7 +76,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             fs.existsSync(projectTailwindConfigPath) &&
             fs.existsSync(projectIndexCSSPath)
           ) {
-            return 'TailwindCSS is already set up.'
+            return 'TailwindCSS is already set up'
           } else {
             return false
           }
@@ -243,6 +243,69 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           )
         },
       },
+      {
+        options: { persistentOutput: true },
+        title: 'Add path alias to web/tsconfig.json',
+        skip: async () => {
+          // if force is true, never skip
+          if (force) {
+            return false
+          }
+          // TODO check if the path alias is already in the tsconfig.json file
+          return false
+        },
+        task: async () => {
+          // TODO add "ui/*": ["src/ui/*"] to the end of the paths object in the tsconfig.json file
+          throw new Error(
+            'Add path alias to web/tsconfig.json — Not implemented',
+          )
+        },
+      },
+      {
+        options: { persistentOutput: true },
+        title: 'Install all necessary packages',
+        skip: async () => {
+          // if force is true, never skip
+          if (force) {
+            return false
+          }
+          // TODO we can check ourselves if the packages are installed and skip if they are,
+          // but because Yarn does this for us, it's low priority
+          return false
+        },
+        task: async () => {
+          // TODO get all packages from web/package.json (filtering out a TBA hardcoded list of packages)
+          // that aren't component dependencies, and install them
+          // We can hardcode the list of packages to filter out, because we know what they are, because we own RWUI.
+          // This list will include, eg, dependencies of RWJS, TailwindCSS, Storybook, etc.
+          throw new Error('Install all necessary packages — Not implemented')
+        },
+      },
+      {
+        options: { persistentOutput: true },
+        title: 'Add utility functions used by RedwoodUI',
+        task: async () => {
+          // TODO add web/src/lib/{utils.ts + types.d.ts} to the project
+          // Need to figure out how to best handle situations where the files already exist.
+          throw new Error(
+            'Add utility functions used by RedwoodUI — Not implemented',
+          )
+        },
+      },
+      {
+        options: { persistentOutput: true },
+        title: 'Add RedwoodUI components to your project',
+        task: async () => {
+          // TODO ahhhh finally the meat and potatoes of the setup.
+          // We need to add the components to the project.
+          // We can first get a list of all the files in RWUI's web/src/ui directory,
+          // and then filter out the ones that are already in the project.
+          // Then, we can provide a list of pending files to the user, and ask them if they want to add them. (maybe? meh)
+          throw new Error(
+            'Add RedwoodUI components to your project — Not implemented',
+          )
+        },
+      },
     ],
     { rendererOptions: { collapseSubtasks: false }, exitOnError: false },
   )
@@ -256,6 +319,12 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
   }
 }
 
+/**
+ * Fetches a file from the RedwoodUI repo.
+ * Uses the GitHub REST API to fetch the file, rather than Octokit,
+ * because Octokit both adds a bunch of overhead
+ * and was causing ESM/CJS related build issues that I didn't want to deal with :)
+ */
 const fetchFromRWUIRepo = async (path: string) => {
   const owner = 'arimendelow'
   const repo = 'RedwoodUI'
@@ -320,6 +389,9 @@ interface ImportantCSSLayers {
   components: string | null
 }
 
+/**
+ * Extracts the necessary data from a CSS file.
+ */
 const extractCSSLayers = (cssContent: string): ImportantCSSLayers => {
   const base = extractLayerContent(cssContent, 'base')
   const components = extractLayerContent(cssContent, 'components')
@@ -329,6 +401,9 @@ const extractCSSLayers = (cssContent: string): ImportantCSSLayers => {
   }
 }
 
+/**
+ * Extracts the content of a specific layer from a CSS file.
+ */
 function extractLayerContent(css: string, layerName: string): string | null {
   const layerRegex = new RegExp(`@layer ${layerName}\\s*{`, 'g')
   const match = layerRegex.exec(css)
