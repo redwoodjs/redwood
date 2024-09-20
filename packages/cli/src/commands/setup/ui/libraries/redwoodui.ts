@@ -11,9 +11,9 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../../../../lib/colors'
 
-import addBaseLayerToIndexCSS from './redwoodui-utils/addBaseLayerToIndexCSS'
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
+import addLayerToIndexCSS from './redwoodui-utils/addLayerToIndexCSS'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
@@ -203,8 +203,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
                 options: { persistentOutput: true },
                 title: 'Add base layer',
                 task: async (_ctx, task) => {
-                  newIndexCSSContent = addBaseLayerToIndexCSS(
+                  newIndexCSSContent = addLayerToIndexCSS(
                     task,
+                    'base',
                     // we can safely cast to string because we know it's not null — if it is, something went wrong
                     rwuiCSSLayers.base as string,
                     projectCSSLayers.base,
@@ -216,13 +217,13 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
                 options: { persistentOutput: true },
                 title: 'Add components layer',
                 task: async (_ctx, task) => {
-                  console.log(
-                    'rwuiCSSLayers.components',
-                    rwuiCSSLayers.components,
-                  )
-                  console.log(
-                    'projectCSSLayers.components',
+                  newIndexCSSContent = addLayerToIndexCSS(
+                    task,
+                    'components',
+                    // we can safely cast to string because we know it's not null — if it is, something went wrong
+                    rwuiCSSLayers.components as string,
                     projectCSSLayers.components,
+                    newIndexCSSContent,
                   )
                 },
               },

@@ -2,60 +2,67 @@ import type { ListrTaskWrapper } from 'listr2'
 
 import c from '../../../../../lib/colors'
 
-const addBaseLayerToIndexCSS = (
+const addLayerToIndexCSS = (
   task: ListrTaskWrapper<any, any>,
-  rwuiBaseLayer: string,
-  projectBaseLayer: string | null,
+  layerName: 'base' | 'components',
+  rwuiLayerContentToAdd: string,
+  projectLayerContent: string | null,
   projectIndexCSS: string,
 ): string => {
   let newCSSContent = projectIndexCSS
-  if (!projectBaseLayer) {
-    // If the project doesn't have a base layer, check if there's an empty one or none at all.
+  if (!projectLayerContent) {
+    // If the project doesn't have the layer, check if there's an empty one or none at all.
     // Doesn't include if commented out.
-    const hasEmptyBaseLayer = projectIndexCSS
+    const hasEmptyLayer = projectIndexCSS
       .split('\n')
       .some(
         (line) =>
-          line.includes('@layer base {') &&
+          line.includes(`@layer ${layerName} {`) &&
           !line.trim().startsWith('//') &&
           !line.trim().startsWith('*'),
       )
 
-    // If there's an empty base layer, replace it with the RWUI base layer.
-    if (hasEmptyBaseLayer) {
+    // If there's an empty layer, replace it with the RWUI layer.
+    if (hasEmptyLayer) {
       newCSSContent = projectIndexCSS.replace(
-        /@layer base {[^}]*}/s,
-        `@layer base {\n  ${rwuiBaseLayer}\n}`,
+        new RegExp(`@layer ${layerName} {[^}]*}`, 's'),
+        `@layer ${layerName} {\n  ${rwuiLayerContentToAdd}\n}`,
       )
       task.output = c.success(
-        "Added RedwoodUI's base layer to your project's index.css.",
+        `Added RedwoodUI's ${layerName} layer to your project's index.css.`,
       )
     } else {
       // If there's no base layer, add the RWUI base layer to the end of the file.
-      newCSSContent = projectIndexCSS + `\n@layer base {\n  ${rwuiBaseLayer}}`
+      newCSSContent =
+        projectIndexCSS + `\n@layer ${layerName} {\n  ${rwuiLayerContentToAdd}}`
       task.output = c.success(
-        "Added RedwoodUI's base layer to your project's index.css.",
+        `Added RedwoodUI's ${layerName} layer to your project's index.css.`,
       )
     }
   } else {
-    // If the project does have a base layer, check whether its classes have the same name as those of the RWUI base layer.
-    // Here, in the base layer, these are HTML tags, not classes. Therefore, they won't start with a dot.
+    // If the project does have the layer, check whether its classes have the same name as those of the RWUI layer.
+    // Note that in the base layer, these are HTML tags, not classes. Therefore, they won't start with a dot.
+    // In the components layer, they will start with a dot.
+    const classPattern =
+      layerName === 'base'
+        ? /[a-zA-Z0-9_-]+(?=\s*\{)/g
+        : /\.[a-zA-Z0-9_-]+(?=\s*\{)/g
     const classesToAdd: string[] =
-      rwuiBaseLayer.match(/[a-zA-Z0-9_-]+(?=\s*\{)/g) || []
+      rwuiLayerContentToAdd.match(classPattern) || []
 
-    // For each class that we want to add, check if it already exists in the project's base layer.
-    // If it does, check if it's the same as the RWUI base layer class.
+    // For each class that we want to add, check if it already exists in the project's layer.
+    // If it does, check if it's the same as the RWUI layer class.
     // If it is, remove it from the list of classes to add.
     // If it's not, add it to a list of conflicting classes.
     const conflictingClasses: string[] = []
 
     classesToAdd.forEach((className) => {
       const classRegex = new RegExp(`(${className}\\s*{[^}]*})`, 's')
-      const rwuiClassMatch = rwuiBaseLayer.match(classRegex)
-      const projectClassMatch = projectBaseLayer.match(classRegex)
+      const rwuiClassMatch = rwuiLayerContentToAdd.match(classRegex)
+      const projectClassMatch = projectLayerContent.match(classRegex)
 
       if (projectClassMatch) {
-        // If the class exists in the project's base layer, check if it's the same as the RWUI base layer class.
+        // If the class exists in the project's layer, check if it's the same as the RWUI layer class.
         // TODO: This is a naive check. It doesn't account for whitespace or ordering differences.
         if (rwuiClassMatch && rwuiClassMatch[0] === projectClassMatch[0]) {
           // If it is the same, just remove it from the list of classes to add.
@@ -71,7 +78,7 @@ const addBaseLayerToIndexCSS = (
     // Now, if there's no conflicting classes or classes to add, we don't need to do anything more.
     if (conflictingClasses.length === 0 && classesToAdd.length === 0) {
       task.output = c.info(
-        "Your project's base layer already has the correct classes.",
+        `Your project's ${layerName} layer already has the correct classes.`,
       )
       return projectIndexCSS
     } else if (classesToAdd.length > 0) {
@@ -81,28 +88,28 @@ const addBaseLayerToIndexCSS = (
       const classesToAddString = classesToAdd
         .map((className) => {
           const classRegex = new RegExp(`(${className}\\s*{[^}]*})`, 's')
-          const rwuiClassMatch = rwuiBaseLayer.match(classRegex)
+          const rwuiClassMatch = rwuiLayerContentToAdd.match(classRegex)
           return rwuiClassMatch ? rwuiClassMatch[0] : ''
         })
         .join('\n  ')
 
       newCSSContent = addToEndOfLayer(
-        'base',
+        layerName,
         classesToAddString,
         projectIndexCSS,
       )
       task.output = c.success(
-        "Added the following new classes to your project's base layer in index.css:\n" +
+        `Added the following new classes to your project's ${layerName} layer in index.css:\n` +
           `${classesToAdd.join(', ')}`,
       )
       task.output += c.warning(
-        "Some classes in RedwoodUI's base layer were not added to your project's base layer because they conflict with existing classes.\nPlease review the following classes in the base layer of your index.css:\n" +
+        `Some classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
           `${conflictingClasses.join(', ')}`,
       )
     } else {
       // If there are no classes to add, but there are conflicting classes, throw an error.
       throw new Error(
-        "Added no new classes to your project's base layer, because they all conflicted with your existing classes.\nPlease review the following classes in the base layer of your index.css:\n" +
+        `Added no new classes to your project's ${layerName} layer, because they all conflicted with your existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
           `${conflictingClasses.join(', ')}`,
       )
     }
@@ -111,7 +118,7 @@ const addBaseLayerToIndexCSS = (
   return newCSSContent
 }
 
-export default addBaseLayerToIndexCSS
+export default addLayerToIndexCSS
 
 const addToEndOfLayer = (
   layerName: string,
