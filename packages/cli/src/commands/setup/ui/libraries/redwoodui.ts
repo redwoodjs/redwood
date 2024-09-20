@@ -11,6 +11,7 @@ import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import c from '../../../../lib/colors'
 
+import addBaseLayerToIndexCSS from './redwoodui-utils/addBaseLayerToIndexCSS'
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
@@ -180,18 +181,67 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           )
         },
       },
-      // {
-      //   title: "Adding RedwoodUI's CSS rules to index.css",
-      //   task: async () => {
-      //     const rwuiIndexCSSContent = await fetchFromRWUIRepo('web/src/index.css')
-      //     const projectIndexCSSContent = fs.readFileSync(
-      //       projectIndexCSSPath,
-      //       'utf-8',
-      //     )
-      //     console.log('rwui index css content', rwuiIndexCSSContent)
-      //     console.log('project index css content', projectIndexCSSContent)
-      //   },
-      // },
+      {
+        title: "Adding RedwoodUI's classes to your project's index.css",
+        task: async (_ctx, task) => {
+          const rwuiIndexCSSContent =
+            await fetchFromRWUIRepo('web/src/index.css')
+
+          const projectIndexCSSContent = fs.readFileSync(
+            projectIndexCSSPath,
+            'utf-8',
+          )
+
+          const rwuiCSSLayers = extractCSSLayers(rwuiIndexCSSContent)
+          const projectCSSLayers = extractCSSLayers(projectIndexCSSContent)
+
+          let newIndexCSSContent = projectIndexCSSContent
+
+          return task.newListr(
+            [
+              {
+                options: { persistentOutput: true },
+                title: 'Add base layer',
+                task: async (_ctx, task) => {
+                  newIndexCSSContent = addBaseLayerToIndexCSS(
+                    task,
+                    // we can safely cast to string because we know it's not null — if it is, something went wrong
+                    rwuiCSSLayers.base as string,
+                    projectCSSLayers.base,
+                    newIndexCSSContent,
+                  )
+                },
+              },
+              {
+                options: { persistentOutput: true },
+                title: 'Add components layer',
+                task: async (_ctx, task) => {
+                  console.log(
+                    'rwuiCSSLayers.components',
+                    rwuiCSSLayers.components,
+                  )
+                  console.log(
+                    'projectCSSLayers.components',
+                    projectCSSLayers.components,
+                  )
+                },
+              },
+              {
+                options: { persistentOutput: true },
+                title: 'Write out new index.css',
+                task: async () => {
+                  // After all transformations, write the new config to the file
+                  fs.writeFileSync(projectIndexCSSPath, newIndexCSSContent)
+                },
+              },
+            ],
+            {
+              rendererOptions: { collapseSubtasks: false },
+              exitOnError: false,
+            },
+          )
+        },
+      },
     ],
     { rendererOptions: { collapseSubtasks: false }, exitOnError: false },
   )
@@ -262,4 +312,43 @@ const extractTailwindConfigData = (
     colorsConfig,
     pluginsConfig,
   }
+}
+
+interface ImportantCSSLayers {
+  base: string | null
+  components: string | null
+}
+
+const extractCSSLayers = (cssContent: string): ImportantCSSLayers => {
+  const base = extractLayerContent(cssContent, 'base')
+  const components = extractLayerContent(cssContent, 'components')
+  return {
+    base,
+    components,
+  }
+}
+
+function extractLayerContent(css: string, layerName: string): string | null {
+  const layerRegex = new RegExp(`@layer ${layerName}\\s*{`, 'g')
+  const match = layerRegex.exec(css)
+  if (!match) {
+    return null
+  }
+
+  const startIndex = match.index + match[0].length
+  let braceCount = 1
+  let endIndex = startIndex
+
+  while (braceCount > 0 && endIndex < css.length) {
+    if (css[endIndex] === '{') {
+      braceCount++
+    }
+    if (css[endIndex] === '}') {
+      braceCount--
+    }
+    endIndex++
+  }
+
+  const content = css.slice(startIndex, endIndex - 1).trim()
+  return content
 }
