@@ -34,7 +34,8 @@ const addLayerToIndexCSS = (
     } else {
       // If there's no base layer, add the RWUI base layer to the end of the file.
       newCSSContent =
-        projectIndexCSS + `\n@layer ${layerName} {\n  ${rwuiLayerContentToAdd}}`
+        projectIndexCSS +
+        `\n@layer ${layerName} {\n  ${rwuiLayerContentToAdd}\n}`
       task.output = c.success(
         `Added RedwoodUI's ${layerName} layer to your project's index.css.`,
       )
@@ -102,10 +103,12 @@ const addLayerToIndexCSS = (
         `Added the following new classes to your project's ${layerName} layer in index.css:\n` +
           `${classesToAdd.join(', ')}`,
       )
-      task.output += c.warning(
-        `Some classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
-          `${conflictingClasses.join(', ')}`,
-      )
+      if (conflictingClasses.length > 0) {
+        task.output += c.warning(
+          `Some classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
+            `${conflictingClasses.join(', ')}`,
+        )
+      }
     } else {
       // If there are no classes to add, but there are conflicting classes, throw an error.
       throw new Error(
