@@ -112,7 +112,7 @@ const addPluginsConfigToProjectTailwindConfig = async (
         pluginsToInstall.push(plugin)
       })
     } else {
-      task.output += c.success(
+      task.output += c.info(
         `\nYour project's TailwindCSS configuration already includes all the required plugins.`,
       )
     }

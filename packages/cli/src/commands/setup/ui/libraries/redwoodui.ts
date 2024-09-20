@@ -14,6 +14,9 @@ import c from '../../../../lib/colors'
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
 import addLayerToIndexCSS from './redwoodui-utils/addLayerToIndexCSS'
+import addPathAliasToTSConfig, {
+  hasPathAliasInTSConfig,
+} from './redwoodui-utils/addPathAliasToTSConfig'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 interface RedwoodUIYargsOptions {
@@ -56,6 +59,8 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
     'tailwind.config.js',
   )
   const projectIndexCSSPath = path.join(rwPaths.web.src, 'index.css')
+
+  const projectWebTSConfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
 
   const tasks = new Listr(
     [
@@ -251,14 +256,39 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           if (force) {
             return false
           }
-          // TODO check if the path alias is already in the tsconfig.json file
-          return false
+
+          const projectTSConfigContent = fs.readFileSync(
+            projectWebTSConfigPath,
+            'utf-8',
+          )
+          if (
+            hasPathAliasInTSConfig(
+              { 'ui/*': ['./src/ui/*'] },
+              projectTSConfigContent,
+            )
+          ) {
+            return 'Path alias already exists in tsconfig.json'
+          } else {
+            return false
+          }
         },
         task: async () => {
           // TODO add "ui/*": ["src/ui/*"] to the end of the paths object in the tsconfig.json file
-          throw new Error(
-            'Add path alias to web/tsconfig.json — Not implemented',
+          // throw new Error(
+          //   'Add path alias to web/tsconfig.json — Not implemented',
+          // )
+          const projectTSConfigContent = fs.readFileSync(
+            projectWebTSConfigPath,
+            'utf-8',
           )
+          console.log(projectTSConfigContent)
+          const newTSConfigContent = addPathAliasToTSConfig(
+            { 'ui/*': ['./src/ui/*'] },
+            projectTSConfigContent,
+          )
+
+          // After all transformations, write the new config to the file
+          fs.writeFileSync(projectWebTSConfigPath, newTSConfigContent)
         },
       },
       {
