@@ -263,7 +263,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           )
           if (
             hasPathAliasInTSConfig(
-              { 'ui/*': ['./src/ui/*'] },
+              { 'ui/*': ['src/ui/*'] },
               projectTSConfigContent,
             )
           ) {
@@ -272,18 +272,14 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             return false
           }
         },
-        task: async () => {
-          // TODO add "ui/*": ["src/ui/*"] to the end of the paths object in the tsconfig.json file
-          // throw new Error(
-          //   'Add path alias to web/tsconfig.json — Not implemented',
-          // )
+        task: async (_ctx, task) => {
           const projectTSConfigContent = fs.readFileSync(
             projectWebTSConfigPath,
             'utf-8',
           )
-          console.log(projectTSConfigContent)
           const newTSConfigContent = addPathAliasToTSConfig(
-            { 'ui/*': ['./src/ui/*'] },
+            task,
+            { 'ui/*': ['src/ui/*'] },
             projectTSConfigContent,
           )
 
@@ -337,7 +333,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         },
       },
     ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: false },
+    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }, // exitOnError true for top-level tasks
   )
 
   try {
