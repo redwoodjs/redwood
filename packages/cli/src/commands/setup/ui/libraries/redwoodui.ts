@@ -375,10 +375,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         title: 'Add utility functions used by RedwoodUI',
         task: async () => {
           // TODO add web/src/lib/{utils.ts + types.d.ts} to the project
-          // Need to figure out how to best handle situations where the files already exist.
-          throw new Error(
-            'Add utility functions used by RedwoodUI — Not implemented',
-          )
+          // If the files already exist, check each export name to see if it matches
         },
       },
       {
@@ -397,7 +394,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       },
       {
         options: { persistentOutput: true },
-        title: 'Add dark mode support to Storybook',
+        title: 'Set up Storybook for RedwoodUI',
         skip: async () => {
           if (force) {
             return false
@@ -424,25 +421,98 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             return 'This project is not using Storybook'
           }
 
-          const storybookMainContent = fs.readFileSync(
-            storybookMainPath,
-            'utf-8',
-          )
-
-          if (
-            /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
-              storybookMainContent,
-            )
-          ) {
-            return 'Your Storybook looks like it already has dark mode support'
-          } else {
-            return false
-          }
+          return false
         },
-        task: async () => {
-          throw new Error(
-            'Add dark mode support to Storybook — Not implemented',
-          )
+        task: async (_ctx, task) => {
+          return task.newListr([
+            {
+              options: { persistentOutput: true },
+              title: 'Add dark mode support to Storybook',
+              skip: async () => {
+                if (force) {
+                  return false
+                }
+                // The main file can be either JS or TS, even if the project is TS
+                const storybookMainPathJS = path.join(
+                  rwPaths.web.storybook,
+                  'main.js',
+                )
+                const storybookMainPathTS = path.join(
+                  rwPaths.web.storybook,
+                  'main.ts',
+                )
+
+                let storybookMainPath: string | null = null
+
+                if (fs.existsSync(storybookMainPathJS)) {
+                  storybookMainPath = storybookMainPathJS
+                } else if (fs.existsSync(storybookMainPathTS)) {
+                  storybookMainPath = storybookMainPathTS
+                }
+
+                if (!storybookMainPath) {
+                  return 'This project is not using Storybook'
+                }
+
+                const storybookMainContent = fs.readFileSync(
+                  storybookMainPath,
+                  'utf-8',
+                )
+
+                if (
+                  /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
+                    storybookMainContent,
+                  )
+                ) {
+                  return 'Your Storybook looks like it already has dark mode support'
+                } else {
+                  return false
+                }
+              },
+              task: async () => {
+                throw new Error(
+                  'Add dark mode support to Storybook — Not implemented',
+                )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: 'Add children placeholder utility component',
+              skip: async () => {
+                const storybookPlaceholderComponentPathJSX = path.join(
+                  rwPaths.web.storybook,
+                  'utilities/ChildrenPlaceholder.jsx',
+                )
+                const storybookPlaceholderComponentPathTSX = path.join(
+                  rwPaths.web.storybook,
+                  'utilities/ChildrenPlaceholder.tsx',
+                )
+
+                let storybookPlaceholderComponentPath: string | null = null
+
+                if (fs.existsSync(storybookPlaceholderComponentPathJSX)) {
+                  storybookPlaceholderComponentPath =
+                    storybookPlaceholderComponentPathJSX
+                } else if (
+                  fs.existsSync(storybookPlaceholderComponentPathTSX)
+                ) {
+                  storybookPlaceholderComponentPath =
+                    storybookPlaceholderComponentPathTSX
+                }
+
+                if (storybookPlaceholderComponentPath) {
+                  return 'ChildrenPlaceholder component already exists'
+                } else {
+                  return false
+                }
+              },
+              task: async () => {
+                throw new Error(
+                  'Add children placeholder utility component — Not implemented',
+                )
+              },
+            },
+          ])
         },
       },
     ],
