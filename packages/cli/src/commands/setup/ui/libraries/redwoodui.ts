@@ -374,8 +374,10 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         options: { persistentOutput: true },
         title: 'Add utility functions used by RedwoodUI',
         task: async () => {
-          // TODO add web/src/lib/{utils.ts + types.d.ts} to the project
-          // If the files already exist, check each export name to see if it matches
+          // TODO add web/src/lib/{utils.ts} to the project
+          throw new Error(
+            'Add utility functions used by RedwoodUI — Not implemented',
+          )
         },
       },
       {
