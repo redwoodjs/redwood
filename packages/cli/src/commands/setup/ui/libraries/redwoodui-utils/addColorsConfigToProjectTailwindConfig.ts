@@ -103,9 +103,10 @@ const addColorsConfigToProjectTailwindConfig = (
     const missingKeys = requiredKeys.filter((key) => !projectKeys.includes(key))
 
     if (missingKeys.length === 0) {
-      task.output = c.info(
-        `Your project's TailwindCSS configuration already includes all required colors.`,
+      task.skip(
+        "Your project's TailwindCSS configuration already includes all required colors.",
       )
+      return projectTailwindConfig
     } else if (missingKeys.length === requiredKeys.length) {
       // If all keys are missing, add the entire RWUI colors config to the bottom of the project colors config
       const rwuiColorsConfigWithoutBraces = rwuiColorsConfig
@@ -151,8 +152,8 @@ const addColorsConfigToProjectTailwindConfig = (
         '\nAdded TailwindCSS color pallette import (used by TWUI default colors) to your config.',
       )
     } else {
-      task.output += c.info(
-        '\nYour TailwindCSS config already includes the TailwindCSS color pallette import (used by TWUI default colors), so we did not add it again.',
+      task.skip(
+        'Your TailwindCSS config already includes the TailwindCSS color pallette import (used by TWUI default colors), so we did not add it again.',
       )
     }
   }

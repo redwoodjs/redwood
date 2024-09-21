@@ -43,8 +43,8 @@ const addDarkModeConfigToProjectTailwindConfig = (
         "Ran into a conflict setting the project's TailwindCSS darkMode configuration.",
       )
     } else {
-      task.output = c.info(
-        `Your project's TailwindCSS configuration already has the correct darkMode setting.`,
+      task.skip(
+        "Your project's TailwindCSS configuration already has the correct darkMode setting.",
       )
       return projectTailwindConfig
     }

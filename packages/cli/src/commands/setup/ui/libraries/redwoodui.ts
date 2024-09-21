@@ -170,6 +170,14 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               {
                 options: { persistentOutput: true },
                 title: 'Write out new TailwindCSS configuration',
+                skip: () => {
+                  if (
+                    newTailwindConfigContent === projectTailwindConfigContent
+                  ) {
+                    return 'No changes to write to the TailwindCSS configuration file'
+                  }
+                  return false
+                },
                 task: async () => {
                   // After all transformations, write the new config to the file
                   fs.writeFileSync(
@@ -235,6 +243,12 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               {
                 options: { persistentOutput: true },
                 title: 'Write out new index.css',
+                skip: () => {
+                  if (newIndexCSSContent === projectIndexCSSContent) {
+                    return 'No changes to write to the index.css file'
+                  }
+                  return false
+                },
                 task: async () => {
                   // After all transformations, write the new config to the file
                   fs.writeFileSync(projectIndexCSSPath, newIndexCSSContent)
@@ -299,12 +313,61 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           // but because Yarn does this for us, it's low priority
           return false
         },
-        task: async () => {
+        task: async (_ctx, task) => {
           // TODO get all packages from web/package.json (filtering out a TBA hardcoded list of packages)
           // that aren't component dependencies, and install them
           // We can hardcode the list of packages to filter out, because we know what they are, because we own RWUI.
           // This list will include, eg, dependencies of RWJS, TailwindCSS, Storybook, etc.
-          throw new Error('Install all necessary packages — Not implemented')
+
+          const rwuiPackageJsonStr = await fetchFromRWUIRepo('web/package.json')
+          const projectPackageJsonStr = fs.readFileSync(
+            path.join(rwPaths.web.base, 'package.json'),
+            'utf-8',
+          )
+          let rwuiPackageJson: any
+          let projectPackageJson: any
+          try {
+            rwuiPackageJson = JSON.parse(rwuiPackageJsonStr)
+          } catch (e: any) {
+            throw new Error(
+              `Error parsing RedwoodUI's package.json: ${e.message}`,
+            )
+          }
+          try {
+            projectPackageJson = JSON.parse(projectPackageJsonStr)
+          } catch (e: any) {
+            throw new Error(
+              `Error parsing your project's package.json: ${e.message}`,
+            )
+          }
+          // get all non-dev dependencies (currently, RWUI doesn't have any specific dev dependencies)
+          const rwuiDeps = Object.keys(rwuiPackageJson.dependencies)
+          const projectDeps = Object.keys(projectPackageJson.dependencies)
+          const depsToInstall = rwuiDeps.filter(
+            (dep) => !projectDeps.includes(dep),
+          )
+
+          if (depsToInstall.length === 0) {
+            task.skip(
+              'No packages to install — all RedwoodUI dependencies are already installed',
+            )
+            return
+          }
+
+          const depsToInstallWithVersions = depsToInstall.map((dep) => {
+            return `${dep}@${rwuiPackageJson.dependencies[dep]}`
+          })
+
+          task.output = c.info(
+            `Installing the following packages — you can remove any later if you don't end up using the components that require them: ${depsToInstallWithVersions.join(', ')}...`,
+          )
+
+          await execa('yarn', [
+            'workspace',
+            'web',
+            'add',
+            ...depsToInstallWithVersions,
+          ])
         },
       },
       {
@@ -329,6 +392,56 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           // Then, we can provide a list of pending files to the user, and ask them if they want to add them. (maybe? meh)
           throw new Error(
             'Add RedwoodUI components to your project — Not implemented',
+          )
+        },
+      },
+      {
+        options: { persistentOutput: true },
+        title: 'Add dark mode support to Storybook',
+        skip: async () => {
+          if (force) {
+            return false
+          }
+          // The main file can be either JS or TS, even if the project is TS
+          const storybookMainPathJS = path.join(
+            rwPaths.web.storybook,
+            'main.js',
+          )
+          const storybookMainPathTS = path.join(
+            rwPaths.web.storybook,
+            'main.ts',
+          )
+
+          let storybookMainPath: string | null = null
+
+          if (fs.existsSync(storybookMainPathJS)) {
+            storybookMainPath = storybookMainPathJS
+          } else if (fs.existsSync(storybookMainPathTS)) {
+            storybookMainPath = storybookMainPathTS
+          }
+
+          if (!storybookMainPath) {
+            return 'This project is not using Storybook'
+          }
+
+          const storybookMainContent = fs.readFileSync(
+            storybookMainPath,
+            'utf-8',
+          )
+
+          if (
+            /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
+              storybookMainContent,
+            )
+          ) {
+            return 'Your Storybook looks like it already has dark mode support'
+          } else {
+            return false
+          }
+        },
+        task: async () => {
+          throw new Error(
+            'Add dark mode support to Storybook — Not implemented',
           )
         },
       },

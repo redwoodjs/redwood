@@ -83,7 +83,7 @@ const addLayerToIndexCSS = (
 
     // Now, if there's no conflicting classes or classes to add, we don't need to do anything more.
     if (conflictingClasses.length === 0 && classesToAdd.length === 0) {
-      task.output = c.info(
+      task.skip(
         `Your project's ${layerName} layer already has the correct classes.`,
       )
       return projectIndexCSS
