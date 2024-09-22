@@ -309,16 +309,15 @@ The entire framework is ([strictly](https://redwoodjs.com/docs/typescript/strict
 
 Redwood's job doesn't end until your application is deployed to the world! That's why we include deploy commands and config to get your app running on the most popular hosts (whether they are serverless or traditional server infrastructure) including:
 
-* [AWS](https://aws.amazon.com/)
-* [Vercel](https://vercel.com/)
-* [Google Cloud](https://cloud.google.com/)
-* [Render](https://render.com/)
-* [Flightcontrol](https://www.flightcontrol.dev/)
-* [Netlify](https://www.netlify.com/)
-* anywhere [Docker](https://www.docker.com) is accepted
+- [Coherence (GWC/AWS)](https://www.withcoherence.com/)
+- [Flightcontrol.dev (AWS)](https://www.flightcontrol.dev?ref=redwood)
+- [Edg.io](https://edg.io)
+- [Netlify.com](https://www.netlify.com/)
+- [Render.com](https://render.com)
+- [Serverless.com](https://serverless.com)
+- [Vercel.com](https://vercel.com)
 
-You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy).
-
+* You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy)!
 ## Coming Soon
 
 Redwood is still in active development, and we're working on some [features](https://community.redwoodjs.com/c/experimental-features/25) that are on the cutting edge of the React ecosystem:
