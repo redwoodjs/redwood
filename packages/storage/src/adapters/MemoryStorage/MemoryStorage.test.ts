@@ -16,6 +16,16 @@ describe('MemoryStorage', () => {
     expect(storage.store[result.location]).toBeDefined()
   })
 
+  test('read should return file contents and type', async () => {
+    const file = new File(['ABCDEF'], 'test.txt', { type: 'image/png' })
+    const { location } = await storage.save(file)
+
+    const result = await storage.read(location)
+    expect(result.contents).toBeInstanceOf(Buffer)
+    expect(result.contents.toString()).toBe('ABCDEF')
+    expect(result.type).toBe('image/png')
+  })
+
   test('remove should delete a file from memory', async () => {
     const file = new File(['test content'], 'test.txt', { type: 'text/plain' })
     const { location } = await storage.save(file)

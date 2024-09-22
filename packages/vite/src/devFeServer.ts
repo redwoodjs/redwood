@@ -44,7 +44,7 @@ async function createServer() {
   const serverStorage = createServerStorage()
 
   app.use('*', (req, _res, next) => {
-    const fullUrl = getFullUrl(req)
+    const fullUrl = getFullUrl(req, rscEnabled)
 
     const perReqStore = createPerRequestMap({
       // Convert express headers to fetch header

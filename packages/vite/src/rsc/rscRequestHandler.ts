@@ -1,3 +1,5 @@
+import { Readable } from 'node:stream'
+
 import * as DefaultFetchAPI from '@whatwg-node/fetch'
 import { normalizeNodeRequest } from '@whatwg-node/server'
 import busboy from 'busboy'
@@ -9,8 +11,6 @@ import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import type { RscFetchProps } from '@redwoodjs/router/RscRouter'
-import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
 import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import {
@@ -19,23 +19,23 @@ import {
 } from '../bundled/react-server-dom-webpack.server.js'
 import { hasStatusCode } from '../lib/StatusError.js'
 import { invoke } from '../middleware/invokeMiddleware.js'
-import { getFullUrlForFlightRequest } from '../utils.js'
 
+import { renderRscToStream } from './rscRenderer.js'
 import { sendRscFlightToStudio } from './rscStudioHandlers.js'
-import { renderRsc } from './rscWorkerCommunication.js'
+
+const BASE_PATH = '/rw-rsc/'
 
 interface CreateRscRequestHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
   viteDevServer?: ViteDevServer
 }
 
-const BASE_PATH = '/rw-rsc/'
-
 export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
 ) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
 
+  // TODO (RSC): Switch from Express to Web compatible Request and Response
   return async (
     req: ExpressRequest,
     res: ExpressResponse,
@@ -89,11 +89,6 @@ export function createRscRequestHandler(
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
-    // "location":{"pathname":"/about","search":""}
-    // These values come from packages/vite/src/ClientRouter.tsx
-    const props: RscFetchProps = JSON.parse(
-      url.searchParams.get('props') || '{}',
-    )
     let rsaId: string | undefined
     let args: unknown[] = []
 
@@ -165,6 +160,8 @@ export function createRscRequestHandler(
 
     if (rscId || rsaId) {
       const handleError = (err: unknown) => {
+        console.log('handleError() err', err)
+
         if (hasStatusCode(err)) {
           res.statusCode = err.statusCode
         } else {
@@ -185,29 +182,13 @@ export function createRscRequestHandler(
       }
 
       try {
-        // We construct the URL for the flight request from props
-        // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
-        // becomes http://localhost:8910/about?foo=bar
-        // In the component, getting location would otherwise be at the rw-rsc URL
-        const fullUrl = getFullUrlForFlightRequest(req, props)
+        const readable = await renderRscToStream({ rscId, rsaId, args })
 
-        const pipeable = renderRsc({
-          rscId,
-          props,
-          rsaId,
-          args,
-          // Pass the serverState from server to the worker
-          // Inside the worker, we'll use this to re-initalize the server state (because workers are stateless)
-          serverState: {
-            headersInit: Object.fromEntries(getRequestHeaders().entries()),
-            serverAuthState: getAuthState(),
-            fullUrl,
-          },
-        })
+        Readable.fromWeb(readable).pipe(res)
 
+        // TODO (RSC): Can we reuse `readable` here somehow?
         await sendRscFlightToStudio({
           rscId,
-          props,
           rsaId,
           args,
           basePath: BASE_PATH,
@@ -217,8 +198,6 @@ export function createRscRequestHandler(
 
         // TODO (RSC): See if we can/need to do more error handling here
         // pipeable.on(handleError)
-
-        pipeable.pipe(res)
       } catch (e) {
         handleError(e)
       }

@@ -31,14 +31,14 @@ function createAuthImplementation(auth0Client: Auth0Client) {
     client: auth0Client,
     restoreAuthState: async () => {
       if (
-        global?.location?.search?.includes('code=') &&
-        global?.location?.search?.includes('state=')
+        globalThis?.location?.search?.includes('code=') &&
+        globalThis?.location?.search?.includes('state=')
       ) {
         const { appState } = await auth0Client.handleRedirectCallback()
         const url = appState?.targetUrl
           ? appState.targetUrl
           : window.location.pathname
-        global?.location?.assign(url)
+        globalThis?.location?.assign(url)
       }
     },
     login: async (options?: RedirectLoginOptions) =>

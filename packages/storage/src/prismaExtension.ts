@@ -57,7 +57,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
         needs: Record<string, boolean>
         compute: (
           modelData: Record<string, unknown>,
-        ) => <T>(this: T, signArgs?: WithSignedUrlArgs) => Promise<T>
+        ) => <T>(this: T, signArgs?: WithSignedUrlArgs) => T
       }
     }
   }

@@ -24,6 +24,8 @@ export interface RouterProps
 export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
   const location = getLocation()
 
+  console.log('ServerRouter.tsx location', location)
+
   const analyzedRoutes = analyzeRoutes(children, {
     currentPathName: location.pathname,
     // @TODO We haven't handled this with SSR/Streaming yet.
@@ -130,7 +132,7 @@ export const Router: React.FC<RouterProps> = ({ paramTypes, children }) => {
 }
 
 // TODO (RSC): We allow users to implement their own `hasRole` function in
-// `api/src/lib/auth.ts`. We should use that instead of implementing our
+// `api/src/lib/auth.ts`. We should use that instead of implementing our own
 // here. Should we just import it from there? Or should we allow users to
 // pass it to us instead somehow?
 function hasRole(requiredRoles: string | string[]): boolean {

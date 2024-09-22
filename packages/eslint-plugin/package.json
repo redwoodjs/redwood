@@ -22,17 +22,17 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@typescript-eslint/utils": "8.2.0",
+    "@typescript-eslint/utils": "8.5.0",
     "eslint": "8.57.0"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/eslint": "8.56.11",
+    "@types/eslint": "8.56.12",
     "@types/estree": "1.0.5",
-    "@typescript-eslint/parser": "8.2.0",
-    "@typescript-eslint/rule-tester": "8.2.0",
-    "tsx": "4.17.0",
-    "typescript": "5.5.4",
+    "@typescript-eslint/parser": "8.5.0",
+    "@typescript-eslint/rule-tester": "8.5.0",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

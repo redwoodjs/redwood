@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Plural word files > creates a page component with a plural word for name 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const CatsPage = () => {
@@ -13,10 +13,10 @@ const CatsPage = () => {
       <p>
         Find me in <code>./web/src/pages/CatsPage/CatsPage.jsx</code>
       </p>
-      <p>
-        My default route is named <code>cats</code>, link to me with \`
-        <Link to={routes.cats()}>Cats</Link>\`
-      </p>
+      {/*
+           My default route is named \`cats\`, link to me with:
+           \`<Link to={routes.cats()}>Cats</Link>\`
+        */}
     </>
   )
 }
@@ -26,7 +26,7 @@ export default CatsPage
 `;
 
 exports[`Single world files > creates a page component 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
@@ -38,10 +38,10 @@ const HomePage = () => {
       <p>
         Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
       </p>
-      <p>
-        My default route is named <code>home</code>, link to me with \`
-        <Link to={routes.home()}>Home</Link>\`
-      </p>
+      {/*
+           My default route is named \`home\`, link to me with:
+           \`<Link to={routes.home()}>Home</Link>\`
+        */}
     </>
   )
 }
@@ -82,7 +82,7 @@ describe('HomePage', () => {
 `;
 
 exports[`TS Files > TS Params 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 type TsParamFilesPageProps = {
@@ -100,10 +100,12 @@ const TsParamFilesPage = ({ id }: TsParamFilesPageProps) => {
         <code>./web/src/pages/TSParamFilesPage/TSParamFilesPage.tsx</code>
       </p>
       <p>
-        My default route is named <code>tsParamFiles</code>, link to me with \`
-        <Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
+        The parameter passed to me is <code>{id}</code>
       </p>
-      <p>The parameter passed to me is {id}</p>
+      {/*
+          My default route is named \`tsParamFiles\`, link to me with:
+          \`<Link to={routes.tsParamFiles({ id: '42' })}>TsParamFiles 42</Link>\`
+      */}
     </>
   )
 }
@@ -113,7 +115,7 @@ export default TsParamFilesPage
 `;
 
 exports[`TS Files > TS Params with type 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 type TsParamTypeFilesPageProps = {
@@ -133,14 +135,12 @@ const TsParamTypeFilesPage = ({ id }: TsParamTypeFilesPageProps) => {
         </code>
       </p>
       <p>
-        My default route is named <code>tsParamTypeFiles</code>, link to me with
-        \`
-        <Link to={routes.tsParamTypeFiles({ id: 42 })}>
-          TsParamTypeFiles 42
-        </Link>
-        \`
+        The parameter passed to me is <code>{id}</code>
       </p>
-      <p>The parameter passed to me is {id}</p>
+      {/*
+          My default route is named \`tsParamTypeFiles\`, link to me with:
+          \`<Link to={routes.tsParamTypeFiles({ id: 42 })}>TsParamTypeFiles 42</Link>\`
+      */}
     </>
   )
 }
@@ -150,7 +150,7 @@ export default TsParamTypeFilesPage
 `;
 
 exports[`TS Files > generates typescript pages 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const TsFilesPage = () => {
@@ -162,10 +162,10 @@ const TsFilesPage = () => {
       <p>
         Find me in <code>./web/src/pages/TSFilesPage/TSFilesPage.tsx</code>
       </p>
-      <p>
-        My default route is named <code>tsFiles</code>, link to me with \`
-        <Link to={routes.tsFiles()}>TsFiles</Link>\`
-      </p>
+      {/*
+          My default route is named \`tsFiles\`, link to me with:
+          \`<Link to={routes.tsFiles()}>TsFiles</Link>\`
+      */}
     </>
   )
 }
@@ -248,7 +248,7 @@ describe('HomePage', () => {
 
 exports[`handler > file generation 3`] = `
 {
-  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+  "fileContent": "// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const HomePage = () => {
@@ -260,10 +260,10 @@ const HomePage = () => {
       <p>
         Find me in <code>./web/src/pages/HomePage/HomePage.jsx</code>
       </p>
-      <p>
-        My default route is named <code>home</code>, link to me with \`
-        <Link to={routes.home()}>Home</Link>\`
-      </p>
+      {/*
+           My default route is named \`home\`, link to me with:
+           \`<Link to={routes.home()}>Home</Link>\`
+        */}
     </>
   )
 }
@@ -332,7 +332,7 @@ describe('PostPage', () => {
 
 exports[`handler > file generation with route params 3`] = `
 {
-  "fileContent": "import { Link, routes } from '@redwoodjs/router'
+  "fileContent": "// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
@@ -345,10 +345,12 @@ const PostPage = ({ id }) => {
         Find me in <code>./web/src/pages/PostPage/PostPage.jsx</code>
       </p>
       <p>
-        My default route is named <code>post</code>, link to me with \`
-        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+        The parameter passed to me is <code>{id}</code>
       </p>
-      <p>The parameter passed to me is {id}</p>
+      {/*
+           My default route is named \`post\`, link to me with:
+           \`<Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+        */}
     </>
   )
 }
@@ -379,7 +381,7 @@ export default Routes",
 `;
 
 exports[`multiWorldFiles > creates a page component 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const ContactUsPage = () => {
@@ -391,10 +393,10 @@ const ContactUsPage = () => {
       <p>
         Find me in <code>./web/src/pages/ContactUsPage/ContactUsPage.jsx</code>
       </p>
-      <p>
-        My default route is named <code>contactUs</code>, link to me with \`
-        <Link to={routes.contactUs()}>ContactUs</Link>\`
-      </p>
+      {/*
+           My default route is named \`contactUs\`, link to me with:
+           \`<Link to={routes.contactUs()}>ContactUs</Link>\`
+        */}
     </>
   )
 }
@@ -435,7 +437,7 @@ describe('ContactUsPage', () => {
 `;
 
 exports[`paramFiles > creates a page component with params 1`] = `
-"import { Link, routes } from '@redwoodjs/router'
+"// import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
 const PostPage = ({ id }) => {
@@ -448,10 +450,12 @@ const PostPage = ({ id }) => {
         Find me in <code>./web/src/pages/PostPage/PostPage.jsx</code>
       </p>
       <p>
-        My default route is named <code>post</code>, link to me with \`
-        <Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+        The parameter passed to me is <code>{id}</code>
       </p>
-      <p>The parameter passed to me is {id}</p>
+      {/*
+           My default route is named \`post\`, link to me with:
+           \`<Link to={routes.post({ id: '42' })}>Post 42</Link>\`
+        */}
     </>
   )
 }

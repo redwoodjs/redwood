@@ -61,7 +61,7 @@ export async function runFeServer() {
   registerFwGlobalsAndShims()
 
   if (rscEnabled) {
-    const { setClientEntries } = await import('./rsc/rscWorkerCommunication.js')
+    const { setClientEntries } = await import('./rsc/rscRenderer.js')
 
     createWebSocketServer()
 
@@ -141,13 +141,12 @@ export async function runFeServer() {
   )
 
   app.use('*', (req, _res, next) => {
-    const fullUrl = getFullUrl(req)
+    const fullUrl = getFullUrl(req, rscEnabled)
     const headers = convertExpressHeaders(req.headersDistinct)
     // Convert express headers to fetch headers
     const perReqStore = createPerRequestMap({ headers, fullUrl })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
-    // But note that the serverStorage is RE-initialised for the RSC worker
     serverStorage.run(perReqStore, next)
   })
 

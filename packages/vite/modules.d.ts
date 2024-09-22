@@ -22,6 +22,8 @@ type ClientManifest = {
 type ReactClientValue = any
 
 declare module 'react-server-dom-webpack/server.edge' {
+  import type { ReadableStream } from 'node:stream/web'
+
   type Options = {
     environmentName?: string
     identifierPrefix?: string

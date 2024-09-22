@@ -149,7 +149,7 @@ export class Listr2Mock {
 
   constructor(
     tasks: Listr.ListrTask<Ctx, typeof Listr.ListrRenderer>[],
-    options?: Listr.ListrOptions | undefined,
+    options?: Listr.ListrOptions,
   ) {
     this.ctx = {}
     this.tasks = tasks.map((task) => new Listr2TaskWrapper({ task, options }))

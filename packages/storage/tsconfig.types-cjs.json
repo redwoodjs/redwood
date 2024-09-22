@@ -3,5 +3,12 @@
   "compilerOptions": {
     "outDir": "dist/cjs",
     "tsBuildInfoFile": "./tsconfig.types-cjs.tsbuildinfo"
-  }
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/__mocks__",
+    "**/__tests__", // dont build types for tests
+    "**/__typetests__"
+  ]
 }

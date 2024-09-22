@@ -4,6 +4,7 @@ import { DEFAULT_LOGGER } from '../../consts.js'
 import * as errors from '../../errors.js'
 import type { BaseJob } from '../../types.js'
 import { Executor } from '../Executor.js'
+import type { ExecutorOptions } from '../Executor.js'
 
 import { MockAdapter, mockLogger } from './mocks.js'
 
@@ -143,6 +144,38 @@ describe('perform', () => {
     expect(adapterSpy).toHaveBeenCalledWith({
       job: options.job,
       deleteJob: true,
+    })
+  })
+
+  it('keeps the job around after successful job if instructed to do so', async () => {
+    const mockAdapter = new MockAdapter()
+    const mockJob = {
+      id: 1,
+      name: 'TestJob',
+      path: 'TestJob/TestJob',
+      args: ['foo'],
+      attempts: 0,
+
+      perform: vi.fn(),
+    }
+    const options: ExecutorOptions = {
+      adapter: mockAdapter,
+      logger: mockLogger,
+      job: mockJob,
+      deleteSuccessfulJobs: false,
+    }
+    const executor = new Executor(options)
+
+    // spy on the success function of the adapter
+    const adapterSpy = vi.spyOn(mockAdapter, 'success')
+    // mock the `loadJob` loader to return the job mock
+    mocks.loadJob.mockImplementation(() => mockJob)
+
+    await executor.perform()
+
+    expect(adapterSpy).toHaveBeenCalledWith({
+      job: options.job,
+      deleteJob: false,
     })
   })
 

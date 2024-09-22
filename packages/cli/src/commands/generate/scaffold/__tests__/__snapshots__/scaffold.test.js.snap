@@ -207,9 +207,9 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No posts yet. '}
+      No posts yet.{' '}
       <Link to={routes.newPost()} className="rw-link">
-        {'Create one?'}
+        Create one?
       </Link>
     </div>
   )
@@ -1586,9 +1586,9 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No posts yet. '}
+      No posts yet.{' '}
       <Link to={routes.newPost()} className="rw-link">
-        {'Create one?'}
+        Create one?
       </Link>
     </div>
   )
@@ -2440,9 +2440,9 @@ import { Toaster } from '@redwoodjs/web/toast'
 
 type LayoutProps = {
   title: string
-  titleTo: string
+  titleTo: keyof typeof routes
   buttonLabel: string
-  buttonTo: string
+  buttonTo: keyof typeof routes
   children: React.ReactNode
 }
 
@@ -3428,9 +3428,9 @@ export const Loading = () => <div>Loading...</div>
 export const Empty = () => {
   return (
     <div className="rw-text-center">
-      {'No posts yet. '}
+      No posts yet.{' '}
       <Link to={routes.newPost()} className="rw-link">
-        {'Create one?'}
+        Create one?
       </Link>
     </div>
   )

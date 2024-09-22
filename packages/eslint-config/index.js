@@ -7,7 +7,7 @@ const {
   getApiSideDefaultBabelConfig,
   getWebSideDefaultBabelConfig,
 } = require('@redwoodjs/babel-config')
-const { getConfig } = require('@redwoodjs/project-config')
+const { getConfig, isTypeScriptProject } = require('@redwoodjs/project-config')
 
 const config = getConfig()
 
@@ -16,7 +16,10 @@ const getProjectBabelOptions = () => {
   // So we just take it out and put it as a separate item
   // Ignoring overrides, as I don't think it has any impact on linting
   const { overrides: _webOverrides, ...otherWebConfig } =
-    getWebSideDefaultBabelConfig()
+    getWebSideDefaultBabelConfig({
+      // We have to enable certain presets like `@babel/preset-react` for JavaScript projects
+      forJavaScriptLinting: !isTypeScriptProject(),
+    })
 
   const { overrides: _apiOverrides, ...otherApiConfig } =
     getApiSideDefaultBabelConfig()

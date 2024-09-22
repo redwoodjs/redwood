@@ -34,9 +34,9 @@
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@vscode/ripgrep": "1.15.9",
-    "@whatwg-node/fetch": "0.9.20",
+    "@whatwg-node/fetch": "0.9.21",
     "cheerio": "1.0.0",
-    "core-js": "3.38.0",
+    "core-js": "3.38.1",
     "deepmerge": "4.3.1",
     "execa": "5.1.1",
     "fast-glob": "3.3.2",
@@ -45,7 +45,7 @@
     "pascalcase": "1.0.0",
     "prettier": "3.3.3",
     "tasuku": "2.0.1",
-    "typescript": "5.5.4",
+    "typescript": "5.6.2",
     "yargs": "17.7.2"
   },
   "devDependencies": {
@@ -57,7 +57,7 @@
     "fs-extra": "11.2.0",
     "publint": "0.2.10",
     "tempy": "1.0.1",
-    "tsx": "4.17.0",
+    "tsx": "4.19.1",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

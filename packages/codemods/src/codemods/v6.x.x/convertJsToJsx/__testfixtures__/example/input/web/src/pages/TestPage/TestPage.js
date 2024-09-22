@@ -10,10 +10,10 @@ const TestPage = () => {
       <p>
         Find me in <code>./web/src/pages/TestPage/TestPage.js</code>
       </p>
-      <p>
+      {/*
         My default route is named <code>test</code>, link to me with `
         <Link to={routes.test()}>Test</Link>`
-      </p>
+      */}
     </>
   )
 }

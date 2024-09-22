@@ -1205,9 +1205,7 @@ export class DbAuthHandler<
       delete userCookieAttributes.name
     }
 
-    const cookieOptions = { ...userCookieAttributes, ...options } || {
-      ...options,
-    }
+    const cookieOptions = { ...userCookieAttributes, ...options }
     const meta = Object.keys(cookieOptions)
       .map((key) => {
         const optionValue =

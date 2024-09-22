@@ -51,13 +51,13 @@
     "nodemon": "3.1.4",
     "react-refresh": "0.14.0",
     "rimraf": "6.0.1",
-    "typescript": "5.5.4"
+    "typescript": "5.6.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/lodash": "4.17.7",
     "publint": "0.2.10",
-    "tsx": "4.17.0"
+    "tsx": "4.19.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

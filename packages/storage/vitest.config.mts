@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename)
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, '**/fixtures'],
+    exclude: [...configDefaults.exclude, '**/fixtures', '**/__typetests__'],
     deps: {
       interopDefault: false,
     },
