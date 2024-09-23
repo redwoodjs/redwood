@@ -126,6 +126,7 @@ export class FileSystemAdapter extends StorageAdapter {
   // ---
 
   private referenceToPath(reference: string) {
+    // TODO(jgmw): Store metadata in a .json file with the same ref
     return path.join(this.config.root, reference)
   }
 

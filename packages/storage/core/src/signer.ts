@@ -7,6 +7,7 @@ export interface StorageSignerPayload {
 }
 
 export abstract class StorageSigner {
+  // TODO(jgmw): verify
   abstract encode(payload: StorageSignerPayload): string
   abstract decode(token: string): StorageSignerPayload | undefined
 }
