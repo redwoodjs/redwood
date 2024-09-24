@@ -907,11 +907,11 @@ export class DbAuthHandler<
     let user
 
     if (credentialId) {
-      user = await this.dbCredentialAccessor
-        .findFirst({
-          where: { [webAuthnOptions.credentialFields.id]: credentialId },
-        })
-        .user()
+      const credential = await this.dbCredentialAccessor.findUnique({
+        where: { [webAuthnOptions.credentialFields.id]: credentialId },
+        include: { [this.options.authModelAccessor]: true },
+      })
+      user = credential[this.options.authModelAccessor]
     } else {
       // webauthn session not present, fallback to getting user from regular
       // session cookie
