@@ -38,7 +38,7 @@ export function paramsForRoute(route: string) {
 
       // Normalize the name
       let name = parts[0]
-      if (name.slice(-3) === '...') {
+      if (name.endsWith('...')) {
         // Globs have their ellipsis removed
         name = name.slice(0, -3)
       }
@@ -47,7 +47,7 @@ export function paramsForRoute(route: string) {
       let type = parts[1]
       if (!type) {
         // Strings and Globs are implicit in the syntax
-        type = match.slice(-3) === '...' ? 'Glob' : 'String'
+        type = match.endsWith('...') ? 'Glob' : 'String'
       }
 
       return [name, type, `{${match}}`]
@@ -82,8 +82,6 @@ const coreParamTypes: Record<string, ParamType> = {
     match: /.*/,
   },
 }
-
-type SupportedRouterParamTypes = keyof typeof coreParamTypes
 
 /**
  * Determine if the given route is a match for the given pathname. If so,
@@ -145,8 +143,7 @@ export function matchPath(
     const params = providedParams.reduce<Record<string, unknown>>(
       (acc, value, index) => {
         const [name, transformName] = routeParamsDefinition[index]
-        const typeInfo =
-          allParamTypes[transformName as SupportedRouterParamTypes]
+        const typeInfo = allParamTypes[transformName]
 
         let transformedValue: string | unknown = value
         if (typeof typeInfo?.parse === 'function') {
@@ -192,7 +189,7 @@ export function getRouteRegexAndParams(
   // /recipe/{id} -> /recipe/([^/$1*]+)
   for (const [_name, type, match] of routeParams) {
     // `undefined` matcher if `type` is not supported
-    const matcher = allParamTypes[type as SupportedRouterParamTypes]?.match
+    const matcher = allParamTypes[type]?.match
 
     // Get the regex as a string, or default regexp if `match` is not specified
     const typeRegexp = matcher?.source || '[^/]+'
@@ -259,7 +256,7 @@ export function validatePath(path: string, routeName: string) {
     )
   }
 
-  if (path.indexOf(' ') >= 0) {
+  if (path.includes(' ')) {
     throw new Error(`Route path for ${routeName} contains spaces: "${path}"`)
   }
 
@@ -270,6 +267,13 @@ export function validatePath(path: string, routeName: string) {
         "`ref` and `key` shouldn't be used as path parameters because they're special React props.",
         'You can fix this by renaming the path parameter.',
       ].join('\n'),
+    )
+  }
+
+  // Guard the following regex matching
+  if (path.length > 2000) {
+    throw new Error(
+      `Route path for ${routeName} is too long to process at ${path.length} characters, limit is 2000 characters.`,
     )
   }
 
@@ -354,7 +358,7 @@ export type FlattenSearchParams = ReturnType<typeof flattenSearchParams>
  * ```
  */
 export function flattenSearchParams(queryString: string) {
-  const searchParams: Array<Record<string, unknown>> = []
+  const searchParams: Record<string, unknown>[] = []
 
   for (const [key, value] of Object.entries(parseSearch(queryString))) {
     searchParams.push({ [key]: value })
@@ -371,7 +375,7 @@ export function flattenSearchParams(queryString: string) {
 export function inIframe() {
   try {
     return global?.self !== global?.top
-  } catch (e) {
+  } catch {
     return true
   }
 }

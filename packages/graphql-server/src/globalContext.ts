@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import { getAsyncStoreInstance } from './globalContextStore'
 
 /**
  * @deprecated This type will be available only from the `@redwoodjs/context` package in a future release.
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GlobalContext extends Record<string, unknown> {}
 
 /**

@@ -36,7 +36,7 @@ const getExecaOptions = (cwd) => ({
 const updatePkgJsonScripts = ({ projectPath, scripts }) => {
   const projectPackageJsonPath = path.join(projectPath, 'package.json')
   const projectPackageJson = JSON.parse(
-    fs.readFileSync(projectPackageJsonPath, 'utf-8')
+    fs.readFileSync(projectPackageJsonPath, 'utf-8'),
   )
   projectPackageJson.scripts = {
     ...projectPackageJson.scripts,
@@ -44,7 +44,7 @@ const updatePkgJsonScripts = ({ projectPath, scripts }) => {
   }
   fs.writeFileSync(
     projectPackageJsonPath,
-    JSON.stringify(projectPackageJson, undefined, 2)
+    JSON.stringify(projectPackageJson, undefined, 2),
   )
 }
 
@@ -66,7 +66,7 @@ async function confirmNoFixtureNoLink(copyFromFixtureOption, linkOption) {
         onCancel: () => {
           process.exit(1)
         },
-      }
+      },
     )
     return checkNoLink
   }

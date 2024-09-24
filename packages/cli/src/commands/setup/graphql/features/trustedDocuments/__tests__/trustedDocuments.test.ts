@@ -1,6 +1,3 @@
-let mockExecutedTaskTitles: Array<string> = []
-let mockSkippedTaskTitles: Array<string> = []
-
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('execa')
@@ -9,31 +6,9 @@ vi.mock('../../../../../../lib/runTransform', () => ({
   runTransform: () => ({}),
 }))
 
-vi.mock('listr2', () => {
-  return {
-    // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
-      return {
-        run: async () => {
-          mockExecutedTaskTitles = []
-          mockSkippedTaskTitles = []
-
-          for (const task of tasks) {
-            const skip =
-              typeof task.skip === 'function' ? task.skip : () => task.skip
-
-            if (skip()) {
-              mockSkippedTaskTitles.push(task.title)
-            } else {
-              mockExecutedTaskTitles.push(task.title)
-              await task.task()
-            }
-          }
-        },
-      }
-    }),
-  }
-})
+vi.mock('listr2', () => ({
+  Listr: Listr2Mock,
+}))
 
 import type fs from 'node:fs'
 import path from 'node:path'
@@ -41,6 +16,7 @@ import path from 'node:path'
 import { vol, fs as memfsFs } from 'memfs'
 import { vi, expect, it, describe, beforeAll, afterAll } from 'vitest'
 
+import { Listr2Mock } from '../../../../../../__tests__/Listr2Mock.js'
 import { handler } from '../trustedDocumentsHandler.js'
 
 // Set up RWJS_CWD
@@ -110,7 +86,7 @@ describe('Trusted documents setup', () => {
 
     await handler({ force: false })
 
-    expect(mockExecutedTaskTitles).toMatchInlineSnapshot(`
+    expect(Listr2Mock.executedTaskTitles).toMatchInlineSnapshot(`
     [
       "Update Redwood Project Configuration to enable GraphQL Trusted Documents ...",
       "Generating Trusted Documents store ...",

@@ -115,7 +115,7 @@ export const decryptSession = (text: string | null) => {
 
   let decoded
   // if cookie contains a pipe then it was encrypted using the `node:crypto`
-  // algorithm (first element is the ecrypted data, second is the initialization vector)
+  // algorithm (first element is the encrypted data, second is the initialization vector)
   // otherwise fall back to using the older CryptoJS algorithm
   const [encryptedText, iv] = text.split('|')
 
@@ -138,7 +138,7 @@ export const decryptSession = (text: string | null) => {
     const json = JSON.parse(data)
 
     return [json, csrf]
-  } catch (e) {
+  } catch {
     throw new DbAuthError.SessionDecryptionError()
   }
 }
@@ -186,15 +186,15 @@ export const dbAuthSession = (
 ) => {
   const sessionCookie = extractCookie(event)
 
-  if (sessionCookie) {
-    // i.e. Browser making a request
-    const [session, _csrfToken] = decryptSession(
-      getSession(sessionCookie, cookieNameOption),
-    )
-    return session
-  } else {
+  if (!sessionCookie) {
     return null
   }
+
+  // This is a browser making a request
+  const [session, _csrfToken] = decryptSession(
+    getSession(sessionCookie, cookieNameOption),
+  )
+  return session
 }
 
 export const webAuthnSession = (event: APIGatewayProxyEvent | Request) => {
@@ -277,15 +277,15 @@ export function getDbAuthResponseBuilder(
     },
     corsHeaders: CorsHeaders,
   ) => {
-    const headers: Record<string, string | Array<string>> = {
+    const headers: Record<string, string | string[]> = {
       ...Object.fromEntries(response.headers?.entries() || []),
       ...corsHeaders,
     }
 
     const dbAuthResponse: {
       statusCode: number
-      headers: Record<string, string | Array<string>>
-      multiValueHeaders?: Record<string, Array<string>>
+      headers: Record<string, string | string[]>
+      multiValueHeaders?: Record<string, string[]>
       body?: string
     } = {
       ...response,

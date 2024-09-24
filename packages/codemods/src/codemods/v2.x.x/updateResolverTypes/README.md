@@ -17,6 +17,5 @@ Taking a specific case, in the test project we have Post.author, which is a rela
 
 This is because of the `avoidOptionals` flag in graphql codegen. Look for this option in `packages/internal/src/generate/graphqlCodeGen.ts`
 
-
 > Note:
 > Very old RW projects don't even have these types in the services. This was introduced in v2.x, when we enabled Prisma model mapping in codegen.

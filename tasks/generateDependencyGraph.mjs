@@ -82,8 +82,8 @@ async function main() {
 
   console.log(
     `Wrote ${chalk.magenta(base)} dependency graph to ${chalk.magenta(
-      outputPath
-    )}`
+      outputPath,
+    )}`,
   )
 
   if (values.open) {

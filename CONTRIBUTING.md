@@ -11,8 +11,8 @@ Love Redwood and want to get involved? You're in the right place!
 > 3. 🪜 [Step-by-step Walkthrough](https://redwoodjs.com/docs/contributing-walkthrough) (including Video Recording)
 > 4. 📈 [Current Project Boards](https://github.com/orgs/redwoodjs/projects)
 > 5. 🤔 What should I work on?
->     - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
->     - [Discovery Process and Open Issues](https://redwoodjs.com/docs/contributing#what-should-i-work-on)
+>    - ["Help Wanted" v1 Triage Board](https://redwoodjs.com/good-first-issue)
+>    - [Discovery Process and Open Issues](https://redwoodjs.com/docs/contributing#what-should-i-work-on)
 
 _Before interacting with the Redwood community, please read and understand our [Code of Conduct](https://github.com/redwoodjs/redwood/blob/main/CODE_OF_CONDUCT.md)._
 
@@ -90,17 +90,18 @@ But how do you actually test your changes in the Redwood Framework in your Redwo
 
 > Besides `<project directory>`, `build:test-project` takes a few other options as well:
 >
-> | Arguments & Options   | Description                                                                           |
-> |-----------------------|---------------------------------------------------------------------------------------|
-> | `<project directory>` | Directory to build test project [default: "./blog-test-project"] |
-> | `--javascript`        | Generate a JavaScript project [default: false] |
-> | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]  |
-> | `--verbose`           | Verbose output [default: false]                                                       |
-> | `--clean`             | Delete existing directory and recreate Test-project [default: false] |
-> | `--canary`            | Upgrade project to latest canary version; NOT compatible with --link [default: true]  |
-> | `--help `             | Show help                                                                             |
+> | Arguments & Options   | Description                                                                          |
+> | --------------------- | ------------------------------------------------------------------------------------ |
+> | `<project directory>` | Directory to build test project [default: "./blog-test-project"]                     |
+> | `--javascript`        | Generate a JavaScript project [default: false]                                       |
+> | `--link`              | Copy Framework dependencies and packages into Test-project [default: false]          |
+> | `--verbose`           | Verbose output [default: false]                                                      |
+> | `--clean`             | Delete existing directory and recreate Test-project [default: false]                 |
+> | `--canary`            | Upgrade project to latest canary version; NOT compatible with --link [default: true] |
+> | `--help `             | Show help                                                                            |
 >
 > **Example:**
+>
 > ```terminal
 > cd redwood/
 > yarn run build:test-project ~/my-repos/redwood-project --javascript --link
@@ -172,6 +173,7 @@ yarn dev <cli command> --cwd <project directory>
 `yarn dev` runs the CLI and `--cwd` makes the command run in your Redwood Project. If you make a change to the code, remember to rebuild the packages!
 
 > Tips:
+>
 > - You can use `yarn build:watch` to automatically build the framework whilst you're making changes.
 > - `--cwd` is optional, it will reference the `__fixtures__/example-todo-main` project in the framework.
 
@@ -238,6 +240,7 @@ Most of the time your contribution to Redwood won't involve adding any new depen
 
 **`yarn add --interactive`**
 Reuse the specified package from other workspaces in the project. Example:
+
 ```
 yarn workspace create-redwood-app add -i rimraf
 ```
@@ -255,22 +258,27 @@ redwood/packages/codemods$ yarn add yargs
 
 **`yarn workspaces foreach ...`**
 This is a command from the workspaces plugin. Runs the command across all workspaces. Example:
+
 ```
 yarn workspaces foreach -i  -v some-package
 ```
+
 -v: outputs the package name the command is currently running against
 
 ### Added to CI: dedupe and constraints
+
 **`yarn dedupe --check`**
+
 > Duplicates are defined as descriptors with overlapping ranges being resolved and
-locked to different locators. They are a natural consequence of Yarn's
-deterministic installs, but they can sometimes pile up and unnecessarily
-increase the size of your project.
+> locked to different locators. They are a natural consequence of Yarn's
+> deterministic installs, but they can sometimes pile up and unnecessarily
+> increase the size of your project.
 > This command dedupes dependencies in the current project using different
-strategies (only one is implemented at the moment).
+> strategies (only one is implemented at the moment).
 
 **`yarn constraints`**
 See new file `constraints.pro` for repo config
+
 - [Yarn Constraints](https://yarnpkg.com/features/constraints)
 - Reference from Babel project: https://github.com/babel/babel/blob/main/constraints.pro
 
@@ -282,13 +290,15 @@ For example, yarn `v3` isn't installed globally, but on a per-project basis.
 Here's a quick overview of some of the new yarn-related files in this repo:
 
 | File             | Description                                                          |
-|:-----------------|:---------------------------------------------------------------------|
+| :--------------- | :------------------------------------------------------------------- |
 | `.yarnrc.yml`    | Yarn's configuration file                                            |
 | `.yarn/plugins`  | Where installed [plugins](https://yarnpkg.com/features/plugins) live |
 | `.yarn/releases` | The `yarn v3` binaries themselves                                    |
 
 #### Advanced Cases
+
 If needed, there's more information in [this PR #3154 comment](https://github.com/redwoodjs/redwood/pull/3154#issue-957115489) about special cases:
+
 - "Binary hoisting" is no longer allowed
 - Specifying Yarn v1 binary (when necessary)
 - `yarn dlx`
@@ -315,6 +325,7 @@ Once you make your changes in your fork, include the link to your repo in your i
 ## Canary publishing
 
 Every time a commit is added to the `main` branch, a `canary` release is automatically published to npm. The most recent `canary` packages can be used in Redwood Project via the following command:
+
 ```
 yarn rw upgrade --tag canary
 ```

@@ -1,7 +1,8 @@
 import { fileURLToPath } from 'node:url'
 
 import { humanId } from 'human-id'
-import { $, argv, path, fs, ProcessPromise } from 'zx'
+import type { ProcessPromise } from 'zx'
+import { $, argv, path, fs } from 'zx'
 
 const ROOT_DIR_PATH = fileURLToPath(new URL('../../', import.meta.url))
 const DIRNAME = path.dirname(fileURLToPath(new URL(import.meta.url)))
@@ -64,10 +65,7 @@ export async function resolveArgv() {
 
     return { prNumber: pr?.number ?? undefined }
   }
-  if (
-    typeof maybePrNumber === 'string' &&
-    maybePrNumber.startsWith('#')
-  ) {
+  if (typeof maybePrNumber === 'string' && maybePrNumber.startsWith('#')) {
     return { prNumber: +maybePrNumber.replace('#', '') }
   }
   if (typeof maybePrNumber === 'number') {

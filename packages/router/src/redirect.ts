@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
-import type { NavigateOptions } from './history'
-import { navigate } from './history'
+import type { NavigateOptions } from './history.js'
+import { navigate } from './history.js'
 
 interface RedirectProps {
   /** The path to redirect to */

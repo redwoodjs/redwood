@@ -1,7 +1,7 @@
-name: "💬 RFC"
-description: "For detailed proposals about new features or changes to existing ones"
+name: '💬 RFC'
+description: 'For detailed proposals about new features or changes to existing ones'
 
-title: "[RFC]: "
+title: '[RFC]: '
 
 body:
   - type: markdown

@@ -36,7 +36,7 @@ export const getInstalledRedwoodVersion = () => {
   try {
     const packageJson = require('../../package.json')
     return packageJson.version
-  } catch (e) {
+  } catch {
     console.error(colors.error('Could not find installed redwood version'))
     process.exit(1)
   }
@@ -126,7 +126,7 @@ export const addEnvVar = (name: string, value: string, comment: string) => {
   let envFile = ''
   const newEnvironmentVariable = [
     comment && `# ${comment}`,
-    `${name} = ${value}`,
+    `${name}=${value}`,
     '',
   ]
     .flat()
@@ -144,7 +144,7 @@ export const addEnvVar = (name: string, value: string, comment: string) => {
       const p = [
         `# Note: The existing environment variable ${name} was not overwritten. Uncomment to use its new value.`,
         comment && `# ${comment}`,
-        `# ${name} = ${value}`,
+        `# ${name}=${value}`,
         '',
       ]
         .flat()

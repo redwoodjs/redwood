@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/eslint-plugin",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -22,18 +22,18 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@typescript-eslint/utils": "7.3.1",
-    "eslint": "8.57.0"
+    "@typescript-eslint/utils": "8.5.0",
+    "eslint": "8.57.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/eslint": "8.56.10",
-    "@types/estree": "1.0.5",
-    "@typescript-eslint/parser": "7.3.1",
-    "@typescript-eslint/rule-tester": "7.3.1",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "@types/eslint": "8.56.12",
+    "@types/estree": "1.0.6",
+    "@typescript-eslint/parser": "8.5.0",
+    "@typescript-eslint/rule-tester": "8.5.0",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

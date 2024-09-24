@@ -20,7 +20,7 @@ export default (file, api) => {
       const schema = `${node.init.quasi.quasis[0].value.raw} ${mutation}`
       node.init.quasi = j.templateLiteral(
         [j.templateElement({ raw: schema, cooked: schema }, true)],
-        []
+        [],
       )
       return node
     })

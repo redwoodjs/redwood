@@ -10,9 +10,9 @@ import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
 import { getMergedConfig } from './lib/getMergedConfig.js'
-import handleJsAsJsx from './plugins/vite-plugin-jsx-loader.js'
-import removeFromBundle from './plugins/vite-plugin-remove-from-bundle.js'
-import swapApolloProvider from './plugins/vite-plugin-swap-apollo-provider.js'
+import { handleJsAsJsx } from './plugins/vite-plugin-jsx-loader.js'
+import { removeFromBundle } from './plugins/vite-plugin-remove-from-bundle.js'
+import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.js'
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -40,6 +40,24 @@ export default function redwoodPluginVite(): PluginOption[] {
 
   const streamingEnabled = rwConfig.experimental.streamingSsr.enabled
   const rscEnabled = rwConfig.experimental?.rsc?.enabled
+
+  const webSideDefaultBabelConfig = getWebSideDefaultBabelConfig()
+
+  const babelConfig = {
+    ...webSideDefaultBabelConfig,
+    // For RSC we don't want to include the routes auto-loader plugin as we
+    // handle that differently in each specific RSC build stage
+    overrides: rscEnabled
+      ? webSideDefaultBabelConfig.overrides.filter((override) => {
+          return !override.plugins?.some((plugin) => {
+            return (
+              Array.isArray(plugin) &&
+              plugin[2] === 'babel-plugin-redwood-routes-auto-loader'
+            )
+          })
+        })
+      : webSideDefaultBabelConfig.overrides,
+  }
 
   return [
     {
@@ -138,11 +156,14 @@ export default function redwoodPluginVite(): PluginOption[] {
     streamingEnabled && swapApolloProvider(),
     handleJsAsJsx(),
     // Remove the splash-page from the bundle.
-    removeFromBundle([
-      {
-        id: /@redwoodjs\/router\/dist\/splash-page/,
-      },
-    ]),
+    removeFromBundle(
+      [
+        {
+          id: /@redwoodjs\/router\/dist\/splash-page/,
+        },
+      ],
+      ['SplashPage'],
+    ),
     !realtimeEnabled &&
       removeFromBundle([
         {
@@ -150,12 +171,7 @@ export default function redwoodPluginVite(): PluginOption[] {
         },
       ]),
     react({
-      babel: {
-        ...getWebSideDefaultBabelConfig({
-          forVite: true,
-          forRsc: rscEnabled,
-        }),
-      },
+      babel: babelConfig,
     }),
     // Only include the Buffer polyfill for non-rsc dev, for DevFatalErrorPage
     // Including the polyfill plugin in any form in RSC breaks

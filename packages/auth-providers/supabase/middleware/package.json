@@ -1,19 +1,23 @@
 {
   "name": "@redwoodjs/auth-supabase-middleware",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/supabase/middleware"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
-      "default": "./dist/index.js"
-    },
-    "./plugin": {
-      "import": "./dist/vite-plugin-auth-supabase-middleware.js",
-      "default": "./cjsWrappers/plugin.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     }
   },
   "main": "./dist/index.js",
@@ -23,28 +27,34 @@
     "cjsWrappers"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.mts",
     "build:pack": "yarn pack -o redwoodjs-auth-supabase-middleware.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
     "@redwoodjs/auth-supabase-api": "workspace:*",
-    "@supabase/ssr": "0.3.0"
+    "@redwoodjs/web": "workspace:*",
+    "@supabase/ssr": "0.5.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
-    "@redwoodjs/vite": "workspace:*",
-    "@types/aws-lambda": "8.10.138",
+    "@types/aws-lambda": "8.10.145",
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

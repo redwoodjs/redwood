@@ -14,7 +14,7 @@ test('Submitting the form should return a response', async ({ page }) => {
 
   const submittedPageText = page.locator('#redwood-app > div')
   await expect(submittedPageText).toHaveText(
-    /The form has been submitted 1 times./
+    /The form has been submitted 1 times./,
   )
 
   // Expect an echo of our message back from the server

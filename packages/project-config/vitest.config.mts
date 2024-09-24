@@ -7,6 +7,6 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, '**/fixtures', '**/dist'],
     alias: {
       'src/(.*)': '<rootDir>/src/$1',
-    }
+    },
   },
 })

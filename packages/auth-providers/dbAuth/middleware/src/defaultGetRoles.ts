@@ -1,4 +1,6 @@
-export const defaultGetRoles = (decoded: Record<string, any>): string[] => {
+export const defaultGetRoles = (
+  decoded: Record<string, any> | undefined | null,
+): string[] => {
   try {
     const roles = decoded?.currentUser?.roles
 
@@ -7,7 +9,7 @@ export const defaultGetRoles = (decoded: Record<string, any>): string[] => {
     } else {
       return roles ? [roles] : []
     }
-  } catch (e) {
+  } catch {
     return []
   }
 }

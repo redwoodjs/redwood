@@ -6,6 +6,18 @@ exports[`in javascript mode > creates a multi word service file 1`] = `
 export const userProfiles = () => {
   return db.userProfile.findMany()
 }
+
+export const userProfile = ({ id }) => {
+  return db.userProfile.findUnique({
+    where: { id },
+  })
+}
+
+export const UserProfile = {
+  user: (_obj, { root }) => {
+    return db.userProfile.findUnique({ where: { id: root?.id } }).user()
+  },
+}
 "
 `;
 
@@ -189,6 +201,15 @@ export const deleteUser = ({ id }) => {
     where: { id },
   })
 }
+
+export const User = {
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
+  transactions: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).transactions()
+  },
+}
 "
 `;
 
@@ -222,6 +243,12 @@ export const deletePost = ({ id }) => {
   return db.post.delete({
     where: { id },
   })
+}
+
+export const Post = {
+  favorites: (_obj, { root }) => {
+    return db.post.findUnique({ where: { id: root?.id } }).favorites()
+  },
 }
 "
 `;
@@ -353,12 +380,27 @@ describe('users', () => {
 `;
 
 exports[`in typescript mode > creates a multi word service file 1`] = `
-"import type { QueryResolvers } from 'types/graphql'
+"import type {
+  QueryResolvers,
+  UserProfileRelationResolvers,
+} from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
 export const userProfiles: QueryResolvers['userProfiles'] = () => {
   return db.userProfile.findMany()
+}
+
+export const userProfile: QueryResolvers['userProfile'] = ({ id }) => {
+  return db.userProfile.findUnique({
+    where: { id },
+  })
+}
+
+export const UserProfile: UserProfileRelationResolvers = {
+  user: (_obj, { root }) => {
+    return db.userProfile.findUnique({ where: { id: root?.id } }).user()
+  },
 }
 "
 `;
@@ -528,7 +570,11 @@ describe('scalarTypes', () => {
 `;
 
 exports[`in typescript mode > creates a single word service file 1`] = `
-"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type {
+  QueryResolvers,
+  MutationResolvers,
+  UserRelationResolvers,
+} from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -560,11 +606,24 @@ export const deleteUser: MutationResolvers['deleteUser'] = ({ id }) => {
     where: { id },
   })
 }
+
+export const User: UserRelationResolvers = {
+  profiles: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).profiles()
+  },
+  transactions: (_obj, { root }) => {
+    return db.user.findUnique({ where: { id: root?.id } }).transactions()
+  },
+}
 "
 `;
 
 exports[`in typescript mode > creates a single word service file with CRUD actions 1`] = `
-"import type { QueryResolvers, MutationResolvers } from 'types/graphql'
+"import type {
+  QueryResolvers,
+  MutationResolvers,
+  PostRelationResolvers,
+} from 'types/graphql'
 
 import { db } from 'src/lib/db'
 
@@ -595,6 +654,12 @@ export const deletePost: MutationResolvers['deletePost'] = ({ id }) => {
   return db.post.delete({
     where: { id },
   })
+}
+
+export const Post: PostRelationResolvers = {
+  favorites: (_obj, { root }) => {
+    return db.post.findUnique({ where: { id: root?.id } }).favorites()
+  },
 }
 "
 `;

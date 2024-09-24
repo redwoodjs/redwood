@@ -1,0 +1,24 @@
+// Don't forget to tell Prisma about your edits to this file using
+// `yarn rw prisma migrate dev` or `yarn rw prisma db push`.
+// `migrate` is like committing while `push` is for prototyping.
+// Read more about both here:
+// https://www.prisma.io/docs/orm/prisma-migrate
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = "native"
+}
+
+// Define your own datamodels here and run `yarn redwood prisma migrate dev`
+// to create migrations for them and apply to your dev DB.
+// TODO: Please remove the following example:
+model UserExample {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}

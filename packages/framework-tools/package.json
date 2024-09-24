@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/framework-tools",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,10 +10,19 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/buildDefaults.d.ts",
-    "default": "./dist/buildDefaults.js"
+    ".": {
+      "types": "./dist/buildDefaults.d.ts",
+      "default": "./dist/buildDefaults.js"
+    },
+    "./generateTypes": {
+      "types": "./dist/generateTypes.d.ts",
+      "default": "./dist/generateTypes.js"
+    }
   },
   "types": "./dist/buildDefaults.d.ts",
+  "bin": {
+    "rw-fwtools-attw": "./dist/bins/rw-fwtools-attw.js"
+  },
   "files": [
     "dist"
   ],
@@ -22,14 +31,17 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "esbuild": "0.21.3",
+    "@arethetypeswrong/cli": "0.16.4",
+    "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
-    "fs-extra": "11.2.0"
+    "fs-extra": "11.2.0",
+    "zx": "8.1.8"
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5"
+    "tsx": "4.19.1",
+    "type-fest": "4.26.1",
+    "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

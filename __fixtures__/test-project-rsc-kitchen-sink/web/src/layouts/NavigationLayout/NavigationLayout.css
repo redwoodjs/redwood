@@ -1,4 +1,8 @@
 .navigation-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
   & > nav {
     display: flex;
     justify-content: space-between;
@@ -23,10 +27,33 @@
       color: #333;
       padding: 5px;
       border-bottom: 2px solid transparent;
+
+      & .auth-status {
+        display: inline-block;
+        padding-left: 2px;
+        margin-top: -6px;
+      }
     }
 
     & a:hover {
       border-bottom: 2px solid #333;
+    }
+  }
+
+  & > p {
+    margin: 0.4rem 0;
+  }
+
+  & > hr {
+    margin: 0.5rem 0 0 0;
+  }
+
+  & > main {
+    display: flex;
+    flex-grow: 1;
+
+    & > div {
+      width: 100%;
     }
   }
 }

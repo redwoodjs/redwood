@@ -114,9 +114,17 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-vite-dev',
     )
 
-    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
+    expect(
+      apiCommand.command
+        .replace(/\s+/g, ' ')
+        // Remove the --max-old-space-size flag, as it's not consistent across
+        // test environments (vite sets this in their vite-ecosystem-ci tests)
+        .replace(/--max-old-space-size=\d+\s/, ''),
+    ).toEqual(
+      'yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
+    expect(apiCommand.env.NODE_ENV).toEqual('development')
+    expect(apiCommand.env.NODE_OPTIONS).toContain('--enable-source-maps')
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
   })
@@ -153,9 +161,17 @@ describe('yarn rw dev', () => {
       'yarn cross-env NODE_ENV=development rw-dev-fe',
     )
 
-    expect(apiCommand.command.replace(/\s+/g, ' ')).toEqual(
-      'yarn cross-env NODE_ENV=development NODE_OPTIONS="--enable-source-maps" yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
+    expect(
+      apiCommand.command
+        .replace(/\s+/g, ' ')
+        // Remove the --max-old-space-size flag, as it's not consistent across
+        // test environments (vite sets this in their vite-ecosystem-ci tests)
+        .replace(/--max-old-space-size=\d+\s/, ''),
+    ).toEqual(
+      'yarn nodemon --quiet --watch "/mocked/project/redwood.toml" --exec "yarn rw-api-server-watch --port 8911 --debug-port 18911 | rw-log-formatter"',
     )
+    expect(apiCommand.env.NODE_ENV).toEqual('development')
+    expect(apiCommand.env.NODE_OPTIONS).toContain('--enable-source-maps')
 
     expect(generateCommand.command).toEqual('yarn rw-gen-watch')
   })
@@ -215,34 +231,5 @@ describe('yarn rw dev', () => {
     const apiCommand = find(concurrentlyArgs, { name: 'api' })
 
     expect(apiCommand.command).not.toContain('--debug-port')
-  })
-
-  it('Will run vite, via rw-vite-dev bin if config has bundler set to Vite', async () => {
-    getConfig.mockReturnValue({
-      web: {
-        port: 8910,
-        bundler: 'vite', // <-- enable vite mode
-      },
-      api: {
-        port: 8911,
-      },
-      experimental: {
-        streamingSsr: {
-          enabled: false,
-        },
-      },
-    })
-
-    await handler({
-      side: ['web'],
-    })
-
-    const concurrentlyArgs = concurrently.mock.lastCall[0]
-
-    const webCommand = find(concurrentlyArgs, { name: 'web' })
-
-    expect(webCommand.command).toContain(
-      'yarn cross-env NODE_ENV=development rw-vite-dev',
-    )
   })
 })

@@ -22,7 +22,7 @@ const rwPaths = getPaths()
 export const handler = async ({ force }: Args) => {
   const extension = isTypeScriptProject() ? 'ts' : 'js'
 
-  const notes: Array<string> = []
+  const notes: string[] = []
 
   const tasks = new Listr([
     addApiPackages(['@envelop/sentry@5', '@sentry/node@7']),
@@ -66,11 +66,11 @@ export const handler = async ({ force }: Args) => {
           .split('\n')
 
         const handlerIndex = contentLines.findLastIndex((line) =>
-          /^export const handler = createGraphQLHandler\({/.test(line),
+          line.startsWith('export const handler = createGraphQLHandler({'),
         )
 
         const pluginsIndex = contentLines.findLastIndex((line) =>
-          /extraPlugins:/.test(line),
+          line.includes('extraPlugins:'),
         )
 
         if (handlerIndex === -1 || pluginsIndex !== -1) {
@@ -119,7 +119,7 @@ export const handler = async ({ force }: Args) => {
         )
 
         const boundaryOpenIndex = contentLines.findLastIndex((line) =>
-          /<FatalErrorBoundary page={FatalErrorPage}>/.test(line),
+          line.includes('<FatalErrorBoundary page={FatalErrorPage}>'),
         )
         contentLines.splice(
           boundaryOpenIndex,
@@ -128,7 +128,7 @@ export const handler = async ({ force }: Args) => {
         )
 
         const boundaryCloseIndex = contentLines.findLastIndex((line) =>
-          /<\/FatalErrorBoundary>/.test(line),
+          line.includes('</FatalErrorBoundary>'),
         )
         contentLines.splice(boundaryCloseIndex, 1, '</Sentry.ErrorBoundary>')
 
@@ -144,7 +144,7 @@ export const handler = async ({ force }: Args) => {
       title: 'One more thing...',
       task: (ctx) => {
         notes.push(
-          colors.green(
+          colors.important(
             'You will need to add `SENTRY_DSN` to `includeEnvironmentVariables` in redwood.toml.',
           ),
         )

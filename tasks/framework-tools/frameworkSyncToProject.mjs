@@ -51,6 +51,7 @@ const ignored = [
 
   /tsconfig.tsbuildinfo/,
   /tsconfig.build.tsbuildinfo/,
+  /tsconfig.cjs.tsbuildinfo/,
 
   (filePath) => IGNORE_EXTENSIONS.some((ext) => filePath.endsWith(ext)),
 ]
@@ -124,7 +125,7 @@ async function main() {
           c.bgYellow(c.black('Heads up ')),
           '',
           "If this failed because Nx couldn't find its package.json file in node_modules, it's a known issue. The workaround is just trying again.",
-        ].join('\n')
+        ].join('\n'),
       )
       return
     }
@@ -140,11 +141,11 @@ async function main() {
     // Save the project's package.json so that we can restore it when this process exits.
     const redwoodProjectPackageJsonPath = path.join(
       redwoodProjectPath,
-      'package.json'
+      'package.json',
     )
     const redwoodProjectPackageJson = fs.readFileSync(
       redwoodProjectPackageJsonPath,
-      'utf-8'
+      'utf-8',
     )
 
     const viteConfigPath = resolveViteConfigPath(redwoodProjectPath)
@@ -234,7 +235,19 @@ async function main() {
   process.on('SIGINT', closeWatcher)
   process.on('exit', closeWatcher)
 
+  let lastSyncEndedAt = 0
   watcher.on('all', async (event, filePath) => {
+    // We ignore changes that happen to package.json files that could have occurred
+    // as a result of the project syncing process. We do this by ignoring changes to
+    // those files that are registered within a short period after the sync process
+    // has ended - because events are being emitted only after the process has ended.
+    if (
+      Date.now() - lastSyncEndedAt < 8_000 &&
+      filePath.endsWith('package.json')
+    ) {
+      return
+    }
+
     logStatus(`${event}: ${filePath}`)
 
     if (filePath.endsWith('package.json')) {
@@ -243,7 +256,7 @@ async function main() {
           `${c.red('Warning:')} You modified a package.json file.`,
           `If you've modified the ${c.underline('dependencies')}`,
           `then you must run ${c.underline('yarn rwfw project:sync')} again.`,
-        ].join(' ')
+        ].join(' '),
       )
     }
 
@@ -256,7 +269,13 @@ async function main() {
       logStatus(`Cleaning ${c.magenta(packageName)}...`)
       await rimraf(path.join(path.dirname(packageJsonPath), 'dist'))
       await rimraf(
-        path.join(path.dirname(packageJsonPath), 'tsconfig.tsbuildinfo')
+        path.join(path.dirname(packageJsonPath), 'tsconfig.tsbuildinfo'),
+      )
+      await rimraf(
+        path.join(path.dirname(packageJsonPath), 'tsconfig.build.tsbuildinfo'),
+      )
+      await rimraf(
+        path.join(path.dirname(packageJsonPath), 'tsconfig.cjs.tsbuildinfo'),
       )
 
       logStatus(`Building ${c.magenta(packageName)}...`)
@@ -278,6 +297,7 @@ async function main() {
 
     logStatus(`Done, and waiting for changes...`)
     console.log(separator)
+    lastSyncEndedAt = Date.now()
   })
 }
 
@@ -324,7 +344,7 @@ function createCleanUp({
         "- remove your project's node_modules directory",
         "- run 'yarn install'",
         '',
-      ].join('\n')
+      ].join('\n'),
     )
 
     cleanedUp = true

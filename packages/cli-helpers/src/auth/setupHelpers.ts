@@ -52,7 +52,7 @@ export interface AuthHandlerArgs {
   webAuthn?: boolean
   webPackages?: string[]
   apiPackages?: string[]
-  extraTasks?: Array<ListrTask<AuthGeneratorCtx> | undefined>
+  extraTasks?: (ListrTask<AuthGeneratorCtx> | undefined)[]
   notes?: string[]
   verbose?: boolean
 }
@@ -145,7 +145,9 @@ export const standardAuthHandler = async ({
 
   try {
     await tasks.run()
-    notes && console.log(`\n   ${notes.join('\n   ')}\n`)
+    if (notes) {
+      console.log(`\n   ${notes.join('\n   ')}\n`)
+    }
   } catch (e) {
     if (isErrorWithMessage(e)) {
       errorTelemetry(process.argv, e.message)

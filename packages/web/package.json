@@ -1,25 +1,13 @@
 {
   "name": "@redwoodjs/web",
-  "version": "7.0.0",
-  "type": "module",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/web"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "cross-env": "./dist/cjs/bins/cross-env.js",
-    "msw": "./dist/cjs/bins/msw.js",
-    "redwood": "./dist/cjs/bins/redwood.js",
-    "rw": "./dist/cjs/bins/redwood.js",
-    "rwfw": "./dist/cjs/bins/rwfw.js",
-    "storybook": "./dist/cjs/bins/storybook.js",
-    "tsc": "./dist/cjs/bins/tsc.js",
-    "webpack": "./dist/cjs/bins/webpack.js"
-  },
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -32,14 +20,56 @@
       }
     },
     "./serverInject": {
-      "require": "./dist/cjs/components/ServerInject.js",
-      "import": "./dist/components/ServerInject.js",
-      "types": "./dist/components/ServerInject.d.ts",
-      "default": "./dist/components/ServerInject.js"
+      "import": {
+        "types": "./dist/components/ServerInject.d.ts",
+        "default": "./dist/components/ServerInject.js"
+      },
+      "require": {
+        "types": "./dist/cjs/components/ServerInject.d.ts",
+        "default": "./dist/cjs/components/ServerInject.js"
+      }
+    },
+    "./request": {
+      "import": {
+        "types": "./dist/server/request.d.ts",
+        "default": "./dist/server/request.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/request.d.ts",
+        "default": "./dist/cjs/server/request.js"
+      }
+    },
+    "./middleware": {
+      "import": {
+        "types": "./dist/server/middleware.d.ts",
+        "default": "./dist/server/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/middleware.d.ts",
+        "default": "./dist/cjs/server/middleware.js"
+      }
+    },
+    "./dist/server/middleware": {
+      "import": {
+        "types": "./dist/server/middleware.d.ts",
+        "default": "./dist/server/middleware.js"
+      },
+      "require": {
+        "types": "./dist/cjs/server/middleware.d.ts",
+        "default": "./dist/cjs/server/middleware.js"
+      }
     },
     "./dist/components/*": {
       "require": "./dist/cjs/components/*.js",
       "import": "./dist/components/*.js"
+    },
+    "./htmlTags": {
+      "require": "./dist/cjs/components/htmlTags.js",
+      "import": "./dist/components/htmlTags.js"
+    },
+    "./Metadata": {
+      "require": "./dist/cjs/components/Metadata.js",
+      "import": "./dist/components/Metadata.js"
     },
     "./dist/apollo/suspense": {
       "require": "./dist/cjs/apollo/suspense.js",
@@ -57,20 +87,40 @@
       "default": "./dist/entry/index.js"
     },
     "./toast": {
-      "require": "./dist/cjs/toast/index.js",
-      "import": "./dist/toast/index.js",
-      "types": "./dist/toast/index.d.ts"
+      "import": {
+        "types": "./dist/toast/index.d.ts",
+        "default": "./dist/toast/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/toast/index.d.ts",
+        "default": "./dist/cjs/toast/index.js"
+      }
     },
     "./apollo": {
-      "require": "./dist/cjs/apollo/index.js",
-      "import": "./dist/apollo/index.js",
-      "types": "./dist/apollo/index.d.ts",
-      "default": "./dist/cjs/apollo/index.js"
+      "import": {
+        "types": "./dist/apollo/index.d.ts",
+        "default": "./dist/apollo/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/apollo/index.d.ts",
+        "default": "./dist/cjs/apollo/index.js"
+      }
     },
     "./forceEsmApollo": {
       "require": "./dist/apollo/index.js",
       "import": "./dist/apollo/index.js"
     }
+  },
+  "main": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "cross-env": "./dist/cjs/bins/cross-env.js",
+    "msw": "./dist/cjs/bins/msw.js",
+    "redwood": "./dist/cjs/bins/redwood.js",
+    "rw": "./dist/cjs/bins/redwood.js",
+    "rwfw": "./dist/cjs/bins/rwfw.js",
+    "storybook": "./dist/cjs/bins/storybook.js",
+    "tsc": "./dist/cjs/bins/tsc.js"
   },
   "files": [
     "dist",
@@ -79,21 +129,26 @@
     "src/entry"
   ],
   "scripts": {
-    "build": "tsx ./build.mts && yarn build:types",
+    "build": "tsx ./build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-web.tgz",
-    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.types-cjs.json",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.9.9",
-    "@babel/runtime-corejs3": "7.24.5",
+    "@apollo/client": "3.11.1",
+    "@babel/runtime-corejs3": "7.25.6",
     "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1",
-    "graphql": "16.8.1",
+    "@redwoodjs/server-store": "workspace:*",
+    "@whatwg-node/fetch": "0.9.21",
+    "apollo-upload-client": "18.0.1",
+    "core-js": "3.38.1",
+    "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
     "react-helmet-async": "2.0.5",
@@ -103,27 +158,32 @@
   },
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
-    "@babel/cli": "7.24.5",
+    "@arethetypeswrong/cli": "0.16.4",
+    "@babel/cli": "7.25.6",
     "@babel/core": "^7.22.20",
-    "@babel/plugin-transform-runtime": "7.24.3",
-    "@babel/runtime": "7.24.5",
+    "@babel/plugin-transform-runtime": "7.25.4",
+    "@babel/runtime": "7.25.6",
     "@redwoodjs/framework-tools": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
-    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "14.3.1",
+    "@types/apollo-upload-client": "^18",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "nodemon": "3.1.3",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.0.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "concurrently": "8.2.2",
+    "nodemon": "3.1.7",
+    "publint": "0.2.11",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916",
+    "tstyche": "2.1.1",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

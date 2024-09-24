@@ -1,8 +1,9 @@
-
 ```
 npx @redwoodjs/codemods@canary update-theme-config
 ```
+
 # Update Theme Config
+
 Modifies the config files specifically for mantine and chakra-ui to use ESM syntax to export the theme.
 
 ```diff

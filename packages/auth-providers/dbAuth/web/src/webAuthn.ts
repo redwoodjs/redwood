@@ -50,7 +50,7 @@ export default class WebAuthnClient {
 
   async isSupported() {
     const { browserSupportsWebAuthn } = await import('@simplewebauthn/browser')
-    return await browserSupportsWebAuthn()
+    return browserSupportsWebAuthn()
   }
 
   isEnabled() {

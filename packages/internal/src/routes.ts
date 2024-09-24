@@ -4,7 +4,7 @@ import chalk from 'chalk'
 
 import { getPaths, getRouteHookForPage } from '@redwoodjs/project-config'
 import { getRouteRegexAndParams } from '@redwoodjs/router'
-import { getProject } from '@redwoodjs/structure/dist/index'
+import { getProject } from '@redwoodjs/structure/dist/index.js'
 import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
 
 export interface RouteInformation {

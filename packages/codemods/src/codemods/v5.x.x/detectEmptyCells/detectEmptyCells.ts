@@ -24,7 +24,7 @@ async function detectEmptyCells(taskContext: TaskInnerAPI) {
 
     try {
       fields = parseGqlQueryToAst(cellQuery)[0].fields
-    } catch (e) {
+    } catch {
       warnings.push(cellPath)
       return
     }

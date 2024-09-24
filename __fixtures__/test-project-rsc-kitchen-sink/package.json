@@ -7,8 +7,8 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/core": "7.0.0-canary.1011",
-    "@redwoodjs/project-config": "7.0.0-canary.1011"
+    "@redwoodjs/core": "8.0.0-canary.861",
+    "@redwoodjs/project-config": "8.0.0-canary.861"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -23,7 +23,6 @@
   "packageManager": "yarn@4.1.1",
   "resolutions": {
     "@apollo/client-react-streaming/superjson": "^1.12.2",
-    "@apollo/client/rehackt": "0.1.0",
-    "react-is": "19.0.0-beta-04b058868c-20240508"
+    "react-is": "19.0.0-rc-f2df5694-20240916"
   }
 }

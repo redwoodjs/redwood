@@ -3,7 +3,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
-import { LocationProvider, useLocation } from '../location'
+import { LocationProvider, useLocation } from '../location.js'
 
 describe('useLocation', () => {
   const TestComponent = () => {

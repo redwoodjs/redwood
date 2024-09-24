@@ -88,4 +88,5 @@ module.exports = {
     ],
   },
   resolver: path.resolve(__dirname, './resolver.js'),
+  testPathIgnorePatterns: ['.(stories|mock).[jt]sx?$'],
 }

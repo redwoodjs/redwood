@@ -10,29 +10,6 @@ import '../../../lib/test'
 import * as helpers from '../helpers'
 import * as page from '../page/page'
 
-const PAGE_TEMPLATE_OUTPUT = `import { Link, routes } from '@redwoodjs/router'
-import { Metadata } from '@redwoodjs/web'
-
-const FooBarPage = () => {
-  return (
-    <>
-      <Metadata title="FooBar" description="FooBar page" />
-
-      <h1>FooBarPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
-      </p>
-      <p>
-        My default route is named <code>fooBar</code>, link to me with \`
-        <Link to={routes.fooBar()}>FooBar</Link>\`
-      </p>
-    </>
-  )
-}
-
-export default FooBarPage
-`
-
 test('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
   const output = helpers.customOrDefaultTemplatePath({
     side: 'web',
@@ -89,7 +66,10 @@ test('templateForComponentFile creates a proper output path for files', async ()
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -108,7 +88,10 @@ test('templateForComponentFile creates a proper output path for files with all c
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -127,7 +110,10 @@ test('templateForComponentFile creates a proper output path for files for starti
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -146,7 +132,10 @@ test('templateForComponentFile creates a proper output path for files with upper
       webPathSection: 'pages',
       generator: 'page',
       templatePath: 'page.tsx.template',
-      templateVars: page.paramVariants(helpers.pathName(undefined, name)),
+      templateVars: {
+        ...page.paramVariants(helpers.pathName(undefined, name)),
+        rscEnabled: false,
+      },
     })
 
     expect(output[0]).toEqual(
@@ -162,7 +151,10 @@ test('templateForComponentFile can create a path in /web', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -177,7 +169,10 @@ test('templateForComponentFile can create a path in /api', async () => {
     apiPathSection: 'services',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -192,7 +187,10 @@ test('templateForComponentFile can override generated component name', async () 
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -208,7 +206,10 @@ test('templateForComponentFile can override file extension', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'Home')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'Home')),
+      rscEnabled: false,
+    },
   })
 
   expect(output[0]).toEqual(
@@ -238,10 +239,36 @@ test('templateForComponentFile creates a template', async () => {
     webPathSection: 'pages',
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: page.paramVariants(helpers.pathName(undefined, 'fooBar')),
+    templateVars: {
+      ...page.paramVariants(helpers.pathName(undefined, 'fooBar')),
+      rscEnabled: false,
+    },
   })
 
-  expect(output[1]).toEqual(PAGE_TEMPLATE_OUTPUT)
+  expect(output[1]).toMatchInlineSnapshot(`
+    "// import { Link, routes } from '@redwoodjs/router'
+    import { Metadata } from '@redwoodjs/web'
+
+    const FooBarPage = () => {
+      return (
+        <>
+          <Metadata title="FooBar" description="FooBar page" />
+
+          <h1>FooBarPage</h1>
+          <p>
+            Find me in <code>./web/src/pages/FooBarPage/FooBarPage.js</code>
+          </p>
+          {/*
+              My default route is named \`fooBar\`, link to me with:
+              \`<Link to={routes.fooBar()}>FooBar</Link>\`
+          */}
+        </>
+      )
+    }
+
+    export default FooBarPage
+    "
+  `)
 })
 
 test('pathName uses passed path if present', () => {

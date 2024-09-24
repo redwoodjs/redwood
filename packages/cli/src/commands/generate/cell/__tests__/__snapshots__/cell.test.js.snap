@@ -84,7 +84,20 @@ export const Success = ({ customIdFields }) => {
 exports[`Custom Id Field files > List cell > creates a cell list mock with a custom id field 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
-  customIdFields: [{ uuid: '42' }, { uuid: '43' }, { uuid: '44' }],
+  customIdFields: [
+    {
+      __typename: 'CustomIdField',
+      uuid: '42',
+    },
+    {
+      __typename: 'CustomIdField',
+      uuid: '43',
+    },
+    {
+      __typename: 'CustomIdField',
+      uuid: '44',
+    },
+  ],
 })
 "
 `;
@@ -128,6 +141,7 @@ export const success = {
 
 exports[`Custom Id Field files > List cell > creates a cell list test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CustomIdFieldsCell'
 import { standard } from './CustomIdFieldsCell.mock'
 
@@ -198,6 +212,7 @@ exports[`Custom Id Field files > Single cell > creates a cell mock with a custom
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   customIdField: {
+    __typename: 'CustomIdField',
     uuid: '42',
   },
 })
@@ -243,6 +258,7 @@ export const success = {
 
 exports[`Custom Id Field files > Single cell > creates a cell test with a custom id field 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './CustomIdFieldCell'
 import { standard } from './CustomIdFieldCell.mock'
 
@@ -313,6 +329,7 @@ exports[`Kebab case words > creates a cell mock with a kebabCase word name 1`] =
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
+    __typename: 'UserProfile',
     id: 42,
   },
 })
@@ -358,6 +375,7 @@ export const success = {
 
 exports[`Kebab case words > creates a cell test with a kebabCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -428,6 +446,7 @@ exports[`Multiword files > creates a cell mock with a multi word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
+    __typename: 'UserProfile',
     id: 42,
   },
 })
@@ -473,6 +492,7 @@ export const success = {
 
 exports[`Multiword files > creates a cell test with a multi word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -543,6 +563,7 @@ exports[`Single word files > creates a cell mock with a single word name 1`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   user: {
+    __typename: 'User',
     id: 42,
   },
 })
@@ -588,6 +609,7 @@ export const success = {
 
 exports[`Single word files > creates a cell test with a single word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './UserCell'
 import { standard } from './UserCell.mock'
 
@@ -658,6 +680,7 @@ exports[`Snake case words > creates a cell mock with a snakeCase word name 1`] =
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
+    __typename: 'UserProfile',
     id: 42,
   },
 })
@@ -703,6 +726,7 @@ export const success = {
 
 exports[`Snake case words > creates a cell test with a snakeCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -786,6 +810,7 @@ export const Success = ({
 
 exports[`TypeScript: generates list cells if list flag passed in 2`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './BazingaCell'
 import { standard } from './BazingaCell.mock'
 
@@ -872,6 +897,7 @@ exports[`TypeScript: generates list cells if list flag passed in 4`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   bazinga: {
+    __typename: 'Bazinga' as const,
     id: 42,
   },
 })
@@ -943,6 +969,7 @@ exports[`camelCase words > creates a cell mock with a camelCase word name 1`] = 
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   userProfile: {
+    __typename: 'UserProfile',
     id: 42,
   },
 })
@@ -988,6 +1015,7 @@ export const success = {
 
 exports[`camelCase words > creates a cell test with a camelCase word name 1`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './UserProfileCell'
 import { standard } from './UserProfileCell.mock'
 
@@ -1056,6 +1084,7 @@ export const Success = ({ address }) => {
 
 exports[`generates a cell with a string primary id key 2`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './AddressCell'
 import { standard } from './AddressCell.mock'
 
@@ -1140,6 +1169,7 @@ exports[`generates a cell with a string primary id key 4`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
   address: {
+    __typename: 'Address',
     id: '42',
   },
 })
@@ -1177,6 +1207,7 @@ export const Success = ({ addresses }) => {
 
 exports[`generates list a cell with a string primary id keys 2`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './AddressesCell'
 import { standard } from './AddressesCell.mock'
 
@@ -1260,7 +1291,20 @@ export const success = {
 exports[`generates list a cell with a string primary id keys 4`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
-  addresses: [{ id: '42' }, { id: '43' }, { id: '44' }],
+  addresses: [
+    {
+      __typename: 'Address',
+      id: '42',
+    },
+    {
+      __typename: 'Address',
+      id: '43',
+    },
+    {
+      __typename: 'Address',
+      id: '44',
+    },
+  ],
 })
 "
 `;
@@ -1296,6 +1340,7 @@ export const Success = ({ members }) => {
 
 exports[`generates list cells if list flag passed in 2`] = `
 "import { render } from '@redwoodjs/testing/web'
+
 import { Loading, Empty, Failure, Success } from './MembersCell'
 import { standard } from './MembersCell.mock'
 
@@ -1379,7 +1424,20 @@ export const success = {
 exports[`generates list cells if list flag passed in 4`] = `
 "// Define your own mock data here:
 export const standard = (/* vars, { ctx, req } */) => ({
-  members: [{ id: 42 }, { id: 43 }, { id: 44 }],
+  members: [
+    {
+      __typename: 'Member',
+      id: 42,
+    },
+    {
+      __typename: 'Member',
+      id: 43,
+    },
+    {
+      __typename: 'Member',
+      id: 44,
+    },
+  ],
 })
 "
 `;

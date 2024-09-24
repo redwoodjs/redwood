@@ -45,7 +45,9 @@ yarn redwood dev
 _Contributors are Welcome! Get started [here](https://redwoodjs.com/docs/contributing). And don't hesitate to ask for help on the forums and chat_.
 
 **Table of Contents**
+
 <!-- toc -->
+
 - [Description](#description)
 - [Local Development](#local-development)
   - [Installation Script](#installation-script)
@@ -56,6 +58,7 @@ _Contributors are Welcome! Get started [here](https://redwoodjs.com/docs/contrib
 ## Description
 
 This package creates and installs a Redwood project, which is the entry point for anyone using Redwood. It has two parts:
+
 - The installation script [`src/create-redwood-app.js`](./src/create-redwood-app.js)
 - Project template code in the [`templates/`](./templates/) directory
 
@@ -98,6 +101,7 @@ yarn node ./dist/create-redwood-app.js /path/to/new/redwood-app
 By default yarn create will pick the latest stable version to run, but you can specify a different version via yarn too!
 
 To try the canary version, run:
+
 ```
 npx create-redwood-app@canary /path/to/project
 ```

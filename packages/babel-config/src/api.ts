@@ -20,6 +20,7 @@ import pluginRedwoodContextWrapping from './plugins/babel-plugin-redwood-context
 import pluginRedwoodDirectoryNamedImport from './plugins/babel-plugin-redwood-directory-named-import'
 import pluginRedwoodGraphqlOptionsExtract from './plugins/babel-plugin-redwood-graphql-options-extract'
 import pluginRedwoodImportDir from './plugins/babel-plugin-redwood-import-dir'
+import pluginRedwoodJobPathInjector from './plugins/babel-plugin-redwood-job-path-injector'
 import pluginRedwoodOTelWrapping from './plugins/babel-plugin-redwood-otel-wrapping'
 
 export const TARGETS_NODE = '20.10'
@@ -74,7 +75,7 @@ export const BABEL_PLUGIN_TRANSFORM_RUNTIME_OPTIONS = {
 // Plugin shape: [ ["Target", "Options", "name"] ],
 // a custom "name" can be supplied so that user's do not accidentally overwrite
 // Redwood's own plugins when they specify their own.
-export type PluginList = Array<PluginShape>
+export type PluginList = PluginShape[]
 type PluginShape =
   | [PluginTarget, PluginOptions, undefined | string]
   | [PluginTarget, PluginOptions]
@@ -85,7 +86,7 @@ export const getApiSideBabelPlugins = ({
 } = {}) => {
   const tsConfig = parseTypeScriptConfigFiles()
 
-  const plugins: Array<PluginShape | boolean> = [
+  const plugins: (PluginShape | boolean)[] = [
     ...getCommonPlugins(),
     // Needed to support `/** @jsxImportSource custom-jsx-library */`
     // comments in JSX files
@@ -177,6 +178,12 @@ export const getApiSideBabelOverrides = ({ projectIsEsm = false } = {}) => {
           },
         ],
       ],
+    },
+    // Add import names and paths to job definitions
+    {
+      // match */api/src/jobs/*.js|ts
+      test: /.+api(?:[\\|/])src(?:[\\|/])jobs(?:[\\|/]).+.(?:js|ts)$/,
+      plugins: [[pluginRedwoodJobPathInjector]],
     },
   ].filter(Boolean)
   return overrides as TransformOptions[]

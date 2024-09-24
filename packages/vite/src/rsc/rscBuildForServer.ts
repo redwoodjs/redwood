@@ -31,6 +31,9 @@ export async function rscBuildForServer(
     throw new Error('Server Entry file not found')
   }
 
+  /** Base path for where to place built artifacts */
+  const outDir = rwPaths.web.distRsc
+
   // TODO (RSC): No redwood-vite plugin, add it in here
   const rscServerBuildOutput = await viteBuild({
     envFile: false,
@@ -84,7 +87,7 @@ export async function rscBuildForServer(
       // That's why it needs the `clientEntryFiles` data
       // (It does other things as well, but that's why it needs clientEntryFiles)
       rscTransformUseClientPlugin(clientEntryFiles),
-      rscTransformUseServerPlugin(),
+      rscTransformUseServerPlugin(outDir, serverEntryFiles),
       rscRoutesImports(),
     ],
     build: {
@@ -92,7 +95,7 @@ export async function rscBuildForServer(
       minify: false,
       ssr: true,
       ssrEmitAssets: true,
-      outDir: rwPaths.web.distRsc,
+      outDir,
       emptyOutDir: true, // Needed because `outDir` is not inside `root`
       manifest: 'server-build-manifest.json',
       rollupOptions: {

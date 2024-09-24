@@ -8,7 +8,7 @@ inputs:
     description: >
       For some actions, setting up the yarn cache takes longer than it would to just yarn install.
     required: false
-    default: true
+    default: 'true'
 
   yarn-install-directory:
     description: >
@@ -19,7 +19,7 @@ inputs:
     description: >
       Whether or not to run `yarn build` to build all the framework packages.
     required: false
-    default: true
+    default: 'true'
 
 runs:
   using: composite
@@ -53,7 +53,7 @@ runs:
       working-directory: ${{ inputs.yarn-install-directory }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
-      run: yarn install --inline-builds
+      run: yarn install --inline-builds && yarn --cwd packages/create-redwood-rsc-app install --inline-builds
 
     - name: 🏗️ Build
       if: inputs.build == 'true'

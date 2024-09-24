@@ -13,11 +13,6 @@ export enum TargetEnum {
   ELECTRON = 'electron',
 }
 
-export enum BundlerEnum {
-  WEBPACK = 'webpack',
-  VITE = 'vite',
-}
-
 export interface NodeTargetConfig {
   title: string
   name?: string
@@ -37,7 +32,6 @@ interface BrowserTargetConfig {
   port: number
   path: string
   target: TargetEnum.BROWSER
-  bundler: BundlerEnum
   includeEnvironmentVariables: string[]
   /**
    * Specify the URL to your api-server.
@@ -93,6 +87,9 @@ export interface Config {
   graphql: {
     fragments: boolean
     trustedDocuments: boolean
+    includeScalars: {
+      File: boolean
+    }
   }
   notifications: {
     versionUpdates: string[]
@@ -130,15 +127,12 @@ export interface CLIPlugin {
   enabled?: boolean
 }
 
-// Note that web's includeEnvironmentVariables is handled in `webpack.common.js`
-// https://github.com/redwoodjs/redwood/blob/d51ade08118c17459cebcdb496197ea52485364a/packages/core/config/webpack.common.js#L19
 const DEFAULT_CONFIG: Config = {
   web: {
     title: 'Redwood App',
     port: 8910,
     path: './web',
     target: TargetEnum.BROWSER,
-    bundler: BundlerEnum.VITE,
     includeEnvironmentVariables: [],
     apiUrl: '/.redwood/functions',
     fastRefresh: true,
@@ -154,7 +148,11 @@ const DEFAULT_CONFIG: Config = {
     serverConfig: './api/server.config.js',
     debugPort: 18911,
   },
-  graphql: { fragments: false, trustedDocuments: false },
+  graphql: {
+    fragments: false,
+    trustedDocuments: false,
+    includeScalars: { File: true },
+  },
   browser: {
     open: false,
   },
@@ -185,9 +183,6 @@ const DEFAULT_CONFIG: Config = {
     cli: {
       autoInstall: true,
       plugins: [
-        {
-          package: '@redwoodjs/cli-storybook',
-        },
         {
           package: '@redwoodjs/cli-storybook-vite',
         },

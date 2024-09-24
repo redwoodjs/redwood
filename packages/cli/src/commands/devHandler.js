@@ -21,14 +21,12 @@ export const handler = async ({
   side = ['api', 'web'],
   forward = '',
   generate = true,
-  watchNodeModules = process.env.RWJS_WATCH_NODE_MODULES === '1',
   apiDebugPort,
 }) => {
   recordTelemetryAttributes({
     command: 'dev',
     side: JSON.stringify(side),
     generate,
-    watchNodeModules,
   })
 
   const rwjsPaths = getPaths()
@@ -60,7 +58,7 @@ export const handler = async ({
 
   // Check web port
   if (side.includes('web')) {
-    // Extract any ports the user forwarded to the webpack server and prefer that instead
+    // Extract any ports the user forwarded to the dev server and prefer that instead
     const forwardedPortMatches = [
       ...forward.matchAll(/\-\-port(\=|\s)(?<port>[^\s]*)/g),
     ]
@@ -140,10 +138,6 @@ export const handler = async ({
     }
   }
 
-  const webpackDevConfig = require.resolve(
-    '@redwoodjs/core/config/webpack.development.js',
-  )
-
   const getApiDebugFlag = () => {
     // Passed in flag takes precedence
     if (apiDebugPort) {
@@ -180,33 +174,23 @@ export const handler = async ({
     webCommand = `yarn cross-env NODE_ENV=development rw-dev-fe ${forward}`
   }
 
-  // 3. Webpack (SPA): we will remove this override after v7
-  if (getConfig().web.bundler === 'webpack') {
-    if (streamingSsrEnabled) {
-      throw new Error(
-        'Webpack does not support SSR. Please switch your bundler to Vite in redwood.toml first',
-      )
-    } else {
-      webCommand = `yarn cross-env NODE_ENV=development RWJS_WATCH_NODE_MODULES=${
-        watchNodeModules ? '1' : ''
-      } webpack serve --config "${webpackDevConfig}" ${forward}`
-    }
-  }
-
   /** @type {Record<string, import('concurrently').CommandObj>} */
   const jobs = {
     api: {
       name: 'api',
       command: [
-        `yarn cross-env NODE_ENV=development NODE_OPTIONS="${getDevNodeOptions()}"`,
-        '  yarn nodemon',
-        '    --quiet',
-        `    --watch "${redwoodConfigPath}"`,
-        '    --exec "yarn rw-api-server-watch',
-        `      --port ${apiAvailablePort}`,
-        `      ${getApiDebugFlag()}`,
-        '      | rw-log-formatter"',
+        'yarn nodemon',
+        '  --quiet',
+        `  --watch "${redwoodConfigPath}"`,
+        '  --exec "yarn rw-api-server-watch',
+        `    --port ${apiAvailablePort}`,
+        `    ${getApiDebugFlag()}`,
+        '    | rw-log-formatter"',
       ].join(' '),
+      env: {
+        NODE_ENV: 'development',
+        NODE_OPTIONS: getDevNodeOptions(),
+      },
       prefixColor: 'cyan',
       runWhen: () => fs.existsSync(rwjsPaths.api.src),
     },

@@ -577,7 +577,7 @@ export class DbAuthHandler<
       user = await this.dbAccessor.findUnique({
         where: { [this.options.authFields.username]: username },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -607,7 +607,7 @@ export class DbAuthHandler<
             [this.options.authFields.resetTokenExpiresAt]: tokenExpires,
           },
         })
-      } catch (e) {
+      } catch {
         throw new DbAuthError.GenericError()
       }
 
@@ -665,10 +665,7 @@ export class DbAuthHandler<
       dbUser,
     )
 
-    if (
-      handlerUser == null ||
-      handlerUser[this.options.authFields.id] == null
-    ) {
+    if (handlerUser?.[this.options.authFields.id] == null) {
       throw new DbAuthError.NoUserIdError()
     }
 
@@ -705,11 +702,9 @@ export class DbAuthHandler<
     }
 
     // check if password is valid using signup criteria
-    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(
-      password as string,
-    )
+    ;(this.options.signup as SignupFlowOptions).passwordValidation?.(password)
 
-    let user = await this._findUserByToken(resetToken as string)
+    let user = await this._findUserByToken(resetToken)
     const [hashedPassword] = hashPassword(password, {
       salt: user.salt,
     })
@@ -738,7 +733,7 @@ export class DbAuthHandler<
           [this.options.authFields.hashedPassword]: hashedPassword,
         },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -815,7 +810,7 @@ export class DbAuthHandler<
       throw new DbAuthError.WebAuthnError('Missing Id in request')
     }
 
-    if (!webAuthnOptions || !webAuthnOptions.enabled) {
+    if (!webAuthnOptions?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -901,7 +896,7 @@ export class DbAuthHandler<
       '@simplewebauthn/server'
     )
 
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!this.options.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -912,11 +907,11 @@ export class DbAuthHandler<
     let user
 
     if (credentialId) {
-      user = await this.dbCredentialAccessor
-        .findFirst({
-          where: { [webAuthnOptions.credentialFields.id]: credentialId },
-        })
-        .user()
+      const credential = await this.dbCredentialAccessor.findUnique({
+        where: { [webAuthnOptions.credentialFields.id]: credentialId },
+        include: { [this.options.authModelAccessor]: true },
+      })
+      user = credential[this.options.authModelAccessor]
     } else {
       // webauthn session not present, fallback to getting user from regular
       // session cookie
@@ -1015,7 +1010,7 @@ export class DbAuthHandler<
       '@simplewebauthn/server'
     )
 
-    if (this.options.webAuthn === undefined || !this.options.webAuthn.enabled) {
+    if (!this.options.webAuthn?.enabled) {
       throw new DbAuthError.WebAuthnError('WebAuthn is not enabled')
     }
 
@@ -1210,9 +1205,7 @@ export class DbAuthHandler<
       delete userCookieAttributes.name
     }
 
-    const cookieOptions = { ...userCookieAttributes, ...options } || {
-      ...options,
-    }
+    const cookieOptions = { ...userCookieAttributes, ...options }
     const meta = Object.keys(cookieOptions)
       .map((key) => {
         const optionValue =
@@ -1319,7 +1312,7 @@ export class DbAuthHandler<
           [this.options.authFields.resetTokenExpiresAt]: null,
         },
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
   }
@@ -1354,7 +1347,7 @@ export class DbAuthHandler<
       user = await this.dbAccessor.findFirst({
         where: findUniqueUserMatchCriteriaOptions,
       })
-    } catch (e) {
+    } catch {
       throw new DbAuthError.GenericError()
     }
 
@@ -1503,7 +1496,7 @@ export class DbAuthHandler<
       // try getting it from the body in JSON: { method: [methodName] }
       try {
         methodName = this.normalizedRequest.jsonBody.method
-      } catch (e) {
+      } catch {
         // there's no body, or it's not JSON, `handler` will return a 404
       }
     }

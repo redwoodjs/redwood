@@ -57,7 +57,7 @@ const getSupabaseAccessTokenFromCookie = async (
   if (!error) {
     const { session } = data
     if (session) {
-      return await session.access_token
+      return session.access_token
     }
     throw new Error('No Supabase session found')
   } else {

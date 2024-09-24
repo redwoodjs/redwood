@@ -4,7 +4,7 @@ import { $ } from 'zx'
 import { rw, rwServer } from './vitest.setup.mjs'
 
 describe('rw serve', () => {
-  it("has help configured", async () => {
+  it('has help configured', async () => {
     const { stdout } = await $`yarn node ${rw} serve --help`
     expect(stdout).toMatchInlineSnapshot(`
       "rw serve [side]
@@ -17,7 +17,6 @@ describe('rw serve', () => {
         rw serve web  Start a server for serving the web side
 
       Options:
-            --version                             Show version number        [boolean]
             --cwd                                 Working directory to use (where
                                                   \`redwood.toml\` is located)
             --load-env-files                      Load additional .env files. Values
@@ -25,6 +24,7 @@ describe('rw serve', () => {
                                                   override earlier ones.       [array]
             --telemetry                           Whether to send anonymous usage
                                                   telemetry to RedwoodJS     [boolean]
+            --version                             Show version number        [boolean]
             --webPort, --web-port                 The port for the web server to
                                                   listen on                   [number]
             --webHost, --web-host                 The host for the web server to
@@ -65,7 +65,6 @@ describe('rw serve', () => {
           rw serve web  Start a server for serving the web side
 
         Options:
-              --version                             Show version number        [boolean]
               --cwd                                 Working directory to use (where
                                                     \`redwood.toml\` is located)
               --load-env-files                      Load additional .env files. Values
@@ -73,6 +72,7 @@ describe('rw serve', () => {
                                                     override earlier ones.       [array]
               --telemetry                           Whether to send anonymous usage
                                                     telemetry to RedwoodJS     [boolean]
+              --version                             Show version number        [boolean]
               --webPort, --web-port                 The port for the web server to
                                                     listen on                   [number]
               --webHost, --web-host                 The host for the web server to
@@ -100,7 +100,7 @@ describe('rw serve', () => {
 })
 
 describe('rwServer', () => {
-  it("has help configured", async () => {
+  it('has help configured', async () => {
     const { stdout } = await $`yarn node ${rwServer} --help`
     expect(stdout).toMatchInlineSnapshot(`
       "rw-server

@@ -16,4 +16,7 @@ export const autoImports = AutoImport({
       ],
     },
   ],
+
+  // We provide our mocking types elsewhere and so don't need this plugin to generate them.
+  dts: false,
 })

@@ -1,0 +1,54 @@
+{
+  "name": "@redwoodjs/jobs",
+  "version": "8.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/jobs"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "rw-jobs": "./dist/bins/rw-jobs.js",
+    "rw-jobs-worker": "./dist/bins/rw-jobs-worker.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-jobs.tgz",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn rw-fwtools-attw",
+    "check:package": "concurrently npm:check:attw yarn:publint",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@redwoodjs/cli-helpers": "workspace:*",
+    "@redwoodjs/project-config": "workspace:*",
+    "type-fest": "4.26.1"
+  },
+  "devDependencies": {
+    "@prisma/client": "5.20.0",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
+  }
+}

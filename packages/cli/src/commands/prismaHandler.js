@@ -33,7 +33,9 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
         commands[0],
       )
     ) {
-      if (!fs.existsSync(rwjsPaths.api.dbSchema)) {
+      // if no schema file or directory exists
+      const schemaDir = path.dirname(rwjsPaths.api.dbSchema)
+      if (!fs.existsSync(rwjsPaths.api.dbSchema) && !fs.existsSync(schemaDir)) {
         console.error()
         console.error(c.error('No Prisma Schema found.'))
         console.error(`Redwood searched here '${rwjsPaths.api.dbSchema}'`)
@@ -61,7 +63,7 @@ export const handler = async ({ _, $0, commands = [], ...options }) => {
   }
 
   console.log()
-  console.log(c.green('Running Prisma CLI...'))
+  console.log(c.note('Running Prisma CLI...'))
   console.log(c.underline('$ yarn prisma ' + args.join(' ')))
   console.log()
 

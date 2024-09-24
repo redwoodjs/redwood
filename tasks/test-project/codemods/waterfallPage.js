@@ -8,7 +8,7 @@ export default (file, api) => {
 
   const importComponent = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('WaterfallBlogPostCell'))],
-    j.stringLiteral('src/components/WaterfallBlogPostCell')
+    j.stringLiteral('src/components/WaterfallBlogPostCell'),
   )
 
   root.find(j.ImportDeclaration).at(-1).insertAfter(importComponent)

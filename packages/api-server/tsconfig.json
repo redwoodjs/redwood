@@ -1,22 +1,17 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
+    "isolatedModules": true,
     "emitDeclarationOnly": false,
-    "noEmit": true,
+    "noEmit": true
   },
-  "include": ["src", "ambient.d.ts"],
+  "include": ["."],
   "references": [
     { "path": "../internal" },
     { "path": "../project-config" },
     { "path": "../adapters/fastify/web" },
-    { "path": "../web-server" }
+    { "path": "../web-server" },
+    { "path": "../realtime" }
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/__mocks__",
-    "**/__tests__/fixtures",
-  ]
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__tests__/fixtures"]
 }

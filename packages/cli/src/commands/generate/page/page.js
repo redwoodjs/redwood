@@ -94,7 +94,10 @@ export const files = async ({ name, tests, stories, typescript, ...rest }) => {
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'page',
     templatePath: 'page.tsx.template',
-    templateVars: rest,
+    templateVars: {
+      rscEnabled: getConfig().experimental?.rsc?.enabled,
+      ...rest,
+    },
   })
 
   const testFile = await templateForComponentFile({

@@ -1,9 +1,19 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 
 import { getDevNodeOptions } from '../../commands/devHandler'
 
 describe('getNodeOptions', () => {
   const enableSourceMapsOption = '--enable-source-maps'
+  let oldNodeOptions = ''
+
+  beforeEach(() => {
+    oldNodeOptions = process.env.NODE_OPTIONS
+    process.env.NODE_OPTIONS = ''
+  })
+
+  afterEach(() => {
+    process.env.NODE_OPTIONS = oldNodeOptions
+  })
 
   it('defaults to enable-source-maps', () => {
     const nodeOptions = getDevNodeOptions()

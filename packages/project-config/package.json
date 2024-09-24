@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/project-config",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -9,9 +9,16 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.cjs"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -20,8 +27,10 @@
   "scripts": {
     "build": "tsx ./build.ts && run build:types",
     "build:pack": "yarn pack -o redwoodjs-project-config.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
@@ -29,15 +38,18 @@
   "dependencies": {
     "deepmerge": "4.3.1",
     "fast-glob": "3.3.2",
-    "smol-toml": "1.2.2",
+    "smol-toml": "1.3.0",
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/framework-tools": "workspace:*",
-    "rimraf": "5.0.7",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
+    "rimraf": "6.0.1",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

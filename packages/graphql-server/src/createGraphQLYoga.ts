@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { useDisableIntrospection } from '@envelop/disable-introspection'
 import { useFilterAllowedOperations } from '@envelop/filter-operation-type'
 import type { GraphQLSchema } from 'graphql'
@@ -53,6 +52,7 @@ export const createGraphQLYoga = ({
   realtime,
   trustedDocuments,
   openTelemetryOptions,
+  includeScalars,
 }: GraphQLYogaOptions) => {
   let schema: GraphQLSchema
   let redwoodDirectivePlugins = [] as Plugin[]
@@ -86,11 +86,14 @@ export const createGraphQLYoga = ({
       directives: projectDirectives,
       subscriptions: projectSubscriptions,
       schemaOptions,
+      includeScalars,
     })
   } catch (e) {
     logger.fatal(e as Error, '\n ⚠️ GraphQL server crashed \n')
 
-    onException && onException()
+    if (onException) {
+      onException()
+    }
 
     // Forcefully crash the graphql server
     // so users know that a misconfiguration has happened
@@ -100,7 +103,7 @@ export const createGraphQLYoga = ({
   try {
     // Important: Plugins are executed in order of their usage, and inject functionality serially,
     // so the order here matters
-    const plugins: Array<Plugin<any>> = []
+    const plugins: Plugin<any>[] = []
 
     const { disableIntrospection } = configureGraphQLIntrospection({
       allowIntrospection,
@@ -210,7 +213,9 @@ export const createGraphQLYoga = ({
 
     return { yoga, logger }
   } catch (e) {
-    onException && onException()
+    if (onException) {
+      onException()
+    }
     throw e
   }
 }

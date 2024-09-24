@@ -33,10 +33,10 @@ export default (file, api) => {
         j.property(
           'init',
           j.identifier('email'),
-          j.literal('story.user@email.com')
+          j.literal('story.user@email.com'),
         ),
         j.property('init', j.identifier('fullName'), j.literal('Story User')),
-      ])
+      ]),
     ),
   ])
 
@@ -47,7 +47,7 @@ export default (file, api) => {
   // }
   const primaryIdentifier = j.identifier('Primary')
   primaryIdentifier.typeAnnotation = j.tsTypeAnnotation(
-    j.tsTypeReference(j.identifier('Story'), null)
+    j.tsTypeReference(j.identifier('Story'), null),
   )
 
   const primaryWithRender = j.exportNamedDeclaration(
@@ -68,22 +68,22 @@ export default (file, api) => {
                       [
                         j.jsxAttribute(
                           j.jsxIdentifier('author'),
-                          j.jsxExpressionContainer(j.identifier('author'))
+                          j.jsxExpressionContainer(j.identifier('author')),
                         ),
                       ],
-                      true
+                      true,
                     ),
                     null,
                     [],
-                    true
-                  )
+                    true,
+                  ),
                 ),
-              ])
-            )
+              ]),
+            ),
           ),
-        ])
+        ]),
       ),
-    ])
+    ]),
   )
 
   if (exportStatement.length > 0) {

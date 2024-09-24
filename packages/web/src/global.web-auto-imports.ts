@@ -30,7 +30,7 @@ declare global {
 
   type GraphQLOperationVariables = Record<string, any>
 
-  /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   // Overridable graphQL hook return types
   interface QueryOperationResult<
     TData = any,
@@ -43,6 +43,7 @@ declare global {
   }
 
   // not defining it here, because it gets overridden by Apollo provider anyway
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface MutationOperationResult<TData, TVariables> {}
 
   // Overridable useQuery and useMutation hooks

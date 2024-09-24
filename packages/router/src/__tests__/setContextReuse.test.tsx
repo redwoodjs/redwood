@@ -3,8 +3,8 @@ import React from 'react'
 import { act, render, waitFor } from '@testing-library/react'
 import { test } from 'vitest'
 
-import { Route, Router, navigate } from '../'
-import { Set } from '../Set'
+import { Route, Router, navigate } from '../index.js'
+import { Set } from '../Set.js'
 
 const HomePage = () => {
   return <p>Home Page</p>

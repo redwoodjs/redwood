@@ -1,41 +1,67 @@
 {
   "name": "@redwoodjs/auth-azure-active-directory-web",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/azureActiveDirectory/web"
   },
   "license": "MIT",
-  "main": "./dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./dist/azureActiveDirectory": {
+      "import": {
+        "types": "./dist/azureActiveDirectory.d.ts",
+        "default": "./dist/azureActiveDirectory.js"
+      },
+      "default": {
+        "types": "./dist/cjs/azureActiveDirectory.d.ts",
+        "default": "./dist/cjs/azureActiveDirectory.js"
+      }
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build": "tsx ./build.ts",
     "build:pack": "yarn pack -o redwoodjs-auth-azure-active-directory-web.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "build:types-cjs": "tsc --build --verbose ./tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn rw-fwtools-attw",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/auth": "workspace:*",
-    "core-js": "3.37.1"
+    "@redwoodjs/auth": "workspace:*"
   },
   "devDependencies": {
     "@azure/msal-browser": "2.39.0",
-    "@babel/cli": "7.24.5",
-    "@babel/core": "^7.22.20",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/netlify-identity-widget": "1.9.6",
     "@types/react": "^18.2.55",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "@azure/msal-browser": "2.39.0"

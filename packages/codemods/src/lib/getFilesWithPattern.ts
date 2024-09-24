@@ -25,7 +25,7 @@ const getFilesWithPattern = ({
      * Return an array of files that contain the pattern
      */
     return stdout.toString().split('\n')
-  } catch (e) {
+  } catch {
     return []
   }
 }

@@ -1,6 +1,6 @@
 # DbAuth Middleware
 
-### Example instantiation 
+### Example instantiation
 
 ```tsx filename='entry.server.tsx'
 import type { TagDescriptor } from '@redwoodjs/web'
@@ -26,7 +26,7 @@ export const registerMiddleware = () => {
     // getRoles optional
     // dbAuthUrl? optional
   })
-  
+
   return [authMw]
 }
 
@@ -40,9 +40,11 @@ export const ServerEntry: React.FC<Props> = ({ css, meta }) => {
 ```
 
 ### Roles handling
-By default the middleware assumes your roles will be in `currentUser.roles` - either as a string or an array of strings. 
+
+By default the middleware assumes your roles will be in `currentUser.roles` - either as a string or an array of strings.
 
 For example
+
 ```js
 
 // If this is your current user:
@@ -71,17 +73,16 @@ For example
 You can customise this by passing a custom `getRoles` function into `initDbAuthMiddleware`. For example:
 
 ```ts
-  const authMw = initDbAuthMiddleware({
-    dbAuthHandler,
-    getCurrentUser,
-    getRoles: (decoded) => {
-      // Assuming you want to get roles from a property called org
-      if (decoded.currentUser.org) {
-        return [decoded.currentUser.org]
-      } else {
-        return []
-      }
+const authMw = initDbAuthMiddleware({
+  dbAuthHandler,
+  getCurrentUser,
+  getRoles: (decoded) => {
+    // Assuming you want to get roles from a property called org
+    if (decoded.currentUser.org) {
+      return [decoded.currentUser.org]
+    } else {
+      return []
     }
-  })
-
+  },
+})
 ```

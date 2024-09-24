@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/api-server",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Redwood's HTTP server for Serverless Functions",
   "repository": {
     "type": "git",
@@ -29,9 +29,11 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@fastify/multipart": "8.3.0",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/context": "workspace:*",
     "@redwoodjs/fastify-web": "workspace:*",
+    "@redwoodjs/internal": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/web-server": "workspace:*",
     "chalk": "4.1.2",
@@ -39,26 +41,26 @@
     "dotenv-defaults": "5.0.2",
     "fast-glob": "3.3.2",
     "fast-json-parse": "1.0.3",
-    "fastify": "4.27.0",
+    "fastify": "4.28.1",
     "fastify-raw-body": "4.3.0",
     "lodash": "4.17.21",
     "pretty-bytes": "5.6.0",
     "pretty-ms": "7.0.1",
-    "qs": "6.12.1",
+    "qs": "6.13.0",
     "split2": "4.2.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/aws-lambda": "8.10.138",
-    "@types/lodash": "4.17.5",
-    "@types/qs": "6.9.15",
+    "@types/aws-lambda": "8.10.145",
+    "@types/lodash": "4.17.9",
+    "@types/qs": "6.9.16",
     "@types/split2": "4.2.3",
-    "@types/yargs": "17.0.32",
+    "@types/yargs": "17.0.33",
     "pino-abstract-transport": "1.2.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "@redwoodjs/graphql-server": "workspace:*"

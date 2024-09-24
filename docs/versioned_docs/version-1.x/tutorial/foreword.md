@@ -6,12 +6,6 @@ In this tutorial we're going to build a blog engine. In reality a blog is probab
 
 If you went through an earlier version of this tutorial you may remember it being split into parts 1 and 2. That was an artifact of the fact that most features demonstrated in part 2 didn't exist in the framework when part 1 was written. Once they were added we created part 2 to contain just those new features. Now that everything is integrated and working well we've moved each section into logically grouped chapters.
 
-## Sign Up for Tutorial Reminders
-
-There's a new Javascript framework coming out every week, we know it can be hard to keep up. If you'd like some non-spammy emails reminding you to go through the tutorial, give us your email below:
-
-<MailchimpForm />
-
 ## Callouts
 
 You'll find some callouts throughout the text to draw your attention:
@@ -43,42 +37,3 @@ This tutorial assumes you are using version 1.0.0 or greater of RedwoodJS.
 :::
 
 Let's get started!
-
-export const MailchimpForm = () => (
-  <>
-    <div id="mc_embed_signup">
-      <form
-        action="https://thedavidprice.us19.list-manage.com/subscribe/post?u=0c27354a06a7fdf4d83ce07fc&amp;id=a94da1950a"
-        method="post"
-        name="mc-embedded-subscribe-form"
-        target="_blank"
-      >
-        <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
-          <input
-            type="text"
-            name="b_0c27354a06a7fdf4d83ce07fc_a94da1950a"
-            tabIndex="-1"
-            defaultValue=""
-          />
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justify: 'center' }}>
-          <input
-            type="email"
-            defaultValue=""
-            placeholder="Email Address"
-            required={true}
-            name="EMAIL"
-            style={{  width: '100%', padding: '0.75rem', border: '1px solid #cccccc', borderRadius: '0.25rem', fontSize: '100%' }}
-          />
-          <input
-            type="submit"
-            value="Subscribe"
-            name="subscribe"
-            style={{ cursor: 'pointer', marginLeft: '0.5rem', padding: '0.8rem 2rem', fontSize: '100%', fontWeight: 'bold', color: '#ffffff', backgroundColor: '#4cb3d4', border: 'none', borderRadius: '0.25rem' }}
-          />
-        </div>
-      </form>
-    </div>
-  </>
-)
-

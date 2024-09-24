@@ -1,7 +1,6 @@
 {
   "name": "storybook-framework-redwoodjs-vite",
-  "type": "module",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Storybook for RedwoodJS with Vite",
   "keywords": [
     "Storybook",
@@ -18,23 +17,23 @@
     "directory": "packages/storybook"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "default": "./dist/index.js"
     },
     "./preset": {
       "types": "./dist/preset.d.ts",
-      "require": "./dist/preset.js"
+      "default": "./dist/preset.js"
     },
-    "./dist/mocks/MockRouter": "./dist/mocks/MockRouter.js",
+    "./dist/mocks/MockRouter": {
+      "default": "./dist/mocks/MockRouter.js"
+    },
     "./dist/preview.js": "./dist/preview.js",
     "./package.json": "./package.json"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*",
@@ -45,31 +44,31 @@
   ],
   "scripts": {
     "build": "tsx build.ts && yarn build:types",
-    "build:types": "tsc --build --verbose",
-    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz"
+    "build:pack": "yarn pack -o storybook-framework-redwoodjs-vite.tgz",
+    "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.0",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "^5.0.2",
+    "@rollup/pluginutils": "5.1.2",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
-    "magic-string": "^0.30.0",
-    "react-docgen": "^7.0.0",
-    "unplugin-auto-import": "^0.17.5"
+    "magic-string": "0.30.11",
+    "react-docgen": "7.0.3",
+    "unplugin-auto-import": "0.18.3"
   },
   "devDependencies": {
-    "@types/node": "20.12.12",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vite": "5.3.1"
+    "@types/node": "20.16.6",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vite": "5.4.7"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916",
     "storybook": "7.6.17"
   },
   "engines": {

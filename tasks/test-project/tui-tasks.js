@@ -529,7 +529,7 @@ async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
         `createContact(input: CreateContactInput!): Contact @skipAuth`,
       )
       .replace(
-        'deleteContact(id: Int!): Contact! @requireAuth',
+        /deleteContact\(id: Int!\): Contact! @requireAuth(?=\s)/,
         'deleteContact(id: Int!): Contact! @requireAuth(roles:["ADMIN"])',
       ) // make deleting contacts admin only
     fs.writeFileSync(pathContactsSdl, resultsContactsSdl)
@@ -716,7 +716,7 @@ export default DoublePage`
   /** @type import('./typing').TuiTaskList */
   const tuiTaskList = [
     {
-      title: 'Adding post model to prisma',
+      title: 'Adding post and user model to prisma',
       task: async () => {
         // Need both here since they have a relation
         const { post, user } = await import('./codemods/models.js')
@@ -809,10 +809,6 @@ export default DoublePage`
       },
     },
     {
-      title: 'Add dbAuth',
-      task: async () => addDbAuth(),
-    },
-    {
       title: 'Add users service',
       task: async () => {
         const generateSdl = createBuilder('yarn redwood g sdl --no-crud')
@@ -847,6 +843,10 @@ export default DoublePage`
 
         return createBuilder('yarn redwood g types')()
       },
+    },
+    {
+      title: 'Add dbAuth',
+      task: async () => addDbAuth(),
     },
     {
       title: 'Add describeScenario tests',

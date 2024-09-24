@@ -17,7 +17,7 @@ const contribFiles = [
 
 async function main() {
   console.log(
-    'Initial count of contributors: ' + mainContribFile.contributors.length
+    'Initial count of contributors: ' + mainContribFile.contributors.length,
   )
   for (file of contribFiles) {
     let currentFile = JSON.parse(fs.readFileSync(file))
@@ -42,7 +42,7 @@ async function main() {
     }
   }
   console.log(
-    'Updated count of contributors: ' + mainContribFile.contributors.length
+    'Updated count of contributors: ' + mainContribFile.contributors.length,
   )
   await fs.writeFileSync(targetFile, JSON.stringify(mainContribFile, null, 2))
   console.log(`Successfully updated "${targetFile}"`)

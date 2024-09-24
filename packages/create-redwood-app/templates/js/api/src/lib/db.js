@@ -7,15 +7,20 @@ import { emitLogLevels, handlePrismaLogging } from '@redwoodjs/api/logger'
 
 import { logger } from './logger'
 
-/*
- * Instance of the Prisma Client
- */
-export const db = new PrismaClient({
+const prismaClient = new PrismaClient({
   log: emitLogLevels(['info', 'warn', 'error']),
 })
 
 handlePrismaLogging({
-  db,
+  db: prismaClient,
   logger,
   logLevels: ['info', 'warn', 'error'],
 })
+
+/**
+ * Global Prisma client extensions should be added here, as $extend
+ * returns a new instance.
+ * export const db = prismaClient.$extend(...)
+ * Add any .$on hooks before using $extend
+ */
+export const db = prismaClient

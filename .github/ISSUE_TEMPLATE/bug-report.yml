@@ -1,7 +1,7 @@
-name: "🐛 Bug report"
-description: "Something not working the way it should be?"
+name: '🐛 Bug report'
+description: 'Something not working the way it should be?'
 
-title: "[Bug?]: "
+title: '[Bug?]: '
 labels: bug/needs-info
 
 body:
@@ -29,7 +29,7 @@ body:
         you're much more likely to get a timely response and fix from us if you fill it out.
         Issues without reproductions are much harder for us to debug.
     validations:
-        required: false
+      required: false
 
   - type: textarea
     attributes:
@@ -52,7 +52,7 @@ body:
         npmPackages:
           @redwoodjs/core: 1.5.2 => 1.5.2
     validations:
-        required: false
+      required: false
 
   - type: checkboxes
     attributes:

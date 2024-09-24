@@ -35,7 +35,7 @@ describe('useRedwoodRealtime', () => {
     `)
   })
 
-  it('should update schema with live directive', async () => {
+  it('should update schema with live directive', () => {
     const spiedPlugin = createSpiedPlugin()
 
     // the original schema should not have the live directive before the useRedwoodRealtime plugin is applied

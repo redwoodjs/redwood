@@ -6,6 +6,7 @@
 - It is used by the CLI and by VSCode extensions to provide IDE features such as diagnostics, code-fixes, etc.
 - **IMPORTANT:** This is an **internal** and **development-time only** package
   - You **cannot** "import it" into a normal redwood app
+
 ## Code
 
 - `/model/*`: The main API and classes (such as RWProject, RWPage, RWService, etc)
@@ -129,7 +130,7 @@ async function test() {
     const project = getProject('/path/to/app')
     const diagnostics = await project.collectDiagnostics()
     const hasErrors = diagnostics.some(
-      (d) => d.diagnostic.severity === DiagnosticSeverity.Error
+      (d) => d.diagnostic.severity === DiagnosticSeverity.Error,
     )
   } catch (e) {
     // we caught a runtime error

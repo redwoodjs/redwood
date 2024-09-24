@@ -1,5 +1,0 @@
-files:
-  - source: /learn.redwoodjs.com/docs/tutorial
-    translation: /learn.redwoodjs.com/i18n/%two_letters_code%/tutorial/%original_file_name%
-  - source: /learn.redwoodjs.com/docs/tutorial2
-    translation: /learn.redwoodjs.com/i18n/%two_letters_code%/tutorial2/%original_file_name%

@@ -1,9 +1,19 @@
+import tsEslintParser from '@typescript-eslint/parser'
 import { RuleTester } from '@typescript-eslint/rule-tester'
 
 import { serviceTypeAnnotations } from '../service-type-annotations.js'
 
 const ruleTester = new RuleTester({
-  parser: '@typescript-eslint/parser',
+  languageOptions: {
+    parser: tsEslintParser,
+    parserOptions: {
+      projectServices: {
+        allowDefaultProject: ['*.ts*'],
+        defaultProject: 'tsconfig.json',
+      },
+      tsconfigRootDir: '/',
+    },
+  },
 })
 
 ruleTester.run('service-type-annotations', serviceTypeAnnotations, {

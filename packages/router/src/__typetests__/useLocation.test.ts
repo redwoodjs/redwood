@@ -1,6 +1,6 @@
 import { expect, test } from 'tstyche'
 
-import { useLocation } from '../location'
+import { useLocation } from '../location.js'
 
 test('useLocation types', () => {
   const location = useLocation()

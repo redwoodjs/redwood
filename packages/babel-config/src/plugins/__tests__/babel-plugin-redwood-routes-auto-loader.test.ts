@@ -6,17 +6,13 @@ import * as babel from '@babel/core'
 import { getPaths } from '@redwoodjs/project-config'
 
 import babelRoutesAutoLoader from '../babel-plugin-redwood-routes-auto-loader'
-import type { PluginOptions as RoutesAutoLoaderOptions } from '../babel-plugin-redwood-routes-auto-loader'
 
-const transform = (
-  filename: string,
-  pluginOptions?: RoutesAutoLoaderOptions,
-) => {
+const transform = (filename: string) => {
   const code = fs.readFileSync(filename, 'utf-8')
   return babel.transform(code, {
     filename,
     presets: ['@babel/preset-react'],
-    plugins: [[babelRoutesAutoLoader, pluginOptions]],
+    plugins: [[babelRoutesAutoLoader]],
   })
 }
 
@@ -37,7 +33,7 @@ describe('mulitiple files ending in Page.{js,jsx,ts,tsx}', () => {
   test('Fails with appropriate message', () => {
     expect(() => {
       transform(getPaths().web.routes)
-    }).toThrowError(
+    }).toThrow(
       "Unable to find only a single file ending in 'Page.{js,jsx,ts,tsx}' " +
         "in the following page directories: 'HomePage'",
     )
@@ -64,8 +60,10 @@ describe('page auto loader correctly imports pages', () => {
   test('Pages get both a LazyComponent and a prerenderLoader', () => {
     expect(result?.code).toContain(`const HomePage = {
   name: "HomePage",
-  prerenderLoader: name => __webpack_require__(require.resolveWeak("./pages/HomePage/HomePage")),
-  LazyComponent: lazy(() => import( /* webpackChunkName: "HomePage" */"./pages/HomePage/HomePage"))
+  prerenderLoader: name => ({
+    default: globalThis.__REDWOOD__PRERENDER_PAGES[name]
+  }),
+  LazyComponent: lazy(() => import("./pages/HomePage/HomePage"))
 `)
   })
 
@@ -74,8 +72,7 @@ describe('page auto loader correctly imports pages', () => {
   })
 
   test('RSC specific code should not be added', () => {
-    expect(result?.code).not.toContain(
-      'import { renderFromRscServer } from "@redwoodjs/vite/client"',
-    )
+    expect(result?.code).not.toContain('DummyComponent')
+    expect(result?.code).not.toContain('= () => {}')
   })
 })

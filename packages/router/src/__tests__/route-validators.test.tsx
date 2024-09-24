@@ -2,8 +2,8 @@ import React from 'react'
 
 import { describe, it, expect } from 'vitest'
 
-import { Route } from '../Route'
-import { isValidRoute } from '../route-validators'
+import { isValidRoute } from '../route-validators.js'
+import { Route } from '../Route.js'
 
 describe('isValidRoute', () => {
   it('throws if Route does not have a path', () => {

@@ -3,6 +3,31 @@ globalThis.__dirname = __dirname
 globalThis.mockFs = false
 let mockFiles = {}
 
+vi.mock('fs', async (importOriginal) => {
+  const originalFs = await importOriginal()
+
+  return {
+    default: {
+      ...originalFs,
+      existsSync: (...args) => {
+        console.log('existsSync', args)
+        if (mockFiles[args[0]]) {
+          return true
+        }
+
+        return originalFs.existsSync.apply(null, args)
+      },
+      readFileSync: (path) => {
+        if (mockFiles[path]) {
+          return mockFiles[path]
+        }
+
+        return originalFs.readFileSync
+      },
+    },
+  }
+})
+
 vi.mock('fs-extra', async (importOriginal) => {
   const originalFsExtra = await importOriginal()
 
@@ -43,8 +68,46 @@ import path from 'path'
 import fs from 'fs-extra'
 import { vi, describe, it, test, expect, beforeEach, afterEach } from 'vitest'
 
-// Load mocks
-import '../../../../lib/test'
+import '../../../../lib/mockTelemetry'
+
+vi.mock('@redwoodjs/project-config', async (importOriginal) => {
+  const path = require('path')
+  const originalProjectConfig = await importOriginal()
+  return {
+    getPaths: () => {
+      const BASE_PATH = '/path/to/project'
+
+      return {
+        base: BASE_PATH,
+        web: {
+          generators: path.join(BASE_PATH, './web/generators'),
+          routes: path.join(BASE_PATH, 'web/src/Routes.js'),
+          pages: path.join(BASE_PATH, '/web/src/pages'),
+        },
+      }
+    },
+    getConfig: () => ({}),
+    ensurePosixPath: originalProjectConfig.ensurePosixPath,
+    resolveFile: originalProjectConfig.resolveFile,
+  }
+})
+
+vi.mock('@redwoodjs/cli-helpers', async (importOriginal) => {
+  const originalCliHelpers = await importOriginal()
+
+  return {
+    ...originalCliHelpers,
+    isTypeScriptProject: () => false,
+  }
+})
+
+vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
+  return {
+    generate: () => {
+      return { errors: [] }
+    },
+  }
+})
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 

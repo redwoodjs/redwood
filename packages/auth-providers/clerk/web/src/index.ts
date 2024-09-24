@@ -1,1 +1,1 @@
-export { createAuth } from './clerk'
+export { createAuth } from './clerk.js'

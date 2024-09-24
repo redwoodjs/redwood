@@ -21,7 +21,7 @@ async function main() {
         'If provided, will ONLY display packages where current version != expectedVersion',
         '',
         '',
-      ].join('\n')
+      ].join('\n'),
     )
 
     return
@@ -58,8 +58,8 @@ async function main() {
           `yarn npm info ${packageName}@${tag} --fields version --json`,
           {
             encoding: 'utf-8',
-          }
-        )
+          },
+        ),
       )
 
       namesToVersions[packageName] = version

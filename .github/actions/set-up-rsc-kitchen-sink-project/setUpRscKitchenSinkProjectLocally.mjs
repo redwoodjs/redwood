@@ -78,7 +78,7 @@ const testProjectPath = path.join(
   'redwood',
   testProjectAndFixtureName,
   // ":" is problematic with paths
-  new Date().toISOString().split(':').join('-')
+  new Date().toISOString().split(':').join('-'),
 )
 
 // Mock for @actions/core
@@ -99,7 +99,7 @@ function execInProject(commandLine, options) {
   return exec(
     commandLine,
     undefined,
-    getExecaOptions(testProjectPath, options?.env)
+    getExecaOptions(testProjectPath, options?.env),
   )
 }
 
@@ -107,5 +107,5 @@ setUpRscTestProject(
   testProjectPath,
   testProjectAndFixtureName,
   core,
-  execInProject
+  execInProject,
 )

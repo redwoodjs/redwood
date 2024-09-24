@@ -8,7 +8,7 @@ import { vi, it, expect, describe, beforeAll, beforeEach } from 'vitest'
 
 import type { CurrentUser } from '@redwoodjs/auth'
 
-import { createAuth } from '../azureActiveDirectory'
+import { createAuth } from '../azureActiveDirectory.js'
 
 const user: AccountInfo = {
   name: 'John',

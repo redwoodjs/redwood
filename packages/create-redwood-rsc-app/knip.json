@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "src/index.ts!",
+    "publish.ts",
+    "build.ts!",
+    "TODO: Remove the line below. 'framework-tools.ts' should not be needed here, it's imported from build.ts",
+    "framework-tools.ts!"
+  ],
+  "ignoreExportsUsedInFile": { "interface": true, "type": true },
+  "project": ["src/**/*.ts!"]
+}

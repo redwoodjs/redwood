@@ -1,7 +1,7 @@
 const RANDOM_WORDS = [
-  'retarders',
-  'masturbation',
-  'houseflies',
+  'unicorns',
+  'roses',
+  'butterflies',
   'stocks',
   'pommie',
   'rollers',

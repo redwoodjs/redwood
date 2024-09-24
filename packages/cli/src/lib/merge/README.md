@@ -112,17 +112,18 @@ const f = (a) => {
 const g = {
   foo: {
     bar: {
-      baz : 'baz'
-    }
-  }
+      baz: 'baz',
+    },
+  },
 }
 // g2.js
 const g = {
   foo: {
-    bar: { // This object's ID is the same as g.foo.bar above,
-      blep: 'baz' // But this string's ID is not; g.foo.bar.blep vs. g.foo.bar.baz.
-    }
-  }
+    bar: {
+      // This object's ID is the same as g.foo.bar above,
+      blep: 'baz', // But this string's ID is not; g.foo.bar.blep vs. g.foo.bar.baz.
+    },
+  },
 }
 ```
 
@@ -151,7 +152,9 @@ A merge strategy is simply a set of named _reducers_ (like you might pass to `Ar
 
 ```js
 const strategy = {
-  ArrayExpression: (lhs, rhs) => { lhs.elements = [...lhs.elements, ...rhs.elements] }
+  ArrayExpression: (lhs, rhs) => {
+    lhs.elements = [...lhs.elements, ...rhs.elements]
+  },
 }
 ```
 
@@ -195,8 +198,11 @@ const propertyEquality = (lprop, rprop) => lprop.key.name === rprop.key.name
 const strategy = {
   ObjectExpression: (lhs, rhs) => {
     // Assuming the presence of lodash
-    lhs.properties = _.uniqWith([...lhs.properties, ...rhs.properties], propertyEquality)
-  }
+    lhs.properties = _.uniqWith(
+      [...lhs.properties, ...rhs.properties],
+      propertyEquality,
+    )
+  },
 }
 // Would merge a.js and b.js as:
 const x = { foo: 'foo' }
@@ -208,7 +214,9 @@ Often, you'll want to define a strategy that treats certain AST nodes as "opaque
 
 ```js
 const strategy = {
-  ArrayExpression: (lhs, rhs) => { lhs.elements = [...lhs.elements, ...rhs.elements] }
+  ArrayExpression: (lhs, rhs) => {
+    lhs.elements = [...lhs.elements, ...rhs.elements]
+  },
 }
 ```
 
@@ -227,11 +235,14 @@ Depending on your use case, that might be what you want. If it isn't, we need a 
 
 ```js
 const strategy = {
-  ArrayExpression: opaquely((lhs, rhs) => { lhs.elements = [...lhs.elements, ...rhs.elements] })
+  ArrayExpression: opaquely((lhs, rhs) => {
+    lhs.elements = [...lhs.elements, ...rhs.elements]
+  }),
 }
 ```
 
 Given this strategy, we'd merge the above example as:
+
 ```js
 // a.js
 const x = [1, [3, [5]]]
@@ -304,11 +315,11 @@ const x = {
   foo: {
     list: ['rw', 'setup'],
     bar: {
-      baz: [1, 2, 3, ['a', 'b', 'c']]
-    }
-  }
+      baz: [1, 2, 3, ['a', 'b', 'c']],
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 
 /* extension.js */
 const x = {
@@ -316,14 +327,15 @@ const x = {
     list: ['ui', 'mantine'],
     bar: {
       value: 10,
-      baz:  [3, 4, 5, ['d', 'e', 'f']]
-    }
-  }
+      baz: [3, 4, 5, ['d', 'e', 'f']],
+    },
+  },
 }
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 and the following strategy:
+
 ```js
 const strategy = {
   ArrayExpression: concatUnique
@@ -337,42 +349,53 @@ Note we do not consider `StringLiteral` in our strategy.
 
 ```js
 /* ext.js */
-const x = {               // x
-  foo: {                  // x.foo
-    list:                 // x.foo.list
-      ['ui', 'mantine'],  // x.foo.list.ArrayExpression
-    bar: {                // x.foo.bar
-      value: 10,          // x.foo.bar.value
-      baz:                // x.foo.bar.baz
-        [                 // x.foo.bar.baz.ArrayExpression
-          3, 4, 5
-          ['d', 'e', 'f'] // x.foo.bar.baz.ArrayExpression.ArrayExpression
-        ]
-    }
-  }
+const x = {
+  // x
+  foo: {
+    // x.foo
+    // x.foo.list
+    list: ['ui', 'mantine'], // x.foo.list.ArrayExpression
+    bar: {
+      // x.foo.bar
+      value: 10, // x.foo.bar.value
+      // x.foo.bar.baz
+      baz: [
+        // x.foo.bar.baz.ArrayExpression
+        3,
+        4,
+        (5)[('d', 'e', 'f')], // x.foo.bar.baz.ArrayExpression.ArrayExpression
+      ],
+    },
+  },
 }
-const y = "Llamas" // < is not labeled! >
+const y = 'Llamas' // < is not labeled! >
 ```
 
 2. Next, it traverses the base AST, and attempts to merge AST nodes **from the leaves, up**. That is, the inner-most expressions are merged first. If, however, a node reducer is marked as "opaque" (described above), that node is considered a leaf for the purpose of merging, and its children are not merged.
 
 ```js
 /* base.js */
-const x = {               // 8. x
-  foo: {                  // 7. x.foo
-    list:                 // 6. x.foo.list
-      ['rw', 'setup'],    // 5. x.foo.list.ArrayExpression
-    bar: {                // 4. x.foo.bar
-      baz:                // 3. x.foo.bar.baz
-        [                 // 2. x.foo.bar.baz.ArrayExpression
-          1, 2, 3,
-          ['a', 'b', 'c'] // 1. x.foo.bar.baz.ArrayExpression.ArrayExpression
-        ],
+const x = {
+  // 8. x
+  foo: {
+    // 7. x.foo
+    // 6. x.foo.list
+    list: ['rw', 'setup'], // 5. x.foo.list.ArrayExpression
+    bar: {
+      // 4. x.foo.bar
+      // 3. x.foo.bar.baz
+      baz: [
+        // 2. x.foo.bar.baz.ArrayExpression
+        1,
+        2,
+        3,
+        ['a', 'b', 'c'], // 1. x.foo.bar.baz.ArrayExpression.ArrayExpression
+      ],
     },
   },
 }
 
-const y = "Alpacas" // < is not merged! >
+const y = 'Alpacas' // < is not merged! >
 ```
 
 1. `x.foo.bar.baz.ArrayExpression.ArrayExpression` finds a semantic match in `ext` (the anonymous array`['d', 'e', 'f']`) and uses the `concatUnique` strategy. The base AST is updated, such that it represents the following:
@@ -383,11 +406,11 @@ const x = {
   foo: {
     list: ['rw', 'setup'],
     bar: {
-      baz: [1, 2, 3, ['a', 'b', 'c', 'd', 'e', 'f']]
-    }
-  }
+      baz: [1, 2, 3, ['a', 'b', 'c', 'd', 'e', 'f']],
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 ```
 
 And the corresponding anonymous array in `ext` is pruned - you can think of this as the base "taking" the array out of its AST and putting it into its own.
@@ -399,11 +422,11 @@ const x = {
     list: ['ui', 'mantine'],
     bar: {
       value: 10,
-      baz:  [3, 4, 5]
-    }
-  }
+      baz: [3, 4, 5],
+    },
+  },
 }
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 2. Proceeding upward, we get to `x.foo.bar.baz.ArrayExpression`, the array containing our formerly-merged nested array. The values `[3, 4, 5]` are merged into the base node using the `concatUnique` strategy. Since `3` appears in the base array, it is not merged. (It would be had we chosen `concat` as our strategy). Now, if we try to naively remove the `ArrayExpression` from the extension AST, we'll be left with malformed javascript, due to an imbalanced `baz:` with nothing on its right side. Our pruning algorithm knows this, and sees that `baz` is now "empty", and removes that as well. We now have:
@@ -414,11 +437,11 @@ const x = {
   foo: {
     list: ['rw', 'setup'],
     bar: {
-      baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']]
-    }
-  }
+      baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']],
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 
 /* extension.js.2 */
 const x = {
@@ -426,10 +449,10 @@ const x = {
     list: ['ui', 'mantine'],
     bar: {
       value: 10,
-    }
-  }
+    },
+  },
 }
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 3. Since there exists no `x.foo.bar.value` in the base, we ignore it in the extension for now. That value is merged by the merge of its parent, `bar`.
@@ -443,19 +466,19 @@ const x = {
     list: ['rw', 'setup'],
     bar: {
       baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']],
-      value: 10
-    }
-  }
+      value: 10,
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 
 /* extension.js.4 */
 const x = {
   foo: {
     list: ['ui', 'mantine'],
-  }
+  },
 }
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 5. As before, we merge `x.foo.list.ArrayExpression` by concatenating the unique elements of the extension into the base. This action leaves the extension's `list:` without a right-hand-side, so it is removed as part of this step.
@@ -467,17 +490,17 @@ const x = {
     list: ['rw', 'setup', 'ui', 'mantine'],
     bar: {
       baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']],
-      value: 10
-    }
-  }
+      value: 10,
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 
 /* extension.js.5 */
 const x = {
-  foo: {}
+  foo: {},
 }
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 6. Merging `foo` and `x` then become rather straightforward, as both will be empty `ObjectExpressions` when they're merged. These two steps will leave `const x;` in the extension, since we've merged the right hand side of its initialization expression. That's malformed Javascript, so our merge strategy removes the `const x` from the extension, since it's already merged all of its meaningful content. We're left with:
@@ -489,14 +512,14 @@ const x = {
     list: ['rw', 'setup', 'ui', 'mantine'],
     bar: {
       baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']],
-      value: 10
-    }
-  }
+      value: 10,
+    },
+  },
 }
-const y = "Alpacas"
+const y = 'Alpacas'
 
 /* extension.js.6 */
-const y = "Llamas"
+const y = 'Llamas'
 ```
 
 3. Then, any remaining module-scope expressions in the extension AST are copied into the base AST.
@@ -508,12 +531,12 @@ const x = {
     list: ['rw', 'setup', 'ui', 'mantine'],
     bar: {
       baz: [1, 2, 3, 4, 5, ['a', 'b', 'c', 'd', 'e', 'f']],
-      value: 10
-    }
-  }
+      value: 10,
+    },
+  },
 }
-const y = "Alpacas"
-const y = "Llamas" // Note: name collision.
+const y = 'Alpacas'
+const y = 'Llamas' // Note: name collision.
 ```
 
 This operation considers how variables are used and declared in both files. The nodes are merged at positions such that variable usages appear after variable definitions. For example:
@@ -551,9 +574,11 @@ const y = [...x, 4, 5, 6]
 const x = [1, 2, 3]
 const y = [...x, 4, 5, 6]
 ```
+
 ## Merge Strategies
 
 ### concat
+
 Merges two AST nodes by appending the meaningful contents of the extension to the meaningful contents of the base. Meaningful content is defined on a per-node basis, and strives to be "what you expect":
 
 `ArrayExpression`'s meaningful contents are the elements in the array.
@@ -563,13 +588,16 @@ Merges two AST nodes by appending the meaningful contents of the extension to th
 As of this writing, these are the only node types supported, but others may be added by updating `strategy.js`.
 
 ### concatUnique
+
 Merges two AST nodes by appending the meaningful contents of the extension to the meaningful contents of the base, omitting duplicates. Meaningful content is defined on a per-node basis, and strives to be "what you expect":
 
 `ArrayExpression`'s meaningful contents are the elements in the array.
 `ObjectExpression`'s meaningful contents are its key/value pairs.
 
 As of this writing, these are the only node types supported, but others may be added by updating `strategy.js`.
+
 ### interleave
+
 Merges two AST nodes like `concatUnique`, with the added permission to create and append AST nodes as needed. This is necessary when the straightforward concatenation of two AST nodes might produce invalid Javascript. The primary (as of this writing, only) use case is for `ImportDeclarations`, which have a few odd rules that make the following invalid:
 
 ```js
@@ -581,7 +609,9 @@ import defaultImport, * from 'source'
 Arguably, this strategy might just be thought of as the `concatUnique` implementation for `ImportDeclarations`, but the author believes the ability to create new AST nodes makes `interleave` conceptually distinct from `concatUnique`.
 
 As of this writing, only `ImportDeclarations` can be `interleave`d.
+
 ### opaquely
+
 This is a strategy-modifier. It is a function which takes a strategy, and returns a strategy. In this particular case, `opaquely` simply marks the given strategy as "opaque", meaning that the strategy handles the merge for a particular AST node (say, a `FunctionDeclaration`) and the children of that type of node should not be recursively merged by other strategies.
 
 For example, given the following strategy:

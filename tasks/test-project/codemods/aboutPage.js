@@ -9,11 +9,21 @@ export default (file, api) => {
   const j = api.jscodeshift
   const root = j(file.source)
 
+  // Remove the `{ Link, routes }` imports that are generated and unused
   root
     .find(j.ImportDeclaration, {
       source: {
-        type: 'Literal',
+        type: 'StringLiteral',
         value: '@redwoodjs/router',
+      },
+    })
+    .remove()
+  // Remove the `{ Metadata }` import that is generated and unused
+  root
+    .find(j.ImportDeclaration, {
+      source: {
+        type: 'StringLiteral',
+        value: '@redwoodjs/web',
       },
     })
     .remove()

@@ -1,7 +1,7 @@
 import React from 'react'
 import type { ReactElement } from 'react'
 
-import type { PageType } from './page'
+import type { PageType } from './page.js'
 
 export type RenderMode = 'stream' | 'html'
 

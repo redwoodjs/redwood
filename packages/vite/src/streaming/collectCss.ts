@@ -8,7 +8,7 @@ export const componentsModules = (
   components: string[],
   vite: ViteDevServer,
 ) => {
-  const matchedModules: Set<ModuleNode> = new Set()
+  const matchedModules = new Set<ModuleNode>()
   components.forEach((component) => {
     const modules = vite.moduleGraph.getModulesByFile(normalizePath(component))
     modules?.forEach((mod) => {

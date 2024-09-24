@@ -16,7 +16,7 @@ export default (file, api) => {
 
   const componentImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('Author'))],
-    j.stringLiteral('src/components/Author')
+    j.stringLiteral('src/components/Author'),
   )
 
   root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)
@@ -32,7 +32,7 @@ export default (file, api) => {
       const { node } = nodePath
       node.init.quasi = j.templateLiteral(
         [j.templateElement({ raw: query, cooked: query }, true)],
-        []
+        [],
       )
       return node
     })

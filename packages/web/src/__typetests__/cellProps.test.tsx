@@ -22,7 +22,7 @@ type Recipe = {
 // e.g. query ListRecipes { recipes { id name } }
 type QueryResult = {
   __typename?: 'Query'
-  recipes: Array<Recipe>
+  recipes: Recipe[]
 }
 
 // This is how graphql-codegen defines queries that don't take vars
@@ -91,6 +91,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ word }: { word: string }) => {
@@ -118,6 +119,7 @@ describe('CellProps mapper type', () => {
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: ({ fetchPolicy }: { fetchPolicy: string }) => {
@@ -143,6 +145,7 @@ describe('CellProps mapper type', () => {
 
   describe('when beforeQuery exists and has no arguments', () => {
     test('Inputs expect props outside cell', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {
@@ -169,6 +172,7 @@ describe('CellProps mapper type', () => {
     })
 
     test('Inputs still expect custom props when query does not take variables', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const cellWithBeforeQuery = {
         ...recipeCell,
         beforeQuery: () => {

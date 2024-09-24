@@ -3,11 +3,11 @@ import {
   getPaths,
   importStatementPath,
 } from '@redwoodjs/project-config'
-import { getProject } from '@redwoodjs/structure/dist/index'
-import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage'
-import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute'
+import { getProject } from '@redwoodjs/structure/dist/index.js'
+import type { RWPage } from '@redwoodjs/structure/dist/model/RWPage.js'
+import type { RWRoute } from '@redwoodjs/structure/dist/model/RWRoute.js'
 
-import { makeFilePath } from '../utils'
+import { makeFilePath } from '../utils.js'
 
 export function getEntries() {
   const entries: Record<string, string> = {}

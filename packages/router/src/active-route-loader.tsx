@@ -1,9 +1,9 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 
-import { getAnnouncement, getFocus, resetFocus } from './a11yUtils'
-import type { Spec } from './page'
-import { usePageLoadingContext } from './PageLoadingContext'
-import { inIframe } from './util'
+import { getAnnouncement, getFocus, resetFocus } from './a11yUtils.js'
+import type { Spec } from './page.js'
+import { usePageLoadingContext } from './PageLoadingContext.js'
+import { inIframe } from './util.js'
 
 interface Props {
   path: string

@@ -41,7 +41,7 @@ export const matchTransformSnapshot: MatchTransformSnapshotFunction = async (
   for (const extension of ['ts', 'tsx', 'js', 'jsx']) {
     try {
       fixturePath = require.resolve(`${maybeFixturePath}.${extension}`)
-    } catch (e) {
+    } catch {
       continue
     }
   }

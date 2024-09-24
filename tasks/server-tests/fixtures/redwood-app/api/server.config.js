@@ -34,16 +34,13 @@ const configureFastify = async (fastify, options) => {
   if (options.side === 'api') {
     fastify.log.trace({ custom: { options } }, 'Configuring api side')
 
-    fastify.get(
-      `/rest/v1/users/get/:userId`,
-      async function (request, reply) {
-        const { userId } = request.params
+    fastify.get(`/rest/v1/users/get/:userId`, async function (request, reply) {
+      const { userId } = request.params
 
-        return reply.send({
-          id: 1
-        })
-      }
-    )
+      return reply.send({
+        id: 1,
+      })
+    })
   }
 
   if (options.side === 'web') {
@@ -61,4 +58,3 @@ module.exports = {
   config,
   configureFastify,
 }
-

@@ -5,10 +5,10 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
 import type { StorybookYargsOptions } from '../types'
 
-export const command = 'storybook-vite'
-export const aliases = ['sbv']
+export const command = 'storybook'
+export const aliases = ['sb']
 export const description =
-  'Launch Storybook: a tool for building UI components and pages in isolation (now, with Vite)!'
+  'Launch Storybook: a tool for building UI components and pages in isolation'
 
 export const defaultOptions: StorybookYargsOptions = {
   open: true,
@@ -68,7 +68,7 @@ export async function handler(options: StorybookYargsOptions): Promise<void> {
   // the perceived performance of the command as there will be delay while we
   // load the handler.
   recordTelemetryAttributes({
-    command: 'storybook-vite',
+    command: 'storybook',
     build: options.build,
     ci: options.ci,
     open: options.open,

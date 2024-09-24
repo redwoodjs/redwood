@@ -149,25 +149,23 @@ describe('makeMergedSchema', () => {
 
     it('Resolver functions are mapped correctly.', () => {
       expect(
-        queryFields.inResolver.resolve &&
-          queryFields.inResolver.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo,
-          ),
+        queryFields.inResolver.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("I'm defined in the resolver.")
     })
 
     it('Resolver functions take preference over service functions.', () => {
       expect(
-        queryFields.inResolverAndServices.resolve &&
-          queryFields.inResolverAndServices.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo,
-          ),
+        queryFields.inResolverAndServices.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("I'm defined in the resolver.")
     })
 
@@ -190,25 +188,23 @@ describe('makeMergedSchema', () => {
 
     it('Resolver functions are mapped correctly', () => {
       expect(
-        myOwnTypeFields.inTypeResolverAndServices.resolve &&
-          myOwnTypeFields.inTypeResolverAndServices.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo,
-          ),
+        myOwnTypeFields.inTypeResolverAndServices.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 
     it('Resolver functions take preference over service functions.', () => {
       expect(
-        myOwnTypeFields.inTypeResolver.resolve &&
-          myOwnTypeFields.inTypeResolver.resolve(
-            null,
-            {},
-            null,
-            {} as GraphQLResolveInfo,
-          ),
+        myOwnTypeFields.inTypeResolver.resolve?.(
+          null,
+          {},
+          null,
+          {} as GraphQLResolveInfo,
+        ),
       ).toEqual("MyOwnType: I'm defined in the resolver.")
     })
 

@@ -22,7 +22,7 @@ export default defineConfig({
       // We should aim to understand this a little more and try to avoid needed to add this specific config. That may
       // require some more work on how this package itself is built or how the `package.json` in the `graphql` package
       // is configured.
-      graphql: "graphql/index.js"
+      graphql: 'graphql/index.js',
     },
   },
 })

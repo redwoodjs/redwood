@@ -36,7 +36,7 @@ export default (file, api) => {
 
       node.init.quasi = j.templateLiteral(
         [j.templateElement({ raw: schema, cooked: schema }, true)],
-        []
+        [],
       )
       return node
     })

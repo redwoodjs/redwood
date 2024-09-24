@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react'
 
 import type { OperationVariables, QueryReference } from '@apollo/client'
-// @ts-expect-error Force import cjs module
 import { useApolloClient } from '@apollo/client/react/hooks/hooks.cjs'
 
 import { useBackgroundQuery, useReadQuery } from '../GraphQLHooksProvider.js'
@@ -56,7 +55,7 @@ export function createSuspendingCell<
   function SuspendingSuccess(props: SuspendingSuccessProps) {
     const { queryRef, suspenseQueryResult, userProps } = props
     const { data, networkStatus } = useReadQuery<DataObject>(queryRef)
-    const afterQueryData = afterQuery(data as DataObject)
+    const afterQueryData = afterQuery(data)
 
     const queryResultWithNetworkStatus: SuspenseCellQueryResult = {
       ...suspenseQueryResult,
@@ -108,7 +107,10 @@ export function createSuspendingCell<
     const FailureComponent = ({ error, resetErrorBoundary }: FallbackProps) => {
       if (!Failure) {
         // So that it bubbles up to the nearest error boundary
-        throw error
+        if (error) {
+          throw error
+        }
+        throw new Error('Unreachable code: FailureComponent without a Failure')
       }
 
       const queryResultWithErrorReset = {

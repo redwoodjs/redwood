@@ -33,7 +33,7 @@ export function URL_toFile(uriOrFilePath: string, sep = path_sep): string {
   if (!isAbsolute(p)) {
     throw new Error('absolute path expected: ' + p)
   }
-  return p!
+  return p
 }
 
 const FILE_SCHEME = 'file://'
@@ -51,7 +51,7 @@ function fileUriToPath(uri: string, sep = path_sep): string {
   if (
     typeof uri !== 'string' ||
     uri.length <= 7 ||
-    uri.substring(0, 7) !== FILE_SCHEME
+    !uri.startsWith(FILE_SCHEME)
   ) {
     throw new TypeError('must pass in a file:// URI to convert to a file path')
   }

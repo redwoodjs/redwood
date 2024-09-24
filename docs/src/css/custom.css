@@ -83,7 +83,7 @@
 
   So far just lighten links a little for a11y.
 */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --ifm-link-color: var(--teal);
 }
 
@@ -94,9 +94,9 @@
 
   Correct the color on hover and increase the font weight.
 */
-.theme-doc-breadcrumbs{
+.theme-doc-breadcrumbs {
   --ifm-link-hover-color: var(--red);
-  font-weight: var(--ifm-font-weight-semibold)
+  font-weight: var(--ifm-font-weight-semibold);
 }
 
 /*
@@ -150,11 +150,11 @@ blockquote {
   padding: 2rem;
 }
 
-[data-theme="light"] blockquote code {
+[data-theme='light'] blockquote code {
   --ifm-code-background: hsl(14deg 70% 84%);
 }
 
-[data-theme="dark"] blockquote {
+[data-theme='dark'] blockquote {
   background-color: hsl(210deg 3% 15%);
 }
 
@@ -254,11 +254,11 @@ blockquote {
   Hide dark mode things on light mode and vice versa.
   ------------------------
 */
-[data-theme="light"] [data-mode="dark"] {
+[data-theme='light'] [data-mode='dark'] {
   display: none;
 }
 
-[data-theme="dark"] [data-mode="light"] {
+[data-theme='dark'] [data-mode='light'] {
   display: none;
 }
 

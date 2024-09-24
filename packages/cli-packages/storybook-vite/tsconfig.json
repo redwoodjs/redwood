@@ -8,6 +8,6 @@
   "references": [
     { "path": "../../cli-helpers" },
     { "path": "../../project-config" },
-    { "path": "../../telemetry" },
+    { "path": "../../telemetry" }
   ]
 }

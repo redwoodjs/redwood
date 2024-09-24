@@ -20,6 +20,7 @@ import * as execCommand from './commands/exec'
 import * as experimentalCommand from './commands/experimental'
 import * as generateCommand from './commands/generate'
 import * as infoCommand from './commands/info'
+import * as jobsCommand from './commands/jobs'
 import * as lintCommand from './commands/lint'
 import * as prerenderCommand from './commands/prerender'
 import * as prismaCommand from './commands/prisma'
@@ -210,6 +211,7 @@ async function runYargs() {
     .command(experimentalCommand)
     .command(generateCommand)
     .command(infoCommand)
+    .command(jobsCommand)
     .command(lintCommand)
     .command(prerenderCommand)
     .command(prismaCommand)
@@ -224,6 +226,10 @@ async function runYargs() {
 
   // Load any CLI plugins
   await loadPlugins(yarg)
+
+  // We explicitly set the version here so that it's always available
+  const pkgJson = require('../package.json')
+  yarg.version(pkgJson['version'])
 
   // Run
   await yarg.parse(process.argv.slice(2), {}, (err, _argv, output) => {

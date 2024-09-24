@@ -1,6 +1,5 @@
 import path from 'path'
 
-import type { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import { beforeAll, afterAll, describe, test, expect } from 'vitest'
 
@@ -18,13 +17,9 @@ afterAll(() => {
   delete process.env.RWJS_CWD
 })
 
-const validateSdlFile = async (document: DocumentNode) => {
-  validateSchema(document)
-}
-
 describe('SDL with no reserved names used', () => {
   describe('SDL is valid', () => {
-    test('with proper type definition names', async () => {
+    test('with proper type definition names', () => {
       const document = gql`
         type Message {
           from: String
@@ -46,9 +41,9 @@ describe('SDL with no reserved names used', () => {
         }
       `
 
-      await expect(validateSdlFile(document)).resolves.not.toThrowError()
+      expect(() => validateSchema(document)).not.toThrowError()
     })
-    test('with proper interface interface definition names', async () => {
+    test('with proper interface interface definition names', () => {
       const document = gql`
         interface Node {
           id: ID!
@@ -64,9 +59,9 @@ describe('SDL with no reserved names used', () => {
           room(id: ID!): [Message!]! @skipAuth
         }
       `
-      await expect(validateSdlFile(document)).resolves.not.toThrowError()
+      expect(() => validateSchema(document)).not.toThrowError()
     })
-    test('with proper interface input type definition names', async () => {
+    test('with proper interface input type definition names', () => {
       const document = gql`
         type Message {
           from: String
@@ -87,12 +82,12 @@ describe('SDL with no reserved names used', () => {
           sendMessage(input: SendMessageInput!): Message! @skipAuth
         }
       `
-      await expect(validateSdlFile(document)).resolves.not.toThrowError()
+      expect(() => validateSchema(document)).not.toThrowError()
     })
   })
 
   describe('SDL is invalid', () => {
-    test('because uses a reserved name as a type', async () => {
+    test('because uses a reserved name as a type', () => {
       const document = gql`
         type Float {
           from: String
@@ -113,13 +108,11 @@ describe('SDL with no reserved names used', () => {
           sendMessage(input: SendMessageInput!): Message! @skipAuth
         }
       `
-      await expect(
-        validateSdlFile(document),
-      ).rejects.toThrowErrorMatchingSnapshot()
+      expect(() => validateSchema(document)).toThrowErrorMatchingSnapshot()
     })
   })
 
-  test('because uses a reserved name as an input', async () => {
+  test('because uses a reserved name as an input', () => {
     const document = gql`
       type Message {
         from: String
@@ -140,12 +133,10 @@ describe('SDL with no reserved names used', () => {
         sendMessage(input: SendMessageInput!): Message! @skipAuth
       }
     `
-    await expect(
-      validateSdlFile(document),
-    ).rejects.toThrowErrorMatchingSnapshot()
+    expect(() => validateSchema(document)).toThrowErrorMatchingSnapshot()
   })
 
-  test('because uses a reserved name as an interface', async () => {
+  test('because uses a reserved name as an interface', () => {
     const document = gql`
       interface Float {
         id: ID!
@@ -171,8 +162,6 @@ describe('SDL with no reserved names used', () => {
         sendMessage(input: SendMessageInput!): Message! @skipAuth
       }
     `
-    await expect(
-      validateSdlFile(document),
-    ).rejects.toThrowErrorMatchingSnapshot()
+    expect(() => validateSchema(document)).toThrowErrorMatchingSnapshot()
   })
 })

@@ -62,6 +62,7 @@ export class RWRouter extends FileNode {
    * One per `<Route>`
    */
   @lazy() get routes() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this
 
     return iter(function* () {
@@ -115,7 +116,7 @@ export class RWRouter extends FileNode {
 
   *ideInfo() {
     if (this.jsxNode) {
-      let location = Location_fromNode(this.jsxNode)
+      const location = Location_fromNode(this.jsxNode)
       const codeLens: CodeLens = {
         range: location.range,
         command: Command.create(

@@ -23,7 +23,7 @@ async function main() {
     [
       `📝 Created a changeset at ${chalk.magenta(changesetFilePath)}`,
       "   Commit it when you're done and push your branch up to GitHub. Thank you! 🙏",
-    ].join('\n')
+    ].join('\n'),
   )
 }
 

@@ -16,7 +16,7 @@ function isInGitRepository() {
   try {
     execa.commandSync('git rev-parse --is-inside-work-tree')
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }
@@ -25,7 +25,7 @@ function isInMercurialRepository() {
   try {
     execa.commandSync('hg --cwd . root')
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }

@@ -52,8 +52,8 @@ export default (file: FileInfo, api: API) => {
           j.importSpecifier(j.identifier('GetProduce')),
         ],
         j.stringLiteral('types/graphql'),
-        'type'
-      )
+        'type',
+      ),
     )
 
   // Replace
@@ -90,15 +90,15 @@ export default (file: FileInfo, api: API) => {
       return [
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('FruitInfo'))],
-          j.stringLiteral('src/components/FruitInfo')
+          j.stringLiteral('src/components/FruitInfo'),
         ),
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('ProduceInfo'))],
-          j.stringLiteral('src/components/ProduceInfo')
+          j.stringLiteral('src/components/ProduceInfo'),
         ),
         j.importDeclaration(
           [j.importDefaultSpecifier(j.identifier('VegetableInfo'))],
-          j.stringLiteral('src/components/VegetableInfo')
+          j.stringLiteral('src/components/VegetableInfo'),
         ),
       ]
     })
@@ -137,9 +137,9 @@ export default (file: FileInfo, api: API) => {
             j.identifier('gql'),
             j.templateLiteral(
               [j.templateElement({ raw: query, cooked: query }, true)],
-              []
-            )
-          )
+              [],
+            ),
+          ),
         ),
       ])
     })
@@ -183,12 +183,12 @@ export default (file: FileInfo, api: API) => {
               [
                 j.templateElement(
                   { raw: produceQuery, cooked: produceQuery },
-                  true
+                  true,
                 ),
               ],
-              []
-            )
-          )
+              [],
+            ),
+          ),
         ),
       ])
     })

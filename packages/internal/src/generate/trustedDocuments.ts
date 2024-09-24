@@ -17,7 +17,7 @@ export const trustedDocumentsStore = async (generatedFiles: any) => {
 
   const storeFile = output[0]
 
-  if (storeFile && storeFile.content) {
+  if (storeFile?.content) {
     const content = await format(`export const store = ${storeFile.content}`, {
       trailingComma: 'es5',
       bracketSpacing: true,
@@ -51,7 +51,7 @@ export const replaceGqlTagWithTrustedDocumentGraphql = async (
 
   const gqlFile = gqlFileOutput[0]
 
-  if (gqlFile && gqlFile.content) {
+  if (gqlFile?.content) {
     gqlFile.content += `\n
       export function gql(source: string | TemplateStringsArray) {
         if (typeof source === 'string') {

@@ -1,0 +1,35 @@
+.main-layout {
+  .demo-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    ul li {
+      padding: 14px 20px;
+    }
+
+    ul li a {
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+
+    ul li a:hover {
+      background-color: #111;
+    }
+  }
+}

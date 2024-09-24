@@ -1,8 +1,3 @@
-let mockExecutedTaskTitles: Array<string> = []
-let mockSkippedTaskTitles: Array<string> = []
-let mockSkipValues: Array<string> = []
-let mockPrompt: (() => boolean) | undefined
-
 vi.mock('fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('node:fs', async () => ({ ...memfsFs, default: { ...memfsFs } }))
 vi.mock('fs-extra', async () => {
@@ -21,7 +16,7 @@ vi.mock('fs-extra', async () => {
   }
 })
 vi.mock('execa', () => ({
-  default: (...args: Array<any>) => {
+  default: (...args: any[]) => {
     // Create an empty config file when `tailwindcss init` is called.
     // If we don't do this, later stages of the setup will fail.
     if (args[0] === 'yarn' && args[1].join(' ').includes('tailwindcss init')) {
@@ -33,40 +28,7 @@ vi.mock('execa', () => ({
 vi.mock('listr2', () => {
   return {
     // Return a constructor function, since we're calling `new` on Listr
-    Listr: vi.fn().mockImplementation((tasks: Array<any>) => {
-      return {
-        run: async () => {
-          mockExecutedTaskTitles = []
-          mockSkippedTaskTitles = []
-          mockSkipValues = []
-
-          for (const task of tasks) {
-            const skip =
-              typeof task.skip === 'function' ? task.skip : () => task.skip
-
-            const skipValue = skip()
-
-            if (skipValue) {
-              mockSkippedTaskTitles.push(task.title)
-              mockSkipValues.push(skipValue)
-            } else {
-              mockExecutedTaskTitles.push(task.title)
-
-              task.skip = (reason: string) => {
-                mockSkippedTaskTitles.push(task.title)
-                mockSkipValues.push(reason)
-              }
-
-              if (mockPrompt) {
-                task.prompt = mockPrompt
-              }
-
-              await task.task({}, task)
-            }
-          }
-        },
-      }
-    }),
+    Listr: Listr2Mock,
   }
 })
 
@@ -84,6 +46,7 @@ import {
   afterEach,
 } from 'vitest'
 
+import { Listr2Mock } from '../../../../__tests__/Listr2Mock.js'
 // @ts-expect-error - no types
 import { handler } from '../libraries/tailwindcss.js'
 
@@ -104,7 +67,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  mockPrompt = undefined
+  Listr2Mock.mockPrompt = undefined
   vi.mocked(console).log.mockRestore()
   vol.reset()
 })
@@ -121,14 +84,12 @@ describe('tasks that should be skipped', () => {
 
     await handler({ install: false })
 
-    expect(mockSkippedTaskTitles).toContain(
+    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
       'Installing project-wide packages...',
     )
-    expect(mockSkippedTaskTitles).toContain('Installing web side packages...')
-    expect(Array.isArray(mockSkipValues)).toBe(true)
-    expect(mockSkipValues.length).toBeGreaterThanOrEqual(2)
-    expect(mockSkipValues[0]).toBe(true)
-    expect(mockSkipValues[1]).toBe(true)
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
+      'Installing web side packages...',
+    )
   })
 
   it("should skip adding directives to index.css if they're already in there", async () => {
@@ -142,23 +103,23 @@ describe('tasks that should be skipped', () => {
 
     await handler({})
 
-    expect(mockSkippedTaskTitles).toContain('Adding directives to index.css...')
-    expect(mockSkipValues).toContain('Directives already exist in index.css')
+    expect(Listr2Mock.skippedTaskTitles).toContain(
+      'Directives already exist in index.css',
+    )
   })
 
   it("should skip updating scaffold.css if it doesn't exist", async () => {
     // No scaffold.css file is the default
     setupDefaultProjectStructure()
 
-    mockPrompt = vi.fn()
+    Listr2Mock.mockPrompt = vi.fn()
 
     await handler({})
 
-    expect(mockSkippedTaskTitles).toContain(
-      "Updating 'scaffold.css' to use tailwind classes...",
+    expect(Listr2Mock.skippedTaskTitles).toContain(
+      "No 'scaffold.css' file to update",
     )
-    expect(mockSkipValues).toContain("No 'scaffold.css' file to update")
-    expect(mockPrompt).not.toHaveBeenCalled()
+    expect(Listr2Mock.mockPrompt).not.toHaveBeenCalled()
   })
 
   it('should skip updating scaffold.css if the user answers "no" to the prompt', async () => {
@@ -172,19 +133,21 @@ describe('tasks that should be skipped', () => {
       ].join('\n'),
     })
 
-    mockPrompt = vi.fn().mockReturnValue(false)
+    Listr2Mock.mockPrompt = vi.fn().mockReturnValue({ default: false })
 
     await handler({})
 
-    expect(mockSkippedTaskTitles).toContain(
-      "Updating 'scaffold.css' to use tailwind classes...",
+    expect(Listr2Mock.skippedTaskTitles).toContain(
+      "Skipping 'scaffold.css' update",
     )
-    expect(mockSkipValues).toContain("Skipping 'scaffold.css' update")
-    expect(mockPrompt).toHaveBeenCalledWith({
-      type: 'Confirm',
-      message:
-        "Do you want to override your 'scaffold.css' to use tailwind classes?",
-    })
+    expect(Listr2Mock.mockPrompt).toHaveBeenCalledWith([
+      {
+        name: 'default',
+        type: 'Confirm',
+        message:
+          "Do you want to override your 'scaffold.css' to use tailwind classes?",
+      },
+    ])
   })
 
   it('should skip adding recommended VS Code extensions to project settings if the user is not using VS Code', async () => {
@@ -194,10 +157,9 @@ describe('tasks that should be skipped', () => {
 
     await handler({})
 
-    expect(mockSkippedTaskTitles).toContain(
-      'Adding recommended VS Code extensions to project settings...',
+    expect(Listr2Mock.skippedTaskTitles).toContain(
+      "Looks like you're not using VS Code",
     )
-    expect(mockSkipValues).toContain("Looks like you're not using VS Code")
   })
 
   it('should skip adding tailwind intellisense plugin config to VS Code settings if the user is not using VS Code', async () => {
@@ -206,10 +168,15 @@ describe('tasks that should be skipped', () => {
 
     await handler({})
 
-    expect(mockSkippedTaskTitles).toContain(
-      'Adding tailwind intellisense plugin configuration to VS Code settings...',
-    )
-    expect(mockSkipValues).toContain("Looks like you're not using VS Code")
+    expect(Listr2Mock.skippedTaskTitles).toMatchInlineSnapshot(`
+      [
+        "Installing project-wide packages...",
+        "Installing web side packages...",
+        "No 'scaffold.css' file to update",
+        "Looks like you're not using VS Code",
+        "Looks like you're not using VS Code",
+      ]
+    `)
   })
 })
 

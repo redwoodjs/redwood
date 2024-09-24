@@ -1,0 +1,11 @@
+.server-delay-form {
+  padding: 1rem;
+
+  label div {
+    margin-bottom: 4px;
+  }
+
+  input {
+    margin-right: 4px;
+  }
+}

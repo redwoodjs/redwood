@@ -42,7 +42,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           // CONTINUE...
         }
 
-        const newPath = getNewPath(value, <string>filename)
+        const newPath = getNewPath(value, filename as string)
         if (!newPath) {
           return
         }
@@ -72,7 +72,7 @@ export default function ({ types: t }: { types: typeof types }): PluginObj {
           // CONTINUE...
         }
 
-        const newPath = getNewPath(value, <string>filename)
+        const newPath = getNewPath(value, filename as string)
         if (!newPath) {
           return
         }

@@ -26,7 +26,7 @@ export default (file, api) => {
   const primaryIdentifier = j.identifier('Primary')
   // Add the `Story` type annotation
   primaryIdentifier.typeAnnotation = j.tsTypeAnnotation(
-    j.tsTypeReference(j.identifier('Story'), null)
+    j.tsTypeReference(j.identifier('Story'), null),
   )
 
   // export const Primary: Story = {
@@ -52,23 +52,23 @@ export default (file, api) => {
                       [
                         j.jsxAttribute(
                           j.jsxIdentifier('id'),
-                          j.jsxExpressionContainer(j.numericLiteral(42))
+                          j.jsxExpressionContainer(j.numericLiteral(42)),
                         ),
                         j.jsxSpreadAttribute(j.identifier('args')),
                       ],
-                      true
+                      true,
                     ),
                     null,
                     [],
-                    true
-                  )
+                    true,
+                  ),
                 ),
-              ])
-            )
+              ]),
+            ),
           ),
-        ])
+        ]),
       ),
-    ])
+    ]),
   )
 
   if (exportStatement.length > 0) {

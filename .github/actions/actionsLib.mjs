@@ -12,24 +12,22 @@ import { hashFiles } from '@actions/glob'
  * @typedef {import('@actions/exec').ExecOptions} ExecOptions
  */
 
-export const REDWOOD_FRAMEWORK_PATH = fileURLToPath(new URL('../../', import.meta.url))
+export const REDWOOD_FRAMEWORK_PATH = fileURLToPath(
+  new URL('../../', import.meta.url),
+)
 
 /**
  * @param {string} command
  * @param {ExecOptions} options
  */
 function execWithEnv(command, { env = {}, ...rest } = {}) {
-  return getExecOutput(
-    command,
-    undefined,
-    {
-      env: {
-        ...process.env,
-        ...env
-      },
-      ...rest
-    }
-  )
+  return getExecOutput(command, undefined, {
+    env: {
+      ...process.env,
+      ...env,
+    },
+    ...rest,
+  })
 }
 
 /**
@@ -51,52 +49,64 @@ export const execInFramework = createExecWithEnvInCwd(REDWOOD_FRAMEWORK_PATH)
  * @param {string} redwoodProjectCwd
  */
 export function projectDeps(redwoodProjectCwd) {
-  return execInFramework('yarn project:deps', { env: { RWJS_CWD: redwoodProjectCwd } })
+  return execInFramework('yarn project:deps', {
+    env: { RWJS_CWD: redwoodProjectCwd },
+  })
 }
 
 /**
  * @param {string} redwoodProjectCwd
  */
 export function projectCopy(redwoodProjectCwd) {
-  return execInFramework('yarn project:copy', { env: { RWJS_CWD: redwoodProjectCwd } })
+  return execInFramework('yarn project:copy', {
+    env: { RWJS_CWD: redwoodProjectCwd },
+  })
 }
 
 /**
  * @param {{ baseKeyPrefix: string, distKeyPrefix: string, canary: boolean }} options
  */
-export async function createCacheKeys({ baseKeyPrefix, distKeyPrefix, canary }) {
+export async function createCacheKeys({
+  baseKeyPrefix,
+  distKeyPrefix,
+  canary,
+}) {
   const baseKey = [
     baseKeyPrefix,
     process.env.RUNNER_OS,
     process.env.GITHUB_REF.replaceAll('/', '-'),
-    await hashFiles(path.join('__fixtures__', 'test-project'))
+    await hashFiles(path.join('__fixtures__', 'test-project')),
   ].join('-')
 
-  const dependenciesKey = [
-    baseKey,
-    'dependencies',
-    await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
-  ].join('-') + (canary ? '-canary' : '')
+  const dependenciesKey =
+    [
+      baseKey,
+      'dependencies',
+      await hashFiles(['yarn.lock', '.yarnrc.yml'].join('\n')),
+    ].join('-') + (canary ? '-canary' : '')
 
-  const distKey = [
-    dependenciesKey,
-    distKeyPrefix,
-    'dist',
-    await hashFiles([
-      'package.json',
-      'babel.config.js',
-      'tsconfig.json',
-      'tsconfig.compilerOption.json',
-      'nx.json',
-      'lerna.json',
-      'packages',
-    ].join('\n'))
-  ].join('-') + (canary ? '-canary' : '')
+  const distKey =
+    [
+      dependenciesKey,
+      distKeyPrefix,
+      'dist',
+      await hashFiles(
+        [
+          'package.json',
+          'babel.config.js',
+          'tsconfig.json',
+          'tsconfig.compilerOption.json',
+          'nx.json',
+          'lerna.json',
+          'packages',
+        ].join('\n'),
+      ),
+    ].join('-') + (canary ? '-canary' : '')
 
   return {
     baseKey,
     dependenciesKey,
-    distKey
+    distKey,
   }
 }
 
@@ -119,7 +129,7 @@ export async function setUpRscTestProject(
   testProjectPath,
   fixtureName,
   core,
-  execInProject
+  execInProject,
 ) {
   core.setOutput('test-project-path', testProjectPath)
 
@@ -129,15 +139,15 @@ export async function setUpRscTestProject(
   const fixturePath = path.join(
     REDWOOD_FRAMEWORK_PATH,
     '__fixtures__',
-    fixtureName
+    fixtureName,
   )
   const rwBinPath = path.join(
     REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/index.js'
+    'packages/cli/dist/index.js',
   )
   const rwfwBinPath = path.join(
     REDWOOD_FRAMEWORK_PATH,
-    'packages/cli/dist/rwfw.js'
+    'packages/cli/dist/rwfw.js',
   )
 
   console.log(`Creating project at ${testProjectPath}`)

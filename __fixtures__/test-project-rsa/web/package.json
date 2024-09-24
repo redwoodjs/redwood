@@ -15,8 +15,8 @@
     "@redwoodjs/forms": "8.0.0-canary.144",
     "@redwoodjs/router": "8.0.0-canary.144",
     "@redwoodjs/web": "8.0.0-canary.144",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916"
   },
   "devDependencies": {
     "@redwoodjs/vite": "8.0.0-canary.144",

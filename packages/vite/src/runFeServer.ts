@@ -6,29 +6,28 @@
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
 import path from 'node:path'
+import process from 'node:process'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
-// @ts-expect-error We will remove dotenv-defaults from this package anyway
 import { config as loadDotEnv } from 'dotenv-defaults'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
+import WebSocket, { WebSocketServer } from 'ws'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
+import { getRscStylesheetLinkGenerator } from '@redwoodjs/router/rscCss'
 import {
   createPerRequestMap,
   createServerStorage,
 } from '@redwoodjs/server-store'
+import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
-import type { Middleware } from './middleware/types.js'
-import { getRscStylesheetLinkGenerator } from './rsc/rscCss.js'
-import { createRscRequestHandler } from './rsc/rscRequestHandler.js'
-import { setClientEntries } from './rsc/rscWorkerCommunication.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
@@ -47,6 +46,8 @@ import { convertExpressHeaders, getFullUrl } from './utils.js'
 loadDotEnv({
   path: path.join(getPaths().base, '.env'),
   defaults: path.join(getPaths().base, '.env.defaults'),
+  // @ts-expect-error - Old typings. @types/dotenv-defaults depends on dotenv
+  // v8. dotenv-defaults uses dotenv v14
   multiline: true,
 })
 // ------------------------------------------------
@@ -60,6 +61,10 @@ export async function runFeServer() {
   registerFwGlobalsAndShims()
 
   if (rscEnabled) {
+    const { setClientEntries } = await import('./rsc/rscRenderer.js')
+
+    createWebSocketServer()
+
     try {
       // This will fail if we're not running in RSC mode (i.e. for Streaming SSR)
       await setClientEntries()
@@ -136,42 +141,40 @@ export async function runFeServer() {
   )
 
   app.use('*', (req, _res, next) => {
-    const fullUrl = getFullUrl(req)
+    const fullUrl = getFullUrl(req, rscEnabled)
     const headers = convertExpressHeaders(req.headersDistinct)
     // Convert express headers to fetch headers
     const perReqStore = createPerRequestMap({ headers, fullUrl })
 
     // By wrapping next, we ensure that all of the other handlers will use this same perReqStore
-    // But note that the serverStorage is RE-initialised for the RSC worker
     serverStorage.run(perReqStore, next)
   })
 
   // 2. Proxy the api server
   // TODO (STREAMING) we need to be able to specify whether proxying is required or not
   // e.g. deploying to Netlify, we don't need to proxy but configure it in Netlify
-  // Also be careful of differences between v2 and v3 of the server
   app.use(
     rwConfig.web.apiUrl,
-    // @WARN! Be careful, between v2 and v3 of http-proxy-middleware
-    // the syntax has changed https://github.com/chimurai/http-proxy-middleware
     createProxyMiddleware({
       changeOrigin: false,
-      pathRewrite: {
-        [`^${rwConfig.web.apiUrl}`]: '', // remove base path
-      },
       // Using 127.0.0.1 to force ipv4. With `localhost` you don't really know
       // if it's going to be ipv4 or ipv6
       target: `http://127.0.0.1:${rwConfig.api.port}`,
     }),
   )
 
-  // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
-  app.use(
-    '/rw-rsc',
-    createRscRequestHandler({
-      getMiddlewareRouter: async () => middlewareRouter,
-    }),
-  )
+  if (rscEnabled) {
+    const { createRscRequestHandler } = await import(
+      './rsc/rscRequestHandler.js'
+    )
+    // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
+    app.use(
+      '/rw-rsc',
+      createRscRequestHandler({
+        getMiddlewareRouter: async () => middlewareRouter,
+      }),
+    )
+  }
 
   // Static asset handling MUST be defined before our catch all routing handler below
   // otherwise it will catch all requests for static assets and return a 404.
@@ -199,6 +202,36 @@ export async function runFeServer() {
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
+
+  if (typeof process.send !== 'undefined') {
+    process.send('server ready')
+  }
+}
+
+function createWebSocketServer() {
+  const wsServer = new WebSocketServer({ port: 18998 })
+
+  wsServer.on('connection', (ws) => {
+    console.log('A new client connected.')
+
+    // Event listener for incoming messages. The `data` is a Buffer
+    ws.on('message', (data) => {
+      const message = data.toString()
+      console.log('Received message:', message)
+
+      // Broadcast the message to all connected clients
+      wsServer.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message)
+        }
+      })
+    })
+
+    // Event listener for client disconnection
+    ws.on('close', () => {
+      console.log('A client disconnected.')
+    })
+  })
 }
 
 runFeServer()

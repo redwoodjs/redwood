@@ -1,8 +1,11 @@
 import path from 'node:path'
 
-import generate from '@babel/generator'
-import { parse as babelParse } from '@babel/parser'
-import traverse from '@babel/traverse'
+// Babel 7 packages are CJS, and need to be imported as such
+import babelGenerator from '@babel/generator'
+const { default: generate } = babelGenerator
+import { parse as babelParse } from '@babel/parser/index.cjs'
+import babelTraverse from '@babel/traverse'
+const { default: traverse } = babelTraverse
 import * as t from '@babel/types'
 import type { Plugin } from 'vite'
 import { normalizePath } from 'vite'
@@ -10,8 +13,8 @@ import { normalizePath } from 'vite'
 import { getPaths } from '@redwoodjs/project-config'
 
 /**
- * Transform `import { Router } from '@redwoodjs/vite/Router'` to
- * `import { Router } from '@redwoodjs/vite/SsrRouter'`
+ * Transform `import { Router } from '@redwoodjs/router/RscRouter'` to
+ * `import { Router } from '@redwoodjs/router/SsrRouter'`
  */
 export function rscSsrRouterImport(): Plugin {
   // Vite IDs are always normalized and so we avoid windows path issues
@@ -42,12 +45,11 @@ export function rscSsrRouterImport(): Plugin {
       traverse(ast, {
         ImportDeclaration(path) {
           const source = path.node.source.value
-          if (source === '@redwoodjs/vite/Router') {
-            path.node.source = t.stringLiteral('@redwoodjs/vite/SsrRouter')
+          if (source === '@redwoodjs/router/RscRouter') {
+            path.node.source = t.stringLiteral('@redwoodjs/router/SsrRouter')
           }
         },
       })
-
       return generate(ast).code
     },
   }

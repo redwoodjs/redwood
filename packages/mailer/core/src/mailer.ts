@@ -72,7 +72,7 @@ export class Mailer<
         this.logger.warn(
           "Automatically loaded the '@redwoodjs/mailer-handler-in-memory' handler, this will be used to process mail in test mode",
         )
-      } catch (_error) {
+      } catch {
         this.logger.warn(
           "No test handler specified and could not load the '@redwoodjs/mailer-handler-in-memory' handler automatically, this will prevent mail from being processed in test mode",
         )
@@ -97,7 +97,7 @@ export class Mailer<
         this.logger.warn(
           "Automatically loaded the '@redwoodjs/mailer-handler-studio' handler, this will be used to process mail in development mode",
         )
-      } catch (_error) {
+      } catch {
         this.logger.warn(
           "No development handler specified and could not load the '@redwoodjs/mailer-handler-studio' handler automatically, this will prevent mail from being processed in development mode",
         )

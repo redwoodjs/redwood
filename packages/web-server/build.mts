@@ -17,7 +17,7 @@ if (bins !== 1) {
     [
       `Error: Expected exactly one bin entry; found ${bins}`,
       './packages/web-server/src/bin.ts uses the bin entry as its scriptName',
-    ].join('\n')
+    ].join('\n'),
   )
   process.exit(1)
 }

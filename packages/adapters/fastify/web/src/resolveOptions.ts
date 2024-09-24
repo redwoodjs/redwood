@@ -83,7 +83,7 @@ function isFullyQualifiedUrl(url: string) {
     // eslint-disable-next-line no-new
     new URL(url)
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }

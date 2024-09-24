@@ -83,14 +83,14 @@ export default (file, api) => {
 
   const serverInjectImport = j.importDeclaration(
     [j.importSpecifier(j.identifier('useServerInsertedHTML'))],
-    j.stringLiteral('@redwoodjs/web')
+    j.stringLiteral('@redwoodjs/web'),
   )
 
   const reactImports = j.importDeclaration(
     ['Suspense', 'useState', 'use', 'useRef'].map((importName) =>
-      j.importSpecifier(j.identifier(importName))
+      j.importSpecifier(j.identifier(importName)),
     ),
-    j.stringLiteral('react')
+    j.stringLiteral('react'),
   )
 
   root

@@ -51,6 +51,13 @@ export const schema = gql`
   }
 `
 
+export const scalarSchemas = {
+  File: gql`
+    scalar File
+  `,
+}
+export type ScalarSchemaKeys = keyof typeof scalarSchemas
+
 export interface Resolvers {
   BigInt: typeof BigIntResolver
   Date: typeof DateResolver

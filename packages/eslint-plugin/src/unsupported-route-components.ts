@@ -1,5 +1,5 @@
 import type { TSESTree } from '@typescript-eslint/utils'
-import { ESLintUtils } from '@typescript-eslint/utils'
+import { AST_NODE_TYPES, ESLintUtils } from '@typescript-eslint/utils'
 import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 
 const createRule = ESLintUtils.RuleCreator.withoutDocs
@@ -13,9 +13,9 @@ function checkNodes(
   nodesToCheck: TSESTree.JSXElement | TSESTree.JSXChild,
   context: RuleContext<'unexpected', []>,
 ) {
-  if (nodesToCheck.type === 'JSXElement') {
+  if (nodesToCheck.type === AST_NODE_TYPES.JSXElement) {
     const name =
-      nodesToCheck.openingElement.name.type === 'JSXIdentifier'
+      nodesToCheck.openingElement.name.type === AST_NODE_TYPES.JSXIdentifier
         ? nodesToCheck.openingElement.name.name
         : null
     if (name && !isAllowedElement(name)) {
@@ -37,7 +37,6 @@ export const unsupportedRouteComponents = createRule({
     type: 'problem',
     docs: {
       description: 'Find unsupported route components',
-      recommended: 'recommended',
     },
     messages: {
       unexpected:
@@ -52,15 +51,21 @@ export const unsupportedRouteComponents = createRule({
         if (isRoutesRenderBlock(node.declarations[0])) {
           const routesDeclaration = node.declarations[0].init
 
-          if (routesDeclaration?.type === 'ArrowFunctionExpression') {
-            if (routesDeclaration.body.type === 'JSXElement') {
+          if (
+            routesDeclaration?.type === AST_NODE_TYPES.ArrowFunctionExpression
+          ) {
+            if (routesDeclaration.body.type === AST_NODE_TYPES.JSXElement) {
               // Routes = () => <Router>...</Router>
               checkNodes(routesDeclaration.body, context)
-            } else if (routesDeclaration.body.type === 'BlockStatement') {
+            } else if (
+              routesDeclaration.body.type === AST_NODE_TYPES.BlockStatement
+            ) {
               // For when  Routes = () => { return (<Router>...</Router>) }
               if (
-                routesDeclaration.body.body[0].type === 'ReturnStatement' &&
-                routesDeclaration.body.body[0].argument?.type === 'JSXElement'
+                routesDeclaration.body.body[0].type ===
+                  AST_NODE_TYPES.ReturnStatement &&
+                routesDeclaration.body.body[0].argument?.type ===
+                  AST_NODE_TYPES.JSXElement
               ) {
                 const routesReturnStatement =
                   routesDeclaration.body.body[0].argument
@@ -77,8 +82,8 @@ export const unsupportedRouteComponents = createRule({
 
 function isRoutesRenderBlock(node?: TSESTree.VariableDeclarator) {
   return (
-    node?.type === 'VariableDeclarator' &&
-    node?.id.type === 'Identifier' &&
+    node?.type === AST_NODE_TYPES.VariableDeclarator &&
+    node?.id.type === AST_NODE_TYPES.Identifier &&
     node?.id.name === 'Routes'
   )
 }

@@ -6,22 +6,31 @@ import * as schemaAstPlugin from '@graphql-codegen/schema-ast'
 import { CodeFileLoader } from '@graphql-tools/code-file-loader'
 import type { LoadSchemaOptions } from '@graphql-tools/load'
 import { loadSchema } from '@graphql-tools/load'
+import { getSchema } from '@prisma/internals'
 import chalk from 'chalk'
 import type { DocumentNode } from 'graphql'
 import { print } from 'graphql'
 import terminalLink from 'terminal-link'
 
 import { rootSchema } from '@redwoodjs/graphql-server'
-import { getPaths, resolveFile } from '@redwoodjs/project-config'
+import type { ScalarSchemaKeys } from '@redwoodjs/graphql-server/src/rootSchema'
+import { getPaths, getConfig, resolveFile } from '@redwoodjs/project-config'
 
 export const generateGraphQLSchema = async () => {
   const redwoodProjectPaths = getPaths()
+  const redwoodProjectConfig = getConfig()
 
   const schemaPointerMap = {
     [print(rootSchema.schema)]: {},
     'graphql/**/*.sdl.{js,ts}': {},
     'directives/**/*.{js,ts}': {},
     'subscriptions/**/*.{js,ts}': {},
+  }
+
+  for (const [name, schema] of Object.entries(rootSchema.scalarSchemas)) {
+    if (redwoodProjectConfig.graphql.includeScalars[name as ScalarSchemaKeys]) {
+      schemaPointerMap[print(schema)] = {}
+    }
   }
 
   // If we're serverful and the user is using realtime, we need to include the live directive for realtime support.
@@ -66,7 +75,9 @@ export const generateGraphQLSchema = async () => {
     if (e instanceof Error) {
       const match = e.message.match(/Unknown type: "(\w+)"/)
       const name = match?.[1]
-      const schemaPrisma = fs.readFileSync(redwoodProjectPaths.api.dbSchema)
+      const schemaPrisma = (
+        await getSchema(redwoodProjectPaths.api.dbSchema)
+      ).toString()
 
       const errorObject = {
         message: `Schema loading failed. ${e.message}`,

@@ -4,7 +4,7 @@ import url from 'node:url'
 
 import type { Manifest as ViteBuildManifest } from 'vite'
 
-import { getProjectRoutes } from '@redwoodjs/internal/dist/routes'
+import { getProjectRoutes } from '@redwoodjs/internal/dist/routes.js'
 import { getAppRouteHook, getPaths } from '@redwoodjs/project-config'
 
 import type { RWRouteManifest } from './types.js'
@@ -32,7 +32,7 @@ export async function buildRouteManifest() {
         ? // @TODO(RSC_DC): this no longer resolves to anything i.e. its always null
           // Because the clientBuildManifest has no pages, because all pages are Server-components?
           // This may be a non-issue, because RSC pages don't need a client bundle per page (or atleast not the same bundle)
-          clientBuildManifest[route.relativeFilePath]?.file ?? null
+          (clientBuildManifest[route.relativeFilePath]?.file ?? null)
         : null,
       matchRegexString: route.matchRegexString,
       // NOTE this is the path definition, not the actual path

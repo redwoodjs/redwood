@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/vite",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
@@ -8,46 +8,39 @@
     "directory": "packages/vite"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./cjsWrapper.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./dist/client.js"
-    },
-    "./clientSsr": {
-      "types": "./dist/clientSsr.d.ts",
-      "default": "./dist/clientSsr.js"
-    },
-    "./Router": {
-      "types": "./dist/ClientRouter.d.ts",
-      "react-server": "./dist/ServerRouter.js",
-      "default": "./dist/ClientRouter.js"
-    },
-    "./SsrRouter": {
-      "types": "./dist/SsrRouter.d.ts",
-      "react-server": "./dist/ServerRouter.js",
-      "default": "./dist/SsrRouter.js"
+      "require": "./dist/cjs/client.js",
+      "import": "./dist/client.js"
     },
     "./buildFeServer": {
-      "types": "./dist/buildFeServer.d.ts",
-      "default": "./dist/buildFeServer.js"
+      "require": "./dist/cjs/buildFeServer.js",
+      "import": "./dist/buildFeServer.js"
     },
     "./react-node-loader": {
-      "types": "./dist/react-server-dom-webpack/node-loader.d.ts",
       "default": "./dist/react-server-dom-webpack/node-loader.js"
     },
-    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs",
-    "./middleware": {
-      "types": "./dist/middleware/index.d.ts",
-      "default": "./dist/middleware/index.js"
-    }
+    "./build": {
+      "import": "./dist/build/build.js",
+      "default": "./dist/cjs/build/build.js"
+    },
+    "./bins/rw-vite-build.mjs": "./bins/rw-vite-build.mjs"
   },
   "bin": {
     "rw-dev-fe": "./dist/devFeServer.js",
+    "rw-dev-rsc": "./dist/devRscServer.js",
     "rw-serve-fe": "./dist/runFeServer.js",
     "rw-vite-build": "./bins/rw-vite-build.mjs",
     "rw-vite-dev": "./bins/rw-vite-dev.mjs",
@@ -55,18 +48,19 @@
   },
   "files": [
     "dist",
-    "inject",
-    "cjsWrapper.js"
+    "inject"
   ],
   "scripts": {
-    "build": "tsx build.mts && yarn build:types",
+    "build": "tsx build.ts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-vite.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "check:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/generator": "7.24.5",
+    "@babel/generator": "7.25.6",
     "@babel/parser": "^7.22.16",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/auth": "workspace:*",
@@ -76,38 +70,50 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
-    "@swc/core": "1.5.27",
-    "@vitejs/plugin-react": "4.2.1",
-    "@whatwg-node/fetch": "0.9.17",
-    "@whatwg-node/server": "0.9.34",
+    "@swc/core": "1.7.28",
+    "@vitejs/plugin-react": "4.3.1",
+    "@whatwg-node/fetch": "0.9.21",
+    "@whatwg-node/server": "0.9.49",
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
+    "chokidar": "3.6.0",
     "cookie": "0.6.0",
-    "core-js": "3.37.1",
+    "core-js": "3.38.1",
     "dotenv-defaults": "5.0.2",
-    "express": "4.19.2",
-    "find-my-way": "8.2.0",
-    "http-proxy-middleware": "2.0.6",
-    "isbot": "5.1.9",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-server-dom-webpack": "19.0.0-beta-04b058868c-20240508",
-    "vite": "5.3.1",
-    "vite-plugin-cjs-interop": "2.1.1",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "execa": "5.1.1",
+    "express": "4.21.0",
+    "find-my-way": "8.2.2",
+    "fs-extra": "11.2.0",
+    "http-proxy-middleware": "3.0.2",
+    "isbot": "5.1.17",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-server-dom-webpack": "19.0.0-rc-f2df5694-20240916",
+    "rimraf": "6.0.1",
+    "vite": "5.4.7",
+    "vite-plugin-cjs-interop": "2.1.4",
+    "vite-plugin-node-polyfills": "0.22.0",
+    "ws": "8.18.0",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.16.4",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.4",
     "@types/busboy": "^1",
     "@types/cookie": "^0",
     "@types/express": "4",
+    "@types/fs-extra": "11.0.4",
     "@types/react": "^18.2.55",
+    "@types/ws": "^8",
     "@types/yargs-parser": "21.0.3",
-    "glob": "10.3.15",
-    "rollup": "4.18.0",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "concurrently": "8.2.2",
+    "glob": "11.0.0",
+    "memfs": "4.12.0",
+    "publint": "0.2.11",
+    "rollup": "4.22.4",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

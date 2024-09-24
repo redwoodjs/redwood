@@ -36,14 +36,8 @@ afterAll(() => {
   process.env.RWJS_CWD = original_RWJS_CWD
 })
 
-let consoleWarnSpy: MockInstance<
-  Parameters<typeof console.warn>,
-  ReturnType<typeof console.warn>
->
-let consoleLogSpy: MockInstance<
-  Parameters<typeof console.log>,
-  ReturnType<typeof console.log>
->
+let consoleWarnSpy: MockInstance<typeof console.warn>
+let consoleLogSpy: MockInstance<typeof console.log>
 
 describe('createServer', () => {
   // Create a server for most tests. Some that test initialization create their own
@@ -239,6 +233,7 @@ describe('resolveOptions', () => {
         requestTimeout:
           DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.requestTimeout,
         logger: DEFAULT_CREATE_SERVER_OPTIONS.logger,
+        bodyLimit: DEFAULT_CREATE_SERVER_OPTIONS.fastifyServerOptions.bodyLimit,
       },
       apiPort: 65501,
       apiHost: '::',

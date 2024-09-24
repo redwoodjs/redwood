@@ -1,7 +1,7 @@
-name: "📖 Documentation"
-description: "A catch-all template for issues about documentation"
+name: '📖 Documentation'
+description: 'A catch-all template for issues about documentation'
 
-title: "[Docs]: "
+title: '[Docs]: '
 labels: topic/docs
 
 body:

@@ -20,7 +20,7 @@ export default (file, api) => {
 
   const componentImport = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogPost'))],
-    j.stringLiteral('src/components/BlogPost')
+    j.stringLiteral('src/components/BlogPost'),
   )
 
   root.find(j.ExportNamedDeclaration).at(0).insertBefore(componentImport)
@@ -36,7 +36,7 @@ export default (file, api) => {
       const { node } = nodePath
       node.init.quasi = j.templateLiteral(
         [j.templateElement({ raw: query, cooked: query }, true)],
-        []
+        [],
       )
       return node
     })

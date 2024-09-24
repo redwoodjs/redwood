@@ -109,8 +109,7 @@ module.exports = {
             //
             // Uses https://github.com/isaacs/minimatch under the hood
             // See https://github.com/isaacs/node-glob#glob-primer for syntax
-            // eslint-disable-next-line prettier/prettier
-            pattern: 'src/*/**/\*.?(sdl.){js,ts}',
+            pattern: 'src/*/**/*.?(sdl.){js,ts}',
             patternOptions: {
               nobrace: true,
               noglobstar: true,
@@ -151,25 +150,18 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       extends: ['plugin:@typescript-eslint/recommended', 'prettier'],
       rules: {
-        // 'recommended' rules we alter
-        '@typescript-eslint/no-explicit-any': 'warn',
+        // TODO: look into enabling these eventually
+        '@typescript-eslint/no-empty-function': 'off',
+        '@typescript-eslint/prefer-function-type': 'off',
+
+        // Specific 'recommended' rules we alter
         '@typescript-eslint/no-var-requires': 'off',
-        '@typescript-eslint/ban-types': 'warn',
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-empty-object-type': 'off',
         '@typescript-eslint/no-unused-vars': [
           'error',
           { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
         ],
-        // Specific 'stylistic' rules we enable
-        '@typescript-eslint/adjacent-overload-signatures': 'error',
-        '@typescript-eslint/no-inferrable-types': 'error',
-        '@typescript-eslint/no-non-null-assertion': 'warn',
-        // Other non-grouped rules we alter
-        'valid-typeof': 'off',
-        camelcase: 'off',
-        '@typescript-eslint/camelcase': 'off',
-        'no-empty-function': 'off',
-        'no-use-before-define': 'off',
-        '@typescript-eslint/no-use-before-define': 'off',
       },
     },
     {

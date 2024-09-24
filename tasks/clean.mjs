@@ -8,7 +8,7 @@ await $`yarn clean:prisma`
 
 await rimraf('packages/**/dist', {
   glob: {
-    ignore: 'packages/**/{fixtures,__fixtures__}/**/dist',
+    ignore: 'packages/**/{fixtures,__fixtures__,node_modules}/**/dist',
   },
 })
 
@@ -18,5 +18,9 @@ await rimraf('packages/**/tsconfig.tsbuildinfo', {
 })
 
 await rimraf('packages/**/tsconfig.build.tsbuildinfo', {
+  glob: true,
+})
+
+await rimraf('packages/**/tsconfig.cjs.tsbuildinfo', {
   glob: true,
 })

@@ -3,8 +3,7 @@ import chalk from 'chalk'
 import { coerceRootPath } from '@redwoodjs/fastify-web'
 
 import { getAPIPort, getAPIHost } from './cliHelpers'
-import createFastifyInstance from './fastify'
-import { redwoodFastifyAPI } from './plugins/api'
+import { createServer } from './createServer'
 import type { APIParsedOptions } from './types'
 
 export async function handler(options: APIParsedOptions = {}) {
@@ -13,32 +12,14 @@ export async function handler(options: APIParsedOptions = {}) {
 
   options.apiRootPath = coerceRootPath(options.apiRootPath ?? '/')
 
-  const fastify = await createFastifyInstance()
-  fastify.register(redwoodFastifyAPI, {
-    redwood: {
-      ...options,
-      loadUserConfig: true,
-    },
+  const fastify = await createServer({
+    apiRootPath: options.apiRootPath,
   })
 
   options.host ??= getAPIHost()
   options.port ??= getAPIPort()
 
-  await fastify.listen({
-    port: options.port,
-    host: options.host,
-    listenTextResolver: (address) => {
-      // In the past, in development, we've prioritized showing a friendlier
-      // host than the listen-on-all-ipv6-addresses '[::]'. Here we replace it
-      // with 'localhost' only if 1) we're not in production and 2) it's there.
-      // In production it's important to be transparent.
-      if (process.env.NODE_ENV !== 'production') {
-        address = address.replace(/http:\/\/\[::\]/, 'http://localhost')
-      }
-
-      return `Server listening at ${address}`
-    },
-  })
+  await fastify.start()
 
   fastify.log.trace(
     { custom: { ...fastify.initialConfig } },

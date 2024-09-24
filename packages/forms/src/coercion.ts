@@ -70,7 +70,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -80,7 +80,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -90,7 +90,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -100,7 +100,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       }
       try {
         return JSON.parse(val)
-      } catch (e) {
+      } catch {
         return NaN // represents invalid JSON parse to JSONValidation function
       }
     },
@@ -110,8 +110,7 @@ const SET_VALUE_AS_FUNCTIONS: Record<
       isValueEmpty(val) ? null : +val,
     emptyAsUndefined: (val: string): number | undefined =>
       isValueEmpty(val) ? undefined : +val,
-    emptyAsNaN: (val: string): number | typeof NaN =>
-      isValueEmpty(val) ? NaN : +val,
+    emptyAsNaN: (val: string): number => (isValueEmpty(val) ? NaN : +val),
     emptyAsString: (val: string): number | '' =>
       isValueEmpty(val) ? '' : +val,
     emptyAsZero: (val: string): number => (isValueEmpty(val) ? 0 : +val),
@@ -261,6 +260,6 @@ export const setCoercion = (
     valueAs, // type
     emptyAs, // emptyAs
     validation.required !== undefined && validation.required !== false, // required
-    /Id$/.test(name || ''), // isId
+    (name || '').endsWith('Id'), // isId
   )
 }

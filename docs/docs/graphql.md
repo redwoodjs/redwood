@@ -6,7 +6,6 @@ description: GraphQL is a fundamental part of Redwood
 
 GraphQL is a fundamental part of Redwood. Having said that, you can get going without knowing anything about it, and can actually get quite far without ever having to read [the docs](https://graphql.org/learn/). But to master Redwood, you'll need to have more than just a vague notion of what GraphQL is. You'll have to really grok it.
 
-
 ## GraphQL 101
 
 GraphQL is a query language that enhances the exchange of data between clients (in Redwood's case, a React app) and servers (a Redwood API).
@@ -45,11 +44,9 @@ returns the following JSON response:
       "description": "Lorem ipsum...",
       "owner": {
         "id": 11,
-        "username": "Redwood",
+        "username": "Redwood"
       },
-      "tags": [
-        { "id": 22, "name": "graphql" }
-      ]
+      "tags": [{ "id": 22, "name": "graphql" }]
     }
   },
   "errors": null
@@ -136,8 +133,8 @@ Since there's two parts to GraphQL in Redwood, the client and the server, we've 
 
 On the `web` side, Redwood uses [Apollo Client](https://www.apollographql.com/docs/react/) by default though you can swap it out for something else if you want.
 
-
 The `api` side offers a GraphQL server built on [GraphQL Yoga](https://www.graphql-yoga.com) and the [Envelop plugin system](https://www.envelop.dev/docs) from [The Guild](https://the-guild.dev).
+
 ###
 
 Redwood's api side is "serverless first", meaning it's architected as functions which can be deployed on either serverless or traditional infrastructure, and Redwood's GraphQL endpoint is effectively "just another function" (with a whole lot more going on under the hood, but that part is handled for you, out of the box).
@@ -155,7 +152,6 @@ RedwoodJS leverages Yoga's Envelop plugins to implement custom internal plugins 
 
 ### Security Best Practices
 
-
 RedwoodJS implements GraphQL Armor from [Escape Technologies](https://escape.tech) to make your endpoint more secure by default by implementing common GraphQL [security best practices](#security).
 
 GraphQL Armor, developed by Escape in partnership with The Guild, is a middleware for JS servers that adds a security layer to the RedwoodJS GraphQL endpoint.
@@ -165,7 +161,6 @@ GraphQL Armor, developed by Escape in partnership with The Guild, is a middlewar
 In addition, RedwoodJS can be setup to enforce [persisted operations](https://the-guild.dev/graphql/yoga-server/docs/features/persisted-operations) -- alternatively called [Trusted Documents](https://benjie.dev/graphql/trusted-documents).
 
 See [Configure Trusted Documents](graphql/trusted-documents#configure-trusted-documents) for more information and usage instructions.
-
 
 ### Conclusion
 
@@ -244,8 +239,6 @@ For example, if you have a query named `search` that supports [Apollo's offset p
   }
 }}>
 ```
-
-
 
 ### Swapping out the RedwoodApolloProvider
 
@@ -333,7 +326,8 @@ export const Users = {
   id: (_args, { root }) => root.id,
   email: (_args, { root }) => root.email,
   name: (_args, { root }) => root.name,
-  age: (_args, { root }) => new Date().getFullYear() - root.birthDate.getFullYear()
+  age: (_args, { root }) =>
+    new Date().getFullYear() - root.birthDate.getFullYear(),
 }
 ```
 
@@ -351,7 +345,8 @@ Here's an example to make things clear:
 
 ```js
 export const Post = {
-  user: (args, gqlArgs) => db.post.findUnique({ where: { id: gqlArgs?.root.id } }).user(),
+  user: (args, gqlArgs) =>
+    db.post.findUnique({ where: { id: gqlArgs?.root.id } }).user(),
 }
 ```
 
@@ -388,7 +383,11 @@ For example, if we want to populate a new, custom `ipAddress` attribute on the c
 // ...
 
 const ipAddress = ({ event }) => {
-  return event?.headers?.['client-ip'] || event?.requestContext?.identity?.sourceIp || 'localhost'
+  return (
+    event?.headers?.['client-ip'] ||
+    event?.requestContext?.identity?.sourceIp ||
+    'localhost'
+  )
 }
 
 const setIpAddress = async ({ event, context }) => {
@@ -431,22 +430,22 @@ query {
 How is this possible? Via Redwood's [root schema](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts). The root schema is where things like currentUser are defined:
 
 ```graphql
-  scalar BigInt
-  scalar Date
-  scalar Time
-  scalar DateTime
-  scalar JSON
-  scalar JSONObject
+scalar BigInt
+scalar Date
+scalar Time
+scalar DateTime
+scalar JSON
+scalar JSONObject
 
-  type Redwood {
-    version: String
-    currentUser: JSON
-    prismaVersion: String
-  }
+type Redwood {
+  version: String
+  currentUser: JSON
+  prismaVersion: String
+}
 
-  type Query {
-    redwood: Redwood
-  }
+type Query {
+  redwood: Redwood
+}
 ```
 
 Now that you've seen the sdl, be sure to check out [the resolvers](https://github.com/redwoodjs/redwood/blob/main/packages/graphql-server/src/rootSchema.ts):
@@ -608,16 +607,16 @@ For local development, you can make a request to the proxy:
 
 ```bash
 curl "http://localhost:8910/.redwood/functions/graphql/readiness" \
-     -H 'x-yoga-id: yoga' \
-     -i
+  -H 'x-yoga-id: yoga' \
+  -i
 ```
 
 or directly invoke the graphql function:
 
 ```bash
 curl "http://localhost:8911/graphql/readiness" \
-     -H 'x-yoga-id: yoga' \
-     -i
+  -H 'x-yoga-id: yoga' \
+  -i
 ```
 
 Either way, you should get a `200 OK` HTTP status if ready, or a `503 Service Unavailable` if not.
@@ -645,13 +644,13 @@ If any fail this check, you will see:
 When building via the `yarn rw build` command and the SDL fails verification, you will see output that lists each query or mutation missing the directive:
 
 ```bash
-  ✔ Generating Prisma Client...
-  ✖ Verifying graphql schema...
-    → - deletePost Mutation
-    Building API...
-    Cleaning Web...
-    Building Web...
-    Prerendering Web...
+✔ Generating Prisma Client...
+✖ Verifying graphql schema...
+→ - deletePost Mutation
+Building API...
+Cleaning Web...
+Building Web...
+Prerendering Web...
 
 You must specify one of @requireAuth, @skipAuth or a custom directive for
 - contacts Query
@@ -668,7 +667,6 @@ You must specify one of @requireAuth, @skipAuth or a custom directive for
 When launching the dev server via the `yarn rw dev` command, you will see output that lists each query or mutation missing the directive:
 
 ```bash
-
 gen | Generating TypeScript definitions and GraphQL schemas...
 gen | 37 files generated
 api | Building... Took 444 ms
@@ -677,19 +675,56 @@ api | Listening on http://localhost:8911/
 api | Importing Server Functions...
 web | ...
 api | FATAL [2021-09-24 18:41:49.700 +0000]:
-api |  ⚠️ GraphQL server crashed
-api |
-api |     Error: You must specify one of @requireAuth, @skipAuth or a custom directive for
-api |     - contacts Query
-api |     - posts Query
-api |     - post Query
-api |     - createContact Mutation
-api |     - createPost Mutation
-api |     - updatePost Mutation
-api |     - deletePost Mutation
+api | ⚠️ GraphQL server crashed
+api \
+  | api | Error: You must specify one of @requireAuth, @skipAuth or a custom directive for
+api | - contacts Query
+api | - posts Query
+api | - post Query
+api | - createContact Mutation
+api | - createPost Mutation
+api | - updatePost Mutation
+api | - deletePost Mutation
 ```
 
 To fix these errors, simple declare with `@requireAuth` to enforce authentication or `@skipAuth` to keep the operation public on each as appropriate for your app's permissions needs.
+
+## Default Scalars
+
+Redwood includes a selection of scalar types by default.
+
+Currently we allow you to control whether or not the `File` scalar is included automatically or not. By default we include the `File` scalar which maps to the standard `File` type. To disable this scalar you should add config to two places:
+
+1. In your `redwood.toml` file like so:
+
+   ```toml
+   [graphql]
+     includeScalars.File = false
+   ```
+
+2. In your `functions/graphql.ts` like so:
+
+   ```typescript
+   export const handler = createGraphQLHandler({
+     authDecoder,
+     getCurrentUser,
+     loggerConfig: { logger, options: {} },
+     directives,
+     sdls,
+     services,
+     onException: () => {
+       // Disconnect from your database with an unhandled exception.
+       db.$disconnect()
+     },
+     // highlight-start
+     includeScalars: {
+       File: false,
+     },
+     // highlight-end
+   })
+   ```
+
+With those two config values added your schema will no longer contain the `File` scalar by default and you are free to add your own or continue without one.
 
 ## Custom Scalars
 
@@ -860,7 +895,7 @@ query GetFavoriteTrees {
 }
 ```
 
-Redwood will automatically detect your union types in your `sdl` files and resolve *which* of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
+Redwood will automatically detect your union types in your `sdl` files and resolve _which_ of your union's types is being returned. If the returned object does not match any of the valid types, the associated operation will produce a GraphQL error.
 
 :::note
 
@@ -874,12 +909,12 @@ Apollo Client stores the results of your GraphQL queries in a local, normalized,
 
 useCache is a custom hook that returns the cache object and some useful methods to interact with the cache:
 
-* [evict](#evict)
-* [extract](#extract)
-* [identify](#identify)
-* [modify](#modify)
-* [resetStore](#resetstore)
-* [clearStore](#clearstore)
+- [evict](#evict)
+- [extract](#extract)
+- [identify](#identify)
+- [modify](#modify)
+- [resetStore](#resetstore)
+- [clearStore](#clearstore)
 
 ```ts
 import { useCache } from '@redwoodjs/web/apollo'
@@ -901,7 +936,6 @@ Either removes a normalized object from the cache or removes a specific field fr
 
 ```ts
 import { useCache } from '@redwoodjs/web/apollo'
-
 
 const Fruit = ({ id }: { id: FragmentIdentifier }) => {
   const { evict } = useCache()
@@ -969,7 +1003,6 @@ const Fruit = ({ id }: { id: FragmentIdentifier }) => {
 ### clearStore
 
 To reset the cache without refetching active queries, use the clearStore method.
-
 
 ```ts
 import { useCache } from '@redwoodjs/web/apollo'
@@ -1150,13 +1183,14 @@ export const handler = createGraphQLHandler({
 
 > Note: Check-out the [in-depth look at Redwood Directives](directives) that explains how to generate directives so you may use them to validate access and transform the response.
 
-
 ### Logging Setup
 
 For a details on setting up GraphQL Logging, see [Logging](#logging).
+
 ### Security Setup
 
 For a details on setting up GraphQL Security, see [Security](#security).
+
 ## Logging
 
 Logging is essential in production apps to be alerted about critical errors and to be able to respond effectively to support issues. In staging and development environments, logging helps you debug queries, resolvers and cell requests.
@@ -1422,16 +1456,16 @@ RedwoodJS will by default reject a variety malicious operation documents; that i
 
 RedwoodJS is configured out-of-the-box with GraphQL security best practices:
 
-* Schema Directive-based Authentication including RBAC validation
-* Production Deploys disable Introspection and GraphQL Playground automatically
-* Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
-* Prevent Information Leaks (Block Field Suggestions, Mask Errors)
+- Schema Directive-based Authentication including RBAC validation
+- Production Deploys disable Introspection and GraphQL Playground automatically
+- Reject Malicious Operation Documents (Max Aliases, Max Cost, Max Depth, Max Directives, Max Tokens)
+- Prevent Information Leaks (Block Field Suggestions, Mask Errors)
 
 And with the Yoga Envelop Plugin ecosystem available to you, there are options for:
 
-* CSRF Protection
-* Rate Limiting
-* and more.
+- CSRF Protection
+- Rate Limiting
+- and more.
 
 ### Authentication
 
@@ -1447,11 +1481,11 @@ When your app builds and your server starts up, Redwood checks that **all** quer
 If not, then your build will fail:
 
 ```bash
-  ✖ Verifying graphql schema...
-    Building API...
-    Cleaning Web...
-    Building Web...
-    Prerendering Web...
+✖ Verifying graphql schema...
+Building API...
+Cleaning Web...
+Building Web...
+Prerendering Web...
 You must specify one of @requireAuth, @skipAuth or a custom directive for
 - contacts Query
 - posts Query
@@ -1604,6 +1638,7 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 However, there may be cases where you want to enable introspection as well as the GraphQL PLaygrouns. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
 
 Here is an example of `createGraphQLHandler` function with the `allowIntrospection` and `allowGraphiQL` options set to `true`:
+
 ```ts {8}
 export const handler = createGraphQLHandler({
   authDecoder,
@@ -1630,7 +1665,6 @@ The may be cases where one wants to allow introspection, but not GraphiQL.
 Or, you may want to enable GraphiQL, but not allow introspection; for example, to try out known queries, but not to share the entire set of possible operations and types.
 
 :::
-
 
 ### GraphQL Armor Configuration
 
@@ -1721,6 +1755,7 @@ You can change the default value via the `maxAliases` setting when creating your
   }
 }
 ```
+
 #### Cost Limit
 
 This protection is enabled by default.
@@ -1768,12 +1803,13 @@ In this small example, we have one object field `me` that contains two, nested s
   }
 }
 ```
+
 The cost breakdown for cost is:
 
-* two scalars `id` and `user` worth 1 each
-* they are at level 1 depth with a depth factor of 1.5
-* 2 \* ( 1 \* 1.5 ) = 2 \* 1.5 = 3
-* their parent object is `me` worth 2
+- two scalars `id` and `user` worth 1 each
+- they are at level 1 depth with a depth factor of 1.5
+- 2 \* ( 1 \* 1.5 ) = 2 \* 1.5 = 3
+- their parent object is `me` worth 2
 
 Therefore the total cost is 2 + 3 = 5.
 
@@ -1790,6 +1826,7 @@ The operation definition `query` of `profile` is ignored in the calculation. Thi
   }
 }
 ```
+
 :::
 
 ##### Configuration and Defaults
@@ -1797,7 +1834,6 @@ The operation definition `query` of `profile` is ignored in the calculation. Thi
 Defaults to a overall maxCost limit of 5000.
 
 You can change the default value via the `costLimit` setting when creating your GraphQL handler.
-
 
 ```ts
 {
@@ -1850,6 +1886,7 @@ query cyclical {
   }
 }
 ```
+
 ##### Configuration and Defaults
 
 Defaults to 6 levels.
@@ -1894,7 +1931,7 @@ The following example demonstrates that by using the `@include` and `@skip` Grap
 }
 ```
 
-...  of formatted Posts with just a single id and title.
+... of formatted Posts with just a single id and title.
 
 ```ts
 {
@@ -1935,15 +1972,16 @@ You can change the default value via the `maxDirectives` setting when creating y
   }
 }
 ```
+
 #### Max Tokens
 
 This protection is enabled by default.
 
 Limit the number of GraphQL tokens in a document.
 
- In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters into a sequence of lexical tokens.
+In computer science, lexical analysis, lexing or tokenization is the process of converting a sequence of characters into a sequence of lexical tokens.
 
- E.g. given the following GraphQL operation.
+E.g. given the following GraphQL operation.
 
 ```ts
  graphql {
@@ -1954,7 +1992,7 @@ Limit the number of GraphQL tokens in a document.
  }
 ```
 
- The tokens are `query`, `{`, `me`, `{`, `id`, `user`, `}` and `}`. Having a total count of 8 tokens.
+The tokens are `query`, `{`, `me`, `{`, `id`, `user`, `}` and `}`. Having a total count of 8 tokens.
 
 ##### Example
 
@@ -2004,6 +2042,7 @@ You can change the default value via the `maxTokens` setting when creating your 
   }
 }
 ```
+
 #### Block Field Suggestions
 
 This plugin is enabled by default.
@@ -2015,6 +2054,7 @@ Example of such a suggestion:
 `Cannot query field "sta" on type "Media". Did you mean "stats", "staff", or "status"?`
 
 ##### Example
+
 ##### Configuration and Defaults
 
 Enabled by default.
@@ -2028,6 +2068,7 @@ You can change the default value via the `blockFieldSuggestions` setting when cr
   }
 }
 ```
+
 Enabling will hide the field suggestion:
 
 `Cannot query field "sta" on type "Media". [Suggestion hidden]?`
@@ -2043,8 +2084,7 @@ Orm if you want a custom mask:
 }
 ```
 
-``Cannot query field "sta" on type "Media". [REDACTED]?`
-
+`Cannot query field "sta" on type "Media". [REDACTED]?`
 
 ### Error Masking
 
@@ -2147,7 +2187,7 @@ export const getWeather = async ({ input }: WeatherInput) {
 
 If you have CORS enabled, almost all requests coming from the browser will have a preflight request - however, some requests are deemed "simple" and don't make a preflight. One example of such a request is a good ol' GET request without any headers, this request can be marked as "simple" and have preflight CORS checks skipped therefore skipping the CORS check.
 
-This attack can be mitigated by saying: "all GET requests must have a custom header set". This would force all clients to manipulate the headers of GET requests, marking them as "_not-_simple" and therefore always executing a preflight request.
+This attack can be mitigated by saying: "all GET requests must have a custom header set". This would force all clients to manipulate the headers of GET requests, marking them as "\_not-\_simple" and therefore always executing a preflight request.
 
 You can achieve this by using the [`@graphql-yoga/plugin-csrf-prevention` GraphQL Yoga plugin](https://the-guild.dev/graphql/yoga-server/docs/features/csrf-prevention).
 
@@ -2170,9 +2210,9 @@ However, if you make those edits in your Prisma schema, then those will be used.
 
 Your Prisma schema is documented with triple slash comments (`///`) that precedes:
 
-* Model names
-* Enum names
-* each Model field name
+- Model names
+- Enum names
+- each Model field name
 
 ```
 /// A blog post.
@@ -2199,10 +2239,10 @@ enum Color {
 
 When used with `--docs` option, [SDL generator](cli-commands#generate-sdl) adds comments for:
 
-* Directives
-* Queries
-* Mutations
-* Input Types
+- Directives
+- Queries
+- Mutations
+- Input Types
 
 :::note
 By default, the `--docs` option to the SDL generator is false and comments are not created.
@@ -2288,6 +2328,7 @@ type Query {
 #### Root Schema
 
 Documentation is also generated for the Redwood Root Schema that defines details about Redwood such as the current user and version information.
+
 ```
 type Query {
   "Fetches the Redwood root schema."
@@ -2343,18 +2384,17 @@ The documentation generated is present when exploring the schema.
 
 ### Use in Docusaurus
 
-If your project uses [Docusaurus](https://docusaurus.io), the generated commented SDL can be used to publish documentation using the [graphql-markdown](https://graphql-markdown.github.io) plugin.
+If your project uses [Docusaurus](https://docusaurus.io), the generated commented SDL can be used to publish documentation using the [graphql-markdown](https://graphql-markdown.dev/) plugin.
 
 #### Basic Setup
 
-The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.github.io) for latest instructions.
+The following is some basic setup information, but please consult [Docusaurus](https://docusaurus.io) and the [graphql-markdown](https://graphql-markdown.dev/) for latest instructions.
 
 1. Install Docusaurus (if you have not done so already)
 
 ```terminal
 npx create-docusaurus@latest docs classic
 ```
-
 
 Add `docs` to your `workspaces` in the project's `package.json`:
 
@@ -2378,7 +2418,7 @@ mkdir docs // if needed
 3. Install the GraphQL Generators Plugin
 
 ```terminal
-yarn workspace docs add @edno/docusaurus2-graphql-doc-generator graphql
+yarn workspace docs add @graphql-markdown/docusaurus graphql @graphql-tools/graphql-file-loader
 ```
 
 4. Ensure a Directory for your GraphQL APi generated documentation resides in with the Docusaurus directory `/docs` structure
@@ -2399,12 +2439,15 @@ mkdir docs/graphql-api // if needed
 // ...
   plugins: [
     [
-      '@edno/docusaurus2-graphql-doc-generator',
+      '@graphql-markdown/docusaurus',
       {
         schema: '../.redwood/schema.graphql',
         rootPath: './docs',
         baseURL: 'graphql-api',
         linkRoot: '../..',
+        loaders: {
+          GraphQLFileLoader: '@graphql-tools/graphql-file-loader',
+        },
       },
     ],
   ],
@@ -2426,37 +2469,6 @@ themeConfig:
           },
 //...
 ```
-6. Update `docs/sidebars.js` to include the generated `graphql-api/sidebar-schema.js`
-
-```
-// docs/sidebars.js
-/**
- * Creating a sidebar enables you to:
- *  - create an ordered group of docs
- *  - render a sidebar for each doc of that group
- *  - provide next/previous navigation
- *
- * The sidebars can be generated from the filesystem, or explicitly defined here.
- *
- * Create as many sidebars as you want.
- */
-
-// @ts-check
-
-/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
-const sidebars = {
-  // By default, Docusaurus generates a sidebar from the docs folder structure
-  tutorialSidebar: [
-    {
-      type: 'autogenerated',
-      dirName: '.',
-    },
-  ],
-  ...require('./docs/graphql-api/sidebar-schema.js'),
-}
-
-module.exports = sidebars
-```
 
 7. Generate the docs
 
@@ -2465,7 +2477,7 @@ module.exports = sidebars
 :::tip
 You can overwrite the generated docs and bypass the plugin's diffMethod use `--force`.
 
-``yarn docusaurus graphql-to-doc --force`
+`yarn docusaurus graphql-to-doc --force`
 :::
 
 8. Start Docusaurus
@@ -2477,21 +2489,27 @@ yarn start
 ##### Example Screens
 
 ##### Schema Documentation
+
 ![graphql-doc-example-main](/img/graphql-api-docs/schema-doc.png)
 
 ##### Type Example
+
 ![graphql-doc-example-type](/img/graphql-api-docs/contact-type.png)
 
 ##### Query Example
+
 ![graphql-doc-example-query](/img/graphql-api-docs/contact-query.png)
 
 ##### Mutation Example
+
 ![graphql-doc-example-mutation](/img/graphql-api-docs/schema-mutation.png)
 
 ##### Directive Example
+
 ![graphql-doc-example-directive](/img/graphql-api-docs/schema-directive.png)
 
 ##### Scalar Example
+
 ![graphql-doc-example-scalar](/img/graphql-api-docs/schema-scalar.png)
 
 ## FAQ
@@ -2508,6 +2526,7 @@ This might be one of our most frequently asked questions of all time. Here's [To
 ## Further Reading
 
 Eager to learn more about GraphQL? Check out some of the resources below:
+
 - [GraphQL.wtf](https://graphql.wtf) covers most aspects of GraphQL and publishes one short video a week
 - The official GraphQL Yoga (the GraphQL server powering Redwood) [tutorial](https://www.graphql-yoga.com/tutorial/basic/00-introduction) is the best place to get your hands on GraphQL basics
 - And of course, [the official GraphQL docs](https://graphql.org/learn/) are great place to do a deep dive into exactly how GraphQL works

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-nodemailer",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -21,13 +21,13 @@
   },
   "dependencies": {
     "@redwoodjs/mailer-core": "workspace:*",
-    "nodemailer": "6.9.14"
+    "nodemailer": "6.9.15"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/nodemailer": "^6",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5"
+    "tsx": "4.19.1",
+    "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

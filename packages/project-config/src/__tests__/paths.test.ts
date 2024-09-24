@@ -94,6 +94,11 @@ describe('paths', () => {
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
           mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
+          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
+          jobsConfig: null,
+          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
+          distJobsConfig: null,
+          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
@@ -112,15 +117,8 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           document: null, // this fixture doesnt have a document
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -370,6 +368,11 @@ describe('paths', () => {
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
           mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
+          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
+          jobsConfig: null,
+          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
+          distJobsConfig: null,
+          logger: null,
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
@@ -388,16 +391,8 @@ describe('paths', () => {
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
           document: null, // this fixture doesnt have a document
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
-
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',
@@ -693,6 +688,11 @@ describe('paths', () => {
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
           mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
+          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
+          jobsConfig: null,
+          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
+          distJobsConfig: null,
+          logger: null,
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
@@ -711,15 +711,8 @@ describe('paths', () => {
           document: null, // this fixture doesnt have a document
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: null,
-          index: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.js'),
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           viteConfig: null, // no vite config in example-todo-main-with-errors
           postcss: path.join(
             FIXTURE_BASEDIR,
@@ -974,6 +967,11 @@ describe('paths', () => {
           types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
           models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
           mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
+          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
+          jobsConfig: null,
+          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
+          distJobsConfig: null,
+          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
         },
         web: {
           routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
@@ -992,15 +990,8 @@ describe('paths', () => {
           src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
           generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
           app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          index: null,
           html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
           config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          webpack: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'webpack.config.js',
-          ),
           postcss: path.join(
             FIXTURE_BASEDIR,
             'web',

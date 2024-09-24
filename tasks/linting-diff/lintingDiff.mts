@@ -1,5 +1,6 @@
-import { $, glob, spinner, fs, path } from 'zx'
 import { cpus } from 'node:os'
+
+import { $, glob, spinner, fs, path } from 'zx'
 
 async function getConfigsForFiles(files: string[]) {
   const configs = new Map<string, any>()
@@ -11,7 +12,9 @@ async function getConfigsForFiles(files: string[]) {
     const batch = files.slice(i, i + batchSize)
     process.stdout.clearLine(0)
     process.stdout.cursorTo(0)
-    process.stdout.write(`Progress: ${Math.min(i + batchSize, files.length)}/${files.length}`)
+    process.stdout.write(
+      `Progress: ${Math.min(i + batchSize, files.length)}/${files.length}`,
+    )
     const promises = batch.map(async (file) => {
       const { stdout } = await $`yarn eslint --print-config ${file}`
       configs.set(file, JSON.parse(stdout))
@@ -45,19 +48,18 @@ async function main() {
   }
 
   // Get the configs for the files
-  console.log("Analyzing existing configs...")
+  console.log('Analyzing existing configs...')
   const fileExistingConfig = await getConfigsForFiles(files)
 
   // Tarsync the framework to the project to apply any changes
-  console.log("Tarsyncing the framework to the project...")
+  console.log('Tarsyncing the framework to the project...')
   await spinner('yarn rwfw project:tarsync', () => $`yarn rwfw project:tarsync`)
 
   // Get the configs for the files again
-  console.log("Analyzing updated configs...")
+  console.log('Analyzing updated configs...')
   const fileUpdatedConfig = await getConfigsForFiles(files)
 
   // Compare the configs
-  const differences = new Map<string, { existing: any, updated: any }>()
   const logs: string[] = []
   const logAndPrint = (message: string) => {
     console.log(message)
@@ -66,52 +68,58 @@ async function main() {
   for (const file of files) {
     const existingConfig = fileExistingConfig.get(file)
     const updatedConfig = fileUpdatedConfig.get(file)
-    differences.set(file, { existing: existingConfig, updated: updatedConfig })
 
     // Check for differences in the more simplistic keys
     const simpleChecks = [
-      "env",
-      "globals",
-      "parser",
-      "plugins",
-      "settings",
-      "ignorePatterns"
+      'env',
+      'globals',
+      'parser',
+      'plugins',
+      'settings',
+      'ignorePatterns',
     ]
     for (const key of simpleChecks) {
-      if (JSON.stringify(existingConfig[key]) !== JSON.stringify(updatedConfig[key])) {
+      if (
+        JSON.stringify(existingConfig[key]) !==
+        JSON.stringify(updatedConfig[key])
+      ) {
         logAndPrint(`${file} has a different ${key} config`)
       }
     }
 
     // Check the "rules" key for differences
-    const allRuleKeys = new Set([...Object.keys(existingConfig.rules), ...Object.keys(updatedConfig.rules)])
+    const allRuleKeys = new Set([
+      ...Object.keys(existingConfig.rules),
+      ...Object.keys(updatedConfig.rules),
+    ])
     for (const key of allRuleKeys) {
       if (!existingConfig.rules[key]) {
         logAndPrint(`${file} has a new rule for ${key}`)
       } else if (!updatedConfig.rules[key]) {
         logAndPrint(`${file} has a removed rule for ${key}`)
-      } else if (JSON.stringify(existingConfig.rules[key]) !== JSON.stringify(updatedConfig.rules[key])) {
+      } else if (
+        JSON.stringify(existingConfig.rules[key]) !==
+        JSON.stringify(updatedConfig.rules[key])
+      ) {
         logAndPrint(`${file} has a different rule for ${key}`)
       }
     }
   }
 
   // Write the output to files for later analysis
-  console.log("Writing results to files...")
+  console.log('Writing results to files...')
   const __dirname = import.meta.dirname ?? '.'
-  await fs.writeJSON(path.join(__dirname, 'differences.json'), Object.fromEntries(differences), { spaces: 2 })
-  await fs.writeFile(path.join(__dirname, 'log.txt'), logs.join("\n"))
-
-  // Output the differences
-  if (differences.size > 0) {
-    console.log(`Found ${differences.size} files with different configs`)
-    console.log(`Output written to: ${__dirname}"`)
-  } else {
-    console.log("No differences found")
-  }
-
-  // Exit with non-zero code if there are differences
-  process.exitCode ||= differences.size > 0 ? 1 : 0
+  await fs.writeJSON(
+    path.join(__dirname, 'before.json'),
+    Object.fromEntries(fileExistingConfig),
+    { spaces: 2 },
+  )
+  await fs.writeJSON(
+    path.join(__dirname, 'after.json'),
+    Object.fromEntries(fileUpdatedConfig),
+    { spaces: 2 },
+  )
+  await fs.writeFile(path.join(__dirname, 'log.txt'), logs.join('\n'))
 }
 
 await main()

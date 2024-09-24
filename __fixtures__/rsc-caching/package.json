@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "api",
+      "web"
+    ]
+  },
+  "devDependencies": {
+    "@redwoodjs/core": "8.0.0-canary.1102",
+    "@redwoodjs/project-config": "8.0.0-canary.1102"
+  },
+  "eslintConfig": {
+    "extends": "@redwoodjs/eslint-config",
+    "root": true
+  },
+  "engines": {
+    "node": "=20.x"
+  },
+  "prisma": {
+    "seed": "yarn rw exec seed"
+  },
+  "packageManager": "yarn@4.1.1",
+  "resolutions": {
+    "@apollo/client-react-streaming/superjson": "^1.12.2",
+    "react-is": "19.0.0-rc-f2df5694-20240916"
+  }
+}

@@ -5,8 +5,7 @@ import type { ViteDevServer } from 'vite'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import type { RscFetchProps } from './rsc/rscFetchForClientRouter'
-import type { EntryServer } from './types'
+import type { EntryServer } from './types.js'
 
 export function stripQueryStringAndHashFromPath(url: string) {
   return url.split('?')[0].split('#')[0]
@@ -67,35 +66,21 @@ export function convertExpressHeaders(
   return headers
 }
 
-export const getFullUrl = (req: ExpressRequest) => {
-  return req.protocol + '://' + req.get('host') + req.originalUrl
-}
+export const getFullUrl = (req: ExpressRequest, rscEnabled: boolean) => {
+  const baseUrl = req.protocol + '://' + req.headers.host
 
-function isRscFetchProps(
-  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
-): rscPropsMaybe is RscFetchProps {
-  return (
-    !!rscPropsMaybe.location &&
-    typeof rscPropsMaybe.location === 'object' &&
-    'pathname' in rscPropsMaybe.location
-  )
-}
+  // Properly parsing search params is difficult, so let's construct a URL
+  // object and have it do the parsing for us.
+  const url = new URL(req.originalUrl || '', baseUrl)
 
-export const getFullUrlForFlightRequest = (
-  req: ExpressRequest,
-  rscPropsMaybe: RscFetchProps | Record<string, unknown>,
-): string => {
-  if (isRscFetchProps(rscPropsMaybe)) {
-    return (
-      req.protocol +
-      '://' +
-      req.get('host') +
-      rscPropsMaybe.location.pathname +
-      rscPropsMaybe.location.search
-    )
-  } else {
-    // If it's not an RscFetchProps, then the url can be returned as is (for
-    // RSA requests)
-    return getFullUrl(req)
+  const pathname = url.searchParams.get('__rwjs__pathname')
+  const search = url.searchParams.get('__rwjs__search')
+
+  let pathnamePlusSearch = req.originalUrl
+
+  if (rscEnabled && pathname !== null && search !== null) {
+    pathnamePlusSearch = pathname + '?' + search
   }
+
+  return baseUrl + pathnamePlusSearch
 }

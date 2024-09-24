@@ -27,7 +27,7 @@ export interface CacheFindManyOptions<
   conditions?: TFindManyArgs
 }
 
-export type CacheKey = string | Array<string>
+export type CacheKey = string | string[]
 export type LatestQuery = Record<string, unknown>
 
 type GenericDelegate = {
@@ -191,7 +191,7 @@ export const createCache = (
 
     try {
       await Promise.race([
-        (result = client.del(cacheKey as string)),
+        (result = client.del(cacheKey)),
         wait(timeout).then(() => {
           throw new CacheTimeoutError()
         }),

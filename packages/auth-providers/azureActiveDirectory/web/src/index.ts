@@ -1,1 +1,1 @@
-export { createAuth } from './azureActiveDirectory'
+export { createAuth } from './azureActiveDirectory.js'

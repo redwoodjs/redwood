@@ -5,6 +5,6 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "skipLibCheck": false,
-  },
+    "skipLibCheck": false
+  }
 }

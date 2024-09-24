@@ -71,15 +71,15 @@ test('Check delayed page has content progressively rendered', async () => {
 
   // Check that its actually rendered on the page. Important when **not** progressively rendering
   await expect(
-    pageWithClientBlocked.locator('[data-test-id="delayed-text-1"]')
+    pageWithClientBlocked.locator('[data-test-id="delayed-text-1"]'),
   ).toHaveCount(1)
   await expect(
-    pageWithClientBlocked.locator('[data-test-id="delayed-text-2"]')
+    pageWithClientBlocked.locator('[data-test-id="delayed-text-2"]'),
   ).toHaveCount(1)
   await expect(
-    pageWithClientBlocked.locator('[data-test-id="delayed-text-3"]')
+    pageWithClientBlocked.locator('[data-test-id="delayed-text-3"]'),
   ).toHaveCount(1)
   await expect(
-    pageWithClientBlocked.locator('[data-test-id="delayed-text-4"]')
+    pageWithClientBlocked.locator('[data-test-id="delayed-text-4"]'),
   ).toHaveCount(1)
 })

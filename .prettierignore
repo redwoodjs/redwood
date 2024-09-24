@@ -1,6 +1,27 @@
+# Ignore built code
 **/dist
 
-# Do not format Markdown files to allow easier documentation contribution
-*.md
+# Ignore fixture projects
+/__fixtures__
 
-/.nx/cache
+# Ignore the certain files in /docs
+/docs/.docusaurus
+/docs/build
+/docs/versioned_docs
+/docs/versioned_sidebars
+
+# Ignore the .nx directory
+/.nx
+
+# Ignore create-redwood-app (we don't want to mismatch between framework and project)
+/packages/create-redwood-app/templates
+/packages/create-redwood-app/tests/**/*.sh
+
+# Ignore create-redwood-rsc-app (it has it's own config)
+/packages/create-redwood-rsc-app
+
+# TODO(jgmw): Is this too broad?
+# Ignore test fixtures
+**/__testfixtures__
+**/__tests__/fixtures
+**/__tests__/__fixtures__

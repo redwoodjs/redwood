@@ -48,7 +48,10 @@ export const serviceTypeAnnotations = createRule({
 
         node.declaration.declarations.forEach((vd) => {
           // VariableDeclarator means an `export const abcThing =`
-          if (vd.type === 'VariableDeclarator' && vd.id.type === 'Identifier') {
+          if (
+            vd.type === AST_NODE_TYPES.VariableDeclarator &&
+            vd.id.type === AST_NODE_TYPES.Identifier
+          ) {
             // Don't add types to functions that start with _
             if (vd.id.name.startsWith('_')) {
               return
@@ -65,13 +68,13 @@ export const serviceTypeAnnotations = createRule({
             // Only run for lowercase arrow funcs ATM
             if (
               isGlobalOrMutationResolver &&
-              vd.init?.type !== 'ArrowFunctionExpression'
+              vd.init?.type !== AST_NODE_TYPES.ArrowFunctionExpression
             ) {
               return
             }
 
             // Switch from the estree type to the typescript-eslint type
-            const tsID = vd.id as TSESTree.Identifier
+            const tsID = vd.id
 
             // If there's no type annotation, then we should add one
             if (!tsID.typeAnnotation) {
@@ -117,7 +120,7 @@ export const serviceTypeAnnotations = createRule({
               }
 
               const isCorrectType =
-                type.typeName?.type === 'Identifier' &&
+                type.typeName?.type === AST_NODE_TYPES.Identifier &&
                 type.typeName?.name === typeName
 
               if (isCorrectType) {

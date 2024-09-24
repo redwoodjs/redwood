@@ -88,7 +88,7 @@ export class RWEnvHelper extends BaseNode {
     if (!existsSync(file)) {
       return undefined
     }
-    return dotenv.parse(readFileSync(file))
+    return dotenv.parse(readFileSync(file, 'utf-8'))
   }
 
   @lazy() get env_available_to_api() {

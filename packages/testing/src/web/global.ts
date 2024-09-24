@@ -1,7 +1,6 @@
 import type {
   mockGraphQLQuery as _mockGraphQLQuery,
   mockGraphQLMutation as _mockGraphQLMutation,
-  mockCurrentUser as _mockCurrentUser,
 } from './mockRequests'
 
 declare global {

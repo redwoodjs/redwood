@@ -8,10 +8,11 @@ import { authDecoder } from '@redwoodjs/auth-supabase-api'
 import {
   MiddlewareRequest,
   MiddlewareResponse,
-} from '@redwoodjs/vite/middleware'
+} from '@redwoodjs/web/middleware'
 
-import initSupabaseAuthMiddleware from '../index'
-import type { SupabaseAuthMiddlewareOptions } from '../index'
+import initSupabaseAuthMiddleware from '../index.js'
+import type { SupabaseAuthMiddlewareOptions } from '../index.js'
+
 const FIXTURE_PATH = path.resolve(
   __dirname,
   '../../../../../../__fixtures__/example-todo-main',

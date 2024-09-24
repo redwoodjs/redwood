@@ -1,38 +1,55 @@
 {
   "name": "@redwoodjs/auth-custom-setup",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/auth-providers/custom/setup"
   },
   "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./dist/setup": {
+      "types": "./dist/setup.d.ts",
+      "default": "./dist/setup.js"
+    },
+    "./dist/setupHandler": {
+      "types": "./dist/setupHandler.d.ts",
+      "default": "./dist/setupHandler.js"
+    }
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:pack": "yarn pack -o redwoodjs-auth-custom-setup.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/cli-helpers": "workspace:*",
-    "core-js": "3.37.1"
+    "@redwoodjs/cli-helpers": "workspace:*"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
-    "@babel/core": "^7.22.20",
-    "@types/yargs": "17.0.32",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "@arethetypeswrong/cli": "0.16.4",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/yargs": "17.0.33",
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

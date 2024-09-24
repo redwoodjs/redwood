@@ -45,15 +45,15 @@ Create a Redwood project using the yarn create command:
 yarn create redwood-app <project directory> [option]
 ```
 
-| Arguments & Options    | Description                                                                                                             |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| `project directory`    | Specify the project directory [Required]                                                                                |
-| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior |
-| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                    |
-| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                  |
-| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: https://telemetry.redwoodjs.com  |
-| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                            |
-| `--git-init`, `--git`  | Initialize a git repo during the install process, disabled by default                                                   |
+| Arguments & Options    | Description                                                                                                                                               |
+| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `project directory`    | Specify the project directory [Required]                                                                                                                  |
+| `--yarn-install`       | Enables the yarn install step and version-requirement checks. You can pass `--no-yarn-install` to disable this behavior                                   |
+| `--typescript`, `--ts` | Generate a TypeScript project. JavaScript by default                                                                                                      |
+| `--overwrite`          | Create the project even if the specified project directory isn't empty                                                                                    |
+| `--no-telemetry`       | Disable sending telemetry events for this create command and all Redwood CLI commands: [https://telemetry.redwoodjs.com](https://telemetry.redwoodjs.com) |
+| `--yarn1`              | Use yarn 1 instead of yarn 3                                                                                                                              |
+| `--git-init`, `--git`  | Initialize a git repo during the install process, disabled by default                                                                                     |
 
 If you run into trouble during the yarn install step, which may happen if you're developing on an external drive and in other miscellaneous scenarios, try the `--yarn1` flag:
 
@@ -69,12 +69,12 @@ Build for production.
 yarn redwood build [side..]
 ```
 
-We use Babel to transpile the api side into `./api/dist` and Webpack to package the web side into `./web/dist`.
+We use Babel to transpile the api side into `./api/dist` and Vite to package the web side into `./web/dist`.
 
-| Arguments & Options | Description                                                                                                                                                                 |
-| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                            |
-| `--verbose, -v`     | Print more information while building                                                                                                                                       |
+| Arguments & Options | Description                                                                      |
+| :------------------ | :------------------------------------------------------------------------------- |
+| `side`              | Which side(s) to build. Choices are `api` and `web`. Defaults to `api` and `web` |
+| `--verbose, -v`     | Print more information while building                                            |
 
 #### Usage
 
@@ -88,9 +88,9 @@ Running `yarn redwood build` without any arguments generates the Prisma client a
 ~/redwood-app$ yarn redwood build
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood build
-  ✔ Generating the Prisma client...
-  ✔ Building "api"...
-  ✔ Building "web"...
+✔ Generating the Prisma client...
+✔ Building "api"...
+✔ Building "web"...
 Done in 17.37s.
 ```
 
@@ -190,12 +190,12 @@ Start development servers for api and web.
 yarn redwood dev [side..]
 ```
 
-`yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Webpack dev server with Redwood's config.
+`yarn redwood dev api` starts the Redwood dev server and `yarn redwood dev web` starts the Vite dev server with Redwood's config.
 
-| Argument           | Description                                                                                                                                                                                 |
-| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web`                                                                                                      |
-| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below |
+| Argument           | Description                                                                            |
+| :----------------- | :------------------------------------------------------------------------------------- |
+| `side`             | Which dev server(s) to start. Choices are `api` and `web`. Defaults to `api` and `web` |
+| `--forward, --fwd` | String of one or more Vite Dev Server config options. See example usage below          |
 
 #### Usage
 
@@ -208,13 +208,13 @@ $ /redwood-app/node_modules/.bin/redwood dev api
 $ /redwood-app/node_modules/.bin/dev-server
 15:04:51 api | Listening on http://localhost:8911
 15:04:51 api | Watching /home/dominic/projects/redwood/redwood-app/api
-15:04:51 api |
-15:04:51 api | Now serving
-15:04:51 api |
-15:04:51 api | ► http://localhost:8911/graphql/
+15:04:51 api \
+  | 15:04:51 api | Now serving
+15:04:51 api \
+  | 15:04:51 api | ► http://localhost:8911/graphql/
 ```
 
-Using `--forward` (alias `--fwd`), you can pass one or more Webpack Dev Server [config options](https://webpack.js.org/configuration/dev-server/). The following will run the dev server, set the port to `1234`, and disable automatic browser opening.
+Using `--forward` (alias `--fwd`), you can pass one or more Vite Dev Server [config options](https://vitejs.dev/guide/cli#vite). The following will run the dev server, set the port to `1234`, and disable automatic browser opening.
 
 ```bash
 ~/redwood-app$ yarn redwood dev --fwd="--port=1234 --open=false"
@@ -226,7 +226,7 @@ You may need to access your dev application from a different host, like your mob
 ~/redwood-app$ yarn redwood dev --fwd="--allowed-hosts all"
 ```
 
-For the full list of Webpack Dev Server settings, see [this documentation](https://webpack.js.org/configuration/dev-server/).
+For the full list of Vite Dev Server settings, see [this documentation](https://vitejs.dev/guide/cli#vite).
 
 For the full list of Server Configuration settings, see [this documentation](app-configuration-redwood-toml.md#api).
 
@@ -248,7 +248,7 @@ yarn redwood deploy <target>
 
 | Commands                      | Description                              |
 | :---------------------------- | :--------------------------------------- |
-| `serverless `                 | Deploy to AWS using Serverless framework |
+| `serverless`                  | Deploy to AWS using Serverless framework |
 | `netlify [...commands]`       | Build command for Netlify deploy         |
 | `render <side> [...commands]` | Build command for Render deploy          |
 | `vercel [...commands]`        | Build command for Vercel deploy          |
@@ -268,7 +268,6 @@ yarn redwood deploy serverless
 | `--pack-only`       | Only package the build for deployment                                                                                                       |
 | `--first-run`       | Use this flag the first time you deploy. The first deploy wizard will walk you through configuring your web side to connect to the api side |
 
-
 ### deploy netlify
 
 Build command for Netlify deploy
@@ -284,6 +283,7 @@ yarn redwood deploy netlify
 | `--data-migrate, --dm` | Migrate the data in your database [default: "true"] |
 
 #### Example
+
 The following command will build, apply Prisma DB migrations, and skip data migrations.
 
 ```
@@ -316,6 +316,7 @@ yarn redwood deploy render <side>
 | `--serve`              | Run server for api in production [default: "true"]  |
 
 #### Example
+
 The following command will build the Web side for static-site CDN deployment.
 
 ```
@@ -343,6 +344,7 @@ yarn redwood deploy vercel
 | `--data-migrate, --dm` | Migrate the data in your database [default: "true"] |
 
 #### Example
+
 The following command will build, apply Prisma DB migrations, and skip data migrations.
 
 ```
@@ -402,6 +404,7 @@ See [this how to](how-to/background-worker.md) for an example of using exec to r
 Set up and run experimental features.
 
 Some caveats:
+
 - these features do not follow SemVer (may be breaking changes in minor and patch releases)
 - these features may be deprecated or removed (anytime)
 - your feedback is wanted and necessary!
@@ -411,6 +414,7 @@ For more information, including details about specific features, see this Redwoo
 
 **Available Experimental Features**
 View all that can be _set up_:
+
 ```
 yarn redwood experimental --help
 ```
@@ -433,6 +437,7 @@ Some generators require that their argument be a model in your `schema.prisma`. 
 | `dbAuth`               | Generate sign in, sign up and password reset pages for dbAuth                                         |
 | `deploy <provider>`    | Generate a deployment configuration                                                                   |
 | `function <name>`      | Generate a Function                                                                                   |
+| `job <name>`           | Generate a background job                                                                             |
 | `layout <name>`        | Generate a layout component                                                                           |
 | `page <name> [path]`   | Generate a page component                                                                             |
 | `scaffold <model>`     | Generate Pages, SDL, and Services files based on a given DB schema Model. Also accepts `<path/model>` |
@@ -491,9 +496,9 @@ Generating a user cell:
 ~/redwood-app$ yarn redwood generate cell user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g cell user
-  ✔ Generating cell files...
-    ✔ Writing `./web/src/components/UserCell/UserCell.test.js`...
-    ✔ Writing `./web/src/components/UserCell/UserCell.js`...
+✔ Generating cell files...
+✔ Writing $(./web/src/components/UserCell/UserCell.test.js)...
+✔ Writing $(./web/src/components/UserCell/UserCell.js)...
 Done in 1.00s.
 ```
 
@@ -552,9 +557,9 @@ Generating a user component:
 ~/redwood-app$ yarn redwood generate component user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g component user
-  ✔ Generating component files...
-    ✔ Writing `./web/src/components/User/User.test.js`...
-    ✔ Writing `./web/src/components/User/User.js`...
+✔ Generating component files...
+✔ Writing $(./web/src/components/User/User.test.js)...
+✔ Writing $(./web/src/components/User/User.js)...
 Done in 1.02s.
 ```
 
@@ -660,8 +665,8 @@ Generating a `myDirective` directive using the interactive command:
 yarn rw g directive myDirective
 
 ? What type of directive would you like to generate? › - Use arrow-keys. Return to submit.
-❯   Validator - Implement a validation: throw an error if criteria not met to stop execution
-    Transformer - Modify values of fields or query responses
+❯ Validator - Implement a validation: throw an error if criteria not met to stop execution
+Transformer - Modify values of fields or query responses
 ```
 
 ### generate function
@@ -699,8 +704,8 @@ Generating a user function:
 ~/redwood-app$ yarn redwood generate function user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g function user
-  ✔ Generating function files...
-    ✔ Writing `./api/src/functions/user.js`...
+✔ Generating function files...
+✔ Writing $(./api/src/functions/user.js)...
 Done in 16.04s.
 ```
 
@@ -730,6 +735,35 @@ $ /redwood-app/node_modules/.bin/dev-server
 17:21:49 api | ► http://localhost:8911/graphql/
 17:21:49 api | ► http://localhost:8911/user/
 ```
+
+### generate job
+
+Generate a background job file (and optional tests) in `api/src/jobs`.
+
+```bash
+yarn redwood generate job <name>
+```
+
+| Arguments & Options  | Description                                                                           |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `name`               | Name of the job ("Job" suffix is optional)                                            |
+| `--force, -f`        | Overwrite existing files                                                              |
+| `--typescript, --ts` | Generate TypeScript files. Enabled by default if we detect your project is TypeScript |
+| `--tests`            | Generate test files [default: true]                                                   |
+
+#### Example
+
+```bash
+yarn redwood generate job WelcomeEmail
+# or
+yarn rw g job WelcomeEmail
+```
+
+:::info Job naming
+By convention a job filename and exported code ends in `Job` and the generate command enforces this. If you don't include "Job" at the end of the name, the generator will add it. For example, with the above command, the file generated would be `api/src/jobs/WelcomeEmailJob/WelcomeEmailJob.{js|ts}`.
+:::
+
+Learn more about jobs in the [Background Jobs docs](background-jobs).
 
 ### generate layout
 
@@ -769,9 +803,9 @@ Generating a user layout:
 ~/redwood-app$ yarn redwood generate layout user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g layout user
-  ✔ Generating layout files...
-    ✔ Writing `./web/src/layouts/UserLayout/UserLayout.test.js`...
-    ✔ Writing `./web/src/layouts/UserLayout/UserLayout.js`...
+✔ Generating layout files...
+✔ Writing $(./web/src/layouts/UserLayout/UserLayout.test.js)...
+✔ Writing $(./web/src/layouts/UserLayout/UserLayout.js)...
 Done in 1.00s.
 ```
 
@@ -809,14 +843,14 @@ See the [RedwoodRecord docs](redwoodrecord.md).
 ~/redwood-app$ yarn redwood generate model User
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g model User
-  ✔ Generating model file...
-    ✔ Successfully wrote file `./api/src/models/User.js`
-  ✔ Parsing datamodel, generating api/src/models/index.js...
+✔ Generating model file...
+✔ Successfully wrote file $(./api/src/models/User.js)
+✔ Parsing datamodel, generating api/src/models/index.js...
 
-  Wrote /Users/rob/Sites/redwoodjs/redwood_record/.redwood/datamodel.json
-  Wrote /Users/rob/Sites/redwoodjs/redwood_record/api/src/models/index.js
+Wrote /Users/rob/Sites/redwoodjs/redwood_record/.redwood/datamodel.json
+Wrote /Users/rob/Sites/redwoodjs/redwood_record/api/src/models/index.js
 
-✨  Done in 3.74s.
+✨ Done in 3.74s.
 ```
 
 Generating a model automatically runs `yarn rw record init` as well.
@@ -826,7 +860,7 @@ Generating a model automatically runs `yarn rw record init` as well.
 Generates a page component and updates the routes.
 
 ```bash
-yarn redwood generate page <name> [path]
+yarn redwood generate page < name > [path]
 ```
 
 `path` can include a route parameter which will be passed to the generated
@@ -920,11 +954,11 @@ const QuotePage = ({ id }) => {
     <>
       <h1>QuotePage</h1>
       <p>Find me in "./web/src/pages/QuotePage/QuotePage.js"</p>
-      <p>
+      {/*
         My default route is named "quote", link to me with `
         <Link to={routes.quote({ id: 42 })}>Quote 42</Link>`
-      </p>
-      <p>The parameter passed to me is {id}</p>
+        The parameter passed to me is {id}
+      */}
     </>
   )
 }
@@ -944,6 +978,7 @@ const Routes = () => {
   )
 }
 ```
+
 ### generate realtime
 
 Generate a boilerplate subscription or live query used with RedwoodJS Realtime.
@@ -952,12 +987,11 @@ Generate a boilerplate subscription or live query used with RedwoodJS Realtime.
 yarn redwood generate realtime <name>
 ```
 
-| Arguments & Options  | Description                                                                                                                                                                                           |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`              | Name of the realtime event to setup.post`                                   |
-| `-t, --type`        | Choices: `liveQuery`, `subscription`. Optional. If not provided, you will be prompted to select.
-| `--force, -f`        | Overwrite existing files
-
+| Arguments & Options | Description                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `name`              | Name of the realtime event to setup.post`                                                        |
+| `-t, --type`        | Choices: `liveQuery`, `subscription`. Optional. If not provided, you will be prompted to select. |
+| `--force, -f`       | Overwrite existing files                                                                         |
 
 #### Usage
 
@@ -970,9 +1004,9 @@ Generate a live query.
 ```bash
 ~/redwood-app$ yarn rw g realtime NewLiveQuery
 ? What type of realtime event would you like to create? › - Use arrow-keys. Return to submit.
-❯   Live Query
-    Create a Live Query to watch for changes in data
-    Subscription
+❯ Live Query
+Create a Live Query to watch for changes in data
+Subscription
 
 ✔ What type of realtime event would you like to create? › Live Query
 ✔ Checking for realtime environment prerequisites ...
@@ -985,15 +1019,14 @@ Generate a subscription.
 ```bash
 ~/redwood-app$ yarn rw g realtime NewSub
 ? What type of realtime event would you like to create? › - Use arrow-keys. Return to submit.
-    Live Query
-❯   Subscription - Create a Subscription to watch for events
+Live Query
+❯ Subscription - Create a Subscription to watch for events
 
 ✔ What type of realtime event would you like to create? › Subscription
 ✔ Checking for realtime environment prerequisites ...
 ✔ Adding newsub example subscription ...
 ✔ Generating types ...
 ```
-
 
 ### generate scaffold
 
@@ -1223,9 +1256,9 @@ yarn redwood g sdl <model> --force --no-tests
 ~/redwood-app$ yarn redwood generate sdl user --force --no-tests
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
-  ✔ Generating SDL files...
-    ✔ Writing `./api/src/graphql/users.sdl.js`...
-    ✔ Writing `./api/src/services/users/users.js`...
+✔ Generating SDL files...
+✔ Writing $(./api/src/graphql/users.sdl.js)...
+✔ Writing $(./api/src/services/users/users.js)...
 Done in 1.04s.
 ```
 
@@ -1243,11 +1276,11 @@ Generating a user sdl:
 ~/redwood-app$ yarn redwood generate sdl user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g sdl user
-  ✔ Generating SDL files...
-    ✔ Writing `./api/src/graphql/users.sdl.js`...
-    ✔ Writing `./api/src/services/users/users.scenarios.js`...
-    ✔ Writing `./api/src/services/users/users.test.js`...
-    ✔ Writing `./api/src/services/users/users.js`...
+✔ Generating SDL files...
+✔ Writing $(./api/src/graphql/users.sdl.js)...
+✔ Writing $(./api/src/services/users/users.scenarios.js)...
+✔ Writing $(./api/src/services/users/users.test.js)...
+✔ Writing $(./api/src/services/users/users.js)...
 Done in 1.04s.
 ```
 
@@ -1387,7 +1420,6 @@ Services are where Redwood puts its business logic. They can be used by your Gra
 | `--tests`            | Generate test and scenario files [default: true]                                     |
 | `--rollback`         | Rollback changes if an error occurs [default: true]                                  |
 
-
 **Destroying**
 
 ```
@@ -1402,10 +1434,10 @@ Generating a user service:
 ~/redwood-app$ yarn redwood generate service user
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/redwood g service user
-  ✔ Generating service files...
-    ✔ Writing `./api/src/services/users/users.scenarios.js`...
-    ✔ Writing `./api/src/services/users/users.test.js`...
-    ✔ Writing `./api/src/services/users/users.js`...
+✔ Generating service files...
+✔ Writing $(./api/src/services/users/users.scenarios.js)...
+✔ Writing $(./api/src/services/users/users.test.js)...
+✔ Writing $(./api/src/services/users/users.js)...
 Done in 1.02s.
 ```
 
@@ -1753,10 +1785,10 @@ yarn redwood setup <category>
 | `deploy`           | Set up a deployment configuration for a provider                                           |
 | `generator`        | Copy default Redwood generator templates locally for customization                         |
 | `i18n`             | Set up i18n                                                                                |
+| `jobs`             | Set up background job creation and processing                                              |
 | `package`          | Peform setup actions by running a third-party npm package                                  |
 | `tsconfig`         | Add relevant tsconfig so you can start using TypeScript                                    |
 | `ui`               | Set up a UI design or style library                                                        |
-| `webpack`          | Set up a webpack config file in your project so you can add custom config                  |
 
 ### setup auth
 
@@ -1787,25 +1819,6 @@ yarn redwood setup cache <client>
 | :------------------ | :------------------------------------------------------ |
 | `client`            | Name of the client to configure, `memcached` or `redis` |
 | `--force, -f`       | Overwrite existing files                                |
-
-### setup custom-web-index
-
-:::warning This command only applies to projects using Webpack
-
-As of v6, all Redwood projects use Vite by default.
-When switching projects to Vite, we made the decision to add the the entry file, `web/src/entry.client.{jsx,tsx}`, back to projects.
-
-:::
-
-Redwood automatically mounts your `<App />` to the DOM, but if you want to customize how that happens, you can use this setup command to generate an `index.js` file in `web/src`.
-
-```
-yarn redwood setup custom-web-index
-```
-
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
-| `--force, -f`       | Overwrite existing files |
 
 ### setup generator
 
@@ -1859,9 +1872,9 @@ Copying the cell generator templates:
 ~/redwood-app$ yarn rw setup generator cell
 yarn run v1.22.4
 $ /redwood-app/node_modules/.bin/rw setup generator cell
-  ✔ Copying generator templates...
-  ✔   Wrote templates to /web/generators/cell
-✨  Done in 2.33s.
+✔ Copying generator templates...
+✔ Wrote templates to /web/generators/cell
+✨ Done in 2.33s.
 ```
 
 ### setup deploy (config)
@@ -1872,11 +1885,11 @@ Set up a deployment configuration.
 yarn redwood setup deploy <provider>
 ```
 
-| Arguments & Options | Description                                                                                           |
-| :------------------ | :---------------------------------------------------------------------------------------------------- |
-| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`,          |
-| `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"] |
-| `--force, -f`       | Overwrite existing configuration [default: false]                                                     |
+| Arguments & Options | Description                                                                                                                                                    |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `provider`          | Deploy provider to configure. Choices are `baremetal`, `coherence`, `edgio`, `flightcontrol`, `netlify`, `render`, `vercel`, or `aws-serverless [deprecated]`, |
+| `--database, -d`    | Database deployment for Render only [choices: "none", "postgresql", "sqlite"] [default: "postgresql"]                                                          |
+| `--force, -f`       | Overwrite existing configuration [default: false]                                                                                                              |
 
 #### setup deploy netlify
 
@@ -1914,6 +1927,18 @@ In order to use [Netlify Dev](https://www.netlify.com/products/dev/) you need to
 
 > Note: To detect the RedwoodJS framework, please use netlify-cli v3.34.0 or greater.
 
+### setup jobs
+
+This command adds the necessary packages and files defining the configuration for Redwood's [Background Jobs](background-jobs) processing.
+
+```
+yarn redwood setup jobs
+```
+
+| Arguments & Options | Description              |
+| :------------------ | :----------------------- |
+| `--force, -f`       | Overwrite existing files |
+
 ### setup mailer
 
 This command adds the necessary packages and files to get started using the RedwoodJS mailer. By default it also creates an example mail template which can be skipped with the `--skip-examples` flag.
@@ -1922,10 +1947,10 @@ This command adds the necessary packages and files to get started using the Redw
 yarn redwood setup mailer
 ```
 
-| Arguments & Options     | Description                    |
-| :---------------------- | :----------------------------- |
-| `--force, -f`           | Overwrite existing files       |
-| `--skip-examples`       | Do not include example content, such as a React email template |
+| Arguments & Options | Description                                                    |
+| :------------------ | :------------------------------------------------------------- |
+| `--force, -f`       | Overwrite existing files                                       |
+| `--skip-examples`   | Do not include example content, such as a React email template |
 
 ### setup package
 
@@ -1937,18 +1962,20 @@ This command behaves similarly to `yarn dlx` but will attempt to confirm compati
 yarn redwood setup package <npm-package>
 ```
 
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
+| Arguments & Options | Description                |
+| :------------------ | :------------------------- |
 | `--force, -f`       | Forgo compatibility checks |
 
 #### Usage
 
 Run the made up `@redwoodjs/setup-example` package:
+
 ```bash
 ~/redwood-app$ yarn rw setup package @redwoodjs/setup-example
 ```
 
 Run the same package but using a particular npm tag and avoiding any compatibility checks:
+
 ```bash
 ~/redwood-app$ yarn rw setup package @redwoodjs/setup-example@beta --force
 ```
@@ -1997,7 +2024,6 @@ Run `yarn rw setup graphql fragments`
 
 This command creates the necessary configuration to start using [GraphQL Trusted Documents](./graphql/trusted-documents.md).
 
-
 ```
 yarn redwood setup graphql trusted-documents
 ```
@@ -2015,7 +2041,6 @@ Run `yarn rw setup graphql trusted-documents`
 ✔ Configuring the GraphQL Handler to use a Trusted Documents store ...
 ```
 
-
 If you have not setup the RedwoodJS server file, it will be setup:
 
 ```bash
@@ -2023,7 +2048,6 @@ If you have not setup the RedwoodJS server file, it will be setup:
 ✔ Adding config to redwood.toml...
 ✔ Adding required api packages...
 ```
-
 
 ### setup realtime
 
@@ -2033,10 +2057,10 @@ This command creates the necessary files, installs the required packages, and pr
 yarn redwood setup realtime
 ```
 
-| Arguments & Options | Description              |
-| :------------------ | :----------------------- |
-|  `-e, --includeExamples, --examples` | Include examples of how to implement liveQueries and subscriptions. Default: true. |
-| `--force, -f`       | Forgo compatibility checks |
+| Arguments & Options                 | Description                                                                        |
+| :---------------------------------- | :--------------------------------------------------------------------------------- |
+| `-e, --includeExamples, --examples` | Include examples of how to implement liveQueries and subscriptions. Default: true. |
+| `--force, -f`                       | Forgo compatibility checks                                                         |
 
 :::note
 
@@ -2061,7 +2085,6 @@ Run `yarn rw setup realtime`
 ✔ Generating types ...
 ```
 
-
 If you have not setup the RedwoodJS server file, it will be setup:
 
 ```bash
@@ -2082,8 +2105,6 @@ yarn redwood setup tsconfig
 | :------------------ | :----------------------- |
 | `--force, -f`       | Overwrite existing files |
 
-
-
 ### setup ui
 
 Set up a UI design or style library. Right now the choices are [TailwindCSS](https://tailwindcss.com/), [Chakra UI](https://chakra-ui.com/), and [Mantine UI](https://ui.mantine.dev/).
@@ -2092,10 +2113,10 @@ Set up a UI design or style library. Right now the choices are [TailwindCSS](htt
 yarn rw setup ui <library>
 ```
 
-| Arguments & Options | Description                                                                             |
-| :------------------ | :-------------------------------------------------------------------------------------- |
+| Arguments & Options | Description                                                                 |
+| :------------------ | :-------------------------------------------------------------------------- |
 | `library`           | Library to configure. Choices are `chakra-ui`, `tailwindcss`, and `mantine` |
-| `--force, -f`       | Overwrite existing configuration                                                        |
+| `--force, -f`       | Overwrite existing configuration                                            |
 
 ## storybook
 
@@ -2125,15 +2146,15 @@ Run Jest tests for api and web.
 yarn redwood test [side..]
 ```
 
-| Arguments & Options | Description                                                                                                                                                                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                           |
-| `--help`            | Show help                                                                                                                                                                                                                                                  |
-| `--version`         | Show version number                                                                                                                                                                                                                                        |
-| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                             |
-| `--watchAll`        | Run all tests                                                                                                                                                                                                                                              |
-| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                        |
-| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                             |
+| Arguments & Options | Description                                                                                                                                                                                                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sides or filter`   | Which side(s) to test, and/or a regular expression to match against your test files to filter by                                                                                                                                                            |
+| `--help`            | Show help                                                                                                                                                                                                                                                   |
+| `--version`         | Show version number                                                                                                                                                                                                                                         |
+| `--watch`           | Run tests related to changed files based on hg/git (uncommitted files). Specify the name or path to a file to focus on a specific set of tests [default: true]                                                                                              |
+| `--watchAll`        | Run all tests                                                                                                                                                                                                                                               |
+| `--collectCoverage` | Show test coverage summary and output info to `coverage` directory in project root. See this directory for an .html coverage report                                                                                                                         |
+| `--clearCache`      | Delete the Jest cache directory and exit without running tests                                                                                                                                                                                              |
 | `--db-push`         | Syncs the test database with your Prisma schema without requiring a migration. It creates a test database if it doesn't already exist [default: true]. This flag is ignored if your project doesn't have an `api` side. [👉 More details](#prisma-db-push). |
 
 > **Note** all other flags are passed onto the jest cli. So for example if you wanted to update your snapshots you can pass the `-u` flag
@@ -2235,9 +2256,9 @@ Besides upgrading to a new stable release, you can use this command to upgrade t
 
 A canary release is published to npm every time a PR is merged to the `main` branch, and when we're getting close to a new release, we publish release candidates.
 
-| Option          | Description                                                                                                                                                                                                        |
-| :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                      |
+| Option          | Description                                                                                                                                                                                                                                                                                |
+| :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--dry-run, -d` | Check for outdated packages without upgrading                                                                                                                                                                                                                                              |
 | `--tag, -t`     | Choices are "rc", "canary", "latest", "next", "experimental", or a specific version (e.g. "0.19.3"). WARNING: Unstable releases in the case of "canary", "rc", "next", and "experimental". And "canary" releases include breaking changes often requiring codemods if upgrading a project. |
 
 #### Example

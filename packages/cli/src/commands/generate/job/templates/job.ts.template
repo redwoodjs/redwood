@@ -1,0 +1,8 @@
+import { jobs } from 'src/lib/jobs'
+
+export const ${name}Job = jobs.createJob({
+  queue: '${queueName}',
+  perform: async () => {
+    jobs.logger.info('${name}Job is performing...')
+  }
+})

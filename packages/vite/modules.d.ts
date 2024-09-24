@@ -5,7 +5,7 @@ declare module 'react-server-dom-webpack/client.edge'
 type ImportManifestEntry = {
   id: string
   // chunks is a double indexed array of chunkId / chunkFilename pairs
-  chunks: Array<string>
+  chunks: string[]
   name: string
 }
 
@@ -15,7 +15,15 @@ type ClientManifest = {
   [id: string]: ClientReferenceManifestEntry
 }
 
+/**
+ * ReactClientValue is complicated. But basically it's anything that's serializable.
+ * @see {@link https://github.com/facebook/react/blob/4c58fce7777f2760f4a93091ca4fca0e3fc2f48c/packages/react-server/src/ReactFlightServer.js#L295}
+ */
+type ReactClientValue = any
+
 declare module 'react-server-dom-webpack/server.edge' {
+  import type { ReadableStream } from 'node:stream/web'
+
   type Options = {
     environmentName?: string
     identifierPrefix?: string
@@ -24,7 +32,9 @@ declare module 'react-server-dom-webpack/server.edge' {
     onPostpone?: (reason: string) => void
   }
 
-  // https://github.com/facebook/react/blob/0711ff17638ed41f9cdea712a19b92f01aeda38f/packages/react-server-dom-webpack/src/ReactFlightDOMServerEdge.js#L48
+  /**
+   * @see {@link https://github.com/facebook/react/blob/4c58fce7777f2760f4a93091ca4fca0e3fc2f48c/packages/react-server-dom-webpack/src/server/ReactFlightDOMServerEdge.js#L57}
+   */
   export function renderToReadableStream(
     model: ReactClientValue,
     webpackMap: ClientManifest,
@@ -107,3 +117,7 @@ declare module 'react-server-dom-webpack/server' {
 }
 
 declare module 'vite-plugin-cjs-interop'
+
+declare module '@babel/parser/index.cjs' {
+  export * from '@babel/parser'
+}

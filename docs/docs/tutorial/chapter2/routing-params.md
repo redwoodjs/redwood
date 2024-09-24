@@ -193,7 +193,6 @@ In this case, the path `/article/{id}` doesn't specify the type of `id` - so it 
 
 </ShowForTs>
 
-
 For routes with route parameters, the named route function expects an object where you specify a value for each parameter. If you click on the link now, it will indeed take you to `/article/1` (or `/article/2`, etc, depending on the ID of the post).
 
 You may have noticed that when trying to view the new single-article page that you're getting an error. This is because the boilerplate code included with the page when it was generated includes a link to the page itself—a link which now requires an `id`. Remove the link and your page should be working again:
@@ -214,10 +213,10 @@ You may have noticed that when trying to view the new single-article page that y
         <p>
           Find me in <code>./web/src/pages/ArticlePage/ArticlePage.js</code>
         </p>
-        <p>
+        {/*
           My default route is named <code>article</code>, link to me with `
--         <Link to={routes.article()}>Article</Link>`
-        </p>
+          <Link to={routes.article()}>Article</Link>`
+        */}
       </>
     )
   }
@@ -241,10 +240,10 @@ You may have noticed that when trying to view the new single-article page that y
         <p>
           Find me in <code>./web/src/pages/ArticlePage/ArticlePage.tsx</code>
         </p>
-        <p>
+        {/*
           My default route is named <code>article</code>, link to me with `
--         <Link to={routes.article()}>Article</Link>`
-        </p>
+          <Link to={routes.article()}>Article</Link>`
+        */}
       </>
     )
   }
@@ -374,7 +373,9 @@ export const Failure = ({ error }: CellFailureProps) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
+export const Success = ({
+  article,
+}: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
   return <div>{JSON.stringify(article)}</div>
 }
 ```
@@ -514,7 +515,8 @@ export const Success = ({ article, id, rand }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-interface Props extends CellSuccessProps<FindArticleQuery, FindArticleQueryVariables> {
+interface Props
+  extends CellSuccessProps<FindArticleQuery, FindArticleQueryVariables> {
   id: number
   rand: number
 }
@@ -825,4 +827,3 @@ To recap:
 3. We created a cell to fetch and display the post.
 4. Redwood made the world a better place by making that `id` available to us at several key junctions in our code and even turning it into a number automatically.
 5. We turned the actual post display into a standard React component and used it in both the homepage and new detail page.
-

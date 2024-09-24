@@ -1,6 +1,7 @@
 # K6 Task
 
 ## Usage
+
 ```
 yarn test:k6 [project-directory]
 ```

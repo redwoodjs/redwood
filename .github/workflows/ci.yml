@@ -11,6 +11,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   YARN_ENABLE_HARDENED_MODE: 0
@@ -27,7 +29,7 @@ jobs:
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -47,16 +49,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
           set-up-yarn-cache: false
-          yarn-install-directory: ./tasks/check
+          yarn-install-directory: .
           build: false
 
       - name: ✅ Check constraints, dependencies, and package.json's
-        uses: ./tasks/check
+        run: yarn check
 
   check-skip:
     needs: detect-changes
@@ -67,6 +69,22 @@ jobs:
 
     steps:
       - run: echo "Skipped"
+
+  formatting-check:
+    name: 📝 Check formatting (prettier)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+        with:
+          set-up-yarn-cache: false
+          yarn-install-directory: .
+          build: false
+
+      - name: 📝 Check formatting (prettier)
+        run: yarn format:check
 
   build-lint-test:
     needs: check
@@ -83,12 +101,16 @@ jobs:
         if: matrix.os != 'ubuntu-latest'
         run: echo "echo "::remove-matcher owner=tsc::""
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
       - name: 🔎 Lint
         run: yarn lint
+
+      # TODO(jgmw): Re-enable when it doesn't hang
+      # - name: 🥡 Check packaging and attw
+      #   run: yarn check:package
 
       - name: 🌡 Test Types
         run: yarn test:types
@@ -96,7 +118,7 @@ jobs:
       - name: Get number of CPU cores
         if: always()
         id: cpu-cores
-        uses: SimenB/github-actions-cpu-cores@v2
+        uses: SimenB/github-actions-cpu-cores@97ba232459a8e02ff6121db9362b09661c875ab8 # v2
 
       - name: 🧪 Test
         run: yarn test-ci --minWorkers=1 --maxWorkers=${{ steps.cpu-cores.outputs.count }}
@@ -118,15 +140,11 @@ jobs:
   tutorial-e2e:
     needs: check
 
-    strategy:
-      matrix:
-        bundler: [vite, webpack]
-
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
+    name: 🌲 Tutorial E2E / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -145,7 +163,6 @@ jobs:
           git config --global user.name "Your Name"
 
           ./tasks/run-e2e "$project_path" \
-            --bundler ${{ matrix.bundler }} \
             --no-build-framework \
             --no-start
 
@@ -155,7 +172,7 @@ jobs:
         working-directory: ${{ steps.crwa.outputs.project-path }}
 
       - name: 🌲 Run Cypress
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@df7484c5ba85def7eef30db301afa688187bc378 # v6
         env:
           CYPRESS_RW_PATH: ${{ steps.crwa.outputs.project-path }}
         with:
@@ -165,12 +182,12 @@ jobs:
           wait-on: 'http://[::1]:8910'
           working-directory: ./tasks/e2e
           spec: |
-             cypress/e2e/01-tutorial/*.cy.js
+            cypress/e2e/01-tutorial/*.cy.js
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
         if: always()
         with:
-          name: ${{ matrix.bundler }}-logs
+          name: logs
           path: |
             ${{ steps.crwa.outputs.project-path }}/dev_server.log
             ${{ steps.crwa.outputs.project-path }}/e2e.log
@@ -179,11 +196,7 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.code == 'false'
 
-    strategy:
-      matrix:
-        bundler: [vite, webpack]
-
-    name: 🌲 Tutorial E2E / ${{ matrix.bundler }} / node 20 latest
+    name: 🌲 Tutorial E2E / node 20 latest
     runs-on: ubuntu-latest
 
     steps:
@@ -195,9 +208,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -206,7 +218,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -214,8 +226,6 @@ jobs:
       - name: 🌲 Set up test project
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
-        with:
-          bundler: ${{ matrix.bundler }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -275,9 +285,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -289,9 +298,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     env:
@@ -300,7 +308,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -327,8 +335,6 @@ jobs:
       - name: 🌲 Set up test project for React 18
         id: set-up-test-project-react-18
         uses: ./.github/actions/set-up-test-project
-        with:
-          bundler: ${{ matrix.bundler }}
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
           YARN_ENABLE_IMMUTABLE_INSTALLS: false
@@ -388,9 +394,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        bundler: [vite, webpack]
 
-    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / ${{ matrix.bundler }} / node 20 latest
+    name: 🔄 Smoke tests React 18 / ${{ matrix.os }} / node 20 latest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -411,7 +416,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -516,10 +521,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      REDWOOD_REDIRECT_TELEMETRY: "http://127.0.0.1:48619" # Random port
+      REDWOOD_REDIRECT_TELEMETRY: 'http://127.0.0.1:48619' # Random port
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -561,7 +566,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -656,7 +661,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -664,7 +669,6 @@ jobs:
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
         with:
-          bundler: vite
           canary: true
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -728,7 +732,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -736,7 +740,6 @@ jobs:
         id: set-up-test-project
         uses: ./.github/actions/set-up-test-project
         with:
-          bundler: vite
           canary: true
         env:
           REDWOOD_DISABLE_TELEMETRY: 1
@@ -806,7 +809,7 @@ jobs:
       REDWOOD_DISABLE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -847,7 +850,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: 18
 
@@ -858,7 +861,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: 21
 
@@ -885,7 +888,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -898,6 +901,53 @@ jobs:
 
     name: Server tests
     runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Skipped"
+
+  background-jobs-e2e:
+    needs: check
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: Background jobs E2E test / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      REDWOOD_CI: 1
+      REDWOOD_VERBOSE_TELEMETRY: 1
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - name: Set up job
+        uses: ./.github/actions/set-up-job
+
+      - name: 🌲 Set up test project
+        id: set-up-test-project
+        uses: ./.github/actions/set-up-test-project
+        with:
+          canary: true
+        env:
+          REDWOOD_DISABLE_TELEMETRY: 1
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+
+      - name: Run E2E test script
+        run: yarn e2e:background-jobs ${{ steps.set-up-test-project.outputs.test-project-path }}
+        env:
+          REDWOOD_VERBOSE_TELEMETRY: ''
+
+  background-jobs-e2e-skip:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.code == 'false'
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    name: Background jobs E2E test / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - run: echo "Skipped"

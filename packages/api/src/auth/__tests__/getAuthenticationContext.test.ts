@@ -1,6 +1,7 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
 import { describe, it, expect } from 'vitest'
 
+import type { Decoded } from '../index'
 import { getAuthenticationContext } from '../index'
 
 export const createMockedEvent = (
@@ -52,18 +53,20 @@ export const createMockedEvent = (
 }
 
 describe('getAuthenticationContext with bearer tokens', () => {
-  it('Can take a single auth decoder for the given provider', async () => {
-    const authDecoderOne = async (_token: string, type: string) => {
+  const authDecoderOne = async (_token: string, type: string) => {
+    return new Promise<Decoded>((resolve) => {
       if (type !== 'one') {
-        return null
+        return resolve(null)
       }
 
-      return {
+      return resolve({
         iss: 'one',
         sub: 'user-id',
-      }
-    }
+      })
+    })
+  }
 
+  it('Can take a single auth decoder for the given provider', async () => {
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
       event: createMockedEvent({
@@ -89,17 +92,6 @@ describe('getAuthenticationContext with bearer tokens', () => {
   })
 
   it('Can take a single auth decoder for some other provider', async () => {
-    const authDecoderOne = async (_token: string, type: string) => {
-      if (type !== 'one') {
-        return null
-      }
-
-      return {
-        iss: 'one',
-        sub: 'user-id',
-      }
-    }
-
     const result = await getAuthenticationContext({
       authDecoder: authDecoderOne,
       event: createMockedEvent({
@@ -144,26 +136,17 @@ describe('getAuthenticationContext with bearer tokens', () => {
   })
 
   it('Can take an array of auth decoders', async () => {
-    const authDecoderOne = async (_token: string, type: string) => {
-      if (type !== 'one') {
-        return null
-      }
-
-      return {
-        iss: 'one',
-        sub: 'user-id',
-      }
-    }
-
     const authDecoderTwo = async (_token: string, type: string) => {
-      if (type !== 'two') {
-        return null
-      }
+      return new Promise<Decoded>((resolve) => {
+        if (type !== 'two') {
+          return resolve(null)
+        }
 
-      return {
-        iss: 'two',
-        sub: 'user-id',
-      }
+        return resolve({
+          iss: 'two',
+          sub: 'user-id',
+        })
+      })
     }
 
     const result = await getAuthenticationContext({
@@ -214,14 +197,16 @@ describe('getAuthenticationContext with bearer tokens', () => {
 
 describe('getAuthenticationContext with cookies', () => {
   const authDecoderOne = async (_token: string, type: string) => {
-    if (type !== 'one') {
-      return null
-    }
+    return new Promise<Decoded>((resolve) => {
+      if (type !== 'one') {
+        return resolve(null)
+      }
 
-    return {
-      iss: 'one',
-      sub: 'user-id',
-    }
+      return resolve({
+        iss: 'one',
+        sub: 'user-id',
+      })
+    })
   }
 
   it('Can take a single auth decoder for the given provider', async () => {

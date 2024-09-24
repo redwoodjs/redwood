@@ -1,15 +1,12 @@
 import http from 'node:http'
-import type { PassThrough } from 'node:stream'
+import type { ReadableStream } from 'node:stream/web'
 
 import type { Request } from 'express'
 
 import { getConfig, getRawConfig } from '@redwoodjs/project-config'
-import { getAuthState, getRequestHeaders } from '@redwoodjs/server-store'
 
-import { getFullUrlForFlightRequest } from '../utils.js'
-
-import type { RenderInput } from './rscWorkerCommunication.js'
-import { renderRsc } from './rscWorkerCommunication.js'
+import { renderRscToStream } from './rscRenderer.js'
+import type { RenderInput } from './rscRenderer.js'
 
 const isTest = () => {
   return process.env.NODE_ENV === 'test'
@@ -36,24 +33,21 @@ const getStudioPort = () => {
 }
 
 const processRenderRscStream = async (
-  pipeable: PassThrough,
+  readable: ReadableStream,
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const chunks = [] as any
+    const chunks: Uint8Array[] = []
 
-    pipeable.on('data', (chunk: any) => {
-      chunks.push(chunk)
+    const writable = new WritableStream({
+      write(chunk) {
+        chunks.push(chunk)
+      },
+      close() {
+        resolve(Buffer.concat(chunks).toString('utf8'))
+      },
     })
 
-    pipeable.on('end', () => {
-      const resultBuffer = Buffer.concat(chunks)
-      const resultString = resultBuffer.toString('utf-8') as string
-      resolve(resultString)
-    })
-
-    pipeable.on('error', (error) => {
-      reject(error)
-    })
+    readable.pipeTo(writable).catch((error) => reject(error))
   })
 }
 
@@ -100,11 +94,11 @@ const postFlightToStudio = (payload: string, metadata: Record<string, any>) => {
 }
 
 const createStudioFlightHandler = (
-  pipeable: PassThrough,
+  readable: ReadableStream,
   metadata: Record<string, any>,
 ) => {
   if (shouldSendToStudio()) {
-    processRenderRscStream(pipeable)
+    processRenderRscStream(readable)
       .then((payload) => {
         console.debug('Sending RSC Rendered stream to Studio')
         postFlightToStudio(payload, metadata)
@@ -129,29 +123,14 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     console.debug('Studio is not enabled')
     return
   }
-  const { rscId, props, rsfId, args, basePath, req, handleError } = input
+  const { rscId, rsaId, args, basePath, req, handleError } = input
 
   try {
     // surround renderRsc with performance metrics
     const startedAt = Date.now()
     const start = performance.now()
 
-    // We construct the URL for the flight request from props
-    // e.g. http://localhost:8910/rw-rsc/__rwjs__Routes?props=location={pathname:"/about",search:"?foo=bar""}
-    // becomes http://localhost:8910/about?foo=bar
-    const fullUrl = getFullUrlForFlightRequest(req, props)
-
-    const pipeable = await renderRsc({
-      rscId,
-      props,
-      rsfId,
-      args,
-      serverState: {
-        headersInit: Object.fromEntries(getRequestHeaders().entries()),
-        serverAuthState: getAuthState(),
-        fullUrl,
-      },
-    })
+    const readable = await renderRscToStream({ rscId, rsaId, args })
     const endedAt = Date.now()
     const end = performance.now()
     const duration = end - start
@@ -160,8 +139,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     const metadata = {
       rsc: {
         rscId,
-        rsfId,
-        props,
+        rsaId,
         args,
       },
       request: {
@@ -178,7 +156,7 @@ export const sendRscFlightToStudio = async (input: StudioRenderInput) => {
     }
 
     // send rendered request to Studio
-    createStudioFlightHandler(pipeable as PassThrough, metadata)
+    createStudioFlightHandler(readable, metadata)
   } catch (e) {
     if (e instanceof Error) {
       console.error('An error occurred rendering RSC and sending to Studio:', e)

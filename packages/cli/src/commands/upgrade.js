@@ -12,6 +12,7 @@ import { getConfig } from '@redwoodjs/project-config'
 import { getPaths } from '../lib'
 import c from '../lib/colors'
 import { generatePrismaClient } from '../lib/generatePrismaClient'
+import { PLUGIN_CACHE_FILENAME } from '../lib/plugin'
 
 export const command = 'upgrade'
 export const description = 'Upgrade all @redwoodjs packages via interactive CLI'
@@ -117,6 +118,10 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
         enabled: (ctx) => ctx.versionToUpgradeTo?.includes('canary'),
       },
       {
+        title: 'Removing CLI cache',
+        task: (ctx) => removeCliCache(ctx, { dryRun, verbose }),
+      },
+      {
         title: 'Running yarn install',
         task: (ctx) => yarnInstall(ctx, { dryRun, verbose }),
         skip: () => dryRun,
@@ -145,7 +150,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
             messageSections.push(
               `   Please review the release notes for any manual steps: \n   ❖ ${terminalLink(
                 `Redwood community discussion`,
-                `https://community.redwoodjs.com/search?q=${version}%23announcements`,
+                `https://community.redwoodjs.com/c/announcements/releases-and-upgrade-guides/`,
               )}\n   ❖ ${terminalLink(
                 `GitHub Release notes`,
                 `https://github.com/redwoodjs/redwood/releases`, // intentionally not linking to specific version
@@ -203,6 +208,25 @@ async function yarnInstall({ verbose }) {
     throw new Error(
       'Could not finish installation. Please run `yarn install` and then `yarn dedupe`, before continuing',
     )
+  }
+}
+
+/**
+ * Removes the CLI plugin cache. This prevents the CLI from using outdated versions of the plugin,
+ * when the plugins share the same alias. e.g. `rw sb` used to point to `@redwoodjs/cli-storybook` but now points to `@redwoodjs/cli-storybook-vite`
+ */
+async function removeCliCache(ctx, { dryRun, verbose }) {
+  const cliCacheDir = path.join(
+    getPaths().generated.base,
+    PLUGIN_CACHE_FILENAME,
+  )
+
+  if (verbose) {
+    console.log('Removing CLI cache at: ', cliCacheDir)
+  }
+
+  if (!dryRun) {
+    fs.removeSync(cliCacheDir)
   }
 }
 

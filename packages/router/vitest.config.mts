@@ -7,5 +7,3 @@ export default defineConfig({
     setupFiles: ['vitest.setup.mts'],
   },
 })
-
-

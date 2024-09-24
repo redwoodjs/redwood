@@ -33,7 +33,6 @@ export type SupportedVerifiers =
   | Sha256Verifier
   | Base64Sha1Verifier
   | Base64Sha256Verifier
-  | Sha1Verifier
   | TimestampSchemeVerifier
   | JwtVerifier
 

@@ -1,12 +1,20 @@
 {
   "extends": "../../tsconfig.compilerOption.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "isolatedModules": true,
+    "moduleResolution": "Node16",
+    "module": "Node16",
     "outDir": "dist",
+    "typeRoots": [
+      "../../node_modules/@types",
+      "../../node_modules/@testing-library"
+    ]
   },
-  "include": ["src", "./ambient.d.ts"],
+  "include": ["."],
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__fixtures__"],
   "references": [
     { "path": "../auth/tsconfig.build.json" },
-    { "path": "../server-store" },
+    { "path": "../framework-tools" },
+    { "path": "../server-store" }
   ]
 }

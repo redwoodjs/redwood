@@ -14,13 +14,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   check-git-tags:
     name: 🏷 Check git tags
     if: github.repository == 'redwoodjs/redwood'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         # Required because lerna uses tags to determine the version.
         with:
           fetch-depth: 0
@@ -29,7 +31,7 @@ jobs:
         run: corepack enable
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: 20
 
@@ -59,7 +61,7 @@ jobs:
     outputs:
       version: ${{ steps.get-version.outputs.value }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
           # `fetch-depth`—number of commits to fetch. `0` fetches all history for all branches and tags.
           #  This is required because lerna uses tags to determine the version.
@@ -92,7 +94,7 @@ jobs:
 
       - name: 🏷 Get version
         id: get-version
-        uses: sergeysova/jq-action@v2.3.0
+        uses: sergeysova/jq-action@a3f0d4ff59cc1dddf023fc0b325dd75b10deec58 # v2.3.0
         with:
           cmd: 'jq .version packages/core/package.json -r'
 
@@ -103,11 +105,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: 💬 Message Slack
         uses: ./.github/actions/message_slack_publishing
         with:
-          title: "🏎 RC Packages"
+          title: '🏎 RC Packages'
           status: ${{ needs.publish-release-candidate.result }}
           version: ${{ needs.publish-release-candidate.outputs.version }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_PACKAGE_PUBLISHING }}

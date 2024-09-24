@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
@@ -29,14 +29,14 @@
     "@redwoodjs/project-config": "workspace:*",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
-    "fastify": "4.27.0",
+    "fastify": "4.28.1",
     "fs-extra": "11.2.0",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5"
+    "tsx": "4.19.1",
+    "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

@@ -48,7 +48,7 @@ test('Check that rehydration works for page not wrapped in Set', async ({
   // Wait for page to have been rehydrated before getting page content.
   // We know the page has been rehydrated when it sends an auth request
   await page.waitForResponse((response) =>
-    response.url().includes('/.redwood/functions/auth')
+    response.url().includes('/.redwood/functions/auth'),
   )
 
   await page.locator('h1').first().waitFor()
@@ -89,7 +89,7 @@ test('Check that rehydration works for page with Cell in Set', async ({
   // before getting page content.
   // We know cells have started fetching data when we see graphql requests
   await page.waitForResponse((response) =>
-    response.url().includes('/.redwood/functions/graphql')
+    response.url().includes('/.redwood/functions/graphql'),
   )
 
   await page.locator('h2').first().waitFor()
@@ -137,7 +137,7 @@ test('Check that rehydration works for page with code split chunks', async ({
   // Wait for page to have been rehydrated before getting page content.
   // We know the page has been rehydrated when it sends an auth request
   await page.waitForResponse((response) =>
-    response.url().includes('/.redwood/functions/auth')
+    response.url().includes('/.redwood/functions/auth'),
   )
 
   await expect(page.getByLabel('Name')).toBeVisible()
@@ -190,11 +190,11 @@ test('Check that meta-tags are rendering the correct dynamic data', async () => 
   await pageWithoutJs.goto('/blog-post/1')
 
   const metaDescription = await pageWithoutJs.locator(
-    'meta[name="description"]'
+    'meta[name="description"]',
   )
 
   const ogDescription = await pageWithoutJs.locator(
-    'meta[property="og:description"]'
+    'meta[property="og:description"]',
   )
   await expect(metaDescription).toHaveAttribute('content', 'Description 1')
   await expect(ogDescription).toHaveAttribute('content', 'Description 1')
@@ -217,7 +217,7 @@ test('Check that you can navigate from home page to specific blog post', async (
 
   await pageWithoutJs.goto('/')
   const aboutMeAnchor = await pageWithoutJs.locator(
-    'a:has-text("A little more about me")'
+    'a:has-text("A little more about me")',
   )
 
   await aboutMeAnchor.click()
@@ -230,7 +230,7 @@ test('Check that you can navigate from home page to specific blog post', async (
   expect(mainContent).not.toMatch(/Welcome to the blog!/)
   expect(mainContent).not.toMatch(/What is the meaning of life\?/)
   expect(pageWithoutJs.url()).toMatch(
-    new RegExp(escapeRegExp(aboutMeAnchorHref))
+    new RegExp(escapeRegExp(aboutMeAnchorHref)),
   )
 
   pageWithoutJs.close()
@@ -247,7 +247,7 @@ test('Check that about is prerendered', async () => {
 
   const aboutPageContent = await pageWithoutJs.locator('main').innerText()
   expect(aboutPageContent).toBe(
-    'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!'
+    'This site was created to demonstrate my mastery of Redwood: Look on my works, ye mighty, and despair!',
   )
   pageWithoutJs.close()
 })
@@ -267,7 +267,7 @@ test('prerender with broken gql query', async () => {
     'web',
     'src',
     'components',
-    'BlogPostsCell'
+    'BlogPostsCell',
   )
 
   const cellPathJs = path.join(cellBasePath, 'BlogPostsCell.jsx')
@@ -284,7 +284,7 @@ test('prerender with broken gql query', async () => {
     })
   } catch (e) {
     expect(e.message).toMatch(
-      /GQL error: Cannot query field "timestamp" on type "Post"\./
+      /GQL error: Cannot query field "timestamp" on type "Post"\./,
     )
   }
 

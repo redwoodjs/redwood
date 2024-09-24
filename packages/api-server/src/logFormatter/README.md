@@ -6,11 +6,11 @@ It is based on [pino-colada](https://github.com/lrlna/pino-colada/blob/master/RE
 
 Redwood-specific GraphQL log data included by the the `useRedwoodLogger` envelop plug-in is supported:
 
-* Request Id
-* User-Agent
-* GraphQL Operation Name
-* GraphQL Query
-* GraphQL Data
+- Request Id
+- User-Agent
+- GraphQL Operation Name
+- GraphQL Query
+- GraphQL Data
 
 ## Command
 
@@ -23,6 +23,7 @@ echo "{\"level\": 30, \"message\": \"Hello RedwoodJS\"}" | yarn rw-log-formatter
 ```
 
 Output:
+
 ```terminal
 11:00:28 🌲 Hello RedwoodJS
 ✨  Done in 0.14s.

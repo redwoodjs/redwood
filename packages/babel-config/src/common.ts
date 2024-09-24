@@ -7,6 +7,7 @@ import { parseConfigFileTextToJson } from 'typescript'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getWebSideBabelPlugins } from './web'
+import type { Flags as WebFlags } from './web'
 
 const pkgJson = require('../package.json')
 
@@ -17,6 +18,7 @@ export interface RegisterHookOptions {
    */
   plugins?: PluginItem[]
   overrides?: TransformOptions['overrides']
+  options?: WebFlags
 }
 
 interface BabelRegisterOptions extends TransformOptions {
@@ -61,7 +63,7 @@ if (!RUNTIME_CORE_JS_VERSION) {
   )
 }
 
-export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
+export const getCommonPlugins = (): [string, PluginOptions][] => {
   return [
     ['@babel/plugin-transform-class-properties', { loose: true }],
     // Note: The private method loose mode configuration setting must be the
@@ -76,9 +78,7 @@ export const getCommonPlugins = (): Array<[string, PluginOptions]> => {
 // It's related to yarn workspaces to be or not to be
 export const getRouteHookBabelPlugins = () => {
   return [
-    ...getWebSideBabelPlugins({
-      forVite: true,
-    }),
+    ...getWebSideBabelPlugins(),
     [
       'babel-plugin-module-resolver',
       {
@@ -124,7 +124,7 @@ export const parseTypeScriptConfigFiles = () => {
 }
 
 type CompilerOptionsForPaths = {
-  compilerOptions: { baseUrl: string; paths: string }
+  compilerOptions: { baseUrl: string; paths: Record<string, string[]> }
 }
 /**
  * Extracts and formats the paths from the [ts|js]config.json file
@@ -162,10 +162,7 @@ export const getPathsFromTypeScriptConfig = (
       continue
     }
     const aliasKey = key.replace('/*', '')
-    const aliasValue = path.join(
-      absoluteBase,
-      (value as string)[0].replace('/*', ''),
-    )
+    const aliasValue = path.join(absoluteBase, value[0].replace('/*', ''))
 
     pathsObj[aliasKey] = aliasValue
   }

@@ -12,15 +12,17 @@ export const flightcontrolConfig = {
         {
           id: 'redwood-api',
           name: 'Redwood API',
-          type: 'fargate',
+          type: 'web',
           buildType: 'nixpacks',
           cpu: 0.5,
           memory: 1,
-          installCommand: 'corepack enable && yarn install',
           buildCommand: 'yarn rw deploy flightcontrol api',
           startCommand: 'yarn rw deploy flightcontrol api --serve',
           port: 8911,
           healthCheckPath: '/graphql/health',
+          ci: {
+            type: 'ec2',
+          },
           envVariables: {
             REDWOOD_WEB_URL: {
               fromService: { id: 'redwood-web', value: 'origin' },
@@ -33,9 +35,11 @@ export const flightcontrolConfig = {
           type: 'static',
           buildType: 'nixpacks',
           singlePageApp: true,
-          installCommand: 'corepack enable && yarn install',
           buildCommand: 'yarn rw deploy flightcontrol web',
           outputDirectory: 'web/dist',
+          ci: {
+            type: 'ec2',
+          },
           envVariables: {
             REDWOOD_API_URL: {
               fromService: { id: 'redwood-api', value: 'origin' },
@@ -52,8 +56,8 @@ export const postgresDatabaseService = {
   name: 'Database',
   type: 'rds',
   engine: 'postgres',
-  engineVersion: '12',
-  instanceSize: 'db.t2.micro',
+  engineVersion: '16',
+  instanceSize: 'db.t4g.micro',
   port: 5432,
   storage: 20,
   private: false,
@@ -65,7 +69,7 @@ export const mysqlDatabaseService = {
   type: 'rds',
   engine: 'mysql',
   engineVersion: '8',
-  instanceSize: 'db.t2.micro',
+  instanceSize: 'db.t4g.micro',
   port: 3306,
   storage: 20,
   private: false,

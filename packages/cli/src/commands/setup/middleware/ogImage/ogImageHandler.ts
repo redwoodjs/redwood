@@ -87,7 +87,7 @@ export async function handler({ force }: { force: boolean }) {
               })
 
               fs.writeFileSync(prettifyPath, prettifiedApp, 'utf-8')
-            } catch (error) {
+            } catch {
               task.output =
                 "Couldn't prettify the changes. Please reformat the files manually if needed."
             }

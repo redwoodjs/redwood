@@ -150,7 +150,11 @@ describe('Custom auth provider', () => {
       <>
         <button
           onClick={() => {
-            isAuthenticated ? logOut() : logIn()
+            if (isAuthenticated) {
+              logOut()
+            } else {
+              logIn()
+            }
           }}
         >
           {isAuthenticated ? 'Log Out' : 'Log In'}
@@ -645,7 +649,7 @@ describe('Custom auth provider', () => {
 
   test("getToken doesn't fail if client throws an error", async () => {
     mockedTestAuthClient.getToken.mockImplementation(() => {
-      throw 'Login Required'
+      throw new Error('Login Required')
     })
     const auth = await getCustomTestAuth()
 

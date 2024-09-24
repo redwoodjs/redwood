@@ -90,7 +90,7 @@ const setupLogger = (
 
 describe('logger', () => {
   describe('creates a logger without options', () => {
-    test('it logs a trace message', async () => {
+    test('it logs a trace message', () => {
       const logger = createLogger({})
 
       expect(logger).toBeDefined()

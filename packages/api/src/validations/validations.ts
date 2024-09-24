@@ -25,16 +25,16 @@ interface AcceptanceValidatorOptions extends WithOptionalMessage {
   /**
    * An array of values that, if any match, will pass the validation.
    */
-  in?: Array<unknown>
+  in?: unknown[]
 }
 
-interface EmailValidatorOptions extends WithOptionalMessage {}
+type EmailValidatorOptions = WithOptionalMessage
 
 interface ExclusionValidatorOptions extends WithOptionalMessage {
   /**
    * The list of values that cannot be used.
    */
-  in?: Array<unknown>
+  in?: unknown[]
   caseSensitive?: boolean
 }
 
@@ -49,7 +49,7 @@ interface InclusionValidatorOptions extends WithOptionalMessage {
   /**
    * The list of values that can be used.
    */
-  in?: Array<unknown>
+  in?: unknown[]
   caseSensitive?: boolean
 }
 
@@ -74,7 +74,7 @@ interface LengthValidatorOptions extends WithOptionalMessage {
    *  length: { between: [2, 255] }
    * })
    */
-  between?: Array<number>
+  between?: number[]
 }
 
 interface NumericalityValidatorOptions extends WithOptionalMessage {
@@ -155,7 +155,7 @@ interface CustomValidatorOptions extends WithOptionalMessage {
 interface UniquenessValidatorOptions extends WithOptionalMessage {
   db?: PrismaClient
 }
-type UniquenessWhere = Record<'AND' | 'NOT', Array<Record<string, unknown>>>
+type UniquenessWhere = Record<'AND' | 'NOT', Record<string, unknown>[]>
 
 interface ValidationRecipe {
   /**
@@ -189,7 +189,7 @@ interface ValidationRecipe {
    *
    * Opposite of the [inclusion](https://redwoodjs.com/docs/services.html#inclusion) validation.
    */
-  exclusion?: Array<unknown> | ExclusionValidatorOptions
+  exclusion?: unknown[] | ExclusionValidatorOptions
   /**
    * Requires that the value match a given regular expression.
    */
@@ -199,7 +199,7 @@ interface ValidationRecipe {
    *
    * Opposite of the [exclusion](https://redwoodjs.com/docs/services.html#exclusion) validation.
    */
-  inclusion?: Array<unknown> | InclusionValidatorOptions
+  inclusion?: unknown[] | InclusionValidatorOptions
   /**
    * Requires that the value meet one or more of a number of string length validations.
    */
@@ -270,7 +270,7 @@ const VALIDATORS = {
     name: string,
     options: boolean | AcceptanceValidatorOptions,
   ) => {
-    let acceptedValues: Array<unknown>
+    let acceptedValues: unknown[]
 
     if (typeof options === 'object') {
       acceptedValues = options.in || []
@@ -309,7 +309,7 @@ const VALIDATORS = {
   exclusion: (
     value: unknown,
     name: string,
-    options: Array<unknown> | ExclusionValidatorOptions,
+    options: unknown[] | ExclusionValidatorOptions,
   ) => {
     const [exclusionList, val] = prepareExclusionInclusion(value, options)
 
@@ -348,7 +348,7 @@ const VALIDATORS = {
   inclusion: (
     value: unknown,
     name: string,
-    options: Array<unknown> | InclusionValidatorOptions,
+    options: unknown[] | InclusionValidatorOptions,
   ) => {
     const [inclusionList, val] = prepareExclusionInclusion(value, options)
 
@@ -554,17 +554,14 @@ const validationError = (
 // can simply be used with Array.includes to perform exclusion/inclusion checks.
 const prepareExclusionInclusion = (
   value: unknown,
-  options:
-    | Array<unknown>
-    | InclusionValidatorOptions
-    | ExclusionValidatorOptions,
-): [Array<unknown>, unknown] => {
+  options: unknown[] | InclusionValidatorOptions | ExclusionValidatorOptions,
+): [unknown[], unknown] => {
   const inputList = (Array.isArray(options) && options) || options.in || []
 
   // default case sensitivity to true
   const caseSensitive = Array.isArray(options)
     ? true
-    : options.caseSensitive ?? true
+    : (options.caseSensitive ?? true)
 
   return caseSensitive
     ? [inputList, value]

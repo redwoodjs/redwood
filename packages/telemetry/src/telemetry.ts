@@ -5,7 +5,7 @@ import path from 'path'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-const spawnProcess = (...args: Array<string>) => {
+const spawnProcess = (...args: string[]) => {
   // "os.type()" returns 'Windows_NT' on Windows. See https://nodejs.org/docs/latest-v12.x/api/os.html#os_os_type.
   const execPath =
     os.type() === 'Windows_NT' ? `"${process.execPath}"` : process.execPath
@@ -42,7 +42,7 @@ const spawnProcess = (...args: Array<string>) => {
 
 // wrap a function in this call to get a telemetry hit including how long it took
 export const timedTelemetry = async (
-  argv: Array<string>,
+  argv: string[],
   options: Record<string, unknown>,
   func: (...args: any[]) => any,
 ) => {
@@ -66,7 +66,7 @@ export const timedTelemetry = async (
   return result
 }
 
-export const errorTelemetry = async (argv: Array<string>, error: any) => {
+export const errorTelemetry = async (argv: string[], error: any) => {
   if (process.env.REDWOOD_DISABLE_TELEMETRY) {
     return
   }

@@ -19,7 +19,6 @@ export {
   getWebSideBabelPresets,
   getWebSideDefaultBabelConfig,
   getWebSideOverrides,
-  prebuildWebFile,
   registerWebSideBabelHook,
 } from './web'
 

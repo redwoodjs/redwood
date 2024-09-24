@@ -1,0 +1,4 @@
+src/__tests__/migrations/*
+src/__tests__/for_unit_test.db*
+.attw.json
+src/__tests__/prisma-client/*

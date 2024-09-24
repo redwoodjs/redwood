@@ -1,12 +1,75 @@
 {
   "name": "@redwoodjs/router",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/router"
   },
   "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./Route": {
+      "import": "./dist/Route.js",
+      "require": "./dist/cjs/Route.js"
+    },
+    "./Set": {
+      "import": "./dist/Set.js",
+      "require": "./dist/cjs/Set.js"
+    },
+    "./Link": {
+      "import": "./dist/link.js",
+      "require": "./dist/cjs/link.js"
+    },
+    "./NavLink": {
+      "import": "./dist/navLink.js",
+      "require": "./dist/cjs/navLink.js"
+    },
+    "./location": {
+      "import": "./dist/location.js",
+      "require": "./dist/cjs/location.js"
+    },
+    "./namedRoutes": {
+      "import": "./dist/namedRoutes.js",
+      "require": "./dist/cjs/namedRoutes.js"
+    },
+    "./util": {
+      "import": "./dist/util.js",
+      "require": "./dist/cjs/util.js"
+    },
+    "./rscCss": {
+      "require": "./dist/cjs/rsc/rscCss.js",
+      "import": "./dist/rsc/rscCss.js"
+    },
+    "./serverRouter": {
+      "import": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/ServerRouter.js"
+    },
+    "./RscRouter": {
+      "react-server": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/ClientRouter.js",
+      "import": "./dist/rsc/ClientRouter.js"
+    },
+    "./SsrRouter": {
+      "react-server": "./dist/rsc/ServerRouter.js",
+      "require": "./dist/cjs/rsc/SsrRouter.js",
+      "import": "./dist/rsc/SsrRouter.js"
+    },
+    "./dist/*": {
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/*.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -14,37 +77,45 @@
     "skip-nav.css"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\"",
+    "build": "tsx ./build.ts",
     "build:pack": "yarn pack -o redwoodjs-router.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose tsconfig.build.json",
+    "build:types-cjs": "tsc --build --verbose tsconfig.cjs.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "tsx ./attw.ts",
+    "check:package": "concurrently npm:check:attw yarn publint",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
     "test:types": "tstyche",
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.25.6",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
-    "core-js": "3.37.1"
+    "core-js": "3.38.1",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916",
+    "react-server-dom-webpack": "19.0.0-rc-f2df5694-20240916"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@arethetypeswrong/cli": "0.16.4",
+    "@babel/cli": "7.25.6",
     "@babel/core": "^7.22.20",
-    "@testing-library/jest-dom": "6.4.6",
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@testing-library/jest-dom": "6.5.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508",
-    "tstyche": "2.0.0",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "concurrently": "8.2.2",
+    "publint": "0.2.11",
+    "tstyche": "2.1.1",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "react": "19.0.0-beta-04b058868c-20240508",
-    "react-dom": "19.0.0-beta-04b058868c-20240508"
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "react-dom": "19.0.0-rc-f2df5694-20240916"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

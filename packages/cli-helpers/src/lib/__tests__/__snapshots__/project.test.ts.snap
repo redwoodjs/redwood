@@ -6,7 +6,7 @@ exports[`addEnvVar > addEnvVar adds environment variables as part of a setup tas
 
 # Note: The existing environment variable EXISTING_VAR was not overwritten. Uncomment to use its new value.
 # Updated existing variable Comment
-# EXISTING_VAR = new_value
+# EXISTING_VAR=new_value
 "
 `;
 
@@ -15,7 +15,7 @@ exports[`addEnvVar > addEnvVar adds environment variables as part of a setup tas
 # CommentedVar = 123
 
 # New Variable Comment
-NEW_VAR = new_value
+NEW_VAR=new_value
 "
 `;
 
@@ -24,7 +24,7 @@ exports[`addEnvVar > addEnvVar adds environment variables as part of a setup tas
 # CommentedVar = 123
 
 # New Variable Comment
-NEW_VAR = new_value
+NEW_VAR=new_value
 "
 `;
 
@@ -34,7 +34,7 @@ exports[`addEnvVar > addEnvVar adds environment variables as part of a setup tas
 
 # Note: The existing environment variable EXISTING_VAR was not overwritten. Uncomment to use its new value.
 # New Variable Comment
-# EXISTING_VAR = new_value
+# EXISTING_VAR=new_value
 "
 `;
 

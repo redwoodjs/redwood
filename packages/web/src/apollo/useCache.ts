@@ -1,7 +1,6 @@
 import type { ApolloCache, Reference, StoreObject } from '@apollo/client'
 import type { NormalizedCacheObject } from '@apollo/client/cache/inmemory/types.js'
 import type { ApolloQueryResult } from '@apollo/client/core'
-// @ts-expect-error Force import cjs module
 import { useApolloClient } from '@apollo/client/react/hooks/hooks.cjs'
 
 type useCacheType = {

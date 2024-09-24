@@ -130,19 +130,19 @@ export type RedwoodApolloLink<
   link: Link
 }
 
-export type RedwoodApolloLinks = Array<
+export type RedwoodApolloLinks = (
   | RedwoodApolloLink<'withToken'>
   | RedwoodApolloLink<'authMiddleware'>
   | RedwoodApolloLink<'enhanceErrorLink'>
   | RedwoodApolloLink<'httpLink', HttpLink>
->
+)[]
 
 // DummyLink is needed to prevent circular dependencies when defining
 // RedwoodApolloLinkName
 // (Just replace DummyLink with RedwoodApolloLink in the InferredLinkName type
 // helper and you'll see what I mean)
 type DummyLink<T extends string> = { name: T }
-type InferredLinkName<T> = T extends Array<DummyLink<infer Name>> ? Name : never
+type InferredLinkName<T> = T extends DummyLink<infer Name>[] ? Name : never
 export type RedwoodApolloLinkName = InferredLinkName<RedwoodApolloLinks>
 
 export type RedwoodApolloLinkFactory = (links: RedwoodApolloLinks) => ApolloLink

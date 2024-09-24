@@ -86,7 +86,7 @@ const analyseNoComparison = () => {
   // ```
   const node_modulesS = Object.entries(node_modules).sort(
     ([_depA, nestedDepsA], [_depB, nestedDepsB]) =>
-      Object.keys(nestedDepsB).length - Object.keys(nestedDepsA).length
+      Object.keys(nestedDepsB).length - Object.keys(nestedDepsA).length,
   )
 
   const barChart = {}
@@ -134,7 +134,7 @@ const analyseNoComparison = () => {
           },
         },
       },
-    })
+    }),
   )
 
   // ------------------------
@@ -152,7 +152,7 @@ const analyseNoComparison = () => {
 
   rwBarChart.rwTooltipFooter = ([tooltipItem]) => {
     return Object.entries(
-      node_modulesS.filter(([dep]) => isRWDep(dep))[tooltipItem.dataIndex][1]
+      node_modulesS.filter(([dep]) => isRWDep(dep))[tooltipItem.dataIndex][1],
     )
       .map(getTooltipString)
       .join('\n')
@@ -199,7 +199,7 @@ const analyseNoComparison = () => {
           },
         },
       },
-    })
+    }),
   )
 }
 
@@ -251,8 +251,8 @@ const analyseWithComparison = () => {
     .sort(
       (
         [_depA, { added: addedA, removed: removedA }],
-        [_depB, { added: addedB, removed: removedB }]
-      ) => addedB.length + removedB.length - (addedA.length + removedA.length)
+        [_depB, { added: addedB, removed: removedB }],
+      ) => addedB.length + removedB.length - (addedA.length + removedA.length),
     )
     .map(([dep]) => {
       return dep
@@ -333,7 +333,7 @@ const analyseWithComparison = () => {
           },
         },
       },
-    })
+    }),
   )
 
   const redwoodKeys = sortedKeys.filter(isRWDep)
@@ -415,7 +415,7 @@ const analyseWithComparison = () => {
           },
         },
       },
-    })
+    }),
   )
 }
 

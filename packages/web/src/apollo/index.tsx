@@ -11,17 +11,13 @@ import type {
 import {
   ApolloProvider,
   ApolloClient,
-  ApolloLink,
   InMemoryCache,
   split,
+  ApolloLink,
 } from '@apollo/client'
-// @ts-expect-error Force import cjs module
 import { setLogVerbosity as apolloSetLogVerbosity } from '@apollo/client/core/core.cjs'
-// @ts-expect-error Force import cjs module
 import { setContext } from '@apollo/client/link/context/context.cjs'
-// @ts-expect-error Force import cjs module
-import { HttpLink } from '@apollo/client/link/http/http.cjs'
-// @ts-expect-error Force import cjs module
+import type { HttpLink } from '@apollo/client/link/http/http.cjs'
 import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries/persisted-queries.cjs'
 import {
   useQuery,
@@ -30,17 +26,15 @@ import {
   useBackgroundQuery,
   useReadQuery,
   useSuspenseQuery,
-  // @ts-expect-error Force import cjs module
 } from '@apollo/client/react/hooks/hooks.cjs'
-// @ts-expect-error Force import cjs module
 import { getMainDefinition } from '@apollo/client/utilities/utilities.cjs'
-import { fetch as crossFetch } from '@whatwg-node/fetch'
 import { print } from 'graphql/language/printer.js'
 
 import type { UseAuth } from '@redwoodjs/auth'
 import { useNoAuth } from '@redwoodjs/auth'
-import './typeOverride.js'
 
+import './typeOverride.js'
+import { createUploadLink } from '../bundled/apollo-upload-client.js'
 import {
   FetchConfigProvider,
   useFetchConfig,
@@ -54,8 +48,9 @@ import {
 } from './fragmentRegistry.js'
 import * as SSELinkExports from './sseLink.js'
 import { useCache } from './useCache.js'
+
 // Not sure why we need to import it this way for legacy builds to work
-const { SSELink } = SSELinkExports
+const { SSELink, isSubscription, isLiveQuery } = SSELinkExports
 
 export type {
   CacheKey,
@@ -228,34 +223,33 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
-  let httpLink = new HttpLink({ uri, ...httpLinkConfig })
-  if (globalThis.RWJS_EXP_STREAMING_SSR) {
-    httpLink = new HttpLink({ uri, fetch: crossFetch, ...httpLinkConfig })
-  }
+  // Internally uploadLink determines whether to use form-data vs http link
+  const uploadLink: ApolloLink = createUploadLink({
+    uri,
+    ...httpLinkConfig,
+    // The upload link types don't match the ApolloLink types, even though it comes from Apollo
+    // because they use ESM imports and we're using the default ones.
+  }) as unknown as ApolloLink
 
   // Our terminating link needs to be smart enough to handle subscriptions, and if the GraphQL query
   // is subscription it needs to use the SSELink (server sent events link).
-  const httpOrSSELink =
+  const uploadOrSSELink =
     typeof SSELink !== 'undefined'
       ? split(
           ({ query }) => {
             const definition = getMainDefinition(query)
 
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
-            )
+            return isSubscription(definition) || isLiveQuery(definition)
           },
-          // @ts-expect-error  Due to CJS imports
           new SSELink({
             url: uri,
             auth: { authProviderType, tokenFn: getToken },
             httpLinkConfig,
             headers,
           }),
-          httpLink,
+          uploadLink,
         )
-      : httpLink
+      : uploadLink
 
   /**
    * Use Trusted Documents aka Persisted Operations aka Queries
@@ -280,8 +274,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     },
     createPersistedQueryLink({
       generateHash: (document: any) => document['__meta__']['hash'],
-    }).concat(httpOrSSELink),
-    httpOrSSELink,
+    }).concat(uploadOrSSELink),
+    uploadOrSSELink,
   )
 
   // The order here is important. The last link *must* be a terminating link like HttpLink, SSELink, or the PersistedQueryLink.

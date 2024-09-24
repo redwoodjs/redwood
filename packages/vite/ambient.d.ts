@@ -3,7 +3,7 @@
 import type { HelmetServerState } from 'react-helmet-async'
 
 declare global {
-  // Provided by Vite.config, or Webpack in the user's project
+  // Provided by Vite.config
   // but "regsitered" in packages/vite/src/streaming/registerGlobals.ts
   // for it to be available to framework code
   var RWJS_ENV: {
@@ -27,6 +27,11 @@ declare global {
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
 
   var __rw_module_cache__: Map<string, unknown>
+
+  var __webpack_chunk_load__: (
+    id: string,
+  ) => Promise<typeof __rw_module_cache__>
+  var __webpack_require__: (id: string) => unknown
 }
 
 export {}

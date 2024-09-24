@@ -52,7 +52,7 @@ function modifyViteConfigToForceOptimize(code) {
               (prop) =>
                 babelTypes.isObjectProperty(prop) &&
                 babelTypes.isIdentifier(prop.key) &&
-                prop.key.name === 'force'
+                prop.key.name === 'force',
             )
 
             if (forceProp) {
@@ -61,20 +61,20 @@ function modifyViteConfigToForceOptimize(code) {
               optimizeDepsProp.value.properties.push(
                 babelTypes.objectProperty(
                   babelTypes.identifier('force'),
-                  babelTypes.booleanLiteral(true)
-                )
+                  babelTypes.booleanLiteral(true),
+                ),
               )
             }
           }
         } else {
           const forceProp = babelTypes.objectProperty(
             babelTypes.identifier('force'),
-            babelTypes.booleanLiteral(true)
+            babelTypes.booleanLiteral(true),
           )
 
           optimizeDepsProp = babelTypes.objectProperty(
             babelTypes.identifier('optimizeDeps'),
-            babelTypes.objectExpression([forceProp])
+            babelTypes.objectExpression([forceProp]),
           )
 
           properties.push(optimizeDepsProp)

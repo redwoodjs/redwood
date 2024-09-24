@@ -26,6 +26,7 @@ import type {
   ServicesGlobImports,
   GraphQLTypeWithFields,
   SdlGlobImports,
+  RedwoodScalarConfig,
 } from './types'
 
 const wrapWithOpenTelemetry = async (
@@ -164,10 +165,7 @@ const resolveUnionType = (types: readonly GraphQLObjectType[]) => ({
 
     // If the maxIntersection fields is not unique, we are unable to determine type
     if (
-      fieldIntersections.indexOf(
-        maxIntersectionFields,
-        maxIntersectionIdx + 1,
-      ) !== -1
+      fieldIntersections.includes(maxIntersectionFields, maxIntersectionIdx + 1)
     ) {
       throw Error(
         'Unable to resolve correct type for union. Try adding unique fields to each type or __typename to each resolver',
@@ -361,11 +359,13 @@ export const makeMergedSchema = ({
   schemaOptions = {},
   directives,
   subscriptions = [],
+  includeScalars,
 }: {
   sdls: SdlGlobImports
   services: ServicesGlobImports
   directives: RedwoodDirective[]
   subscriptions: RedwoodSubscription[]
+  includeScalars?: RedwoodScalarConfig
 
   /**
    * A list of options passed to [makeExecutableSchema](https://www.graphql-tools.com/docs/generate-schema/#makeexecutableschemaoptions).
@@ -374,9 +374,16 @@ export const makeMergedSchema = ({
 }) => {
   const sdlSchemas = Object.values(sdls).map(({ schema }) => schema)
 
+  const rootEntries = [rootGqlSchema.schema]
+
+  // We cannot access the getConfig from project-config here so the user must supply it via a config option
+  if (includeScalars?.File !== false) {
+    rootEntries.push(rootGqlSchema.scalarSchemas.File)
+  }
+
   const typeDefs = mergeTypes(
     [
-      rootGqlSchema.schema,
+      ...rootEntries,
       ...directives.map((directive) => directive.schema), // pick out schemas from directives
       ...subscriptions.map((subscription) => subscription.schema), // pick out schemas from subscriptions
       ...sdlSchemas, // pick out the schemas from sdls

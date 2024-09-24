@@ -1,23 +1,20 @@
 #!/usr/bin/env node
 /* eslint-env node, es6*/
 
-import path from "node:path"
-import url from "node:url"
+import path from 'node:path'
+import url from 'node:url'
 
-import fs from "fs-extra"
+import fs from 'fs-extra'
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
-export const validForTests = [
-  "context_functions",
-  "context_graphql",
-]
+export const validForTests = ['context_functions', 'context_graphql']
 
 export function setup({ projectPath }: { projectPath: string }) {
   // Copy over SDL
   fs.copyFileSync(
     path.join(__dirname, 'templates', 'benchmark.sdl.ts'),
-    path.join(projectPath, 'api', 'src', 'graphql', 'benchmark.sdl.ts')
+    path.join(projectPath, 'api', 'src', 'graphql', 'benchmark.sdl.ts'),
   )
 
   // Copy over the service
@@ -26,12 +23,12 @@ export function setup({ projectPath }: { projectPath: string }) {
     'api',
     'src',
     'services',
-    'benchmarks'
+    'benchmarks',
   )
   fs.mkdirSync(benchmarkServicePath)
   fs.copyFileSync(
     path.join(__dirname, 'templates', 'benchmarks.ts'),
-    path.join(benchmarkServicePath, 'benchmarks.ts')
+    path.join(benchmarkServicePath, 'benchmarks.ts'),
   )
 
   // Copy over the function
@@ -39,10 +36,10 @@ export function setup({ projectPath }: { projectPath: string }) {
     projectPath,
     'api',
     'src',
-    'functions'
+    'functions',
   )
   fs.copyFileSync(
     path.join(__dirname, 'templates', 'func.ts'),
-    path.join(benchmarkFunctionPath, 'func.ts')
+    path.join(benchmarkFunctionPath, 'func.ts'),
   )
 }

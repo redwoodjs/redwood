@@ -13,9 +13,15 @@ import chalk from 'chalk'
  */
 export default {
   error: chalk.bold.red,
-  warning: chalk.keyword('orange'),
-  green: chalk.green,
+  warning: chalk.hex('#ffa500'),
+  highlight: chalk.hex('#ffa500'),
+  success: chalk.green,
   info: chalk.grey,
   bold: chalk.bold,
   underline: chalk.underline,
+  note: chalk.blue,
+  tip: chalk.green,
+  important: chalk.magenta,
+  caution: chalk.red,
+  link: chalk.underline,
 }

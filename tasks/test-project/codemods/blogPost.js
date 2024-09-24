@@ -44,7 +44,7 @@ export default (file, api) => {
       j.importSpecifier(j.identifier('Link'), j.identifier('Link')),
       j.importSpecifier(j.identifier('routes'), j.identifier('routes')),
     ],
-    j.stringLiteral('@redwoodjs/router')
+    j.stringLiteral('@redwoodjs/router'),
   )
 
   root.find(j.VariableDeclaration).insertBefore(routerImport)

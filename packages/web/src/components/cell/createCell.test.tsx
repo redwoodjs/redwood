@@ -14,7 +14,7 @@ describe('createCell', () => {
     }
   })
 
-  test('Renders a static Success component', async () => {
+  test('Renders a static Success component', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -31,7 +31,7 @@ describe('createCell', () => {
     screen.getByText(/^Great success!$/)
   })
 
-  test('Renders Success with data', async () => {
+  test('Renders Success with data', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -59,7 +59,7 @@ describe('createCell', () => {
     screen.getByText(/^42$/)
   })
 
-  test('Renders Success if any of the fields have data (i.e. not just the first)', async () => {
+  test('Renders Success if any of the fields have data (i.e. not just the first)', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { users { name } posts { title } }',
@@ -111,7 +111,7 @@ describe('createCell', () => {
     screen.getByText(/kittens/)
   })
 
-  test('Renders default Loading when there is no data', async () => {
+  test('Renders default Loading when there is no data', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -128,7 +128,7 @@ describe('createCell', () => {
     screen.getByText(/^Loading...$/)
   })
 
-  test('Renders custom Loading when there is no data', async () => {
+  test('Renders custom Loading when there is no data', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -146,7 +146,7 @@ describe('createCell', () => {
     screen.getByText(/^Fetching answer...$/)
   })
 
-  test('Renders Success even when `loading` is true if there is data', async () => {
+  test('Renders Success even when `loading` is true if there is data', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -164,7 +164,7 @@ describe('createCell', () => {
     screen.getByText(/^Great success!$/)
   })
 
-  test('Renders Empty if available, and data field is null', async () => {
+  test('Renders Empty if available, and data field is null', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -182,7 +182,7 @@ describe('createCell', () => {
     screen.getByText(/^No one knows$/)
   })
 
-  test('Renders Empty if available, and data field is an empty array', async () => {
+  test('Renders Empty if available, and data field is an empty array', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answers }',
@@ -200,7 +200,7 @@ describe('createCell', () => {
     screen.getByText(/^No one knows$/)
   })
 
-  test('Renders Success even if data is empty when no Empty is available', async () => {
+  test('Renders Success even if data is empty when no Empty is available', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -217,7 +217,7 @@ describe('createCell', () => {
     screen.getByText(/^Empty success$/)
   })
 
-  test('Allows passing children to Success', async () => {
+  test('Allows passing children to Success', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -237,7 +237,7 @@ describe('createCell', () => {
     screen.getByText(/^🦆$/)
   })
 
-  test('Cell props are passed to the query as variables', async () => {
+  test('Cell props are passed to the query as variables', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: `query Greet($name: String!) {
@@ -261,7 +261,7 @@ describe('createCell', () => {
     screen.getByText(/^Hello Bob!$/)
   })
 
-  test('Allows QUERY to be a function', async () => {
+  test('Allows QUERY to be a function', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: ({ variables }) => {
@@ -295,7 +295,7 @@ describe('createCell', () => {
     screen.getByText(/^Call me Lara Croft$/)
   })
 
-  test('Renders Failure when there is an error', async () => {
+  test('Renders Failure when there is an error', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -314,7 +314,7 @@ describe('createCell', () => {
     screen.getByText(/^Sad face :\($/)
   })
 
-  test('Passes error to Failure component', async () => {
+  test('Passes error to Failure component', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -333,7 +333,7 @@ describe('createCell', () => {
     screen.getByText(/^{"msg":"System malfunction"}$/)
   })
 
-  test('Passes error and errorCode to Failure component', async () => {
+  test('Passes error and errorCode to Failure component', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -359,7 +359,7 @@ describe('createCell', () => {
     screen.getByText(/^{"msg":"System malfunction"},code:SIMON_SAYS_NO$/)
   })
 
-  test('Passes children to Failure', async () => {
+  test('Passes children to Failure', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -379,7 +379,7 @@ describe('createCell', () => {
     screen.getByText(/^Child$/)
   })
 
-  test('Throws an error when there is an error if no Failure component exists', async () => {
+  test('Throws an error when there is an error if no Failure component exists', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -410,7 +410,7 @@ describe('createCell', () => {
     console.error = err
   })
 
-  test('Allows overriding of default isDataEmpty', async () => {
+  test('Allows overriding of default isDataEmpty', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -433,7 +433,7 @@ describe('createCell', () => {
     screen.getByText(/^Got nothing$/)
   })
 
-  test('Allows mixing isDataEmpty with custom logic', async () => {
+  test('Allows mixing isDataEmpty with custom logic', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: 'query TestQuery { answer }',
@@ -457,7 +457,7 @@ describe('createCell', () => {
     screen.getByText(/^Got nothing$/)
   })
 
-  test('Allows overriding variables in beforeQuery', async () => {
+  test('Allows overriding variables in beforeQuery', () => {
     const TestCell = createCell({
       // @ts-expect-error - Purposefully using a plain string here.
       QUERY: `query Greet($name: String!) {

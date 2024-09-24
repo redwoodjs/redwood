@@ -3,10 +3,7 @@ import { $ } from 'zx'
 
 import { rw, rwServer, test, testContext } from './vitest.setup.mjs'
 
-describe.each([
-  [[rw, 'serve']],
-  [rwServer],
-])('serve both (%s)', (cmd) => {
+describe.each([[[rw, 'serve']], [rwServer]])('serve both (%s)', (cmd) => {
   describe('webPort', () => {
     it("`--webPort` changes the web server's port", async () => {
       const webPort = 8920

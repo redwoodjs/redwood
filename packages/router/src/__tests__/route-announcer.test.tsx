@@ -3,12 +3,12 @@ import React from 'react'
 import { render, waitFor, act } from '@testing-library/react'
 import { beforeEach, test, expect } from 'vitest'
 
-import { getAnnouncement } from '../a11yUtils'
-import { navigate } from '../history'
-import { namedRoutes as routes } from '../namedRoutes'
-import { Route } from '../Route'
-import RouteAnnouncement from '../route-announcement'
-import { Router } from '../router'
+import { getAnnouncement } from '../a11yUtils.js'
+import { navigate } from '../history.js'
+import { namedRoutes as routes } from '../namedRoutes.js'
+import RouteAnnouncement from '../route-announcement.js'
+import { Route } from '../Route.js'
+import { Router } from '../router.js'
 
 // SETUP
 const HomePage = () => <h1>Home Page</h1>

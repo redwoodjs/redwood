@@ -3,7 +3,10 @@
   "compilerOptions": {
     "strict": true,
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": ["src"],
   "references": [

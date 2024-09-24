@@ -41,7 +41,7 @@ describe('vitePluginOgGen', () => {
   test('should generate rollup inputs for all OG components', async () => {
     // Type cast so TS doesn't complain calling config below
     // because config can be of many types!
-    const plugin = (await vitePluginOgGen()) as {
+    const plugin = vitePluginOgGen() as {
       config: (config: any, env: ConfigEnv) => any
     }
 
@@ -87,7 +87,7 @@ describe('vitePluginOgGen', () => {
       config: expect.any(Function),
     }
 
-    const plugin = await vitePluginOgGen()
+    const plugin = vitePluginOgGen()
 
     expect(plugin).toEqual(expectedPlugin)
   })

@@ -33,7 +33,7 @@ export function spawnCancellable(
   ;(promise as any).cancel = () => {
     try {
       cp.kill()
-    } catch (e) {
+    } catch {
       // intentionally left empty
     }
   }

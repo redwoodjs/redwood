@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/realtime",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -23,26 +23,26 @@
   },
   "dependencies": {
     "@envelop/live-query": "7.0.0",
-    "@graphql-tools/schema": "10.0.3",
-    "@graphql-tools/utils": "10.2.0",
-    "@graphql-yoga/plugin-defer-stream": "3.3.1",
-    "@graphql-yoga/plugin-graphql-sse": "3.3.1",
-    "@graphql-yoga/redis-event-target": "3.0.0",
-    "@graphql-yoga/subscription": "5.0.0",
+    "@graphql-tools/schema": "10.0.6",
+    "@graphql-tools/utils": "10.5.4",
+    "@graphql-yoga/plugin-defer-stream": "3.7.0",
+    "@graphql-yoga/plugin-graphql-sse": "3.7.0",
+    "@graphql-yoga/redis-event-target": "3.0.1",
+    "@graphql-yoga/subscription": "5.0.1",
     "@n1ru4l/graphql-live-query": "0.10.0",
     "@n1ru4l/in-memory-live-query-store": "0.10.0",
-    "graphql": "16.8.1"
+    "graphql": "16.9.0"
   },
   "devDependencies": {
-    "@envelop/core": "5.0.1",
+    "@envelop/core": "5.0.2",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "ioredis": "^5.3.2",
-    "nodemon": "3.1.3",
-    "tsx": "4.15.6",
-    "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "nodemon": "3.1.7",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
   },
   "peerDependencies": {
     "ioredis": "^5.3.2"

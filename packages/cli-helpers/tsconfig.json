@@ -3,18 +3,13 @@
   "compilerOptions": {
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "rootDir": "src",
     "outDir": "dist"
   },
-  "include": ["src"],
+  "include": ["."],
   "references": [
+    { "path": "../framework-tools" },
     { "path": "../telemetry" },
     { "path": "../project-config" }
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "**/__mocks__",
-    "**/__tests__/fixtures",
-  ]
+  "exclude": ["dist", "node_modules", "**/__mocks__", "**/__tests__/fixtures"]
 }

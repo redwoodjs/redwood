@@ -9,7 +9,7 @@ interface SplashPageProps {
   >
 }
 
-const SplashPage = ({
+export const SplashPage = ({
   hasGeneratedRoutes,
   allStandardRoutes: routesMap,
 }: SplashPageProps) => {
@@ -592,5 +592,3 @@ const useVersion = () => {
   }, [])
   return version
 }
-
-export { SplashPage }

@@ -31,12 +31,13 @@ const isIdenticalArray = (a, b) => {
 }
 
 const configureTeardown = async () => {
-  const { getDMMF } = require('@prisma/internals')
+  const { getDMMF, getSchema } = require('@prisma/internals')
   const fs = require('fs')
 
   // @NOTE prisma utils are available in cli lib/schemaHelpers
   // But avoid importing them, to prevent memory leaks in jest
-  const schema = await getDMMF({ datamodelPath: dbSchemaPath })
+  const datamodel = await getSchema(dbSchemaPath)
+  const schema = await getDMMF({ datamodel })
   const schemaModels = schema.datamodel.models.map((m) => m.dbName || m.name)
 
   // check if pre-defined delete order already exists and if so, use it to start
@@ -56,12 +57,15 @@ const configureTeardown = async () => {
 let quoteStyle
 // determine what kind of quotes are needed around table names in raw SQL
 const getQuoteStyle = async () => {
-  const { getConfig: getPrismaConfig } = require('@prisma/internals')
-  const fs = require('fs')
+  const { getConfig: getPrismaConfig, getSchema } = require('@prisma/internals')
+
+  // @NOTE prisma utils are available in cli lib/schemaHelpers
+  // But avoid importing them, to prevent memory leaks in jest
+  const datamodel = await getSchema(dbSchemaPath)
 
   if (!quoteStyle) {
     const config = await getPrismaConfig({
-      datamodel: fs.readFileSync(dbSchemaPath).toString(),
+      datamodel,
     })
 
     switch (config.datasources?.[0]?.provider) {

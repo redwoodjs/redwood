@@ -5,7 +5,7 @@ import {
   getRouteHookBabelPlugins,
   transformWithBabel,
 } from '@redwoodjs/babel-config'
-import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files'
+import { findRouteHooksSrc } from '@redwoodjs/internal/dist/files.js'
 import type { Paths } from '@redwoodjs/project-config'
 import { getPaths } from '@redwoodjs/project-config'
 

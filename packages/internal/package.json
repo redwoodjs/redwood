@@ -1,12 +1,56 @@
 {
   "name": "@redwoodjs/internal",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
     "directory": "packages/internal"
   },
   "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/dev": {
+      "types": "./dist/dev.d.ts",
+      "default": "./dist/dev.js"
+    },
+    "./dist/files": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/files.js": {
+      "types": "./dist/files.d.ts",
+      "default": "./dist/files.js"
+    },
+    "./dist/gql": {
+      "types": "./dist/gql.d.ts",
+      "default": "./dist/gql.js"
+    },
+    "./dist/routes.js": {
+      "types": "./dist/routes.d.ts",
+      "default": "./dist/routes.js"
+    },
+    "./dist/ts2js": {
+      "types": "./dist/ts2js.d.ts",
+      "default": "./dist/ts2js.js"
+    },
+    "./dist/validateSchema": {
+      "types": "./dist/validateSchema.d.ts",
+      "default": "./dist/validateSchema.js"
+    },
+    "./dist/build/api": {
+      "types": "./dist/build/api.d.ts",
+      "default": "./dist/build/api.js"
+    },
+    "./dist/generate/generate": {
+      "types": "./dist/generate/generate.d.ts",
+      "default": "./dist/generate/generate.js"
+    }
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -17,12 +61,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:js && yarn build:types",
+    "build": "tsx ./build.mts && yarn build:types",
     "build:clean-dist": "rimraf 'dist/**/*/__tests__' --glob",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored && yarn build:clean-dist",
     "build:pack": "yarn pack -o redwoodjs-internal.tgz",
-    "build:types": "tsc --build --verbose",
+    "build:types": "tsc --build --verbose ./tsconfig.json",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx\" --ignore dist --exec \"yarn build\"",
+    "check:attw": "yarn attw -P",
+    "check:package": "concurrently npm:check:attw yarn:publint",
     "fix:permissions": "chmod +x dist/generate/generate.js dist/generate/watch.js",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "test": "vitest run",
@@ -33,48 +78,51 @@
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/plugin-transform-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.24.5",
+    "@babel/runtime-corejs3": "7.25.6",
     "@babel/traverse": "^7.22.20",
     "@graphql-codegen/add": "4.0.1",
     "@graphql-codegen/cli": "3.3.1",
-    "@graphql-codegen/client-preset": "4.3.0",
+    "@graphql-codegen/client-preset": "4.3.3",
     "@graphql-codegen/core": "3.1.0",
     "@graphql-codegen/fragment-matcher": "5.0.2",
     "@graphql-codegen/schema-ast": "3.0.1",
-    "@graphql-codegen/typed-document-node": "5.0.7",
+    "@graphql-codegen/typed-document-node": "5.0.9",
     "@graphql-codegen/typescript": "3.0.4",
     "@graphql-codegen/typescript-operations": "3.0.4",
     "@graphql-codegen/typescript-react-apollo": "3.3.7",
     "@graphql-codegen/typescript-resolvers": "3.2.1",
-    "@graphql-tools/documents": "1.0.0",
+    "@graphql-tools/documents": "1.0.1",
     "@redwoodjs/babel-config": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/router": "workspace:*",
-    "@sdl-codegen/node": "0.0.15",
+    "@sdl-codegen/node": "2.0.1",
     "chalk": "4.1.2",
-    "core-js": "3.37.1",
+    "core-js": "3.38.1",
     "deepmerge": "4.3.1",
-    "esbuild": "0.21.3",
+    "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "graphql": "16.8.1",
+    "graphql": "16.9.0",
     "kill-port": "1.6.1",
-    "prettier": "3.3.2",
-    "rimraf": "5.0.7",
+    "prettier": "3.3.3",
+    "rimraf": "6.0.1",
     "source-map": "0.7.4",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.22.11",
+    "systeminformation": "5.23.5",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.6.2"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.5",
+    "@arethetypeswrong/cli": "0.16.4",
+    "@redwoodjs/framework-tools": "workspace:*",
     "@types/fs-extra": "11.0.4",
+    "concurrently": "8.2.2",
     "graphql-tag": "2.12.6",
-    "tsx": "4.15.6",
-    "vitest": "1.6.0"
+    "publint": "0.2.11",
+    "tsx": "4.19.1",
+    "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

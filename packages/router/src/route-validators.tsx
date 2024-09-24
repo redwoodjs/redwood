@@ -6,8 +6,8 @@ import type {
   NotFoundRouteProps,
   RedirectRouteProps,
   RouteProps,
-} from './Route'
-import { Route } from './Route'
+} from './Route.js'
+import { Route } from './Route.js'
 
 function isNodeTypeRoute(
   node: ReactNode,

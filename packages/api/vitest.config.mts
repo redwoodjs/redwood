@@ -5,9 +5,7 @@ export default defineConfig({
     sequence: {
       hooks: 'list',
     },
-    setupFiles: [
-      './vitest.setup.mts'
-    ],
+    setupFiles: ['./vitest.setup.mts'],
     logHeapUsage: true,
   },
 })

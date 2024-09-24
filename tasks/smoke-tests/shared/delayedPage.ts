@@ -3,7 +3,7 @@ import { expect } from '@playwright/test'
 
 export async function checkDelayedPageRendering(
   page: Page,
-  { expectedDelay }: { expectedDelay: number }
+  { expectedDelay }: { expectedDelay: number },
 ) {
   const delayedLogStatements: { message: string; time: number }[] = []
 

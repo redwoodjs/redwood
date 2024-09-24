@@ -12,7 +12,7 @@
 import type { RWRouteManifestItem } from '@redwoodjs/internal'
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import type { MiddlewareReg } from './middleware/types'
+import type { MiddlewareReg } from './middleware/types.js'
 
 export type RWRouteManifest = Record<PathDefinition, RWRouteManifestItem>
 

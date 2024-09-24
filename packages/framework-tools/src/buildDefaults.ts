@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import * as esbuild from 'esbuild'
 import type { BuildOptions as ESBuildOptions } from 'esbuild'
@@ -28,6 +29,7 @@ export const defaultIgnorePatterns = [
   '**/__fixtures__',
   '**/testUtils',
   '**/__testfixtures__',
+  '**/__typetests__',
 ]
 
 interface BuildOptions {
@@ -81,5 +83,90 @@ export async function build({
       'This is unexpected and probably means something is wrong with the ' +
         'build.',
     )
+  }
+}
+
+export function buildCjs() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.cjs.json',
+      outdir: 'dist/cjs',
+    },
+  })
+}
+
+export function buildEsm() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.build.json',
+      format: 'esm',
+    },
+  })
+}
+
+export function buildExternalCjs() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.cjs.json',
+      outdir: 'dist/cjs',
+      packages: 'external',
+    },
+  })
+}
+
+export function buildExternalEsm() {
+  return build({
+    buildOptions: {
+      ...defaultBuildOptions,
+      tsconfig: 'tsconfig.build.json',
+      format: 'esm',
+      packages: 'external',
+    },
+  })
+}
+
+interface CopyAssetsOptions {
+  buildFileUrl: string
+  patterns: string[]
+  ignore?: string[]
+}
+
+export async function copyAssets({
+  buildFileUrl,
+  patterns,
+  ignore,
+}: CopyAssetsOptions) {
+  const rootDirPath = path.dirname(fileURLToPath(buildFileUrl))
+  const srcDirPath = path.join(rootDirPath, 'src')
+  const distDirPath = path.join(rootDirPath, 'dist')
+
+  let pathnames = await fg(patterns, {
+    absolute: true,
+    cwd: srcDirPath,
+    ignore: ignore ?? defaultIgnorePatterns,
+  })
+
+  // For Windows.
+  pathnames = pathnames.map((p) => path.normalize(p))
+
+  for (const pathname of pathnames) {
+    const distPathname = pathname.replace(srcDirPath, distDirPath)
+
+    try {
+      await fs.mkdirp(path.dirname(distPathname))
+      await fs.copyFile(pathname, distPathname)
+      console.log(
+        `Copied asset into dist: ${path.relative(distDirPath, distPathname)}`,
+      )
+    } catch (error) {
+      console.error(
+        `Couldn't copy ${pathname} to ${distPathname}. ` +
+          `(Replaced ${srcDirPath} with ${distDirPath} to get the dist pathname.)`,
+      )
+      throw error
+    }
   }
 }

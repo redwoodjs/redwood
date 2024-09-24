@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useMemo } from 'react'
 
-import type { AuthContextInterface } from '@redwoodjs/auth'
+import type { AuthContextInterface } from '@redwoodjs/auth' with { 'resolution-mode': 'import' }
 import { useNoAuth } from '@redwoodjs/auth'
 
-import type { analyzeRoutes } from './analyzeRoutes'
-import type { ParamType } from './util'
+import type { analyzeRoutes } from './analyzeRoutes.js'
+import type { ParamType } from './util.js'
 
 type UseAuth = () => AuthContextInterface<
   unknown,

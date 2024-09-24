@@ -11,7 +11,7 @@ export const buildRscClientAndServer = async ({
 }: {
   verbose?: boolean
 }) => {
-  // Analyze all files and generate a list of RSCs and RSFs
+  // Analyze all files and generate a list of RSCs and RSAs
   const { clientEntryFiles, serverEntryFiles } = await rscBuildAnalyze()
 
   // Generate the client bundle

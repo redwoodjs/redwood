@@ -68,9 +68,9 @@ if (testProjectPath === undefined) {
       '  yarn build:test-project --link <your test project path>',
       '',
       `Then set the ${chalk.magenta(
-        'REDWOOD_TEST_PROJECT_PATH'
+        'REDWOOD_TEST_PROJECT_PATH',
       )} env var to the path of your test project and run this script again.`,
-    ].join('\n')
+    ].join('\n'),
   )
   process.exit(1)
 }

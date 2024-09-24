@@ -19,8 +19,8 @@ export function convertAddress(address: MailAddress): string {
 
 export function convertAddresses(addresses: MailAddress[]): string[] {
   const result: string[] = []
-  for (let i = 0; i < addresses.length; i++) {
-    result.push(convertAddress(addresses[i]))
+  for (const address of addresses) {
+    result.push(convertAddress(address))
   }
   return result
 }

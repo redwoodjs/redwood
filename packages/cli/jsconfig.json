@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "dist",
-    "emitDeclarationOnly": false,
+    "emitDeclarationOnly": false
   },
   "include": ["src"],
   "references": [

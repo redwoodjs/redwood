@@ -2,6 +2,7 @@
 export const standard = (/* vars, { ctx, req } */) => ({
   blogPosts: [
     {
+      __typename: 'Post' as const,
       id: 42,
       title: 'Mocked title',
       body: 'Mocked body',
@@ -9,11 +10,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
       authorId: 5,
 
       author: {
+        __typename: 'User' as const,
         email: 'five@5.com',
         fullName: 'Five Lastname',
       },
     },
     {
+      __typename: 'Post' as const,
       id: 43,
       title: 'Mocked title',
       body: 'Mocked body',
@@ -21,11 +24,13 @@ export const standard = (/* vars, { ctx, req } */) => ({
       authorId: 5,
 
       author: {
+        __typename: 'User' as const,
         email: 'five@5.com',
         fullName: 'Five Lastname',
       },
     },
     {
+      __typename: 'Post' as const,
       id: 44,
       title: 'Mocked title',
       body: 'Mocked body',
@@ -33,6 +38,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
       authorId: 5,
 
       author: {
+        __typename: 'User' as const,
         email: 'five@5.com',
         fullName: 'Five Lastname',
       },

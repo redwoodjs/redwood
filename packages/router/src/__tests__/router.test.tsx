@@ -23,10 +23,10 @@ import {
   Redirect,
   Route,
   Router,
-} from '../index'
-import { useParams } from '../params'
-import { Set } from '../Set'
-import type { GeneratedRoutesMap } from '../util'
+} from '../index.js'
+import { useParams } from '../params.js'
+import { Set } from '../Set.js'
+import type { GeneratedRoutesMap } from '../util.js'
 
 type UnknownAuthContextInterface = AuthContextInterface<
   unknown,

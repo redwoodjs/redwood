@@ -4,14 +4,12 @@ import { registerFragment } from '@redwoodjs/web/apollo'
 
 import Card from 'src/components/Card'
 
-const { useRegisteredFragment } = registerFragment(
-  gql`
-    fragment Produce_info on Produce {
-      id
-      name
-    }
-  `
-)
+const { useRegisteredFragment } = registerFragment(gql`
+  fragment Produce_info on Produce {
+    id
+    name
+  }
+`)
 
 const ProduceInfo = ({ id }: { id: string }) => {
   const { data, complete } = useRegisteredFragment<Produce>(id)

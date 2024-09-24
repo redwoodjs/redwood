@@ -5,10 +5,8 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": ["src", "ambient.d.ts"],
-  "references": [
-    { "path": "../framework-tools" }
-  ]
+  "references": [{ "path": "../framework-tools" }]
 }

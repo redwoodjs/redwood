@@ -106,7 +106,7 @@ export const useRedwoodOpenTelemetry = (
             onExecuteDone({ result }) {
               if (isAsyncIterable(result)) {
                 executionSpan.end()
-                // eslint-disable-next-line no-console
+
                 console.warn(
                   `Plugin "RedwoodOpenTelemetry" encountered an AsyncIterator which is not supported yet, so tracing data is not available for the operation.`,
                 )

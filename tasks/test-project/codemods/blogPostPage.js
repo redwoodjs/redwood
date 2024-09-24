@@ -16,13 +16,14 @@ export default (file, api) => {
 
   const importComponent = j.importDeclaration(
     [j.importDefaultSpecifier(j.identifier('BlogPostCell'))],
-    j.stringLiteral('src/components/BlogPostCell')
+    j.stringLiteral('src/components/BlogPostCell'),
   )
 
+  // Remove the `{ Link, routes }` imports that are generated and unused
   root
     .find(j.ImportDeclaration, {
       source: {
-        type: 'Literal',
+        type: 'StringLiteral',
         value: '@redwoodjs/router',
       },
     })

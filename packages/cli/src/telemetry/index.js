@@ -78,7 +78,6 @@ export async function startTelemetry() {
       for (const signal of ['SIGTERM', 'SIGINT', 'SIGHUP']) {
         process.on(signal, () => {
           if (process.listenerCount(signal) === 1) {
-            console.log(`Received ${signal} signal, exiting...`)
             process.exit()
           }
         })
