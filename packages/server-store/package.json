@@ -24,7 +24,7 @@
   "dependencies": {
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/cookie-jar": "workspace:*",
-    "esbuild": "0.23.1",
+    "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0"
   },
