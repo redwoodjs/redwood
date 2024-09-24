@@ -1,12 +1,31 @@
 # Deployment
 
-## TODO Add note about all the providers we support (but just use grove)
-
 Are you ready for the quickest, simplest deployment you've ever seen? There are plenty of hosting providers for apps like Redwood, but they all seem to have drawbacks in one way or another. So, we built our own.
 
 ## Grove
 
 Grove is a hosting platform specifically built by the Redwood core team to run Redwood applications. We host your web side, api side, and database. You don't even have to sign up for an account to deploy an app! In fact, let's do that now. Our site will be online in less than 5 minutes, guaranteed. Ready...GO!
+
+:::info More Deployment Options
+
+Out of the box, Redwood can deploy to a whole range of hosting providers including:
+
+- [Baremetal](/docs/deploy/baremetal) (physical server that you have SSH access to)
+- [Coherence](/docs/deploy/coherence)
+- [Flightcontrol](/docs/deploy/flightcontrol)
+- [Netlify](/docs/deploy/netlify)
+- [Render](/docs/deploy/render)
+- [Vercel](/docs/deploy/vercel)
+
+We're going with Grove here because it's the simplest and easiest for a Redwood app.
+
+:::
+
+:::danger Grove is in alpha!
+
+Grove is currently under development and is not meant to your production-ready application!
+
+:::
 
 ## Install the CLI
 
@@ -57,7 +76,23 @@ Grove collected all the code for your app and sent it to a "builder" container t
 
 ## Claiming Your App
 
-That gets our site online, but there's no way to check on the status of our site, watch logs, set ENV vars, etc. To do that, you'll need to claim your app by creating an account—in addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that link and you'll be ready to go!
+That gets our site online, but there's no way to check on the status of our site, watch logs, set ENV vars, etc. To do that, you'll need to claim your app by creating an account—in addition to the URL you opened above, the CLI also returned a URL to claim your account. Follow that second link from the deploy output, create a login (or use GitHub) and you should see your Grove dashboard:
+
+![grove dashboard](/img/tutorial/grove-dashboard.png)
+
+To link the Grove CLI to your claimed app, run the following:
+
+```bash
+grove login
+```
+
+You'll be taken to your browser to authorize access. Now your `grove` CLI is now tied to your account. You'll still need to go to the "Claim" URL any time you deploy a _new_ app, but you won't have to login again.
+
+:::info Error on redeploy?
+
+When trying to re-deploy an app that you have claimed, you'll need to have run `grove login` first so we know that you have permission to deploy to that host again!
+
+:::
 
 ## Where are my blog posts?
 
@@ -69,7 +104,20 @@ You may have noticed a glaring security hole in our build (one that we just expl
 
 dbAuth provides an API for signup and login that the client knows how to call, but if someone were crafty enough they could make their own API calls to that same endpoint and still create a new user even without the signup page! Ahhhh! We finally made it through this long (but fun!) tutorial, can't we just take a break and put our feet up? Unfortunately, the war against bad actors never really ends.
 
-To close this hole, check out `api/src/functions/auth.js`, this is where the configuration for dbAuth lives. Take a gander at the `signupOptions` object, specifically the `handler()` function. This defines what to do with the user data that's submitted on the signup form. If you simply have this function return `false`, instead of creating a user, we will have effectively shut the door on the API signup hack.
+To close this hole, check out `api/src/functions/auth.js`, this is where the configuration for dbAuth lives. Take a gander at the `signupOptions` object, specifically the `handler()` function. This defines what to do with the user data that's submitted on the signup form. If you simply have this function return `false`, instead of creating a user, we will have effectively shut the door on the API signup hack:
+
+```js
+const signupOptions = {
+  // highlight-start
+  handler: () => {
+    return false
+  },
+  // highlight-end
+
+  // ...
+```
+
+The signup page itself is still visible, however. To remove it completely, remove the `<Route>` in the Router, and remove the "Don't have an acocunt? Sign up!" link on the login page.
 
 Be sure to save your changes, then run `grove deploy` to push the changes live. Take that, hackers!
 
