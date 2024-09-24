@@ -57,41 +57,33 @@ yarn rw g service users
 
 Now that you have the file, let's add the `generateToken` function.
 
-```javascript {21} title="/api/src/services/users/users.js"
-// add this import to the top of the file
-import CryptoJS from 'crypto-js'
+```javascript title="/api/src/services/users/users.js"
+// add the following two imports to the top of the file
+import crypto from 'node:crypto'
+import { hashPassword } from '@redwoodjs/auth-dbauth-api'
+
 // add this to the bottom of the file
 export const generateLoginToken = async ({ email }) => {
   try {
     // look up if the user exists
-    let lookupUser = await db.user.findFirst({ where: { email } })
+    const lookupUser = await db.user.findFirst({ where: { email } })
 
     if (!lookupUser) {
       return { message: 'Login Request received' }
     }
+
     // here we're going to generate a random password of 6 numbers
-    // here we're going to generate a random password of 6 numbers
-    let randomNumber = (() => {
-      let random = CryptoJS.lib.WordArray.random(6)
-      let randomString = random.toString()
-      let sixDigitNumber = randomString.replace(/\D/g, '')
-      if (sixDigitNumber.length < 6) {
-        sixDigitNumber = sixDigitNumber.padStart(6, '0')
-      }
-      if (sixDigitNumber.length > 6) {
-        sixDigitNumber = sixDigitNumber.slice(0, 6)
-      }
-      return sixDigitNumber.toString()
-    })()
+    const randomNumber = crypto
+      .randomInt(0, 1_000_000)
+      .toString()
+      .padStart(6, '0')
     console.log({ randomNumber }) // email the user this number
-    let salt = CryptoJS.lib.WordArray.random(30)
-    let loginToken = CryptoJS.PBKDF2(randomNumber, salt, {
-      keySize: 256 / 32,
-    }).toString()
+
+    const [loginToken, salt] = hashPassword(randomNumber)
     // now we'll update the user with the new salt and loginToken
-    let loginTokenExpiresAt = new Date()
+    const loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
-    let data = {
+    const data = {
       salt,
       loginToken,
       loginTokenExpiresAt,
@@ -113,7 +105,7 @@ export const generateLoginToken = async ({ email }) => {
 
 In addition to the new function, we need to add it to the sdl file. While we're here let's also ensure we do not expose the loginToken. This file may be users.sdl.js or users.sdl.ts depending on if you set up Redwood to use JavaScript or TypeScript.
 
-```javascript {21} title="/api/src/graphql/users.sdl.js"
+```javascript title="/api/src/graphql/users.sdl.js"
 export const schema = gql`
   type User {
     id: Int!
@@ -226,7 +218,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 const GENERATE_LOGIN_TOKEN = gql`
   mutation generateLoginToken($email: String!) {
@@ -259,7 +251,7 @@ const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
 
   return (
     <>
-      <MetaTags title="Login" />
+      <Metadata title="Login" />
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
@@ -339,7 +331,7 @@ import {
   FieldError,
 } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -366,7 +358,7 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
 
   return (
     <>
-      <MetaTags title="Login" />
+      <Metadata title="Login" />
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />
         <div className="rw-scaffold rw-login-container">
@@ -460,7 +452,7 @@ yarn rw g page LoginPasswordless
 import { useEffect, useState } from 'react'
 
 import { useLocation } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 import LoginPasswordlessForm from 'src/components/LoginPasswordlessForm/LoginPasswordlessForm'
 import LoginPasswordlessTokenForm from 'src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm'
@@ -488,7 +480,7 @@ const LoginPasswordlessPage = () => {
 
   return (
     <>
-      <MetaTags
+      <Metadata
         title="LoginPasswordless"
         description="LoginPasswordless page"
       />
@@ -530,7 +522,7 @@ import {
   Submit,
 } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -577,7 +569,7 @@ const SignupPage = () => {
 
   return (
     <>
-      <MetaTags title="Signup" />
+      <Metadata title="Signup" />
 
       <main className="rw-main">
         <Toaster toastOptions={{ className: 'rw-toast', duration: 6000 }} />

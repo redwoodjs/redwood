@@ -43,14 +43,14 @@
     "@supabase/ssr": "0.5.1"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/graphql-server": "workspace:*",
     "@types/aws-lambda": "8.10.145",
     "concurrently": "8.2.2",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "ts-toolbelt": "9.6.0",
     "tsx": "4.19.1",
     "typescript": "5.6.2",

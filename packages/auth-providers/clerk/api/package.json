@@ -42,12 +42,12 @@
     "@clerk/clerk-sdk-node": "4.13.21"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.16.2",
+    "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/aws-lambda": "8.10.145",
     "concurrently": "8.2.2",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
     "vitest": "2.0.5"

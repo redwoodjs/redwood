@@ -8,14 +8,13 @@ import process from 'node:process'
 import { hideBin } from 'yargs/helpers'
 import yargs from 'yargs/yargs'
 
-import { loadEnvFiles } from '@redwoodjs/cli-helpers/loadEnvFiles'
-
 import { PROCESS_TITLE_PREFIX } from '../consts.js'
 import type { Worker } from '../core/Worker.js'
 import { WorkerConfigIndexNotFoundError } from '../errors.js'
 import { loadJobsManager } from '../loaders.js'
+import { setupEnv } from '../setupEnv.js'
 
-loadEnvFiles()
+setupEnv()
 
 const parseArgs = (argv: string[]) => {
   return yargs(hideBin(argv))
