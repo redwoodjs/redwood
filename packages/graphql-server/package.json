@@ -53,7 +53,7 @@
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/realtime": "workspace:*",
     "@types/aws-lambda": "8.10.145",
-    "@types/jsonwebtoken": "9.0.6",
+    "@types/jsonwebtoken": "9.0.7",
     "@types/lodash": "4.17.7",
     "@types/uuid": "10.0.0",
     "@whatwg-node/fetch": "0.9.21",
