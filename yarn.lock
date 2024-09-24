@@ -8796,7 +8796,7 @@ __metadata:
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vite: "npm:5.4.7"
-    vite-plugin-cjs-interop: "npm:2.1.3"
+    vite-plugin-cjs-interop: "npm:2.1.4"
     vite-plugin-node-polyfills: "npm:0.22.0"
     vitest: "npm:2.0.5"
     ws: "npm:8.18.0"
@@ -29656,16 +29656,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-cjs-interop@npm:2.1.3":
-  version: 2.1.3
-  resolution: "vite-plugin-cjs-interop@npm:2.1.3"
+"vite-plugin-cjs-interop@npm:2.1.4":
+  version: 2.1.4
+  resolution: "vite-plugin-cjs-interop@npm:2.1.4"
   dependencies:
     acorn: "npm:^8.12.1"
     acorn-import-assertions: "npm:^1.9.0"
     estree-walker: "npm:^3.0.3"
     magic-string: "npm:^0.30.11"
     minimatch: "npm:^10.0.1"
-  checksum: 10c0/e08f416279fcabe082f42501d859995cc9d3dc593339e8c01473e10997ea940c002afe5e3977ecf98680966d759d23c0ff4f1d05100003c67b70544f133dc415
+  checksum: 10c0/bd8e5f3a6dd062b3739459457c8ae462b729ccd32a5e47409a55328a2e47863b49cbe9d7e89343a49424a6077a938dfb3d34bb79198c978a7ba2455db3190f48
   languageName: node
   linkType: hard
 
