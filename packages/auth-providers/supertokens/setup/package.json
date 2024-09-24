@@ -47,7 +47,7 @@
     "@types/yargs": "17.0.33",
     "concurrently": "8.2.2",
     "memfs": "4.12.0",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
     "vitest": "2.0.5"

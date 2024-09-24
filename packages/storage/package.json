@@ -64,7 +64,7 @@
     "@types/mime-types": "2.1.4",
     "concurrently": "8.2.2",
     "esbuild": "0.23.1",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "tstyche": "2.1.1",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
