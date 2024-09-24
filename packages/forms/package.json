@@ -48,7 +48,7 @@
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
     "nodemon": "3.1.4",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tsx": "4.19.1",
