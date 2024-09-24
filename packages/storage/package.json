@@ -63,7 +63,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/mime-types": "2.1.4",
     "concurrently": "8.2.2",
-    "esbuild": "0.23.1",
+    "esbuild": "0.24.0",
     "publint": "0.2.11",
     "tstyche": "2.1.1",
     "tsx": "4.19.1",
