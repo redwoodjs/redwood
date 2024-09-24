@@ -94,7 +94,7 @@ When trying to re-deploy an app that you have claimed, you'll need to have run `
 
 :::
 
-You may notice a big scary red timer at the top of your dashboard! This is a countdown until your site expires. While Grove is in alpha/beta we are only allowing sites to persist for 48 hours (but that should be plenty of time to finish the tutorial, RIGHT?). Soon, we will extend this timer and we will notify Grove members when that time comes. In the meantime, if you do need more time for your app, you can contact us at [support@grove.dev](support@grove.dev) with your app's subdomain and we can extend your time!
+You may notice a big scary red timer at the top of your dashboard! This is a countdown until your site expires. While Grove is in alpha/beta we are only allowing sites to persist for 48 hours (but that should be plenty of time to finish the tutorial, RIGHT?). Soon, we will extend this timer and we will notify Grove members when that time comes. In the meantime, if you do need more time for your app, you can contact us at [support@grove.dev](mailto:support@grove.dev?subject=I%20need%20more%20time!&body=I%20could%20use%20a%20little%20more%20time%20on%20my%20Grove%20site:%20[subdomain].grove.dev) with your app's subdomain and we can extend your time!
 
 ## Where are my blog posts?
 
