@@ -373,11 +373,47 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       {
         options: { persistentOutput: true },
         title: 'Add utility functions used by RedwoodUI',
-        task: async () => {
-          // TODO add web/src/lib/{utils.ts} to the project
-          throw new Error(
-            'Add utility functions used by RedwoodUI — Not implemented',
+        task: async (_ctx, task) => {
+          // TODO add web/src/lib/utils.{ts/js} to the project
+
+          const projectRWUIUtilsPathTS = path.join(
+            rwPaths.web.src,
+            'lib/uiUtils.ts',
           )
+          const projectRWUIUtilsPathJS = path.join(
+            rwPaths.web.src,
+            'lib/uiUtils.js',
+          )
+
+          let utilsAlreadyInstalled = false
+          if (
+            fs.existsSync(projectRWUIUtilsPathTS) ||
+            fs.existsSync(projectRWUIUtilsPathJS)
+          ) {
+            utilsAlreadyInstalled = true
+          }
+
+          let shouldOverwrite = force ? true : false
+
+          // give user chance to switch overwrite to true
+          if (utilsAlreadyInstalled && !shouldOverwrite) {
+            shouldOverwrite = await task.prompt({
+              type: 'confirm',
+              message:
+                "Looks like you've already got the RWUI utilities. Do you want to overwrite them? This may be helpful, for example if you've made changes and want to reset them or if we've made updates.",
+              initial: false,
+            })
+          }
+
+          if (utilsAlreadyInstalled && !shouldOverwrite) {
+            task.skip("RWUI's utility functions are already installed")
+            return
+          } else {
+            const rwuiUtilsContent = await fetchFromRWUIRepo(
+              'web/src/lib/uiUtils.ts',
+            )
+            fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
+          }
         },
       },
       {
