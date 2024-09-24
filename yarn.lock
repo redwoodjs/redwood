@@ -7245,7 +7245,7 @@ __metadata:
     "@redwoodjs/web-server": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
     "@types/lodash": "npm:4.17.9"
-    "@types/qs": "npm:6.9.15"
+    "@types/qs": "npm:6.9.16"
     "@types/split2": "npm:4.2.3"
     "@types/yargs": "npm:17.0.33"
     chalk: "npm:4.1.2"
@@ -11187,10 +11187,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*, @types/qs@npm:6.9.15, @types/qs@npm:^6.9.5":
-  version: 6.9.15
-  resolution: "@types/qs@npm:6.9.15"
-  checksum: 10c0/49c5ff75ca3adb18a1939310042d273c9fc55920861bd8e5100c8a923b3cda90d759e1a95e18334092da1c8f7b820084687770c83a1ccef04fb2c6908117c823
+"@types/qs@npm:*, @types/qs@npm:6.9.16, @types/qs@npm:^6.9.5":
+  version: 6.9.16
+  resolution: "@types/qs@npm:6.9.16"
+  checksum: 10c0/a4e871b80fff623755e356fd1f225aea45ff7a29da30f99fddee1a05f4f5f33485b314ab5758145144ed45708f97e44595aa9a8368e9bbc083932f931b12dbb6
   languageName: node
   linkType: hard
 
