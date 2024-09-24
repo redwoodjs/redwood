@@ -425,9 +425,10 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           // We can first get a list of all the files in RWUI's web/src/ui directory,
           // and then filter out the ones that are already in the project.
           // Then, we can provide a list of pending files to the user, and ask them if they want to add them. (maybe? meh)
-          throw new Error(
-            'Add RedwoodUI components to your project — Not implemented',
-          )
+
+          // first, get list of components from repo
+          const listOfComponentFolders = await fetchFromRWUIRepo('web/src/ui')
+          console.log('listOfComponentFolders', listOfComponentFolders)
         },
       },
       {
@@ -571,8 +572,12 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
  * Uses the GitHub REST API to fetch the file, rather than Octokit,
  * because Octokit both adds a bunch of overhead
  * and was causing ESM/CJS related build issues that I didn't want to deal with :)
+ *
+ * @returns string, if path is to file, or array of {name: string, path: string} if path is to a directory
  */
-const fetchFromRWUIRepo = async (path: string) => {
+const fetchFromRWUIRepo = async (
+  path: string,
+): Promise<string | { name: string; path: string }> => {
   const owner = 'arimendelow'
   const repo = 'RedwoodUI'
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
@@ -594,16 +599,16 @@ const fetchFromRWUIRepo = async (path: string) => {
 
   const data = await res.json()
 
-  // Content comes in base64 encoded
-  // Can confirm this by checking data.encoding === 'base64'
-  const fileContent = Buffer.from(data.content, 'base64').toString('utf8')
-  return fileContent
-}
-
-interface ImportantTailwindConfigData {
-  darkModeConfig: string | null
-  colorsConfig: string | null
-  pluginsConfig: string | null
+  if (Array.isArray(data)) {
+    // If data is an array, it's a list of file contents. Return an array of name/path.
+    return data.map((item: any) => ({ name: item.name, path: item.path }))
+  } else {
+    // If data is just an object, it's a file. Decode the encoded content and return it.
+    // Content comes in base64 encoded
+    // Can confirm this by checking data.encoding === 'base64'
+    const fileContent = Buffer.from(data.content, 'base64').toString('utf8')
+    return fileContent
+  }
 }
 
 /**
