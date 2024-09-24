@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/lodash": "4.17.7",
+    "@types/lodash": "4.17.9",
     "publint": "0.2.10",
     "tsx": "4.19.1"
   },
