@@ -90,7 +90,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.25.0",
+    "@babel/runtime-corejs3": "7.25.6",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "core-js": "3.38.1",
@@ -100,14 +100,14 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.16.4",
-    "@babel/cli": "7.24.8",
+    "@babel/cli": "7.25.6",
     "@babel/core": "^7.22.20",
     "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/jest-dom": "6.5.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "tstyche": "2.1.1",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
