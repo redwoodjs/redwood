@@ -60,7 +60,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/generator": "7.25.0",
+    "@babel/generator": "7.25.6",
     "@babel/parser": "^7.22.16",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/auth": "workspace:*",
@@ -109,7 +109,7 @@
     "concurrently": "8.2.2",
     "glob": "11.0.0",
     "memfs": "4.12.0",
-    "publint": "0.2.10",
+    "publint": "0.2.11",
     "rollup": "4.22.4",
     "tsx": "4.19.1",
     "typescript": "5.6.2",

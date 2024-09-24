@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "8.5.0",
-    "eslint": "8.57.0"
+    "eslint": "8.57.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
