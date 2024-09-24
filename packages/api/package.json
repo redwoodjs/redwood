@@ -50,7 +50,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@prisma/client": "5.19.1",
+    "@prisma/client": "5.20.0",
     "@whatwg-node/fetch": "0.9.21",
     "cookie": "0.6.0",
     "humanize-string": "2.1.0",
@@ -62,7 +62,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/aws-lambda": "8.10.145",
-    "@types/jsonwebtoken": "9.0.6",
+    "@types/jsonwebtoken": "9.0.7",
     "@types/memjs": "1",
     "@types/pascalcase": "1.0.3",
     "@types/split2": "4.2.3",
