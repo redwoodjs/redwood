@@ -419,16 +419,82 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       {
         options: { persistentOutput: true },
         title: 'Add RedwoodUI components to your project',
-        task: async () => {
+        task: async (_ctx, task) => {
           // TODO ahhhh finally the meat and potatoes of the setup.
           // We need to add the components to the project.
           // We can first get a list of all the files in RWUI's web/src/ui directory,
           // and then filter out the ones that are already in the project.
           // Then, we can provide a list of pending files to the user, and ask them if they want to add them. (maybe? meh)
 
-          // first, get list of components from repo
-          const listOfComponentFolders = await fetchFromRWUIRepo('web/src/ui')
-          console.log('listOfComponentFolders', listOfComponentFolders)
+          // top-level components
+          const listOfComponentFolders = (await fetchFromRWUIRepo(
+            'web/src/ui',
+          )) as { name: string; path: string }[]
+          // components in sub-directories
+          const listOfFormComponentFolders = (await fetchFromRWUIRepo(
+            'web/src/ui/formFields',
+          )) as { name: string; path: string }[]
+
+          // filter to only directory names that start with a capital letter, as these are the ones that are components
+          const componentsAvailable = listOfComponentFolders.filter((val) =>
+            /^[A-Z]/.test(val.name),
+          )
+          const formComponentsAvailable = listOfFormComponentFolders.filter(
+            (val) => /^[A-Z]/.test(val.name),
+          )
+
+          const selectedComponents = await task.prompt<{
+            [key: string]: boolean
+          }>({
+            type: 'multiselect',
+            message:
+              'Select the components you want to add to your project (form fields are next; type A to select all):' +
+              c.warning(
+                '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
+              ),
+            choices: [
+              ...componentsAvailable.map((component) => component.name),
+            ],
+          })
+
+          const selectedFormComponents = await task.prompt<{
+            [key: string]: boolean
+          }>({
+            type: 'multiselect',
+            message:
+              'Select the form components you want to add to your project (type A to select all):' +
+              c.warning(
+                '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
+              ),
+            choices: [
+              ...formComponentsAvailable.map((component) => component.name),
+            ],
+          })
+
+          console.log('selectedComponents', selectedComponents)
+          console.log('selectedFormComponents', selectedFormComponents)
+
+          // const componentsToAdd = Object.keys(selectedComponents).filter(
+          //   (key) => selectedComponents[key],
+          // )
+
+          // if (componentsToAdd.length === 0) {
+          //   task.skip('No components selected to add')
+          //   return
+          // }
+
+          // for (const componentPath of componentsToAdd) {
+          //   const componentContent = await fetchFromRWUIRepo(componentPath)
+          //   const componentName = path.basename(componentPath)
+          //   const destinationPath = path.join(
+          //     rwPaths.web.src,
+          //     'ui',
+          //     componentName,
+          //   )
+
+          //   fs.ensureDirSync(path.dirname(destinationPath))
+          //   fs.writeFileSync(destinationPath, componentContent as string)
+          // }
         },
       },
       {
@@ -577,7 +643,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
  */
 const fetchFromRWUIRepo = async (
   path: string,
-): Promise<string | { name: string; path: string }> => {
+): Promise<string | { name: string; path: string }[]> => {
   const owner = 'arimendelow'
   const repo = 'RedwoodUI'
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
