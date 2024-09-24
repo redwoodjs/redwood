@@ -5,6 +5,13 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@altano/repository-tools@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@altano/repository-tools@npm:0.1.1"
+  checksum: 10c0/2c24182033111262d923b702aef5d659403d66f513d084677aba8058969d06d2814921501fcc1d382634f500d231ffb0dd9b472ca09b93ba11f52426cd66a385
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/code-frame@npm:7.24.7"
@@ -2122,9 +2129,10 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-package-json@npm:^0.15.2":
-  version: 0.15.2
-  resolution: "eslint-plugin-package-json@npm:0.15.2"
+  version: 0.15.3
+  resolution: "eslint-plugin-package-json@npm:0.15.3"
   dependencies:
+    "@altano/repository-tools": "npm:^0.1.1"
     detect-indent: "npm:6.1.0"
     detect-newline: "npm:3.1.0"
     package-json-validator: "npm:^0.6.5"
@@ -2135,7 +2143,7 @@ __metadata:
   peerDependencies:
     eslint: ">=8.0.0"
     jsonc-eslint-parser: ^2.0.0
-  checksum: 10c0/c2ec0e76169ed29b468d1c36642496f2d1c0c7f5e60cc768d0cea2620362813c9668d1f0fb180582de62fd39febd3df0ea5aa7f3ec7734f96f553ee61b427293
+  checksum: 10c0/aedf3ed001d3ce19ca085ae332266832a7be92944e3b38836b61786961a7fa3c160a169761edc0e6c4f68d27ee4497cb34032ee1da691951d70526d084e8face
   languageName: node
   linkType: hard
 
