@@ -26,7 +26,6 @@ export const DEFAULT_SERVER_CONFIG = {
   monitorCommand: 'pm2',
   sides: ['api', 'web'],
   keepReleases: 5,
-  freeSpaceRequired: 2048,
 }
 
 export const command = 'baremetal [environment]'
@@ -173,7 +172,7 @@ export const verifyServerConfig = (config) => {
     throwMissingConfig('repo')
   }
 
-  if (!/^\d+$/.test(config.freeSpaceRequired)) {
+  if (config.freeSpaceRequired && !/^\d+$/.test(config.freeSpaceRequired)) {
     throw new Error('"freeSpaceRequired" must be an integer >= 0')
   }
 
@@ -410,9 +409,21 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
           // This will only show if --verbose is passed
           task.output = `Available disk space: ${dfMb}MB`
 
-          const freeSpaceRequired = parseInt(serverConfig.freeSpaceRequired, 10)
+          const freeSpaceRequired = parseInt(
+            serverConfig.freeSpaceRequired ?? 2048,
+            10,
+          )
 
           if (dfMb < freeSpaceRequired) {
+            if (typeof serverConfig.freeSpaceRequired === 'undefined') {
+              return task.skip(
+                c.warning(
+                  'Warning: Your server is running low on disk space. (' +
+                    `${Math.round(dfMb)}MB available)`,
+                ),
+              )
+            }
+
             throw new Error(
               `Not enough disk space. You need at least ${freeSpaceRequired}` +
                 'MB free space to continue.',

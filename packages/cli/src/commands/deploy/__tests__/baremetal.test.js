@@ -267,9 +267,9 @@ describe('serverConfigWithDefaults', () => {
     expect(config.branch).toEqual('moon')
   })
 
-  it('provides default freeSpaceRequired', () => {
+  it('does not provide default freeSpaceRequired', () => {
     const config = baremetal.serverConfigWithDefaults({}, {})
-    expect(config.freeSpaceRequired).toEqual(2048)
+    expect(config.freeSpaceRequired).toBeUndefined()
   })
 })
 
@@ -688,7 +688,30 @@ describe('deployTasks', () => {
     expect(tasks[0].skip()).toBeTruthy()
   })
 
-  it('throws an error if there is not enough available space on the server', () => {
+  it('warns if there is not enough available space on the server and freeSpaceRequired is not configured', async () => {
+    const ssh = {
+      exec: () => ({ stdout: 'df:1875' }),
+    }
+
+    const { freeSpaceRequired: _, ...serverConfig } = defaultServerConfig
+
+    const tasks = baremetal.deployTasks(
+      defaultYargs,
+      ssh,
+      { ...serverConfig, sides: ['api', 'web'] },
+      {}, // lifecycle
+    )
+
+    await tasks[0].task({}, mockTask)
+
+    expect(mockTask.skip).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Warning: Your server is running low on disk space.',
+      ),
+    )
+  })
+
+  it('throws an error if there is less available space on the server than freeSpaceRequired', () => {
     const ssh = {
       exec: () => ({ stdout: 'df:1875' }),
     }
