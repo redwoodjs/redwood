@@ -63,6 +63,20 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
 
   const projectWebTSConfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
 
+  let usingStorybook = false
+  // The main file can be either JS or TS, even if the project is TS
+  const storybookMainPathJS = path.join(rwPaths.web.storybook, 'main.js')
+  const storybookMainPathTS = path.join(rwPaths.web.storybook, 'main.ts')
+  let storybookMainPath: string | null = null
+  if (fs.existsSync(storybookMainPathJS)) {
+    storybookMainPath = storybookMainPathJS
+  } else if (fs.existsSync(storybookMainPathTS)) {
+    storybookMainPath = storybookMainPathTS
+  }
+  if (storybookMainPath) {
+    usingStorybook = true
+  }
+
   const tasks = new Listr(
     [
       {
@@ -447,9 +461,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             (val) => /^[A-Z]/.test(val.name),
           )
 
-          const selectedComponents = await task.prompt<{
-            [key: string]: boolean
-          }>({
+          const selectedComponents = await task.prompt<string[]>({
             type: 'multiselect',
             message:
               'Select the components you want to add to your project (form fields are next; type A to select all):' +
@@ -461,9 +473,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             ],
           })
 
-          const selectedFormComponents = await task.prompt<{
-            [key: string]: boolean
-          }>({
+          const selectedFormComponents = await task.prompt<string[]>({
             type: 'multiselect',
             message:
               'Select the form components you want to add to your project (type A to select all):' +
@@ -474,6 +484,58 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               ...formComponentsAvailable.map((component) => component.name),
             ],
           })
+
+          return task.newListr([
+            ...selectedComponents.map((componentToInstall) => ({
+              options: { persistentOutput: true },
+              title: `Install component ${componentToInstall}`,
+              task: async () => {
+                // need to get both the .tsx and .stories.tsx files
+                const componentFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.tsx`
+                const componentStoriesFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.stories.tsx`
+                const componentContent =
+                  await fetchFromRWUIRepo(componentFilePath)
+                const componentStoriesContent = await fetchFromRWUIRepo(
+                  componentStoriesFilePath,
+                )
+                fs.writeFileSync(componentFilePath, componentContent as string)
+                fs.writeFileSync(
+                  componentStoriesFilePath,
+                  componentStoriesContent as string,
+                )
+              },
+            })),
+            ...selectedFormComponents.map((formComponentToInstall) => ({
+              options: { persistentOutput: true },
+              title: `Install form component${formComponentToInstall}`,
+              task: async () => {
+                // need to get both the .tsx and .stories.tsx files
+                const componentFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.tsx`
+                const componentStoriesFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.stories.tsx`
+                const componentContent =
+                  await fetchFromRWUIRepo(componentFilePath)
+                const componentStoriesContent = await fetchFromRWUIRepo(
+                  componentStoriesFilePath,
+                )
+                fs.writeFileSync(componentFilePath, componentContent as string)
+                fs.writeFileSync(
+                  componentStoriesFilePath,
+                  componentStoriesContent as string,
+                )
+              },
+            })),
+            ...(selectedFormComponents.length > 0
+              ? [
+                  {
+                    options: { persistentOutput: true },
+                    title: 'Install shared dependencies for form components',
+                    task: async () => {
+                      // Placeholder for installing shared dependencies for form components
+                    },
+                  },
+                ]
+              : []),
+          ])
 
           console.log('selectedComponents', selectedComponents)
           console.log('selectedFormComponents', selectedFormComponents)
@@ -505,28 +567,11 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         options: { persistentOutput: true },
         title: 'Set up Storybook for RedwoodUI',
         skip: async () => {
-          if (force) {
+          if (usingStorybook && force) {
             return false
           }
-          // The main file can be either JS or TS, even if the project is TS
-          const storybookMainPathJS = path.join(
-            rwPaths.web.storybook,
-            'main.js',
-          )
-          const storybookMainPathTS = path.join(
-            rwPaths.web.storybook,
-            'main.ts',
-          )
 
-          let storybookMainPath: string | null = null
-
-          if (fs.existsSync(storybookMainPathJS)) {
-            storybookMainPath = storybookMainPathJS
-          } else if (fs.existsSync(storybookMainPathTS)) {
-            storybookMainPath = storybookMainPathTS
-          }
-
-          if (!storybookMainPath) {
+          if (!usingStorybook) {
             return 'This project is not using Storybook'
           }
 
@@ -541,30 +586,10 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
                 if (force) {
                   return false
                 }
-                // The main file can be either JS or TS, even if the project is TS
-                const storybookMainPathJS = path.join(
-                  rwPaths.web.storybook,
-                  'main.js',
-                )
-                const storybookMainPathTS = path.join(
-                  rwPaths.web.storybook,
-                  'main.ts',
-                )
-
-                let storybookMainPath: string | null = null
-
-                if (fs.existsSync(storybookMainPathJS)) {
-                  storybookMainPath = storybookMainPathJS
-                } else if (fs.existsSync(storybookMainPathTS)) {
-                  storybookMainPath = storybookMainPathTS
-                }
-
-                if (!storybookMainPath) {
-                  return 'This project is not using Storybook'
-                }
 
                 const storybookMainContent = fs.readFileSync(
-                  storybookMainPath,
+                  // We know the user is using Storybook because we checked above
+                  storybookMainPath as string,
                   'utf-8',
                 )
 
@@ -586,31 +611,47 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             },
             {
               options: { persistentOutput: true },
-              title: 'Add children placeholder utility component',
+              title: 'Add story utility components',
               skip: async () => {
-                const storybookPlaceholderComponentPathJSX = path.join(
-                  rwPaths.web.storybook,
-                  'utilities/ChildrenPlaceholder.jsx',
+                // TODO this hardcodes the possible utility components. Instead,
+                // we should fetch the list of utility components from the RWUI repo.
+
+                // in the user's project can be either JSX or TSX, but in RWUI it's always TSX
+                const childrenPlaceholderComponentPathJSX = path.join(
+                  rwPaths.web.src,
+                  'ui/storyUtils/ChildrenPlaceholder.jsx',
                 )
-                const storybookPlaceholderComponentPathTSX = path.join(
-                  rwPaths.web.storybook,
-                  'utilities/ChildrenPlaceholder.tsx',
+                const childrenPlaceholderComponentPathTSX = path.join(
+                  rwPaths.web.src,
+                  'ui/storyUtils/ChildrenPlaceholder.tsx',
+                )
+                const rwjsLogoPathJSX = path.join(
+                  rwPaths.web.src,
+                  'ui/storyUtils/RedwoodJSLogo.jsx',
+                )
+                const rwjsLogoPathTSX = path.join(
+                  rwPaths.web.src,
+                  'ui/storyUtils/RedwoodJSLogo.tsx',
                 )
 
-                let storybookPlaceholderComponentPath: string | null = null
-
-                if (fs.existsSync(storybookPlaceholderComponentPathJSX)) {
-                  storybookPlaceholderComponentPath =
-                    storybookPlaceholderComponentPathJSX
-                } else if (
-                  fs.existsSync(storybookPlaceholderComponentPathTSX)
-                ) {
-                  storybookPlaceholderComponentPath =
-                    storybookPlaceholderComponentPathTSX
+                let rwjsLogoPath: string | null = null
+                if (fs.existsSync(rwjsLogoPathJSX)) {
+                  rwjsLogoPath = rwjsLogoPathJSX
+                } else if (fs.existsSync(rwjsLogoPathTSX)) {
+                  rwjsLogoPath = rwjsLogoPathTSX
                 }
 
-                if (storybookPlaceholderComponentPath) {
-                  return 'ChildrenPlaceholder component already exists'
+                let childrenPlaceholderComponentPath: string | null = null
+                if (fs.existsSync(childrenPlaceholderComponentPathJSX)) {
+                  childrenPlaceholderComponentPath =
+                    childrenPlaceholderComponentPathJSX
+                } else if (fs.existsSync(childrenPlaceholderComponentPathTSX)) {
+                  childrenPlaceholderComponentPath =
+                    childrenPlaceholderComponentPathTSX
+                }
+
+                if (childrenPlaceholderComponentPath && rwjsLogoPath) {
+                  return 'ChildrenPlaceholder components already exist'
                 } else {
                   return false
                 }
