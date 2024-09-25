@@ -2,6 +2,7 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
+import type { ListrTaskWrapper } from 'listr2'
 import { Listr } from 'listr2'
 import type { Argv } from 'yargs'
 
@@ -752,4 +753,33 @@ function extractLayerContent(css: string, layerName: string): string | null {
 
   const content = css.slice(startIndex, endIndex - 1).trim()
   return content
+}
+
+/**
+ * TODO: finish implementing this and actually use it.
+ * The main challenge, I think, will be that an import name isn't necessarily the same as the package name: eg, `import tailwindDefaults from 'tailwindcss/defaultConfig' is importing from the package `tailwindcss`, not `tailwindcss/defaultConfig`.
+ * Maybe the move is to go the other way around — get a list of possible packages to install, and *then* look in the import statements?
+ * Basically, we want to replace all (or most?) of the calls to `fs.writeFileSync()` with this function.
+ *
+ * Rather than blindly adding packages to the project,
+ * we'll do it as we add the files that require them.
+ *
+ * @param rwuiPackageJson Content of the RedwoodUI package.json — this is where we get the package versions. Getting it requires a network call, so requiring it as a parameter such that it can be retrieved only once.
+ * @param fileBeingAdded Content of the file being added to the project
+ * @param filePath Path of the file being added — this is where it will be written out to
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function addFileAndInstallPackages(
+  task: ListrTaskWrapper<any, any>,
+  rwuiPackageJson: string,
+  fileBeingAdded: string,
+  filePath: string,
+) {
+  task.output = 'addFileAndInstallPackages is not yet implemented'
+  console.log(rwuiPackageJson, fileBeingAdded, filePath)
+
+  // get the list of dependencies from the file
+  // filter out the ones that are already in the project
+  // install the remaining ones in the same way we do in the "Install all necessary packages" task
+  // write the file with fs.writeFileSync()
 }
