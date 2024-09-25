@@ -284,21 +284,30 @@ describe('run', async () => {
   })
 
   it('will try to find jobs in a loop until `forever` is set to `false`', async () => {
+    const sleepDelayMs = 10
+
     const adapter = new MockAdapter()
     const worker = new Worker({
       adapter,
       logger: mockLogger,
       processName: 'mockProcessName',
       queues: ['*'],
-      sleepDelay: 0.01,
+      sleepDelay: sleepDelayMs / 1000,
       forever: true,
     })
 
-    worker.run()
+    const startedAt = Date.now()
+    const runPromise = worker.run()
+
     // just enough delay to run through the loop twice
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => setTimeout(resolve, 2 * sleepDelayMs))
+
     worker.forever = false
-    expect(adapter.find).toHaveBeenCalledTimes(2)
+    const stoppedAt = Date.now()
+    await runPromise
+
+    const expectedLoops = Math.floor((stoppedAt - startedAt) / sleepDelayMs)
+    expect(adapter.find).toHaveBeenCalledTimes(expectedLoops)
   })
 
   it('does nothing if no job found and forever=false', async () => {
