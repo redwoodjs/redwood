@@ -20,38 +20,28 @@ import addPathAliasToTSConfig, {
 } from './redwoodui-utils/addPathAliasToTSConfig'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
-interface RedwoodUIYargsOptions {
-  force: boolean
-  install: boolean
-}
+// TODO: add options here, probably at least `force`
+// interface RedwoodUIYargsOptions {
+// }
 
 export const command = 'redwoodui'
 export const aliases = ['rwui']
 export const description = 'Set up RedwoodUI'
-export function builder(
-  yargs: Argv<RedwoodUIYargsOptions>,
-): Argv<RedwoodUIYargsOptions> {
+export function builder(yargs: Argv): Argv {
+  // TODO add options
   return yargs
-    .option('force', {
-      alias: 'f',
-      default: false,
-      description:
-        'Overwrite all existing configuration (NOTE: this will also reset your TailwindCSS configuration!)',
-      type: 'boolean',
-    })
-    .option('install', {
-      alias: 'i',
-      default: true,
-      description: 'Install packages',
-      type: 'boolean',
-    })
+  // .option('force', {
+  //   alias: 'f',
+  //   default: false,
+  //   description:
+  //     'Overwrite all existing configuration (NOTE: this will also reset your TailwindCSS configuration!)',
+  //   type: 'boolean',
+  // })
 }
 
-export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
+export const handler = async () => {
   recordTelemetryAttributes({
     command: 'setup ui redwoodui',
-    force,
-    install,
   })
   const rwPaths = getPaths()
 
@@ -86,11 +76,6 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         // there's already a setup command for this,
         // so if it's not setup, we can just run that command.
         skip: async () => {
-          // if force is true, never skip
-          if (force) {
-            return false
-          }
-
           // if the config already exists, don't need to set up, so skip
           if (
             fs.existsSync(projectTailwindConfigPath) &&
@@ -102,13 +87,13 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           }
         },
         task: async () => {
-          const argsToInclude: string[] = [
-            force && '-f',
-            install && '-i',
-          ].filter((item) => item != false)
+          // TODO once we add args to the command, we'll likely want to pass any that map over through
+          // const argsToInclude: string[] = [
+          //   force && '-f',
+          // ].filter((item) => item != false)
           await execa(
             'yarn',
-            ['rw', 'setup', 'ui', 'tailwindcss', ...argsToInclude],
+            ['rw', 'setup', 'ui', 'tailwindcss'],
             // this is needed so that the output is shown in the terminal.
             // TODO: still, it's not perfect, because the output is shown below the others
             // and seems to be swallowing, for example, part of the suggested extensions message.
@@ -282,11 +267,6 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         options: { persistentOutput: true },
         title: 'Add path alias to web/tsconfig.json',
         skip: async () => {
-          // if force is true, never skip
-          if (force) {
-            return false
-          }
-
           const projectTSConfigContent = fs.readFileSync(
             projectWebTSConfigPath,
             'utf-8',
@@ -319,12 +299,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       },
       {
         options: { persistentOutput: true },
+        // TODO get rid of this task if we can make addFileAndInstallPackages work
         title: 'Install all necessary packages',
         skip: async () => {
-          // if force is true, never skip
-          if (force) {
-            return false
-          }
           // TODO we can check ourselves if the packages are installed and skip if they are,
           // but because Yarn does this for us, it's low priority
           return false
@@ -411,7 +388,7 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             utilsAlreadyInstalled = true
           }
 
-          let shouldOverwrite = force ? true : false
+          let shouldOverwrite = false
 
           // give user chance to switch overwrite to true
           if (utilsAlreadyInstalled && !shouldOverwrite) {
@@ -567,10 +544,6 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         options: { persistentOutput: true },
         title: 'Set up Storybook for RedwoodUI',
         skip: async () => {
-          if (usingStorybook && force) {
-            return false
-          }
-
           if (!usingStorybook) {
             return 'This project is not using Storybook'
           }
@@ -583,10 +556,6 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
               options: { persistentOutput: true },
               title: 'Add dark mode support to Storybook',
               skip: async () => {
-                if (force) {
-                  return false
-                }
-
                 const storybookMainContent = fs.readFileSync(
                   // We know the user is using Storybook because we checked above
                   storybookMainPath as string,
