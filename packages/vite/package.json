@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/vite",
-  "version": "8.2.0",
+  "version": "8.3.0",
   "description": "Vite configuration package for Redwood",
   "repository": {
     "type": "git",
