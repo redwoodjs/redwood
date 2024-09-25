@@ -121,3 +121,13 @@ const seedFile = fs
 fs.writeFileSync(seedFilePath, seedFile)
 
 console.groupEnd()
+
+console.group('Updating lint ignore line in auth.js')
+
+const authFilePath = path.join(JS_TEMPLATE_PATH, 'api', 'src', 'lib', 'auth.js')
+const authFile = fs
+  .readFileSync(authFilePath, 'utf-8')
+  .replace('@typescript-eslint/no-unused-vars', 'no-unused-vars')
+fs.writeFileSync(authFilePath, authFile)
+
+console.groupEnd()

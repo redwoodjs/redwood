@@ -55,15 +55,15 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/react": "^18.2.55",
     "concurrently": "8.2.2",
-    "firebase": "10.13.1",
-    "publint": "0.2.10",
-    "react": "19.0.0-rc-8269d55d-20240802",
-    "tsx": "4.17.0",
-    "typescript": "5.5.4",
+    "firebase": "10.13.2",
+    "publint": "0.2.11",
+    "react": "19.0.0-rc-f2df5694-20240916",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
     "vitest": "2.0.5"
   },
   "peerDependencies": {
-    "firebase": "10.13.1"
+    "firebase": "10.13.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }

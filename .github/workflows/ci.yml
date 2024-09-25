@@ -108,8 +108,9 @@ jobs:
       - name: 🔎 Lint
         run: yarn lint
 
-      - name: 🥡 Check packaging and attw
-        run: yarn check:package
+      # TODO(jgmw): Re-enable when it doesn't hang
+      # - name: 🥡 Check packaging and attw
+      #   run: yarn check:package
 
       - name: 🌡 Test Types
         run: yarn test:types
@@ -849,7 +850,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: 18
 
@@ -860,7 +861,7 @@ jobs:
           PROJECT_PATH: ${{ env.PROJECT_PATH }}
 
       - name: ⬢ Set up Node.js
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: 21
 

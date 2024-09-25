@@ -141,7 +141,7 @@ export async function runFeServer() {
   )
 
   app.use('*', (req, _res, next) => {
-    const fullUrl = getFullUrl(req)
+    const fullUrl = getFullUrl(req, rscEnabled)
     const headers = convertExpressHeaders(req.headersDistinct)
     // Convert express headers to fetch headers
     const perReqStore = createPerRequestMap({ headers, fullUrl })

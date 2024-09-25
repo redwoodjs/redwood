@@ -11,7 +11,6 @@ import type Router from 'find-my-way'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
 
-import type { RscFetchProps } from '@redwoodjs/router/RscRouter'
 import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 
 import {
@@ -90,11 +89,6 @@ export function createRscRequestHandler(
 
     const url = new URL(req.originalUrl || '', 'http://' + req.headers.host)
     let rscId: string | undefined
-    // "location":{"pathname":"/about","search":""}
-    // These values come from packages/vite/src/ClientRouter.tsx
-    const props: RscFetchProps = JSON.parse(
-      url.searchParams.get('props') || '{}',
-    )
     let rsaId: string | undefined
     let args: unknown[] = []
 
@@ -188,14 +182,13 @@ export function createRscRequestHandler(
       }
 
       try {
-        const readable = await renderRscToStream({ rscId, props, rsaId, args })
+        const readable = await renderRscToStream({ rscId, rsaId, args })
 
         Readable.fromWeb(readable).pipe(res)
 
         // TODO (RSC): Can we reuse `readable` here somehow?
         await sendRscFlightToStudio({
           rscId,
-          props,
           rsaId,
           args,
           basePath: BASE_PATH,

@@ -30,6 +30,16 @@ export function initConfig() {
       console.log('--help is not implemented yet')
       console.log('PR welcome!')
       console.log()
+      if (args.find((arg) => arg === '--verbose' || arg === '-v')) {
+        console.log('Hidden flags:')
+        console.log(
+          '--npx: Used during development to simulate running from _npx/',
+        )
+        console.log(
+          '--no-check-latest: Used when relaunching, to prevent infinite ' +
+            'relauch loop',
+        )
+      }
     } else if (arg === '--version' || arg === '-V') {
       config.printVersion = true
     } else if (arg.startsWith('--template') || arg.startsWith('-t')) {

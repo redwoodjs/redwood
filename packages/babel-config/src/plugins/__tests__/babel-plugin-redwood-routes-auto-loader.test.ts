@@ -72,8 +72,7 @@ describe('page auto loader correctly imports pages', () => {
   })
 
   test('RSC specific code should not be added', () => {
-    expect(result?.code).not.toContain(
-      'import { renderFromRscServer } from "@redwoodjs/vite/client"',
-    )
+    expect(result?.code).not.toContain('DummyComponent')
+    expect(result?.code).not.toContain('= () => {}')
   })
 })
