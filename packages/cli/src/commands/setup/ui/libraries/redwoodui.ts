@@ -105,9 +105,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
         options: { persistentOutput: true },
         title: 'Merging your TailwindCSS configuration with that of RedwoodUI',
         task: async (_ctx, task) => {
-          const rwuiTailwindConfigContent = await fetchFromRWUIRepo(
+          const rwuiTailwindConfigContent = (await fetchFromRWUIRepo(
             'web/config/tailwind.config.js',
-          )
+          )) as string
 
           const projectTailwindConfigContent = fs.readFileSync(
             projectTailwindConfigPath,
@@ -197,8 +197,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
       {
         title: "Adding RedwoodUI's classes to your project's index.css",
         task: async (_ctx, task) => {
-          const rwuiIndexCSSContent =
-            await fetchFromRWUIRepo('web/src/index.css')
+          const rwuiIndexCSSContent = (await fetchFromRWUIRepo(
+            'web/src/index.css',
+          )) as string
 
           const projectIndexCSSContent = fs.readFileSync(
             projectIndexCSSPath,
@@ -319,7 +320,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
           // We can hardcode the list of packages to filter out, because we know what they are, because we own RWUI.
           // This list will include, eg, dependencies of RWJS, TailwindCSS, Storybook, etc.
 
-          const rwuiPackageJsonStr = await fetchFromRWUIRepo('web/package.json')
+          const rwuiPackageJsonStr = (await fetchFromRWUIRepo(
+            'web/package.json',
+          )) as string
           const projectPackageJsonStr = fs.readFileSync(
             path.join(rwPaths.web.base, 'package.json'),
             'utf-8',
@@ -409,9 +412,9 @@ export const handler = async ({ force, install }: RedwoodUIYargsOptions) => {
             task.skip("RWUI's utility functions are already installed")
             return
           } else {
-            const rwuiUtilsContent = await fetchFromRWUIRepo(
+            const rwuiUtilsContent = (await fetchFromRWUIRepo(
               'web/src/lib/uiUtils.ts',
-            )
+            )) as string
             fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
           }
         },
@@ -682,7 +685,11 @@ const fetchFromRWUIRepo = async (
  */
 const extractTailwindConfigData = (
   configContent: string,
-): ImportantTailwindConfigData => {
+): {
+  darkModeConfig: string | null
+  colorsConfig: string | null
+  pluginsConfig: string | null
+} => {
   const darkModeMatch = configContent.match(/darkMode:\s*([^\n]+),/)
   const darkModeConfig = darkModeMatch ? darkModeMatch[1].trim() : null
 
