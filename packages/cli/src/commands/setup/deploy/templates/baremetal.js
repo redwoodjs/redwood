@@ -40,6 +40,7 @@ processNames = ["serve"]
 repo = "git@github.com:myorg/myapp.git"
 branch = "main"
 keepReleases = 5
+freeSpaceRequired = 2048
 
 # If you have separate api and web servers:
 #
