@@ -15,9 +15,6 @@ import c from '../../../../lib/colors'
 import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsConfigToProjectTailwindConfig'
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
 import addLayerToIndexCSS from './redwoodui-utils/addLayerToIndexCSS'
-import addPathAliasToTSConfig, {
-  hasPathAliasInTSConfig,
-} from './redwoodui-utils/addPathAliasToTSConfig'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
 // TODO: add options here, probably at least `force`
@@ -50,8 +47,6 @@ export const handler = async () => {
     'tailwind.config.js',
   )
   const projectIndexCSSPath = path.join(rwPaths.web.src, 'index.css')
-
-  const projectWebTSConfigPath = path.join(rwPaths.web.base, 'tsconfig.json')
 
   let usingStorybook = false
   // The main file can be either JS or TS, even if the project is TS
@@ -261,40 +256,6 @@ export const handler = async () => {
               exitOnError: false,
             },
           )
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        title: 'Add path alias to web/tsconfig.json',
-        skip: async () => {
-          const projectTSConfigContent = fs.readFileSync(
-            projectWebTSConfigPath,
-            'utf-8',
-          )
-          if (
-            hasPathAliasInTSConfig(
-              { 'ui/*': ['src/ui/*'] },
-              projectTSConfigContent,
-            )
-          ) {
-            return 'Path alias already exists in tsconfig.json'
-          } else {
-            return false
-          }
-        },
-        task: async (_ctx, task) => {
-          const projectTSConfigContent = fs.readFileSync(
-            projectWebTSConfigPath,
-            'utf-8',
-          )
-          const newTSConfigContent = addPathAliasToTSConfig(
-            task,
-            { 'ui/*': ['src/ui/*'] },
-            projectTSConfigContent,
-          )
-
-          // After all transformations, write the new config to the file
-          fs.writeFileSync(projectWebTSConfigPath, newTSConfigContent)
         },
       },
       {
