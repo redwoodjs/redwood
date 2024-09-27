@@ -64,6 +64,10 @@ You can also prerender pages that contain variables pulled from the URL, like th
 
 This is Redwood's version of static site generation, aka SSG.
 
+#### Accessibility
+
+Redwood includes a couple of components to [aid screen readers](https://redwoodjs.com/docs/accessibility) in properly navigating your app. The `<RouteAnnouncement>` component tells a screen reader to read something aloud, even though it isn't visible in the browser. And the `<RouteFocus>` tells a reader to skip verbose navigation options at the top of a page and get to the content.
+
 ### Authentication
 
 The `<PrivateSet>` route limits access to users that are authenticated, but how do they authenticate? Redwood includes integrations to many popular third party authentication hosts (including [Auth0](https://auth0.com/), [Supabase](https://supabase.com/docs/guides/auth) and [Clerk](https://clerk.com/)). You can also [host your own auth](https://redwoodjs.com/docs/auth/dbauth), or write your own [custom authentication](https://redwoodjs.com/docs/auth/custom) option. If going self-hosted, we include login, signup, and reset password pages, as well as the option to include TouchID/FaceID and third party biometric readers!
@@ -76,13 +80,13 @@ The homepage is accessible _without_ being logged in, browsing to `/` will load 
 
 Redwood uses GraphQL as the glue between the front- and backends: whenever you want data from the server/database, you're going to retrieve it via GraphQL. Now, we could have just given you raw access to some GraphQL library and let you make those calls yourself. We use [Apollo Client](https://www.apollographql.com/apollo-client) on the frontend and Apollo provides hooks like [useQuery()](https://www.apollographql.com/tutorials/lift-off-part1/10-the-usequery-hook) and [useMutation()](https://www.apollographql.com/tutorials/lift-off-part4/08-the-usemutation-hook) to retrieve and set data, respectively. But Redwood has a much deeper integration.
 
-What if you could have a component that was not only responsible for its own display _but even its own data retrieval_? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls "cells."
+What if you could have a component that was not only responsible for its own display _but even its own data retrieval_? Meaning everything that component needed in order to display itself could all be self-contained. That includes the code to display while the data is loading, or if something goes wrong. These kinds of uber-components are real, and Redwood calls them "cells."
 
 ### Cells
 
 A cell is still just a React component (also called a [single file component](https://www.swyx.io/react-sfcs-here)), it just happens to follow a couple of conventions that make it work as described above:
 
-1. The name of the file ends in `Cell"
+1. The name of the file ends in "Cell"
 2. The file exports several named components, at the very least one named `QUERY` and another named `Success`
 3. The file can optionally export several other components, like `Loading`, `Failure` and `Empty`. You can probably guess what those are for!
 
@@ -137,10 +141,6 @@ So, you get performance benefits of an instant display of cached data, but with 
 You can also directly manipulate the cache to add or remove entries, or even use it for [state management](https://www.apollographql.com/docs/react/local-state/local-state-management/).
 
 If you're familiar with GraphQL then you know that on the backend you define the structure of data that GraphQL queries will return with "resolvers." But GraphQL itself doesn't know anything about talking to databases. How does the raw data in the database make it into those resolvers? That's where our next package comes in.
-
-### Accessibility
-
-Redwood includes a couple of components to [aid screen readers](https://redwoodjs.com/docs/accessibility) in properly navigating your app. The `<RouteAnnouncement>` component tells a screen reader to read something aloud, even though it isn't visible in the browser. And the `<RouteFocus>` tells a reader to skip verbose navigation options at the top of a page and get to the content.
 
 ## The Backend
 
@@ -311,16 +311,16 @@ The entire framework is ([strictly](https://redwoodjs.com/docs/typescript/strict
 
 Redwood's job doesn't end until your application is deployed to the world! That's why we include deploy commands and config to get your app running on the most popular hosts (whether they are serverless or traditional server infrastructure) including:
 
-- [AWS](https://aws.amazon.com/)
-- [Vercel](https://vercel.com/)
-- [Google Cloud](https://cloud.google.com/)
-- [Azure](https://azure.microsoft.com/en-us/)
-- [Render](https://render.com/)
-- [Flightcontrol](https://www.flightcontrol.dev/)
-- [Netlify](https://www.netlify.com/)
+- [Coherence (GWC/AWS)](https://www.withcoherence.com/)
+- [Flightcontrol.dev (AWS)](https://www.flightcontrol.dev?ref=redwood)
+- [Edg.io](https://edg.io)
+- [Netlify.com](https://www.netlify.com/)
+- [Render.com](https://render.com)
+- [Serverless.com](https://serverless.com)
+- [Vercel.com](https://vercel.com)
 - anywhere [Docker](https://www.docker.com) is accepted
 
-You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy).
+* You can even deploy to your own server via SSH commands (we call that our [Baremetal](../../deploy/baremetal.md) deploy)!
 
 ## Coming Soon
 

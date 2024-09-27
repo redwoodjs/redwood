@@ -23,12 +23,12 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "8.5.0",
-    "eslint": "8.57.0"
+    "eslint": "8.57.1"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/eslint": "8.56.12",
-    "@types/estree": "1.0.5",
+    "@types/estree": "1.0.6",
     "@typescript-eslint/parser": "8.5.0",
     "@typescript-eslint/rule-tester": "8.5.0",
     "tsx": "4.19.1",

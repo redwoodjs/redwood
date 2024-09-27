@@ -25,8 +25,8 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "7.25.0",
-    "@prisma/internals": "5.19.1",
+    "@babel/runtime-corejs3": "7.25.6",
+    "@prisma/internals": "5.20.0",
     "@redwoodjs/project-config": "workspace:*",
     "@types/line-column": "1.0.2",
     "camelcase": "6.3.0",
@@ -51,11 +51,11 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/cli": "7.24.8",
+    "@babel/cli": "7.25.6",
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
-    "@types/lodash": "4.17.7",
-    "@types/node": "20.16.5",
+    "@types/lodash": "4.17.9",
+    "@types/node": "20.16.6",
     "@types/vscode": "1.93.0",
     "typescript": "5.6.2",
     "vitest": "2.0.5"
