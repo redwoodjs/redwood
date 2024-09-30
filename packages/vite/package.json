@@ -29,9 +29,6 @@
       "require": "./dist/cjs/buildFeServer.js",
       "import": "./dist/buildFeServer.js"
     },
-    "./react-node-loader": {
-      "default": "./dist/react-server-dom-webpack/node-loader.js"
-    },
     "./build": {
       "import": "./dist/build/build.js",
       "default": "./dist/cjs/build/build.js"
