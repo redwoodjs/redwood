@@ -2,11 +2,12 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import type { ListrTaskWrapper } from 'listr2'
+import type { ListrGetRendererTaskOptions, ListrTask } from 'listr2'
 import { Listr } from 'listr2'
 import type { Argv } from 'yargs'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
+import type { Paths } from '@redwoodjs/project-config'
 import { getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
@@ -268,11 +269,6 @@ export const handler = async () => {
           return false
         },
         task: async (_ctx, task) => {
-          // TODO get all packages from web/package.json (filtering out a TBA hardcoded list of packages)
-          // that aren't component dependencies, and install them
-          // We can hardcode the list of packages to filter out, because we know what they are, because we own RWUI.
-          // This list will include, eg, dependencies of RWJS, TailwindCSS, Storybook, etc.
-
           const rwuiPackageJsonStr = (await fetchFromRWUIRepo(
             'web/package.json',
           )) as string
@@ -330,8 +326,6 @@ export const handler = async () => {
         options: { persistentOutput: true },
         title: 'Add utility functions used by RedwoodUI',
         task: async (_ctx, task) => {
-          // TODO add web/src/lib/utils.{ts/js} to the project
-
           const projectRWUIUtilsPathTS = path.join(
             rwPaths.web.src,
             'lib/uiUtils.ts',
@@ -582,6 +576,262 @@ export const handler = async () => {
   }
 }
 
+class RWUIInstallHandler {
+  rwPaths!: Paths
+
+  projectTailwindConfigPath!: string
+  projectIndexCSSPath!: string
+
+  storybookMainPath: string | null = null
+
+  defaultTaskOptions: ListrGetRendererTaskOptions<any> = {
+    persistentOutput: true,
+  }
+
+  constructor() {
+    this.initGlobalPaths()
+    this.initStorybookInfo()
+  }
+
+  /**
+   * A place to house the initialization of paths that don't make sense being initialized elsewhere
+   */
+  initGlobalPaths() {
+    this.rwPaths = getPaths()
+
+    this.projectTailwindConfigPath = path.join(
+      this.rwPaths.web.config,
+      'tailwind.config.js',
+    )
+    this.projectIndexCSSPath = path.join(this.rwPaths.web.src, 'index.css')
+  }
+
+  initStorybookInfo() {
+    // The main file can be either JS or TS, even if the project is TS
+    const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.js')
+    const storybookMainPathTS = path.join(this.rwPaths.web.storybook, 'main.ts')
+
+    if (fs.existsSync(storybookMainPathJS)) {
+      this.storybookMainPath = storybookMainPathJS
+    } else if (fs.existsSync(storybookMainPathTS)) {
+      this.storybookMainPath = storybookMainPathTS
+    }
+  }
+
+  get usingStorybook() {
+    return !!this.storybookMainPath
+  }
+
+  /**
+   * Checks if TailwindCSS is set up, calling the setup CLI if it isn't
+   */
+  getSetupTWTask(): ListrTask {
+    return {
+      options: this.defaultTaskOptions,
+      title: 'Setting up TailwindCSS',
+      skip: async () => {
+        // if the config already exists, don't need to set up, so skip
+        if (
+          fs.existsSync(this.projectTailwindConfigPath) &&
+          fs.existsSync(this.projectIndexCSSPath)
+        ) {
+          return 'TailwindCSS is already set up'
+        } else {
+          return false
+        }
+      },
+      task: async () => {
+        // TODO once we add args to the command, we'll likely want to pass any that map over through
+        // const argsToInclude: string[] = [
+        //   force && '-f',
+        // ].filter((item) => item != false)
+        await execa(
+          'yarn',
+          ['rw', 'setup', 'ui', 'tailwindcss'],
+          // this is needed so that the output is shown in the terminal.
+          // TODO: still, it's not perfect, because the output is shown below the others
+          // and seems to be swallowing, for example, part of the suggested extensions message.
+          { stdio: 'inherit' },
+        )
+      },
+    }
+  }
+
+  getConfigTWTask(): ListrTask {
+    return {
+      options: { persistentOutput: true },
+      title: 'Merging your TailwindCSS configuration with that of RedwoodUI',
+      task: async (_ctx, task) => {
+        const rwuiTailwindConfigContent = (await fetchFromRWUIRepo(
+          'web/config/tailwind.config.js',
+        )) as string
+
+        const projectTailwindConfigContent = fs.readFileSync(
+          this.projectTailwindConfigPath,
+          'utf-8',
+        )
+
+        const rwuiTailwindConfigData = extractTailwindConfigData(
+          rwuiTailwindConfigContent,
+        )
+        const projectTailwindConfigData = extractTailwindConfigData(
+          projectTailwindConfigContent,
+        )
+
+        let newTailwindConfigContent = projectTailwindConfigContent
+
+        return task.newListr(
+          [
+            {
+              options: { persistentOutput: true },
+              title: "Add RedwoodUI's darkMode configuration",
+              task: async (_ctx, task) => {
+                newTailwindConfigContent =
+                  addDarkModeConfigToProjectTailwindConfig(
+                    task,
+                    // we can safely cast to string because we know it's not null — if it is, something went wrong
+                    rwuiTailwindConfigData.darkModeConfig as string,
+                    projectTailwindConfigData.darkModeConfig,
+                    newTailwindConfigContent,
+                  )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: "Add RedwoodUI's color theme configuration",
+              task: async (_ctx, task) => {
+                newTailwindConfigContent =
+                  addColorsConfigToProjectTailwindConfig(
+                    task,
+                    // we can safely cast to string because we know it's not null — if it is, something went wrong
+                    rwuiTailwindConfigData.colorsConfig as string,
+                    projectTailwindConfigData.colorsConfig,
+                    newTailwindConfigContent,
+                  )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: "Add RedwoodUI's plugins configuration",
+              task: async (_ctx, task) => {
+                newTailwindConfigContent =
+                  await addPluginsConfigToProjectTailwindConfig(
+                    task,
+                    // we can safely cast to string because we know it's not null — if it is, something went wrong
+                    rwuiTailwindConfigData.pluginsConfig as string,
+                    projectTailwindConfigData.pluginsConfig,
+                    newTailwindConfigContent,
+                  )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: 'Write out new TailwindCSS configuration',
+              skip: () => {
+                if (newTailwindConfigContent === projectTailwindConfigContent) {
+                  return 'No changes to write to the TailwindCSS configuration file'
+                }
+                return false
+              },
+              task: async () => {
+                // After all transformations, write the new config to the file
+                fs.writeFileSync(
+                  this.projectTailwindConfigPath,
+                  newTailwindConfigContent,
+                )
+              },
+            },
+          ],
+          {
+            rendererOptions: { collapseSubtasks: false },
+            exitOnError: false,
+          },
+        )
+      },
+    }
+  }
+
+  getAddCSSTask(): ListrTask {
+    return {
+      title: "Adding RedwoodUI's classes to your project's index.css",
+      task: async (_ctx, task) => {
+        const rwuiIndexCSSContent = (await fetchFromRWUIRepo(
+          'web/src/index.css',
+        )) as string
+
+        const projectIndexCSSContent = fs.readFileSync(
+          this.projectIndexCSSPath,
+          'utf-8',
+        )
+
+        const rwuiCSSLayers = extractCSSLayers(rwuiIndexCSSContent)
+        const projectCSSLayers = extractCSSLayers(projectIndexCSSContent)
+
+        let newIndexCSSContent = projectIndexCSSContent
+
+        return task.newListr(
+          [
+            {
+              options: { persistentOutput: true },
+              title: 'Add base layer',
+              task: async (_ctx, task) => {
+                newIndexCSSContent = addLayerToIndexCSS(
+                  task,
+                  'base',
+                  // we can safely cast to string because we know it's not null — if it is, something went wrong
+                  rwuiCSSLayers.base as string,
+                  projectCSSLayers.base,
+                  newIndexCSSContent,
+                )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: 'Add components layer',
+              task: async (_ctx, task) => {
+                newIndexCSSContent = addLayerToIndexCSS(
+                  task,
+                  'components',
+                  // we can safely cast to string because we know it's not null — if it is, something went wrong
+                  rwuiCSSLayers.components as string,
+                  projectCSSLayers.components,
+                  newIndexCSSContent,
+                )
+              },
+            },
+            {
+              options: { persistentOutput: true },
+              title: 'Write out new index.css',
+              skip: () => {
+                if (newIndexCSSContent === projectIndexCSSContent) {
+                  return 'No changes to write to the index.css file'
+                }
+                return false
+              },
+              task: async () => {
+                // After all transformations, write the new config to the file
+                fs.writeFileSync(this.projectIndexCSSPath, newIndexCSSContent)
+              },
+            },
+          ],
+          {
+            rendererOptions: { collapseSubtasks: false },
+            exitOnError: false,
+          },
+        )
+      },
+    }
+  }
+
+  invoke() {
+    return new Listr([
+      this.getSetupTWTask(),
+      this.getConfigTWTask(),
+      this.getAddCSSTask(),
+    ])
+  }
+}
+
 /**
  * Fetches a file from the RedwoodUI repo.
  * Uses the GitHub REST API to fetch the file, rather than Octokit,
@@ -700,39 +950,11 @@ function extractLayerContent(css: string, layerName: string): string | null {
   return content
 }
 
-function ensureDirectoryExistence(filePath: string) {
+function ensureDirectoryExistence(filePath: string): boolean {
   const dirname = path.dirname(filePath)
   if (fs.existsSync(dirname)) {
     return true
   }
   fs.mkdirSync(dirname, { recursive: true })
-}
-
-/**
- * TODO: finish implementing this and actually use it.
- * The main challenge, I think, will be that an import name isn't necessarily the same as the package name: eg, `import tailwindDefaults from 'tailwindcss/defaultConfig' is importing from the package `tailwindcss`, not `tailwindcss/defaultConfig`.
- * Maybe the move is to go the other way around — get a list of possible packages to install, and *then* look in the import statements?
- * Basically, we want to replace all (or most?) of the calls to `fs.writeFileSync()` with this function.
- *
- * Rather than blindly adding packages to the project,
- * we'll do it as we add the files that require them.
- *
- * @param rwuiPackageJson Content of the RedwoodUI package.json — this is where we get the package versions. Getting it requires a network call, so requiring it as a parameter such that it can be retrieved only once.
- * @param fileBeingAdded Content of the file being added to the project
- * @param filePath Path of the file being added — this is where it will be written out to
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function addFileAndInstallPackages(
-  task: ListrTaskWrapper<any, any>,
-  rwuiPackageJson: string,
-  fileBeingAdded: string,
-  filePath: string,
-) {
-  task.output = 'addFileAndInstallPackages is not yet implemented'
-  console.log(rwuiPackageJson, fileBeingAdded, filePath)
-
-  // get the list of dependencies from the file
-  // filter out the ones that are already in the project
-  // install the remaining ones in the same way we do in the "Install all necessary packages" task
-  // write the file with fs.writeFileSync()
+  return true
 }
