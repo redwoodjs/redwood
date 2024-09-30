@@ -41,6 +41,17 @@ export const handler = async () => {
   recordTelemetryAttributes({
     command: 'setup ui redwoodui',
   })
+  const installHandler = new RWUIInstallHandler()
+
+  try {
+    await installHandler.getAllTasks().run()
+  } catch (e: any) {
+    errorTelemetry(process.argv, e.message)
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
+  }
+  return // remove this when removing the below old code
+
   const rwPaths = getPaths()
 
   const projectTailwindConfigPath = path.join(
@@ -823,12 +834,265 @@ class RWUIInstallHandler {
     }
   }
 
-  invoke() {
-    return new Listr([
-      this.getSetupTWTask(),
-      this.getConfigTWTask(),
-      this.getAddCSSTask(),
-    ])
+  getAddUtilityFunctionsTask(): ListrTask {
+    return {
+      options: { persistentOutput: true },
+      title: 'Add utility functions used by RedwoodUI',
+      task: async (_ctx, task) => {
+        const projectRWUIUtilsPathTS = path.join(
+          this.rwPaths.web.src,
+          'lib/uiUtils.ts',
+        )
+        const projectRWUIUtilsPathJS = path.join(
+          this.rwPaths.web.src,
+          'lib/uiUtils.js',
+        )
+
+        let utilsAlreadyInstalled = false
+        if (
+          fs.existsSync(projectRWUIUtilsPathTS) ||
+          fs.existsSync(projectRWUIUtilsPathJS)
+        ) {
+          utilsAlreadyInstalled = true
+        }
+
+        let shouldOverwrite = false
+
+        // give user chance to switch overwrite to true
+        if (utilsAlreadyInstalled && !shouldOverwrite) {
+          shouldOverwrite = await task.prompt({
+            type: 'confirm',
+            message:
+              "Looks like you've already got the RWUI utilities. Do you want to overwrite them? This may be helpful, for example if you've made changes and want to reset them or if we've made updates.",
+            initial: false,
+          })
+        }
+
+        if (utilsAlreadyInstalled && !shouldOverwrite) {
+          task.skip("RWUI's utility functions are already installed")
+          return
+        } else {
+          const rwuiUtilsContent = (await fetchFromRWUIRepo(
+            'web/src/lib/uiUtils.ts',
+          )) as string
+          fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
+        }
+      },
+    }
+  }
+
+  getAddComponentsTask(): ListrTask {
+    return {
+      options: { persistentOutput: true },
+      title: 'Add RedwoodUI components to your project',
+      task: async (_ctx, task) => {
+        // top-level components
+        const listOfComponentFolders = (await fetchFromRWUIRepo(
+          'web/src/ui',
+        )) as { name: string; path: string }[]
+        // components in sub-directories
+        const listOfFormComponentFolders = (await fetchFromRWUIRepo(
+          'web/src/ui/formFields',
+        )) as { name: string; path: string }[]
+
+        // filter to only directory names that start with a capital letter, as these are the ones that are components
+        const componentsAvailable = listOfComponentFolders.filter((val) =>
+          /^[A-Z]/.test(val.name),
+        )
+        const formComponentsAvailable = listOfFormComponentFolders.filter(
+          (val) => /^[A-Z]/.test(val.name) && val.name !== 'InputFieldWrapper', // InputFieldWrapper is a shared dependency, and not a regular component
+        )
+
+        const selectedComponents = await task.prompt<string[]>({
+          type: 'multiselect',
+          message:
+            'Select the components you want to add to your project (form fields are next):' +
+            c.warning(
+              '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
+            ),
+          hint: 'Use the arrow keys to navigate, space to select, and A to select all',
+          choices: [...componentsAvailable.map((component) => component.name)],
+        })
+
+        const selectedFormComponents = await task.prompt<string[]>({
+          type: 'multiselect',
+          message:
+            'Select the form components you want to add to your project (type A to select all):' +
+            c.warning(
+              '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
+            ),
+          hint: 'Use the arrow keys to navigate, space to select, and A to select all',
+          choices: [
+            ...formComponentsAvailable.map((component) => component.name),
+          ],
+        })
+
+        return task.newListr([
+          ...selectedComponents.map((componentToInstall) => ({
+            options: { persistentOutput: true },
+            title: `Install component: ${componentToInstall}`,
+            task: async () => {
+              // need to get both the .tsx and .stories.tsx files
+              const componentFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.tsx`
+              const componentStoriesFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.stories.tsx`
+              const componentContent =
+                await fetchFromRWUIRepo(componentFilePath)
+              const componentStoriesContent = await fetchFromRWUIRepo(
+                componentStoriesFilePath,
+              )
+              ensureDirectoryExistence(componentFilePath)
+              fs.writeFileSync(componentFilePath, componentContent as string)
+              fs.writeFileSync(
+                componentStoriesFilePath,
+                componentStoriesContent as string,
+              )
+            },
+          })),
+          ...selectedFormComponents.map((formComponentToInstall) => ({
+            options: { persistentOutput: true },
+            title: `Install form component: ${formComponentToInstall}`,
+            task: async () => {
+              // need to get both the .tsx and .stories.tsx files
+              const componentFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.tsx`
+              const componentStoriesFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.stories.tsx`
+              const componentContent =
+                await fetchFromRWUIRepo(componentFilePath)
+              const componentStoriesContent = await fetchFromRWUIRepo(
+                componentStoriesFilePath,
+              )
+              ensureDirectoryExistence(componentFilePath)
+              fs.writeFileSync(componentFilePath, componentContent as string)
+              fs.writeFileSync(
+                componentStoriesFilePath,
+                componentStoriesContent as string,
+              )
+            },
+          })),
+          ...(selectedFormComponents.length > 0
+            ? [
+                {
+                  options: { persistentOutput: true },
+                  title: 'Install shared dependencies for form components',
+                  task: async () => {
+                    // Placeholder for installing shared dependencies for form components
+                  },
+                },
+              ]
+            : []),
+        ])
+      },
+    }
+  }
+
+  getSetUpStorybookTask(): ListrTask {
+    return {
+      options: { persistentOutput: true },
+      title: 'Set up Storybook for RedwoodUI',
+      skip: async () => {
+        if (!this.usingStorybook) {
+          return "This project is not using Storybook. If you do wish to use Storybook, you can set it up with `yarn redwood storybook`\nNote that without Storybook set up, we won't add component stories to your project."
+        }
+
+        return false
+      },
+      task: async (_ctx, task) => {
+        return task.newListr([
+          {
+            options: { persistentOutput: true },
+            title: 'Add dark mode support to Storybook',
+            skip: async () => {
+              const storybookMainContent = fs.readFileSync(
+                // We know the user is using Storybook because we checked above
+                this.storybookMainPath as string,
+                'utf-8',
+              )
+
+              if (
+                /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
+                  storybookMainContent,
+                )
+              ) {
+                return 'Your Storybook looks like it already has dark mode support'
+              } else {
+                return false
+              }
+            },
+            task: async () => {
+              throw new Error(
+                'Add dark mode support to Storybook — Not implemented',
+              )
+            },
+          },
+          {
+            options: { persistentOutput: true },
+            title: 'Add story utility components',
+            skip: async () => {
+              // TODO this hardcodes the possible utility components. Instead,
+              // we should fetch the list of utility components from the RWUI repo.
+
+              // in the user's project can be either JSX or TSX, but in RWUI it's always TSX
+              const childrenPlaceholderComponentPathJSX = path.join(
+                this.rwPaths.web.src,
+                'ui/storyUtils/ChildrenPlaceholder.jsx',
+              )
+              const childrenPlaceholderComponentPathTSX = path.join(
+                this.rwPaths.web.src,
+                'ui/storyUtils/ChildrenPlaceholder.tsx',
+              )
+              const rwjsLogoPathJSX = path.join(
+                this.rwPaths.web.src,
+                'ui/storyUtils/RedwoodJSLogo.jsx',
+              )
+              const rwjsLogoPathTSX = path.join(
+                this.rwPaths.web.src,
+                'ui/storyUtils/RedwoodJSLogo.tsx',
+              )
+
+              let rwjsLogoPath: string | null = null
+              if (fs.existsSync(rwjsLogoPathJSX)) {
+                rwjsLogoPath = rwjsLogoPathJSX
+              } else if (fs.existsSync(rwjsLogoPathTSX)) {
+                rwjsLogoPath = rwjsLogoPathTSX
+              }
+
+              let childrenPlaceholderComponentPath: string | null = null
+              if (fs.existsSync(childrenPlaceholderComponentPathJSX)) {
+                childrenPlaceholderComponentPath =
+                  childrenPlaceholderComponentPathJSX
+              } else if (fs.existsSync(childrenPlaceholderComponentPathTSX)) {
+                childrenPlaceholderComponentPath =
+                  childrenPlaceholderComponentPathTSX
+              }
+
+              if (childrenPlaceholderComponentPath && rwjsLogoPath) {
+                return 'ChildrenPlaceholder components already exist'
+              } else {
+                return false
+              }
+            },
+            task: async () => {
+              throw new Error(
+                'Add children placeholder utility component — Not implemented',
+              )
+            },
+          },
+        ])
+      },
+    }
+  }
+
+  getAllTasks() {
+    return new Listr(
+      [
+        this.getSetupTWTask(),
+        this.getConfigTWTask(),
+        this.getAddCSSTask(),
+        this.getSetUpStorybookTask(),
+        this.getAddUtilityFunctionsTask(),
+        this.getAddComponentsTask(),
+      ],
+      { rendererOptions: { collapseSubtasks: false }, exitOnError: true }, // exitOnError true for top-level tasks
+    )
   }
 }
 
