@@ -370,7 +370,11 @@ class RWUIInstallHandler {
             'web/src/lib/uiUtils.ts',
           )) as string
 
-          fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
+          this._addFileAndInstallPackages(
+            task,
+            rwuiUtilsContent,
+            projectRWUIUtilsPathTS,
+          )
         }
       },
     }
@@ -444,6 +448,9 @@ class RWUIInstallHandler {
                   title: 'Install shared dependencies for form components',
                   task: async () => {
                     // Placeholder for installing shared dependencies for form components
+                    throw new Error(
+                      'Install shared dependencies for form components — Not implemented',
+                    )
                   },
                 },
               ]
@@ -638,13 +645,13 @@ class RWUIInstallHandler {
     componentName: string,
     componentType: 'standard' | 'form' = 'standard',
   ) {
-    const componentFilePath = `web/src/ui/${componentType === 'form' ? 'formFields' : ''}/${componentName}/${componentName}.tsx`
-    const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields' : ''}/${componentName}/${componentName}.stories.tsx`
+    const componentFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.tsx`
+    const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.stories.tsx`
 
     ensureDirectoryExistence(componentFilePath)
 
     const componentContent = await fetchFromRWUIRepo(componentFilePath)
-    this._addFileAndInstallPackages(
+    await this._addFileAndInstallPackages(
       task,
       componentContent as string,
       componentFilePath,
@@ -653,7 +660,7 @@ class RWUIInstallHandler {
       const componentStoriesContent = await fetchFromRWUIRepo(
         componentStoriesFilePath,
       )
-      this._addFileAndInstallPackages(
+      await this._addFileAndInstallPackages(
         task,
         componentStoriesContent as string,
         componentStoriesFilePath,
@@ -668,6 +675,12 @@ class RWUIInstallHandler {
  * because Octokit both adds a bunch of overhead
  * and was causing ESM/CJS related build issues that I didn't want to deal with :)
  *
+ * However, because this is not an authenticated request, it is rate-limited to 60 requests per hour: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#primary-rate-limit-for-unauthenticated-users
+ * - This is actually too low for installing all components and their stories.
+ * - Two options:
+ *   - Just authenticate with a PAT
+ *   - Download the entire repo as a ZIP into a temp dir that will need to be cleaned up, and read from there
+ *
  * @returns string, if path is to file, or array of {name: string, path: string} if path is to a directory
  */
 const fetchFromRWUIRepo = async (
@@ -677,19 +690,35 @@ const fetchFromRWUIRepo = async (
   const repo = 'RedwoodUI'
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
 
+  const githubToken =
+    process.env.GH_TOKEN ||
+    process.env.GITHUB_TOKEN ||
+    process.env.REDWOOD_GITHUB_TOKEN
+
   // Perform the fetch request
   const res = await fetch(apiUrl, {
+    // @ts-expect-error — it doesn't like the way we're conditionally adding the Authorization header
     headers: {
       Accept: 'application/vnd.github.v3+json',
       // https://docs.github.com/en/rest/about-the-rest-api/api-versions?apiVersion=2022-11-28#supported-api-versions
       'X-GitHub-Api-Version': '2022-11-28',
       // https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
       'User-Agent': 'RedwoodUI Setup',
+      Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
     },
   })
 
   if (!res.ok) {
-    throw new Error(`Error fetching file from repo: ${res.statusText}`)
+    // If we've timed out, tell users to add a PAT and give them a link to instructions
+    // Check x-ratelimit-remaining header
+    const rateLimitRemaining = res.headers.get('x-ratelimit-remaining')
+    if (rateLimitRemaining === '0') {
+      throw new Error(
+        "You've hit the rate limit for unauthenticated requests to the GitHub API. To continue, you'll need to wait, or you can authenticate with a Personal Access Token (PAT) with the `public_repo` property. Create a PAT and store it under the environment variable GH_TOKEN. You can find instructions on how to do that here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic",
+      )
+    } else {
+      throw new Error(`Error fetching file from repo: ${res.statusText}`)
+    }
   }
 
   const data = await res.json()
