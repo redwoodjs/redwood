@@ -164,7 +164,7 @@ class RWUIInstallHandler {
 
   getConfigTWTask(): ListrTask {
     return {
-      options: { persistentOutput: true },
+      options: this.defaultTaskOptions,
       title: 'Merging your TailwindCSS configuration with that of RedwoodUI',
       task: async (_ctx, task) => {
         const rwuiTailwindConfigContent = (await fetchFromRWUIRepo(
@@ -427,20 +427,28 @@ class RWUIInstallHandler {
         })
 
         return task.newListr([
-          ...selectedComponents.map((componentToInstall) => ({
-            options: { persistentOutput: true },
-            title: `Install component: ${componentToInstall}`,
-            task: async () => {
-              await this._installComponent(task, componentToInstall)
-            },
-          })),
-          ...selectedFormComponents.map((formComponentToInstall) => ({
-            options: { persistentOutput: true },
-            title: `Install form component: ${formComponentToInstall}`,
-            task: async () => {
-              await this._installComponent(task, formComponentToInstall, 'form')
-            },
-          })),
+          ...selectedComponents.map(
+            (componentToInstall): ListrTask => ({
+              options: { persistentOutput: false },
+              title: `Install component: ${componentToInstall}`,
+              task: async (_ctx, task) => {
+                await this._installComponent(task, componentToInstall)
+              },
+            }),
+          ),
+          ...selectedFormComponents.map(
+            (formComponentToInstall): ListrTask => ({
+              options: { persistentOutput: false },
+              title: `Install form component: ${formComponentToInstall}`,
+              task: async (_ctx, task) => {
+                await this._installComponent(
+                  task,
+                  formComponentToInstall,
+                  'form',
+                )
+              },
+            }),
+          ),
           ...(selectedFormComponents.length > 0
             ? [
                 {
@@ -603,6 +611,7 @@ class RWUIInstallHandler {
         }
       }
 
+      // TODO don't install if a newer version is in the project's web/package.json
       if (dependencies[matchedPkg]) {
         depsToInstall.push(`${matchedPkg}@${dependencies[matchedPkg]}`)
       } else if (devDependencies[matchedPkg]) {
@@ -610,23 +619,26 @@ class RWUIInstallHandler {
       }
     })
 
-    const hasExistingOutput = task.output !== undefined
+    if (depsToInstall.length > 0 || devDepsToInstall.length > 0) {
+      const hasExistingOutput = task.output !== undefined
+      const outputMessage = `As part of adding the file ${filePath}, installing the following packages...\n`
 
-    const outputMessage = `As part of adding the file ${filePath}, installing the following dependencies:\n${depsToInstall.join(', ')}\nand devDependencies:\n${devDepsToInstall.join(', ')}\n...`
-
-    if (hasExistingOutput) {
-      task.output += outputMessage
-    } else {
-      task.output = outputMessage
+      if (hasExistingOutput) {
+        task.output += outputMessage
+      } else {
+        task.output = outputMessage
+      }
     }
 
     // Install the dependencies
     if (depsToInstall.length > 0) {
+      task.output += `As dependencies: ${depsToInstall.join(', ')}\n`
       await execa('yarn', ['workspace', 'web', 'add', ...depsToInstall])
     }
 
     // Install the devDependencies
     if (devDepsToInstall.length > 0) {
+      task.output += `As devDependencies: ${devDepsToInstall.join(', ')}\n`
       await execa('yarn', [
         'workspace',
         'web',
@@ -640,6 +652,12 @@ class RWUIInstallHandler {
     fs.writeFileSync(filePath, fileBeingAdded)
   }
 
+  /**
+   * Installs a component from the RedwoodUI repo into the user's project.
+   * Installs any required packages as well.
+   *
+   * TODO: Some components rely on other components. Check, and install as well.
+   */
   async _installComponent(
     task: ListrTaskWrapper<any, any>,
     componentName: string,
