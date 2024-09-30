@@ -2,7 +2,11 @@ import path from 'path'
 
 import execa from 'execa'
 import fs from 'fs-extra'
-import type { ListrGetRendererTaskOptions, ListrTask } from 'listr2'
+import type {
+  ListrGetRendererTaskOptions,
+  ListrTask,
+  ListrTaskWrapper,
+} from 'listr2'
 import { Listr } from 'listr2'
 import type { Argv } from 'yargs'
 
@@ -50,541 +54,6 @@ export const handler = async () => {
     console.error(c.error(e.message))
     process.exit(e?.exitCode || 1)
   }
-  return // remove this when removing the below old code
-
-  const rwPaths = getPaths()
-
-  const projectTailwindConfigPath = path.join(
-    rwPaths.web.config,
-    'tailwind.config.js',
-  )
-  const projectIndexCSSPath = path.join(rwPaths.web.src, 'index.css')
-
-  let usingStorybook = false
-  // The main file can be either JS or TS, even if the project is TS
-  const storybookMainPathJS = path.join(rwPaths.web.storybook, 'main.js')
-  const storybookMainPathTS = path.join(rwPaths.web.storybook, 'main.ts')
-  let storybookMainPath: string | null = null
-  if (fs.existsSync(storybookMainPathJS)) {
-    storybookMainPath = storybookMainPathJS
-  } else if (fs.existsSync(storybookMainPathTS)) {
-    storybookMainPath = storybookMainPathTS
-  }
-  if (storybookMainPath) {
-    usingStorybook = true
-  }
-
-  const tasks = new Listr(
-    [
-      {
-        options: { persistentOutput: true },
-        title: 'Setting up TailwindCSS',
-        // first, check that Tailwind has been setup.
-        // there's already a setup command for this,
-        // so if it's not setup, we can just run that command.
-        skip: async () => {
-          // if the config already exists, don't need to set up, so skip
-          if (
-            fs.existsSync(projectTailwindConfigPath) &&
-            fs.existsSync(projectIndexCSSPath)
-          ) {
-            return 'TailwindCSS is already set up'
-          } else {
-            return false
-          }
-        },
-        task: async () => {
-          // TODO once we add args to the command, we'll likely want to pass any that map over through
-          // const argsToInclude: string[] = [
-          //   force && '-f',
-          // ].filter((item) => item != false)
-          await execa(
-            'yarn',
-            ['rw', 'setup', 'ui', 'tailwindcss'],
-            // this is needed so that the output is shown in the terminal.
-            // TODO: still, it's not perfect, because the output is shown below the others
-            // and seems to be swallowing, for example, part of the suggested extensions message.
-            { stdio: 'inherit' },
-          )
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        title: 'Merging your TailwindCSS configuration with that of RedwoodUI',
-        task: async (_ctx, task) => {
-          const rwuiTailwindConfigContent = (await fetchFromRWUIRepo(
-            'web/config/tailwind.config.js',
-          )) as string
-
-          const projectTailwindConfigContent = fs.readFileSync(
-            projectTailwindConfigPath,
-            'utf-8',
-          )
-
-          const rwuiTailwindConfigData = extractTailwindConfigData(
-            rwuiTailwindConfigContent,
-          )
-          const projectTailwindConfigData = extractTailwindConfigData(
-            projectTailwindConfigContent,
-          )
-
-          let newTailwindConfigContent = projectTailwindConfigContent
-
-          return task.newListr(
-            [
-              {
-                options: { persistentOutput: true },
-                title: "Add RedwoodUI's darkMode configuration",
-                task: async (_ctx, task) => {
-                  newTailwindConfigContent =
-                    addDarkModeConfigToProjectTailwindConfig(
-                      task,
-                      // we can safely cast to string because we know it's not null — if it is, something went wrong
-                      rwuiTailwindConfigData.darkModeConfig as string,
-                      projectTailwindConfigData.darkModeConfig,
-                      newTailwindConfigContent,
-                    )
-                },
-              },
-              {
-                options: { persistentOutput: true },
-                title: "Add RedwoodUI's color theme configuration",
-                task: async (_ctx, task) => {
-                  newTailwindConfigContent =
-                    addColorsConfigToProjectTailwindConfig(
-                      task,
-                      // we can safely cast to string because we know it's not null — if it is, something went wrong
-                      rwuiTailwindConfigData.colorsConfig as string,
-                      projectTailwindConfigData.colorsConfig,
-                      newTailwindConfigContent,
-                    )
-                },
-              },
-              {
-                options: { persistentOutput: true },
-                title: "Add RedwoodUI's plugins configuration",
-                task: async (_ctx, task) => {
-                  newTailwindConfigContent =
-                    await addPluginsConfigToProjectTailwindConfig(
-                      task,
-                      // we can safely cast to string because we know it's not null — if it is, something went wrong
-                      rwuiTailwindConfigData.pluginsConfig as string,
-                      projectTailwindConfigData.pluginsConfig,
-                      newTailwindConfigContent,
-                    )
-                },
-              },
-              {
-                options: { persistentOutput: true },
-                title: 'Write out new TailwindCSS configuration',
-                skip: () => {
-                  if (
-                    newTailwindConfigContent === projectTailwindConfigContent
-                  ) {
-                    return 'No changes to write to the TailwindCSS configuration file'
-                  }
-                  return false
-                },
-                task: async () => {
-                  // After all transformations, write the new config to the file
-                  fs.writeFileSync(
-                    projectTailwindConfigPath,
-                    newTailwindConfigContent,
-                  )
-                },
-              },
-            ],
-            {
-              rendererOptions: { collapseSubtasks: false },
-              exitOnError: false,
-            },
-          )
-        },
-      },
-      {
-        title: "Adding RedwoodUI's classes to your project's index.css",
-        task: async (_ctx, task) => {
-          const rwuiIndexCSSContent = (await fetchFromRWUIRepo(
-            'web/src/index.css',
-          )) as string
-
-          const projectIndexCSSContent = fs.readFileSync(
-            projectIndexCSSPath,
-            'utf-8',
-          )
-
-          const rwuiCSSLayers = extractCSSLayers(rwuiIndexCSSContent)
-          const projectCSSLayers = extractCSSLayers(projectIndexCSSContent)
-
-          let newIndexCSSContent = projectIndexCSSContent
-
-          return task.newListr(
-            [
-              {
-                options: { persistentOutput: true },
-                title: 'Add base layer',
-                task: async (_ctx, task) => {
-                  newIndexCSSContent = addLayerToIndexCSS(
-                    task,
-                    'base',
-                    // we can safely cast to string because we know it's not null — if it is, something went wrong
-                    rwuiCSSLayers.base as string,
-                    projectCSSLayers.base,
-                    newIndexCSSContent,
-                  )
-                },
-              },
-              {
-                options: { persistentOutput: true },
-                title: 'Add components layer',
-                task: async (_ctx, task) => {
-                  newIndexCSSContent = addLayerToIndexCSS(
-                    task,
-                    'components',
-                    // we can safely cast to string because we know it's not null — if it is, something went wrong
-                    rwuiCSSLayers.components as string,
-                    projectCSSLayers.components,
-                    newIndexCSSContent,
-                  )
-                },
-              },
-              {
-                options: { persistentOutput: true },
-                title: 'Write out new index.css',
-                skip: () => {
-                  if (newIndexCSSContent === projectIndexCSSContent) {
-                    return 'No changes to write to the index.css file'
-                  }
-                  return false
-                },
-                task: async () => {
-                  // After all transformations, write the new config to the file
-                  fs.writeFileSync(projectIndexCSSPath, newIndexCSSContent)
-                },
-              },
-            ],
-            {
-              rendererOptions: { collapseSubtasks: false },
-              exitOnError: false,
-            },
-          )
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        // TODO get rid of this task if we can make addFileAndInstallPackages work
-        title: 'Install all necessary packages',
-        skip: async () => {
-          // TODO we can check ourselves if the packages are installed and skip if they are,
-          // but because Yarn does this for us, it's low priority
-          return false
-        },
-        task: async (_ctx, task) => {
-          const rwuiPackageJsonStr = (await fetchFromRWUIRepo(
-            'web/package.json',
-          )) as string
-          const projectPackageJsonStr = fs.readFileSync(
-            path.join(rwPaths.web.base, 'package.json'),
-            'utf-8',
-          )
-          let rwuiPackageJson: any
-          let projectPackageJson: any
-          try {
-            rwuiPackageJson = JSON.parse(rwuiPackageJsonStr)
-          } catch (e: any) {
-            throw new Error(
-              `Error parsing RedwoodUI's package.json: ${e.message}`,
-            )
-          }
-          try {
-            projectPackageJson = JSON.parse(projectPackageJsonStr)
-          } catch (e: any) {
-            throw new Error(
-              `Error parsing your project's package.json: ${e.message}`,
-            )
-          }
-          // get all non-dev dependencies (currently, RWUI doesn't have any specific dev dependencies)
-          const rwuiDeps = Object.keys(rwuiPackageJson.dependencies)
-          const projectDeps = Object.keys(projectPackageJson.dependencies)
-          const depsToInstall = rwuiDeps.filter(
-            (dep) => !projectDeps.includes(dep),
-          )
-
-          if (depsToInstall.length === 0) {
-            task.skip(
-              'No packages to install — all RedwoodUI dependencies are already installed',
-            )
-            return
-          }
-
-          const depsToInstallWithVersions = depsToInstall.map((dep) => {
-            return `${dep}@${rwuiPackageJson.dependencies[dep]}`
-          })
-
-          task.output = c.info(
-            `Installing the following packages — you can remove any later if you don't end up using the components that require them: ${depsToInstallWithVersions.join(', ')}...`,
-          )
-
-          await execa('yarn', [
-            'workspace',
-            'web',
-            'add',
-            ...depsToInstallWithVersions,
-          ])
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        title: 'Add utility functions used by RedwoodUI',
-        task: async (_ctx, task) => {
-          const projectRWUIUtilsPathTS = path.join(
-            rwPaths.web.src,
-            'lib/uiUtils.ts',
-          )
-          const projectRWUIUtilsPathJS = path.join(
-            rwPaths.web.src,
-            'lib/uiUtils.js',
-          )
-
-          let utilsAlreadyInstalled = false
-          if (
-            fs.existsSync(projectRWUIUtilsPathTS) ||
-            fs.existsSync(projectRWUIUtilsPathJS)
-          ) {
-            utilsAlreadyInstalled = true
-          }
-
-          let shouldOverwrite = false
-
-          // give user chance to switch overwrite to true
-          if (utilsAlreadyInstalled && !shouldOverwrite) {
-            shouldOverwrite = await task.prompt({
-              type: 'confirm',
-              message:
-                "Looks like you've already got the RWUI utilities. Do you want to overwrite them? This may be helpful, for example if you've made changes and want to reset them or if we've made updates.",
-              initial: false,
-            })
-          }
-
-          if (utilsAlreadyInstalled && !shouldOverwrite) {
-            task.skip("RWUI's utility functions are already installed")
-            return
-          } else {
-            const rwuiUtilsContent = (await fetchFromRWUIRepo(
-              'web/src/lib/uiUtils.ts',
-            )) as string
-            fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
-          }
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        title: 'Add RedwoodUI components to your project',
-        task: async (_ctx, task) => {
-          // top-level components
-          const listOfComponentFolders = (await fetchFromRWUIRepo(
-            'web/src/ui',
-          )) as { name: string; path: string }[]
-          // components in sub-directories
-          const listOfFormComponentFolders = (await fetchFromRWUIRepo(
-            'web/src/ui/formFields',
-          )) as { name: string; path: string }[]
-
-          // filter to only directory names that start with a capital letter, as these are the ones that are components
-          const componentsAvailable = listOfComponentFolders.filter((val) =>
-            /^[A-Z]/.test(val.name),
-          )
-          const formComponentsAvailable = listOfFormComponentFolders.filter(
-            (val) =>
-              /^[A-Z]/.test(val.name) && val.name !== 'InputFieldWrapper', // InputFieldWrapper is a shared dependency, and not a regular component
-          )
-
-          const selectedComponents = await task.prompt<string[]>({
-            type: 'multiselect',
-            message:
-              'Select the components you want to add to your project (form fields are next):' +
-              c.warning(
-                '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
-              ),
-            hint: 'Use the arrow keys to navigate, space to select, and A to select all',
-            choices: [
-              ...componentsAvailable.map((component) => component.name),
-            ],
-          })
-
-          const selectedFormComponents = await task.prompt<string[]>({
-            type: 'multiselect',
-            message:
-              'Select the form components you want to add to your project (type A to select all):' +
-              c.warning(
-                '\n🚨 All selected components will be overwritten if they already exist.\nMake sure to back up any important changes before proceeding.\n',
-              ),
-            hint: 'Use the arrow keys to navigate, space to select, and A to select all',
-            choices: [
-              ...formComponentsAvailable.map((component) => component.name),
-            ],
-          })
-
-          return task.newListr([
-            ...selectedComponents.map((componentToInstall) => ({
-              options: { persistentOutput: true },
-              title: `Install component: ${componentToInstall}`,
-              task: async () => {
-                // need to get both the .tsx and .stories.tsx files
-                const componentFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.tsx`
-                const componentStoriesFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.stories.tsx`
-                const componentContent =
-                  await fetchFromRWUIRepo(componentFilePath)
-                const componentStoriesContent = await fetchFromRWUIRepo(
-                  componentStoriesFilePath,
-                )
-                ensureDirectoryExistence(componentFilePath)
-                fs.writeFileSync(componentFilePath, componentContent as string)
-                fs.writeFileSync(
-                  componentStoriesFilePath,
-                  componentStoriesContent as string,
-                )
-              },
-            })),
-            ...selectedFormComponents.map((formComponentToInstall) => ({
-              options: { persistentOutput: true },
-              title: `Install form component: ${formComponentToInstall}`,
-              task: async () => {
-                // need to get both the .tsx and .stories.tsx files
-                const componentFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.tsx`
-                const componentStoriesFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.stories.tsx`
-                const componentContent =
-                  await fetchFromRWUIRepo(componentFilePath)
-                const componentStoriesContent = await fetchFromRWUIRepo(
-                  componentStoriesFilePath,
-                )
-                ensureDirectoryExistence(componentFilePath)
-                fs.writeFileSync(componentFilePath, componentContent as string)
-                fs.writeFileSync(
-                  componentStoriesFilePath,
-                  componentStoriesContent as string,
-                )
-              },
-            })),
-            ...(selectedFormComponents.length > 0
-              ? [
-                  {
-                    options: { persistentOutput: true },
-                    title: 'Install shared dependencies for form components',
-                    task: async () => {
-                      // Placeholder for installing shared dependencies for form components
-                    },
-                  },
-                ]
-              : []),
-          ])
-        },
-      },
-      {
-        options: { persistentOutput: true },
-        title: 'Set up Storybook for RedwoodUI',
-        skip: async () => {
-          if (!usingStorybook) {
-            return 'This project is not using Storybook'
-          }
-
-          return false
-        },
-        task: async (_ctx, task) => {
-          return task.newListr([
-            {
-              options: { persistentOutput: true },
-              title: 'Add dark mode support to Storybook',
-              skip: async () => {
-                const storybookMainContent = fs.readFileSync(
-                  // We know the user is using Storybook because we checked above
-                  storybookMainPath as string,
-                  'utf-8',
-                )
-
-                if (
-                  /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
-                    storybookMainContent,
-                  )
-                ) {
-                  return 'Your Storybook looks like it already has dark mode support'
-                } else {
-                  return false
-                }
-              },
-              task: async () => {
-                throw new Error(
-                  'Add dark mode support to Storybook — Not implemented',
-                )
-              },
-            },
-            {
-              options: { persistentOutput: true },
-              title: 'Add story utility components',
-              skip: async () => {
-                // TODO this hardcodes the possible utility components. Instead,
-                // we should fetch the list of utility components from the RWUI repo.
-
-                // in the user's project can be either JSX or TSX, but in RWUI it's always TSX
-                const childrenPlaceholderComponentPathJSX = path.join(
-                  rwPaths.web.src,
-                  'ui/storyUtils/ChildrenPlaceholder.jsx',
-                )
-                const childrenPlaceholderComponentPathTSX = path.join(
-                  rwPaths.web.src,
-                  'ui/storyUtils/ChildrenPlaceholder.tsx',
-                )
-                const rwjsLogoPathJSX = path.join(
-                  rwPaths.web.src,
-                  'ui/storyUtils/RedwoodJSLogo.jsx',
-                )
-                const rwjsLogoPathTSX = path.join(
-                  rwPaths.web.src,
-                  'ui/storyUtils/RedwoodJSLogo.tsx',
-                )
-
-                let rwjsLogoPath: string | null = null
-                if (fs.existsSync(rwjsLogoPathJSX)) {
-                  rwjsLogoPath = rwjsLogoPathJSX
-                } else if (fs.existsSync(rwjsLogoPathTSX)) {
-                  rwjsLogoPath = rwjsLogoPathTSX
-                }
-
-                let childrenPlaceholderComponentPath: string | null = null
-                if (fs.existsSync(childrenPlaceholderComponentPathJSX)) {
-                  childrenPlaceholderComponentPath =
-                    childrenPlaceholderComponentPathJSX
-                } else if (fs.existsSync(childrenPlaceholderComponentPathTSX)) {
-                  childrenPlaceholderComponentPath =
-                    childrenPlaceholderComponentPathTSX
-                }
-
-                if (childrenPlaceholderComponentPath && rwjsLogoPath) {
-                  return 'ChildrenPlaceholder components already exist'
-                } else {
-                  return false
-                }
-              },
-              task: async () => {
-                throw new Error(
-                  'Add children placeholder utility component — Not implemented',
-                )
-              },
-            },
-          ])
-        },
-      },
-    ],
-    { rendererOptions: { collapseSubtasks: false }, exitOnError: true }, // exitOnError true for top-level tasks
-  )
-
-  try {
-    await tasks.run()
-  } catch (e: any) {
-    errorTelemetry(process.argv, e.message)
-    console.error(c.error(e.message))
-    process.exit(e?.exitCode || 1)
-  }
 }
 
 class RWUIInstallHandler {
@@ -595,6 +64,12 @@ class RWUIInstallHandler {
 
   storybookMainPath: string | null = null
 
+  /**
+   * The contents of the package.json file from the RedwoodUI repo's web workspace
+   * (as that's the only one we care about as a source of truth for dependencies)
+   */
+  rwuiPackageJson: any
+
   defaultTaskOptions: ListrGetRendererTaskOptions<any> = {
     persistentOutput: true,
   }
@@ -602,6 +77,7 @@ class RWUIInstallHandler {
   constructor() {
     this.initGlobalPaths()
     this.initStorybookInfo()
+    this.initRemoteFileContents()
   }
 
   /**
@@ -617,6 +93,9 @@ class RWUIInstallHandler {
     this.projectIndexCSSPath = path.join(this.rwPaths.web.src, 'index.css')
   }
 
+  /**
+   * A place to house the initialization of Storybook-related info
+   */
   initStorybookInfo() {
     // The main file can be either JS or TS, even if the project is TS
     const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.js')
@@ -626,6 +105,21 @@ class RWUIInstallHandler {
       this.storybookMainPath = storybookMainPathJS
     } else if (fs.existsSync(storybookMainPathTS)) {
       this.storybookMainPath = storybookMainPathTS
+    }
+  }
+
+  /**
+   * A place to house the initialization of remote file contents that is accessed between more than one task
+   * so that we don't need to fetch the same file multiple times
+   */
+  async initRemoteFileContents() {
+    const rwuiPackageJsonStr = (await fetchFromRWUIRepo(
+      'web/package.json',
+    )) as string
+    try {
+      this.rwuiPackageJson = JSON.parse(rwuiPackageJsonStr)
+    } catch (e: any) {
+      throw new Error(`Error parsing RedwoodUI's package.json: ${e.message}`)
     }
   }
 
@@ -875,6 +369,7 @@ class RWUIInstallHandler {
           const rwuiUtilsContent = (await fetchFromRWUIRepo(
             'web/src/lib/uiUtils.ts',
           )) as string
+
           fs.writeFileSync(projectRWUIUtilsPathTS, rwuiUtilsContent)
         }
       },
@@ -932,40 +427,14 @@ class RWUIInstallHandler {
             options: { persistentOutput: true },
             title: `Install component: ${componentToInstall}`,
             task: async () => {
-              // need to get both the .tsx and .stories.tsx files
-              const componentFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.tsx`
-              const componentStoriesFilePath = `web/src/ui/${componentToInstall}/${componentToInstall}.stories.tsx`
-              const componentContent =
-                await fetchFromRWUIRepo(componentFilePath)
-              const componentStoriesContent = await fetchFromRWUIRepo(
-                componentStoriesFilePath,
-              )
-              ensureDirectoryExistence(componentFilePath)
-              fs.writeFileSync(componentFilePath, componentContent as string)
-              fs.writeFileSync(
-                componentStoriesFilePath,
-                componentStoriesContent as string,
-              )
+              await this._installComponent(task, componentToInstall)
             },
           })),
           ...selectedFormComponents.map((formComponentToInstall) => ({
             options: { persistentOutput: true },
             title: `Install form component: ${formComponentToInstall}`,
             task: async () => {
-              // need to get both the .tsx and .stories.tsx files
-              const componentFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.tsx`
-              const componentStoriesFilePath = `web/src/ui/formFields/${formComponentToInstall}/${formComponentToInstall}.stories.tsx`
-              const componentContent =
-                await fetchFromRWUIRepo(componentFilePath)
-              const componentStoriesContent = await fetchFromRWUIRepo(
-                componentStoriesFilePath,
-              )
-              ensureDirectoryExistence(componentFilePath)
-              fs.writeFileSync(componentFilePath, componentContent as string)
-              fs.writeFileSync(
-                componentStoriesFilePath,
-                componentStoriesContent as string,
-              )
+              await this._installComponent(task, formComponentToInstall, 'form')
             },
           })),
           ...(selectedFormComponents.length > 0
@@ -1094,6 +563,103 @@ class RWUIInstallHandler {
       { rendererOptions: { collapseSubtasks: false }, exitOnError: true }, // exitOnError true for top-level tasks
     )
   }
+
+  async _addFileAndInstallPackages(
+    task: ListrTaskWrapper<any, any>,
+    /**
+     * The parsed content of the RedwoodUI package.json
+     */
+    fileBeingAdded: string,
+    filePath: string,
+  ) {
+    const dependencies: Record<string, string> =
+      this.rwuiPackageJson.dependencies
+    const devDependencies: Record<string, string> =
+      this.rwuiPackageJson.devDependencies
+
+    const packageImports = extractPackageImports(fileBeingAdded)
+
+    const depsToInstall: string[] = []
+    const devDepsToInstall: string[] = []
+
+    packageImports.forEach((pkg) => {
+      // Find the longest matching package name in dependencies or devDependencies
+      let matchedPkg = ''
+      for (const dep in dependencies) {
+        if (pkg.startsWith(dep) && dep.length > matchedPkg.length) {
+          matchedPkg = dep
+        }
+      }
+      for (const devDep in devDependencies) {
+        if (pkg.startsWith(devDep) && devDep.length > matchedPkg.length) {
+          matchedPkg = devDep
+        }
+      }
+
+      if (dependencies[matchedPkg]) {
+        depsToInstall.push(`${matchedPkg}@${dependencies[matchedPkg]}`)
+      } else if (devDependencies[matchedPkg]) {
+        devDepsToInstall.push(`${matchedPkg}@${devDependencies[matchedPkg]}`)
+      }
+    })
+
+    const hasExistingOutput = task.output !== undefined
+
+    const outputMessage = `As part of adding the file ${filePath}, installing the following dependencies:\n${depsToInstall.join(', ')}\nand devDependencies:\n${devDepsToInstall.join(', ')}\n...`
+
+    if (hasExistingOutput) {
+      task.output += outputMessage
+    } else {
+      task.output = outputMessage
+    }
+
+    // Install the dependencies
+    if (depsToInstall.length > 0) {
+      await execa('yarn', ['workspace', 'web', 'add', ...depsToInstall])
+    }
+
+    // Install the devDependencies
+    if (devDepsToInstall.length > 0) {
+      await execa('yarn', [
+        'workspace',
+        'web',
+        'add',
+        '-D',
+        ...devDepsToInstall,
+      ])
+    }
+
+    // Write the file to the specified path
+    fs.writeFileSync(filePath, fileBeingAdded)
+  }
+
+  async _installComponent(
+    task: ListrTaskWrapper<any, any>,
+    componentName: string,
+    componentType: 'standard' | 'form' = 'standard',
+  ) {
+    const componentFilePath = `web/src/ui/${componentType === 'form' ? 'formFields' : ''}/${componentName}/${componentName}.tsx`
+    const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields' : ''}/${componentName}/${componentName}.stories.tsx`
+
+    ensureDirectoryExistence(componentFilePath)
+
+    const componentContent = await fetchFromRWUIRepo(componentFilePath)
+    this._addFileAndInstallPackages(
+      task,
+      componentContent as string,
+      componentFilePath,
+    )
+    if (this.usingStorybook) {
+      const componentStoriesContent = await fetchFromRWUIRepo(
+        componentStoriesFilePath,
+      )
+      this._addFileAndInstallPackages(
+        task,
+        componentStoriesContent as string,
+        componentStoriesFilePath,
+      )
+    }
+  }
 }
 
 /**
@@ -1221,4 +787,30 @@ function ensureDirectoryExistence(filePath: string): boolean {
   }
   fs.mkdirSync(dirname, { recursive: true })
   return true
+}
+
+/**
+ * Extracts package names from all import statements in a given file content.
+ * - Note that this does not currently handle "require" statements.
+ * - It also will exclude local imports (currently, those starting with "./" or "src/").
+ * - Also note that this will just return the full import name, ie if you import from "pacakge/subpackage", it will return "package/subpackage".
+ */
+function extractPackageImports(fileContent: string): string[] {
+  // Regular expression to match import statements and capture the package name
+  const importRegex = /import\s.*?from\s['"](.*?)['"]/g
+  const packages = new Set<string>()
+  let match
+
+  // Iterate over all matches in the file content
+  while ((match = importRegex.exec(fileContent)) !== null) {
+    // Extract the package name
+    const pkg = match[1]
+    // Only add non-local imports
+    if (!pkg.startsWith('./') && !pkg.startsWith('src/')) {
+      packages.add(pkg)
+    }
+  }
+
+  // Convert the set of packages to an array and return it
+  return Array.from(packages)
 }
