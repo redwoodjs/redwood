@@ -90,7 +90,7 @@
     "react": "19.0.0-rc-8269d55d-20240802",
     "react-server-dom-webpack": "19.0.0-rc-8269d55d-20240802",
     "rimraf": "6.0.1",
-    "vite": "6.0.0-alpha.21",
+    "vite": "6.0.0-beta.2",
     "vite-plugin-cjs-interop": "2.1.1",
     "vite-plugin-node-polyfills": "0.22.0",
     "ws": "8.18.0",

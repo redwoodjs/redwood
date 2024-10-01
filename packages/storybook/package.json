@@ -62,7 +62,7 @@
     "@types/node": "20.14.15",
     "tsx": "4.17.0",
     "typescript": "5.5.4",
-    "vite": "6.0.0-alpha.21"
+    "vite": "6.0.0-beta.2"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "workspace:*",
