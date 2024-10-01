@@ -22,7 +22,7 @@ import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkM
 import addLayerToIndexCSS from './redwoodui-utils/addLayerToIndexCSS'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
 
-// TODO: add options here, probably at least `force`
+// TODO add options here, probably at least `force`
 // interface RedwoodUIYargsOptions {
 // }
 
@@ -98,9 +98,10 @@ class RWUIInstallHandler {
    */
   initStorybookInfo() {
     // The main file can be either JS or TS, even if the project is TS
-    const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.js')
+    const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.ts')
     const storybookMainPathTS = path.join(this.rwPaths.web.storybook, 'main.ts')
 
+    // Not using tsFileExistInProject because we specifically want to know which file the user is using
     if (fs.existsSync(storybookMainPathJS)) {
       this.storybookMainPath = storybookMainPathJS
     } else if (fs.existsSync(storybookMainPathTS)) {
@@ -154,7 +155,7 @@ class RWUIInstallHandler {
           'yarn',
           ['rw', 'setup', 'ui', 'tailwindcss'],
           // this is needed so that the output is shown in the terminal.
-          // TODO: still, it's not perfect, because the output is shown below the others
+          // TODO still, it's not perfect, because the output is shown below the others
           // and seems to be swallowing, for example, part of the suggested extensions message.
           { stdio: 'inherit' },
         )
@@ -333,22 +334,12 @@ class RWUIInstallHandler {
       options: { persistentOutput: true },
       title: 'Add utility functions used by RedwoodUI',
       task: async (_ctx, task) => {
-        const projectRWUIUtilsPathTS = path.join(
+        const projectRWUIUtilsPath = path.join(
           this.rwPaths.web.src,
           'lib/uiUtils.ts',
         )
-        const projectRWUIUtilsPathJS = path.join(
-          this.rwPaths.web.src,
-          'lib/uiUtils.js',
-        )
 
-        let utilsAlreadyInstalled = false
-        if (
-          fs.existsSync(projectRWUIUtilsPathTS) ||
-          fs.existsSync(projectRWUIUtilsPathJS)
-        ) {
-          utilsAlreadyInstalled = true
-        }
+        const utilsAlreadyInstalled = tsFileExistInProject(projectRWUIUtilsPath)
 
         let shouldOverwrite = false
 
@@ -358,7 +349,7 @@ class RWUIInstallHandler {
             type: 'confirm',
             message:
               "Looks like you've already got the RWUI utilities. Do you want to overwrite them? This may be helpful, for example if you've made changes and want to reset them or if we've made updates.",
-            initial: false,
+            initial: 'no',
           })
         }
 
@@ -373,7 +364,7 @@ class RWUIInstallHandler {
           this._addFileAndInstallPackages(
             task,
             rwuiUtilsContent,
-            projectRWUIUtilsPathTS,
+            projectRWUIUtilsPath,
           )
         }
       },
@@ -402,6 +393,7 @@ class RWUIInstallHandler {
           (val) => /^[A-Z]/.test(val.name) && val.name !== 'InputFieldWrapper', // InputFieldWrapper is a shared dependency, and not a regular component
         )
 
+        // TODO add a note next to any components that appear to already be installed
         const selectedComponents = await task.prompt<string[]>({
           type: 'multiselect',
           message:
@@ -426,44 +418,62 @@ class RWUIInstallHandler {
           ],
         })
 
-        return task.newListr([
-          ...selectedComponents.map(
-            (componentToInstall): ListrTask => ({
-              options: { persistentOutput: false },
-              title: `Install component: ${componentToInstall}`,
-              task: async (_ctx, task) => {
-                await this._installComponent(task, componentToInstall)
-              },
-            }),
-          ),
-          ...selectedFormComponents.map(
-            (formComponentToInstall): ListrTask => ({
-              options: { persistentOutput: false },
-              title: `Install form component: ${formComponentToInstall}`,
-              task: async (_ctx, task) => {
-                await this._installComponent(
-                  task,
-                  formComponentToInstall,
-                  'form',
-                )
-              },
-            }),
-          ),
-          ...(selectedFormComponents.length > 0
-            ? [
-                {
-                  options: { persistentOutput: true },
-                  title: 'Install shared dependencies for form components',
-                  task: async () => {
-                    // Placeholder for installing shared dependencies for form components
-                    throw new Error(
-                      'Install shared dependencies for form components — Not implemented',
-                    )
-                  },
+        return task.newListr(
+          [
+            ...selectedComponents.map(
+              (componentToInstall): ListrTask => ({
+                options: { persistentOutput: false },
+                title: `Install component: ${componentToInstall}`,
+                task: async (_ctx, task) => {
+                  await this._installComponent(task, componentToInstall)
                 },
-              ]
-            : []),
-        ])
+              }),
+            ),
+            ...(selectedFormComponents.length > 0
+              ? [
+                  {
+                    options: { persistentOutput: true },
+                    title: 'Install shared dependencies for form components',
+                    task: async (_ctx, task) => {
+                      ;[
+                        'web/src/ui/formFields/inputVariants.ts',
+                        'web/src/ui/formFields/groupFieldCommon.tsx',
+                        'web/src/ui/formFields/dropdownFieldCommon.tsx',
+                        'web/src/ui/formFields/InputFieldWrapper/InputFieldWrapper.tsx',
+                      ].forEach(async (filePath) => {
+                        let shouldInstall = true
+                        if (tsFileExistInProject(filePath)) {
+                          shouldInstall = await task.prompt({
+                            type: 'confirm',
+                            message: `Looks like you already have ${filePath}. Do you want to overwrite it?`,
+                            initial: 'no',
+                          })
+                        }
+                        if (shouldInstall) {
+                          await this._installFileFromRWUIRepo(task, filePath)
+                        }
+                      })
+                    },
+                  } as ListrTask,
+                ]
+              : []),
+            ...selectedFormComponents.map(
+              (formComponentToInstall): ListrTask => ({
+                options: { persistentOutput: false },
+                title: `Install form component: ${formComponentToInstall}`,
+                task: async (_ctx, task) => {
+                  await this._installComponent(
+                    task,
+                    formComponentToInstall,
+                    'form',
+                  )
+                },
+              }),
+            ),
+          ],
+          // exitOnError false because we want to continue even if one of the components fails
+          { exitOnError: false },
+        )
       },
     }
   }
@@ -581,10 +591,7 @@ class RWUIInstallHandler {
 
   async _addFileAndInstallPackages(
     task: ListrTaskWrapper<any, any>,
-    /**
-     * The parsed content of the RedwoodUI package.json
-     */
-    fileBeingAdded: string,
+    fileContent: string,
     filePath: string,
   ) {
     const dependencies: Record<string, string> =
@@ -592,13 +599,14 @@ class RWUIInstallHandler {
     const devDependencies: Record<string, string> =
       this.rwuiPackageJson.devDependencies
 
-    const packageImports = extractPackageImports(fileBeingAdded)
+    const packageImports = extractPackageImports(fileContent)
 
     const depsToInstall: string[] = []
     const devDepsToInstall: string[] = []
 
     packageImports.forEach((pkg) => {
       // Find the longest matching package name in dependencies or devDependencies
+      // Initiailizing as empty string rather than null because we want to compare lengths
       let matchedPkg = ''
       for (const dep in dependencies) {
         if (pkg.startsWith(dep) && dep.length > matchedPkg.length) {
@@ -611,17 +619,49 @@ class RWUIInstallHandler {
         }
       }
 
-      // TODO don't install if a newer version is in the project's web/package.json
-      if (dependencies[matchedPkg]) {
-        depsToInstall.push(`${matchedPkg}@${dependencies[matchedPkg]}`)
-      } else if (devDependencies[matchedPkg]) {
-        devDepsToInstall.push(`${matchedPkg}@${devDependencies[matchedPkg]}`)
+      // Sometimes, an internal package will be imported, so it won't be in any listed dependencies
+      // eg @radix-ui/react-popper, which doesn't make sense to install separately
+      if (matchedPkg === '') {
+        return // skip to next iteration
+      }
+
+      const projectPackageJsonPath = path.join(
+        this.rwPaths.web.base,
+        'package.json',
+      )
+      const projectPackageJson = JSON.parse(
+        fs.readFileSync(projectPackageJsonPath, 'utf-8'),
+      )
+
+      const getMajorVersion = (version: string) => {
+        const parsed = parseInt(version.split('.')[0].replace(/\D/g, ''), 10)
+        return parsed
+      }
+
+      const projectDeps = {
+        ...projectPackageJson.dependencies,
+        ...projectPackageJson.devDependencies,
+      }
+
+      const projectVersion = projectDeps[matchedPkg]
+        ? getMajorVersion(projectDeps[matchedPkg])
+        : null
+      const rwuiVersion = dependencies[matchedPkg]
+        ? getMajorVersion(dependencies[matchedPkg])
+        : getMajorVersion(devDependencies[matchedPkg])
+
+      if (projectVersion === null || rwuiVersion > projectVersion) {
+        if (dependencies[matchedPkg]) {
+          depsToInstall.push(`${matchedPkg}@${dependencies[matchedPkg]}`)
+        } else if (devDependencies[matchedPkg]) {
+          devDepsToInstall.push(`${matchedPkg}@${devDependencies[matchedPkg]}`)
+        }
       }
     })
 
     if (depsToInstall.length > 0 || devDepsToInstall.length > 0) {
       const hasExistingOutput = task.output !== undefined
-      const outputMessage = `As part of adding the file ${filePath}, installing the following packages...\n`
+      const outputMessage = `As part of adding the file ${filePath}, need to add the following packages...\n`
 
       if (hasExistingOutput) {
         task.output += outputMessage
@@ -649,14 +689,16 @@ class RWUIInstallHandler {
     }
 
     // Write the file to the specified path
-    fs.writeFileSync(filePath, fileBeingAdded)
+    fs.writeFileSync(filePath, fileContent)
   }
 
   /**
    * Installs a component from the RedwoodUI repo into the user's project.
    * Installs any required packages as well.
    *
-   * TODO: Some components rely on other components. Check, and install as well.
+   * TODO Some components rely on other components. Check, and install as well.
+   * One idea of how to do this is to maintain a set of components to install at the class level,
+   * and add any extra components to install to that set as we go.
    */
   async _installComponent(
     task: ListrTaskWrapper<any, any>,
@@ -664,26 +706,33 @@ class RWUIInstallHandler {
     componentType: 'standard' | 'form' = 'standard',
   ) {
     const componentFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.tsx`
-    const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.stories.tsx`
 
-    ensureDirectoryExistence(componentFilePath)
-
-    const componentContent = await fetchFromRWUIRepo(componentFilePath)
-    await this._addFileAndInstallPackages(
-      task,
-      componentContent as string,
-      componentFilePath,
-    )
+    await this._installFileFromRWUIRepo(task, componentFilePath)
     if (this.usingStorybook) {
-      const componentStoriesContent = await fetchFromRWUIRepo(
-        componentStoriesFilePath,
-      )
-      await this._addFileAndInstallPackages(
-        task,
-        componentStoriesContent as string,
-        componentStoriesFilePath,
+      const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.stories.tsx`
+      await this._installFileFromRWUIRepo(task, componentStoriesFilePath)
+    }
+  }
+
+  /**
+   * Given the path to a file, fetches the file from the RedwoodUI repo and installs it in the user's project.
+   * Also installs any required packages.
+   */
+  async _installFileFromRWUIRepo(
+    task: ListrTaskWrapper<any, any>,
+    filePath: string,
+  ) {
+    ensureDirectoryExistence(filePath)
+
+    const fileContent = await fetchFromRWUIRepo(filePath)
+
+    if (Array.isArray(fileContent)) {
+      throw new Error(
+        `Expected a file, but got a directory at the path: ${filePath}`,
       )
     }
+
+    await this._addFileAndInstallPackages(task, fileContent, filePath)
   }
 }
 
@@ -860,4 +909,15 @@ function extractPackageImports(fileContent: string): string[] {
 
   // Convert the set of packages to an array and return it
   return Array.from(packages)
+}
+
+/**
+ * Checks if a TS/TSX file exists in the project (either as TS or JS).
+ * Expects input file to be a TS file, as that's what RWUI is written in.
+ */
+function tsFileExistInProject(filePath: string): boolean {
+  // check for both TS and JS files
+  return (
+    fs.existsSync(filePath) || fs.existsSync(filePath.replace('.ts', '.js'))
+  )
 }
