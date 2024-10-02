@@ -1,3 +1,14 @@
+class DummyWS {
+  addEventListener() {}
+  send() {}
+}
+
+if (typeof globalThis.WebSocket === 'undefined') {
+  // @ts-expect-error - We're just trying to make sure WebSocket is defined for
+  // when Vite analyzes this file during SSR
+  globalThis.WebSocket = DummyWS
+}
+
 export interface RscModel {
   __rwjs__Routes: [React.ReactElement]
   __rwjs__rsa_data?: unknown

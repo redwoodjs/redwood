@@ -1,3 +1,5 @@
+console.log('peter_rocks at the top of rscRequestHandler.ts')
+
 import { Readable } from 'node:stream'
 
 import * as DefaultFetchAPI from '@whatwg-node/fetch'
@@ -34,6 +36,8 @@ export function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
 ) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
+
+  console.log('peter_rocks inside createRscRequestHandler')
 
   // TODO (RSC): Switch from Express to Web compatible Request and Response
   return async (

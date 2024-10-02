@@ -13,12 +13,28 @@ type RSDWClientType = typeof RSDWClientModule
 type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
+  if (globalThis.__rwjs__vite_dev_server) {
+    return {
+      serverEntries: {
+        __rwjs__Routes: '../../src/Routes.tsx',
+      },
+      ssrEntries: {},
+    }
+  }
+
   const entriesPath = getPaths().web.distRscEntries
   const entries = await import(makeFilePath(entriesPath))
   return entries
 }
 
 async function getRoutesComponent(): Promise<React.FunctionComponent> {
+  if (globalThis.__rwjs__vite_dev_server) {
+    const routesMod = await globalThis.__rwjs__vite_dev_server.ssrLoadModule(
+      getPaths().web.routes,
+    )
+    return routesMod.default
+  }
+
   const { serverEntries } = await getEntries()
   const entryPath = path.join(
     getPaths().web.distRsc,
@@ -74,6 +90,13 @@ function resolveClientEntryForProd(
 
 const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
+/**
+ * Render the RW App's Routes.{tsx,jsx} component.
+ * In production, this function will read the Routes component from the App's
+ * dist directory.
+ * During dev, this function will use Vite to load the Routes component from
+ * the App's src directory.
+ */
 export async function renderRoutesSsr(pathname: string) {
   console.log('renderRoutesSsr pathname', pathname)
 

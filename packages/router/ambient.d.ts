@@ -1,8 +1,11 @@
 /* eslint-disable no-var */
 /// <reference types="react/experimental" />
+import type { ViteDevServer } from 'vite'
 
 declare global {
   var __REDWOOD__PRERENDERING: boolean
+  var __rwjs__vite_dev_server: ViteDevServer | undefined
+
   /**
    * URL or absolute path to the GraphQL serverless function, without the trailing slash.
    * Example: `./redwood/functions/graphql` or `https://api.redwoodjs.com/graphql`

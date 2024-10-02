@@ -1,8 +1,11 @@
+// import path from 'node:path'
+// import url from 'node:url'
+
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
 import type { ViteDevServer } from 'vite'
-import { createServer as createViteServer } from 'vite'
+import { createServer as createViteServer, createViteRuntime } from 'vite'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 import type { RouteSpec } from '@redwoodjs/internal/dist/routes.js'
@@ -19,6 +22,7 @@ import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
+import { rscSsrRouterImport } from './plugins/vite-plugin-rsc-ssr-router-import.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import {
@@ -29,6 +33,7 @@ import {
 
 // TODO (STREAMING) Just so it doesn't error out. Not sure how to handle this.
 globalThis.__REDWOOD__PRERENDER_PAGES = {}
+globalThis.__rwjs__vite_dev_server = undefined
 
 async function createServer() {
   ensureProcessDirWeb()
@@ -40,11 +45,15 @@ async function createServer() {
 
   const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
 
+  console.log('peter_rocks rscEnabled', rscEnabled)
+
   // Per request store is only used in server components
   const serverStorage = createServerStorage()
 
   app.use('*', (req, _res, next) => {
     const fullUrl = getFullUrl(req, rscEnabled)
+
+    console.log('fullUrl', fullUrl)
 
     const perReqStore = createPerRequestMap({
       // Convert express headers to fetch header
@@ -76,11 +85,81 @@ async function createServer() {
   }
   // ~~~~ Dev time validations ~~~~
 
+  console.log('peter_rocks before createViteServer')
+
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
   // can take control
   const vite = await createViteServer({
     configFile: rwPaths.web.viteConfig,
+    envFile: false,
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    },
+    ssr: {
+      // Inline every file apart from node built-ins. We want vite/rollup to
+      // inline dependencies in the server build. This gets round runtime
+      // importing of "server-only" and other packages with poisoned imports.
+      //
+      // Files included in `noExternal` are files we want Vite to analyze
+      // As of vite 5.2 `true` here means "all except node built-ins"
+      noExternal: true,
+      // TODO (RSC): Other frameworks build for RSC without `noExternal: true`.
+      // What are we missing here? When/why is that a better choice? I know
+      // we would have to explicitly add a bunch of packages to noExternal, if
+      // we wanted to go that route.
+      // noExternal: ['@tobbe.dev/rsc-test'],
+      // Can't inline prisma client (db calls fail at runtime) or react-dom
+      // (css pre-init failure)
+      // Server store has to be externalized, because it's a singleton (shared between FW and App)
+      external: [
+        '@prisma/client',
+        '@prisma/fetch-engine',
+        '@prisma/internals',
+        '@redwoodjs/auth-dbauth-api',
+        '@redwoodjs/cookie-jar',
+        '@redwoodjs/server-store',
+        '@simplewebauthn/server',
+        'graphql-scalars',
+        'minimatch',
+        'playwright',
+        'react-dom',
+      ],
+      resolve: {
+        // These conditions are used in the plugin pipeline, and only affect non-externalized
+        // dependencies during the SSR build. Which because of `noExternal: true` means all
+        // dependencies apart from node built-ins.
+        // TODO (RSC): What's the difference between `conditions` and
+        // `externalConditions`? When is one used over the other?
+        // conditions: ['react-server'],
+        // externalConditions: ['react-server'],
+      },
+      optimizeDeps: {
+        // We need Vite to optimize these dependencies so that they are resolved
+        // with the correct conditions. And so that CJS modules work correctly.
+        include: [
+          'react/**/*',
+          'react-dom/server',
+          'react-dom/server.edge',
+          'rehackt',
+          'react-server-dom-webpack/server',
+          'react-server-dom-webpack/client',
+          '@apollo/client/cache/*',
+          '@apollo/client/utilities/*',
+          '@apollo/client/react/hooks/*',
+          'react-fast-compare',
+          'invariant',
+          'shallowequal',
+          'graphql/language/*',
+          'stacktracey',
+          'deepmerge',
+          'fast-glob',
+        ],
+      },
+    },
+    resolve: {
+      // conditions: ['react-server'],
+    },
     plugins: [
       cjsInterop({
         dependencies: [
@@ -92,12 +171,20 @@ async function createServer() {
         ],
       }),
       rscEnabled && rscRoutesAutoLoader(),
+      rscEnabled && rscSsrRouterImport(),
     ],
     server: { middlewareMode: true },
     logLevel: 'info',
     clearScreen: false,
     appType: 'custom',
   })
+
+  const viteRuntime = await createViteRuntime(vite)
+  globalThis.__rwjs__vite_dev_server = vite
+  // @ts-expect-error - need to update globalThis types
+  globalThis.__rwjs__vite_runtime = viteRuntime
+
+  console.log('peter_rocks after createViteServer')
 
   // create a handler that will invoke middleware with or without a route
   // The DEV one will create a new middleware router on each request
@@ -126,21 +213,37 @@ async function createServer() {
   // use vite's connect instance as middleware
   app.use(vite.middlewares)
 
+  console.log('peter_rocks after app.use(vite.middleware)')
+
   if (rscEnabled) {
-    const { createRscRequestHandler } = await import(
-      './rsc/rscRequestHandler.js'
-    )
+    console.log('peter_rocks before importing rscRequestHandler')
+    // const { createRscRequestHandler } = await import(
+    //   './rsc/rscRequestHandler.js'
+    // )
+    // const { createRscRequestHandler } = await viteRuntime.executeUrl(
+    //   new URL('./rsc/rscRequestHandler.js', import.meta.url).pathname,
+    // )
+    console.log('peter_rocks after importing rscRequestHandler')
     // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
     app.use(
       '/rw-rsc',
-      createRscRequestHandler({
-        getMiddlewareRouter: async () => createMiddlewareRouter(vite),
-        viteDevServer: vite,
-      }),
+      // createRscRequestHandler({
+      //   getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+      //   viteDevServer: vite,
+      // }),
+      (req, res, next) => {
+        console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
+        console.log('req.headers.host', req.headers.host)
+        console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
+
+        return next()
+      },
     )
   }
 
   const routes = getProjectRoutes()
+
+  console.log('peter_rocks before createReactStreamingHandler')
 
   const routeHandler = await createReactStreamingHandler(
     {

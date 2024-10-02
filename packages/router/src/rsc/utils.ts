@@ -8,12 +8,16 @@ export function makeFilePath(path: string) {
 }
 
 /**
- *
  * See vite/streamHelpers.ts.
  *
- * This function ensures we load the same version of rsdw_client to prevent multiple instances of React
+ * This function ensures we load the bundled version of React to prevent
+ * multiple instances of React
  */
 export async function importReact() {
+  if (globalThis.__rwjs__vite_dev_server) {
+    return await globalThis.__rwjs__vite_dev_server.ssrLoadModule('react')
+  }
+
   const distSsr = getPaths().web.distSsr
   const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
 
@@ -21,12 +25,19 @@ export async function importReact() {
 }
 
 /**
- *
  * See vite/streamHelpers.ts.
  *
- * This function ensures we load the same version of rsdw_client to prevent multiple instances of React
+ * This function ensures we load the same version of rsdw_client everywhere to
+ * prevent multiple instances of React
  */
 export async function importRsdwClient() {
+  if (globalThis.__rwjs__vite_dev_server) {
+    const rsdwcMod = await globalThis.__rwjs__vite_dev_server.ssrLoadModule(
+      'react-server-dom-webpack/client.edge',
+    )
+    return rsdwcMod.default
+  }
+
   const distSsr = getPaths().web.distSsr
   const rsdwClientPath = makeFilePath(
     path.join(distSsr, '__rwjs__rsdw-client.mjs'),
