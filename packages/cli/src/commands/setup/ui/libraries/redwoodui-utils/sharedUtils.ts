@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { fs } from 'memfs'
+import fs from 'fs-extra'
 
 /**
  * Fetches a file from the RedwoodUI repo.

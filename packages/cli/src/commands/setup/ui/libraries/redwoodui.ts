@@ -495,24 +495,38 @@ class RWUIInstallHandler {
                     options: { persistentOutput: true },
                     title: 'Install shared dependencies for form components',
                     task: async (_ctx, task) => {
-                      ;[
+                      const sharedDependencies = [
                         'web/src/ui/formFields/inputVariants.ts',
                         'web/src/ui/formFields/groupFieldCommon.tsx',
                         'web/src/ui/formFields/dropdownFieldCommon.tsx',
                         'web/src/ui/formFields/InputFieldWrapper/InputFieldWrapper.tsx',
-                      ].forEach(async (filePath) => {
-                        let shouldInstall = true
-                        if (tsFileExistInProject(filePath)) {
-                          shouldInstall = await task.prompt({
-                            type: 'confirm',
-                            message: `Looks like you already have ${filePath}. Do you want to overwrite it?`,
-                            initial: 'no',
-                          })
-                        }
-                        if (shouldInstall) {
-                          await this._installFileFromRWUIRepo(task, filePath)
-                        }
-                      })
+                      ]
+
+                      const existingFiles = sharedDependencies.filter(
+                        (filePath) => tsFileExistInProject(filePath),
+                      )
+
+                      let filesToOverwrite: string[] = []
+                      if (existingFiles.length > 0) {
+                        filesToOverwrite = await task.prompt<string[]>({
+                          type: 'multiselect',
+                          message:
+                            'Select the shared dependencies you want to overwrite:',
+                          hint: 'Use the arrow keys to navigate, space to select, and A to select all',
+                          choices: existingFiles,
+                        })
+                      }
+
+                      await Promise.all(
+                        sharedDependencies.map(async (filePath) => {
+                          if (
+                            !tsFileExistInProject(filePath) ||
+                            filesToOverwrite.includes(filePath)
+                          ) {
+                            await this._installFileFromRWUIRepo(task, filePath)
+                          }
+                        }),
+                      )
                     },
                   } as ListrTask,
                 ]
@@ -795,6 +809,19 @@ class RWUIInstallHandler {
     if (this.usingStorybook) {
       const componentStoriesFilePath = `web/src/ui/${componentType === 'form' ? 'formFields/' : ''}${componentName}/${componentName}.stories.tsx`
       await this._installFileFromRWUIRepo(task, componentStoriesFilePath)
+    }
+
+    // Some components have extra files that need to be added. This is a place to add those.
+    // TODO automate this by looking at the contents of the component folder in the RWUI repo, or something.
+    const extraComponentFiles: Record<string, string[]> = {
+      Menu: ['web/src/ui/Menu/menuCommon.tsx'],
+    }
+    if (extraComponentFiles[componentName]) {
+      await Promise.all(
+        extraComponentFiles[componentName].map(async (filePath) => {
+          await this._installFileFromRWUIRepo(task, filePath)
+        }),
+      )
     }
   }
 
