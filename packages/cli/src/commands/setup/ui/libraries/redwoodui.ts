@@ -61,6 +61,18 @@ export const handler = async () => {
 
   try {
     await installHandler.getAllTasks().run()
+    console.log(
+      c.success(
+        'RedwoodUI has been successfully set up in your project. Enjoy using RedwoodUI!',
+      ),
+    )
+    if (installHandler.usingStorybook) {
+      console.log(
+        c.success(
+          "Looks like you're using Storybook — to see all the RedwoodUI components, run `yarn rw storybook`.",
+        ),
+      )
+    }
   } catch (e: any) {
     errorTelemetry(process.argv, e.message)
     console.error(c.error(e.message))
