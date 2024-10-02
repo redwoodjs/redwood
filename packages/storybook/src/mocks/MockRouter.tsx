@@ -7,9 +7,10 @@
 
 import type React from 'react'
 
+import { flattenAll } from '@redwoodjs/router/dist/react-util'
 import { isValidRoute } from '@redwoodjs/router/dist/route-validators'
 import type { RouterProps } from '@redwoodjs/router/dist/router'
-import { flattenAll, replaceParams } from '@redwoodjs/router/dist/util'
+import { replaceParams } from '@redwoodjs/router/dist/util'
 
 export * from '@redwoodjs/router/dist/index'
 
