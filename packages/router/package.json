@@ -47,6 +47,10 @@
       "import": "./dist/util.js",
       "require": "./dist/cjs/util.js"
     },
+    "./react-util": {
+      "import": "./dist/react-util.js",
+      "require": "./dist/cjs/react-util.js"
+    },
     "./rscCss": {
       "require": "./dist/cjs/rsc/rscCss.js",
       "import": "./dist/rsc/rscCss.js"
