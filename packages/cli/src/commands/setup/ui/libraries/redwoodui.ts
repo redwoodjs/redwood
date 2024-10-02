@@ -30,8 +30,8 @@ import {
   ensureDirectoryExistence,
 } from './redwoodui-utils/sharedUtils'
 import {
-  addSBDarkModeThemes,
-  addSBStylingAddon,
+  addSBAddonsToMain,
+  addSBDarkModeThemesToPreview,
 } from './redwoodui-utils/storybookConfigMods'
 
 // TODO add options here, probably at least `force`
@@ -542,53 +542,50 @@ class RWUIInstallHandler {
           {
             options: { persistentOutput: true },
             title: 'Add dark mode support to Storybook',
-            skip: async () => {
-              let storybookMainContent = fs.readFileSync(
-                // We know the user is using Storybook because we checked above
+            task: async () => {
+              const origSBMainContent = fs.readFileSync(
+                // We know the user is using Storybook because we checked in the skip function
                 this.projectStorybookMainPath as string,
                 'utf-8',
               )
 
-              let storybookPreviewContent = this.projectStorybookPreviewPath
+              const origSBPreviewContent = this.projectStorybookPreviewPath
                 ? fs.readFileSync(this.projectStorybookPreviewPath, 'utf-8')
                 : ''
 
-              // TODO replace with regex test
-              const hasStlyingAddon = storybookMainContent.includes(
-                '@storybook/addon-styling',
+              const newSBMainContent = addSBAddonsToMain(origSBMainContent, [
+                '@storybook/addon-themes',
+              ])
+
+              const newSBPreviewContent =
+                await addSBDarkModeThemesToPreview(origSBPreviewContent)
+
+              if (
+                newSBMainContent == origSBMainContent &&
+                newSBPreviewContent == origSBPreviewContent
+              ) {
+                task.skip(
+                  'Your Storybook config looks like it already has dark mode support',
+                )
+                return
+              }
+
+              this._addFileAndInstallPackages(
+                task,
+                newSBMainContent,
+                this.projectStorybookMainPath as string,
               )
-
-              const hasDarkModeThemes =
-                /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
-                  storybookPreviewContent,
-                )
-
-              if (!hasStlyingAddon) {
-                storybookMainContent = addSBStylingAddon(storybookMainContent)
-              }
-
-              if (!hasDarkModeThemes) {
-                storybookPreviewContent = addSBDarkModeThemes(
-                  storybookPreviewContent,
-                )
-              }
-
-              if (hasDarkModeThemes && hasStlyingAddon) {
-                return 'Your Storybook looks like it already has dark mode support'
-              } else {
-                return false
-              }
-            },
-            task: async () => {
-              throw new Error(
-                'Add dark mode support to Storybook — Not implemented',
+              this._addFileAndInstallPackages(
+                task,
+                newSBPreviewContent,
+                this.projectStorybookPreviewPath || 'web/.storybook/preview.ts',
               )
             },
           },
           {
             options: { persistentOutput: true },
             title: 'Add story utility components',
-            skip: async () => {
+            task: async () => {
               // TODO this hardcodes the possible utility components. Instead,
               // we should fetch the list of utility components from the RWUI repo.
 
@@ -610,13 +607,6 @@ class RWUIInstallHandler {
                 'ui/storyUtils/RedwoodJSLogo.tsx',
               )
 
-              let rwjsLogoPath: string | null = null
-              if (fs.existsSync(rwjsLogoPathJSX)) {
-                rwjsLogoPath = rwjsLogoPathJSX
-              } else if (fs.existsSync(rwjsLogoPathTSX)) {
-                rwjsLogoPath = rwjsLogoPathTSX
-              }
-
               let childrenPlaceholderComponentPath: string | null = null
               if (fs.existsSync(childrenPlaceholderComponentPathJSX)) {
                 childrenPlaceholderComponentPath =
@@ -625,17 +615,31 @@ class RWUIInstallHandler {
                 childrenPlaceholderComponentPath =
                   childrenPlaceholderComponentPathTSX
               }
+              let rwjsLogoPath: string | null = null
+              if (fs.existsSync(rwjsLogoPathJSX)) {
+                rwjsLogoPath = rwjsLogoPathJSX
+              } else if (fs.existsSync(rwjsLogoPathTSX)) {
+                rwjsLogoPath = rwjsLogoPathTSX
+              }
 
               if (childrenPlaceholderComponentPath && rwjsLogoPath) {
-                return 'ChildrenPlaceholder components already exist'
-              } else {
-                return false
+                task.skip('Story utility components already exist')
+                return
               }
-            },
-            task: async () => {
-              throw new Error(
-                'Add children placeholder utility component — Not implemented',
-              )
+
+              if (!childrenPlaceholderComponentPath) {
+                await this._installFileFromRWUIRepo(
+                  task,
+                  'web/src/ui/storyUtils/ChildrenPlaceholder.tsx',
+                )
+              }
+
+              if (!rwjsLogoPath) {
+                await this._installFileFromRWUIRepo(
+                  task,
+                  'web/src/ui/storyUtils/RedwoodJSLogo.tsx',
+                )
+              }
             },
           },
         ])
