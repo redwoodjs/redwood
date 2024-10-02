@@ -382,10 +382,12 @@ async function initializeGit(newAppDir, commitMessage) {
 
 async function handleTargetDirPreference(targetDir) {
   if (targetDir) {
+    const targetDirText =
+      targetDir === '.' ? 'the current directory' : targetDir
+
     tui.drawText(
-      `${RedwoodStyling.green(
-        '✔',
-      )} Creating your Redwood app in ${targetDir} based on command line argument`,
+      `${RedwoodStyling.green('✔')} Creating your Redwood app in ` +
+        `${targetDirText} based on command line argument`,
     )
 
     return targetDir
@@ -791,6 +793,8 @@ async function createRedwoodApp() {
     await initializeGit(newAppDir, commitMessage)
   }
 
+  const shouldPrintCdCommand = newAppDir !== process.cwd()
+
   // Post install message
   tui.drawText(
     [
@@ -804,11 +808,12 @@ async function createRedwoodApp() {
       `${RedwoodStyling.header(`Fire it up!`)} 🚀`,
       '',
       ...[
-        `${RedwoodStyling.redwood(
-          ` > ${RedwoodStyling.green(
-            `cd ${path.relative(process.cwd(), newAppDir)}`,
+        shouldPrintCdCommand &&
+          `${RedwoodStyling.redwood(
+            ` > ${RedwoodStyling.green(
+              `cd ${path.relative(process.cwd(), newAppDir)}`,
+            )}`,
           )}`,
-        )}`,
         !yarnInstall &&
           `${RedwoodStyling.redwood(
             ` > ${RedwoodStyling.green(`yarn install`)}`,
