@@ -21,6 +21,10 @@ import addColorsConfigToProjectTailwindConfig from './redwoodui-utils/addColorsC
 import addDarkModeConfigToProjectTailwindConfig from './redwoodui-utils/addDarkModeConfigToProjectTailwindConfig'
 import addLayerToIndexCSS from './redwoodui-utils/addLayerToIndexCSS'
 import addPluginsConfigToProjectTailwindConfig from './redwoodui-utils/addPluginsConfigToProjectTailwindConfig'
+import {
+  addSBDarkModeThemes,
+  addSBStylingAddon,
+} from './redwoodui-utils/storybookConfigMods'
 
 // TODO add options here, probably at least `force`
 // interface RedwoodUIYargsOptions {
@@ -62,7 +66,15 @@ class RWUIInstallHandler {
   projectTailwindConfigPath!: string
   projectIndexCSSPath!: string
 
-  storybookMainPath: string | null = null
+  /**
+   * If this exists, the user is using Storybook
+   */
+  projectStorybookMainPath: string | null = null
+  /**
+   * This may or may not exist, even if the user is using Storybook.
+   * It can be TS, TSX, JS, or JSX.
+   */
+  projectStorybookPreviewPath: string | null = null
 
   /**
    * The contents of the package.json file from the RedwoodUI repo's web workspace
@@ -98,14 +110,42 @@ class RWUIInstallHandler {
    */
   initStorybookInfo() {
     // The main file can be either JS or TS, even if the project is TS
-    const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.ts')
+    const storybookMainPathJS = path.join(this.rwPaths.web.storybook, 'main.js')
     const storybookMainPathTS = path.join(this.rwPaths.web.storybook, 'main.ts')
 
     // Not using tsFileExistInProject because we specifically want to know which file the user is using
     if (fs.existsSync(storybookMainPathJS)) {
-      this.storybookMainPath = storybookMainPathJS
+      this.projectStorybookMainPath = storybookMainPathJS
     } else if (fs.existsSync(storybookMainPathTS)) {
-      this.storybookMainPath = storybookMainPathTS
+      this.projectStorybookMainPath = storybookMainPathTS
+    }
+
+    // The preview file can be either TS, JS, TSX, or JSX
+    const storybookPreviewPathJS = path.join(
+      this.rwPaths.web.storybook,
+      'preview.js',
+    )
+    const storybookPreviewPathTS = path.join(
+      this.rwPaths.web.storybook,
+      'preview.ts',
+    )
+    const storybookPreviewPathJSX = path.join(
+      this.rwPaths.web.storybook,
+      'preview.jsx',
+    )
+    const storybookPreviewPathTSX = path.join(
+      this.rwPaths.web.storybook,
+      'preview.tsx',
+    )
+
+    if (fs.existsSync(storybookPreviewPathJS)) {
+      this.projectStorybookPreviewPath = storybookPreviewPathJS
+    } else if (fs.existsSync(storybookPreviewPathTS)) {
+      this.projectStorybookPreviewPath = storybookPreviewPathTS
+    } else if (fs.existsSync(storybookPreviewPathJSX)) {
+      this.projectStorybookPreviewPath = storybookPreviewPathJSX
+    } else if (fs.existsSync(storybookPreviewPathTSX)) {
+      this.projectStorybookPreviewPath = storybookPreviewPathTSX
     }
   }
 
@@ -125,7 +165,7 @@ class RWUIInstallHandler {
   }
 
   get usingStorybook() {
-    return !!this.storybookMainPath
+    return !!this.projectStorybookMainPath
   }
 
   /**
@@ -495,17 +535,37 @@ class RWUIInstallHandler {
             options: { persistentOutput: true },
             title: 'Add dark mode support to Storybook',
             skip: async () => {
-              const storybookMainContent = fs.readFileSync(
+              let storybookMainContent = fs.readFileSync(
                 // We know the user is using Storybook because we checked above
-                this.storybookMainPath as string,
+                this.projectStorybookMainPath as string,
                 'utf-8',
               )
 
-              if (
+              let storybookPreviewContent = this.projectStorybookPreviewPath
+                ? fs.readFileSync(this.projectStorybookPreviewPath, 'utf-8')
+                : ''
+
+              // TODO replace with regex test
+              const hasStlyingAddon = storybookMainContent.includes(
+                '@storybook/addon-styling',
+              )
+
+              const hasDarkModeThemes =
                 /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
-                  storybookMainContent,
+                  storybookPreviewContent,
                 )
-              ) {
+
+              if (!hasStlyingAddon) {
+                storybookMainContent = addSBStylingAddon(storybookMainContent)
+              }
+
+              if (!hasDarkModeThemes) {
+                storybookPreviewContent = addSBDarkModeThemes(
+                  storybookPreviewContent,
+                )
+              }
+
+              if (hasDarkModeThemes && hasStlyingAddon) {
                 return 'Your Storybook looks like it already has dark mode support'
               } else {
                 return false
