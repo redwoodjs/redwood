@@ -77,10 +77,10 @@ function resolveClientEntryForProd(
 
 const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
-export async function renderRoutesFromDist<TProps extends Record<string, any>>(
+export async function renderRoutesSsr<TProps extends Record<string, any>>(
   pathname: string,
 ) {
-  console.log('renderRoutesFromDist pathname', pathname)
+  console.log('renderRoutesSsr pathname', pathname)
 
   const cached = rscCache.get(pathname)
   if (cached) {
