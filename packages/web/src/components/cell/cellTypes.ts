@@ -52,11 +52,15 @@ export type CellProps<
 >
 
 export type CellLoadingProps<TVariables extends OperationVariables = any> = {
-  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
+  queryResult?:
+    | NonSuspenseCellQueryResult<TVariables, any>
+    | SuspenseCellQueryResult
 }
 
 export type CellFailureProps<TVariables extends OperationVariables = any> = {
-  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
+  queryResult?:
+    | NonSuspenseCellQueryResult<TVariables, any>
+    | SuspenseCellQueryResult
   error?: QueryOperationResult['error'] | Error // for tests and storybook
 
   /**
@@ -106,7 +110,9 @@ export type CellSuccessProps<
   TData = any,
   TVariables extends OperationVariables = any,
 > = {
-  queryResult?: NonSuspenseCellQueryResult<TVariables> | SuspenseCellQueryResult
+  queryResult?:
+    | NonSuspenseCellQueryResult<TVariables, TData>
+    | SuspenseCellQueryResult
   updating?: boolean
 } & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
 
@@ -199,8 +205,9 @@ export type SuspendingSuccessProps = React.PropsWithChildren<
 
 export type NonSuspenseCellQueryResult<
   TVariables extends OperationVariables = any,
+  TData = any,
 > = Partial<
-  Omit<QueryOperationResult<any, TVariables>, 'loading' | 'error' | 'data'>
+  Omit<QueryOperationResult<TData, TVariables>, 'loading' | 'error' | 'data'>
 >
 
 // We call this queryResult in createCell, sadly a very overloaded term
