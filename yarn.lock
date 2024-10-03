@@ -8931,7 +8931,6 @@ __metadata:
     acorn-loose: "npm:8.4.0"
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
-    chokidar: "npm:3.6.0"
     concurrently: "npm:8.2.2"
     cookie: "npm:0.6.0"
     core-js: "npm:3.38.1"
@@ -8959,7 +8958,6 @@ __metadata:
     yargs-parser: "npm:21.1.1"
   bin:
     rw-dev-fe: ./dist/devFeServer.js
-    rw-dev-rsc: ./dist/devRscServer.js
     rw-serve-fe: ./dist/runFeServer.js
     rw-vite-build: ./bins/rw-vite-build.mjs
     rw-vite-dev: ./bins/rw-vite-dev.mjs

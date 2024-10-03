@@ -69,20 +69,6 @@ globalThis.__webpack_require__ ||= (id) => {
 };
 `
 
-const rscLiveReload = `\
-// NOTE: This code is used during development to enable "live-reload."
-window.addEventListener('load', () => {
-  const sse = new EventSource('http://localhost:8913');
-  sse.addEventListener('reload', () => {
-    window.location.reload();
-  });
-  window.addEventListener('beforeunload', () => {
-    sse.close();
-  });
-  // TODO (RSC): Handle disconnect / error states.
-});
-`
-
 export async function reactRenderToStreamResponse(
   mwRes: MiddlewareResponse,
   renderOptions: RenderToStreamArgs,
@@ -193,7 +179,7 @@ export async function reactRenderToStreamResponse(
     bootstrapScriptContent:
       // Only insert assetMap if client side JS will be loaded
       jsBundles.length > 0
-        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}; ${isProd ? '' : rscLiveReload}`
+        ? `window.__REDWOOD__ASSET_MAP = ${assetMap}; ${rscWebpackShims}`
         : undefined,
     bootstrapModules: jsBundles,
   }
