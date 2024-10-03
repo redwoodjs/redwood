@@ -5,7 +5,7 @@ import { LocationProvider, useLocation } from '../location.js'
 import { namedRoutes } from '../namedRoutes.js'
 import type { RouterProps } from '../router.js'
 
-import { renderRoutesFromDist } from './clientSsr.js'
+import { renderRoutesSsr } from './clientSsr.js'
 
 export const Router = ({ paramTypes, children }: RouterProps) => {
   return (
@@ -31,6 +31,5 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   // Note that the value changes at runtime
   Object.assign(namedRoutes, namedRoutesMap)
 
-  // @TODO(RSC): TS doesn't like that we're returning a promise, but in RSC it's ok!
-  return renderRoutesFromDist(pathname) as unknown as React.ReactNode
+  return renderRoutesSsr(pathname)
 }
