@@ -27,19 +27,22 @@ export async function fetchFromRWUIRepo(
   const githubToken =
     process.env.GH_TOKEN ||
     process.env.GITHUB_TOKEN ||
-    process.env.REDWOOD_GITHUB_TOKEN
+    process.env.REDWOOD_GITHUB_TOKEN ||
+    null
 
   // Perform the fetch request
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github.v3+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'User-Agent': 'RedwoodUI Setup',
+  }
+
+  if (githubToken) {
+    headers.Authorization = `Bearer ${githubToken}`
+  }
+
   const res = await fetch(apiUrl, {
-    // @ts-expect-error — it doesn't like the way we're conditionally adding the Authorization header
-    headers: {
-      Accept: 'application/vnd.github.v3+json',
-      // https://docs.github.com/en/rest/about-the-rest-api/api-versions?apiVersion=2022-11-28#supported-api-versions
-      'X-GitHub-Api-Version': '2022-11-28',
-      // https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
-      'User-Agent': 'RedwoodUI Setup',
-      Authorization: githubToken ? `Bearer ${githubToken}` : undefined,
-    },
+    headers,
   })
 
   if (!res.ok) {
@@ -49,6 +52,10 @@ export async function fetchFromRWUIRepo(
     if (rateLimitRemaining === '0') {
       throw new Error(
         "You've hit the rate limit for unauthenticated requests to the GitHub API. To continue, you'll need to wait, or you can authenticate with a Personal Access Token (PAT) with the `public_repo` property. Create a PAT and store it under the environment variable GH_TOKEN. You can find instructions on how to do that here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic",
+      )
+    } else if (res.statusText == 'Unauthorized') {
+      throw new Error(
+        'Request to the GitHub API was made with a token with incorrect permissions. Please check your GitHub token to make sure it has the `public_repo` property. Check under the environment variables GH_TOKEN, GITHUB_TOKEN, and REDWOOD_GITHUB_TOKEN.',
       )
     } else {
       throw new Error(`Error fetching file from repo: ${res.statusText}`)
