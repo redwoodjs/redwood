@@ -596,7 +596,7 @@ class RWUIInstallHandler {
                 newSBPreviewContent == origSBPreviewContent
               ) {
                 task.skip(
-                  'Your Storybook config looks like it already has dark mode support',
+                  'No changes to make to Storybook main or preview files',
                 )
                 return
               }

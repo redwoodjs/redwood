@@ -57,32 +57,18 @@ const addToDefaultExport = (
       return objectContent.replace(objectRegex, (match) => {
         const newObjectContent = match
           .trim()
-          .replace(/}\s*$/, `,\n  ${property}: ${value}\n}`)
+          .replace(/}\s*$/, `\n  ${property}: ${value}\n}`)
         return newObjectContent
       })
     }
 
-    const match = content.match(namedObjectRegex)
-    logTaskOutput(task, c.info(`Found object definition: ${match}`))
-    logTaskOutput(
-      task,
-      c.info(
-        `Used regex:\n\n${namedObjectRegex}\n\non content:\n\n${content}\n\n`,
-      ),
-    )
-
     return content.replace(
       namedObjectRegex,
       (match, declaration, objectContent) => {
-        logTaskOutput(task, c.info(`Found object definition: ${match}`))
         const newObjectContent = addPropertyToObject(
           objectContent,
           property,
           value,
-        )
-        logTaskOutput(
-          task,
-          c.info(`Updated object content: ${newObjectContent}`),
         )
         return match.replace(objectContent, newObjectContent)
       },
@@ -104,7 +90,7 @@ const addToDefaultExport = (
     const objectContent = inlineExportMatch[1]
     const newObjectContent = objectContent
       .trim()
-      .replace(/}\s*$/, `,\n  ${property}: ${value}\n}`)
+      .replace(/}\s*$/, `\n  ${property}: ${value}\n}`)
     return content.replace(objectContent, newObjectContent)
   }
 
