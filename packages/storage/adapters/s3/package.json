@@ -31,6 +31,11 @@
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.663.0",
+    "@aws-sdk/lib-storage": "3.663.0",
+    "@aws-sdk/s3-request-presigner": "3.663.0"
+  },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "concurrently": "8.2.2",
