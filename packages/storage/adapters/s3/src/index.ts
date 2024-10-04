@@ -81,6 +81,7 @@ export class S3Adapter extends StorageAdapter {
       }),
     )
 
+    // don't I want all the s3 response data here? like typ, etag, etc?`
     return new File([data], enrichedReference, {
       type: mimeType,
       lastModified: response.LastModified?.getTime(),
@@ -151,6 +152,7 @@ export class S3Adapter extends StorageAdapter {
     return enrichedReference
   }
 
+  // do I really read/write need data and stream?
   override async writeStream<TStreamType>(
     data: ReadableStream<TStreamType>,
     options?: S3WriteOptions,
@@ -162,6 +164,7 @@ export class S3Adapter extends StorageAdapter {
         Bucket: this.config.bucket,
         Key: reference,
         Body: data,
+
         ...Object.fromEntries(
           Object.entries(options || {}).filter(([key]) => key !== 'tags'),
         ),
