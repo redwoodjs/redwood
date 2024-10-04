@@ -1,0 +1,51 @@
+{
+  "name": "@redwoodjs/storage-adapter-memory",
+  "version": "8.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redwoodjs/redwood.git",
+    "directory": "packages/storage/adapters/memory"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn tsx ./build.mts && yarn build:types",
+    "build:pack": "yarn pack -o redwoodjs-storage-adapter-memory.tgz",
+    "build:types": "tsc --build --verbose ./tsconfig.build.json",
+    "check:attw": "yarn rw-fwtools-attw",
+    "check:package": "concurrently npm:check:attw yarn:publint",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@redwoodjs/storage-core": "workspace:*",
+    "lru-cache": "11.0.1",
+    "mime-types": "2.1.35",
+    "uuid": "10.0.0"
+  },
+  "devDependencies": {
+    "@redwoodjs/framework-tools": "workspace:*",
+    "@types/uuid": "10.0.0",
+    "concurrently": "8.2.2",
+    "esbuild": "0.23.1",
+    "publint": "0.2.10",
+    "tsx": "4.19.1",
+    "typescript": "5.6.2",
+    "vitest": "2.0.5"
+  },
+  "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
+}

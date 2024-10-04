@@ -9357,6 +9357,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@redwoodjs/storage-adapter-memory@workspace:packages/storage/adapters/memory":
+  version: 0.0.0-use.local
+  resolution: "@redwoodjs/storage-adapter-memory@workspace:packages/storage/adapters/memory"
+  dependencies:
+    "@redwoodjs/framework-tools": "workspace:*"
+    "@redwoodjs/storage-core": "workspace:*"
+    "@types/uuid": "npm:10.0.0"
+    concurrently: "npm:8.2.2"
+    esbuild: "npm:0.23.1"
+    lru-cache: "npm:11.0.1"
+    mime-types: "npm:2.1.35"
+    publint: "npm:0.2.10"
+    tsx: "npm:4.19.1"
+    typescript: "npm:5.6.2"
+    uuid: "npm:10.0.0"
+    vitest: "npm:2.0.5"
+  languageName: unknown
+  linkType: soft
+
 "@redwoodjs/storage-adapter-s3@workspace:packages/storage/adapters/s3":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/storage-adapter-s3@workspace:packages/storage/adapters/s3"
