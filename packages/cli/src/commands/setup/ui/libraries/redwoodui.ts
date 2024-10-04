@@ -28,6 +28,7 @@ import {
   tsFileExistInProject,
   extractPackageImports,
   ensureDirectoryExistence,
+  logTaskOutput,
 } from './redwoodui-utils/sharedUtils'
 import {
   addSBAddonsToMain,
@@ -568,7 +569,7 @@ class RWUIInstallHandler {
           {
             options: { persistentOutput: true },
             title: 'Add dark mode support to Storybook',
-            task: async () => {
+            task: async (_ctx, task) => {
               const origSBMainContent = fs.readFileSync(
                 // We know the user is using Storybook because we checked in the skip function
                 this.projectStorybookMainPath as string,
@@ -579,12 +580,16 @@ class RWUIInstallHandler {
                 ? fs.readFileSync(this.projectStorybookPreviewPath, 'utf-8')
                 : ''
 
-              const newSBMainContent = addSBAddonsToMain(origSBMainContent, [
-                '@storybook/addon-themes',
-              ])
+              const newSBMainContent = addSBAddonsToMain(
+                task,
+                origSBMainContent,
+                ['@storybook/addon-themes'],
+              )
 
-              const newSBPreviewContent =
-                await addSBDarkModeThemesToPreview(origSBPreviewContent)
+              const newSBPreviewContent = await addSBDarkModeThemesToPreview(
+                task,
+                origSBPreviewContent,
+              )
 
               if (
                 newSBMainContent == origSBMainContent &&
@@ -611,7 +616,7 @@ class RWUIInstallHandler {
           {
             options: { persistentOutput: true },
             title: 'Add story utility components',
-            task: async () => {
+            task: async (_ctx, task) => {
               // TODO this hardcodes the possible utility components. Instead,
               // we should fetch the list of utility components from the RWUI repo.
 
@@ -758,25 +763,23 @@ class RWUIInstallHandler {
     })
 
     if (depsToInstall.length > 0 || devDepsToInstall.length > 0) {
-      const hasExistingOutput = task.output !== undefined
       const outputMessage = `As part of adding the file ${filePath}, need to add the following packages...\n`
 
-      if (hasExistingOutput) {
-        task.output += outputMessage
-      } else {
-        task.output = outputMessage
-      }
+      logTaskOutput(task, outputMessage)
     }
 
     // Install the dependencies
     if (depsToInstall.length > 0) {
-      task.output += `As dependencies: ${depsToInstall.join(', ')}\n`
+      logTaskOutput(task, `As dependencies: ${depsToInstall.join(', ')}\n`)
       await execa('yarn', ['workspace', 'web', 'add', ...depsToInstall])
     }
 
     // Install the devDependencies
     if (devDepsToInstall.length > 0) {
-      task.output += `As devDependencies: ${devDepsToInstall.join(', ')}\n`
+      logTaskOutput(
+        task,
+        `As devDependencies: ${devDepsToInstall.join(', ')}\n`,
+      )
       await execa('yarn', [
         'workspace',
         'web',

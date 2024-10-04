@@ -1,6 +1,7 @@
 import path from 'path'
 
 import fs from 'fs-extra'
+import type { ListrTaskWrapper } from 'listr2'
 
 /**
  * Fetches a file from the RedwoodUI repo.
@@ -223,4 +224,16 @@ export function tsFileExistInProject(filePath: string): boolean {
   return (
     fs.existsSync(filePath) || fs.existsSync(filePath.replace('.ts', '.js'))
   )
+}
+
+/**
+ * Adds the given content to the task output.
+ * Checks if there is existing output, and appends the new content if so.
+ */
+export function logTaskOutput(
+  task: ListrTaskWrapper<any, any>,
+  content: string,
+) {
+  const existingOutput = task.output ? task.output + '\n' : ''
+  task.output = existingOutput + content
 }

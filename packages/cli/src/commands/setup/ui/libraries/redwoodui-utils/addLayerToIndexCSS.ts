@@ -2,6 +2,8 @@ import type { ListrTaskWrapper } from 'listr2'
 
 import c from '../../../../../lib/colors'
 
+import { logTaskOutput } from './sharedUtils'
+
 const addLayerToIndexCSS = (
   task: ListrTaskWrapper<any, any>,
   layerName: 'base' | 'components',
@@ -109,9 +111,12 @@ const addLayerToIndexCSS = (
           `${classesToAdd.join(', ')}`,
       )
       if (conflictingClasses.length > 0) {
-        task.output += c.warning(
-          `\nSome classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
-            `${conflictingClasses.join(', ')}`,
+        logTaskOutput(
+          task,
+          c.warning(
+            `\nSome classes in RedwoodUI's ${layerName} layer were not added to your project's ${layerName} layer because they conflict with existing classes.\nPlease review the following classes in the ${layerName} layer of your index.css:\n` +
+              `${conflictingClasses.join(', ')}`,
+          ),
         )
       }
     } else {

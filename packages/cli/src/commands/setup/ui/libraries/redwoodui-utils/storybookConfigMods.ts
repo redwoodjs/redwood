@@ -1,4 +1,12 @@
-import { addImportStatementToFile, fetchFromRWUIRepo } from './sharedUtils'
+import type { ListrTaskWrapper } from 'listr2'
+
+import c from '../../../../../lib/colors'
+
+import {
+  addImportStatementToFile,
+  fetchFromRWUIRepo,
+  logTaskOutput,
+} from './sharedUtils'
 
 /**
  * Adds a new property and value to the default export object in a given TypeScript content string.
@@ -9,48 +17,99 @@ import { addImportStatementToFile, fetchFromRWUIRepo } from './sharedUtils'
  * @returns The modified content string with the new property and value added to the default export object.
  *
  * The function handles two cases:
- * 1. When the default export is assigned to a named object.
+ * 1. When the default export is assigned to a named object, with or without a type annotation.
  * 2. When the default export is an inline object.
- *
- * If the default export is a named object, it uses a regular expression to find and modify the object definition.
- * If the default export is an inline object, it directly adds the new property and value to the object.
- * If no default export is found, the original content is returned unchanged.
  */
 const addToDefaultExport = (
+  task: ListrTaskWrapper<any, any>,
   content: string,
   property: string,
   value: string,
 ): string => {
-  const defaultExportMatch = content.match(/export\s+default\s+(\w+)/)
-  const defaultObjectExportMatch = content.match(/export\s+default\s+{([^}]*)}/)
+  // Handle case where default export is a named object (with or without type annotation)
+  const namedExportRegex = /export\s+default\s+(\w+)/
+  const namedExportMatch = content.match(namedExportRegex)
 
-  if (defaultExportMatch) {
-    const defaultExportName = defaultExportMatch[1]
-    const exportRegex = new RegExp(
-      `(export\\s+default\\s+${defaultExportName}\\s*=\\s*{)([^}]*)}`,
-      's',
+  if (namedExportMatch) {
+    logTaskOutput(
+      task,
+      c.info(
+        `Found named default export object, adding property '${property}'...`,
+      ),
     )
-    // Replaces parts of the `content` string that match the `exportRegex` pattern.
-    // The replacement function takes three arguments: the full match (`match`), and two capture groups (`p1` and `p2`).
-    // It constructs a new string by concatenating `p1`, a trimmed version of `p2` (if `p2` is not empty, it adds a comma),
-    // and then appends the new `property` and `value` pair, followed by a closing brace `}`.
+    const objectName = namedExportMatch[1]
+    const namedObjectRegex = new RegExp(
+      `(const|let|var)\\s+${objectName}(?:\\s*:\\s*[^=]+)?\\s*=\\s*({(?:[^{}]*|\{(?:[^{}]*|\{[^{}]*\})*\})*})`,
+      'm',
+    )
+
+    logTaskOutput(
+      task,
+      c.info(`Looking for object definition of '${objectName}'...`),
+    )
+
+    const addPropertyToObject = (
+      objectContent: string,
+      property: string,
+      value: string,
+    ): string => {
+      const objectRegex = /({(?:[^{}]*|\{(?:[^{}]*|\{[^{}]*\})*\})*})/
+      return objectContent.replace(objectRegex, (match) => {
+        const newObjectContent = match
+          .trim()
+          .replace(/}\s*$/, `,\n  ${property}: ${value}\n}`)
+        return newObjectContent
+      })
+    }
+
+    const match = content.match(namedObjectRegex)
+    logTaskOutput(task, c.info(`Found object definition: ${match}`))
+    logTaskOutput(
+      task,
+      c.info(
+        `Used regex:\n\n${namedObjectRegex}\n\non content:\n\n${content}\n\n`,
+      ),
+    )
+
     return content.replace(
-      exportRegex,
-      (_match, p1, p2) =>
-        `${p1}${p2.trim() ? `${p2.trim()},` : ''} ${property}: ${value}}`,
+      namedObjectRegex,
+      (match, declaration, objectContent) => {
+        logTaskOutput(task, c.info(`Found object definition: ${match}`))
+        const newObjectContent = addPropertyToObject(
+          objectContent,
+          property,
+          value,
+        )
+        logTaskOutput(
+          task,
+          c.info(`Updated object content: ${newObjectContent}`),
+        )
+        return match.replace(objectContent, newObjectContent)
+      },
     )
-  } else if (defaultObjectExportMatch) {
-    const defaultObjectContent = defaultObjectExportMatch[1]
-    return content.replace(
-      defaultObjectExportMatch[0],
-      `export default {${defaultObjectContent}, ${property}: ${value}}`,
-    )
-  } else {
-    console.error(
-      `Could not find the default export in the given content. Returning the original content. Given content:\n${content}`,
-    )
-    return content
   }
+
+  // Handle case where default export is an inline object
+  const inlineExportRegex =
+    /export\s+default\s+({(?:[^{}]*|\{(?:[^{}]*|\{[^{}]*\})*\})*})/
+  const inlineExportMatch = content.match(inlineExportRegex)
+
+  if (inlineExportMatch) {
+    logTaskOutput(
+      task,
+      c.info(
+        `Found inline default export object, adding property '${property}'...`,
+      ),
+    )
+    const objectContent = inlineExportMatch[1]
+    const newObjectContent = objectContent
+      .trim()
+      .replace(/}\s*$/, `,\n  ${property}: ${value}\n}`)
+    return content.replace(objectContent, newObjectContent)
+  }
+
+  // Throw error if no default export found
+  throw new Error('No default export found in the given content:\n' + content)
 }
 
 /**
@@ -61,9 +120,16 @@ const addToDefaultExport = (
  * Does not install any packages.
  */
 export const addSBAddonsToMain = (
+  task: ListrTaskWrapper<any, any>,
   sbMainContent: string,
   addOnsToAdd: string[],
 ): string => {
+  logTaskOutput(
+    task,
+    c.info(
+      `Adding Storybook addons to your main config: ${addOnsToAdd.join(', ')}...`,
+    ),
+  )
   const addonsArrayMatch = sbMainContent.match(/addons\s*:\s*\[([^\]]*)\]/)
 
   if (addonsArrayMatch) {
@@ -73,7 +139,7 @@ export const addSBAddonsToMain = (
     )
 
     if (addonsToAdd.length > 0) {
-      const updatedAddonsArray = addonsArray.trim().endsWith(',')
+      const updatedAddonsArray = addonsArray.trim()
         ? `${addonsArray} ${addonsToAdd.map((addon) => `'${addon}'`).join(', ')},`
         : `${addonsArray}, ${addonsToAdd.map((addon) => `'${addon}'`).join(', ')},`
       return sbMainContent.replace(
@@ -85,7 +151,7 @@ export const addSBAddonsToMain = (
     }
   } else {
     const addonsValue = `[${addOnsToAdd.map((addon) => `'${addon}'`).join(', ')}]`
-    return addToDefaultExport(sbMainContent, 'addons', addonsValue)
+    return addToDefaultExport(task, sbMainContent, 'addons', addonsValue)
   }
 }
 
@@ -97,18 +163,33 @@ export const addSBAddonsToMain = (
  * Does not install any packages.
  */
 export const addSBDarkModeThemesToPreview = async (
+  task: ListrTaskWrapper<any, any>,
   sbPreviewContent: string,
 ): Promise<string> => {
   if (!sbPreviewContent) {
+    logTaskOutput(
+      task,
+      "Doesn't look like you have a Storybook preview file yet. Adding one now with dark/light mode themes...",
+    )
     return (await fetchFromRWUIRepo('web/.storybook/preview.ts')) as string
   }
 
+  logTaskOutput(
+    task,
+    c.info('Adding dark/light mode themes to your preview file...'),
+  )
   const hasDarkModeThemes =
     /themes:\s*{\s*light:\s*'light',\s*dark:\s*'dark',\s*}/.test(
       sbPreviewContent,
     )
 
   if (hasDarkModeThemes) {
+    logTaskOutput(
+      task,
+      c.info(
+        'Your Storybook preview file already includes dark/light mode themes. Skipping...',
+      ),
+    )
     return sbPreviewContent
   }
 
@@ -131,23 +212,26 @@ export const addSBDarkModeThemesToPreview = async (
     const decoratorsArray = decoratorsArrayMatch[1]
 
     if (!decoratorsArray.includes('withThemeByDataAttribute')) {
-      const updatedDecoratorsArray = decoratorsArray.trim().endsWith(',')
-        ? `${decoratorsArray} withThemeByDataAttribute<ReactRenderer>({
-            themes: {
-              light: 'light',
-              dark: 'dark',
-            },
-            defaultTheme: 'light',
-            attributeName: 'data-mode',
-          }),`
-        : `${decoratorsArray}, withThemeByDataAttribute<ReactRenderer>({
-            themes: {
-              light: 'light',
-              dark: 'dark',
-            },
-            defaultTheme: 'light',
-            attributeName: 'data-mode',
-          }),`
+      const updatedDecoratorsArray = decoratorsArray.trim()
+        ? `${decoratorsArray.trim()},
+    withThemeByDataAttribute<ReactRenderer>({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-mode',
+    }),`
+        : `
+    withThemeByDataAttribute<ReactRenderer>({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-mode',
+    }),
+  `
       return sbPreviewContent.replace(
         decoratorsArrayMatch[0],
         `decorators: [${updatedDecoratorsArray}]`,
@@ -157,15 +241,20 @@ export const addSBDarkModeThemesToPreview = async (
     }
   } else {
     const decoratorsValue = `[
-      withThemeByDataAttribute<ReactRenderer>({
-        themes: {
-          light: 'light',
-          dark: 'dark',
-        },
-        defaultTheme: 'light',
-        attributeName: 'data-mode',
-      }),
-    ]`
-    return addToDefaultExport(sbPreviewContent, 'decorators', decoratorsValue)
+    withThemeByDataAttribute<ReactRenderer>({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-mode',
+    }),
+  ]`
+    return addToDefaultExport(
+      task,
+      sbPreviewContent,
+      'decorators',
+      decoratorsValue,
+    )
   }
 }

@@ -2,6 +2,8 @@ import type { ListrTaskWrapper } from 'listr2'
 
 import c from '../../../../../lib/colors'
 
+import { logTaskOutput } from './sharedUtils'
+
 /**
  * Adds the RedwoodUI colors TailwindCSS configuration to the project's TailwindCSS configuration.
  * - If the project doesn't have a colors config, it will add it.
@@ -62,9 +64,13 @@ const addColorsConfigToProjectTailwindConfig = (
       )
     }
 
-    task.output += c.success(
-      `\nAdded RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
+    logTaskOutput(
+      task,
+      c.success(
+        `\nAdded RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
+      ),
     )
+
     needToAddTWColorsImport = true
   } else {
     // Here, we know that the project has *some* colors config, but we don't know if it's correct.
@@ -124,9 +130,13 @@ const addColorsConfigToProjectTailwindConfig = (
           })
         },
       )
-      task.output += c.success(
-        `\nLooks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
+      logTaskOutput(
+        task,
+        c.success(
+          `\nLooks like you already had some custom colors config — added RedwoodUI's colors configuration to your project's TailwindCSS configuration.\nPlease confirm that the config has been added correctly by checking your TailwindCSS config file.`,
+        ),
       )
+
       needToAddTWColorsImport = true
     } else {
       // If there are only some missing keys, warn the user to consult the RedwoodUI
@@ -148,8 +158,11 @@ const addColorsConfigToProjectTailwindConfig = (
     if (!configToReturn.includes(colorsImport)) {
       // Add the colors import to the top of the file
       configToReturn = colorsImport + configToReturn
-      task.output += c.success(
-        '\nAdded TailwindCSS color pallette import (used by TWUI default colors) to your config.',
+      logTaskOutput(
+        task,
+        c.success(
+          '\nAdded TailwindCSS color pallette import (used by TWUI default colors) to your config.',
+        ),
       )
     } else {
       task.skip(
