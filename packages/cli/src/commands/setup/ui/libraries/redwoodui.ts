@@ -728,6 +728,9 @@ class RWUIInstallHandler {
         return // skip to next iteration
       }
 
+      // ARI YOU ARE HERE:
+      // - also look in root package.json for installed packages
+      // - figure out why the dev dep packages aren't being installed
       const projectPackageJsonPath = path.join(
         this.rwPaths.web.base,
         'package.json',

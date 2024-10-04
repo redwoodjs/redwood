@@ -113,7 +113,7 @@ export const addSBAddonsToMain = (
   logTaskOutput(
     task,
     c.info(
-      `Adding Storybook addons to your main config: ${addOnsToAdd.join(', ')}...`,
+      `Confirming Storybook has the following addons: ${addOnsToAdd.join(', ')}...`,
     ),
   )
   const addonsArrayMatch = sbMainContent.match(/addons\s*:\s*\[([^\]]*)\]/)
@@ -125,9 +125,13 @@ export const addSBAddonsToMain = (
     )
 
     if (addonsToAdd.length > 0) {
+      logTaskOutput(
+        task,
+        c.info(`Adding addons: ${addonsToAdd.join(', ')} to your Storybook...`),
+      )
       const updatedAddonsArray = addonsArray.trim()
-        ? `${addonsArray} ${addonsToAdd.map((addon) => `'${addon}'`).join(', ')},`
-        : `${addonsArray}, ${addonsToAdd.map((addon) => `'${addon}'`).join(', ')},`
+        ? `${addonsArray}, ${addonsToAdd.map((addon) => `'${addon}'`).join(', ')}`
+        : `${addonsToAdd.map((addon) => `'${addon}'`).join(', ')}`
       return sbMainContent.replace(
         addonsArrayMatch[0],
         `addons: [${updatedAddonsArray}]`,
