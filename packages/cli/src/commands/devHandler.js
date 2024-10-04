@@ -29,6 +29,14 @@ export const handler = async ({
     generate,
   })
 
+  console.log('devHandler')
+  console.log('devHandler')
+  console.log('devHandler')
+  console.log('devHandler')
+  console.log('devHandler')
+  console.log('devHandler')
+  console.log('devHandler')
+
   const rwjsPaths = getPaths()
 
   const serverFile = serverFileExists()
@@ -169,8 +177,20 @@ export const handler = async ({
   process.env.VITE_CJS_IGNORE_WARNING = 'true'
   let webCommand = `yarn cross-env NODE_ENV=development rw-vite-dev ${forward}`
 
+  console.log('devHandler')
+  console.log('devHandler   before check')
+  console.log('devHandler forward', forward)
+  console.log('devHandler')
+
   // 2. Vite with SSR
   if (streamingSsrEnabled) {
+    console.log('devHandler')
+    console.log('devHandler')
+    console.log('devHandler')
+    console.log('devHandler streamingSsrEnabled')
+    console.log('devHandler')
+    console.log('devHandler')
+    console.log('devHandler')
     webCommand = `yarn cross-env NODE_ENV=development rw-dev-fe ${forward}`
   }
 

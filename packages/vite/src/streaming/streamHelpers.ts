@@ -104,7 +104,7 @@ export async function reactRenderToStreamResponse(
   const rscEnabled = getConfig().experimental?.rsc?.enabled
 
   const { createElement }: React = rscEnabled
-    ? await importModule('__rwjs__react', viteDevServer)
+    ? await importModule('__rwjs__react', !!viteDevServer)
     : await import('react')
 
   const {
@@ -112,10 +112,10 @@ export async function reactRenderToStreamResponse(
     ServerHtmlProvider,
     ServerInjectedHtml,
   }: ServerInjectType = rscEnabled
-    ? await importModule('__rwjs__server_inject', viteDevServer)
+    ? await importModule('__rwjs__server_inject', !!viteDevServer)
     : await import('@redwoodjs/web/serverInject')
   const { renderToString }: RDServerType = rscEnabled
-    ? await importModule('rd-server', viteDevServer)
+    ? await importModule('rd-server', !!viteDevServer)
     : await import('react-dom/server')
 
   // This ensures an isolated state for each request
@@ -143,10 +143,10 @@ export async function reactRenderToStreamResponse(
   const timeoutTransform = createTimeoutTransform(timeoutHandle)
 
   const { ServerAuthProvider }: ServerAuthProviderType = rscEnabled
-    ? await importModule('__rwjs__server_auth_provider', viteDevServer)
+    ? await importModule('__rwjs__server_auth_provider', !!viteDevServer)
     : await import('@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js')
   const { LocationProvider }: LocationType = rscEnabled
-    ? await importModule('__rwjs__location', viteDevServer)
+    ? await importModule('__rwjs__location', !!viteDevServer)
     : await import('@redwoodjs/router/location')
 
   const renderRoot = (url: URL) => {
@@ -192,13 +192,13 @@ export async function reactRenderToStreamResponse(
   // modules (components) will later use when they render. Had we just imported
   // `react-dom/server.edge` normally we would have gotten an instance based on
   // react and react-dom in node_modules. All client components however uses a
-  // bundled version of React (so that we can have one version of react without
+  // bundled version of React (so that we can have one version of react with
   // the react-server condition and one without at the same time). Importing it
   // like this we make sure that SSR uses that same bundled version of react
   // and react-dom as the components.
   // TODO (RSC): Always import using importModule when RSC is on by default
   const { renderToReadableStream }: RDServerType = rscEnabled
-    ? await importModule('rd-server', viteDevServer)
+    ? await importModule('rd-server', !!viteDevServer)
     : await import('react-dom/server.edge')
 
   try {
@@ -300,7 +300,7 @@ async function importModule(
     | '__rwjs__location'
     | '__rwjs__server_auth_provider'
     | '__rwjs__server_inject',
-  viteDevServer?: ViteDevServer,
+  isDev?: boolean,
 ) {
   const distSsr = getPaths().web.distSsr
   const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
@@ -313,37 +313,25 @@ async function importModule(
     path.join(distSsr, '__rwjs__server_inject.mjs'),
   )
 
-  if (viteDevServer) {
+  if (isDev) {
     console.log('asking vite to load module', mod)
 
     if (mod === 'rd-server') {
-      const loadedMod = await viteDevServer.ssrLoadModule(
-        'react-dom/server.edge',
-      )
-      console.log('loadedMod', loadedMod)
+      const loadedMod = await import('react-dom/server.edge')
       return loadedMod.default
     } else if (mod === '__rwjs__react') {
-      const loadedMod = await viteDevServer.ssrLoadModule('react')
-      console.log('loadedMod', loadedMod)
+      const loadedMod = await import('react')
       return loadedMod.default
     } else if (mod === '__rwjs__location') {
-      const loadedMod = await viteDevServer.ssrLoadModule(
-        '@redwoodjs/router/location',
-      )
-      console.log('loadedMod', loadedMod)
+      const loadedMod = await import('@redwoodjs/router/location')
       return loadedMod
     } else if (mod === '__rwjs__server_auth_provider') {
-      const loadedMod = await viteDevServer.ssrLoadModule(
-        '@redwoodjs/auth/ServerAuthProvider',
+      const loadedMod = await import(
+        '@redwoodjs/auth/dist/AuthProvider/ServerAuthProvider.js'
       )
-      console.log('loadedMod', loadedMod)
       return loadedMod
     } else if (mod === '__rwjs__server_inject') {
-      const loadedMod = await viteDevServer.ssrLoadModule(
-        '@redwoodjs/web/serverInject',
-      )
-      console.log('loadedMod', loadedMod)
-      // Don't need default because rwjs/web is now ESM
+      const loadedMod = await import('@redwoodjs/web/serverInject')
       return loadedMod
     }
   } else {

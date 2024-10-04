@@ -1,5 +1,8 @@
 import React, { useMemo } from 'react'
 
+;(React as any).peter = 'peter'
+console.log('SsrRouter React', React)
+
 import { analyzeRoutes } from '../analyzeRoutes.js'
 import { LocationProvider, useLocation } from '../location.js'
 import { namedRoutes } from '../namedRoutes.js'
@@ -32,4 +35,16 @@ const LocationAwareRouter = ({ paramTypes, children }: RouterProps) => {
   Object.assign(namedRoutes, namedRoutesMap)
 
   return renderRoutesSsr(pathname)
+
+  // return (
+  //   <>
+  //     SSR Router renderRoutesSsr(pathname)
+  //     <p>pathname:</p>
+  //     {pathname}
+  //     <p>namedRoutes:</p>
+  //     <pre>
+  //       <code>{JSON.stringify(Object.entries(namedRoutes), null, 2)}</code>
+  //     </pre>
+  //   </>
+  // )
 }

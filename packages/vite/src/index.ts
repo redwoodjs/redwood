@@ -59,8 +59,6 @@ export default function redwoodPluginVite(): PluginOption[] {
       : webSideDefaultBabelConfig.overrides,
   }
 
-  console.log('peter_rocks redwoodPluginVite()')
-
   return [
     {
       name: 'redwood-plugin-vite-html-env',

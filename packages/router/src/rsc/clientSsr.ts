@@ -1,19 +1,17 @@
 import path from 'node:path'
 
 import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
-import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 
 import { moduleMap } from './ssrModuleMap.js'
-import { importRsdwClient, importReact } from './utils.js'
+import { importRsdwClient, importReact, importRsdwServer } from './utils.js'
 import { makeFilePath } from './utils.js'
 
 type RSDWClientType = typeof RSDWClientModule
-type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
-  if (globalThis.__rwjs__vite_dev_server) {
+  if (globalThis.__rwjs__vite_ssr_runtime) {
     return {
       serverEntries: {
         __rwjs__Routes: '../../src/Routes.tsx',
@@ -28,13 +26,16 @@ async function getEntries() {
 }
 
 async function getRoutesComponent(): Promise<React.FunctionComponent> {
-  if (globalThis.__rwjs__vite_dev_server) {
-    const routesMod = await globalThis.__rwjs__vite_dev_server.ssrLoadModule(
+  // For SSR during dev
+  if (globalThis.__rwjs__vite_ssr_runtime) {
+    const routesMod = await globalThis.__rwjs__vite_ssr_runtime.executeUrl(
       getPaths().web.routes,
     )
+
     return routesMod.default
   }
 
+  // For SSR during prod
   const { serverEntries } = await getEntries()
   const entryPath = path.join(
     getPaths().web.distRsc,
@@ -133,22 +134,26 @@ export async function renderRoutesSsr(pathname: string) {
 
   const { createElement } = await importReact()
 
-  // We need to do this weird import dance because we need to import a version
-  // of react-server-dom-webpack/server.edge that has been built with the
-  // `react-server` condition. If we just did a regular import, we'd get the
-  // generic version in node_modules, and it'd throw an error about not being
-  // run in an environment with the `react-server` condition.
-  const dynamicImport = ''
-  const { renderToReadableStream }: RSDWServerType = await import(
-    /* @vite-ignore */
-    dynamicImport + 'react-server-dom-webpack/server.edge'
-  )
+  const { renderToReadableStream } = await importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
   // RSC server "world" and that `stream` comes from `fetch`. So this is us
   // emulating the reply (stream) you'd get from a fetch call.
   const stream = renderToReadableStream(createElement(Routes), bundlerConfig)
+
+  if (Math.random() < 5) {
+    const elementPromise = Promise.resolve(
+      createElement(
+        'p',
+        null,
+        'Hello from clientSsr.ts after renderToReadableStream',
+      ),
+    )
+
+    rscCache.set(pathname, elementPromise)
+    return elementPromise
+  }
 
   // We have to do this weird import thing because we need a version of
   // react-server-dom-webpack/client.edge that uses the same bundled version

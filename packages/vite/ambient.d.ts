@@ -1,7 +1,7 @@
 /* eslint-disable no-var */
 /// <reference types="react/experimental" />
 import type { HelmetServerState } from 'react-helmet-async'
-import type { ViteDevServer } from 'vite'
+import type { ViteRuntime } from 'vite/runtime'
 
 declare global {
   // Provided by Vite.config
@@ -24,7 +24,8 @@ declare global {
   }
 
   var __REDWOOD__PRERENDER_PAGES: any
-  var __rwjs__vite_dev_server: ViteDevServer | undefined
+  var __rwjs__vite_ssr_runtime: ViteRuntime | undefined
+  var __rwjs__vite_rsc_runtime: ViteRuntime | undefined
 
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
 
