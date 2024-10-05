@@ -90,6 +90,7 @@ export class JobManager<
       maxRuntime: config.maxRuntime,
       sleepDelay: config.sleepDelay,
       deleteFailedJobs: config.deleteFailedJobs,
+      deleteSuccessfulJobs: config.deleteSuccessfulJobs,
       processName,
       queues: [config.queue].flat(),
       workoff,
