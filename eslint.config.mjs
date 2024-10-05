@@ -15,6 +15,7 @@ import tsEslint from 'typescript-eslint'
 
 import redwoodjsPlugin from '@redwoodjs/eslint-plugin'
 import { findUp } from '@redwoodjs/project-config'
+import { buildSharedConfig } from './eslint.config.shared.mjs'
 
 // Framework Babel config is monorepo root ./babel.config.js
 // `yarn lint` runs for each workspace, which needs findUp for path to root
@@ -488,40 +489,26 @@ export default tsEslint.config(
       ],
     },
   },
-  // @ts-ignore
+  // Migrating projects that are used with "eslintConfig"
+  ...buildSharedConfig(
+    '**/__fixtures/*/**/',
+    'packages/create-redwood-app/templates/*/**/',
+  ),
   // Issues that appeared while migrating to flat config
-  // TODO: Enable rules and fix related issues
-  ...[
-    {
-      files: ['**/*.mjs'],
-      rules: {
-        'no-irregular-whitespace': 'off',
-      },
+  // TODO: Fix related issues
+  {
+    files: ['**/*.mjs'],
+    rules: {
+      'no-irregular-whitespace': 'off',
     },
-    {
-      ignores: ['**/*.template'],
+  },
+  {
+    ignores: ['**/*.template'],
+  },
+  {
+    rules: {
+      '@typescript-eslint/await-thenable': 'off',
+      'react/react-in-jsx-scope': 'off',
     },
-    {
-      rules: {
-        '@typescript-eslint/await-thenable': 'off',
-        'react/react-in-jsx-scope': 'off',
-      },
-    },
-    {
-      files: ['packages/create-redwood-app/templates/*/*.js'],
-      languageOptions: {
-        globals: {
-          ...globals.node,
-        },
-      },
-    },
-    {
-      files: ['packages/create-redwood-app/templates/js/scripts/seed.js'],
-      languageOptions: {
-        globals: {
-          ...globals.browser,
-        },
-      },
-    },
-  ],
+  },
 )
