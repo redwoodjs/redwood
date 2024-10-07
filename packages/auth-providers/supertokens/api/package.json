@@ -51,7 +51,7 @@
     "publint": "0.2.11",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
-    "vitest": "2.0.5"
+    "vitest": "2.1.2"
   },
   "peerDependencies": {
     "supertokens-node": "15.2.3"
