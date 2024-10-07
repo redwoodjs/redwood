@@ -7754,7 +7754,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
     concurrently: "npm:8.2.2"
-    firebase-admin: "npm:12.5.0"
+    firebase-admin: "npm:12.6.0"
     publint: "npm:0.2.11"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
@@ -17844,9 +17844,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-admin@npm:12.5.0":
-  version: 12.5.0
-  resolution: "firebase-admin@npm:12.5.0"
+"firebase-admin@npm:12.6.0":
+  version: 12.6.0
+  resolution: "firebase-admin@npm:12.6.0"
   dependencies:
     "@fastify/busboy": "npm:^3.0.0"
     "@firebase/database-compat": "npm:^1.0.2"
@@ -17864,7 +17864,7 @@ __metadata:
       optional: true
     "@google-cloud/storage":
       optional: true
-  checksum: 10c0/da961e3a44bac301926950b359859a2af50bcc4c0adaa8cc924a900abfe9861347ac6effa6b383f600ed1be0e56aa270ba5efd28a8d2de5ea8396e6e0666871d
+  checksum: 10c0/c96c2ea58646ad45934fa114b5dc228ce82f12e185eb5b2aee3eef66546df218d4338cb398b6792d268780fc25b55d808e8b93822665dd7a9162742f3ad65b8b
   languageName: node
   linkType: hard
 
