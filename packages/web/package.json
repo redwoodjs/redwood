@@ -96,6 +96,16 @@
         "default": "./dist/cjs/toast/index.js"
       }
     },
+    "./upload": {
+      "import": {
+        "types": "./dist/upload/index.d.ts",
+        "default": "./dist/upload/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/upload/index.d.ts",
+        "default": "./dist/cjs/upload/index.js"
+      }
+    },
     "./apollo": {
       "import": {
         "types": "./dist/apollo/index.d.ts",
@@ -126,8 +136,8 @@
     "dist",
     "apollo",
     "toast",
-    "src/entry",
-    "src/upload"
+    "upload",
+    "src/entry"
   ],
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
