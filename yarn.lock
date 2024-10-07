@@ -3261,16 +3261,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@faire/mjml-react@npm:3.3.0":
-  version: 3.3.0
-  resolution: "@faire/mjml-react@npm:3.3.0"
+"@faire/mjml-react@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@faire/mjml-react@npm:3.4.0"
   dependencies:
     lodash.kebabcase: "npm:^4.1.1"
   peerDependencies:
     mjml: ^4.13.0
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/dc9cd475d624c4b48462a49ef1e964b7010b297347a3fca1664e18c8d198a0373071b8d6afcbac99ac5725b50dcdc99081ab1766b21f54a4ad569e5b41e19bdb
+  checksum: 10c0/4207cae8fb2fb3406e93d806df6536579b9d92b42f19349ba65a4283772e66d0189d5d3c3b2ec0881be1d6c3df88f9c8a2ebb56b5cb33973d6167212df576589
   languageName: node
   linkType: hard
 
@@ -8586,7 +8586,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/mailer-renderer-mjml-react@workspace:packages/mailer/renderers/mjml-react"
   dependencies:
-    "@faire/mjml-react": "npm:3.3.0"
+    "@faire/mjml-react": "npm:3.4.0"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/mailer-core": "workspace:*"
     "@types/mjml": "npm:4"
