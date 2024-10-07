@@ -126,7 +126,8 @@
     "dist",
     "apollo",
     "toast",
-    "src/entry"
+    "src/entry",
+    "src/upload"
   ],
   "scripts": {
     "build": "tsx ./build.ts && yarn build:types",
@@ -151,6 +152,7 @@
     "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
+    "react-dropzone": "14.2.9",
     "react-helmet-async": "2.0.5",
     "react-hot-toast": "2.4.1",
     "stacktracey": "2.1.8",
@@ -176,6 +178,7 @@
     "publint": "0.2.10",
     "react": "19.0.0-rc-f2df5694-20240916",
     "react-dom": "19.0.0-rc-f2df5694-20240916",
+    "react-dropzone": "14.2.3",
     "tstyche": "2.1.1",
     "tsx": "4.19.1",
     "typescript": "5.6.2",

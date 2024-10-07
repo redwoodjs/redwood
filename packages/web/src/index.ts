@@ -42,4 +42,6 @@ export * from './routeHooks.types.js'
 
 export * from './components/ServerInject.js'
 
+export * from './upload/index.js'
+
 export type { TypedDocumentNode } from './components/GraphQLHooksProvider.js'

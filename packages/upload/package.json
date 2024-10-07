@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "@envelop/core": "5.0.2",
-    "graphql": "16.9.0",
+    "@redwoodjs/context": "workspace:*",
+    "@redwoodjs/graphql-server": "workspace:*",
     "jsonwebtoken": "9.0.2"
   },
   "devDependencies": {
