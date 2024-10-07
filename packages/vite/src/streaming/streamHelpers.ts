@@ -302,17 +302,6 @@ async function importModule(
     | '__rwjs__server_inject',
   isDev?: boolean,
 ) {
-  const distSsr = getPaths().web.distSsr
-  const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
-  const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
-  const locationPath = makeFilePath(path.join(distSsr, '__rwjs__location.mjs'))
-  const serverAuthProviderPath = makeFilePath(
-    path.join(distSsr, '__rwjs__server_auth_provider.mjs'),
-  )
-  const serverInjectPath = makeFilePath(
-    path.join(distSsr, '__rwjs__server_inject.mjs'),
-  )
-
   if (isDev) {
     console.log('asking vite to load module', mod)
 
@@ -335,6 +324,19 @@ async function importModule(
       return loadedMod
     }
   } else {
+    const distSsr = getPaths().web.distSsr
+    const rdServerPath = makeFilePath(path.join(distSsr, 'rd-server.mjs'))
+    const reactPath = makeFilePath(path.join(distSsr, '__rwjs__react.mjs'))
+    const locationPath = makeFilePath(
+      path.join(distSsr, '__rwjs__location.mjs'),
+    )
+    const serverAuthProviderPath = makeFilePath(
+      path.join(distSsr, '__rwjs__server_auth_provider.mjs'),
+    )
+    const serverInjectPath = makeFilePath(
+      path.join(distSsr, '__rwjs__server_inject.mjs'),
+    )
+
     if (mod === 'rd-server') {
       return (await import(rdServerPath)).default
     } else if (mod === '__rwjs__react') {

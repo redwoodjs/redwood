@@ -58,11 +58,15 @@ export async function importRsdwClient() {
   return (await import(rsdwClientPath)).default
 }
 
+// TODO (RSC): Rename this method if we keep importing from react-dom/server.edge
 export async function importRsdwServer() {
   if (globalThis.__rwjs__vite_rsc_runtime) {
+    // return (await import('react-dom/server.edge')).default
+    // return (await import('react-server-dom-webpack/server.edge')).default
     const rsdwServerMod = await globalThis.__rwjs__vite_rsc_runtime.executeUrl(
       // await globalThis.__rwjs__vite_rsc_server.ssrLoadModule(
       'react-server-dom-webpack/server.edge',
+      // 'react-dom/server.edge',
       // '/Users/tobbe/dev/redwood/redwood/packages/router/vite-fix/react-server-dom-webpack.server.edge',
       // '../../vite-fix/react-server-dom-webpack.server.edge',
     )

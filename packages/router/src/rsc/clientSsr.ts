@@ -27,8 +27,8 @@ async function getEntries() {
 
 async function getRoutesComponent(): Promise<React.FunctionComponent> {
   // For SSR during dev
-  if (globalThis.__rwjs__vite_ssr_runtime) {
-    const routesMod = await globalThis.__rwjs__vite_ssr_runtime.executeUrl(
+  if (globalThis.__rwjs__vite_rsc_runtime) {
+    const routesMod = await globalThis.__rwjs__vite_rsc_runtime.executeUrl(
       getPaths().web.routes,
     )
 
@@ -140,20 +140,45 @@ export async function renderRoutesSsr(pathname: string) {
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
   // RSC server "world" and that `stream` comes from `fetch`. So this is us
   // emulating the reply (stream) you'd get from a fetch call.
-  const stream = renderToReadableStream(createElement(Routes), bundlerConfig)
+  const originalStream = renderToReadableStream(
+    createElement(Routes),
+    bundlerConfig,
+  )
 
-  if (Math.random() < 5) {
-    const elementPromise = Promise.resolve(
-      createElement(
-        'p',
-        null,
-        'Hello from clientSsr.ts after renderToReadableStream',
-      ),
-    )
+  // Clone and log the stream
+  const [streamForLogging, streamForRendering] = originalStream.tee()
 
-    rscCache.set(pathname, elementPromise)
-    return elementPromise
-  }
+  // Log the stream content
+  ;(async () => {
+    const reader = streamForLogging.getReader()
+    const decoder = new TextDecoder()
+    let logContent = ''
+
+    while (true /* eslint-disable-line no-constant-condition */) {
+      const { done, value } = await reader.read()
+
+      if (done) {
+        break
+      }
+
+      logContent += decoder.decode(value, { stream: true })
+    }
+
+    console.log('Stream content:', logContent)
+  })()
+
+  // if (Math.random() < 5) {
+  //   const elementPromise = Promise.resolve(
+  //     createElement(
+  //       'p',
+  //       null,
+  //       'Hello from clientSsr.ts after renderToReadableStream',
+  //     ),
+  //   )
+
+  //   rscCache.set(pathname, elementPromise)
+  //   return elementPromise
+  // }
 
   // We have to do this weird import thing because we need a version of
   // react-server-dom-webpack/client.edge that uses the same bundled version
@@ -163,7 +188,7 @@ export async function renderRoutesSsr(pathname: string) {
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
-  const data = createFromReadableStream(stream, {
+  const data = createFromReadableStream(streamForRendering, {
     ssrManifest: { moduleMap, moduleLoading: null },
   })
 
