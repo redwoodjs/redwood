@@ -22,7 +22,7 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "cookie": "0.7.1",
+    "cookie": "0.7.2",
     "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0"
