@@ -30,17 +30,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/core@npm:1.10.1, @actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6, @actions/core@npm:^1.9.1":
-  version: 1.10.1
-  resolution: "@actions/core@npm:1.10.1"
+"@actions/core@npm:1.11.1, @actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6, @actions/core@npm:^1.9.1":
+  version: 1.11.1
+  resolution: "@actions/core@npm:1.11.1"
   dependencies:
+    "@actions/exec": "npm:^1.1.1"
     "@actions/http-client": "npm:^2.0.1"
-    uuid: "npm:^8.3.2"
-  checksum: 10c0/7a61446697a23dcad3545cf0634dedbdedf20ae9a0ee6ee977554589a15deb4a93593ee48a41258933d58ce0778f446b0d2c162b60750956fb75e0b9560fb832
+  checksum: 10c0/9aa30b397d8d0dbc74e69fe46b23fb105cab989beb420c57eacbfc51c6804abe8da0f46973ca9f639d532ea4c096d0f4d37da0223fbe94f304fa3c5f53537c30
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:1.1.1, @actions/exec@npm:^1.0.1":
+"@actions/exec@npm:1.1.1, @actions/exec@npm:^1.0.1, @actions/exec@npm:^1.1.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
@@ -26883,7 +26883,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@actions/cache": "npm:3.2.4"
-    "@actions/core": "npm:1.10.1"
+    "@actions/core": "npm:1.11.1"
     "@actions/exec": "npm:1.1.1"
     "@actions/glob": "npm:0.5.0"
     "@babel/cli": "npm:7.25.6"
