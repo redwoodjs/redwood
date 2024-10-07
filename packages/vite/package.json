@@ -67,7 +67,7 @@
     "@redwoodjs/server-store": "workspace:*",
     "@redwoodjs/web": "workspace:*",
     "@swc/core": "1.7.28",
-    "@vitejs/plugin-react": "4.3.1",
+    "@vitejs/plugin-react": "4.3.2",
     "@whatwg-node/fetch": "0.9.21",
     "@whatwg-node/server": "0.9.49",
     "acorn-loose": "8.4.0",
