@@ -52,7 +52,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
-    "@types/jscodeshift": "0.11.11",
+    "@types/jscodeshift": "0.12.0",
     "@types/yargs": "17.0.33",
     "fs-extra": "11.2.0",
     "publint": "0.2.11",
