@@ -73,7 +73,7 @@
     "acorn-loose": "8.4.0",
     "buffer": "6.0.3",
     "busboy": "^1.6.0",
-    "cookie": "0.6.0",
+    "cookie": "0.7.0",
     "core-js": "3.38.1",
     "dotenv-defaults": "5.0.2",
     "execa": "5.1.1",

@@ -7446,7 +7446,7 @@ __metadata:
     "@types/split2": "npm:4.2.3"
     "@whatwg-node/fetch": "npm:0.9.21"
     concurrently: "npm:8.2.2"
-    cookie: "npm:0.6.0"
+    cookie: "npm:0.7.0"
     humanize-string: "npm:2.1.0"
     jsonwebtoken: "npm:9.0.2"
     memjs: "npm:1.3.2"
@@ -8240,7 +8240,7 @@ __metadata:
   dependencies:
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
-    cookie: "npm:0.6.0"
+    cookie: "npm:0.7.0"
     esbuild: "npm:0.24.0"
     fast-glob: "npm:3.3.2"
     fs-extra: "npm:11.2.0"
@@ -8933,7 +8933,7 @@ __metadata:
     buffer: "npm:6.0.3"
     busboy: "npm:^1.6.0"
     concurrently: "npm:8.2.2"
-    cookie: "npm:0.6.0"
+    cookie: "npm:0.7.0"
     core-js: "npm:3.38.1"
     dotenv-defaults: "npm:5.0.2"
     execa: "npm:5.1.1"
@@ -14703,6 +14703,13 @@ __metadata:
   version: 0.6.0
   resolution: "cookie@npm:0.6.0"
   checksum: 10c0/f2318b31af7a31b4ddb4a678d024514df5e705f9be5909a192d7f116cfb6d45cbacf96a473fa733faa95050e7cff26e7832bb3ef94751592f1387b71c8956686
+  languageName: node
+  linkType: hard
+
+"cookie@npm:0.7.0":
+  version: 0.7.0
+  resolution: "cookie@npm:0.7.0"
+  checksum: 10c0/15c20c9b85431c8565b1750f9bccff0bd289b943d956e25fffce3b146e57934075965c8305a4e3a65a70622c9ed483e013daf9159d9c50f5c3f97f2e7c8117ac
   languageName: node
   linkType: hard
 
