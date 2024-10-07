@@ -20,7 +20,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@faire/mjml-react": "3.3.0",
+    "@faire/mjml-react": "3.4.0",
     "@redwoodjs/mailer-core": "workspace:*",
     "mjml": "4.15.3"
   },
