@@ -48,7 +48,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel-plugin-tester": "9.0.10",
     "@types/babel__core": "7.20.5",
-    "@types/node": "20.16.6",
+    "@types/node": "20.16.10",
     "babel-plugin-tester": "11.0.4",
     "tsx": "4.19.1",
     "vitest": "2.0.5"
