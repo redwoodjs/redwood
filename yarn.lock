@@ -8625,7 +8625,7 @@ __metadata:
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
-    vite: "npm:5.4.7"
+    vite: "npm:5.4.8"
     vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
@@ -8950,7 +8950,7 @@ __metadata:
     rollup: "npm:4.22.4"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
-    vite: "npm:5.4.7"
+    vite: "npm:5.4.8"
     vite-plugin-cjs-interop: "npm:2.1.4"
     vite-plugin-node-polyfills: "npm:0.22.0"
     vitest: "npm:2.0.5"
@@ -27882,7 +27882,7 @@ __metadata:
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     unplugin-auto-import: "npm:0.18.3"
-    vite: "npm:5.4.7"
+    vite: "npm:5.4.8"
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
@@ -29925,9 +29925,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:5.4.7, vite@npm:^5.0.0":
-  version: 5.4.7
-  resolution: "vite@npm:5.4.7"
+"vite@npm:5.4.8, vite@npm:^5.0.0":
+  version: 5.4.8
+  resolution: "vite@npm:5.4.8"
   dependencies:
     esbuild: "npm:^0.21.3"
     fsevents: "npm:~2.3.3"
@@ -29964,7 +29964,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/0ca7ca60f71c61f3855bbabf7e33909bec32933b35914d4d281813c728183e78e7ce5be05735a7671df3a994613d3881f520a32a80715faa92effb28deee9320
+  checksum: 10c0/af70af6d6316a3af71f44ebe3ab343bd66450d4157af73af3b32239e1b6ec43ff6f651d7cc4193b21ed3bff2e9356a3de9e96aee53857f39922e4a2d9fad75a1
   languageName: node
   linkType: hard
 
