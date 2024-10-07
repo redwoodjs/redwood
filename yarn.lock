@@ -8195,7 +8195,7 @@ __metadata:
     "@svgr/plugin-jsx": "npm:8.1.0"
     "@types/babel__core": "npm:7.20.5"
     "@types/fs-extra": "npm:11.0.4"
-    "@types/jscodeshift": "npm:0.11.11"
+    "@types/jscodeshift": "npm:0.12.0"
     "@types/yargs": "npm:17.0.33"
     "@vscode/ripgrep": "npm:1.15.9"
     "@whatwg-node/fetch": "npm:0.9.21"
@@ -11018,13 +11018,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jscodeshift@npm:0.11.11":
-  version: 0.11.11
-  resolution: "@types/jscodeshift@npm:0.11.11"
+"@types/jscodeshift@npm:0.12.0":
+  version: 0.12.0
+  resolution: "@types/jscodeshift@npm:0.12.0"
   dependencies:
     ast-types: "npm:^0.14.1"
     recast: "npm:^0.20.3"
-  checksum: 10c0/b3d2be46d523ae679a2c986d7f98232aabaa761c960423105286bfd682fb57f9366f6afed1e1d6b35e4923b7e038c0aa539032d7e7fd430754683078032cd578
+  checksum: 10c0/18dea1a12f47daa35063c872a255a7239125187b172ce66639c326bd4b6a500fc8b44a98ec3a8e3fc502786658874a6b35850ac9f4effd9b9aacd1602b033feb
   languageName: node
   linkType: hard
 
@@ -26911,7 +26911,7 @@ __metadata:
     "@types/babel__generator": "npm:7.6.8"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.13"
-    "@types/jscodeshift": "npm:0.11.11"
+    "@types/jscodeshift": "npm:0.12.0"
     "@types/ncp": "npm:2.0.8"
     "@types/prompts": "npm:2.4.9"
     "@typescript-eslint/eslint-plugin": "npm:8.5.0"
