@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react'
 
-;(React as any).peter = 'peter'
-console.log('SsrRouter React', React)
-
 import { analyzeRoutes } from '../analyzeRoutes.js'
 import { LocationProvider, useLocation } from '../location.js'
 import { namedRoutes } from '../namedRoutes.js'
