@@ -31,12 +31,12 @@ type Preview = {
 
 export const UploadFileComponent = ({
   name = 'upload',
-  className = 'm-4 rounded-lg border-2 border-dashed border-gray-300 p-4 text-center',
+  className = '',
   onFileAccepted,
   maxFiles = 20,
   acceptedFileTypes = imageFileTypes,
   children,
-  dropzoneContent = <p>Drag n drop some files here</p>,
+  dropzoneContent = <p>Drag and drop some files here</p>,
   dropActiveContent = <p>Drop the files here ...</p>,
   uploadButtonContent = <span>Click to upload</span>,
   showPreviews = false,
