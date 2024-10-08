@@ -54,9 +54,10 @@ function resolveClientEntryForProd(
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  console.log('resolveClientEntryForProd during SSR - filePath', clientEntry)
+  console.log('resolveClientEntryForProd during SSR - clientEntry', clientEntry)
 
   if (!clientEntry) {
+    // TODO (RSC): Is this ever used?
     if (absoluteClientEntries['*'] === '*') {
       return basePath + path.relative(getPaths().base, filePathSlash)
     }
