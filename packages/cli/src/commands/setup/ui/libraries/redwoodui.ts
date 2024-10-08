@@ -422,7 +422,7 @@ class RWUIInstallHandler {
             'web/src/lib/uiUtils.ts',
           )) as string
 
-          this._addFileAndInstallPackages(
+          await this._addFileAndInstallPackages(
             task,
             rwuiUtilsContent,
             projectRWUIUtilsPath,
@@ -601,12 +601,12 @@ class RWUIInstallHandler {
                 return
               }
 
-              this._addFileAndInstallPackages(
+              await this._addFileAndInstallPackages(
                 task,
                 newSBMainContent,
                 this.projectStorybookMainPath as string,
               )
-              this._addFileAndInstallPackages(
+              await this._addFileAndInstallPackages(
                 task,
                 newSBPreviewContent,
                 this.projectStorybookPreviewPath || 'web/.storybook/preview.ts',
@@ -728,15 +728,24 @@ class RWUIInstallHandler {
         return // skip to next iteration
       }
 
-      // ARI YOU ARE HERE:
-      // - also look in root package.json for installed packages
-      // - figure out why the dev dep packages aren't being installed
-      const projectPackageJsonPath = path.join(
+      // Even though RWUI should only use dependencies in web/package.json,
+      // we still want to check the root one of the project just in case something
+      // was previously installed that way.
+      // Also, we do want to run this on every file because of possible shared dependencies between files
+      // (aka, the project's package.json files are subject to change).
+      const projectRootPackageJsonPath = path.join(
+        this.rwPaths.base,
+        'package.json',
+      )
+      const projectWebPackageJsonPath = path.join(
         this.rwPaths.web.base,
         'package.json',
       )
-      const projectPackageJson = JSON.parse(
-        fs.readFileSync(projectPackageJsonPath, 'utf-8'),
+      const projectRootPackageJson = JSON.parse(
+        fs.readFileSync(projectRootPackageJsonPath, 'utf-8'),
+      )
+      const projectWebPackageJson = JSON.parse(
+        fs.readFileSync(projectWebPackageJsonPath, 'utf-8'),
       )
 
       const getMajorVersion = (version: string) => {
@@ -745,8 +754,10 @@ class RWUIInstallHandler {
       }
 
       const projectDeps = {
-        ...projectPackageJson.dependencies,
-        ...projectPackageJson.devDependencies,
+        ...projectRootPackageJson.dependencies,
+        ...projectRootPackageJson.devDependencies,
+        ...projectWebPackageJson.dependencies,
+        ...projectWebPackageJson.devDependencies,
       }
 
       const projectVersion = projectDeps[matchedPkg]
