@@ -15,7 +15,7 @@ const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),
 )
 
-export async function handler({ force, includeExamples, verbose }) {
+export async function handler({ force, verbose }) {
   const redwoodPaths = getPaths()
   const ts = isTypeScriptProject()
   const projectName = getConfig().web.title
@@ -23,9 +23,8 @@ export async function handler({ force, includeExamples, verbose }) {
   const tasks = new Listr(
     [
       addApiPackages([`@redwoodjs/upload@${version}`]),
-      // add the upload directive
       {
-        title: 'Adding the upload api lib ...',
+        title: 'Adding the upload directive ...',
         task: async () => {
           const uploadDirectiveTemplateContent = fs.readFileSync(
             path.resolve(
@@ -40,6 +39,7 @@ export async function handler({ force, includeExamples, verbose }) {
 
           const uploadDirectiveFile = path.join(
             redwoodPaths.api.directives,
+            'upload',
             'upload.ts',
           )
 
@@ -57,10 +57,8 @@ export async function handler({ force, includeExamples, verbose }) {
           ]
         },
       },
-      // add the upload sdl and service
       {
-        title: 'Adding Upload sdl and service ...',
-        enabled: () => includeExamples,
+        title: 'Adding upload sdl and service ...',
         task: async () => {
           // sdl
 
@@ -106,6 +104,32 @@ export async function handler({ force, includeExamples, verbose }) {
             ? exampleServiceTemplateContent
             : await transformTSToJS(serviceFile, exampleServiceTemplateContent)
 
+          // types
+
+          const typesTemplateContent = fs.readFileSync(
+            path.resolve(
+              __dirname,
+              'templates',
+              'api',
+              'services',
+              `types.ts.template`,
+            ),
+            'utf-8',
+          )
+          let typesFile
+          let typesContent
+
+          if (isTypeScriptProject()) {
+            typesFile = path.join(
+              redwoodPaths.api.services,
+              'types',
+              `types.${isTypeScriptProject() ? 'ts' : 'js'}`,
+            )
+
+            typesContent = ts
+              ? typesTemplateContent
+              : await transformTSToJS(typesFile, typesTemplateContent)
+          }
           // write all files
           return [
             writeFile(sdlFile, sdlContent, {
@@ -114,10 +138,13 @@ export async function handler({ force, includeExamples, verbose }) {
             writeFile(serviceFile, serviceContent, {
               overwriteExisting: force,
             }),
+            isTypeScriptProject() &&
+              writeFile(typesFile, typesContent, {
+                overwriteExisting: force,
+              }),
           ]
         },
       },
-      // add the upload plugin to the graphql server
       {
         title: 'Adding the upload plugin to the graphql server ...',
         task: async () => {
@@ -133,7 +160,7 @@ export async function handler({ force, includeExamples, verbose }) {
           )
 
           // Add import statement at the top of the file
-          const importStatement = `import { createUploadDirective } from '@redwoodjs/upload'
+          const importStatement = `import { useRedwoodUpload } from '@redwoodjs/upload'
 
 //
 // In extraPlugins setup useRedwoodUpload
