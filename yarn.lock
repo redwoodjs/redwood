@@ -9517,9 +9517,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/uploads@workspace:packages/uploads":
+"@redwoodjs/uploads-graphql@workspace:packages/uploads/graphql":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/uploads@workspace:packages/uploads"
+  resolution: "@redwoodjs/uploads-graphql@workspace:packages/uploads/graphql"
   dependencies:
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"

@@ -13,7 +13,7 @@
     { "path": "packages/forms" },
     { "path": "packages/codemods" },
     { "path": "packages/storage" },
-    { "path": "packages/upload" }
+    { "path": "packages/uploads" }
   ],
   "files": []
 }
