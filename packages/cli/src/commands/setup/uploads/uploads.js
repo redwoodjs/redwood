@@ -1,8 +1,8 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-export const command = 'upload'
+export const command = 'uploads'
 
-export const description = 'Setup RedwoodJS Upload'
+export const description = 'Setup RedwoodJS Uploads'
 
 export function builder(yargs) {
   yargs
@@ -26,6 +26,6 @@ export async function handler(options) {
     force: options.force,
     verbose: options.verbose,
   })
-  const { handler } = await import('./uploadHandler.js')
+  const { handler } = await import('./uploadsHandler.js')
   return handler(options)
 }

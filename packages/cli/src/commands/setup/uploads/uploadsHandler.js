@@ -23,43 +23,43 @@ export async function handler({ force, verbose }) {
 
   const tasks = new Listr(
     [
-      addApiPackages([`@redwoodjs/upload@${version}`]),
+      addApiPackages([`@redwoodjs/uploads@${version}`]),
       {
         title: 'Adding the upload directive ...',
         task: async () => {
-          const uploadDirectiveTemplateContent = fs.readFileSync(
+          const uploadsDirectiveTemplateContent = fs.readFileSync(
             path.resolve(
               __dirname,
               'templates',
               'api',
               'directives',
-              'upload.ts.template',
+              'uploads.ts.template',
             ),
             'utf-8',
           )
 
-          const uploadDirectiveFile = path.join(
+          const uploadsDirectiveFile = path.join(
             redwoodPaths.api.directives,
-            'upload',
-            'upload.ts',
+            'uploads',
+            'uploads.ts',
           )
 
           const directiveContent = ts
-            ? uploadDirectiveTemplateContent
+            ? uploadsDirectiveTemplateContent
             : await transformTSToJS(
-                uploadDirectiveFile,
-                uploadDirectiveTemplateContent,
+                uploadsDirectiveFile,
+                uploadsDirectiveTemplateContent,
               )
 
           return [
-            writeFile(uploadDirectiveFile, directiveContent, {
+            writeFile(uploadsDirectiveFile, directiveContent, {
               overwriteExisting: force,
             }),
           ]
         },
       },
       {
-        title: 'Adding upload sdl and service ...',
+        title: 'Adding uploads sdl and service ...',
         task: async () => {
           // sdl
 
@@ -123,7 +123,7 @@ export async function handler({ force, verbose }) {
           if (isTypeScriptProject()) {
             typesFile = path.join(
               redwoodPaths.api.services,
-              'types',
+              'redwoodUploads',
               `types.${isTypeScriptProject() ? 'ts' : 'js'}`,
             )
 
@@ -147,7 +147,7 @@ export async function handler({ force, verbose }) {
         },
       },
       {
-        title: 'Adding the upload plugin to the graphql server ...',
+        title: 'Adding the uploads plugin to the graphql server ...',
         task: async () => {
           const graphqlFunctionFile = path.join(
             redwoodPaths.api.functions,
@@ -161,7 +161,7 @@ export async function handler({ force, verbose }) {
           )
 
           // Add import statement at the top of the file
-          const importStatement = `import { useRedwoodUpload } from '@redwoodjs/upload'
+          const importStatement = `import { useRedwoodUploads } from '@redwoodjs/uploads'
 
 //
 // In extraPlugins setup useRedwoodUpload

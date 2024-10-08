@@ -1,4 +1,4 @@
-export type UploadErrorMessage = string | ((config: UploadConfig) => string)
+export type UploadErrorMessage = string | ((config: UploadsConfig) => string)
 
 export type UploadErrorMessages = {
   uploadTokenRequired?: UploadErrorMessage
@@ -11,7 +11,7 @@ export type UploadErrorMessages = {
   invalidFileType?: UploadErrorMessage
 }
 
-export type UploadConfig = {
+export type UploadsConfig = {
   contentTypes?: string[]
   maxFileSize?: number
   maxFiles?: number
@@ -19,11 +19,11 @@ export type UploadConfig = {
   expiresIn?: string | number
 }
 
-export type UploadTokenPayload = UploadConfig & {
+export type UploadTokenPayload = UploadsConfig & {
   operationName: string
 }
 
-export type RedwoodUploadOptions = {
+export type RedwoodUploadsOptions = {
   appName: string
   uploadTarget?: string
   uploadTokenHeaderName?: string

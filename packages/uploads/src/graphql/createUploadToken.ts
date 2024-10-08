@@ -13,9 +13,9 @@ import {
   DEFAULT_UPLOAD_APP_NAME,
   DEFAULT_UPLOAD_TARGET,
 } from '../constants'
-import type { UploadConfig, UploadTokenPayload } from '../types'
+import type { UploadsConfig, UploadTokenPayload } from '../types'
 
-const DEFAULT_UPLOAD_CONFIG: UploadConfig = {
+const DEFAULT_UPLOAD_CONFIG: UploadsConfig = {
   contentTypes: [...IMAGE_CONTENT_TYPES, PDF_CONTENT_TYPE],
   maxFileSize: MAX_FILE_SIZE,
   maxFiles: MAX_FILES,

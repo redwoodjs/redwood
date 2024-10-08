@@ -1,4 +1,4 @@
-# Upload
+# Uploads
 
 The file upload solution for RedwoodJS.
 

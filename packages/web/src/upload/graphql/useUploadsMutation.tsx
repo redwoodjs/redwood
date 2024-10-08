@@ -19,7 +19,7 @@ export type UploadTokenOptions = {
   uploadTokenHeaderName?: string
 }
 
-export type UseUploadMutationOptions = {
+export type UseUploadsMutationOptions = {
   mutation: DocumentNode | TypedDocumentNode<any, any>
   options?: MutationHookOptions
   uploadTokenOptions?: UploadTokenOptions
@@ -27,10 +27,10 @@ export type UseUploadMutationOptions = {
 
 export const DEFAULT_UPLOAD_TOKEN_HEADER_NAME = 'x-rw-upload-token'
 
-export const useUploadMutation = (
-  mutation: UseUploadMutationOptions['mutation'],
-  options: UseUploadMutationOptions['options'] = {},
-  uploadTokenOptions: UseUploadMutationOptions['uploadTokenOptions'] = {},
+export const useUploadsMutation = (
+  mutation: UseUploadsMutationOptions['mutation'],
+  options: UseUploadsMutationOptions['options'] = {},
+  uploadTokenOptions: UseUploadsMutationOptions['uploadTokenOptions'] = {},
 ) => {
   // Extract the mutation name from the mutation document
   const operationDef = mutation.definitions[0]

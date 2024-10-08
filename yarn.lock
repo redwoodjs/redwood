@@ -9517,11 +9517,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/upload@workspace:packages/upload":
+"@redwoodjs/uploads@workspace:packages/uploads":
   version: 0.0.0-use.local
-  resolution: "@redwoodjs/upload@workspace:packages/upload"
+  resolution: "@redwoodjs/uploads@workspace:packages/uploads"
   dependencies:
-    "@envelop/core": "npm:5.0.2"
     "@redwoodjs/context": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/graphql-server": "workspace:*"

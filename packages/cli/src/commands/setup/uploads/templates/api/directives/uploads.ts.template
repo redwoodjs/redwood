@@ -165,6 +165,6 @@ const validate: ValidatorDirectiveFunc = ({ directiveArgs, args, context }) => {
   }
 }
 
-const upload = createValidatorDirective(schema, validate)
+const uploads = createValidatorDirective(schema, validate)
 
-export default upload
+export default uploads

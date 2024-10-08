@@ -29,7 +29,7 @@ type Preview = {
   previewUrl: string
 }
 
-export const UploadFileComponent = ({
+export const UploadFilesComponent = ({
   name = 'upload',
   className = '',
   onFileAccepted,

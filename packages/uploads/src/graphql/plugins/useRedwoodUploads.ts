@@ -3,10 +3,10 @@ import type { Plugin } from 'graphql-yoga'
 import type { RedwoodGraphQLContext } from '@redwoodjs/graphql-server'
 
 import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '../../constants'
-import type { RedwoodUploadOptions } from '../../types'
+import type { RedwoodUploadsOptions } from '../../types'
 
-export const useRedwoodUpload = (
-  options: RedwoodUploadOptions,
+export const useRedwoodUploads = (
+  options: RedwoodUploadsOptions,
 ): Plugin<RedwoodGraphQLContext> => {
   return {
     async onContextBuilding({ extendContext }) {

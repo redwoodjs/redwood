@@ -1,2 +1,2 @@
-export * from './components/UploadComponent.js'
-export * from './graphql/useUploadMutation.js'
+export * from './components/UploadFilesComponent.jsx'
+export * from './graphql/useUploadsMutation.jsx'
