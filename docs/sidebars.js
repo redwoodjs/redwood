@@ -231,8 +231,25 @@ module.exports = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Upload and Storage',
+          link: {
+            type: 'generated-index',
+            title: 'Upload and Storage',
+            slug: 'upload-and-storage/index',
+          },
+          items: [
+            { type: 'doc', label: 'About', id: 'uploads-and-storage/about' },
+            { type: 'doc', label: 'Upload', id: 'uploads-and-storage/upload' },
+            {
+              type: 'doc',
+              label: 'Storage',
+              id: 'uploads-and-storage/storage',
+            },
+          ],
+        },
         'webhooks',
-        'uploads',
         'vite-configuration',
       ],
     },
