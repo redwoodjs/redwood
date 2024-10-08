@@ -2,8 +2,9 @@ import path from 'path'
 
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
+import { format } from 'prettier'
 
-import { addApiPackages } from '@redwoodjs/cli-helpers'
+import { addApiPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -190,6 +191,44 @@ export async function handler({ force, verbose }) {
           console.log(
             'Note: You may need to manually restart GraphQL in VSCode to see the new types take effect.\n\n',
           )
+        },
+      },
+
+      {
+        title: 'Prettifying changed files',
+        task: async (_ctx, task) => {
+          const ext = isTypeScriptProject() ? 'ts' : 'js'
+          const prettifyPaths = [
+            path.join(getPaths().api.directives, 'upload', `upload.${ext}`),
+            path.join(getPaths().api.graphql, `redwoodUploads.sdl.${ext}`),
+            path.join(
+              getPaths().api.services,
+              'redwoodUploads',
+              `redwoodUploads.${ext}`,
+            ),
+            isTypeScriptProject() &&
+              path.join(getPaths().api.services, 'types', `types.${ext}`),
+            path.join(getPaths().api.functions, `graphql.${ext}`),
+          ]
+
+          for (const prettifyPath of prettifyPaths) {
+            try {
+              if (!fs.existsSync(prettifyPath)) {
+                continue
+              }
+              const source = fs.readFileSync(prettifyPath, 'utf-8')
+              const prettierOptions = await getPrettierOptions()
+              const prettifiedApp = await format(source, {
+                ...prettierOptions,
+                parser: 'babel-ts',
+              })
+
+              fs.writeFileSync(prettifyPath, prettifiedApp, 'utf-8')
+            } catch {
+              task.output =
+                "Couldn't prettify the changes. Please reformat the files manually if needed."
+            }
+          }
         },
       },
     ],
