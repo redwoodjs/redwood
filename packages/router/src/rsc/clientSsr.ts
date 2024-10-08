@@ -123,7 +123,9 @@ export async function renderRoutesSsr(pathname: string) {
         // filePath /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/rsc/assets/rsc-AboutCounter.tsx-1.mjs
         // name AboutCounter
 
-        const id = resolveClientEntryForProd(filePath, clientEntries)
+        const id = globalThis.__rwjs__vite_ssr_runtime
+          ? filePath
+          : resolveClientEntryForProd(filePath, clientEntries)
 
         console.log('clientSsr.ts::Proxy id', id)
         // id /Users/tobbe/tmp/test-project-rsc-kitchen-sink/web/dist/browser/assets/rsc-AboutCounter.tsx-1-4kTKU8GC.mjs
