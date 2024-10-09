@@ -169,19 +169,6 @@ export async function renderRoutesSsr(pathname: string) {
     console.log('Stream content:', logContent)
   })()
 
-  // if (Math.random() < 5) {
-  //   const elementPromise = Promise.resolve(
-  //     createElement(
-  //       'p',
-  //       null,
-  //       'Hello from clientSsr.ts after renderToReadableStream',
-  //     ),
-  //   )
-
-  //   rscCache.set(pathname, elementPromise)
-  //   return elementPromise
-  // }
-
   // We have to do this weird import thing because we need a version of
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in

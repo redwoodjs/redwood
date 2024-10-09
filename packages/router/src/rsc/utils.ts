@@ -20,10 +20,7 @@ export function makeFilePath(path: string) {
 export async function importReact() {
   if (globalThis.__rwjs__vite_ssr_runtime) {
     const reactMod = await import('react')
-    console.log('rsc/utils.ts reactMod', reactMod.default)
     return reactMod.default
-    // return (await globalThis.__rwjs__vite_ssr_runtime.executeUrl('react'))
-    //   .default
   }
 
   const distSsr = getPaths().web.distSsr
@@ -40,12 +37,6 @@ export async function importReact() {
  */
 export async function importRsdwClient() {
   if (globalThis.__rwjs__vite_ssr_runtime) {
-    // const rsdwcMod = await globalThis.__rwjs__vite_ssr_runtime.executeUrl(
-    //   'react-server-dom-webpack/client.edge',
-    //   // '/Users/tobbe/dev/redwood/redwood/packages/router/vite-fix/react-server-dom-webpack.client.edge',
-    // )
-    //
-    // return rsdwcMod.default
     const rsdwcMod = await import('react-server-dom-webpack/client.edge')
     return rsdwcMod.default
   }
@@ -58,20 +49,13 @@ export async function importRsdwClient() {
   return (await import(rsdwClientPath)).default
 }
 
-// TODO (RSC): Rename this method if we keep importing from react-dom/server.edge
-export async function importRsdwServer() {
+export async function importRsdwServer(): Promise<RSDWServerType> {
   if (globalThis.__rwjs__vite_rsc_runtime) {
-    // return (await import('react-dom/server.edge')).default
-    // return (await import('react-server-dom-webpack/server.edge')).default
     const rsdwServerMod = await globalThis.__rwjs__vite_rsc_runtime.executeUrl(
-      // await globalThis.__rwjs__vite_rsc_server.ssrLoadModule(
       'react-server-dom-webpack/server.edge',
-      // 'react-dom/server.edge',
-      // '/Users/tobbe/dev/redwood/redwood/packages/router/vite-fix/react-server-dom-webpack.server.edge',
-      // '../../vite-fix/react-server-dom-webpack.server.edge',
     )
 
-    return rsdwServerMod.default as RSDWServerType
+    return rsdwServerMod.default
   } else {
     // We need to do this weird import dance because we need to import a version
     // of react-server-dom-webpack/server.edge that has been built with the

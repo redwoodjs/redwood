@@ -1,6 +1,3 @@
-// import path from 'node:path'
-// import url from 'node:url'
-
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
@@ -52,8 +49,6 @@ async function createServer() {
 
   app.use('*', (req, _res, next) => {
     const fullUrl = getFullUrl(req, rscEnabled)
-
-    console.log('fullUrl', fullUrl)
 
     const perReqStore = createPerRequestMap({
       // Convert express headers to fetch header

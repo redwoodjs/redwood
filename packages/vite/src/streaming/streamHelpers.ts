@@ -303,8 +303,6 @@ async function importModule(
   isDev?: boolean,
 ) {
   if (isDev) {
-    console.log('asking vite to load module', mod)
-
     if (mod === 'rd-server') {
       const loadedMod = await import('react-dom/server.edge')
       return loadedMod.default
