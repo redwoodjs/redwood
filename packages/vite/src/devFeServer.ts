@@ -212,6 +212,7 @@ async function createServer() {
         '@redwoodjs/auth-dbauth-api',
         '@redwoodjs/cookie-jar',
         '@redwoodjs/server-store',
+        '@redwoodjs/structure',
         '@simplewebauthn/server',
         'graphql-scalars',
         'minimatch',
@@ -249,6 +250,9 @@ async function createServer() {
           'stacktracey',
           'deepmerge',
           'fast-glob',
+          '@whatwg-node/fetch',
+          'busboy',
+          'cookie',
         ],
         // exclude: ['webpack']
       },
@@ -348,26 +352,18 @@ async function createServer() {
   app.use(vite.middlewares)
 
   if (rscEnabled) {
-    // const { createRscRequestHandler } = await import(
-    //   './rsc/rscRequestHandler.js'
-    // )
-    // const { createRscRequestHandler } = await viteRuntime.executeUrl(
-    //   new URL('./rsc/rscRequestHandler.js', import.meta.url).pathname,
-    // )
+    const { createRscRequestHandler } =
+      await globalThis.__rwjs__vite_rsc_runtime.executeUrl(
+        new URL('./rsc/rscRequestHandler.js', import.meta.url).pathname,
+      )
+
     // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
     app.use(
       '/rw-rsc',
-      // createRscRequestHandler({
-      //   getMiddlewareRouter: async () => createMiddlewareRouter(vite),
-      //   viteDevServer: vite,
-      // }),
-      (req, res, next) => {
-        console.log('req.originalUrl', req.originalUrl, 'req.url', req.url)
-        console.log('req.headers.host', req.headers.host)
-        console.log("req.headers['rw-rsc']", req.headers['rw-rsc'])
-
-        return next()
-      },
+      await createRscRequestHandler({
+        getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+        viteDevServer: vite,
+      }),
     )
   }
 
