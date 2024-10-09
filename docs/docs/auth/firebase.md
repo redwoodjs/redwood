@@ -77,3 +77,79 @@ const HomePage = () => {
 "Email/Password" says what it means: Firebase doesn't redirect to a hosted sign-up page or open a sign-up modal.
 In a real app, you'd build a form here, but we're going to hardcode an email and password.
 After you sign up, you should see `{"isAuthenticated":true}` on the page.
+
+------------------------------Pt-Br-----------------------------------------------
+---
+sidebar_label: Firebase
+---
+
+# Firebase Authentication
+
+Para começar, execute o comando de configuração:
+
+```bash
+yarn rw setup auth firebase
+```
+
+Isso instala todos os pacotes, escreve todos os arquivos e faz todas as modificações de código necessárias.
+Para uma explicação detalhada de todas as mudanças do lado da API e do lado web que não são exclusivas do Firebase, veja o documento principal de Autenticação. Por agora, vamos focar no lado do Firebase.
+
+Se você ainda não tem uma conta no Firebase, este é o momento de criar uma: navegue até https://firebase.google.com e clique em "Ir para o console", inscreva-se e crie um projeto.
+Depois de pronto, vamos obter as chaves da API.
+
+Para obter as chaves da API, precisamos adicionar um aplicativo web ao nosso projeto.
+Clique no ícone </> na principal chamada para ação no painel—"Comece adicionando o Firebase ao seu aplicativo". Dê um apelido ao seu aplicativo, e então você verá as chaves da API.
+Como estamos usando o Firebase apenas para autenticação, só precisamos das chaves apiKey, authDomain e projectId. Copie essas chaves para o arquivo .env do seu projeto:
+
+```bash title=".env"
+FIREBASE_API_KEY="..."
+FIREBASE_AUTH_DOMAIN="..."
+FIREBASE_PROJECT_ID="..."
+```
+
+Por fim, inclua FIREBASE_API_KEY e FIREBASE_AUTH_DOMAIN na lista de variáveis de ambiente que devem estar disponíveis para o lado web (FIREBASE_PROJECT_ID é para o lado da API):
+
+```toml title="redwood.toml"
+[web]
+  # ...
+  includeEnvironmentVariables = ["FIREBASE_API_KEY", "FIREBASE_AUTH_DOMAIN"]
+```
+
+Conectamos nosso aplicativo Firebase ao nosso aplicativo Redwood, mas se você tentar agora, não funcionará. Isso ocorre porque ainda não ativamos a autenticação no nosso aplicativo Firebase.
+
+Volte ao painel mais uma vez: no menu à esquerda, clique em "Build", "Authentication" e "Começar". Vamos usar "Email/Senha" aqui, mas sinta-se à vontade para configurar como desejar.
+Clique em "Email/Senha", habilite e clique em "Salvar".
+
+Isso deve ser suficiente; agora, tudo deve funcionar. Vamos garantir: se este é um projeto totalmente novo, gere uma página inicial.
+Lá, tentaremos se inscrever extraindo signUp do hook useAuth (importe isso de 'src/auth'). Também extrairemos e exibiremos isAuthenticated para ver se funcionou:
+
+```tsx title="web/src/pages/HomePage.tsx"
+import { useAuth } from 'src/auth'
+
+const HomePage = () => {
+  const { isAuthenticated, signUp } = useAuth()
+
+  return (
+    <>
+      {/* MetaTags, h1, paragraphs, etc. */}
+
+      <p>{JSON.stringify({ isAuthenticated })}</p>
+      <button
+        onClick={() =>
+          signUp({
+            // email: 'your.email@email.com',
+            // password: 'super secret password',
+          })
+        }
+      >
+        sign up
+      </button>
+    </>
+  )
+}
+```
+
+"Email/Senha" significa exatamente o que diz: o Firebase não redireciona para uma página de inscrição hospedada nem abre um modal de inscrição.
+Em um aplicativo real, você criaria um formulário aqui, mas vamos codificar um email e senha.
+Depois de se inscrever, você deve ver {"isAuthenticated":true} na página.
+
