@@ -1,16 +1,10 @@
 import path from 'node:path'
 
-import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
-import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
-
 import { getPaths } from '@redwoodjs/project-config'
 
 import { moduleMap } from './ssrModuleMap.js'
-import { importRsdwClient, importReact } from './utils.js'
+import { importRsdwClient, importRsdwServer, importReact } from './utils.js'
 import { makeFilePath } from './utils.js'
-
-type RSDWClientType = typeof RSDWClientModule
-type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
@@ -110,17 +104,7 @@ export async function renderRoutesSsr(pathname: string) {
   )
 
   const { createElement } = await importReact()
-
-  // We need to do this weird import dance because we need to import a version
-  // of react-server-dom-webpack/server.edge that has been built with the
-  // `react-server` condition. If we just did a regular import, we'd get the
-  // generic version in node_modules, and it'd throw an error about not being
-  // run in an environment with the `react-server` condition.
-  const dynamicImport = ''
-  const { renderToReadableStream }: RSDWServerType = await import(
-    /* @vite-ignore */
-    dynamicImport + 'react-server-dom-webpack/server.edge'
-  )
+  const { renderToReadableStream } = await importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
@@ -132,7 +116,7 @@ export async function renderRoutesSsr(pathname: string) {
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType = await importRsdwClient()
+  const { createFromReadableStream } = await importRsdwClient()
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
