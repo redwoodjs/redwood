@@ -12,8 +12,8 @@
     { "path": "packages/graphql-server" },
     { "path": "packages/forms" },
     { "path": "packages/codemods" },
-    { "path": "packages/storage" },
-    { "path": "packages/uploads" }
+    { "path": "packages/uploads" },
+    { "path": "packages/storage" }
   ],
   "files": []
 }

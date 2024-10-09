@@ -60,7 +60,7 @@ export const useUploadsMutation = (
   const token = data?.uploadToken?.token
 
   // Customize the useMutation hook to include the upload token in the headers
-  const [mutate] = useMutation(mutation, {
+  const result = useMutation(mutation, {
     ...options,
     context: {
       headers: {
@@ -70,5 +70,5 @@ export const useUploadsMutation = (
     },
   })
 
-  return [mutate]
+  return result
 }

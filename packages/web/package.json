@@ -96,16 +96,6 @@
         "default": "./dist/cjs/toast/index.js"
       }
     },
-    "./upload": {
-      "import": {
-        "types": "./dist/upload/index.d.ts",
-        "default": "./dist/upload/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs/upload/index.d.ts",
-        "default": "./dist/cjs/upload/index.js"
-      }
-    },
     "./apollo": {
       "import": {
         "types": "./dist/apollo/index.d.ts",
@@ -136,7 +126,6 @@
     "dist",
     "apollo",
     "toast",
-    "upload",
     "src/entry"
   ],
   "scripts": {
@@ -153,7 +142,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.11.1",
-    "@babel/runtime-corejs3": "7.25.0",
+    "@babel/runtime-corejs3": "7.25.7",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@whatwg-node/fetch": "0.9.21",
@@ -162,7 +151,6 @@
     "graphql": "16.9.0",
     "graphql-sse": "2.5.3",
     "graphql-tag": "2.12.6",
-    "react-dropzone": "14.2.9",
     "react-helmet-async": "2.0.5",
     "react-hot-toast": "2.4.1",
     "stacktracey": "2.1.8",
@@ -171,10 +159,10 @@
   "devDependencies": {
     "@apollo/client-react-streaming": "0.10.0",
     "@arethetypeswrong/cli": "0.16.4",
-    "@babel/cli": "7.24.8",
+    "@babel/cli": "7.25.7",
     "@babel/core": "^7.22.20",
-    "@babel/plugin-transform-runtime": "7.24.7",
-    "@babel/runtime": "7.25.0",
+    "@babel/plugin-transform-runtime": "7.25.7",
+    "@babel/runtime": "7.25.7",
     "@redwoodjs/framework-tools": "workspace:*",
     "@redwoodjs/internal": "workspace:*",
     "@rollup/plugin-babel": "6.0.4",
@@ -184,11 +172,10 @@
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "concurrently": "8.2.2",
-    "nodemon": "3.1.4",
-    "publint": "0.2.10",
+    "nodemon": "3.1.7",
+    "publint": "0.2.11",
     "react": "19.0.0-rc-f2df5694-20240916",
     "react-dom": "19.0.0-rc-f2df5694-20240916",
-    "react-dropzone": "14.2.3",
     "tstyche": "2.1.1",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
