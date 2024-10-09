@@ -1,10 +1,12 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
+import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
 import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+type RSDWClientType = typeof RSDWClientModule
 type RSDWServerType = typeof RSDWServerModule
 
 export function makeFilePath(path: string) {
@@ -35,7 +37,7 @@ export async function importReact() {
  * This function ensures we load the same version of rsdw_client everywhere to
  * prevent multiple instances of React
  */
-export async function importRsdwClient() {
+export async function importRsdwClient(): Promise<RSDWClientType> {
   if (globalThis.__rwjs__vite_ssr_runtime) {
     const rsdwcMod = await import('react-server-dom-webpack/client.edge')
     return rsdwcMod.default

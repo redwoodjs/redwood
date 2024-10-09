@@ -1,8 +1,10 @@
 import { describe, expect, vi, it, beforeEach } from 'vitest'
 
 import type { Job, JobDefinition } from '../../types.js'
+import type { CreateWorkerArgs } from '../JobManager.js'
 import { JobManager } from '../JobManager.js'
 import { Scheduler } from '../Scheduler.js'
+import { Worker } from '../Worker.js'
 
 import { MockAdapter, mockLogger } from './mocks.js'
 
@@ -243,5 +245,52 @@ describe('createJob()', () => {
     const job = manager.createJob(jobDefinition)
 
     expect(job).toEqual(jobDefinition)
+  })
+})
+
+describe('createWorker()', () => {
+  it('creates a worker with a custom configuration', () => {
+    const mockAdapter = new MockAdapter()
+    const customLogger = { ...mockLogger, custom: true }
+    const manager = new JobManager({
+      adapters: { mock: mockAdapter },
+      queues: ['default', 'high'] as const,
+      logger: mockLogger,
+      workers: [
+        {
+          adapter: 'mock' as const,
+          queue: ['default', 'high'] as const,
+          count: 1,
+          logger: customLogger,
+          maxAttempts: 10,
+          maxRuntime: 120000,
+          sleepDelay: 7,
+          deleteFailedJobs: true,
+          deleteSuccessfulJobs: false,
+        },
+      ],
+    })
+
+    const workerArgs: CreateWorkerArgs = {
+      index: 0,
+      workoff: true,
+      clear: true,
+      processName: 'test-worker-custom-config',
+    }
+
+    const worker = manager.createWorker(workerArgs)
+
+    expect(worker).toBeInstanceOf(Worker)
+    expect(worker).toHaveProperty('adapter', mockAdapter)
+    expect(worker).toHaveProperty('logger', customLogger)
+    expect(worker).toHaveProperty('maxAttempts', 10)
+    expect(worker).toHaveProperty('maxRuntime', 120000)
+    expect(worker).toHaveProperty('sleepDelay', 7000)
+    expect(worker).toHaveProperty('deleteFailedJobs', true)
+    expect(worker).toHaveProperty('deleteSuccessfulJobs', false)
+    expect(worker).toHaveProperty('processName', 'test-worker-custom-config')
+    expect(worker).toHaveProperty('queues', ['default', 'high'])
+    expect(worker).toHaveProperty('workoff', true)
+    expect(worker).toHaveProperty('clear', true)
   })
 })

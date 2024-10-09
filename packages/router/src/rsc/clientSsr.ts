@@ -1,14 +1,10 @@
 import path from 'node:path'
 
-import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
-
 import { getPaths } from '@redwoodjs/project-config'
 
 import { moduleMap } from './ssrModuleMap.js'
 import { importRsdwClient, importReact, importRsdwServer } from './utils.js'
 import { makeFilePath } from './utils.js'
-
-type RSDWClientType = typeof RSDWClientModule
 
 async function getEntries() {
   if (globalThis.__rwjs__vite_ssr_runtime) {
@@ -71,9 +67,10 @@ function resolveClientEntryForProd(
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  console.log('resolveClientEntryForProd during SSR - filePath', clientEntry)
+  console.log('resolveClientEntryForProd during SSR - clientEntry', clientEntry)
 
   if (!clientEntry) {
+    // TODO (RSC): Is this ever used?
     if (absoluteClientEntries['*'] === '*') {
       return basePath + path.relative(getPaths().base, filePathSlash)
     }
@@ -135,7 +132,6 @@ export async function renderRoutesSsr(pathname: string) {
   )
 
   const { createElement } = await importReact()
-
   const { renderToReadableStream } = await importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
@@ -173,7 +169,7 @@ export async function renderRoutesSsr(pathname: string) {
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType = await importRsdwClient()
+  const { createFromReadableStream } = await importRsdwClient()
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
