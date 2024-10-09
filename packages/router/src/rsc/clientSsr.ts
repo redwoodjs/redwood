@@ -1,16 +1,10 @@
 import path from 'node:path'
 
-import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
-import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
-
 import { getPaths } from '@redwoodjs/project-config'
 
 import { moduleMap } from './ssrModuleMap.js'
 import { importRsdwClient, importReact } from './utils.js'
 import { makeFilePath } from './utils.js'
-
-type RSDWClientType = typeof RSDWClientModule
-type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
@@ -110,17 +104,7 @@ export async function renderRoutesSsr(pathname: string) {
   )
 
   const { createElement } = await importReact()
-
-  // We need to do this weird import dance because we need to import a version
-  // of react-server-dom-webpack/server.edge that has been built with the
-  // `react-server` condition. If we just did a regular import, we'd get the
-  // generic version in node_modules, and it'd throw an error about not being
-  // run in an environment with the `react-server` condition.
-  const dynamicImport = ''
-  const { renderToReadableStream }: RSDWServerType = await import(
-    /* @vite-ignore */
-    dynamicImport + 'react-server-dom-webpack/server.edge'
-  )
+  const { renderToReadableStream } = importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
