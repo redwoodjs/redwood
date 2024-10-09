@@ -28,6 +28,15 @@ async function loadServerFile(filePath: string) {
 }
 
 const getRoutesComponent: any = async () => {
+  if (globalThis.__rwjs__vite_rsc_runtime) {
+    const routesPath = getPaths().web.routes
+
+    const routesMod =
+      await globalThis.__rwjs__vite_rsc_runtime.executeUrl(routesPath)
+
+    return routesMod.default
+  }
+
   const serverEntries = await getEntriesFromDist()
   console.log('rscRenderer.ts serverEntries', serverEntries)
 

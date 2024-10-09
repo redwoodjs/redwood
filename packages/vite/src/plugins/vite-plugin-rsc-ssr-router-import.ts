@@ -23,9 +23,9 @@ export function rscSsrRouterImport(): Plugin {
 
   return {
     name: 'rsc-ssr-router-import',
-    transform: async function (code, id) {
+    transform: async function (code, id, options) {
       // We only care about the routes file
-      if (id !== routesFileId) {
+      if (!options?.ssr || id !== routesFileId) {
         return null
       }
 
@@ -50,6 +50,7 @@ export function rscSsrRouterImport(): Plugin {
           }
         },
       })
+
       return generate(ast).code
     },
   }
