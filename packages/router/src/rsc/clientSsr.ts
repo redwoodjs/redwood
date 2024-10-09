@@ -3,7 +3,7 @@ import path from 'node:path'
 import { getPaths } from '@redwoodjs/project-config'
 
 import { moduleMap } from './ssrModuleMap.js'
-import { importRsdwClient, importReact } from './utils.js'
+import { importRsdwClient, importRsdwServer, importReact } from './utils.js'
 import { makeFilePath } from './utils.js'
 
 async function getEntries() {
@@ -104,7 +104,7 @@ export async function renderRoutesSsr(pathname: string) {
   )
 
   const { createElement } = await importReact()
-  const { renderToReadableStream } = importRsdwServer()
+  const { renderToReadableStream } = await importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
@@ -116,7 +116,7 @@ export async function renderRoutesSsr(pathname: string) {
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType = await importRsdwClient()
+  const { createFromReadableStream } = await importRsdwClient()
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
