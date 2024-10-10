@@ -47,6 +47,8 @@ writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 // [2]: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
 
 const copyCommand = os.platform() === 'win32' ? 'copy' : 'cp'
+const moveCommand = os.platform() === 'win32' ? 'move' : 'mv'
+
 await $`${copyCommand} package.json package.json.bak`
 
 const packageJson: PackageJson = JSON.parse(
@@ -62,10 +64,9 @@ try {
   console.error(e)
 
   // Restore the original package.json
-  const moveCommand = os.platform() === 'win32' ? 'move' : 'mv'
   await $`${moveCommand} package.json.bak package.json`
 
   process.exit(1)
 }
 
-await $`mv package.json.bak package.json`
+await $`${moveCommand} package.json.bak package.json`
