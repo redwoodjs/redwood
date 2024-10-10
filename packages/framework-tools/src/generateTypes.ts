@@ -35,7 +35,8 @@ export async function generateTypesCjs() {
     process.exitCode = e.exitCode
     throw new Error(e)
   } finally {
-    await $`mv package.json.bak package.json`
+    const moveCommand = os.platform() === 'win32' ? 'move' : 'mv'
+    await $`${moveCommand} package.json.bak package.json`
   }
 }
 
