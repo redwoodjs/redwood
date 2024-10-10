@@ -96,11 +96,7 @@ export class ServerManager {
     // If it doesn't close within 2 seconds, forcefully close it
     await Promise.race([
       new Promise<void>((resolve) => {
-        console.log(
-          chalk.yellow(
-            'API server did not exit within 2 seconds, forcefully closing it.',
-          ),
-        )
+        console.log(chalk.yellow('Shutting down API server.'))
         this.httpServerProcess!.on('exit', () => resolve())
         this.httpServerProcess!.kill()
       }),
