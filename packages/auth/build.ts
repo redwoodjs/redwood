@@ -46,7 +46,8 @@ writeFileSync('dist/package.json', JSON.stringify({ type: 'module' }))
 // [1]: https://github.com/arethetypeswrong/arethetypeswrong.github.io/issues/21#issuecomment-1494618930
 // [2]: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API
 
-await $`cp package.json package.json.bak`
+const copyCommand = os.platform() === 'win32' ? 'copy' : 'cp'
+await $`${copyCommand} package.json package.json.bak`
 
 const packageJson: PackageJson = JSON.parse(
   readFileSync('./package.json', 'utf-8'),
