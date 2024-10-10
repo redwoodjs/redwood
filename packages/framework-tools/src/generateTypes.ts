@@ -19,7 +19,8 @@ $.quote = os.platform() === 'win32' ? quotePowerShell : quote
  * [1]: https://github.com/arethetypeswrong/arethetypeswrong.github.io/issues/21#issuecomment-1494618930
  */
 export async function generateTypesCjs() {
-  await $`cp package.json package.json.bak`
+  const copyCommand = os.platform() === 'win32' ? 'copy' : 'cp'
+  await $`${copyCommand} package.json package.json.bak`
 
   const packageJson: PackageJson = JSON.parse(
     readFileSync('./package.json', 'utf-8'),
