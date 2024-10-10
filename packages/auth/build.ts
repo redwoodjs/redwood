@@ -62,7 +62,8 @@ try {
   console.error(e)
 
   // Restore the original package.json
-  await $`mv package.json.bak package.json`
+  const moveCommand = os.platform() === 'win32' ? 'move' : 'mv'
+  await $`${moveCommand} package.json.bak package.json`
 
   process.exit(1)
 }
