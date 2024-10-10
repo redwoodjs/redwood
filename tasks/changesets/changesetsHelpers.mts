@@ -2,7 +2,9 @@ import { fileURLToPath } from 'node:url'
 
 import { humanId } from 'human-id'
 import type { ProcessPromise } from 'zx'
-import { $, argv, path, fs } from 'zx'
+import { argv, path, fs, $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 const ROOT_DIR_PATH = fileURLToPath(new URL('../../', import.meta.url))
 const DIRNAME = path.dirname(fileURLToPath(new URL(import.meta.url)))

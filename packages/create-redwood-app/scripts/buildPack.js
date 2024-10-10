@@ -2,7 +2,9 @@
 
 import { fileURLToPath } from 'node:url'
 
-import { cd, path, within, $ } from 'zx'
+import { cd, path, within, $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 const tsTemplatePath = fileURLToPath(
   new URL('../templates/ts', import.meta.url),

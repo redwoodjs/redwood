@@ -1,6 +1,6 @@
 import process from 'node:process'
 
-import { $, cd, path, ProcessOutput, fs } from 'zx'
+import { cd, path, ProcessOutput, fs, $, os, quotePowerShell, quote } from 'zx'
 
 import {
   JOBS_SCRIPT,
@@ -14,6 +14,8 @@ import {
   projectDirectoryExists,
   projectFileExists,
 } from './util.mjs'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 $.env.DATABASE_URL = 'file:./dev.db'
 

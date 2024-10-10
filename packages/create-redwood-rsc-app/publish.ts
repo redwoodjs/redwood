@@ -1,8 +1,11 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+
 import { rimrafSync } from 'rimraf'
-import { $ } from 'zx'
+import { $, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 async function main() {
   if (process.argv.length !== 4) {

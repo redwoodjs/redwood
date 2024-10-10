@@ -1,7 +1,9 @@
 /* eslint-env node */
 
 import { describe, test, expect, it } from 'vitest'
-import { cd, fs, $ } from 'zx'
+import { cd, fs, $, $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 if (!process.env.PROJECT_PATH) {
   throw new Error('PROJECT_PATH environment variable is not set')

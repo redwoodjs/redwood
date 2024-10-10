@@ -28,7 +28,9 @@ import util from 'node:util'
 
 import execa from 'execa'
 import prompts from 'prompts'
-import { cd, chalk, fs, path, within, $ } from 'zx'
+import { cd, chalk, fs, path, within, $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 async function main() {
   let options

@@ -3,7 +3,9 @@
 import { fileURLToPath } from 'node:url'
 
 import Configstore from 'configstore'
-import { cd, fs, os, path, $ } from 'zx'
+import { cd, fs, os, path, $, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 const config = new Configstore('create-redwood-app')
 let projectPath = config.get('projectPath')

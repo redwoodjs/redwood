@@ -1,4 +1,4 @@
-import { $, cd } from 'zx'
+import { cd, $, os, quotePowerShell, quote } from 'zx'
 
 import type { Options } from './lib.mjs'
 import {
@@ -9,6 +9,8 @@ import {
   yarnInstall,
 } from './lib.mjs'
 import { OutputManager, Stage } from './output.mjs'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 export async function tarsync(
   { projectPath, verbose }: Omit<Options, 'watch'>,

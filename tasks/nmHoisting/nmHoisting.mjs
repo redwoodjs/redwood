@@ -2,7 +2,9 @@
 /* eslint-env node */
 // @ts-check
 
-import { cd, fs, os, path, within, $ } from 'zx'
+import { cd, fs, os, path, within, $, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 async function main() {
   const TMP_DIR = os.tmpdir()

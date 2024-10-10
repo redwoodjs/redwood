@@ -2,7 +2,9 @@
 /* eslint-env node */
 
 import { rimraf } from 'rimraf'
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 await $`yarn clean:prisma`
 

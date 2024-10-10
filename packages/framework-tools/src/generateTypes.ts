@@ -3,7 +3,9 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import type { PackageJson } from 'type-fest'
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 /**
  * This function will run `yarn build:types-cjs` to generate the CJS type

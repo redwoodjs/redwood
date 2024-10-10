@@ -1,4 +1,6 @@
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 interface Problem {
   kind: string

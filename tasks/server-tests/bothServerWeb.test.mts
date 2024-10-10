@@ -1,7 +1,9 @@
 import { describe, it } from 'vitest'
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
 
 import { rw, rwServer, test, testContext } from './vitest.setup.mjs'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 describe.each([[[rw, 'serve']], [rwServer]])('serve both (%s)', (cmd) => {
   describe('webPort', () => {

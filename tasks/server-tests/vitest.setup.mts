@@ -1,10 +1,12 @@
 import { fileURLToPath } from 'node:url'
 
 import { afterAll, afterEach, beforeAll, expect } from 'vitest'
-import { fs, path, $ } from 'zx'
+import { fs, path, $, os, quote, quotePowerShell } from 'zx'
 import type { ProcessPromise } from 'zx'
 
 import { getConfig } from '@redwoodjs/project-config'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 $.verbose = !!process.env.VERBOSE
 

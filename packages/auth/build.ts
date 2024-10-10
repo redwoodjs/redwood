@@ -1,9 +1,11 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 
 import type { PackageJson } from 'type-fest'
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
 
 import { build, defaultBuildOptions } from '@redwoodjs/framework-tools'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 // ESM build
 await build({

@@ -1,7 +1,20 @@
 import { fileURLToPath } from 'node:url'
 import { parseArgs as nodeUtilParseArgs } from 'node:util'
 
-import { $, cd, chalk, fs, glob, path, within } from 'zx'
+import {
+  cd,
+  chalk,
+  fs,
+  glob,
+  path,
+  within,
+  $,
+  os,
+  quotePowerShell,
+  quote,
+} from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 export const TARBALL_DEST_DIRNAME = 'tarballs'
 

@@ -1,6 +1,8 @@
 import { cpus } from 'node:os'
 
-import { $, glob, spinner, fs, path } from 'zx'
+import { glob, spinner, fs, path, $, os, quotePowerShell, quote } from 'zx'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 async function getConfigsForFiles(files: string[]) {
   const configs = new Map<string, any>()

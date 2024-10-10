@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { $ } from 'zx'
+import { $, os, quotePowerShell, quote } from 'zx'
 
 import { rw, rwServer } from './vitest.setup.mjs'
+
+$.quote = os.platform() === 'win32' ? quotePowerShell : quote
 
 describe('rw serve', () => {
   it('has help configured', async () => {
