@@ -147,7 +147,7 @@ export const handler = async ({
 
     // Running a separate process here, otherwise it wouldn't pick up the
     // generated Prisma Client due to require module caching
-    await execa('yarn rw prerender', {
+    await execa('yarn', ['rw', 'prerender'], {
       stdio: 'inherit',
       cwd: rwjsPaths.web.base,
     })
