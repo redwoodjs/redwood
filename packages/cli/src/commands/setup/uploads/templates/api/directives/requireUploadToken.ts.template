@@ -169,7 +169,7 @@ const validate: ValidatorDirectiveFunc = ({ directiveArgs, args, context }) => {
     logger.error({ error }, 'Upload validation failed')
     throw new ValidationError(error.message)
   }
-}
+}a
 
 const requireUploadToken = createValidatorDirective(schema, validate)
 

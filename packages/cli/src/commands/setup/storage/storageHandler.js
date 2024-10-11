@@ -16,7 +16,7 @@ import { getPaths, transformTSToJS, writeFile } from '../../../lib'
 import c from '../../../lib/colors'
 import { isTypeScriptProject } from '../../../lib/project'
 
-export const handler = async ({ force, skipExamples }) => {
+export const handler = async ({ force }) => {
   const projectIsTypescript = isTypeScriptProject()
   const redwoodVersion =
     require(path.join(getPaths().base, 'package.json')).devDependencies[
@@ -54,8 +54,33 @@ export const handler = async ({ force, skipExamples }) => {
         },
       },
       {
+        title: `Adding withStorage directive...`,
+        task: async () => {
+          const templatePath = path.resolve(
+            __dirname,
+            'templates',
+            'withStorage.directive.ts.template',
+          )
+          const templateContent = fs.readFileSync(templatePath, {
+            encoding: 'utf8',
+            flag: 'r',
+          })
+
+          const storagePath = path.join(
+            getPaths().api.directives,
+            'withStorage.ts',
+          )
+          const storageContent = projectIsTypescript
+            ? templateContent
+            : await transformTSToJS(storagePath, templateContent)
+
+          return writeFile(storagePath, storageContent, {
+            overwriteExisting: force,
+          })
+        },
+      },
+      {
         title: `Adding signedUrl function...`,
-        skip: () => skipExamples,
         task: async () => {
           const templatePath = path.resolve(
             __dirname,
