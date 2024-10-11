@@ -5,7 +5,11 @@ import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { getPrettierOptions, addEnvVarTask } from '@redwoodjs/cli-helpers'
+import {
+  addApiPackages,
+  getPrettierOptions,
+  addEnvVarTask,
+} from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 import { getPaths, transformTSToJS, writeFile } from '../../../lib'
@@ -77,13 +81,13 @@ export const handler = async ({ force, skipExamples }) => {
         },
       },
       // TODO(jgmw): Enable this once these packages have been published otherwise it will fail
-      // {
-      //   ...addApiPackages([
-      //     `@redwoodjs/storage-core@${redwoodVersion}`,
-      //     `@redwoodjs/storage-adapter-filesystem@${redwoodVersion}`,
-      //   ]),
-      //   title: 'Adding required dependencies to your api side...',
-      // },
+      {
+        ...addApiPackages([
+          `@redwoodjs/storage-core@${redwoodVersion}`,
+          `@redwoodjs/storage-adapter-filesystem@${redwoodVersion}`,
+        ]),
+        title: 'Adding required dependencies to your api side...',
+      },
       {
         title: 'Prettifying changed files',
         task: async (_ctx, task) => {

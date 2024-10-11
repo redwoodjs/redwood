@@ -7,16 +7,22 @@ import {
   ValidationError,
   ValidatorDirectiveFunc,
 } from '@redwoodjs/graphql-server'
-import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '@redwoodjs/upload'
-import type { UploadConfig, UploadErrorMessages } from '@redwoodjs/upload'
+import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '@redwoodjs/uploads-graphql'
+import type {
+  UploadConfig,
+  UploadErrorMessages,
+} from '@redwoodjs/uploads-graphql'
 
 import { logger } from 'src/lib/logger'
 
 export const schema = gql`
   """
-  Use @upload to validate file uploads with dynamic input and size constraints.
+  Use @requireUploadToken to validate file uploads with dynamic input and size constraints.
   """
-  directive @upload(variable: String!, fields: [String!]!) on FIELD_DEFINITION
+  directive @requireUploadToken(
+    variable: String!
+    fields: [String!]!
+  ) on FIELD_DEFINITION
 `
 
 const validateUploadToken = (context: GlobalContext) => {
@@ -30,7 +36,7 @@ const validateUploadToken = (context: GlobalContext) => {
     context.useRedwoodUploadErrorMessages as UploadErrorMessages
 
   if (!operationName) {
-    if (errorMessages.operationNameRequired) {
+    if (errorMessages?.operationNameRequired) {
       if (typeof errorMessages.operationNameRequired === 'function') {
         throw new ValidationError(errorMessages.operationNameRequired({}))
       }
@@ -42,7 +48,7 @@ const validateUploadToken = (context: GlobalContext) => {
   const uploadToken = headers[uploadTokenHeaderName]
 
   if (!uploadToken) {
-    if (errorMessages.uploadTokenRequired) {
+    if (errorMessages?.uploadTokenRequired) {
       if (typeof errorMessages.uploadTokenRequired === 'function') {
         throw new ValidationError(errorMessages.uploadTokenRequired({}))
       }
@@ -87,7 +93,7 @@ const validateFiles = (
 
   if (minFiles !== undefined && fileCount < minFiles) {
     logger.error({ minFiles, fileCount }, 'Too few files')
-    if (errorMessages.tooFewFiles) {
+    if (errorMessages?.tooFewFiles) {
       if (typeof errorMessages.tooFewFiles === 'function') {
         throw new ValidationError(errorMessages.tooFewFiles({ minFiles }))
       }
@@ -98,7 +104,7 @@ const validateFiles = (
 
   if (maxFiles !== undefined && fileCount > maxFiles) {
     logger.error({ maxFiles, fileCount }, 'Too many files')
-    if (errorMessages.tooManyFiles) {
+    if (errorMessages?.tooManyFiles) {
       if (typeof errorMessages.tooManyFiles === 'function') {
         throw new ValidationError(errorMessages.tooManyFiles({ maxFiles }))
       }
@@ -111,7 +117,7 @@ const validateFiles = (
   files.forEach((file) => {
     if (contentTypes && !contentTypes.includes(file.type)) {
       logger.error({ contentTypes }, 'Invalid file type')
-      if (errorMessages.invalidFileType) {
+      if (errorMessages?.invalidFileType) {
         if (typeof errorMessages.invalidFileType === 'function') {
           throw new ValidationError(
             errorMessages.invalidFileType({ contentTypes })
@@ -129,7 +135,7 @@ const validateFiles = (
         { size: file.size, maxFileSize },
         'File size exceeds the maximum allowed size'
       )
-      if (errorMessages.tooLargeFile) {
+      if (errorMessages?.tooLargeFile) {
         if (typeof errorMessages.tooLargeFile === 'function') {
           throw new ValidationError(errorMessages.tooLargeFile({ maxFileSize }))
         }
@@ -165,6 +171,6 @@ const validate: ValidatorDirectiveFunc = ({ directiveArgs, args, context }) => {
   }
 }
 
-const uploads = createValidatorDirective(schema, validate)
+const requireUploadToken = createValidatorDirective(schema, validate)
 
-export default uploads
+export default requireUploadToken

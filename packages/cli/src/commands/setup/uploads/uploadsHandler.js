@@ -1,10 +1,16 @@
+import crypto from 'node:crypto'
 import path from 'path'
 
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import { format } from 'prettier'
 
-import { addApiPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
+import {
+  addApiPackages,
+  addWebPackages,
+  addEnvVarTask,
+  getPrettierOptions,
+} from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
@@ -23,7 +29,8 @@ export async function handler({ force, verbose }) {
 
   const tasks = new Listr(
     [
-      addApiPackages([`@redwoodjs/uploads@${version}`]),
+      addApiPackages([`@redwoodjs/uploads-graphql@${version}`]),
+      addWebPackages([`@redwoodjs/uploads-web@${version}`]),
       {
         title: 'Adding the upload directive ...',
         task: async () => {
@@ -33,15 +40,15 @@ export async function handler({ force, verbose }) {
               'templates',
               'api',
               'directives',
-              'uploads.ts.template',
+              'requireUploadToken.ts.template',
             ),
             'utf-8',
           )
 
           const uploadsDirectiveFile = path.join(
             redwoodPaths.api.directives,
-            'uploads',
-            'uploads.ts',
+            'requireUploadToken',
+            'requireUploadToken.ts',
           )
 
           const directiveContent = ts
@@ -161,12 +168,12 @@ export async function handler({ force, verbose }) {
           )
 
           // Add import statement at the top of the file
-          const importStatement = `import { useRedwoodUploads } from '@redwoodjs/uploads'
+          const importStatement = `import { useRedwoodUploads } from '@redwoodjs/uploads-graphql'
 
 //
 // In extraPlugins setup useRedwoodUpload
 // extraPlugins: [
-//   useRedwoodUpload({
+//   useRedwoodUploads({
 //     appName: '${projectName}',
 //   }),
 // ]
@@ -184,6 +191,11 @@ export async function handler({ force, verbose }) {
           )
         },
       },
+      addEnvVarTask(
+        'UPLOAD_TOKEN_SECRET',
+        crypto.randomBytes(32).toString('base64'),
+        'Secret for securely signing the upload token',
+      ),
       {
         title: `Generating types ...`,
         task: async () => {
