@@ -1,4 +1,7 @@
-import { createUploadToken } from '@redwoodjs/uploads-graphql'
+import {
+  createUploadToken,
+  IMAGE_CONTENT_TYPES,
+} from '@redwoodjs/uploads-graphql'
 import type { UploadTokenPayload } from '@redwoodjs/uploads-graphql'
 
 import type { GetRedwoodUploadTokenResolver } from './types'
@@ -13,10 +16,11 @@ export const getRedwoodUploadToken: GetRedwoodUploadTokenResolver = async ({
 
   const payload: UploadTokenPayload = {
     operationName,
-    minFiles: 2,
+    minFiles: 1,
     maxFiles: 3,
     expiresIn: 24 * 60 * 60,
     maxFileSize: 1 * 1024 * 1024, // 1MB
+    contentTypes: IMAGE_CONTENT_TYPES,
   }
 
   const token = createUploadToken(payload)

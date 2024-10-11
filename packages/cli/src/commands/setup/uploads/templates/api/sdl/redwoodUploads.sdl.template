@@ -1,4 +1,6 @@
 export const schema = gql`
+  scalar File
+
   type RedwoodUploadToken {
     token: String!
   }
