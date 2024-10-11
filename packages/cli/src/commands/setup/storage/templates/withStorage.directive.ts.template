@@ -1,3 +1,5 @@
+import { RedwoodStorageFormat } from 'types/graphql'
+
 import {
   createTransformerDirective,
   TransformerDirectiveFunc,
@@ -9,24 +11,26 @@ export const schema = gql`
   """
   Use @withStorage to fetch data from storage as a signed URL or data URI.
   """
-  enum StorageFormat {
+  enum RedwoodStorageFormat {
     SIGNED_URL
     DATA_URI
   }
 
-  directive @withStorage(format: StorageFormat = SIGNED_URL) on FIELD_DEFINITION
+  directive @withStorage(
+    format: RedwoodStorageFormat = SIGNED_URL
+  ) on FIELD_DEFINITION
 `
 
-export const getBase64DataUri = async (filePath: string): Promise<string> => {
+export const getBase64DataUri = async (reference: string): Promise<string> => {
   try {
-    const file = await storage.readFile(filePath)
+    const file = await storage.readFile(reference)
     const base64Data = Buffer.from(await file.arrayBuffer()).toString('base64')
     const mimeType = file.type
 
     const dataUri = `data:${mimeType};base64,${base64Data}`
     return dataUri
   } catch (error) {
-    logger.error({ error, filePath }, 'Error creating base64 data URI')
+    logger.error({ error, reference }, 'Error creating base64 data URI')
     throw error
   }
 }
@@ -43,12 +47,14 @@ const transform: TransformerDirectiveFunc = async ({
     return null
   }
 
+  const format = directiveArgs.format as RedwoodStorageFormat
+
   try {
-    if (directiveArgs.format === 'SIGNED_URL') {
+    if (format === 'SIGNED_URL') {
       return await storage.getSignedUrl(resolvedValue)
     }
 
-    if (directiveArgs.format === 'DATA_URI') {
+    if (format === 'DATA_URI') {
       return await getBase64DataUri(resolvedValue)
     }
 
