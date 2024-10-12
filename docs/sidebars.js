@@ -197,6 +197,32 @@ module.exports = {
         'server-file',
         'serverless-functions',
         'services',
+        {
+          type: 'category',
+          label: 'Storage and Uploads',
+          link: {
+            type: 'generated-index',
+            title: 'Storage and Uploads',
+            slug: 'storage-and-uploads/index',
+          },
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'storage-and-uploads/overview',
+            },
+            {
+              type: 'doc',
+              label: 'Storage',
+              id: 'storage-and-uploads/storage',
+            },
+            {
+              type: 'doc',
+              label: 'Uploads',
+              id: 'storage-and-uploads/uploads',
+            },
+          ],
+        },
         'storybook',
         'studio',
         'testing',
@@ -231,24 +257,7 @@ module.exports = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'Upload and Storage',
-          link: {
-            type: 'generated-index',
-            title: 'Upload and Storage',
-            slug: 'upload-and-storage/index',
-          },
-          items: [
-            { type: 'doc', label: 'About', id: 'uploads-and-storage/about' },
-            { type: 'doc', label: 'Upload', id: 'uploads-and-storage/upload' },
-            {
-              type: 'doc',
-              label: 'Storage',
-              id: 'uploads-and-storage/storage',
-            },
-          ],
-        },
+
         'webhooks',
         'vite-configuration',
       ],

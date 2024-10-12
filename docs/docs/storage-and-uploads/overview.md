@@ -1,4 +1,6 @@
-# Uploading and Storing Files in RedwoodJS
+# Storage and Uploads
+
+## Overview
 
 In web development, **uploads** and **storage** are related but distinct processes, each playing a critical role in handling files on the web.
 
