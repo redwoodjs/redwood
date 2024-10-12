@@ -4,6 +4,7 @@ import {
   createTransformerDirective,
   TransformerDirectiveFunc,
 } from '@redwoodjs/graphql-server'
+import type { StorageAdapter } from '@redwoodjs/storage-core'
 
 import { logger } from 'src/lib/logger'
 import { storage } from 'src/lib/storage'
@@ -15,15 +16,23 @@ export const schema = gql`
     SIGNED_URL
     DATA_URI
   }
+  enum RedwoodStorageAdapter {
+    S3
+    FS
+  }
 
   directive @withStorage(
     format: RedwoodStorageFormat = SIGNED_URL
+    adapter: RedwoodStorageAdapter = FS
   ) on FIELD_DEFINITION
 `
 
-export const getBase64DataUri = async (reference: string): Promise<string> => {
+export const getBase64DataUri = async (
+  adapter: StorageAdapter,
+  reference: string
+): Promise<string> => {
   try {
-    const file = await storage.readFile(reference)
+    const file = await adapter.readFile(reference)
     const base64Data = Buffer.from(await file.arrayBuffer()).toString('base64')
     const mimeType = file.type
 
@@ -48,14 +57,17 @@ const transform: TransformerDirectiveFunc = async ({
   }
 
   const format = directiveArgs.format as RedwoodStorageFormat
+  const adapter = storage.findAdapter(
+    directiveArgs.adapter.toLowerCase() as string
+  )
 
   try {
     if (format === 'SIGNED_URL') {
-      return await storage.getSignedUrl(resolvedValue)
+      return await adapter.getSignedUrl(resolvedValue)
     }
 
     if (format === 'DATA_URI') {
-      return await getBase64DataUri(resolvedValue)
+      return await getBase64DataUri(adapter, resolvedValue)
     }
 
     return resolvedValue

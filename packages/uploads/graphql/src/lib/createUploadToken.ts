@@ -5,7 +5,7 @@ import { context } from '@redwoodjs/context'
 
 import {
   IMAGE_CONTENT_TYPES,
-  PDF_CONTENT_TYPE,
+  DOCUMENT_CONTENT_TYPES,
   MAX_FILE_SIZE,
   MAX_FILES,
   MIN_FILES,
@@ -16,7 +16,7 @@ import {
 import type { UploadsConfig, UploadTokenPayload } from '../types'
 
 const DEFAULT_UPLOAD_CONFIG: UploadsConfig = {
-  contentTypes: [...IMAGE_CONTENT_TYPES, PDF_CONTENT_TYPE],
+  contentTypes: [...IMAGE_CONTENT_TYPES, ...DOCUMENT_CONTENT_TYPES],
   maxFileSize: MAX_FILE_SIZE,
   maxFiles: MAX_FILES,
   minFiles: MIN_FILES,
