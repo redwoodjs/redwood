@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 import type { APIGatewayEvent, Context } from 'aws-lambda'
 
 import { storage, signer } from 'src/lib/storage'
@@ -36,12 +38,18 @@ export const handler = async (event: APIGatewayEvent, _context: Context) => {
     return unauthorizedResponse
   }
 
+  const etagData = `${adapterName}-${reference}-${expiry}`
+  const ETag = `"${Buffer.from(etagData).toString('base64')}"`
+
   // Lookup and return the data
   const result = await adapter.readData(reference)
+
   return {
     statusCode: 200,
     headers: {
-      // 'Content-Type': 'application/json',
+      // 'Content-Type': 'application/octet-stream',
+      'Cache-Control': 'public, max-age=3600',
+      ETag,
     },
     body: result,
   }
