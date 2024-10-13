@@ -59,3 +59,9 @@ This will add a few new files to your project to let you configure upload valida
 - public vs private
 - permissions
 - validation
+
+## Upload Token and useUploadsMutation
+
+- UploadToken
+- useUploadsMutation
+- requiresUploadToken directive
