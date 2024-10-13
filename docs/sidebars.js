@@ -213,6 +213,11 @@ module.exports = {
             },
             {
               type: 'doc',
+              label: 'Quick Start',
+              id: 'storage-and-uploads/quickstart',
+            },
+            {
+              type: 'doc',
               label: 'Storage',
               id: 'storage-and-uploads/storage',
             },
