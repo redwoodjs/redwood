@@ -186,6 +186,14 @@ await storage.writeFile('file-reference', file)
 await storage.writeStream('file-reference', stream)
 ```
 
+When should you use which method?
+
+When in doubt, use `writeFile`. It's the simplest method and works in most cases.
+
+But sometimes you might want to store binary data or you don't have a file instance yet. For that, use `writeData`.
+
+And if you need to stream a file to storage, use `writeStream` but you'll need a stream like `fs.createReadStream` or with a File object like `File.stream()`.
+
 ## Streaming Files
 
 You can stream files directly from storage:
@@ -194,4 +202,30 @@ You can stream files directly from storage:
 const stream = await storage.stream('file-reference')
 ```
 
-That's it! You're now ready to use RedwoodJS storage in your application. Happy coding!
+## Fetching Files in your Pages and Components
+
+```graphql
+type Profile {
+  id: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  firstName: String!
+  lastName: String!
+  avatar: String! @withStorage
+}
+```
+
+### withStorage Directive
+
+```graphql
+@withStorage(format: SIGNED_URL | DATA_URI)
+@withStorage(adapter: FS | S3)
+@withStorage(adapter: FS | S3, format: SIGNED_URL | DATA_URI)
+```
+
+- SIGNED_URL
+- DATA_URI
+
+### Storage Function
+
+- verifies SignedUrl
