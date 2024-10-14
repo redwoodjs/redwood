@@ -15,13 +15,14 @@ import {
 } from '../constants'
 import type { UploadsConfig, UploadTokenPayload } from '../types'
 
-const DEFAULT_UPLOAD_CONFIG: UploadsConfig = {
+const DEFAULT_UPLOADS_CONFIG: UploadsConfig = {
   contentTypes: [...IMAGE_CONTENT_TYPES, ...DOCUMENT_CONTENT_TYPES],
   maxFileSize: MAX_FILE_SIZE,
   maxFiles: MAX_FILES,
   minFiles: MIN_FILES,
   expiresIn: EXPIRES_IN,
 }
+
 export const createUploadToken = (payload: UploadTokenPayload) => {
   const secret = process.env.UPLOAD_TOKEN_SECRET
 
@@ -32,7 +33,7 @@ export const createUploadToken = (payload: UploadTokenPayload) => {
   const { operationName, ...uploadConfig } = payload
 
   // merge the payload with the default payload
-  const finalPayload = { ...DEFAULT_UPLOAD_CONFIG, ...uploadConfig }
+  const finalPayload = { ...DEFAULT_UPLOADS_CONFIG, ...uploadConfig }
   const { expiresIn = EXPIRES_IN, ...finalPayloadWithoutExpiresIn } =
     finalPayload
 
