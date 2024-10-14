@@ -30,4 +30,6 @@ export abstract class StorageAdapter {
 
   abstract getSignedUrl(reference: string): Promise<string>
   // TODO(jgmw): validate signed url function - maybe?
+  // add options like download & filename that sets the content-disposition header
+  // TODO(dt): getPublicUrl - no expiration?
 }

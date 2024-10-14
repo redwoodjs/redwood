@@ -42,6 +42,13 @@ export const createProfile: MutationResolvers['createProfile'] = async ({
 
 If just want to upload files, RedwoodJS doesn't require any special setup aside from adding the `File` scalar to your GraphQL schema as GraphQL Yoga will handle the rest.
 
+:::note Ready To Go
+
+RedwoodJS has already configured its Apollo Client with a terminating link that fetches a GraphQL multipart request if the GraphQL variables contain files (by default FileList, File, or Blob instances).
+
+That means you don't need to do anything special to use the `File` scalar in your Upload mutations.
+:::
+
 However, if you want to store the files, you'll need to configure the `storage` manager as documented in the [Storage](/docs/storage-and-uploads/storage) page.
 
 But before you do that, there are a few things you should consider -- namely, having some rules for who can upload what to your server.

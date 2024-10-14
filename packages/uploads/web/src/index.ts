@@ -1,2 +1,6 @@
 export * from './graphql/useUploadsMutation.js'
-export * from './components/UploadFilesComponent.js'
+export * from './components/RedwoodUploadsComponent.js'
+export * from './components/DefaultFileRenderer.js'
+export * from './components/DefaultFileRejectionRenderer.js'
+export * from './components/types.js'
+export * from './core/fileTypes.js'
