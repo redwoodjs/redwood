@@ -32,8 +32,9 @@ export interface RedwoodUploadComponentProps extends DropzoneOptions {
   buttonClassName?: string
   showButton?: boolean
   buttonText?: string
-  rejectMessage?: MessageProp // Message for file type rejection or too many files
   defaultMessage?: MessageProp // Default message when no file is rejected
+  rejectMessage?: MessageProp // Message for file type rejection or too many files
+  activeMessage?: MessageProp // Message for active zone
   fileRenderer?: React.ComponentType<FileRendererProps> // Custom component to render files
   fileRejectionRenderer?: React.ComponentType<FileRejectionRendererProps> // Custom component to render file rejections
 }

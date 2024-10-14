@@ -34,6 +34,7 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   buttonText = 'Select files',
   rejectMessage = 'Invalid file(s). Please check requirements and try again.', // Simplified reject message
   defaultMessage = "Drag 'n' drop some files here, or click to select files", // Custom default message
+  activeMessage = "Drag 'n' drop some files here, or click to select files", // Custom active message
   fileRenderer: FileRendererComponent = DefaultFileRenderer, // Default to simple file renderer
   fileRejectionRenderer:
     FileRejectionRendererComponent = DefaultFileRejectionRenderer, // Default to simple file renderer
@@ -71,6 +72,14 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     }
   }, [fileRejections, getRootProps])
 
+  // Function to generate the active message
+  const getActiveMessage = (): string => {
+    if (typeof activeMessage === 'function') {
+      return activeMessage({ maxFiles, minSize, maxSize, accept })
+    }
+    return activeMessage
+  }
+
   // Function to generate the reject message
   const getRejectMessage = (): string => {
     if (typeof rejectMessage === 'function') {
@@ -95,7 +104,13 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     <section>
       <div {...getRootProps({ className: combinedClassName })}>
         <input {...getInputProps({ name })} />
-        <p>{isDragReject ? getRejectMessage() : getDefaultMessage()}</p>
+        <p>
+          {isDragReject
+            ? getRejectMessage()
+            : isDragActive
+              ? getActiveMessage()
+              : getDefaultMessage()}
+        </p>
       </div>
 
       {showButton && (
