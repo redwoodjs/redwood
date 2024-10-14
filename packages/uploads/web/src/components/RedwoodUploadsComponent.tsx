@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useDropzone } from 'react-dropzone'
 
@@ -13,16 +13,19 @@ import type { RedwoodUploadComponentProps } from './types.js'
 
 export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   onDrop,
+  acceptedFiles,
+  setAcceptedFiles,
+  fileRejections,
+  setFileRejections,
   accept = {
     ...ACCEPTED_IMAGE_TYPES,
     ...ACCEPTED_DOCUMENT_TYPES,
   }, // Default accept for images and documents
   name = 'uploads',
   maxFiles = 1,
-  minFiles = 1, // Minimum number of files default to 1
   minSize = 0, // Minimum file size in bytes default to 0
   maxSize = 1_024 * 1_024, // 1MB default size
-  multiple = false, // Prevent multiple files from being uploaded
+  multiple = false,
   className = '',
   activeClassName = '',
   rejectClassName = '',
@@ -37,28 +40,41 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   ...dropzoneOptions
 }) => {
   const {
-    acceptedFiles,
-    fileRejections,
     getRootProps,
     getInputProps,
     open, // `open` allows opening the file dialog programmatically
     isDragActive,
     isDragReject,
   } = useDropzone({
-    onDrop,
+    onDrop: (acceptedFiles, fileRejections, event) => {
+      setAcceptedFiles?.(acceptedFiles)
+      setFileRejections?.(fileRejections)
+      onDrop?.(acceptedFiles, fileRejections, event)
+    },
     accept,
     maxFiles,
     minSize,
     maxSize,
-    multiple,
-    noClick: showButton, // Disable click if button is shown
+    multiple: maxFiles > 1 ? true : multiple, // Set multiple to true if maxFiles > 1
+    noClick: showButton,
     ...dropzoneOptions,
   })
+  useEffect(() => {
+    if (acceptedFiles && acceptedFiles.length === 0) {
+      getRootProps().ref.current?.dropzone?.removeAllFiles()
+    }
+  }, [acceptedFiles, getRootProps])
+
+  useEffect(() => {
+    if (fileRejections && fileRejections.length === 0) {
+      getRootProps().ref.current?.dropzone?.removeAllFiles()
+    }
+  }, [fileRejections, getRootProps])
 
   // Function to generate the reject message
   const getRejectMessage = (): string => {
     if (typeof rejectMessage === 'function') {
-      return rejectMessage({ maxFiles, minFiles, minSize, accept })
+      return rejectMessage({ maxFiles, minSize, maxSize, accept })
     }
     return rejectMessage
   }
@@ -66,7 +82,7 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   // Function to generate the default message
   const getDefaultMessage = (): string => {
     if (typeof defaultMessage === 'function') {
-      return defaultMessage({ maxFiles, minFiles, minSize, accept })
+      return defaultMessage({ maxFiles, minSize, maxSize, accept })
     }
     return defaultMessage
   }
@@ -88,10 +104,10 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
         </button>
       )}
       <aside>
-        {acceptedFiles.length > 0 && (
+        {acceptedFiles && acceptedFiles.length > 0 && (
           <FileRendererComponent files={acceptedFiles} />
         )}
-        {fileRejections.length > 0 && (
+        {fileRejections && fileRejections.length > 0 && (
           <FileRejectionRendererComponent fileRejections={fileRejections} />
         )}
       </aside>

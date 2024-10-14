@@ -12,16 +12,21 @@ export type MessageProp =
   | string
   | ((args: {
       maxFiles: number
-      minFiles?: number
-      minSize: number
+      minSize?: number
+      maxSize?: number
       accept: DropzoneOptions['accept']
     }) => string)
 
 export interface RedwoodUploadComponentProps extends DropzoneOptions {
   name?: string
+  acceptedFiles?: File[]
+  setAcceptedFiles?: (files: File[]) => void
+  fileRejections?: FileRejection[]
+  setFileRejections?: (fileRejections: FileRejection[]) => void
   className?: string
   maxFiles?: number
-  minFiles?: number
+  minSize?: number
+  maxSize?: number
   activeClassName?: string
   rejectClassName?: string
   buttonClassName?: string
