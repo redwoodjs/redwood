@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useDropzone } from 'react-dropzone'
+import type { FileRejection } from 'react-dropzone'
 
 import {
   ACCEPTED_IMAGE_TYPES,
@@ -40,6 +41,11 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     FileRejectionRendererComponent = DefaultFileRejectionRenderer, // Default to simple file renderer
   ...dropzoneOptions
 }) => {
+  const [internalAcceptedFiles, setInternalAcceptedFiles] = useState<File[]>([])
+  const [internalFileRejections, setInternalFileRejections] = useState<
+    FileRejection[]
+  >([])
+
   const {
     getRootProps,
     getInputProps,
@@ -50,6 +56,8 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     onDrop: (acceptedFiles, fileRejections, event) => {
       setAcceptedFiles?.(acceptedFiles)
       setFileRejections?.(fileRejections)
+      setInternalAcceptedFiles(acceptedFiles)
+      setInternalFileRejections(fileRejections)
       onDrop?.(acceptedFiles, fileRejections, event)
     },
     accept,
@@ -119,11 +127,17 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
         </button>
       )}
       <aside>
-        {acceptedFiles && acceptedFiles.length > 0 && (
-          <FileRendererComponent files={acceptedFiles} />
+        {((acceptedFiles?.length ?? 0) > 0 ||
+          internalAcceptedFiles.length > 0) && (
+          <FileRendererComponent
+            files={acceptedFiles ?? internalAcceptedFiles}
+          />
         )}
-        {fileRejections && fileRejections.length > 0 && (
-          <FileRejectionRendererComponent fileRejections={fileRejections} />
+        {((fileRejections?.length ?? 0) > 0 ||
+          internalFileRejections.length > 0) && (
+          <FileRejectionRendererComponent
+            fileRejections={fileRejections || internalFileRejections}
+          />
         )}
       </aside>
     </section>

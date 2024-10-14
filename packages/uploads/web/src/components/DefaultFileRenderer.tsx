@@ -5,7 +5,9 @@ import type { FileRendererProps } from './types.js'
 export const DefaultFileRenderer: React.FC<FileRendererProps> = ({ files }) => {
   return (
     <>
-      <h4>Accepted Files</h4>
+      <h4 style={{ marginBottom: '8px' }}>
+        <strong>Accepted Files</strong>
+      </h4>
       <ul>
         {files.map((file) => (
           <li key={file.name}>
