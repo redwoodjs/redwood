@@ -14,16 +14,14 @@ export const getRedwoodUploadToken: GetRedwoodUploadTokenResolver = async ({
 
   // Note: based on the operation name, we could configure the content types, max file size, etc
 
-  const payload: UploadTokenPayload = {
+  const token = createUploadToken({
     operationName,
     minFiles: 1,
     maxFiles: 3,
     expiresIn: 24 * 60 * 60,
     maxFileSize: 1 * 1024 * 1024, // 1MB
     contentTypes: IMAGE_CONTENT_TYPES,
-  }
-
-  const token = createUploadToken(payload)
+  })
 
   return { token }
 }
