@@ -1,31 +1,13 @@
-import jwt from 'jsonwebtoken'
-
-import type { GlobalContext } from '@redwoodjs/context'
 import type { DirectiveParams } from '@redwoodjs/graphql-server'
 import {
   createValidatorDirective,
-  AuthenticationError,
   ValidationError,
   ValidatorDirectiveFunc,
 } from '@redwoodjs/graphql-server'
-import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '@redwoodjs/uploads-graphql'
-import type {
-  RedwoodUploadsOptions,
-  UploadErrorMessage,
-} from '@redwoodjs/uploads-graphql'
-import type {
-  UploadsConfig,
-  UploadErrorMessages,
-} from '@redwoodjs/uploads-graphql'
+import { validateUploadToken, validateFiles } from '@redwoodjs/uploads-graphql'
+import type { RedwoodUploadContext } from '@redwoodjs/uploads-graphql'
 
 import { logger } from 'src/lib/logger'
-
-type RedwoodUploadContext = GlobalContext & {
-  useRedwoodUploadErrorMessages?: UploadErrorMessages
-  useRedwoodUploadTokenHeaderName?: RedwoodUploadsOptions['uploadTokenHeaderName']
-  useRedwoodUploadTarget?: RedwoodUploadsOptions['uploadTarget']
-  useRedwoodUploadAppName?: RedwoodUploadsOptions['appName']
-}
 
 export const schema = gql`
   """
@@ -36,142 +18,6 @@ export const schema = gql`
     fields: [String!]!
   ) on FIELD_DEFINITION
 `
-
-type ValidateUploadConditionProps = {
-  isConditionMet: boolean
-  errorMessage: UploadErrorMessage
-  errorMessageParams?: Record<string, string | number | boolean>
-  defaultMessage: string
-  isAuthenticationError?: boolean
-}
-
-const validateUploadCondition = ({
-  isConditionMet: condition,
-  errorMessage,
-  errorMessageParams: params = {},
-  defaultMessage,
-  isAuthenticationError = false,
-}: ValidateUploadConditionProps) => {
-  const UploadError = isAuthenticationError
-    ? AuthenticationError
-    : ValidationError
-
-  logger.debug(
-    {
-      condition,
-      params,
-      defaultMessage,
-    },
-    'validateUploadCondition'
-  )
-  if (condition) {
-    if (errorMessage) {
-      if (typeof errorMessage === 'function') {
-        const message = errorMessage(params)
-        logger.warn(message, 'Upload condition failed')
-        throw new UploadError(message)
-      }
-      logger.warn(errorMessage, 'Upload condition failed')
-      throw new UploadError(errorMessage)
-    }
-    logger.warn(defaultMessage, 'Upload condition failed')
-    throw new UploadError(defaultMessage)
-  }
-}
-
-const validateUploadToken = (context: RedwoodUploadContext) => {
-  const headers = context.event?.['headers'] || {}
-  const { operationName } = context?.['params'] as { operationName: string }
-
-  const uploadTokenHeaderName =
-    context.useRedwoodUploadTokenHeaderName ?? DEFAULT_UPLOAD_TOKEN_HEADER_NAME
-  const uploadToken = headers[
-    uploadTokenHeaderName
-  ] as RedwoodUploadsOptions['uploadTokenHeaderName']
-  const errorMessages = context.useRedwoodUploadErrorMessages
-
-  validateUploadCondition({
-    isConditionMet: !operationName,
-    errorMessage: errorMessages?.operationNameRequired,
-    errorMessageParams: {},
-    defaultMessage: 'Operation name is required',
-  })
-
-  validateUploadCondition({
-    isConditionMet: !uploadToken,
-    errorMessage: errorMessages?.uploadTokenRequired,
-    errorMessageParams: {},
-    defaultMessage: 'Upload token is required',
-  })
-
-  try {
-    const decodedToken = jwt.verify(
-      uploadToken,
-      process.env.UPLOAD_TOKEN_SECRET,
-      {
-        algorithms: ['HS256'],
-        audience: context.useRedwoodUploadTarget,
-        issuer: context.useRedwoodUploadAppName,
-        subject: operationName,
-      }
-    )
-    return decodedToken
-  } catch (error) {
-    logger.error({ error }, 'Token verification failed')
-    validateUploadCondition({
-      isConditionMet: true,
-      errorMessage: errorMessages.invalidUploadToken,
-      errorMessageParams: {},
-      defaultMessage: 'Authentication failed: Invalid upload token',
-      isAuthenticationError: true,
-    })
-  }
-}
-
-const validateFiles = (
-  files: File[],
-  { minFiles, maxFiles, contentTypes, maxFileSize }: UploadsConfig,
-  context: RedwoodUploadContext
-) => {
-  const fileCount = files.length
-
-  logger.debug(
-    { minFiles, maxFiles, contentTypes, maxFileSize },
-    'UploadsConfig'
-  )
-
-  const errorMessages = context.useRedwoodUploadErrorMessages
-
-  validateUploadCondition({
-    isConditionMet: minFiles !== undefined && fileCount < minFiles,
-    errorMessage: errorMessages?.tooFewFiles,
-    errorMessageParams: { minFiles },
-    defaultMessage: `Too few files. Min ${minFiles} files required`,
-  })
-
-  validateUploadCondition({
-    isConditionMet: maxFiles !== undefined && fileCount > maxFiles,
-    errorMessage: errorMessages?.tooManyFiles,
-    errorMessageParams: { maxFiles },
-    defaultMessage: `Too many files. Max ${maxFiles} files allowed`,
-  })
-
-  files.forEach((file) => {
-    validateUploadCondition({
-      isConditionMet: contentTypes && !contentTypes.includes(file.type),
-      errorMessage: errorMessages?.invalidFileType,
-      errorMessageParams: { contentTypes },
-      defaultMessage: `Invalid file type. Allowed types: ${contentTypes?.join(', ')}`,
-    })
-
-    validateUploadCondition({
-      isConditionMet: maxFileSize !== undefined && file.size > maxFileSize,
-      errorMessage: errorMessages?.tooLargeFile,
-      errorMessageParams: { maxFileSize },
-      defaultMessage: `File size exceeds the maximum allowed size. Max size: ${maxFileSize} bytes`,
-    })
-  })
-}
 
 const validate: ValidatorDirectiveFunc = ({
   directiveArgs,
@@ -184,7 +30,7 @@ const validate: ValidatorDirectiveFunc = ({
 }) => {
   const { variable, fields } = directiveArgs
 
-  const uploadsConfig = validateUploadToken(context) as UploadsConfig
+  const uploadsConfig = validateUploadToken(context)
 
   try {
     const inputVariable = args[variable]
