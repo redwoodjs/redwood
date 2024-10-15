@@ -49,7 +49,6 @@ const transform: TransformerDirectiveFunc = async ({
   resolvedValue,
 }) => {
   if (
-    !resolvedValue ||
     typeof resolvedValue !== 'string' ||
     resolvedValue.length === 0
   ) {
