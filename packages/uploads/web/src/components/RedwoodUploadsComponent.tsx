@@ -13,34 +13,57 @@ import { DefaultFileRenderer } from './DefaultFileRenderer.js'
 import type { RedwoodUploadComponentProps } from './types.js'
 
 export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
-  onDrop,
-  acceptedFiles,
-  setAcceptedFiles,
-  fileRejections,
-  setFileRejections,
-  accept = {
-    ...ACCEPTED_IMAGE_TYPES,
-    ...ACCEPTED_DOCUMENT_TYPES,
-  }, // Default accept for images and documents
-  name = 'uploads',
-  maxFiles = 1,
-  minSize = 0, // Minimum file size in bytes default to 0
-  maxSize = 1_024 * 1_024, // 1MB default size
-  multiple = false,
-  className = '',
-  activeClassName = '',
-  rejectClassName = '',
-  buttonClassName = '',
-  showButton = false, // Optionally show a button for selecting files
-  buttonText = 'Select files',
-  rejectMessage = 'Invalid file(s). Please check requirements and try again.', // Simplified reject message
-  defaultMessage = "Drag 'n' drop some files here, or click to select files", // Custom default message
-  activeMessage = "Drag 'n' drop some files here, or click to select files", // Custom active message
-  fileRenderer: FileRendererComponent = DefaultFileRenderer, // Default to simple file renderer
-  fileRejectionRenderer:
-    FileRejectionRendererComponent = DefaultFileRejectionRenderer, // Default to simple file renderer
+  fileHandling,
+  fileConstraints,
+  styling,
+  uiElements,
+  button,
+  customMessages,
+  customRenderers,
   ...dropzoneOptions
 }) => {
+  const {
+    onDrop,
+    acceptedFiles,
+    setAcceptedFiles,
+    fileRejections,
+    setFileRejections,
+  } = fileHandling || {}
+
+  const {
+    accept = {
+      ...ACCEPTED_IMAGE_TYPES,
+      ...ACCEPTED_DOCUMENT_TYPES,
+    },
+    maxFiles = 1,
+    minSize = 0,
+    maxSize = 1_024 * 1_024,
+    multiple = false,
+  } = fileConstraints || {}
+
+  const {
+    className = '',
+    activeClassName = '',
+    rejectClassName = '',
+    buttonClassName = '',
+  } = styling || {}
+
+  const { name = 'uploads' } = uiElements || {}
+
+  const { buttonText = 'Select files', showButton = false } = button || {}
+
+  const {
+    rejectMessage = 'Invalid file(s). Please check requirements and try again.',
+    defaultMessage = "Drag 'n' drop some files here, or click to select files",
+    activeMessage = "Drag 'n' drop some files here, or click to select files",
+  } = customMessages || {}
+
+  const {
+    fileRenderer: FileRendererComponent = DefaultFileRenderer,
+    fileRejectionRenderer:
+      FileRejectionRendererComponent = DefaultFileRejectionRenderer,
+  } = customRenderers || {}
+
   const [internalAcceptedFiles, setInternalAcceptedFiles] = useState<File[]>([])
   const [internalFileRejections, setInternalFileRejections] = useState<
     FileRejection[]
@@ -58,7 +81,11 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
       setFileRejections?.(fileRejections)
       setInternalAcceptedFiles(acceptedFiles)
       setInternalFileRejections(fileRejections)
-      onDrop?.(acceptedFiles, fileRejections, event)
+      onDrop?.(
+        acceptedFiles,
+        fileRejections,
+        event as unknown as React.DragEvent<HTMLElement>,
+      )
     },
     accept,
     maxFiles,
