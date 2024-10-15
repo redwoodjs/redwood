@@ -1,5 +1,6 @@
 import { RedwoodStorageFormat } from 'types/graphql'
 
+import type { DirectiveParams } from '@redwoodjs/graphql-server'
 import {
   createTransformerDirective,
   TransformerDirectiveFunc,
@@ -19,6 +20,7 @@ export const schema = gql`
   enum RedwoodStorageAdapter {
     S3
     FS
+    OG
   }
 
   directive @withStorage(
@@ -47,18 +49,18 @@ export const getBase64DataUri = async (
 const transform: TransformerDirectiveFunc = async ({
   directiveArgs,
   resolvedValue,
+}: {
+  directiveArgs: DirectiveParams['directiveArgs']
+  resolvedValue: DirectiveParams['resolvedValue']
 }) => {
-  if (
-    typeof resolvedValue !== 'string' ||
-    resolvedValue.length === 0
-  ) {
+  if (typeof resolvedValue !== 'string' || resolvedValue.length === 0) {
     return null
   }
 
   const format = directiveArgs.format as RedwoodStorageFormat
-  const adapter = storage.findAdapter(
-    directiveArgs.adapter.toLowerCase() as string
-  )
+  const adapter = storage.findAdapter(directiveArgs.adapter.toLowerCase())
+
+  // you can check context's currentUser to conditionally return signed urls or data uris
 
   try {
     if (format === 'SIGNED_URL') {

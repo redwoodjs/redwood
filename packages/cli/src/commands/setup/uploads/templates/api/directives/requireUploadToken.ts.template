@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 import type { GlobalContext } from '@redwoodjs/context'
+import type { DirectiveParams } from '@redwoodjs/graphql-server'
 import {
   createValidatorDirective,
   AuthenticationError,
@@ -9,11 +10,18 @@ import {
 } from '@redwoodjs/graphql-server'
 import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '@redwoodjs/uploads-graphql'
 import type {
-  UploadConfig,
+  UploadsConfig,
   UploadErrorMessages,
 } from '@redwoodjs/uploads-graphql'
 
 import { logger } from 'src/lib/logger'
+
+type RedwoodUploadContext = GlobalContext & {
+  useRedwoodUploadErrorMessages?: UploadErrorMessages
+  useRedwoodUploadTokenHeaderName?: string
+  useRedwoodUploadTarget?: string
+  useRedwoodUploadAppName?: string
+}
 
 export const schema = gql`
   """
@@ -25,15 +33,14 @@ export const schema = gql`
   ) on FIELD_DEFINITION
 `
 
-const validateUploadToken = (context: GlobalContext) => {
+const validateUploadToken = (context: RedwoodUploadContext) => {
   const headers = context.event?.['headers'] || {}
   const { operationName } = context?.['params'] as { operationName: string }
 
   const uploadTokenHeaderName =
     context.useRedwoodUploadTokenHeaderName ?? DEFAULT_UPLOAD_TOKEN_HEADER_NAME
 
-  const errorMessages =
-    context.useRedwoodUploadErrorMessages as UploadErrorMessages
+  const errorMessages = context.useRedwoodUploadErrorMessages
 
   if (!operationName) {
     if (errorMessages?.operationNameRequired) {
@@ -84,7 +91,7 @@ const validateUploadToken = (context: GlobalContext) => {
 
 const validateFiles = (
   files: File[],
-  { minFiles, maxFiles, contentTypes, maxFileSize }: UploadConfig
+  { minFiles, maxFiles, contentTypes, maxFileSize }: UploadsConfig
 ) => {
   const fileCount = files.length
 
@@ -149,10 +156,18 @@ const validateFiles = (
   })
 }
 
-const validate: ValidatorDirectiveFunc = ({ directiveArgs, args, context }) => {
+const validate: ValidatorDirectiveFunc = ({
+  directiveArgs,
+  args,
+  context,
+}: {
+  directiveArgs: DirectiveParams['directiveArgs']
+  args: DirectiveParams['args']
+  context: RedwoodUploadContext
+}) => {
   const { variable, fields } = directiveArgs
 
-  const uploadConfig = validateUploadToken(context) as UploadConfig
+  const uploadsConfig = validateUploadToken(context) as UploadsConfig
 
   try {
     const inputVariable = args[variable]
@@ -163,13 +178,13 @@ const validate: ValidatorDirectiveFunc = ({ directiveArgs, args, context }) => {
 
     fields.forEach((field) => {
       const files = inputVariable[field] as File[]
-      validateFiles(files, uploadConfig)
+      validateFiles(files, uploadsConfig)
     })
   } catch (error) {
     logger.error({ error }, 'Upload validation failed')
     throw new ValidationError(error.message)
   }
-}a
+}
 
 const requireUploadToken = createValidatorDirective(schema, validate)
 
