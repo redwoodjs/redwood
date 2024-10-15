@@ -10,6 +10,10 @@ import {
 } from '@redwoodjs/graphql-server'
 import { DEFAULT_UPLOAD_TOKEN_HEADER_NAME } from '@redwoodjs/uploads-graphql'
 import type {
+  RedwoodUploadsOptions,
+  UploadErrorMessage,
+} from '@redwoodjs/uploads-graphql'
+import type {
   UploadsConfig,
   UploadErrorMessages,
 } from '@redwoodjs/uploads-graphql'
@@ -18,9 +22,9 @@ import { logger } from 'src/lib/logger'
 
 type RedwoodUploadContext = GlobalContext & {
   useRedwoodUploadErrorMessages?: UploadErrorMessages
-  useRedwoodUploadTokenHeaderName?: string
-  useRedwoodUploadTarget?: string
-  useRedwoodUploadAppName?: string
+  useRedwoodUploadTokenHeaderName?: RedwoodUploadsOptions['uploadTokenHeaderName']
+  useRedwoodUploadTarget?: RedwoodUploadsOptions['uploadTarget']
+  useRedwoodUploadAppName?: RedwoodUploadsOptions['appName']
 }
 
 export const schema = gql`
@@ -33,36 +37,72 @@ export const schema = gql`
   ) on FIELD_DEFINITION
 `
 
+type ValidateUploadConditionProps = {
+  isConditionMet: boolean
+  errorMessage: UploadErrorMessage
+  errorMessageParams?: Record<string, string | number | boolean>
+  defaultMessage: string
+  isAuthenticationError?: boolean
+}
+
+const validateUploadCondition = ({
+  isConditionMet: condition,
+  errorMessage,
+  errorMessageParams: params = {},
+  defaultMessage,
+  isAuthenticationError = false,
+}: ValidateUploadConditionProps) => {
+  const UploadError = isAuthenticationError
+    ? AuthenticationError
+    : ValidationError
+
+  logger.debug(
+    {
+      condition,
+      params,
+      defaultMessage,
+    },
+    'validateUploadCondition'
+  )
+  if (condition) {
+    if (errorMessage) {
+      if (typeof errorMessage === 'function') {
+        const message = errorMessage(params)
+        logger.warn(message, 'Upload condition failed')
+        throw new UploadError(message)
+      }
+      logger.warn(errorMessage, 'Upload condition failed')
+      throw new UploadError(errorMessage)
+    }
+    logger.warn(defaultMessage, 'Upload condition failed')
+    throw new UploadError(defaultMessage)
+  }
+}
+
 const validateUploadToken = (context: RedwoodUploadContext) => {
   const headers = context.event?.['headers'] || {}
   const { operationName } = context?.['params'] as { operationName: string }
 
   const uploadTokenHeaderName =
     context.useRedwoodUploadTokenHeaderName ?? DEFAULT_UPLOAD_TOKEN_HEADER_NAME
-
+  const uploadToken = headers[
+    uploadTokenHeaderName
+  ] as RedwoodUploadsOptions['uploadTokenHeaderName']
   const errorMessages = context.useRedwoodUploadErrorMessages
 
-  if (!operationName) {
-    if (errorMessages?.operationNameRequired) {
-      if (typeof errorMessages.operationNameRequired === 'function') {
-        throw new ValidationError(errorMessages.operationNameRequired({}))
-      }
-      throw new ValidationError(errorMessages.operationNameRequired)
-    }
-    throw new ValidationError('Operation name is required')
-  }
+  validateUploadCondition({
+    isConditionMet: !operationName,
+    errorMessage: errorMessages?.operationNameRequired,
+    errorMessageParams: {},
+    defaultMessage: 'Operation name is required',
+  })
 
-  const uploadToken = headers[uploadTokenHeaderName]
-
-  if (!uploadToken) {
-    if (errorMessages?.uploadTokenRequired) {
-      if (typeof errorMessages.uploadTokenRequired === 'function') {
-        throw new ValidationError(errorMessages.uploadTokenRequired({}))
-      }
-      throw new ValidationError(errorMessages.uploadTokenRequired)
-    }
-    throw new ValidationError('Upload token is required')
-  }
+  validateUploadCondition({
+    isConditionMet: !uploadToken,
+    errorMessage: errorMessages?.uploadTokenRequired,
+    errorMessageParams: {},
+    defaultMessage: 'Upload token is required',
+  })
 
   try {
     const decodedToken = jwt.verify(
@@ -75,84 +115,61 @@ const validateUploadToken = (context: RedwoodUploadContext) => {
         subject: operationName,
       }
     )
-    logger.debug({ decodedToken }, 'Decoded upload token')
     return decodedToken
   } catch (error) {
-    logger.error({ error }, 'JWT verification failed')
-    if (errorMessages.invalidUploadToken) {
-      if (typeof errorMessages.invalidUploadToken === 'function') {
-        throw new ValidationError(errorMessages.invalidUploadToken({}))
-      }
-      throw new ValidationError(errorMessages.invalidUploadToken)
-    }
-    throw new AuthenticationError('Authentication failed: Invalid upload token')
+    logger.error({ error }, 'Token verification failed')
+    validateUploadCondition({
+      isConditionMet: true,
+      errorMessage: errorMessages.invalidUploadToken,
+      errorMessageParams: {},
+      defaultMessage: 'Authentication failed: Invalid upload token',
+      isAuthenticationError: true,
+    })
   }
 }
 
 const validateFiles = (
   files: File[],
-  { minFiles, maxFiles, contentTypes, maxFileSize }: UploadsConfig
+  { minFiles, maxFiles, contentTypes, maxFileSize }: UploadsConfig,
+  context: RedwoodUploadContext
 ) => {
   const fileCount = files.length
 
-  const errorMessages =
-    context.useRedwoodUploadErrorMessages as UploadErrorMessages
+  logger.debug(
+    { minFiles, maxFiles, contentTypes, maxFileSize },
+    'UploadsConfig'
+  )
 
-  if (minFiles !== undefined && fileCount < minFiles) {
-    logger.error({ minFiles, fileCount }, 'Too few files')
-    if (errorMessages?.tooFewFiles) {
-      if (typeof errorMessages.tooFewFiles === 'function') {
-        throw new ValidationError(errorMessages.tooFewFiles({ minFiles }))
-      }
-      throw new ValidationError(errorMessages.tooFewFiles)
-    }
-    throw new ValidationError(`Too few files. Min ${minFiles} files required`)
-  }
+  const errorMessages = context.useRedwoodUploadErrorMessages
 
-  if (maxFiles !== undefined && fileCount > maxFiles) {
-    logger.error({ maxFiles, fileCount }, 'Too many files')
-    if (errorMessages?.tooManyFiles) {
-      if (typeof errorMessages.tooManyFiles === 'function') {
-        throw new ValidationError(errorMessages.tooManyFiles({ maxFiles }))
-      }
-      throw new ValidationError(errorMessages.tooManyFiles)
-    }
+  validateUploadCondition({
+    isConditionMet: minFiles !== undefined && fileCount < minFiles,
+    errorMessage: errorMessages?.tooFewFiles,
+    errorMessageParams: { minFiles },
+    defaultMessage: `Too few files. Min ${minFiles} files required`,
+  })
 
-    throw new ValidationError(`Too many files. Max ${maxFiles} files allowed`)
-  }
+  validateUploadCondition({
+    isConditionMet: maxFiles !== undefined && fileCount > maxFiles,
+    errorMessage: errorMessages?.tooManyFiles,
+    errorMessageParams: { maxFiles },
+    defaultMessage: `Too many files. Max ${maxFiles} files allowed`,
+  })
 
   files.forEach((file) => {
-    if (contentTypes && !contentTypes.includes(file.type)) {
-      logger.error({ contentTypes }, 'Invalid file type')
-      if (errorMessages?.invalidFileType) {
-        if (typeof errorMessages.invalidFileType === 'function') {
-          throw new ValidationError(
-            errorMessages.invalidFileType({ contentTypes })
-          )
-        }
-        throw new ValidationError(errorMessages.invalidFileType)
-      }
-      throw new ValidationError(
-        `Invalid file type. Allowed types: ${contentTypes.join(', ')}`
-      )
-    }
+    validateUploadCondition({
+      isConditionMet: contentTypes && !contentTypes.includes(file.type),
+      errorMessage: errorMessages?.invalidFileType,
+      errorMessageParams: { contentTypes },
+      defaultMessage: `Invalid file type. Allowed types: ${contentTypes?.join(', ')}`,
+    })
 
-    if (maxFileSize !== undefined && file.size > maxFileSize) {
-      logger.error(
-        { size: file.size, maxFileSize },
-        'File size exceeds the maximum allowed size'
-      )
-      if (errorMessages?.tooLargeFile) {
-        if (typeof errorMessages.tooLargeFile === 'function') {
-          throw new ValidationError(errorMessages.tooLargeFile({ maxFileSize }))
-        }
-        throw new ValidationError(errorMessages.tooLargeFile)
-      }
-
-      throw new ValidationError(
-        `File size exceeds the maximum allowed size. Max size: ${maxFileSize} bytes`
-      )
-    }
+    validateUploadCondition({
+      isConditionMet: maxFileSize !== undefined && file.size > maxFileSize,
+      errorMessage: errorMessages?.tooLargeFile,
+      errorMessageParams: { maxFileSize },
+      defaultMessage: `File size exceeds the maximum allowed size. Max size: ${maxFileSize} bytes`,
+    })
   })
 }
 
@@ -178,10 +195,10 @@ const validate: ValidatorDirectiveFunc = ({
 
     fields.forEach((field) => {
       const files = inputVariable[field] as File[]
-      validateFiles(files, uploadsConfig)
+      validateFiles(files, uploadsConfig, context)
     })
   } catch (error) {
-    logger.error({ error }, 'Upload validation failed')
+    logger.warn({ error }, 'Upload validation failed')
     throw new ValidationError(error.message)
   }
 }
