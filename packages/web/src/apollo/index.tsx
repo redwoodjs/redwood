@@ -219,7 +219,11 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     return forward(operation)
   })
 
-  const { httpLinkConfig, link: redwoodApolloLink } = config ?? {}
+  const {
+    httpLinkConfig,
+    link: redwoodApolloLink,
+    ...otherClientConfig
+  } = React.useMemo(() => config ?? {}, [config])
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
@@ -294,8 +298,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     link = link(redwoodApolloLinks)
   }
 
-  const client = useMemo(() => {
-    const { httpLinkConfig, link, ...rest } = config ?? {}
+  const client = React.useMemo(() => {
     return new ApolloClient({
       // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.
       // See https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object.
@@ -313,15 +316,16 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
           notifyOnNetworkStatusChange: true,
         },
       },
-      ...rest,
+      link,
+      ...otherClientConfig,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `link` is not stable, we use `useEffect` below to update it.
-  }, [config])
+  }, [otherClientConfig])
 
   // Update the link when it changes (e.g. every re-render of this provider since `link` is currently unstable).
-  // useEffect(() => {
-  //   client.setLink(link)
-  // }, [client, link])
+  React.useEffect(() => {
+    client.setLink(link)
+  }, [client, link])
 
   const extendErrorAndRethrow = (error: any, _errorInfo: React.ErrorInfo) => {
     error['mostRecentRequest'] = data.mostRecentRequest
