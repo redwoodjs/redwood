@@ -136,6 +136,9 @@ export type GraphQLClientConfigProp = Omit<
   link?: ApolloLink | RedwoodApolloLinkFactory
 }
 
+/** Local variable to keep track of current ApolloClient instance. */
+let _client: ApolloClient<unknown> | undefined
+
 const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   config: Omit<GraphQLClientConfigProp, 'cacheConfig' | 'cache'> & {
     cache: ApolloCache<unknown>
@@ -299,7 +302,12 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   }
 
   const client = React.useMemo(() => {
-    return new ApolloClient({
+    // If we have a client instance, stop it before creating a new one.
+    if (_client) {
+      _client.stop()
+    }
+
+    _client = new ApolloClient({
       // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.
       // See https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object.
       defaultOptions: {
@@ -319,6 +327,8 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
       link,
       ...otherClientConfig,
     })
+
+    return _client
     // eslint-disable-next-line react-hooks/exhaustive-deps -- `link` is not stable, we use `useEffect` below to update it.
   }, [otherClientConfig])
 
