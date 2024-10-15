@@ -6,3 +6,6 @@ export * from './components/types.js'
 export * from './core/fileTypes.js'
 export * from './core/utils.js'
 export type { DropzoneOptions, FileRejection } from 'react-dropzone'
+
+export * from 'react-dropzone'
+export type * from 'react-dropzone'
