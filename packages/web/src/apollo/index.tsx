@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import type {
   ApolloClientOptions,
@@ -377,7 +377,7 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
     fragmentRegistry.register(...fragments)
   }
 
-  const apolloConfig = useMemo(() => {
+  const apolloConfig = React.useMemo(() => {
     // Since Apollo Client gets re-instantiated on auth changes,
     // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
     const { cacheConfig, ...config } = graphQLClientConfig ?? {}
