@@ -20,6 +20,7 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   button,
   customMessages,
   customRenderers,
+  children,
   ...dropzoneOptions
 }) => {
   const {
@@ -146,6 +147,7 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
               ? getActiveMessage()
               : getDefaultMessage()}
         </p>
+        {children}
       </div>
 
       {showButton && (

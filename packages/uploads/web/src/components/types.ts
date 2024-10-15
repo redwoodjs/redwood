@@ -67,6 +67,7 @@ export interface RedwoodUploadComponentProps
   button?: ButtonProps
   customMessages?: CustomMessagesProps
   customRenderers?: CustomRenderersProps
+  children?: React.ReactNode // Add children prop type
 }
 
 export type MessageProp = string | ((args: MessagePropArgs) => string)
