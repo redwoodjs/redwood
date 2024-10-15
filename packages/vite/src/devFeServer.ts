@@ -21,6 +21,7 @@ import { createMiddlewareRouter } from './middleware/register.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscRoutesImports } from './plugins/vite-plugin-rsc-routes-imports.js'
 import { rscSsrRouterImport } from './plugins/vite-plugin-rsc-ssr-router-import.js'
+import { createWebSocketServer } from './rsc/rscWebSocketServer.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import {
@@ -347,6 +348,8 @@ async function createServer() {
   app.use(vite.middlewares)
 
   if (rscEnabled) {
+    createWebSocketServer()
+
     const { createRscRequestHandler } =
       await globalThis.__rwjs__vite_rsc_runtime.executeUrl(
         new URL('./rsc/rscRequestHandler.js', import.meta.url).pathname,

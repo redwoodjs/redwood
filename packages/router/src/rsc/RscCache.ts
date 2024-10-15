@@ -1,4 +1,5 @@
 class DummyWS {
+  readyState = WebSocket?.OPEN
   addEventListener() {}
   send() {}
 }
@@ -125,7 +126,7 @@ export class RscCache {
     } else if (this.sendRetries >= 10) {
       console.error('Exhausted retries to send message to WebSocket server.')
     } else {
-      console.error('WebSocket connection is closed.')
+      console.error('RscCache: WebSocket connection is closed.')
     }
   }
 
