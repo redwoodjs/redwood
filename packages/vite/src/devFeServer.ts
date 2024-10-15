@@ -1,3 +1,5 @@
+import http from 'node:http'
+
 import { createServerAdapter } from '@whatwg-node/server'
 import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
@@ -41,6 +43,11 @@ async function createServer() {
   registerFwGlobalsAndShims()
 
   const app = express()
+  // We do this to have a server to pass to Vite's HMR functionality, to be
+  // able to pass it along to the express server, to get WS support all the way
+  // through. (This is not currently implemented, this is just in preparation)
+  // TODO (RSC): Figure out all the HMR stuff
+  const server = http.createServer(app)
   const rwPaths = getPaths()
 
   const rscEnabled = getConfig().experimental.rsc?.enabled ?? false
@@ -312,10 +319,33 @@ async function createServer() {
       // rscTransformUseClientPlugin(clientEntryFiles),
       // rscTransformUseServerPlugin(outDir, serverEntryFiles),
       rscRoutesImports(),
+      {
+        name: 'rsc-hot-update',
+        handleHotUpdate(ctx) {
+          console.log('rsc-hot-update ctx.modules', ctx.modules)
+          return []
+        },
+      },
     ],
     build: {
       ssr: true,
     },
+    server: {
+      // We never call `viteRscServer.listen()`, so we should run this in
+      // middleware mode
+      middlewareMode: true,
+      // The hmr/fast-refresh websocket in this server collides with the one in
+      // the other Vite server. So we can either disable it or run it on a
+      // different port.
+      // TODO (RSC): Figure out if we should disable or just pick a different
+      // port
+      ws: false,
+      // hmr: {
+      //   port: 24679,
+      // },
+    },
+    appType: 'custom',
+    cacheDir: './node_modules/.vite-rsc',
   })
 
   globalThis.__rwjs__vite_rsc_runtime = await createViteRuntime(viteRscServer)
@@ -388,7 +418,7 @@ async function createServer() {
 
   const port = getConfig().web.port
   console.log(`Started server on http://localhost:${port}`)
-  return app.listen(port)
+  return server.listen(port)
 }
 
 let devApp = createServer()
