@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import type {
   ApolloClientOptions,
@@ -167,10 +167,10 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     mostRecentResponse?: any
   }
 
-  const data = {
+  const data: ApolloRequestData = {
     mostRecentRequest: undefined,
     mostRecentResponse: undefined,
-  } as ApolloRequestData
+  }
 
   const updateDataApolloLink = new ApolloLink((operation, forward) => {
     const { operationName, query, variables } = operation
@@ -219,7 +219,7 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     return forward(operation)
   })
 
-  const { httpLinkConfig, link: redwoodApolloLink, ...rest } = config ?? {}
+  const { httpLinkConfig, link: redwoodApolloLink } = config ?? {}
 
   // A terminating link. Apollo Client uses this to send GraphQL operations to a server over HTTP.
   // See https://www.apollographql.com/docs/react/api/link/introduction/#the-terminating-link.
@@ -294,26 +294,34 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
     link = link(redwoodApolloLinks)
   }
 
-  const client = new ApolloClient({
-    // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.
-    // See https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object.
-    defaultOptions: {
-      watchQuery: {
-        // The `fetchPolicy` we expect:
-        //
-        // > Apollo Client executes the full query against both the cache and your GraphQL server.
-        // > The query automatically updates if the result of the server-side query modifies cached fields.
-        //
-        // See https://www.apollographql.com/docs/react/data/queries/#cache-and-network.
-        fetchPolicy: 'cache-and-network',
-        // So that Cells rerender when refetching.
-        // See https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states.
-        notifyOnNetworkStatusChange: true,
+  const client = useMemo(() => {
+    const { httpLinkConfig, link, ...rest } = config ?? {}
+    return new ApolloClient({
+      // Default options for every Cell. Better to specify them here than in `beforeQuery` where it's too easy to overwrite them.
+      // See https://www.apollographql.com/docs/react/api/core/ApolloClient/#example-defaultoptions-object.
+      defaultOptions: {
+        watchQuery: {
+          // The `fetchPolicy` we expect:
+          //
+          // > Apollo Client executes the full query against both the cache and your GraphQL server.
+          // > The query automatically updates if the result of the server-side query modifies cached fields.
+          //
+          // See https://www.apollographql.com/docs/react/data/queries/#cache-and-network.
+          fetchPolicy: 'cache-and-network',
+          // So that Cells rerender when refetching.
+          // See https://www.apollographql.com/docs/react/data/queries/#inspecting-loading-states.
+          notifyOnNetworkStatusChange: true,
+        },
       },
-    },
-    link,
-    ...rest,
-  })
+      ...rest,
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `link` is not stable, we use `useEffect` below to update it.
+  }, [config])
+
+  // Update the link when it changes (e.g. every re-render of this provider since `link` is currently unstable).
+  // useEffect(() => {
+  //   client.setLink(link)
+  // }, [client, link])
 
   const extendErrorAndRethrow = (error: any, _errorInfo: React.ErrorInfo) => {
     error['mostRecentRequest'] = data.mostRecentRequest
@@ -360,26 +368,30 @@ export const RedwoodApolloProvider: React.FunctionComponent<{
   logLevel = 'debug',
   children,
 }) => {
-  // Since Apollo Client gets re-instantiated on auth changes,
-  // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
-  const { cacheConfig, ...config } = graphQLClientConfig ?? {}
-
   // Auto register fragments
   if (fragments) {
     fragmentRegistry.register(...fragments)
   }
 
-  const cache = new InMemoryCache({
-    fragments: fragmentRegistry,
-    possibleTypes: cacheConfig?.possibleTypes,
-    ...cacheConfig,
-  }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
+  const apolloConfig = useMemo(() => {
+    // Since Apollo Client gets re-instantiated on auth changes,
+    // we have to instantiate `InMemoryCache` here, so that it doesn't get wiped.
+    const { cacheConfig, ...config } = graphQLClientConfig ?? {}
+
+    const cache = new InMemoryCache({
+      fragments: fragmentRegistry,
+      possibleTypes: cacheConfig?.possibleTypes,
+      ...cacheConfig,
+    }).restore(globalThis?.__REDWOOD__APOLLO_STATE ?? {})
+
+    // This order so that the user can still completely overwrite the cache.
+    return { cache, ...config }
+  }, [graphQLClientConfig])
 
   return (
     <FetchConfigProvider useAuth={useAuth}>
       <ApolloProviderWithFetchConfig
-        // This order so that the user can still completely overwrite the cache.
-        config={{ cache, ...config }}
+        config={apolloConfig}
         useAuth={useAuth}
         logLevel={logLevel}
       >
