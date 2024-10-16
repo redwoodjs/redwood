@@ -5,6 +5,8 @@ export interface RedwoodUploadsContextType {
   open: () => void
   isDragActive: boolean
   isDragReject: boolean
+  isFocused: boolean
+  isDragAccept: boolean
   acceptedFiles: File[]
   fileRejections: FileRejection[]
   setAcceptedFiles: React.Dispatch<React.SetStateAction<File[]>>

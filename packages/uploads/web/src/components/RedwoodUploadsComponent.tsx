@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import type { CSSProperties } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 
 import type { FileRejection } from 'react-dropzone'
 import { useDropzone } from 'react-dropzone'
@@ -9,19 +10,48 @@ import { ACCEPTED_DOCUMENT_TYPES } from '../index.js'
 import { RedwoodUploadsProvider } from './hooks/useRedwoodUploadsContext.js'
 import type { RedwoodUploadComponentProps } from './types.js'
 
+const baseStyle: CSSProperties = {
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '24px',
+  borderWidth: 2,
+  borderRadius: 2,
+  borderColor: '#eeeeee', // Light gray
+  borderStyle: 'dashed',
+  backgroundColor: '#fafafa', // Very light gray (almost white)
+  color: '#000000', // Black
+  outline: 'none',
+  transition: 'border .24s ease-in-out',
+}
+
+const focusedStyle = {
+  borderColor: '#2196f3', // Bright blue
+}
+
+const acceptStyle = {
+  borderColor: '#00e676', // Bright green
+}
+
+const rejectStyle = {
+  borderColor: '#ff1744', // Bright red
+}
+
 export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   name = 'uploads',
   className,
   fileConstraints,
   children,
   dropzoneContent,
-  messageContent,
+  messageContent: customMessageContent, // Rename the prop
   setFiles,
   onResetFiles,
   ...dropzoneOptions
 }) => {
   const [acceptedFiles, setAcceptedFiles] = useState<File[]>([])
   const [fileRejections, setFileRejections] = useState<FileRejection[]>([])
+
   const {
     accept = {
       ...ACCEPTED_IMAGE_TYPES,
@@ -57,21 +87,30 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     }
   }, [onResetFiles, resetFiles])
 
-  const { getRootProps, getInputProps, open, isDragActive, isDragReject } =
-    useDropzone({
-      onDrop,
-      accept,
-      maxFiles,
-      minSize,
-      maxSize,
-      multiple: maxFiles > 1 ? true : multiple,
-      ...dropzoneOptions,
-    })
+  const {
+    getRootProps,
+    getInputProps,
+    open,
+    isDragActive,
+    isDragReject,
+    isFocused,
+    isDragAccept,
+  } = useDropzone({
+    onDrop,
+    accept,
+    maxFiles,
+    minSize,
+    maxSize,
+    multiple: maxFiles > 1 ? true : multiple,
+    ...dropzoneOptions,
+  })
 
   const contextValue = {
     open,
     isDragActive,
     isDragReject,
+    isFocused,
+    isDragAccept,
     acceptedFiles,
     fileRejections,
     setAcceptedFiles,
@@ -79,12 +118,32 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     resetFiles,
   }
 
+  const defaultMessageContent = (
+    <p>
+      {isDragActive
+        ? 'Drop the files here...'
+        : isDragReject
+          ? 'File type not accepted, sorry!'
+          : "Drag 'n' drop some files here, or click to select files"}
+    </p>
+  )
+  const style = useMemo(
+    () => ({
+      ...baseStyle,
+      ...(isFocused ? focusedStyle : {}),
+      ...(isDragActive ? acceptStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {}),
+    }),
+    [isFocused, isDragAccept, isDragActive, isDragReject],
+  ) as CSSProperties
+
   return (
     <RedwoodUploadsProvider value={contextValue}>
       <div>
-        <div {...getRootProps({ className, ref: dropzoneRef })}>
+        <div {...getRootProps({ className, ref: dropzoneRef, style })}>
           <input {...getInputProps({ name })} />
-          {messageContent}
+          {customMessageContent || defaultMessageContent}
           {dropzoneContent}
         </div>
         {children}
