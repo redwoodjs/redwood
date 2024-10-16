@@ -1,36 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 
-import { useDropzone } from 'react-dropzone'
 import type { FileRejection } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 
-import {
-  ACCEPTED_IMAGE_TYPES,
-  ACCEPTED_DOCUMENT_TYPES,
-} from '../core/fileTypes.js'
+import { ACCEPTED_IMAGE_TYPES } from '../core/fileTypes.js'
+import { ACCEPTED_DOCUMENT_TYPES } from '../index.js'
 
-import { DefaultFileRejectionRenderer } from './DefaultFileRejectionRenderer.js'
-import { DefaultFileRenderer } from './DefaultFileRenderer.js'
+import { RedwoodUploadsProvider } from './hooks/useRedwoodUploadsContext.js'
 import type { RedwoodUploadComponentProps } from './types.js'
 
 export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
-  fileHandling,
+  name = 'uploads',
+  className,
   fileConstraints,
-  styling,
-  uiElements,
-  button,
-  customMessages,
-  customRenderers,
   children,
+  dropzoneContent,
+  messageContent,
+  setFiles,
+  onResetFiles,
   ...dropzoneOptions
 }) => {
-  const {
-    onDrop,
-    acceptedFiles,
-    setAcceptedFiles,
-    fileRejections,
-    setFileRejections,
-  } = fileHandling || {}
-
+  const [acceptedFiles, setAcceptedFiles] = useState<File[]>([])
+  const [fileRejections, setFileRejections] = useState<FileRejection[]>([])
   const {
     accept = {
       ...ACCEPTED_IMAGE_TYPES,
@@ -42,133 +33,62 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     multiple = false,
   } = fileConstraints || {}
 
-  const {
-    className = '',
-    activeClassName = '',
-    rejectClassName = '',
-    buttonClassName = '',
-  } = styling || {}
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      setAcceptedFiles(acceptedFiles)
+      setFileRejections(fileRejections)
+      setFiles?.(acceptedFiles)
+    },
+    [setFiles],
+  )
 
-  const { name = 'uploads' } = uiElements || {}
+  const dropzoneRef = useRef<any>(null)
 
-  const { buttonText = 'Select files', showButton = false } = button || {}
+  const resetFiles = useCallback(() => {
+    setAcceptedFiles([])
+    setFileRejections([])
+    setFiles?.([])
+  }, [setFiles])
 
-  const {
-    rejectMessage = 'Invalid file(s). Please check requirements and try again.',
-    defaultMessage = "Drag 'n' drop some files here, or click to select files",
-    activeMessage = "Drag 'n' drop some files here, or click to select files",
-  } = customMessages || {}
+  // Provide the resetFiles function to the parent component
+  useEffect(() => {
+    if (onResetFiles) {
+      onResetFiles(resetFiles)
+    }
+  }, [onResetFiles, resetFiles])
 
-  const {
-    fileRenderer: FileRendererComponent = DefaultFileRenderer,
-    fileRejectionRenderer:
-      FileRejectionRendererComponent = DefaultFileRejectionRenderer,
-  } = customRenderers || {}
+  const { getRootProps, getInputProps, open, isDragActive, isDragReject } =
+    useDropzone({
+      onDrop,
+      accept,
+      maxFiles,
+      minSize,
+      maxSize,
+      multiple: maxFiles > 1 ? true : multiple,
+      ...dropzoneOptions,
+    })
 
-  const [internalAcceptedFiles, setInternalAcceptedFiles] = useState<File[]>([])
-  const [internalFileRejections, setInternalFileRejections] = useState<
-    FileRejection[]
-  >([])
-
-  const {
-    getRootProps,
-    getInputProps,
-    open, // `open` allows opening the file dialog programmatically
+  const contextValue = {
+    open,
     isDragActive,
     isDragReject,
-  } = useDropzone({
-    onDrop: (acceptedFiles, fileRejections, event) => {
-      setAcceptedFiles?.(acceptedFiles)
-      setFileRejections?.(fileRejections)
-      setInternalAcceptedFiles(acceptedFiles)
-      setInternalFileRejections(fileRejections)
-      onDrop?.(
-        acceptedFiles,
-        fileRejections,
-        event as unknown as React.DragEvent<HTMLElement>,
-      )
-    },
-    accept,
-    maxFiles,
-    minSize,
-    maxSize,
-    multiple: maxFiles > 1 ? true : multiple, // Set multiple to true if maxFiles > 1
-    noClick: showButton,
-    ...dropzoneOptions,
-  })
-  useEffect(() => {
-    if (acceptedFiles && acceptedFiles.length === 0) {
-      getRootProps().ref.current?.dropzone?.removeAllFiles()
-    }
-  }, [acceptedFiles, getRootProps])
-
-  useEffect(() => {
-    if (fileRejections && fileRejections.length === 0) {
-      getRootProps().ref.current?.dropzone?.removeAllFiles()
-    }
-  }, [fileRejections, getRootProps])
-
-  // Function to generate the active message
-  const getActiveMessage = (): string => {
-    if (typeof activeMessage === 'function') {
-      return activeMessage({ maxFiles, minSize, maxSize, accept })
-    }
-    return activeMessage
+    acceptedFiles,
+    fileRejections,
+    setAcceptedFiles,
+    setFileRejections,
+    resetFiles,
   }
-
-  // Function to generate the reject message
-  const getRejectMessage = (): string => {
-    if (typeof rejectMessage === 'function') {
-      return rejectMessage({ maxFiles, minSize, maxSize, accept })
-    }
-    return rejectMessage
-  }
-
-  // Function to generate the default message
-  const getDefaultMessage = (): string => {
-    if (typeof defaultMessage === 'function') {
-      return defaultMessage({ maxFiles, minSize, maxSize, accept })
-    }
-    return defaultMessage
-  }
-
-  const combinedClassName = `${className} ${
-    isDragActive ? activeClassName : ''
-  } ${isDragReject ? rejectClassName : ''}`
 
   return (
-    <section>
-      <div {...getRootProps({ className: combinedClassName })}>
-        <input {...getInputProps({ name })} />
-        <p>
-          {isDragReject
-            ? getRejectMessage()
-            : isDragActive
-              ? getActiveMessage()
-              : getDefaultMessage()}
-        </p>
+    <RedwoodUploadsProvider value={contextValue}>
+      <div>
+        <div {...getRootProps({ className, ref: dropzoneRef })}>
+          <input {...getInputProps({ name })} />
+          {messageContent}
+          {dropzoneContent}
+        </div>
         {children}
       </div>
-
-      {showButton && (
-        <button type="button" className={buttonClassName} onClick={open}>
-          {buttonText}
-        </button>
-      )}
-      <aside>
-        {((acceptedFiles?.length ?? 0) > 0 ||
-          internalAcceptedFiles.length > 0) && (
-          <FileRendererComponent
-            files={acceptedFiles ?? internalAcceptedFiles}
-          />
-        )}
-        {((fileRejections?.length ?? 0) > 0 ||
-          internalFileRejections.length > 0) && (
-          <FileRejectionRendererComponent
-            fileRejections={fileRejections || internalFileRejections}
-          />
-        )}
-      </aside>
-    </section>
+    </RedwoodUploadsProvider>
   )
 }

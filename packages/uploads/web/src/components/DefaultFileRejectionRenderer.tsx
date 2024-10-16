@@ -2,11 +2,13 @@ import React from 'react'
 
 import { formatFileSize, getReadableErrorMessage } from '../core/utils.js'
 
+import { useRedwoodUploadsContext } from './hooks/useRedwoodUploadsContext.js'
 import type { FileRejectionRendererProps } from './types.js'
 
 export const DefaultFileRejectionRenderer: React.FC<
   FileRejectionRendererProps
-> = ({ fileRejections }) => {
+> = () => {
+  const { fileRejections } = useRedwoodUploadsContext()
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
     <li key={file.name} style={{ marginBottom: '8px' }}>
       {file.name} - {formatFileSize(file.size)}
@@ -22,10 +24,14 @@ export const DefaultFileRejectionRenderer: React.FC<
 
   return (
     <>
-      <h4 style={{ marginBottom: '8px' }}>
-        <strong>Rejected files</strong>
-      </h4>
-      <ul>{fileRejectionItems}</ul>
+      {fileRejections.length > 0 && (
+        <>
+          <h4 style={{ marginBottom: '8px' }}>
+            <strong>Rejected files</strong>
+          </h4>
+          <ul>{fileRejectionItems}</ul>
+        </>
+      )}
     </>
   )
 }

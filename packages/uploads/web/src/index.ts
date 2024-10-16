@@ -5,6 +5,8 @@ export * from './components/DefaultFileRejectionRenderer.js'
 export * from './components/types.js'
 export * from './core/fileTypes.js'
 export * from './core/utils.js'
+export * from './components/RedwoodUploadsButton.js'
+export * from './components/hooks/useRedwoodUploadsContext.js'
 export type { DropzoneOptions, FileRejection } from 'react-dropzone'
 
 export * from 'react-dropzone'
