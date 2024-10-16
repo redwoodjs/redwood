@@ -47,6 +47,7 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
   messageContent: customMessageContent, // Rename the prop
   setFiles,
   onResetFiles,
+  allowPaste = false,
   ...dropzoneOptions
 }) => {
   const [acceptedFiles, setAcceptedFiles] = useState<File[]>([])
@@ -86,6 +87,23 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
       onResetFiles(resetFiles)
     }
   }, [onResetFiles, resetFiles])
+
+  const handlePaste = useCallback(
+    (event: React.ClipboardEvent) => {
+      const items = event.clipboardData?.items
+      if (items) {
+        const files = Array.from(items)
+          .filter((item) => item.kind === 'file')
+          .map((item) => item.getAsFile())
+          .filter((file): file is File => file !== null)
+
+        if (files.length > 0) {
+          onDrop(files, [])
+        }
+      }
+    },
+    [onDrop],
+  )
 
   const {
     getRootProps,
@@ -138,10 +156,15 @@ export const RedwoodUploadsComponent: React.FC<RedwoodUploadComponentProps> = ({
     [isFocused, isDragAccept, isDragActive, isDragReject],
   ) as CSSProperties
 
+  const rootProps = {
+    ...getRootProps({ className, ref: dropzoneRef, style }),
+    onPaste: allowPaste ? handlePaste : undefined,
+  }
+
   return (
     <RedwoodUploadsProvider value={contextValue}>
       <div>
-        <div {...getRootProps({ className, ref: dropzoneRef, style })}>
+        <div {...rootProps}>
           <input {...getInputProps({ name })} />
           {customMessageContent || defaultMessageContent}
           {dropzoneContent}

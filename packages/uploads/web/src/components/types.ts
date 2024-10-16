@@ -22,6 +22,7 @@ export interface RedwoodUploadComponentProps
   messageContent?: React.ReactNode
   setFiles?: React.Dispatch<React.SetStateAction<File[]>>
   onResetFiles?: (resetFunction: () => void) => void
+  allowPaste?: boolean
 }
 
 export type MessageProp = string | ((args: MessagePropArgs) => string)
