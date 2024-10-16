@@ -1,14 +1,6 @@
 import type React from 'react'
 
-import type { Accept, DropzoneOptions, FileRejection } from 'react-dropzone'
-
-export interface FileRendererProps {
-  files: File[]
-}
-
-export interface FileRejectionRendererProps {
-  fileRejections: FileRejection[]
-}
+import type { Accept, DropzoneOptions } from 'react-dropzone'
 
 export interface FileConstraintsProps {
   accept?: Accept

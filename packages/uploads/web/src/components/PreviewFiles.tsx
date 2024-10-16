@@ -1,9 +1,8 @@
 import React from 'react'
 
 import { useRedwoodUploadsContext } from './hooks/useRedwoodUploadsContext.js'
-import type { FileRendererProps } from './types.js'
 
-export const DefaultFileRenderer: React.FC<FileRendererProps> = () => {
+export const PreviewFiles: React.FC = () => {
   const { acceptedFiles } = useRedwoodUploadsContext()
   return (
     <>
