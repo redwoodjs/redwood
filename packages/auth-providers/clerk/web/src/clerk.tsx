@@ -24,9 +24,10 @@ export function createAuth(
     ) => (rolesToCheck: string | string[]) => boolean
   },
   authImplementationOptions?: AuthImplementationOptions,
-) {
+): ReturnType<typeof createAuthentication> {
   const authImplementation = createAuthImplementation(authImplementationOptions)
 
+  // @ts-ignore-next-line
   return createAuthentication(authImplementation, customProviderHooks)
 }
 
