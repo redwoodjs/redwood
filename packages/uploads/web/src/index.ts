@@ -7,6 +7,7 @@ export * from './core/fileTypes.js'
 export * from './core/utils.js'
 export * from './components/RedwoodFilePickerButton.js'
 export * from './components/hooks/useRedwoodUploadsContext.js'
+export * from './components/hooks/useUploadProgress.js'
 export type { DropzoneOptions, FileRejection } from 'react-dropzone'
 
 export * from 'react-dropzone'
