@@ -48,6 +48,7 @@ import {
 } from './fragmentRegistry.js'
 import * as SSELinkExports from './sseLink.js'
 import { useCache } from './useCache.js'
+import { useUploadProgressFetch } from './useUploadProgressFetch.js'
 
 // Not sure why we need to import it this way for legacy builds to work
 const { SSELink, isSubscription, isLiveQuery } = SSELinkExports
@@ -227,6 +228,9 @@ const ApolloProviderWithFetchConfig: React.FunctionComponent<{
   const uploadLink: ApolloLink = createUploadLink({
     uri,
     ...httpLinkConfig,
+    // We  use a custom uploadProgressFetch to show progress of uploads
+    // if the useUploadProgress option is set in the mutation context options
+    fetch: useUploadProgressFetch as typeof fetch,
     // The upload link types don't match the ApolloLink types, even though it comes from Apollo
     // because they use ESM imports and we're using the default ones.
   }) as unknown as ApolloLink

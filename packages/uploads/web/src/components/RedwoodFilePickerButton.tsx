@@ -2,15 +2,14 @@ import React from 'react'
 
 import { useRedwoodUploadsContext } from './hooks/useRedwoodUploadsContext.js'
 
-interface RedwoodUploadsButtonProps {
+interface RedwoodFilePickerButtonProps {
   children: React.ReactNode
   className?: string
 }
 
-export const RedwoodUploadsButton: React.FC<RedwoodUploadsButtonProps> = ({
-  children,
-  className,
-}) => {
+export const RedwoodFilePickerButton: React.FC<
+  RedwoodFilePickerButtonProps
+> = ({ children, className }) => {
   const { open } = useRedwoodUploadsContext()
 
   return (
