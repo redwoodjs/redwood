@@ -578,6 +578,7 @@ Don't forget the new `CryptoJS` import at the top!
 ```js title="/api/src/functions/oauth/oauth.js"
 // highlight-next-line
 import CryptoJS from 'crypto-js'
+import { cookieName } from '@redwoodjs/auth-dbauth-api' //on dbAuth v7.6.2, cookie setting has changed, you can check /api/src/functions/auth.ts
 
 const callback = async (event) => {
   const { code } = event.queryStringParameters
@@ -643,7 +644,8 @@ const secureCookie = (user) => {
     data,
     process.env.SESSION_SECRET
   ).toString()
-
+  //if you're using dbAuth v7.6.2, you have to change the cookie name. You can comment out the line below and make the next line as comment.
+  //return [`${cookieName}=${encrypted}`, ...cookieAttrs].join('; ')
   return [`session=${encrypted}`, ...cookieAttrs].join('; ')
 }
 // highlight-end
