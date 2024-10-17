@@ -643,7 +643,8 @@ const secureCookie = (user) => {
     data,
     process.env.SESSION_SECRET
   ).toString()
-
+  const cookieName = 'session_8911' //if you're using dbAuth v7.6.2, you have to change the cookie name. You can comment out the line below and make the next line as comment. 8911 is the api port. You can change it accordingly.
+  //return [`${cookieName}=${encrypted}`, ...cookieAttrs].join('; ')
   return [`session=${encrypted}`, ...cookieAttrs].join('; ')
 }
 // highlight-end
