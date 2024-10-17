@@ -6,7 +6,6 @@
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
 import path from 'node:path'
-import process from 'node:process'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
@@ -202,10 +201,6 @@ export async function runFeServer() {
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
-
-  if (typeof process.send !== 'undefined') {
-    process.send('server ready')
-  }
 }
 
 function createWebSocketServer() {

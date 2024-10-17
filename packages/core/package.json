@@ -38,7 +38,7 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@babel/cli": "7.25.6",
+    "@babel/cli": "7.25.7",
     "@redwoodjs/api-server": "workspace:*",
     "@redwoodjs/cli": "workspace:*",
     "@redwoodjs/eslint-config": "workspace:*",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/lodash": "4.17.9",
+    "@types/lodash": "4.17.10",
     "publint": "0.2.11",
     "tsx": "4.19.1"
   },

@@ -1,17 +1,10 @@
 import path from 'node:path'
 
-import type { default as RSDWClientModule } from 'react-server-dom-webpack/client.edge'
-import type { default as RSDWServerModule } from 'react-server-dom-webpack/server.edge'
-
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getRscStylesheetLinkGenerator } from './rscCss.js'
 import { moduleMap } from './ssrModuleMap.js'
-import { importRsdwClient, importReact } from './utils.js'
+import { importRsdwClient, importRsdwServer, importReact } from './utils.js'
 import { makeFilePath } from './utils.js'
-
-type RSDWClientType = typeof RSDWClientModule
-type RSDWServerType = typeof RSDWServerModule
 
 async function getEntries() {
   const entriesPath = getPaths().web.distRscEntries
@@ -19,9 +12,7 @@ async function getEntries() {
   return entries
 }
 
-async function getRoutesComponent<TProps>(): Promise<
-  React.FunctionComponent<TProps>
-> {
+async function getRoutesComponent(): Promise<React.FunctionComponent> {
   const { serverEntries } = await getEntries()
   const entryPath = path.join(
     getPaths().web.distRsc,
@@ -57,9 +48,10 @@ function resolveClientEntryForProd(
   const filePathSlash = filePath.replaceAll('\\', '/')
   const clientEntry = absoluteClientEntries[filePathSlash]
 
-  console.log('resolveClientEntryForProd during SSR - filePath', clientEntry)
+  console.log('resolveClientEntryForProd during SSR - clientEntry', clientEntry)
 
   if (!clientEntry) {
+    // TODO (RSC): Is this ever used?
     if (absoluteClientEntries['*'] === '*') {
       return basePath + path.relative(getPaths().base, filePathSlash)
     }
@@ -77,18 +69,15 @@ function resolveClientEntryForProd(
 
 const rscCache = new Map<string, Thenable<React.ReactElement>>()
 
-export async function renderRoutesFromDist<TProps extends Record<string, any>>(
-  pathname: string,
-) {
-  console.log('renderRoutesFromDist pathname', pathname)
+export async function renderRoutesSsr(pathname: string) {
+  console.log('renderRoutesSsr pathname', pathname)
 
   const cached = rscCache.get(pathname)
   if (cached) {
     return cached
   }
 
-  const cssLinks = getRscStylesheetLinkGenerator()()
-  const Routes = await getRoutesComponent<TProps>()
+  const Routes = await getRoutesComponent()
 
   console.log('clientSsr.ts getEntries()', await getEntries())
   const clientEntries = (await getEntries()).ssrEntries
@@ -115,40 +104,19 @@ export async function renderRoutesFromDist<TProps extends Record<string, any>>(
   )
 
   const { createElement } = await importReact()
-
-  // We need to do this weird import dance because we need to import a version
-  // of react-server-dom-webpack/server.edge that has been built with the
-  // `react-server` condition. If we just did a regular import, we'd get the
-  // generic version in node_modules, and it'd throw an error about not being
-  // run in an environment with the `react-server` condition.
-  const dynamicImport = ''
-  const { renderToReadableStream }: RSDWServerType = await import(
-    /* @vite-ignore */
-    dynamicImport + 'react-server-dom-webpack/server.edge'
-  )
+  const { renderToReadableStream } = await importRsdwServer()
 
   console.log('clientSsr.ts right before renderToReadableStream')
   // We're in clientSsr.ts, but we're supposed to be pretending we're in the
   // RSC server "world" and that `stream` comes from `fetch`. So this is us
   // emulating the reply (stream) you'd get from a fetch call.
-  const stream = renderToReadableStream(
-    // createElement(layout, undefined, createElement(page, props)),
-    createElement(Routes, {
-      // TODO (RSC): Include a more complete location object here. At least
-      // search params as well
-      // TODO (RSC): Get rid of this when the router can just use
-      // useLocation()
-      location: { pathname },
-      css: cssLinks,
-    }),
-    bundlerConfig,
-  )
+  const stream = renderToReadableStream(createElement(Routes), bundlerConfig)
 
   // We have to do this weird import thing because we need a version of
   // react-server-dom-webpack/client.edge that uses the same bundled version
   // of React as all the client components. Also see comment in
   // streamHelpers.ts about the rd-server import for some more context
-  const { createFromReadableStream }: RSDWClientType = await importRsdwClient()
+  const { createFromReadableStream } = await importRsdwClient()
 
   // Here we use `createFromReadableStream`, which is equivalent to
   // `createFromFetch` as used in the browser
