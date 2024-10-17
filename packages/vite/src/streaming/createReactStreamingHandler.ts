@@ -208,6 +208,7 @@ export const createReactStreamingHandler = async (
           console.error(err)
         },
       },
+      viteDevServer,
     )
 
     return reactResponse
