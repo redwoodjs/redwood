@@ -63,8 +63,9 @@ export const useUploadsMutation = (
   const result = useMutation(mutation, {
     ...options,
     context: {
+      ...options?.context,
       headers: {
-        ...options?.['context']?.headers,
+        ...options?.context?.headers,
         [uploadTokenHeaderName]: token,
       },
     },

@@ -14,13 +14,7 @@ export const useUploadProgress = () => {
   const fetchOptionsWithProgress = {
     useUploadProgress: true,
     headers: (headers: Headers) => {
-      const plainHeaders: Record<string, string> = {}
-      headers.forEach((value, key) => {
-        plainHeaders[key] = value
-      })
-      return {
-        ...plainHeaders,
-      }
+      return headers
     },
     onProgress: (ev: ProgressEvent) => {
       setProgress(ev.loaded / ev.total)
