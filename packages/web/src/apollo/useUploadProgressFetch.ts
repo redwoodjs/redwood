@@ -1,6 +1,6 @@
 const parseHeaders = (rawHeaders: string): Headers => {
   const headers = new Headers()
-  console.log('rawHeaders', rawHeaders)
+
   // Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
   // https://tools.ietf.org/html/rfc7230#section-3.2
   const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ')
@@ -12,8 +12,7 @@ const parseHeaders = (rawHeaders: string): Headers => {
       headers.append(key, value)
     }
   })
-  console.log('preProcessedHeaders', preProcessedHeaders)
-  console.log('headers', headers)
+
   return headers
 }
 
@@ -36,7 +35,6 @@ const uploadProgressFetch = (
   options: UploadProgressFetchOptions,
 ): Promise<Response> =>
   new Promise((resolve, reject) => {
-    console.log('uploadProgressFetch', url, options)
     const xhr = new XMLHttpRequest()
     xhr.onload = () => {
       const opts: OnloadOptions = {
@@ -64,8 +62,6 @@ const uploadProgressFetch = (
       const headerValue = options.headers
         ? (options.headers[key as keyof HeadersInit] as string)
         : ''
-      console.log('key', key)
-      console.log('headerValue', headerValue)
       xhr.setRequestHeader(key, headerValue)
     })
 
