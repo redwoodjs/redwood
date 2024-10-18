@@ -27,12 +27,20 @@ export type UseUploadsMutationOptions = {
 
 export const DEFAULT_UPLOAD_TOKEN_HEADER_NAME = 'x-rw-upload-token'
 
-export const useUploadsMutation = (
-  mutation: UseUploadsMutationOptions['mutation'],
-  options: UseUploadsMutationOptions['options'] = {},
-  uploadTokenOptions: UseUploadsMutationOptions['uploadTokenOptions'] = {},
+// Function to retrieve the upload token
+export const useUploadToken = (operationName: string) => {
+  const { data } = useQuery(GET_REDWOOD_UPLOAD_TOKEN, {
+    variables: { operationName },
+    skip: !operationName, // Skip the query if the operation name is not available
+  })
+
+  return data?.uploadToken?.token
+}
+
+// Function to extract the mutation name from the mutation document
+export const getMutationName = (
+  mutation: DocumentNode | TypedDocumentNode<any, any>,
 ) => {
-  // Extract the mutation name from the mutation document
   const operationDef = mutation.definitions[0]
   const mutationName =
     operationDef && 'name' in operationDef
@@ -43,21 +51,31 @@ export const useUploadsMutation = (
     throw new Error('Mutation name is required')
   }
 
-  // Use the getRedwoodUploadToken query to get the JWT token
-  const {
-    data,
-    //loading, error
-  } = useQuery(GET_REDWOOD_UPLOAD_TOKEN, {
-    variables: { operationName: mutationName },
-    skip: !mutationName, // Skip the query if the mutation name is not available
-  })
+  return mutationName
+}
 
-  const uploadTokenHeaderName =
+// Function to get the upload token header name
+export const getUploadTokenHeaderName = (
+  uploadTokenOptions?: UploadTokenOptions,
+) => {
+  return (
     uploadTokenOptions?.uploadTokenHeaderName ??
     DEFAULT_UPLOAD_TOKEN_HEADER_NAME
+  )
+}
+
+export const useUploadsMutation = (
+  mutation: UseUploadsMutationOptions['mutation'],
+  options: UseUploadsMutationOptions['options'] = {},
+  uploadTokenOptions: UseUploadsMutationOptions['uploadTokenOptions'] = {},
+) => {
+  const mutationName = getMutationName(mutation)
+
+  // Retrieve the upload token header name using the new function
+  const uploadTokenHeaderName = getUploadTokenHeaderName(uploadTokenOptions)
 
   // Retrieve the token
-  const token = data?.uploadToken?.token
+  const token = useUploadToken(mutationName)
 
   // Customize the useMutation hook to include the upload token in the headers
   const result = useMutation(mutation, {
