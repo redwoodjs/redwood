@@ -1,6 +1,15 @@
 import { useState, useCallback } from 'react'
 
-export const useUploadProgress = () => {
+import type { UseUploadsMutationOptions } from './useUploadsMutation.js'
+import {
+  getMutationName,
+  getUploadTokenHeaderName,
+  useUploadToken,
+} from './useUploadsMutation.js'
+
+export const useUploadProgress = (
+  mutation: UseUploadsMutationOptions['mutation'],
+) => {
   const [progress, setProgress] = useState<number>(0)
   const [abortHandler, setAbortHandler] = useState<(() => void) | null>(null)
 
@@ -24,8 +33,22 @@ export const useUploadProgress = () => {
     },
   }
 
+  const mutationName = getMutationName(mutation)
+  const token = useUploadToken(mutationName)
+  const uploadTokenHeaderName = getUploadTokenHeaderName()
+
+  const context: {
+    fetchOptions: typeof fetchOptionsWithProgress
+    headers: Record<string, string>
+  } = {
+    fetchOptions: fetchOptionsWithProgress,
+    headers: {
+      [uploadTokenHeaderName]: token,
+    },
+  }
+
   return {
-    fetchOptionsWithProgress,
+    context,
     progress,
     setProgress,
     onAbortHandler,
