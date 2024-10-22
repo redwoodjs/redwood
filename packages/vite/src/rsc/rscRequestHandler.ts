@@ -20,9 +20,6 @@ import {
 import { hasStatusCode } from '../lib/StatusError.js'
 import { invoke } from '../middleware/invokeMiddleware.js'
 
-import { renderRscToStream } from './rscRenderer.js'
-import { sendRscFlightToStudio } from './rscStudioHandlers.js'
-
 const BASE_PATH = '/rw-rsc/'
 
 interface CreateRscRequestHandlerOptions {
@@ -30,10 +27,13 @@ interface CreateRscRequestHandlerOptions {
   viteDevServer?: ViteDevServer
 }
 
-export function createRscRequestHandler(
+export async function createRscRequestHandler(
   options: CreateRscRequestHandlerOptions,
 ) {
   // This is mounted at /rw-rsc, so will have /rw-rsc stripped from req.url
+
+  const { renderRscToStream } = await import('./rscRenderer.js')
+  const { sendRscFlightToStudio } = await import('./rscStudioHandlers.js')
 
   // TODO (RSC): Switch from Express to Web compatible Request and Response
   return async (
