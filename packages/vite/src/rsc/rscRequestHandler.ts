@@ -99,61 +99,14 @@ export async function createRscRequestHandler(
       console.log('rscId', rscId)
       console.log('rsaId', rsaId)
 
+      // TODO (RSC): When is this ever '_'? Can we remove that extra check?
       if (rscId && rscId !== '_') {
         res.setHeader('Content-Type', 'text/x-component')
       } else {
         rscId = undefined
       }
 
-      if (rsaId) {
-        // TODO (RSC): For React Server Actions we need to limit the request
-        // size somehow
-        // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
-        if (req.headers['content-type']?.startsWith('multipart/form-data')) {
-          console.log('RSA: multipart/form-data')
-          const bb = busboy({ headers: req.headers })
-          // TODO (RSC): The generic here could be typed better
-          const reply = decodeReplyFromBusboy<unknown[]>(bb)
-
-          req.pipe(bb)
-          args = await reply
-
-          // TODO (RSC): Loop over args (to not only look at args[0])
-          if (args[0] instanceof FormData) {
-            const serializedFormData: Record<string, any> = {}
-
-            for (const [key, value] of args[0]) {
-              // Several form fields can share the same name. This should be
-              // represented as an array of the values of all those fields
-              if (serializedFormData[key] !== undefined) {
-                if (!Array.isArray(serializedFormData[key])) {
-                  serializedFormData[key] = [serializedFormData[key]]
-                }
-
-                serializedFormData[key].push(value)
-              } else {
-                serializedFormData[key] = value
-              }
-            }
-
-            args[0] = {
-              __formData__: true,
-              state: serializedFormData,
-            }
-          }
-        } else {
-          console.log('RSA: regular body')
-          let body = ''
-
-          for await (const chunk of req) {
-            body += chunk
-          }
-
-          if (body) {
-            args = await decodeReply(body)
-          }
-        }
-      }
+      args = await handleRsa(rsaId, req, args)
     }
 
     console.log('rscRequestHandler: args', args)
@@ -203,4 +156,64 @@ export async function createRscRequestHandler(
       }
     }
   }
+}
+
+async function handleRsa(
+  rsaId: string | undefined,
+  req: ExpressRequest,
+  args: unknown[],
+) {
+  if (!rsaId) {
+    return args
+  }
+
+  // TODO (RSC): For React Server Actions we need to limit the request
+  // size somehow
+  // https://nextjs.org/docs/app/api-reference/functions/server-actions#size-limitation
+  if (req.headers['content-type']?.startsWith('multipart/form-data')) {
+    console.log('RSA: multipart/form-data')
+    const bb = busboy({ headers: req.headers })
+    // TODO (RSC): The generic here could be typed better
+    const reply = decodeReplyFromBusboy<unknown[]>(bb)
+
+    req.pipe(bb)
+    args = await reply
+
+    // TODO (RSC): Loop over args (to not only look at args[0])
+    if (args[0] instanceof FormData) {
+      const serializedFormData: Record<string, any> = {}
+
+      for (const [key, value] of args[0]) {
+        // Several form fields can share the same name. This should be
+        // represented as an array of the values of all those fields
+        if (serializedFormData[key] !== undefined) {
+          if (!Array.isArray(serializedFormData[key])) {
+            serializedFormData[key] = [serializedFormData[key]]
+          }
+
+          serializedFormData[key].push(value)
+        } else {
+          serializedFormData[key] = value
+        }
+      }
+
+      args[0] = {
+        __formData__: true,
+        state: serializedFormData,
+      }
+    }
+  } else {
+    console.log('RSA: regular body')
+    let body = ''
+
+    for await (const chunk of req) {
+      body += chunk
+    }
+
+    if (body) {
+      args = await decodeReply(body)
+    }
+  }
+
+  return args
 }
