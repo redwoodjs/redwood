@@ -212,7 +212,8 @@ function createWebSocketServer() {
     // Event listener for incoming messages. The `data` is a Buffer
     ws.on('message', (data) => {
       const message = data.toString()
-      console.log('Received message:', message)
+      console.log('runFeServer.ts: Received message:')
+      console.log(message.slice(0, 120) + '...')
 
       // Broadcast the message to all connected clients
       wsServer.clients.forEach((client) => {
