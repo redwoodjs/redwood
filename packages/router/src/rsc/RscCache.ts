@@ -1,3 +1,15 @@
+class DummyWS {
+  readyState = WebSocket?.OPEN
+  addEventListener() {}
+  send() {}
+}
+
+if (typeof globalThis.WebSocket === 'undefined') {
+  // @ts-expect-error - We're just trying to make sure WebSocket is defined for
+  // when Vite analyzes this file during SSR
+  globalThis.WebSocket = DummyWS
+}
+
 export interface RscModel {
   __rwjs__Routes: [React.ReactElement]
   __rwjs__rsa_data?: unknown
@@ -114,7 +126,7 @@ export class RscCache {
     } else if (this.sendRetries >= 10) {
       console.error('Exhausted retries to send message to WebSocket server.')
     } else {
-      console.error('WebSocket connection is closed.')
+      console.error('RscCache: WebSocket connection is closed.')
     }
   }
 
