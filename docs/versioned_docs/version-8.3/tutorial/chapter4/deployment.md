@@ -32,7 +32,7 @@ Grove is currently under development and is not meant to your production-ready a
 You'll only need to do this once, and then you'll have the `grove` CLI command and can deploy any Redwood app directly from your development machine:
 
 ```bash
-curl -L https://install.grove.dev | sh
+curl -L https://grove.dev/install.sh | sh
 ```
 
 That will download a simple bash script and then run it, installing the Grove CLI tool, which is written in Go.
