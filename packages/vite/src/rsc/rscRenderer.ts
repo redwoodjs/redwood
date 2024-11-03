@@ -1,14 +1,12 @@
 import path from 'node:path'
 import type { ReadableStream } from 'node:stream/web'
 
-import { createElement } from 'react'
-
-import { renderToReadableStream } from 'react-server-dom-webpack/server.edge'
-
 import { getPaths } from '@redwoodjs/project-config'
 
 import { getEntriesFromDist } from '../lib/entries.js'
 import { StatusError } from '../lib/StatusError.js'
+
+import { importRscReact, importRsdwServer } from './utils.js'
 
 export type RenderInput = {
   rscId?: string | undefined
@@ -18,7 +16,9 @@ export type RenderInput = {
 
 let absoluteClientEntries: Record<string, string> = {}
 
-export function renderRscToStream(input: RenderInput): Promise<ReadableStream> {
+export async function renderRscToStream(
+  input: RenderInput,
+): Promise<ReadableStream> {
   return input.rscId ? renderRsc(input) : executeRsa(input)
 }
 
@@ -28,6 +28,15 @@ async function loadServerFile(filePath: string) {
 }
 
 const getRoutesComponent: any = async () => {
+  if (globalThis.__rwjs__vite_rsc_runtime) {
+    const routesPath = getPaths().web.routes
+
+    const routesMod =
+      await globalThis.__rwjs__vite_rsc_runtime.executeUrl(routesPath)
+
+    return routesMod.default
+  }
+
   const serverEntries = await getEntriesFromDist()
   console.log('rscRenderer.ts serverEntries', serverEntries)
 
@@ -82,13 +91,17 @@ function getBundlerConfig() {
     {},
     {
       get(_target, encodedId: string) {
-        console.log('Proxy get encodedId', encodedId)
+        console.log('rscRenderer.ts Proxy get encodedId', encodedId)
         const [filePath, name] = encodedId.split('#') as [string, string]
-        // filePath /Users/tobbe/dev/waku/examples/01_counter/dist/assets/rsc0.js
+        console.log('filePath', filePath)
+        console.log('name', name)
+        // filePath /Users/tobbe/tmp/rw-rsc-status/web/src/components/Counter/Counter.tsx
         // name Counter
 
         const filePathSlash = filePath.replaceAll('\\', '/')
-        const id = absoluteClientEntries[filePathSlash]
+        const id = globalThis.__rwjs__vite_rsc_runtime
+          ? filePath
+          : absoluteClientEntries[filePathSlash]
 
         console.log('absoluteClientEntries', absoluteClientEntries)
         console.log('filePath', filePathSlash)
@@ -125,6 +138,12 @@ async function renderRsc(input: RenderInput): Promise<ReadableStream> {
 
   console.log('renderRsc input', input)
 
+  // TODO (RSC): This is currently duplicated in executeRsa. The importing
+  // should be moved to the top of `createRscRequestHandler` so we only have to
+  // do it once. Then just pass the imported functions down to where they're
+  // used
+  const { createElement } = await importRscReact()
+  const { renderToReadableStream } = await importRsdwServer()
   const serverRoutes = await getRoutesComponent()
   const model: RscModel = {
     __rwjs__Routes: createElement(serverRoutes),
@@ -183,6 +202,13 @@ async function executeRsa(input: RenderInput): Promise<ReadableStream> {
 
   const data = await method(...input.args)
   console.log('rscRenderer.ts rsa return data', data)
+
+  // TODO (RSC): This is currently duplicated in renderRsc. See further comments
+  // there. Do we also need to use the importXyz() helper methods here?
+  const { createElement } = await import('react')
+  const { renderToReadableStream } = await import(
+    'react-server-dom-webpack/server.edge'
+  )
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscRenderer.ts executeRsa serverRoutes', serverRoutes)
