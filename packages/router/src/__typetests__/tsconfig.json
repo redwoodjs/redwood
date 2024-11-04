@@ -4,5 +4,5 @@
     "types": []
   },
   "include": ["./"],
-  "exclude": [],
+  "exclude": []
 }
