@@ -8751,7 +8751,7 @@ __metadata:
     publint: "npm:0.2.11"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
-    tstyche: "npm:2.1.1"
+    tstyche: "npm:3.0.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -8790,7 +8790,7 @@ __metadata:
     esbuild: "npm:0.24.0"
     mime-types: "npm:2.1.35"
     publint: "npm:0.2.11"
-    tstyche: "npm:2.1.1"
+    tstyche: "npm:3.0.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     ulid: "npm:2.3.0"
@@ -9028,7 +9028,7 @@ __metadata:
     react-hot-toast: "npm:2.4.1"
     stacktracey: "npm:2.1.8"
     ts-toolbelt: "npm:9.6.0"
-    tstyche: "npm:2.1.1"
+    tstyche: "npm:3.0.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -26961,7 +26961,7 @@ __metadata:
     prettier-plugin-sh: "npm:0.14.0"
     prompts: "npm:2.4.2"
     rimraf: "npm:6.0.1"
-    tstyche: "npm:2.1.1"
+    tstyche: "npm:3.0.0"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -29007,9 +29007,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tstyche@npm:2.1.1":
-  version: 2.1.1
-  resolution: "tstyche@npm:2.1.1"
+"tstyche@npm:3.0.0":
+  version: 3.0.0
+  resolution: "tstyche@npm:3.0.0"
   peerDependencies:
     typescript: 4.x || 5.x
   peerDependenciesMeta:
@@ -29017,7 +29017,7 @@ __metadata:
       optional: true
   bin:
     tstyche: ./build/bin.js
-  checksum: 10c0/f634f8593344c43623160a4728f433a5c91fb9b00cbd0ac491501c05979fc8dd825b0fd6d6249d8c95207ed365b5c2d7292fdef71f0341c7c2854b9bf5ab09b0
+  checksum: 10c0/dede68ed73dd1a3bab7cc68cc227e32120882c1995c50439fcb250ddf66ce0b79da4b7957999b57ffbc1e6da49814c2334c3b4fed54d07d5cc81c561a62eb2a1
   languageName: node
   linkType: hard
 
