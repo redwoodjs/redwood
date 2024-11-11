@@ -299,7 +299,7 @@ export function getDbAuthResponseBuilder(
         delete headers['set-cookie']
         delete headers['Set-Cookie']
         dbAuthResponse.multiValueHeaders = {
-          'Set-Cookie': setCookieHeaders,
+          'set-cookie': setCookieHeaders,
         }
       } else {
         headers['set-cookie'] = setCookieHeaders
