@@ -298,10 +298,7 @@ export function getDbAuthResponseBuilder(
       delete headers['set-cookie']
       delete headers['Set-Cookie']
 
-      // `'multiValueHeaders' in event` is true for both Netlify and Vercel
-      // but only Netlify actually supports it. Vercel will just ignore it
-      // https://github.com/vercel/vercel/issues/7820
-      if ('multiValueHeaders' in event && !('x-vercel-id' in headers)) {
+      if (supportsMultiValueHeaders(event)) {
         dbAuthResponse.multiValueHeaders = {
           // Netlify wants 'Set-Cookie' headers to be capitalized
           // https://github.com/redwoodjs/redwood/pull/10889
@@ -316,6 +313,13 @@ export function getDbAuthResponseBuilder(
 
     return dbAuthResponse
   }
+}
+
+// `'multiValueHeaders' in event` is true for both Netlify and Vercel
+// but only Netlify actually supports it. Vercel will just ignore it
+// https://github.com/vercel/vercel/issues/7820
+function supportsMultiValueHeaders(event: APIGatewayProxyEvent | Request) {
+  return 'multiValueHeaders' in event && !('x-vercel-id' in event.headers)
 }
 
 export const extractHashingOptions = (text: string): ScryptOptions => {
