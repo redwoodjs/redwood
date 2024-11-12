@@ -319,7 +319,10 @@ export function getDbAuthResponseBuilder(
 // but only Netlify actually supports it. Vercel will just ignore it
 // https://github.com/vercel/vercel/issues/7820
 function supportsMultiValueHeaders(event: APIGatewayProxyEvent | Request) {
-  return 'multiValueHeaders' in event && !('x-vercel-id' in event.headers)
+  return (
+    'multiValueHeaders' in event &&
+    (!event.headers || !('x-vercel-id' in event.headers))
+  )
 }
 
 export const extractHashingOptions = (text: string): ScryptOptions => {
