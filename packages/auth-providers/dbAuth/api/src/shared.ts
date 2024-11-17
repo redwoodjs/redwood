@@ -40,34 +40,34 @@ const getPort = () => {
 // When in development environment, check for auth impersonation cookie
 // if user has generated graphiql headers
 const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent | Request) => {
-  if (process.env.NODE_ENV === 'development') {
-    const impersationationHeader = getEventHeader(
-      event,
-      'rw-studio-impersonation-cookie',
-    )
-
-    if (impersationationHeader) {
-      return impersationationHeader
-    }
-
-    // TODO: Remove code below when we remove the old way of passing the cookie
-    // from Studio, and decide it's OK to break compatibility with older Studio
-    // versions
-    try {
-      if (!isFetchApiRequest(event)) {
-        const jsonBody = JSON.parse(event.body ?? '{}')
-        return (
-          jsonBody?.extensions?.headers?.cookie ||
-          jsonBody?.extensions?.headers?.Cookie
-        )
-      }
-    } catch {
-      // sometimes the event body isn't json
-      return
-    }
+  if (process.env.NODE_ENV !== 'development') {
+    return
   }
 
-  return
+  const impersationationHeader = getEventHeader(
+    event,
+    'rw-studio-impersonation-cookie',
+  )
+
+  if (impersationationHeader) {
+    return impersationationHeader
+  }
+
+  // TODO: Remove code below when we remove the old way of passing the cookie
+  // from Studio, and decide it's OK to break compatibility with older Studio
+  // versions
+  try {
+    if (!isFetchApiRequest(event)) {
+      const jsonBody = JSON.parse(event.body ?? '{}')
+      return (
+        jsonBody?.extensions?.headers?.cookie ||
+        jsonBody?.extensions?.headers?.Cookie
+      )
+    }
+  } catch {
+    // sometimes the event body isn't json
+    return
+  }
 }
 
 // decrypts session text using old CryptoJS algorithm (using node:crypto library)
@@ -97,6 +97,7 @@ const legacyDecryptSession = (encryptedText: string) => {
 export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
+
 // whether this encrypted session was made with the old CryptoJS algorithm
 export const isLegacySession = (text: string | undefined) => {
   if (!text) {
