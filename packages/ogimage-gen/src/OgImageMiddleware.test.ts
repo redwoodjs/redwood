@@ -183,7 +183,7 @@ describe('OgImageMiddleware', () => {
   test('importComponent should import the component using viteDevServer', async () => {
     const filePath = '/path/to/component.js'
     const invokeOptions = {
-      viteDevServer: {
+      viteSsrDevServer: {
         ssrLoadModule: vi.fn().mockResolvedValue({
           data: 'some data',
           output: 'Component output',
@@ -198,7 +198,7 @@ describe('OgImageMiddleware', () => {
       Component: 'Component output',
     })
 
-    expect(invokeOptions.viteDevServer.ssrLoadModule).toHaveBeenCalledWith(
+    expect(invokeOptions.viteSsrDevServer.ssrLoadModule).toHaveBeenCalledWith(
       filePath,
     )
   })
