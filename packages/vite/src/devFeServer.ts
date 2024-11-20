@@ -272,42 +272,44 @@ async function createServer() {
           // vite uses
           globalThis.__rwjs__client_references?.delete(id)
 
-          if (/^(["'])use client\1/.test(code)) {
-            console.log(
-              'rsc-record-and-transform-use-client-plugin: ' +
-                'adding client reference',
-              id,
-            )
-            globalThis.__rwjs__client_references?.add(id)
-
-            // TODO (RSC): Proper AST parsing would be more robust than simple
-            // regex matching. But this is a quick and dirty way to get started
-            const fns = code.matchAll(/export function (\w+)\(/g)
-            const consts = code.matchAll(/export const (\w+) = \(/g)
-            const names = [...fns, ...consts].map(([, name]) => name)
-
-            const result = [
-              `import { registerClientReference } from "react-server-dom-webpack/server.edge";`,
-              '',
-              ...names.map((name) => {
-                return name === 'default'
-                  ? `export default registerClientReference({}, "${id}", "${name}");`
-                  : `export const ${name} = registerClientReference({}, "${id}", "${name}");`
-              }),
-            ].join('\n')
-
-            console.log('rsc-record-and-transform-use-client-plugin result')
-            console.log(
-              result
-                .split('\n')
-                .map((line, i) => `  ${i + 1}: ${line}`)
-                .join('\n'),
-            )
-
-            return { code: result, map: null }
+          // If `code` doesn't start with "use client" or 'use client' we can
+          // skip this file
+          if (!/^(["'])use client\1/.test(code)) {
+            return undefined
           }
 
-          return undefined
+          console.log(
+            'rsc-record-and-transform-use-client-plugin: ' +
+              'adding client reference',
+            id,
+          )
+          globalThis.__rwjs__client_references?.add(id)
+
+          // TODO (RSC): Proper AST parsing would be more robust than simple
+          // regex matching. But this is a quick and dirty way to get started
+          const fns = code.matchAll(/export function (\w+)\(/g)
+          const consts = code.matchAll(/export const (\w+) = \(/g)
+          const names = [...fns, ...consts].map(([, name]) => name)
+
+          const result = [
+            `import { registerClientReference } from "react-server-dom-webpack/server.edge";`,
+            '',
+            ...names.map((name) => {
+              return name === 'default'
+                ? `export default registerClientReference({}, "${id}", "${name}");`
+                : `export const ${name} = registerClientReference({}, "${id}", "${name}");`
+            }),
+          ].join('\n')
+
+          console.log('rsc-record-and-transform-use-client-plugin result')
+          console.log(
+            result
+              .split('\n')
+              .map((line, i) => `  ${i + 1}: ${line}`)
+              .join('\n'),
+          )
+
+          return { code: result, map: null }
         },
       },
 
