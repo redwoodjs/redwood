@@ -7,27 +7,29 @@
     "directory": "packages/ogimage-gen"
   },
   "license": "MIT",
+  "type": "commonjs",
   "exports": {
     "./plugin": {
+      "types": "./dist/vite-plugin-ogimage-gen.d.ts",
       "import": "./dist/vite-plugin-ogimage-gen.js",
-      "default": "./cjsWrappers/plugin.js",
-      "types": "./dist/vite-plugin-ogimage-gen.d.ts"
+      "default": "./cjsWrappers/plugin.js"
     },
     "./middleware": {
+      "types": "./dist/OgImageMiddleware.d.ts",
       "import": "./dist/OgImageMiddleware.js",
-      "default": "./cjsWrappers/middleware.js",
       "react-server": "./empty.js",
-      "types": "./dist/OgImageMiddleware.d.ts"
+      "default": "./cjsWrappers/middleware.js"
     },
     "./hooks": {
+      "types": "./dist/hooks.d.ts",
       "import": "./dist/hooks.js",
-      "default": "./cjsWrappers/hooks.js",
-      "types": "./dist/hooks.d.ts"
+      "default": "./cjsWrappers/hooks.js"
     }
   },
   "files": [
     "dist",
-    "cjsWrappers"
+    "cjsWrappers",
+    "empty.js"
   ],
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
