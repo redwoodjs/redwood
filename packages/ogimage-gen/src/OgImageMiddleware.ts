@@ -304,9 +304,9 @@ export default class OgImageMiddleware {
     invokeOptions: MiddlewareInvokeOptions,
   ) {
     try {
-      if (invokeOptions.viteDevServer) {
+      if (invokeOptions.viteSsrDevServer) {
         const { data, output } =
-          await invokeOptions.viteDevServer.ssrLoadModule(filePath)
+          await invokeOptions.viteSsrDevServer.ssrLoadModule(filePath)
         return { data, Component: output }
       } else {
         const { data, output } = await import(filePath)

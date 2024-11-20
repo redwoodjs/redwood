@@ -24,7 +24,7 @@ const BASE_PATH = '/rw-rsc/'
 
 interface CreateRscRequestHandlerOptions {
   getMiddlewareRouter: () => Promise<Router.Instance<any>>
-  viteDevServer?: ViteDevServer
+  viteSsrDevServer?: ViteDevServer
 }
 
 export async function createRscRequestHandler(
@@ -59,7 +59,7 @@ export async function createRscRequestHandler(
         matchedMw?.handler as Middleware | undefined,
         {
           params: matchedMw?.params,
-          viteDevServer: options.viteDevServer,
+          viteSsrDevServer: options.viteSsrDevServer,
         },
       )
 
