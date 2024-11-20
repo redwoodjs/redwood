@@ -24,6 +24,13 @@ export async function renderRscToStream(
 
 async function loadServerFile(filePath: string) {
   console.log('rscRenderer.ts loadServerFile filePath', filePath)
+
+  if (globalThis.__rwjs__vite_rsc_runtime) {
+    const serverMod =
+      await globalThis.__rwjs__vite_rsc_runtime.executeUrl(filePath)
+    return serverMod.default ? serverMod.default : serverMod
+  }
+
   return import(`file://${filePath}`)
 }
 
@@ -203,12 +210,10 @@ async function executeRsa(input: RenderInput): Promise<ReadableStream> {
   const data = await method(...input.args)
   console.log('rscRenderer.ts rsa return data', data)
 
-  // TODO (RSC): This is currently duplicated in renderRsc. See further comments
-  // there. Do we also need to use the importXyz() helper methods here?
-  const { createElement } = await import('react')
-  const { renderToReadableStream } = await import(
-    'react-server-dom-webpack/server.edge'
-  )
+  // TODO (RSC): This is currently duplicated in renderRsc. See further
+  // comments there
+  const { createElement } = await importRscReact()
+  const { renderToReadableStream } = await importRsdwServer()
 
   const serverRoutes = await getRoutesComponent()
   console.log('rscRenderer.ts executeRsa serverRoutes', serverRoutes)
