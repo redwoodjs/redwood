@@ -23,6 +23,7 @@ import { createMiddlewareRouter } from './middleware/register.js'
 import { rscRoutesAutoLoader } from './plugins/vite-plugin-rsc-routes-auto-loader.js'
 import { rscRoutesImports } from './plugins/vite-plugin-rsc-routes-imports.js'
 import { rscSsrRouterImport } from './plugins/vite-plugin-rsc-ssr-router-import.js'
+import { rscTransformUseServerPlugin } from './plugins/vite-plugin-rsc-transform-server.js'
 import { createWebSocketServer } from './rsc/rscWebSocketServer.js'
 import { collectCssPaths, componentsModules } from './streaming/collectCss.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
@@ -183,6 +184,7 @@ async function createServer() {
   globalThis.__rwjs__vite_ssr_runtime =
     await createViteRuntime(viteSsrDevServer)
   globalThis.__rwjs__client_references = new Set<string>()
+  globalThis.__rwjs__server_references = new Set<string>()
 
   // const clientEntryFileSet = new Set<string>()
   // const serverEntryFileSet = new Set<string>()
@@ -258,7 +260,23 @@ async function createServer() {
           'busboy',
           'cookie',
         ],
-        // exclude: ['webpack']
+        // Without excluding `util` we get "TypeError: util.TextEncoder is not
+        // a constructor" in react-server-dom-webpack.server because it'll try
+        // to use Browserify's `util` instead of Node's. And Browserify's
+        // polyfill is missing TextEncoder+TextDecoder. The reason it's using
+        // the Browserify polyfill is because we have
+        // `vite-plugin-node-polyfills` as a dependency, and that'll add
+        // Browserify's `node-util` to `node_modules`, so when Vite goes to
+        // resolve `import { TextEncoder } from 'util` it'll find the one in
+        // `node_modules` instead of Node's internal version.
+        // We only see this in dev, and not in prod. I'm not entirely sure why
+        // but I have two guesses: 1. When RSC is enabled we don't actually use
+        // `vite-plugin-node-polyfill`, so some kind of tree shaking is
+        // happening, which prevents the issue from occurring. 2. In prod we
+        // only use Node's dependency resolution. Vite is not involved. And
+        // that difference in resolution is what prevents the issue from
+        // occurring.
+        exclude: ['util'],
       },
     },
     resolve: {
@@ -268,6 +286,10 @@ async function createServer() {
       {
         name: 'rsc-record-and-tranform-use-client-plugin',
         transform(code, id, _options) {
+          // This is called from `getRoutesComponent()` in `clientSsr.ts`
+          // during SSR. So options.ssr will be true in that case.
+          // TODO (RSC): When is this called outside of SSR?
+
           // TODO (RSC): We need to make sure this `id` always matches what
           // vite uses
           globalThis.__rwjs__client_references?.delete(id)
@@ -312,6 +334,7 @@ async function createServer() {
           return { code: result, map: null }
         },
       },
+      rscTransformUseServerPlugin('', {}),
 
       // The rscTransformUseClientPlugin maps paths like
       // /Users/tobbe/.../rw-app/node_modules/@tobbe.dev/rsc-test/dist/rsc-test.es.js
@@ -348,7 +371,8 @@ async function createServer() {
       // },
     },
     appType: 'custom',
-    cacheDir: './node_modules/.vite-rsc',
+    // Using a unique cache dir here to not clash with our other vite server
+    cacheDir: '../node_modules/.vite-rsc',
   })
 
   globalThis.__rwjs__vite_rsc_runtime = await createViteRuntime(viteRscServer)
