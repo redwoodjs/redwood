@@ -91,7 +91,7 @@ async function createServer() {
   // Create Vite server in middleware mode and configure the app type as
   // 'custom', disabling Vite's own HTML serving logic so parent server
   // can take control
-  const vite = await createViteServer({
+  const viteSsrDevServer = await createViteServer({
     configFile: rwPaths.web.viteConfig,
     envFile: false,
     define: {
@@ -180,7 +180,8 @@ async function createServer() {
     appType: 'custom',
   })
 
-  globalThis.__rwjs__vite_ssr_runtime = await createViteRuntime(vite)
+  globalThis.__rwjs__vite_ssr_runtime =
+    await createViteRuntime(viteSsrDevServer)
   globalThis.__rwjs__client_references = new Set<string>()
 
   // const clientEntryFileSet = new Set<string>()
@@ -355,7 +356,7 @@ async function createServer() {
   const handleWithMiddleware = (route?: RouteSpec) => {
     return createServerAdapter(async (req: Request) => {
       // Recreate middleware router on each request in dev
-      const middlewareRouter = await createMiddlewareRouter(vite)
+      const middlewareRouter = await createMiddlewareRouter(viteSsrDevServer)
       const middleware = middlewareRouter.find(
         req.method as HTTPMethod,
         req.url,
@@ -367,7 +368,7 @@ async function createServer() {
 
       const [mwRes] = await invoke(req, middleware, {
         route,
-        viteDevServer: vite,
+        viteSsrDevServer,
       })
 
       return mwRes.toResponse()
@@ -375,7 +376,7 @@ async function createServer() {
   }
 
   // use vite's connect instance as middleware
-  app.use(vite.middlewares)
+  app.use(viteSsrDevServer.middlewares)
 
   if (rscEnabled) {
     createWebSocketServer()
@@ -389,8 +390,9 @@ async function createServer() {
     app.use(
       '/rw-rsc',
       await createRscRequestHandler({
-        getMiddlewareRouter: async () => createMiddlewareRouter(vite),
-        viteDevServer: vite,
+        getMiddlewareRouter: async () =>
+          createMiddlewareRouter(viteSsrDevServer),
+        viteSsrDevServer,
       }),
     )
   }
@@ -403,12 +405,16 @@ async function createServer() {
       clientEntryPath: rwPaths.web.entryClient,
       getStylesheetLinks: (route) => {
         // In dev route is a RouteSpec, with additional properties
-        return getCssLinks({ rwPaths, route: route as RouteSpec, vite })
+        return getCssLinks({
+          rwPaths,
+          route: route as RouteSpec,
+          viteSsrDevServer,
+        })
       },
       // Recreate middleware router on each request in dev
-      getMiddlewareRouter: async () => createMiddlewareRouter(vite),
+      getMiddlewareRouter: async () => createMiddlewareRouter(viteSsrDevServer),
     },
-    vite,
+    viteSsrDevServer,
   )
 
   app.get('*', createServerAdapter(routeHandler))
@@ -442,15 +448,15 @@ process.stdin.on('data', async (data) => {
 function getCssLinks({
   rwPaths,
   route,
-  vite,
+  viteSsrDevServer,
 }: {
   rwPaths: Paths
   route?: RouteSpec
-  vite: ViteDevServer
+  viteSsrDevServer: ViteDevServer
 }) {
   const appAndRouteModules = componentsModules(
     [rwPaths.web.app, route?.filePath].filter(Boolean) as string[],
-    vite,
+    viteSsrDevServer,
   )
 
   const collectedCss = collectCssPaths(appAndRouteModules)

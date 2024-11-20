@@ -60,7 +60,7 @@ interface LoadAndRunRouteHooks {
     req: Request
     parsedParams?: Record<string, any>
   }
-  viteDevServer?: ViteDevServer
+  viteSsrDevServer?: ViteDevServer
   previousOutput?: RouteHookOutput
 }
 
@@ -71,12 +71,14 @@ const defaultRouteHookOutput = {
 export const loadAndRunRouteHooks = async ({
   paths = [],
   reqMeta,
-  viteDevServer,
+  viteSsrDevServer,
   previousOutput = defaultRouteHookOutput,
 }: LoadAndRunRouteHooks): Promise<RouteHookOutput> => {
   // Step 1, load the route hooks
   const loadModule = async (path: string) => {
-    return viteDevServer ? viteDevServer.ssrLoadModule(path) : import(path)
+    return viteSsrDevServer
+      ? viteSsrDevServer.ssrLoadModule(path)
+      : import(path)
   }
 
   let currentRouteHooks: RouteHooks
@@ -105,7 +107,7 @@ export const loadAndRunRouteHooks = async ({
         paths,
         reqMeta,
         previousOutput: rhOutput,
-        viteDevServer,
+        viteSsrDevServer,
       })
     } else {
       return rhOutput
