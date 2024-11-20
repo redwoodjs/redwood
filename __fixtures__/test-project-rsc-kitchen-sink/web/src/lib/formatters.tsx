@@ -4,6 +4,10 @@ import humanize from 'humanize-string'
 
 const MAX_STRING_LENGTH = 150
 
+export const bigIntDisplay = (value: bigint) => {
+  return value.toString()
+}
+
 export const formatEnum = (values: string | string[] | null | undefined) => {
   let output = ''
 
