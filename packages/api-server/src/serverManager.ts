@@ -94,24 +94,33 @@ export class ServerManager {
 
     // Try to gracefully close the server
     // If it doesn't close within 2 seconds, forcefully close it
-    await Promise.race([
-      new Promise<void>((resolve) => {
-        console.log(chalk.yellow('Shutting down API server.'))
-        this.httpServerProcess!.on('exit', () => resolve())
-        this.httpServerProcess!.kill()
-      }),
-      new Promise<void>((resolve) =>
-        setTimeout(() => {
-          console.log(
-            chalk.yellow(
-              'API server did not exit within 2 seconds, forcefully closing it.',
-            ),
-          )
-          this.httpServerProcess!.kill('SIGKILL')
-          resolve()
-        }, 2000),
-      ),
-    ])
+    await new Promise<void>((resolve) => {
+      console.log(chalk.yellow('Shutting down API server.'))
+
+      const cleanup = () => {
+        this.httpServerProcess?.removeAllListeners('exit')
+        clearTimeout(forceKillTimeout)
+      }
+
+      this.httpServerProcess!.on('exit', () => {
+        console.log(chalk.yellow('API server exited.'))
+        cleanup()
+        resolve()
+      })
+
+      const forceKillTimeout = setTimeout(() => {
+        console.log(
+          chalk.yellow(
+            'API server did not exit within 2 seconds, forcefully closing it.',
+          ),
+        )
+        cleanup()
+        this.httpServerProcess!.kill('SIGKILL')
+        resolve()
+      }, 2000)
+
+      this.httpServerProcess!.kill()
+    })
   }
 }
 
