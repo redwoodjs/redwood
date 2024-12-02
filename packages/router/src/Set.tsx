@@ -56,11 +56,10 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
 type PrivateSetProps<P> = P & Omit<
   SetProps<P>,
-  'private' | 'unauthenticated' | 'wrap'
+  'private' | 'unauthenticated'
 > & {
   /** The page name where a user will be redirected when not authenticated */
   unauthenticated: string
-  wrap?: WrapperType<P> | WrapperType<P>[]
 }
 
 /** @deprecated Please use `<PrivateSet>` instead */
