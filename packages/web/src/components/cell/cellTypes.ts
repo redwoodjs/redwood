@@ -55,7 +55,7 @@ export type CellLoadingProps<TVariables extends OperationVariables = any> = {
   queryResult?:
     | NonSuspenseCellQueryResult<TVariables, any>
     | SuspenseCellQueryResult
-}
+} & TVariables
 
 export type CellFailureProps<TVariables extends OperationVariables = any> = {
   queryResult?:
@@ -68,7 +68,7 @@ export type CellFailureProps<TVariables extends OperationVariables = any> = {
    */
   errorCode?: string
   updating?: boolean
-}
+} & TVariables
 
 // aka guarantee that all properties in T exist
 type Guaranteed<T> = {
@@ -114,7 +114,9 @@ export type CellSuccessProps<
     | NonSuspenseCellQueryResult<TVariables, TData>
     | SuspenseCellQueryResult
   updating?: boolean
-} & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
+} & TVariables &
+  // pre-computing makes the types more readable on hover
+  A.Compute<CellSuccessData<TData>>
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.
