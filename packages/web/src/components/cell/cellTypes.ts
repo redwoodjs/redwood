@@ -114,7 +114,9 @@ export type CellSuccessProps<
     | NonSuspenseCellQueryResult<TVariables, TData>
     | SuspenseCellQueryResult
   updating?: boolean
-} & TVariables & A.Compute<CellSuccessData<TData>> // pre-computing makes the types more readable on hover
+} & TVariables &
+  // pre-computing makes the types more readable on hover
+  A.Compute<CellSuccessData<TData>>
 
 /**
  * A coarse type for the `data` prop returned by `useQuery`.
