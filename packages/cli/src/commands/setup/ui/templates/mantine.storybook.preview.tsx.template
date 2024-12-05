@@ -7,13 +7,11 @@ import theme from 'config/mantine.config'
 import '@mantine/core/styles.css'
 
 /** @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} */
-const withMantine = (StoryFn: StoryFn) => {
-  return (
-    <MantineProvider theme={theme}>
-      <StoryFn />
-    </MantineProvider>
-  )
-}
+const withMantine = (Story: StoryFn) => (
+  <MantineProvider theme={theme}>
+    <Story />
+  </MantineProvider>
+)
 
 const preview: Preview = {
   decorators: [withMantine]
