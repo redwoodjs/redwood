@@ -1,14 +1,12 @@
 import * as React from 'react'
 
 import { MantineProvider } from '@mantine/core'
-import type { StoryFn } from '@storybook/react'
+import type { Preview, StoryFn } from '@storybook/react'
 import theme from 'config/mantine.config'
 
 import '@mantine/core/styles.css'
 
-/**
- * @param { import("@storybook/react").StoryFn} StoryFn
- */
+/** @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} */
 const withMantine = (StoryFn: StoryFn) => {
   return (
     <MantineProvider theme={theme}>
@@ -17,4 +15,6 @@ const withMantine = (StoryFn: StoryFn) => {
   )
 }
 
-export const decorators = [withMantine]
+const preview: Preview = {
+  decorators: [withMantine]
+}
