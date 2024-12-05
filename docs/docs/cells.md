@@ -148,7 +148,11 @@ For example, if you wanted to turn on Apollo's polling option, and prevent cachi
  
 ```jsx
 export const beforeQuery = (props) => {
-  return { variables: props, fetchPolicy: 'no-cache', pollInterval: 2500 }
+  return {
+    variables: props,
+    fetchPolicy: 'no-cache',
+    pollInterval: 2500
+  }
 }
 ```
 
@@ -159,7 +163,11 @@ export const beforeQuery = (props) => {
 export const beforeQuery = (
   props
 ): GraphQLQueryHookOptions<FindBlogPostQuery, FindBlogPostQueryVariables> => {
-  return { variables: props, fetchPolicy: 'no-cache', pollInterval: 2500 }
+  return {
+    variables: props,
+    fetchPolicy: 'no-cache',
+    pollInterval: 2500
+  }
 }
 ```
 
@@ -208,8 +216,8 @@ export const beforeQuery = (): GraphQLQueryHookOptions<
 // The cell will take 1 prop named "word" that is a string: <Cell word="abc">
 export const beforeQuery = ({ word }) => {
   return {
-    variables: { magicWord: word }
-   }
+    variables: { magicWord: word },
+  }
 }
 ```
 
