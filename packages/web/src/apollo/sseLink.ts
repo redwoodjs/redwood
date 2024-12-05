@@ -95,7 +95,7 @@ class SSELink extends ApolloLink {
     super()
 
     const { url, auth, headers, httpLinkConfig } = options
-    const { credentials, referrer, referrerPolicy } =
+    const { credentials, referrer, referrerPolicy, ...customHeaders } =
       httpLinkConfig?.headers || {}
 
     this.client = createClient({
@@ -105,12 +105,13 @@ class SSELink extends ApolloLink {
 
         // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
         if (!token) {
-          return { ...headers }
+          return { ...headers, ...customHeaders }
         }
         return {
           Authorization: `Bearer ${token}`,
           'auth-provider': auth.authProviderType,
           ...headers,
+          ...customHeaders
         }
       },
       credentials: mapCredentialsHeader(credentials),
