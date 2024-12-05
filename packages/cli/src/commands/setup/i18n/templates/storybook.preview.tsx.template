@@ -30,7 +30,7 @@ export const globalTypes: GlobalTypes = {
  */
 const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  React.useEffect(() => {
+  useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
 
@@ -41,8 +41,7 @@ const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
   )
 }
 
-const preview: Preview =
-{ 
+const preview: Preview = { 
   decorators: [withI18n]
 }
 
