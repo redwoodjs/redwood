@@ -103,15 +103,13 @@ class SSELink extends ApolloLink {
       headers: async () => {
         const token = await auth.tokenFn()
 
-        // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
-        if (!token) {
-          return { ...headers, ...customHeaders }
-        }
+        // Only add auth headers when there's a token. `token` is `null` when
+        // `!isAuthenticated`.
         return {
-          Authorization: `Bearer ${token}`,
-          'auth-provider': auth.authProviderType,
+          ...(token && { Authorization: `Bearer ${token}` }),
+          ...(token && { 'auth-provider': auth.authProviderType }),
           ...headers,
-          ...customHeaders
+          ...customHeaders,
         }
       },
       credentials: mapCredentialsHeader(credentials),
