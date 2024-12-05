@@ -166,7 +166,7 @@ describe('CustomIdFieldsCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure uuid={'42'} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -178,7 +178,7 @@ describe('CustomIdFieldsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success customIdFields={standard().customIdFields} />)
+      render(<Success uuid={'42'} customIdFields={standard().customIdFields} />)
     }).not.toThrow()
   })
 })
@@ -283,7 +283,7 @@ describe('CustomIdFieldCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure uuid={'42'} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -295,7 +295,7 @@ describe('CustomIdFieldCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success customIdField={standard().customIdField} />)
+      render(<Success uuid={'42'} customIdField={standard().customIdField} />)
     }).not.toThrow()
   })
 })
@@ -400,7 +400,7 @@ describe('UserProfileCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -412,7 +412,7 @@ describe('UserProfileCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success userProfile={standard().userProfile} />)
+      render(<Success id={42} userProfile={standard().userProfile} />)
     }).not.toThrow()
   })
 })
@@ -517,7 +517,7 @@ describe('UserProfileCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -529,7 +529,7 @@ describe('UserProfileCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success userProfile={standard().userProfile} />)
+      render(<Success id={42} userProfile={standard().userProfile} />)
     }).not.toThrow()
   })
 })
@@ -634,7 +634,7 @@ describe('UserCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -646,7 +646,7 @@ describe('UserCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success user={standard().user} />)
+      render(<Success id={42} user={standard().user} />)
     }).not.toThrow()
   })
 })
@@ -751,7 +751,7 @@ describe('UserProfileCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -763,7 +763,7 @@ describe('UserProfileCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success userProfile={standard().userProfile} />)
+      render(<Success id={42} userProfile={standard().userProfile} />)
     }).not.toThrow()
   })
 })
@@ -835,7 +835,7 @@ describe('BazingaCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -847,7 +847,7 @@ describe('BazingaCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success bazinga={standard().bazinga} />)
+      render(<Success id={42} bazinga={standard().bazinga} />)
     }).not.toThrow()
   })
 })
@@ -1040,7 +1040,7 @@ describe('UserProfileCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1052,7 +1052,7 @@ describe('UserProfileCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success userProfile={standard().userProfile} />)
+      render(<Success id={42} userProfile={standard().userProfile} />)
     }).not.toThrow()
   })
 })
@@ -1109,7 +1109,7 @@ describe('AddressCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={'42'} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1121,7 +1121,7 @@ describe('AddressCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success address={standard().address} />)
+      render(<Success id={'42'} address={standard().address} />)
     }).not.toThrow()
   })
 })
@@ -1232,7 +1232,7 @@ describe('AddressesCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={'42'} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1244,7 +1244,7 @@ describe('AddressesCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success addresses={standard().addresses} />)
+      render(<Success id={'42'} addresses={standard().addresses} />)
     }).not.toThrow()
   })
 })
@@ -1365,7 +1365,7 @@ describe('MembersCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1377,7 +1377,7 @@ describe('MembersCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success members={standard().members} />)
+      render(<Success id={42} members={standard().members} />)
     }).not.toThrow()
   })
 })
