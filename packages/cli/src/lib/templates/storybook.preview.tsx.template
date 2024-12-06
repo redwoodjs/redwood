@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import type { GlobalTypes } from '@storybook/csf'
-import type { Preview, StoryFn, StoryContext } from '@storybook/react'
+import type { Preview, StoryContext, StoryFn } from '@storybook/react'
 
 /** @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#global-types-and-the-toolbar-annotation | Global types and the toolbar annotation}  */
 export const globalTypes: GlobalTypes = {}
