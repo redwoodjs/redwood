@@ -584,11 +584,14 @@ const componentFiles = async (
     const outputComponentName = component
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
+      .replace(/\.ts\.template/, generateTypescript ? '.ts' : '.js')
       .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputComponentName.replace(/\.[jt]sx?/, '')
+      outputComponentName
+        .replace(/\.test|\.mock|\.stories/, '')
+        .replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.components,
