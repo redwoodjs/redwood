@@ -520,11 +520,14 @@ const pageFiles = async (
     const outputPageName = page
       .replace(/Names/, pluralName)
       .replace(/Name/, singularName)
+      .replace(/\.ts\.template/, generateTypescript ? '.ts' : '.js')
       .replace(/\.tsx\.template/, generateTypescript ? '.tsx' : '.jsx')
 
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
-      outputPageName.replace(/\.[jt]sx?/, '')
+      outputPageName
+        .replace(/\.test|\.mock|\.stories/, '')
+        .replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
       getPaths().web.pages,
