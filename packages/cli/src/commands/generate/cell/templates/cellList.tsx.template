@@ -1,8 +1,9 @@
 import type { ${operationName}, ${operationName}Variables  } from 'types/graphql'
 
 import type {
-  CellSuccessProps,
   CellFailureProps,
+  CellLoadingProps,
+  CellSuccessProps,
   TypedDocumentNode,
 } from '@redwoodjs/web'
 
@@ -17,15 +18,23 @@ export const QUERY: TypedDocumentNode<
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading: React.FC<
+  CellLoadingProps<<${operationName}Variables>
+> = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty: React.FC<
+  CellSuccessProps<${operationName}Variables>
+> = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure: React.FC<
+  CellFailureProps<${operationName}Variables>
+> = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ ${camelName} }: CellSuccessProps<${operationName}>) => {
+export const Success: React.FC<
+  CellSuccessProps<${operationName}, ${operationName}Variables>
+> = ({ ${camelName} }) => {
   return (
     <ul>
       {${camelName}.map((item) => {
