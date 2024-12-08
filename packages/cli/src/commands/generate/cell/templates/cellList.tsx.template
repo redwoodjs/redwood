@@ -19,7 +19,7 @@ export const QUERY: TypedDocumentNode<
 `
 
 export const Loading: React.FC<
-  CellLoadingProps<<${operationName}Variables>
+  CellLoadingProps<${operationName}Variables>
 > = () => <div>Loading...</div>
 
 export const Empty: React.FC<
