@@ -32,7 +32,7 @@ module.exports = {
     'jest-dom',
     '@redwoodjs',
   ],
-  ignorePatterns: ['node_modules', 'dist'],
+  ignorePatterns: ['node_modules', 'dist', "!.storybook/"],
   settings: {
     react: {
       version: 'detect',
