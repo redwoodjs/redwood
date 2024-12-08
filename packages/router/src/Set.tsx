@@ -1,6 +1,8 @@
 import type { ReactElement, ReactNode } from 'react'
 import React from 'react'
 
+import type { routes } from '@redwoodjs/router'
+
 export type WrapperType<WTProps> = (
   props: Omit<WTProps, 'wrap' | 'children'> & {
     children: ReactNode
@@ -28,7 +30,7 @@ type SetProps<P> = P & {
    *
    * @deprecated Please use `<PrivateSet>` instead and specify this prop there
    */
-  unauthenticated?: string
+  unauthenticated?: keyof typeof routes
   /**
    * Route is permitted when authenticated and user has any of the provided
    * roles such as "admin" or ["admin", "editor"]
@@ -57,7 +59,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 type PrivateSetProps<P> = P &
   Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
     /** The page name where a user will be redirected when not authenticated */
-    unauthenticated: string
+    unauthenticated: keyof typeof routes
   }
 
 /** @deprecated Please use `<PrivateSet>` instead */
