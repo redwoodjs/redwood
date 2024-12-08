@@ -98,6 +98,21 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
   const tasks = new Listr(
     [
       {
+        title: 'Confirm upgrade',
+        task: async (ctx, task) => {
+          const proceed = await task.prompt({
+            type: 'Confirm',
+            message:
+              'This will upgrade your RedwoodJS project to the latest version. Do you want to proceed?',
+            initial: true,
+          })
+          if (!proceed) {
+            task.skip('Upgrade cancelled by user.')
+            process.exit(0)
+          }
+        },
+      },
+      {
         title: 'Checking latest version',
         task: async (ctx) => setLatestVersionToContext(ctx, tag),
       },
@@ -183,7 +198,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
       },
     ],
     {
-      renderer: verbose && 'verbose',
+      renderer: verbose ? 'verbose' : 'default',
       rendererOptions: { collapseSubtasks: false },
     },
   )
