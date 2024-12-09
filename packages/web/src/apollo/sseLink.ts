@@ -95,7 +95,7 @@ class SSELink extends ApolloLink {
     super()
 
     const { url, auth, headers, httpLinkConfig } = options
-    const { credentials, referrer, referrerPolicy } =
+    const { credentials, referrer, referrerPolicy, ...customHeaders } =
       httpLinkConfig?.headers || {}
 
     this.client = createClient({
@@ -103,14 +103,13 @@ class SSELink extends ApolloLink {
       headers: async () => {
         const token = await auth.tokenFn()
 
-        // Only add auth headers when there's a token. `token` is `null` when `!isAuthenticated`.
-        if (!token) {
-          return { ...headers }
-        }
+        // Only add auth headers when there's a token. `token` is `null` when
+        // `!isAuthenticated`.
         return {
-          Authorization: `Bearer ${token}`,
-          'auth-provider': auth.authProviderType,
+          ...(token && { Authorization: `Bearer ${token}` }),
+          ...(token && { 'auth-provider': auth.authProviderType }),
           ...headers,
+          ...customHeaders,
         }
       },
       credentials: mapCredentialsHeader(credentials),
