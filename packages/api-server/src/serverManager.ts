@@ -102,7 +102,7 @@ export class ServerManager {
         clearTimeout(forceKillTimeout)
       }
 
-      this.httpServerProcess!.on('exit', () => {
+      this.httpServerProcess?.on('exit', () => {
         console.log(chalk.yellow('API server exited.'))
         cleanup()
         resolve()
@@ -115,11 +115,11 @@ export class ServerManager {
           ),
         )
         cleanup()
-        this.httpServerProcess!.kill('SIGKILL')
+        this.httpServerProcess?.kill('SIGKILL')
         resolve()
       }, 2000)
 
-      this.httpServerProcess!.kill()
+      this.httpServerProcess?.kill()
     })
   }
 }
