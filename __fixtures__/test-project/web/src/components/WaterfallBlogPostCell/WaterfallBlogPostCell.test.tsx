@@ -24,7 +24,7 @@ describe('WaterfallBlogPostCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -36,7 +36,9 @@ describe('WaterfallBlogPostCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success waterfallBlogPost={standard().waterfallBlogPost} />)
+      render(
+        <Success id={42} waterfallBlogPost={standard().waterfallBlogPost} />
+      )
     }).not.toThrow()
   })
 })

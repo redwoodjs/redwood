@@ -24,7 +24,7 @@ describe('BlogPostsCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure id={42} error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -36,7 +36,7 @@ describe('BlogPostsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success blogPosts={standard().blogPosts} />)
+      render(<Success id={42} blogPosts={standard().blogPosts} />)
     }).not.toThrow()
   })
 })
