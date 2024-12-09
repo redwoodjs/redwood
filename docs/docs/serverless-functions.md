@@ -846,7 +846,7 @@ Content-Type: application/json
 
 ### Other security considerations
 
-In addition to securing your serverless functions, you may consider logging, rate limiting and whitelisting as ways to protect your functions from abuse or misuse. Some of these benefits can be achieved i.e. middleware like [middy](https://middy.js.org/), since our functions should be compatible with the lambda functions ecosystem.
+In addition to securing your serverless functions, you may consider logging, rate limiting and whitelisting as ways to protect your functions from abuse or misuse. Some of these benefits can be achieved with middleware like [middy](https://middy.js.org/), since our functions should be compatible with the lambda functions ecosystem.
 
 #### Visibility via Logging
 
