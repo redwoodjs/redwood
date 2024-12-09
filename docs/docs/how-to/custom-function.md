@@ -63,8 +63,11 @@ Access to fetch at 'http://localhost:8911/serverTime' from origin 'http://localh
 We could set the headers for `serverTime` to allow requests from any origin... but maybe a better idea would be to never request `8911` from `8910` in the first place. Hence the `apiUrl`! We're making a request to `8910/.redwood/functions/serverTime`&mdash;still the same domain&mdash;but [Vite](https://github.com/redwoodjs/redwood/blob/main/packages/vite/src/index.ts#L119) proxies them to `localhost:8911/serverTime` for us. Since we can access the `apiUrl` on the frontend via [environment variables](environment-variables/#accessing-api-urls), we can now change the above fetch to work in development as well as in production:
 
 ```javascript
-const serverTime = await fetch(window.RWJS_API_URL + '/serverTime')
+const serverTime = await fetch(globalThis.RWJS_API_URL + '/serverTime')
 ```
+
+> Note: If you want to use [Redwood Authentication](https://docs.redwoodjs.com/docs/serverless-functions/#serverless-functions-with-redwood-user-authentication) on your custom function, your fetch needs to send credentials in a cookie via `fetch(globalThis.RWJS_API_URL + '/serverTime', { credentials: 'include' })`. If you are using dbAuth you might need to add the [Domain](https://docs.redwoodjs.com/docs/auth/dbauth/#cookie-domain) property to your cookie configuration. 
+
 
 ## Getting the Time
 
