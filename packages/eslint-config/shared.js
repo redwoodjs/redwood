@@ -32,7 +32,10 @@ module.exports = {
     'jest-dom',
     '@redwoodjs',
   ],
-  ignorePatterns: ['node_modules', 'dist', "!.storybook/"],
+  // In addition to this, eslint also has some implicit ignore patterns, like
+  // `node_modules`.
+  // See https://eslint.org/docs/latest/use/configure/ignore-deprecated
+  ignorePatterns: ['dist'],
   settings: {
     react: {
       version: 'detect',
