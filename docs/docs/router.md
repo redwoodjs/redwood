@@ -165,7 +165,7 @@ A `PrivateSet` makes all Routes inside that Set require authentication. When a u
 Here's an example of how you'd use a `PrivateSet`:
 
 ```jsx title="Routes.jsx"
-<Router>
+<Router useAuth={useAuth}>
   <Route path="/" page={HomePage} name="home" />
   <PrivateSet unauthenticated="home">
     <Route path="/admin" page={AdminPage} name="admin" />
@@ -178,7 +178,7 @@ For more fine-grained control, you can specify `roles` (which takes a string for
 To protect private routes for access by a single role:
 
 ```jsx title="Routes.jsx"
-<Router>
+<Router useAuth={useAuth}>
   <PrivateSet unauthenticated="forbidden" roles="admin">
     <Route path="/admin/users" page={UsersPage} name="users" />
   </PrivateSet>
@@ -190,7 +190,7 @@ To protect private routes for access by a single role:
 To protect private routes for access by multiple roles:
 
 ```jsx title="Routes.jsx"
-<Router>
+<Router useAuth={useAuth}>
   <PrivateSet unauthenticated="forbidden" roles={['admin', 'editor', 'publisher']}>
     <Route path="/admin/posts/{id:Int}/edit" page={EditPostPage} name="editPost" />
   </PrivateSet>
