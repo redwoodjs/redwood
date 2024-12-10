@@ -3,7 +3,7 @@ import React from 'react'
 
 import type { routes } from '@redwoodjs/router'
 
-type SetProps<P extends React.FC> = React.ComponentProps<P> & {
+type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
   /**
    * A react component that the children of the Set will be wrapped
    * in (typically a Layout component)
@@ -46,9 +46,9 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 }
 
 type PrivateSetProps<P> = Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
-    /** The page name where a user will be redirected when not authenticated */
-    unauthenticated: keyof typeof routes
-  }
+  /** The page name where a user will be redirected when not authenticated */
+  unauthenticated: keyof typeof routes
+}
 
 /** @deprecated Please use `<PrivateSet>` instead */
 export function Private<WrapperProps>(props: PrivateSetProps<WrapperProps>) {
