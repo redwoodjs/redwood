@@ -3,12 +3,6 @@ import React from 'react'
 
 import type { routes } from '@redwoodjs/router'
 
-export type WrapperType<WTProps> = (
-  props: Omit<WTProps, 'wrap' | 'children'> & {
-    children: ReactNode
-  },
-) => ReactElement | null
-
 type SetProps<P extends React.FC> = React.ComponentProps<P> & {
   /**
    * A react component that the children of the Set will be wrapped
