@@ -56,7 +56,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   return <>{props.children}</>
 }
 
-type PrivateSetProps<P> = P &
+type PrivateSetProps<P> = (P extends WrapperType<P> ? P : {}) &
   Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
     /** The page name where a user will be redirected when not authenticated */
     unauthenticated: keyof typeof routes
