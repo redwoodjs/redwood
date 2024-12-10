@@ -9,7 +9,7 @@ export type WrapperType<WTProps> = (
   },
 ) => ReactElement | null
 
-type SetProps<P> = P & {
+type SetProps<P> = (P extends WrapperType<P> ? P : {}) & {
   /**
    * P is the interface for the props that are forwarded to the wrapper
    * components. TypeScript will most likely infer this for you, but if you
