@@ -11,10 +11,8 @@ export type WrapperType<WTProps> = (
 
 type SetProps<P extends React.FC> = React.ComponentProps<P> & {
   /**
-   * P is the interface for the props that are forwarded to the wrapper
-   * components. TypeScript will most likely infer this for you, but if you
-   * need to you can specify it yourself in your JSX like so:
-   *   <Set<{theme: string}> wrap={ThemableLayout} theme="dark">
+   * A react component that the children of the Set will be wrapped
+   * in (typically a Layout component)
    */
   wrap?: P | P[]
   /**
@@ -45,10 +43,7 @@ type SetProps<P extends React.FC> = React.ComponentProps<P> & {
 }
 
 /**
- * TypeScript will often infer the type of the props you can forward to the
- * wrappers for you, but if you need to you can specify it yourself in your
- * JSX like so:
- *   <Set<{theme: string}> wrap={ThemeableLayout} theme="dark">
+ * A set containing public `<Route />`s
  */
 export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   // @MARK: Virtual Component, this is actually never rendered
@@ -68,6 +63,9 @@ export function Private<WrapperProps>(props: PrivateSetProps<WrapperProps>) {
   return <>{props.children}</>
 }
 
+/**
+ * A set containing private `<Route />`s that require authentication to access
+ */
 export function PrivateSet<WrapperProps>(props: PrivateSetProps<WrapperProps>) {
   // @MARK Virtual Component, this is actually never rendered
   // See analyzeRoutes in utils.tsx, inside the isSetNode block
