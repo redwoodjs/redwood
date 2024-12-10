@@ -9,14 +9,14 @@ export type WrapperType<WTProps> = (
   },
 ) => ReactElement | null
 
-type SetProps<P> = (P extends WrapperType<P> ? P : {}) & {
+type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
   /**
    * P is the interface for the props that are forwarded to the wrapper
    * components. TypeScript will most likely infer this for you, but if you
    * need to you can specify it yourself in your JSX like so:
    *   <Set<{theme: string}> wrap={ThemableLayout} theme="dark">
    */
-  wrap?: WrapperType<P> | WrapperType<P>[]
+  wrap?: P | P[]
   /**
    *`Routes` nested in a `<Set>` with `private` specified require
    * authentication. When a user is not authenticated and attempts to visit
@@ -56,8 +56,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
   return <>{props.children}</>
 }
 
-type PrivateSetProps<P> = (P extends WrapperType<P> ? P : {}) &
-  Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
+type PrivateSetProps<P> = Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
     /** The page name where a user will be redirected when not authenticated */
     unauthenticated: keyof typeof routes
   }
