@@ -29,50 +29,60 @@ export const Failure = ({ error }) => (
   <div>Error loading posts: {error.message}</div>
 )
 
-export const Success = ({ posts }) => {
-  return posts.map((post) => (
+export const Success = ({ posts }) => 
+  posts.map((post) => (
     <article key={post.id}>
       <h2>{post.title}</h2>
       <div>{post.body}</div>
     </article>
   ))
-}
 ```
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { FindPostsQuery, FindPostsQueryVariables } from 'types/graphql'
+import type {
+  CellFailureProps,
+  CellLoadingProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql`
-  query FindPosts {
-    posts {
-      id
-      title
-      body
-      createdAt
+export const QUERY: TypedDocumentNode<FindPostsQuery, FindPostsQueryVariables> =
+  gql`
+    query FindPostsQuery {
+      posts {
+        id
+        title
+        body
+        createdAt
+      }
     }
-  }
-`
+  `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading: React.FC<CellLoadingProps<FindPostsQueryVariables>> = () => (
+  <div>Loading...</div>
+)
 
-export const Empty = () => <div>No posts yet!</div>
+export const Empty: React.FC<CellSuccessProps<FindPostsQueryVariables>> = () => (
+  <div>No posts yet!</div>
+)
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure: React.FC<CellFailureProps<FindPostsQueryVariables>> = ({ error }) => (
   <div>Error loading posts: {error.message}</div>
 )
 
-export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
-  return posts.map((post) => (
+export const Success: React.FC<
+  CellSuccessProps<FindPostsQuery, FindPostsQueryVariables>
+> = ({ posts }) =>
+  posts.map((post) => (
     <article key={post.id}>
       <h2>{post.title}</h2>
       <div>{post.body}</div>
     </article>
   ))
-}
 ```
 
 </TabItem>
@@ -142,49 +152,57 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }) => {
-  return (
-    <ul>
-      {articles.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
-      })}
-    </ul>
-  )
-}
+export const Success = ({ articles }) => (
+  <ul>
+    {articles.map((item) => {
+      return <li key={item.id}>{JSON.stringify(item)}</li>
+    })}
+  </ul>
+)
 ```
 
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-import type { ArticlesQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
+import type {
+  CellFailureProps,
+  CellLoadingProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql`
-  query ArticlesQuery {
-    articles {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      articles {
+        id
+      }
     }
-  }
-`
+  `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+export const Loading: React.FC<CellLoadingProps<ArticlesQueryVariables>> = () => (
+  <div>Loading...</div>
 )
 
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
-  return (
-    <ul>
-      {articles.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
-      })}
-    </ul>
-  )
-}
+export const Empty: React.FC<CellSuccessProps<ArticlesQueryVariables>> = () => (
+  <div>Empty</div>
+)
+
+export const Failure: React.FC<CellFailureProps<ArticlesQueryVariables>> = ({
+  error,
+}) => <div style={{ color: 'red' }}>Error: {error?.message}</div>
+
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
+> = ({ articles }) => (
+  <ul>
+    {articles.map((item) => {
+      return <li key={item.id}>{JSON.stringify(item)}</li>
+    })}
+  </ul>
+)
 ```
 
 </TabItem>
@@ -227,14 +245,15 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles {
+        id
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -282,37 +301,47 @@ export const Success = ({ posts }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-import type { ArticlesQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
+import type {
+  CellFailureProps,
+  CellLoadingProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      posts {
+        id
+      }
     }
-  }
-`
+  `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+export const Loading: React.FC<CellLoadingProps<ArticlesQueryVariables>> = () => (
+  <div>Loading...</div>
 )
 
+export const Empty: React.FC<CellSuccessProps<ArticlesQueryVariables>> = () => (
+  <div>Empty</div>
+)
+
+export const Failure: React.FC<CellFailureProps<ArticlesQueryVariables>> = ({
+  error,
+}) => <div style={{ color: 'red' }}>Error: {error?.message}</div>
+
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
 // highlight-next-line
-export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
-  return (
-    <ul>
-      // highlight-next-line
-      {posts.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
-      })}
-    </ul>
-  )
-}
+> = ({ posts }) => (
+  <ul>
+    // highlight-next-line
+    {posts.map((item) => {
+      return <li key={item.id}>{JSON.stringify(item)}</li>
+    })}
+  </ul>
+)
 ```
 
 </TabItem>
@@ -413,14 +442,15 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      posts {
+        id
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -446,14 +476,15 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles: posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles: posts {
+        id
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -472,7 +503,10 @@ export const Success = ({ articles }) => { ... }
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => { ... }
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
+  // highlight-next-line
+> = ({ articles }) => { ... }
 ```
 
 </TabItem>
@@ -520,34 +554,51 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles: posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles: posts {
+        id
+      }
     }
-  }
-`
+  `
 
-export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
-
-export const Failure = ({ error }: CellFailureProps) => (
-  <div style={{ color: 'red' }}>Error: {error.message}</div>
+export const Loading: React.FC<CellLoadingProps<ArticlesQueryVariables>> = () => (
+  <div>Loading...</div>
 )
 
+export const Empty: React.FC<CellSuccessProps<ArticlesQueryVariables>> = () => (
+  <div>Empty</div>
+)
+
+export const Failure: React.FC<CellFailureProps<ArticlesQueryVariables>> = ({
+  error,
+}) => <div style={{ color: 'red' }}>Error: {error?.message}</div>
+
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
 // highlight-next-line
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
-  return (
-    <ul>
-      // highlight-next-line
-      {articles.map((item) => {
-        return <li key={item.id}>{JSON.stringify(item)}</li>
-      })}
-    </ul>
-  )
-}
+> = ({ posts }) => (
+  <ul>
+    // highlight-next-line
+    {posts.map((item) => {
+      return <li key={item.id}>{JSON.stringify(item)}</li>
+    })}
+  </ul>
+)
+
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
+  // highlight-next-line
+> = ({ articles }) => (
+  <ul>
+    // highlight-next-line
+    {articles.map((item) => {
+      return <li key={item.id}>{JSON.stringify(item)}</li>
+    })}
+  </ul>
+)
 ```
 
 </TabItem>
@@ -577,18 +628,19 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    articles: posts {
-      id
-      // highlight-start
-      title
-      body
-      createdAt
-      // highlight-end
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      articles: posts {
+        id
+        // highlight-start
+        title
+        body
+        createdAt
+        // highlight-end
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -627,23 +679,24 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
-  return (
-    // highlight-start
-    <>
-      {articles.map((article) => (
-        <article key={article.id}>
-          <header>
-            <h2>{article.title}</h2>
-          </header>
-          <p>{article.body}</p>
-          <div>Posted at: {article.createdAt}</div>
-        </article>
-      ))}
-    </>
-    // highlight-end
-  )
-}
+export const Success: React.FC<
+  CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
+  // highlight-next-line
+> = ({ articles }) => (
+  // highlight-start
+  <>
+    {articles.map((article) => (
+      <article key={article.id}>
+        <header>
+          <h2>{article.title}</h2>
+        </header>
+        <p>{article.body}</p>
+        <div>Posted at: {article.createdAt}</div>
+      </article>
+    ))}
+  </>
+  // highlight-end
+)
 ```
 
 </TabItem>
