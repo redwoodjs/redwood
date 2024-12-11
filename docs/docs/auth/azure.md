@@ -107,11 +107,11 @@ To add roles exposed via the `roles` claim, follow [Add app roles to your applic
 ## `logIn` Options
 
 `options` in `logIn(options?)` is of type [RedirectRequest](https://azuread.github.io/microsoft-authentication-library-for-js/ref/types/_azure_msal_browser.RedirectRequest.html) and is a good place to pass in optional [scopes](https://docs.microsoft.com/en-us/graph/permissions-reference#user-permissions) to be authorized.
-By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid` and `profile` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
+By default, MSAL sets `scopes` to [/.default](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope) which is built in for every application that refers to the static list of permissions configured on the application registration. Furthermore, MSAL will add `openid`, `profile` and `offline_access` to all requests. In the example below we explicit include `User.Read.All` in the login scope.
 
 ```jsx
 await logIn({
-  scopes: ['User.Read.All'], // becomes ['openid', 'profile', 'User.Read.All']
+  scopes: ['User.Read.All'], // becomes ['openid', 'profile', 'offline_access', 'User.Read.All']
 })
 ```
 
