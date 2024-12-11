@@ -681,9 +681,8 @@ export const Success = ({ articles }) => {
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
 export const Success: React.FC<
   CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>
-  // highlight-next-line
-> = ({ articles }) => (
   // highlight-start
+> = ({ articles }) => (
   <>
     {articles.map((article) => (
       <article key={article.id}>
