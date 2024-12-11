@@ -1,9 +1,10 @@
 import type { FindAuthorQuery, FindAuthorQueryVariables } from 'types/graphql'
 
 import type {
-  CellSuccessProps,
-  CellFailureProps,
-  TypedDocumentNode,
+   CellFailureProps,
+   CellLoadingProps,
+   CellSuccessProps,
+   TypedDocumentNode,
 } from '@redwoodjs/web'
 
 import Author from 'src/components/Author'
@@ -20,19 +21,21 @@ export const QUERY: TypedDocumentNode<
   }
 `
 
-export const Loading = () => <span>Loading...</span>
+export const Loading: React.FC<
+  CellLoadingProps<FindAuthorQueryVariables>
+> = () => <span>Loading...</span>
 
-export const Empty = () => <span>Empty</span>
+export const Empty: React.FC<
+  CellSuccessProps<FindAuthorQueryVariables>
+> = () => <span>Empty</span>
 
-export const Failure = ({
+export const Failure: React.FC<CellFailureProps<FindAuthorQueryVariables>> = ({
   error,
-}: CellFailureProps<FindAuthorQueryVariables>) => (
-  <span style={{ color: 'red' }}>Error: {error?.message}</span>
-)
+}) => <span style={{ color: 'red' }}>Error: {error?.message}</span>
 
-export const Success = ({
-  author,
-}: CellSuccessProps<FindAuthorQuery, FindAuthorQueryVariables>) => (
+export const Success: React.FC<
+  CellSuccessProps<FindAuthorQuery, FindAuthorQueryVariables>
+> = ({ author }) => (
   <span className="author-cell">
     <Author author={author} />
   </span>
