@@ -743,10 +743,8 @@ Let's say you have a dashboard area on your Redwood app, which can only be acces
 
 In order to display a loader while auth details are being retrieved you can add the `whileLoadingAuth` prop to your `PrivateSet` component:
 
-```jsx
-//Routes.js
-
-<Router>
+```jsx title="Routes.jsx"
+<Router useAuth={useAuth}>
   <PrivateSet
     wrap={DashboardLayout}
     unauthenticated="login"
