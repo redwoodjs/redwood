@@ -4,8 +4,9 @@ import type {
 } from 'types/graphql'
 
 import type {
-  CellSuccessProps,
   CellFailureProps,
+  CellLoadingProps,
+  CellSuccessProps,
   TypedDocumentNode,
 } from '@redwoodjs/web'
 
@@ -29,18 +30,18 @@ export const QUERY: TypedDocumentNode<
   }
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading: React.FC<
+  CellLoadingProps<FindBlogPostQueryVariables>
+> = () => <div>Loading...</div>
 
-export const Empty = () => <div>Empty</div>
+export const Empty: React.FC<
+  CellSuccessProps<FindBlogPostQueryVariables>
+> = () => <div>Empty</div>
 
-export const Failure = ({
-  error,
-}: CellFailureProps<FindBlogPostQueryVariables>) => (
-  <div style={{ color: 'red' }}>Error: {error?.message}</div>
-)
+export const Failure: React.FC<
+  CellFailureProps<FindBlogPostQueryVariables>
+> = ({ error }) => <div style={{ color: 'red' }}>Error: {error?.message}</div>
 
-export const Success = ({
-  blogPost,
-}: CellSuccessProps<FindBlogPostQuery, FindBlogPostQueryVariables>) => (
-  <BlogPost blogPost={blogPost} />
-)
+export const Success: React.FC<
+  CellSuccessProps<FindBlogPostQuery, FindBlogPostQueryVariables>
+> = ({ blogPost }) => <BlogPost blogPost={blogPost} />
