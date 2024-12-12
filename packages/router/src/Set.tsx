@@ -8,7 +8,7 @@ type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
    * A react component that the children of the Set will be wrapped
    * in (typically a Layout component)
    */
-  wrap?: P | P[]
+  wrap?: P
   /**
    *`Routes` nested in a `<Set>` with `private` specified require
    * authentication. When a user is not authenticated and attempts to visit
