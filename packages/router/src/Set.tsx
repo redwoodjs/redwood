@@ -3,10 +3,23 @@ import React from 'react'
 
 import type { AvailableRoutes } from '@redwoodjs/router'
 
-type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
+type SetProps<P> = (P extends React.FC<any>
+  ? React.ComponentProps<P>
+  : P extends React.FC<any>[]
+    ? React.ComponentProps<P[0]> &
+        React.ComponentProps<P[1]> &
+        React.ComponentProps<P[2]> &
+        React.ComponentProps<P[3]> &
+        React.ComponentProps<P[4]> &
+        React.ComponentProps<P[5]> &
+        React.ComponentProps<P[6]> &
+        React.ComponentProps<P[7]> &
+        React.ComponentProps<P[8]> &
+        React.ComponentProps<P[9]>
+    : unknown) & {
   /**
-   * A react component that the children of the Set will be wrapped
-   * in (typically a Layout component)
+   * A React component, or an array of React components, that the children of
+   * the Set will be wrapped in (typically a Layout component and/or a context)
    */
   wrap?: P
   /**
