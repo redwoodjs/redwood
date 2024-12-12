@@ -55,6 +55,8 @@ module.exports = {
     './shared.js',
     config.web.a11y && 'plugin:jsx-a11y/recommended',
   ].filter(Boolean),
+  // This is merged with `ignorePatterns` in shared.js
+  ignorePatterns: ['!.storybook/'],
   parserOptions: {
     requireConfigFile: false,
     babelOptions: getProjectBabelOptions(),
