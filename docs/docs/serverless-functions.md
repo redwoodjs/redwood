@@ -920,4 +920,3 @@ export const handler = async (event: APIGatewayEvent, context: Context) => {
 ## How-To
 
 We have prepared a simple [How-To](how-to/custom-function/) for you on how to setup a custom function to retrieve the server time, including consideration of CORS.
-
