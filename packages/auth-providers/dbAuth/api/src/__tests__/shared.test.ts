@@ -8,7 +8,7 @@ import * as error from '../errors'
 import {
   extractCookie,
   getSession,
-  cookieName,
+  generateCookieName,
   hashPassword,
   isLegacySession,
   legacyHashPassword,
@@ -79,17 +79,19 @@ describe('getSession()', () => {
   })
 })
 
-describe('cookieName()', () => {
+describe('generateCookieName()', () => {
   it('returns the default cookie name', () => {
-    expect(cookieName(undefined)).toEqual('session')
+    expect(generateCookieName(undefined)).toEqual('session')
   })
 
   it('allows you to pass a cookie name to use', () => {
-    expect(cookieName('my_cookie_name')).toEqual('my_cookie_name')
+    expect(generateCookieName('my_cookie_name')).toEqual('my_cookie_name')
   })
 
   it('replaces %port% with a port number', () => {
-    expect(cookieName('session_%port%_my_app')).toEqual('session_8911_my_app')
+    expect(generateCookieName('session_%port%_my_app')).toEqual(
+      'session_8911_my_app',
+    )
   })
 })
 
