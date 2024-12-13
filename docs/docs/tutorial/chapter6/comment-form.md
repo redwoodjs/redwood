@@ -1642,18 +1642,19 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```graphql title="web/src/components/CommentsCell/CommentsCell.tsx"
-export const QUERY = gql`
-  // highlight-start
-  query CommentsQuery($postId: Int!) {
-    comments(postId: $postId) {
-    // highlight-end
-      id
-      name
-      body
-      createdAt
+export const QUERY: TypedDocumentNode<CommentsQuery, CommentsQueryVariables> =
+  gql`
+    // highlight-start
+    query CommentsQuery($postId: Int!) {
+      comments(postId: $postId) {
+      // highlight-end
+        id
+        name
+        body
+        createdAt
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
