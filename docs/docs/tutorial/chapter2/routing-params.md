@@ -740,7 +740,9 @@ export const Failure = ({
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
+export const Success = ({
+  articles,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
   return (
     <>
       {articles.map((article) => (
@@ -828,7 +830,9 @@ export const Failure = ({
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ article }: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
+export const Success = ({
+  article,
+}: CellSuccessProps<FindArticleQuery, FindArticleQueryVariables>) => {
   // highlight-next-line
   return <Article article={article} />
 }
