@@ -355,10 +355,10 @@ import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
-export const QUERY: TypeDocumentNode<
+export const QUERY: TypedDocumentNode<
   FindArticleQuery,
   FindArticleQueryVariables
 > = gql`
@@ -712,13 +712,13 @@ import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
 // highlight-next-line
 import Article from 'src/components/Article'
 
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       articles: posts {
@@ -798,13 +798,13 @@ import type { FindArticleQuery, FindArticleQueryVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
 // highlight-next-line
 import Article from 'src/components/Article'
 
-export const QUERY: TypeDocumentNode<
+export const QUERY: TypedDocumentNode<
   FindArticleQuery,
   FindArticleQueryVariables
 > = gql`
