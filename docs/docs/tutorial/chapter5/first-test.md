@@ -316,7 +316,6 @@ export const Success = ({
     articles.map((article) => <Article article={article} />)
   }
 }
-
 ```
 
 </TabItem>
