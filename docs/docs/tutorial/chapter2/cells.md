@@ -48,10 +48,10 @@ import type { FindPosts, FindPostsVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
-export const QUERY: TypeDocumentNode<FindPosts, FindPostsVariables> = gql`
+export const QUERY: TypedDocumentNode<FindPosts, FindPostsVariables> = gql`
   query FindPosts {
     posts {
       id
@@ -169,10 +169,10 @@ import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       articles {
@@ -244,7 +244,7 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       // highlight-next-line
@@ -305,10 +305,10 @@ import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
 import type {
   CellFailureProps,
   CellSuccessProps,
-  TypeDocumentNode,
+  TypedDocumentNode,
 } from '@redwoodjs/web'
 
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       // highlight-next-line
@@ -441,7 +441,7 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       // highlight-next-line
@@ -475,7 +475,7 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       // highlight-next-line
@@ -550,7 +550,7 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       // highlight-next-line
@@ -612,7 +612,7 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY: TypeDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
   gql`
     query ArticlesQuery {
       articles: posts {
