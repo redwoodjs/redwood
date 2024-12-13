@@ -51,7 +51,7 @@ export type CellProps<
     CellPropsVariables<CellType, GQLVariables>
 >
 
-type InputVarProps<T> = T extends { [key: string]: never; } ? unknown : T
+type InputVarProps<T> = T extends { [key: string]: never } ? unknown : T
 
 export type CellLoadingProps<TVariables extends OperationVariables = any> = {
   queryResult?:
@@ -175,7 +175,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
     response: DataObject,
     options: {
       isDataEmpty: (data: DataObject) => boolean
-    }
+    },
   ) => boolean
   /**
    * If the query's in flight and there's no stale data, render this.

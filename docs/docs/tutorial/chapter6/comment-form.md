@@ -287,6 +287,7 @@ const CommentForm = () => {
           wrapperClassName="bg-red-100 text-red-900 text-sm p-3 rounded"
         />
         // highlight-end
+
         <Label
           name="name"
           className="block text-xs font-semibold text-gray-500 uppercase"
