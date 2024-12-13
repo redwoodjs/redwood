@@ -219,7 +219,14 @@ export default CommentForm
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+```tsx title="web/src/components/CommentForm/CommentForm.tsx"
+// highlight-start
+import type {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
+// highlight-end
+
 import {
   Form,
   // highlight-next-line
@@ -232,10 +239,13 @@ import {
   SubmitHandler,
 } from '@redwoodjs/forms'
 // highlight-next-line
-import { useMutation } from '@redwoodjs/web'
+import { useMutation, TypedDocumentNode } from '@redwoodjs/web'
 
 // highlight-start
-const CREATE = gql`
+const CREATE: TypedDocumentNode<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+> = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
     createComment(input: $input) {
       id
