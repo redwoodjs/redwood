@@ -230,16 +230,15 @@ export const beforeQuery = ({ page }) => {
 
 ```tsx title="web/src/components/BlogPostsCell/BlogPostsCell.tsx"
 export const beforeQuery = ({
-  urlName,
+  page,
 }: FindBlogPostQueryVariables): GraphQLQueryHookOptions<
   FindBlogPostQuery,
   FindBlogPostQueryVariables
 > => {
-  urlName = urlName ? parseInt(urlName, 10) : 1
+  page = page ? parseInt(page, 10) : 1
 
-  return { variables: { urlName } }
+  return { variables: { page } }
 }
-
 ```
 
 </TabItem>
