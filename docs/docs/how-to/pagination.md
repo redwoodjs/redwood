@@ -228,7 +228,7 @@ export const beforeQuery = ({ page }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```tsx title="web/src/components/BlogPostsCell/BlogPostsCell.jsx"
+```tsx title="web/src/components/BlogPostsCell/BlogPostsCell.tsx"
 export const beforeQuery = ({
   urlName,
 }: FindBlogPostQueryVariables): GraphQLQueryHookOptions<
