@@ -36,7 +36,7 @@ The Baremetal deploy runs several commands in sequence. These can be customized,
 
 1. `df` to make sure there is enough free disk space on the server
 2. `git clone --depth=1` to retrieve the latest code
-3. Symlink the latest deploy `.env` to the shared `.env` in the app dir
+3. Create a `.env` symlink to the shared `.env` in the app dir
 4. `yarn install` - installs dependencies
 5. Runs prisma DB migrations
 6. Generate Prisma client libs
