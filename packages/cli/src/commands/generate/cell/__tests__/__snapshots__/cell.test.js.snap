@@ -926,11 +926,13 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<MembersQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
+export const Success = ({
+  members,
+}: CellSuccessProps<MembersQuery, MembersQueryVariables>) => {
   return (
     <ul>
       {members.map((item) => {
