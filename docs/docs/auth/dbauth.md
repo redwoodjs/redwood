@@ -357,11 +357,15 @@ To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js`
 
 ```json title="api/src/functions/auth.js"
 cookie: {
-  HttpOnly: true,
-  Path: '/',
-  SameSite: 'Strict',
-  Secure: process.env.NODE_ENV !== 'development' ? true : false,
-  Domain: 'example.com'
+  attributes: {
+    HttpOnly: true,
+    Path: '/',
+    SameSite: 'Strict',
+    Secure: process.env.NODE_ENV !== 'development' ? true : false,
+    // highlight-next-line
+    Domain: 'example.com'
+  },
+  // name: 'session_%port%'
 }
 ```
 
