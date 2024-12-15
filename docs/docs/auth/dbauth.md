@@ -316,13 +316,18 @@ These options determine how the cookie that tracks whether the client is authori
 
 ```javascript
 cookie: {
-  HttpOnly: true,
-  Path: '/',
-  SameSite: 'Strict',
-  Secure: true,
-  // Domain: 'example.com',
+  attributes: {
+    HttpOnly: true,
+    Path: '/',
+    SameSite: 'Strict',
+    Secure: true,
+    // Domain: 'example.com',
+  },
+  // name: 'session_%port%' 
 }
 ```
+
+As shown above the cookie name defaults to `'session_%port%'` but can also be customized, where `%port% will be replaced with the port the api server is running on.
 
 ### CORS config
 
