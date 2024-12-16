@@ -327,7 +327,7 @@ cookie: {
 }
 ```
 
-As shown above the cookie name defaults to `'session_%port%'` but can also be customized, where `%port% will be replaced with the port the api server is running on.
+As shown above the cookie name defaults to `'session_%port%'` but can also be customized, where `%port%` will be replaced with the port the api server is running on.
 
 ### CORS config
 
