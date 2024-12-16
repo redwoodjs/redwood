@@ -355,7 +355,7 @@ By default, the session cookie will not have the `Domain` property set, which a 
 
 To do this, set the `cookie.attibutes.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-```json title="api/src/functions/auth.js"
+```js title="api/src/functions/auth.js"
 cookie: {
   attributes: {
     HttpOnly: true,
