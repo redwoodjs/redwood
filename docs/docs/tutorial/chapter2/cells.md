@@ -43,10 +43,15 @@ export const Success = ({ posts }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-import type { FindPosts } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import type { FindPosts, FindPostsVariables } from 'types/graphql'
 
-export const QUERY = gql`
+import type {
+  CellFailureProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+
+export const QUERY: TypedDocumentNode<FindPosts, FindPostsVariables> = gql`
   query FindPosts {
     posts {
       id
@@ -61,11 +66,13 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>No posts yet!</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<FindPostsVariables>) => (
   <div>Error loading posts: {error.message}</div>
 )
 
-export const Success = ({ posts }: CellSuccessProps<FindPosts>) => {
+export const Success = ({
+  posts,
+}: CellSuccessProps<FindPosts, FindPostsVariables>) => {
   return posts.map((post) => (
     <article key={post.id}>
       <h2>{post.title}</h2>
@@ -156,27 +163,37 @@ export const Success = ({ articles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-import type { ArticlesQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
 
-export const QUERY = gql`
-  query ArticlesQuery {
-    articles {
-      id
+import type {
+  CellFailureProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      articles {
+        id
+      }
     }
-  }
-`
+  `
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({
+  error,
+}: CellFailureProps<ArticlesQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({
+  articles,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
   return (
     <ul>
       {articles.map((item) => {
@@ -226,15 +243,16 @@ export const QUERY = gql`
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles {
-      id
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles {
+        id
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -281,29 +299,39 @@ export const Success = ({ posts }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-import type { ArticlesQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+import type { ArticlesQuery, ArticlesQueryVariables } from 'types/graphql'
 
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    posts {
-      id
+import type {
+  CellFailureProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      posts {
+        id
+      }
     }
-  }
-`
+  `
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({
+  error,
+}: CellFailureProps<ArticlesQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
 // highlight-next-line
-export const Success = ({ posts }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({
+  posts,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
   return (
     <ul>
       // highlight-next-line
@@ -363,7 +391,7 @@ export default HomePage
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/pages/HomePage/HomePage.tsx"
+```tsx title="web/src/pages/HomePage/HomePage.tsx"
 import { Metadata } from '@redwoodjs/web'
 
 // highlight-next-line
@@ -413,14 +441,15 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      posts {
+        id
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>
@@ -446,13 +475,14 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles: posts {
-      id
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles: posts {
+        id
+      }
     }
-  }
 `
 ```
 
@@ -472,7 +502,7 @@ export const Success = ({ articles }) => { ... }
 <TabItem value="ts" label="TypeScript">
 
 ```ts
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => { ... }
+export const Success = ({ articles }: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => { ... }
 ```
 
 </TabItem>
@@ -519,26 +549,31 @@ export const Success = ({ articles }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    // highlight-next-line
-    articles: posts {
-      id
+```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      // highlight-next-line
+      articles: posts {
+        id
+      }
     }
-  }
-`
+  `
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({
+  error,
+}: CellFailureProps<ArticlesQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-// highlight-next-line
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({
+  // highlight-next-line
+  articles,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
   return (
     <ul>
       // highlight-next-line
@@ -577,17 +612,18 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const QUERY = gql`
-  query ArticlesQuery {
-    articles: posts {
-      id
-      // highlight-start
-      title
-      body
-      createdAt
-      // highlight-end
+export const QUERY: TypedDocumentNode<ArticlesQuery, ArticlesQueryVariables> =
+  gql`
+    query ArticlesQuery {
+      articles: posts {
+        id
+        // highlight-start
+        title
+        body
+        createdAt
+        // highlight-end
+      }
     }
-  }
 `
 ```
 
@@ -627,7 +663,9 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/ArticlesCell/ArticlesCell.tsx"
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
+export const Success = ({
+  articles,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
   return (
     // highlight-start
     <>

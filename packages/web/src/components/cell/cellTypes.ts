@@ -51,11 +51,13 @@ export type CellProps<
     CellPropsVariables<CellType, GQLVariables>
 >
 
+type InputVarProps<T> = T extends { [key: string]: never } ? unknown : T
+
 export type CellLoadingProps<TVariables extends OperationVariables = any> = {
   queryResult?:
     | NonSuspenseCellQueryResult<TVariables, any>
     | SuspenseCellQueryResult
-} & TVariables
+} & InputVarProps<TVariables>
 
 export type CellFailureProps<TVariables extends OperationVariables = any> = {
   queryResult?:
@@ -68,7 +70,7 @@ export type CellFailureProps<TVariables extends OperationVariables = any> = {
    */
   errorCode?: string
   updating?: boolean
-} & TVariables
+} & InputVarProps<TVariables>
 
 // aka guarantee that all properties in T exist
 type Guaranteed<T> = {
@@ -114,7 +116,7 @@ export type CellSuccessProps<
     | NonSuspenseCellQueryResult<TVariables, TData>
     | SuspenseCellQueryResult
   updating?: boolean
-} & TVariables &
+} & InputVarProps<TVariables> &
   // pre-computing makes the types more readable on hover
   A.Compute<CellSuccessData<TData>>
 
