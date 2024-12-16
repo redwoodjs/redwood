@@ -323,7 +323,7 @@ cookie: {
     Secure: true,
     // Domain: 'example.com',
   },
-  // name: 'session_%port%' 
+  // name: 'session_%port%',
 }
 ```
 
@@ -566,7 +566,7 @@ export const handler = async (event, context) => {
         Path: '/',
         SameSite: 'Strict',
         Secure: process.env.NODE_ENV !== 'development' ? true : false,
-      }
+      },
     },
 
     forgotPassword: forgotPasswordOptions,
