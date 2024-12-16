@@ -561,10 +561,12 @@ export const handler = async (event, context) => {
     },
 
     cookie: {
-      HttpOnly: true,
-      Path: '/',
-      SameSite: 'Strict',
-      Secure: process.env.NODE_ENV !== 'development' ? true : false,
+      attributes: {
+        HttpOnly: true,
+        Path: '/',
+        SameSite: 'Strict',
+        Secure: process.env.NODE_ENV !== 'development' ? true : false,
+      }
     },
 
     forgotPassword: forgotPasswordOptions,
