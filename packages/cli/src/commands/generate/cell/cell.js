@@ -101,8 +101,8 @@ export const files = async ({ name, typescript, ...options }) => {
     generator: 'cell',
     templatePath: 'test.js.template',
     templateVars: {
-      idName,
-      mockIdValues,
+      idName: shouldGenerateList ? undefined : idName,
+      mockIdValues: shouldGenerateList ? undefined : mockIdValues,
     },
   })
 

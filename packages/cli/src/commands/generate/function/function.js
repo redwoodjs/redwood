@@ -32,7 +32,7 @@ export const files = async ({
     apiPathSection: 'functions',
     generator: 'function',
     templatePath: 'function.ts.template',
-    templateVars: { ...rest },
+    templateVars: { ...rest, typescript: generateTypescript },
     outputPath: path.join(
       getPaths().api.functions,
       functionName,
