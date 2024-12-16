@@ -4,7 +4,7 @@ import type {
   ApolloClient,
   NetworkStatus,
   OperationVariables,
-  QueryReference,
+  QueryRef,
   UseBackgroundQueryResult,
 } from '@apollo/client'
 import type { DocumentNode } from 'graphql'
@@ -200,7 +200,7 @@ export interface CreateCellProps<CellProps, CellVariables> {
 export type SuspendingSuccessProps = React.PropsWithChildren<
   Record<string, unknown>
 > & {
-  queryRef: QueryReference<DataObject> // from useBackgroundQuery
+  queryRef: QueryRef<DataObject> // from useBackgroundQuery
   suspenseQueryResult: SuspenseCellQueryResult<DataObject, any>
   userProps: Record<string, any> // we don't really care about the types here, we are just forwarding on
 }
