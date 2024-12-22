@@ -166,7 +166,7 @@ describe('CustomIdFieldsCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure uuid={'42'} error={new Error('Oh no')} />)
+      render(<Failure error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -178,7 +178,7 @@ describe('CustomIdFieldsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success uuid={'42'} customIdFields={standard().customIdFields} />)
+      render(<Success customIdFields={standard().customIdFields} />)
     }).not.toThrow()
   })
 })
@@ -926,11 +926,13 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({ error }: CellFailureProps<MembersQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ members }: CellSuccessProps<MembersQuery>) => {
+export const Success = ({
+  members,
+}: CellSuccessProps<MembersQuery, MembersQueryVariables>) => {
   return (
     <ul>
       {members.map((item) => {
@@ -1232,7 +1234,7 @@ describe('AddressesCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure id={'42'} error={new Error('Oh no')} />)
+      render(<Failure error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1244,7 +1246,7 @@ describe('AddressesCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success id={'42'} addresses={standard().addresses} />)
+      render(<Success addresses={standard().addresses} />)
     }).not.toThrow()
   })
 })
@@ -1365,7 +1367,7 @@ describe('MembersCell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure id={42} error={new Error('Oh no')} />)
+      render(<Failure error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -1377,7 +1379,7 @@ describe('MembersCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success id={42} members={standard().members} />)
+      render(<Success members={standard().members} />)
     }).not.toThrow()
   })
 })

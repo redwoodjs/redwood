@@ -49,6 +49,7 @@
 export * from 'react-hook-form'
 
 export { CheckboxField } from './CheckboxField'
+export type { EmptyAsValue, RedwoodRegisterOptions } from './coercion'
 export { FieldError } from './FieldError'
 export { Form, FormProps } from './Form'
 export { default as FormError } from './FormError'
