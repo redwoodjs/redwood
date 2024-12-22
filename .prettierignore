@@ -9,6 +9,10 @@
 /docs/build
 /docs/versioned_docs
 /docs/versioned_sidebars
+# https://github.com/prettier/prettier/issues/16952
+/docs/docs/how-to/pagination.md
+/docs/docs/tutorial/chapter2/routing-params.md
+/docs/docs/tutorial/chapter6/comment-form.md
 
 # Ignore the .nx directory
 /.nx
