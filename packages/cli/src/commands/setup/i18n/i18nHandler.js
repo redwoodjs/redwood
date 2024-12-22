@@ -54,7 +54,6 @@ export const handler = async ({ force }) => {
                     'workspace',
                     'web',
                     'add',
-                    'i18n',
                     'i18next',
                     'react-i18next',
                     'i18next-browser-languagedetector',
