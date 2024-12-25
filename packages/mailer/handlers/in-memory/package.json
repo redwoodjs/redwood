@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-in-memory",
-  "version": "8.4.1",
+  "version": "8.4.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",

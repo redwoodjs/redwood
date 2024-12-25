@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "8.4.1",
+  "version": "8.4.2",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
