@@ -316,13 +316,18 @@ These options determine how the cookie that tracks whether the client is authori
 
 ```javascript
 cookie: {
-  HttpOnly: true,
-  Path: '/',
-  SameSite: 'Strict',
-  Secure: true,
-  // Domain: 'example.com',
+  attributes: {
+    HttpOnly: true,
+    Path: '/',
+    SameSite: 'Strict',
+    Secure: true,
+    // Domain: 'example.com',
+  },
+  // name: 'session_%port%',
 }
 ```
+
+As shown above the cookie name defaults to `'session_%port%'` but can also be customized, where `%port%` will be replaced with the port the api server is running on.
 
 ### CORS config
 
@@ -348,15 +353,19 @@ See [WebAuthn Configuration](#function-config) section below.
 
 By default, the session cookie will not have the `Domain` property set, which a browser will default to be the [current domain only](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#define_where_cookies_are_sent). If your site is spread across multiple domains (for example, your site is at `example.com` but your api-side is deployed to `api.example.com`) you'll need to explicitly set a Domain so that the cookie is accessible to both.
 
-To do this, set the `cookie.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
+To do this, set the `cookie.attributes.Domain` property in your `api/src/functions/auth.js` configuration, set to the root domain of your site, which will allow it to be read by all subdomains as well. For example:
 
-```json title="api/src/functions/auth.js"
+```js title="api/src/functions/auth.js"
 cookie: {
-  HttpOnly: true,
-  Path: '/',
-  SameSite: 'Strict',
-  Secure: process.env.NODE_ENV !== 'development' ? true : false,
-  Domain: 'example.com'
+  attributes: {
+    HttpOnly: true,
+    Path: '/',
+    SameSite: 'Strict',
+    Secure: process.env.NODE_ENV !== 'development' ? true : false,
+    // highlight-next-line
+    Domain: 'example.com'
+  },
+  // name: 'session_%port%'
 }
 ```
 
@@ -552,10 +561,12 @@ export const handler = async (event, context) => {
     },
 
     cookie: {
-      HttpOnly: true,
-      Path: '/',
-      SameSite: 'Strict',
-      Secure: process.env.NODE_ENV !== 'development' ? true : false,
+      attributes: {
+        HttpOnly: true,
+        Path: '/',
+        SameSite: 'Strict',
+        Secure: process.env.NODE_ENV !== 'development' ? true : false,
+      },
     },
 
     forgotPassword: forgotPasswordOptions,

@@ -25,11 +25,11 @@ import {
 
 import * as DbAuthError from './errors'
 import {
-  cookieName,
   decryptSession,
   encryptSession,
   extractCookie,
   extractHashingOptions,
+  generateCookieName,
   getDbAuthResponseBuilder,
   getSession,
   hashPassword,
@@ -414,7 +414,7 @@ export class DbAuthHandler<
     deleteHeaders.append(
       'set-cookie',
       [
-        `${cookieName(this.options.cookie?.name)}=`,
+        `${generateCookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     )
@@ -1245,7 +1245,7 @@ export class DbAuthHandler<
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = encryptSession(session)
     const sessionCookieString = [
-      `${cookieName(this.options.cookie?.name)}=${encrypted}`,
+      `${generateCookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

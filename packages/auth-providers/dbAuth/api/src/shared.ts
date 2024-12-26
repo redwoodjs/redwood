@@ -160,22 +160,24 @@ export const encryptSession = (dataString: string) => {
 // returns the actual value of the session cookie
 export const getSession = (
   text: string | undefined,
-  cookieNameOption: string | undefined,
+  cookieNameTemplate: string | undefined,
 ) => {
   if (typeof text === 'undefined' || text === null) {
     return null
   }
 
+  const cookieName = generateCookieName(cookieNameTemplate)
+
   const cookies = text.split(';')
   const sessionCookie = cookies.find((cookie) => {
-    return cookie.split('=')[0].trim() === cookieName(cookieNameOption)
+    return cookie.split('=')[0].trim() === cookieName
   })
 
-  if (!sessionCookie || sessionCookie === `${cookieName(cookieNameOption)}=`) {
+  if (!sessionCookie || sessionCookie === `${cookieName}=`) {
     return null
   }
 
-  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '').trim()
+  return sessionCookie.replace(`${cookieName}=`, '').trim()
 }
 
 // Convenience function to get session, decrypt, and return session data all
@@ -183,7 +185,7 @@ export const getSession = (
 // name of the dbAuth session cookie
 export const dbAuthSession = (
   event: APIGatewayProxyEvent | Request,
-  cookieNameOption: string | undefined,
+  cookieNameTemplate: string | undefined,
 ) => {
   const sessionCookie = extractCookie(event)
 
@@ -193,7 +195,7 @@ export const dbAuthSession = (
 
   // This is a browser making a request
   const [session, _csrfToken] = decryptSession(
-    getSession(sessionCookie, cookieNameOption),
+    getSession(sessionCookie, cookieNameTemplate),
   )
   return session
 }
@@ -252,9 +254,9 @@ export const legacyHashPassword = (text: string, salt?: string) => {
   ]
 }
 
-export const cookieName = (name: string | undefined) => {
+export function generateCookieName(template: string | undefined) {
   const port = getPort()
-  const cookieName = name?.replace('%port%', '' + port) ?? 'session'
+  const cookieName = template?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
 }
