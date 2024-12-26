@@ -8171,7 +8171,7 @@ __metadata:
     semver: "npm:7.6.3"
     smol-toml: "npm:1.3.1"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.23.5"
+    systeminformation: "npm:5.23.8"
     terminal-link: "npm:2.1.1"
     title-case: "npm:3.0.3"
     tsx: "npm:4.19.1"
@@ -28380,6 +28380,16 @@ __metadata:
   bin:
     systeminformation: lib/cli.js
   checksum: 10c0/849283b2886c46ff5e79594e939c87202b5283b8aa16cd0d665c595781dba51913060728bae95b94837b78c3a515a0f00ab0a0471604990c5c778f555bd075ea
+  conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
+  languageName: node
+  linkType: hard
+
+"systeminformation@npm:5.23.8":
+  version: 5.23.8
+  resolution: "systeminformation@npm:5.23.8"
+  bin:
+    systeminformation: lib/cli.js
+  checksum: 10c0/d4d750d82345081a6a12200ec8f559ff65a8c28d9797d4368c246682ee02131ee08a4227e4401b6680839f0f0e1a72758071fd84eae2f0584a89e948d583703f
   conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
