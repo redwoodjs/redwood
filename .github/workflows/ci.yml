@@ -29,7 +29,7 @@ jobs:
       ssr: ${{ steps.detect-changes.outputs.ssr }}
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
         with:
@@ -101,7 +101,7 @@ jobs:
         if: matrix.os != 'ubuntu-latest'
         run: echo "echo "::remove-matcher owner=tsc::""
 
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -144,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -218,7 +218,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -308,7 +308,7 @@ jobs:
 
     steps:
       - name: Checkout the framework code
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Set up job
         uses: ./.github/actions/set-up-job
@@ -416,7 +416,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -524,7 +524,7 @@ jobs:
       REDWOOD_REDIRECT_TELEMETRY: 'http://127.0.0.1:48619' # Random port
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -566,7 +566,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -661,7 +661,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -732,7 +732,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -809,7 +809,7 @@ jobs:
       REDWOOD_DISABLE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -888,7 +888,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
@@ -920,7 +920,7 @@ jobs:
       REDWOOD_VERBOSE_TELEMETRY: 1
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Set up job
         uses: ./.github/actions/set-up-job
 
