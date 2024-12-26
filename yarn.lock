@@ -8496,7 +8496,7 @@ __metadata:
     rimraf: "npm:6.0.1"
     source-map: "npm:0.7.4"
     string-env-interpolation: "npm:1.0.1"
-    systeminformation: "npm:5.23.5"
+    systeminformation: "npm:5.23.8"
     terminal-link: "npm:2.1.1"
     ts-node: "npm:10.9.2"
     tsx: "npm:4.19.1"
@@ -8850,7 +8850,7 @@ __metadata:
     "@whatwg-node/fetch": "npm:0.9.21"
     ci-info: "npm:4.0.0"
     envinfo: "npm:7.14.0"
-    systeminformation: "npm:5.23.5"
+    systeminformation: "npm:5.23.8"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
     uuid: "npm:10.0.0"
@@ -14898,7 +14898,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     klaw-sync: "npm:6.0.0"
     semver: "npm:7.6.3"
-    systeminformation: "npm:5.23.5"
+    systeminformation: "npm:5.23.8"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.19.1"
     untildify: "npm:4.0.0"
@@ -28371,16 +28371,6 @@ __metadata:
     "@pkgr/core": "npm:^0.1.0"
     tslib: "npm:^2.6.2"
   checksum: 10c0/d8b89e1bf30ba3ffb469d8418c836ad9c0c062bf47028406b4d06548bc66af97155ea2303b96c93bf5c7c0f0d66153a6fbd6924c76521b434e6a9898982abc2e
-  languageName: node
-  linkType: hard
-
-"systeminformation@npm:5.23.5":
-  version: 5.23.5
-  resolution: "systeminformation@npm:5.23.5"
-  bin:
-    systeminformation: lib/cli.js
-  checksum: 10c0/849283b2886c46ff5e79594e939c87202b5283b8aa16cd0d665c595781dba51913060728bae95b94837b78c3a515a0f00ab0a0471604990c5c778f555bd075ea
-  conditions: (os=darwin | os=linux | os=win32 | os=freebsd | os=openbsd | os=netbsd | os=sunos | os=android)
   languageName: node
   linkType: hard
 
