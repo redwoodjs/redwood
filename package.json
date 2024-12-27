@@ -101,7 +101,7 @@
     "cypress-fail-fast": "7.1.1",
     "cypress-wait-until": "3.0.2",
     "dependency-cruiser": "16.4.2",
-    "dotenv": "16.4.5",
+    "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-plugin-react": "7.36.1",
     "eslint-plugin-react-hooks": "4.6.0",
