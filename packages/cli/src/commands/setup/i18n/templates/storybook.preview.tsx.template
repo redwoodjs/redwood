@@ -1,10 +1,11 @@
 import * as React from 'react'
-import { I18nextProvider } from 'react-i18next'
+
 import type { GlobalTypes } from '@storybook/csf'
-import type { StoryFn, StoryContext } from '@storybook/react'
+import type { Preview, StoryContext, StoryFn } from '@storybook/react'
+import { I18nextProvider } from 'react-i18next'
 import i18n from 'web/src/i18n'
 
-/** @type { import("@storybook/csf").GlobalTypes } */
+/** @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#global-types-and-the-toolbar-annotation | Global types and the toolbar annotation}  */
 export const globalTypes: GlobalTypes = {
   locale: {
     name: 'Locale',
@@ -25,8 +26,8 @@ export const globalTypes: GlobalTypes = {
  * https://github.com/storybookjs/addon-kit/blob/main/src/withGlobals.ts
  * Unfortunately that will make eslint complain, so we have to disable it when
  * using a hook below
- * @param { import("@storybook/react").StoryFn} StoryFn
- * @param { import("@storybook/react").StoryContext} context
+ *
+ * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} 
  */
 const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -41,4 +42,8 @@ const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
   )
 }
 
-export const decorators = [withI18n]
+const preview: Preview = { 
+  decorators: [withI18n]
+}
+
+export default preview

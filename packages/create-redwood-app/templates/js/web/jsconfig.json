@@ -44,6 +44,7 @@
   "include": [
     "src",
     "config",
+    ".storybook/**/*",
     "../.redwood/types/includes/all-*",
     "../.redwood/types/includes/web-*",
     "../types",

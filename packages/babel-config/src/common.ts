@@ -140,16 +140,21 @@ export const getPathsFromTypeScriptConfig = (
     return {}
   }
 
-  if (!config.compilerOptions?.baseUrl || !config.compilerOptions?.paths) {
+  if (!config.compilerOptions?.paths) {
     return {}
   }
 
   const { baseUrl, paths } = config.compilerOptions
 
-  // Convert it to absolute path - on windows the baseUrl is already absolute
-  const absoluteBase = path.isAbsolute(baseUrl)
-    ? baseUrl
-    : path.join(rootDir, baseUrl)
+  let absoluteBase: string
+  if (baseUrl) {
+    // Convert it to absolute path - on windows the baseUrl is already absolute
+    absoluteBase = path.isAbsolute(baseUrl)
+      ? baseUrl
+      : path.join(rootDir, baseUrl)
+  } else {
+    absoluteBase = rootDir
+  }
 
   const pathsObj: Record<string, string> = {}
   for (const [key, value] of Object.entries(paths)) {

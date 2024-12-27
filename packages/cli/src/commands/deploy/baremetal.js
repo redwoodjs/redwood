@@ -26,6 +26,7 @@ export const DEFAULT_SERVER_CONFIG = {
   monitorCommand: 'pm2',
   sides: ['api', 'web'],
   keepReleases: 5,
+  freeSpaceRequired: 2048,
 }
 
 export const command = 'baremetal [environment]'
@@ -52,6 +53,12 @@ export const builder = (yargs) => {
     describe:
       'Set this flag the first time you deploy: starts server processes from scratch',
     default: false,
+    type: 'boolean',
+  })
+
+  yargs.option('df', {
+    describe: 'Check available disk space',
+    default: true,
     type: 'boolean',
   })
 
@@ -164,6 +171,10 @@ export const verifyServerConfig = (config) => {
 
   if (!config.repo) {
     throwMissingConfig('repo')
+  }
+
+  if (!/^\d+$/.test(config.freeSpaceRequired)) {
+    throw new Error('"freeSpaceRequired" must be an integer >= 0')
   }
 
   return true
@@ -358,6 +369,63 @@ export const deployTasks = (yargs, ssh, serverConfig, serverLifecycle) => {
   const cmdPath = pathJoin(serverConfig.path, yargs.releaseDir)
   const config = { yargs, ssh, serverConfig, serverLifecycle, cmdPath }
   const tasks = []
+
+  tasks.push(
+    commandWithLifecycleEvents({
+      name: 'df',
+      config: { ...config, cmdPath: serverConfig.path },
+      skip:
+        !yargs.df ||
+        serverConfig.freeSpaceRequired === 0 ||
+        serverConfig.freeSpaceRequired === '0',
+      command: {
+        title: `Checking available disk space...`,
+        task: async (_ctx, task) => {
+          const { stdout } = await ssh.exec(serverConfig.path, 'df', [
+            serverConfig.path,
+            '|',
+            'awk',
+            '\'NR == 2 {print "df:"$4}\'',
+          ])
+
+          // I'm doing this because on my machine "stdout" was:
+          // 'Non-interactive shell detected\n4102880'
+          // Other machines might have different output
+          const df = stdout.split('\n').find((line) => line.startsWith('df:'))
+
+          if (!df || !df.startsWith('df:') || df === 'df:') {
+            return task.skip(
+              c.warning('Warning: Could not get disk space information'),
+            )
+          }
+
+          const dfMb = parseInt(df.replace('df:', ''), 10) / 1024
+
+          if (isNaN(dfMb)) {
+            return task.skip(
+              c.warning('Warning: Could not parse disk space information'),
+            )
+          }
+
+          // This will only show if --verbose is passed
+          task.output = `Available disk space: ${dfMb}MB`
+
+          const freeSpaceRequired = parseInt(
+            serverConfig.freeSpaceRequired ?? 2048,
+            10,
+          )
+
+          if (dfMb < freeSpaceRequired) {
+            throw new Error(
+              `Not enough disk space. You need at least ${freeSpaceRequired}` +
+                `MB free space to continue. (Currently ${Math.round(dfMb)}MB ` +
+                'available)',
+            )
+          }
+        },
+      },
+    }),
+  )
 
   tasks.push(
     commandWithLifecycleEvents({
@@ -661,6 +729,7 @@ export const handler = async (yargs) => {
   recordTelemetryAttributes({
     command: 'deploy baremetal',
     firstRun: yargs.firstRun,
+    df: yargs.df,
     update: yargs.update,
     install: yargs.install,
     migrate: yargs.migrate,

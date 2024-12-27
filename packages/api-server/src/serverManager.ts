@@ -3,6 +3,7 @@ import { fork } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 
+import chalk from 'chalk'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
@@ -82,13 +83,44 @@ export class ServerManager {
   }
 
   async restartApiServer() {
-    this.killApiServer()
+    await this.killApiServer()
     await this.startApiServer()
   }
 
-  killApiServer() {
-    this.httpServerProcess?.emit('exit')
-    this.httpServerProcess?.kill()
+  async killApiServer() {
+    if (!this.httpServerProcess) {
+      return
+    }
+
+    // Try to gracefully close the server
+    // If it doesn't close within 2 seconds, forcefully close it
+    await new Promise<void>((resolve) => {
+      console.log(chalk.yellow('Shutting down API server.'))
+
+      const cleanup = () => {
+        this.httpServerProcess?.removeAllListeners('exit')
+        clearTimeout(forceKillTimeout)
+      }
+
+      this.httpServerProcess?.on('exit', () => {
+        console.log(chalk.yellow('API server exited.'))
+        cleanup()
+        resolve()
+      })
+
+      const forceKillTimeout = setTimeout(() => {
+        console.log(
+          chalk.yellow(
+            'API server did not exit within 2 seconds, forcefully closing it.',
+          ),
+        )
+        cleanup()
+        this.httpServerProcess?.kill('SIGKILL')
+        resolve()
+      }, 2000)
+
+      this.httpServerProcess?.kill()
+    })
   }
 }
 

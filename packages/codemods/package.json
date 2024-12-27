@@ -24,11 +24,11 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/cli": "7.24.8",
+    "@babel/cli": "7.25.7",
     "@babel/core": "^7.22.20",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.25.0",
+    "@babel/runtime-corejs3": "7.25.7",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/project-config": "workspace:*",
     "@svgr/core": "8.1.0",
@@ -43,7 +43,7 @@
     "graphql": "16.9.0",
     "jscodeshift": "17.0.0",
     "pascalcase": "1.0.0",
-    "prettier": "3.3.3",
+    "prettier": "3.4.2",
     "tasuku": "2.0.1",
     "typescript": "5.6.2",
     "yargs": "17.7.2"
@@ -52,10 +52,10 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
-    "@types/jscodeshift": "0.11.11",
+    "@types/jscodeshift": "0.12.0",
     "@types/yargs": "17.0.33",
     "fs-extra": "11.2.0",
-    "publint": "0.2.10",
+    "publint": "0.2.12",
     "tempy": "1.0.1",
     "tsx": "4.19.1",
     "vitest": "2.0.5"

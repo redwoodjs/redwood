@@ -12,7 +12,7 @@ interface Problem {
 
 await $({
   nothrow: true,
-})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs ./react-node-loader -f json > .attw.json`
+})`yarn attw -P --exclude-entrypoints ./bins/rw-vite-build.mjs -f json > .attw.json`
 const output = await $`cat .attw.json`
 await $`rm .attw.json`
 

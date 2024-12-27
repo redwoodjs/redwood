@@ -25,11 +25,11 @@ import {
 
 import * as DbAuthError from './errors'
 import {
-  cookieName,
   decryptSession,
   encryptSession,
   extractCookie,
   extractHashingOptions,
+  generateCookieName,
   getDbAuthResponseBuilder,
   getSession,
   hashPassword,
@@ -414,7 +414,7 @@ export class DbAuthHandler<
     deleteHeaders.append(
       'set-cookie',
       [
-        `${cookieName(this.options.cookie?.name)}=`,
+        `${generateCookieName(this.options.cookie?.name)}=`,
         ...this._cookieAttributes({ expires: 'now' }),
       ].join(';'),
     )
@@ -907,11 +907,11 @@ export class DbAuthHandler<
     let user
 
     if (credentialId) {
-      user = await this.dbCredentialAccessor
-        .findFirst({
-          where: { [webAuthnOptions.credentialFields.id]: credentialId },
-        })
-        .user()
+      const credential = await this.dbCredentialAccessor.findUnique({
+        where: { [webAuthnOptions.credentialFields.id]: credentialId },
+        include: { [this.options.authModelAccessor]: true },
+      })
+      user = credential[this.options.authModelAccessor]
     } else {
       // webauthn session not present, fallback to getting user from regular
       // session cookie
@@ -1245,7 +1245,7 @@ export class DbAuthHandler<
     const session = JSON.stringify(data) + ';' + csrfToken
     const encrypted = encryptSession(session)
     const sessionCookieString = [
-      `${cookieName(this.options.cookie?.name)}=${encrypted}`,
+      `${generateCookieName(this.options.cookie?.name)}=${encrypted}`,
       ...this._cookieAttributes({ expires: this.sessionExpiresDate }),
     ].join(';')
 

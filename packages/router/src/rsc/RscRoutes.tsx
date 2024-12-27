@@ -29,6 +29,40 @@ function onStreamFinished(
   )
 }
 
+async function rsaFetch(
+  serializedLocation: string,
+  rsaId: string,
+  rsaArgs: unknown[],
+) {
+  const rscId = '_'
+  const searchParams = new URLSearchParams()
+  searchParams.set('action_id', rsaId)
+
+  const url = BASE_PATH + rscId + '?' + searchParams + '&' + serializedLocation
+
+  let body: Awaited<ReturnType<typeof encodeReply>> = ''
+
+  try {
+    body = await encodeReply(rsaArgs)
+  } catch (e) {
+    console.error('Error encoding Server Action arguments', e)
+  }
+
+  return fetch(url, {
+    method: 'POST',
+    body,
+    headers: { 'rw-rsc': '1' },
+  })
+}
+
+function rscFetch(serializedLocation: string) {
+  const rscId = '__rwjs__Routes'
+
+  return fetch(BASE_PATH + rscId + '?' + serializedLocation, {
+    headers: { 'rw-rsc': '1' },
+  })
+}
+
 type SerializedLocation =
   | `__rwjs__pathname=${string}&__rwjs__search=${string}`
   | `__rwjs__pathname=${string}&__rwjs__search=${string}::${string}`
@@ -47,22 +81,11 @@ function rscFetchRoutes(serializedLocation: SerializedLocation) {
     console.log('rscFetchRoutes :: cache miss for', rscCacheKey)
   }
 
-  const rscId = '__rwjs__Routes'
-
-  // TODO (RSC): During SSR we should not fetch (Is this function really
-  // called during SSR?)
-  const responsePromise = fetch(BASE_PATH + rscId + '?' + serializedLocation, {
-    headers: {
-      'rw-rsc': '1',
-    },
-  })
-
   const options: Options<unknown[], RscModel> = {
-    // React will hold on to `callServer` and use that when it detects a
-    // server action is invoked (like `action={onSubmit}` in a <form>
-    // element). So for now at least we need to send it with every RSC
-    // request, so React knows what `callServer` method to use for server
-    // actions inside the RSC.
+    // React will hold on to `callServer` and use that when it detects a server
+    // action is invoked (like `action={onSubmit}` in a <form> element). So for
+    // now at least we need to send it with every RSC request, so React knows
+    // what `callServer` method to use for server actions inside the RSC.
     // TODO (RSC): Need to figure out the types for callServer
     // @ts-expect-error types
     callServer: async function (rsaId: string, args: unknown[]) {
@@ -71,33 +94,12 @@ function rscFetchRoutes(serializedLocation: SerializedLocation) {
       console.log('RscRoutes :: callServer rsaId', rsaId, 'args', args)
 
       // Including rsaId here for debugging reasons only, what's important is
-      // `new Date()`, to make sure the cache key is unique so we trigger a
+      // `Date.now()`, to make sure the cache key is unique so we trigger a
       // rerender. It's needed to handle calling RSAs multiple times with the
       // same arguments
-      const rscCacheKey: SerializedLocation = `${serializedLocation}::${rsaId}::${new Date()}`
+      const rscCacheKey: SerializedLocation = `${serializedLocation}::${rsaId}::${Date.now()}`
 
-      const searchParams = new URLSearchParams()
-      searchParams.set('action_id', rsaId)
-      const rscId = '_'
-
-      let body: Awaited<ReturnType<typeof encodeReply>> = ''
-
-      try {
-        body = await encodeReply(args)
-      } catch (e) {
-        console.error('Error encoding Server Action arguments', e)
-      }
-
-      const responsePromise = fetch(
-        BASE_PATH + rscId + '?' + searchParams + '&' + serializedLocation,
-        {
-          method: 'POST',
-          body,
-          headers: {
-            'rw-rsc': '1',
-          },
-        },
-      )
+      const responsePromise = rsaFetch(serializedLocation, rsaId, args)
 
       onStreamFinished(responsePromise, () => {
         updateCurrentRscCacheKey(rscCacheKey)
@@ -116,10 +118,7 @@ function rscFetchRoutes(serializedLocation: SerializedLocation) {
     },
   }
 
-  const modelPromise = createFromFetch<never, RscModel>(
-    responsePromise,
-    options,
-  )
+  const modelPromise = createFromFetch(rscFetch(serializedLocation), options)
 
   rscCache.set(rscCacheKey, modelPromise)
 

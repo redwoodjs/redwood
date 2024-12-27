@@ -79,7 +79,18 @@ export class Worker {
   lastCheckTime: Date
 
   constructor(options: WorkerOptions) {
-    this.options = { ...DEFAULT_OPTIONS, ...options }
+    // Note: if we did a simple spread like { ...DEFAULT_OPTIONS, ...options } then any undefined values in `options`
+    // would override the defaults. We want to keep the defaults if the value is `undefined` so we have to do this
+    const nonUndefinedOptions = Object.fromEntries(
+      Object.entries(options ?? {}).filter(([_, value]) => value !== undefined),
+    )
+    this.options = {
+      ...DEFAULT_OPTIONS,
+      ...nonUndefinedOptions,
+      adapter: options?.adapter,
+      processName: options?.processName,
+      queues: options?.queues,
+    }
 
     if (!options?.adapter) {
       throw new AdapterRequiredError()

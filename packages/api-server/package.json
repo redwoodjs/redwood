@@ -53,8 +53,8 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/aws-lambda": "8.10.145",
-    "@types/lodash": "4.17.7",
-    "@types/qs": "6.9.15",
+    "@types/lodash": "4.17.10",
+    "@types/qs": "6.9.16",
     "@types/split2": "4.2.3",
     "@types/yargs": "17.0.33",
     "pino-abstract-transport": "1.2.0",

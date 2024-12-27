@@ -10,7 +10,6 @@ vi.mock('fs', async (importOriginal) => {
     default: {
       ...originalFs,
       existsSync: (...args) => {
-        console.log('existsSync', args)
         if (mockFiles[args[0]]) {
           return true
         }

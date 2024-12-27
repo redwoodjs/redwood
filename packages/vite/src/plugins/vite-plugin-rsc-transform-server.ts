@@ -21,6 +21,15 @@ export function rscTransformUseServerPlugin(
         return code
       }
 
+      if (
+        id.includes('node_modules/.vite') ||
+        id.includes('/react-server-dom-webpack/') ||
+        id.includes('/react-server-dom-webpack.server')
+      ) {
+        console.log('vite-plugin-rsc-transform-server.ts: Skipping', id)
+        return code
+      }
+
       let mod: swc.Module
 
       const isTypescript = id.endsWith('.ts') || id.endsWith('.tsx')
