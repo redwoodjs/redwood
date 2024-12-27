@@ -8,9 +8,9 @@
 //   expect('some output').toEqual(loadComponentFixture('component', 'filename.js'))
 // })
 
-import fs from 'node:fs'
-import path from 'node:path'
+import path from 'path'
 
+import fs from 'fs-extra'
 import { vi } from 'vitest'
 
 import './mockTelemetry'
