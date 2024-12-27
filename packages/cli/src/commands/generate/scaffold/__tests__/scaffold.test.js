@@ -962,9 +962,9 @@ describe('custom templates', () => {
   // api-side file)
 
   test('creates an sdl', () => {
-    expect(tsFiles).toHaveProperty([
-      path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts'),
-    ])
+    expect(
+      tsFiles[path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts')],
+    ).toMatchSnapshot()
   })
 
   // Layout

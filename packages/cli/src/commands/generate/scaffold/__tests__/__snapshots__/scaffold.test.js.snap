@@ -266,6 +266,70 @@ export default ScaffoldLayout
 "
 `;
 
+exports[`custom templates > creates an sdl 1`] = `
+"export const schema = gql\`
+  type Post {
+    id: Int!
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+    isPinned: Boolean!
+    readTime: Float!
+    rating: Float
+    upvotes: Int!
+    metadata: JSON!
+    hugeNumber: BigInt!
+    favorites: [Favorite]!
+    tag: [Tag]!
+  }
+
+  type Query {
+    posts: [Post!]! @requireAuth
+    post(id: Int!): Post @requireAuth
+  }
+
+  input CreatePostInput {
+    title: String!
+    slug: String!
+    author: String!
+    body: String!
+    image: String
+    postedAt: DateTime
+    isPinned: Boolean!
+    readTime: Float!
+    rating: Float
+    upvotes: Int!
+    metadata: JSON!
+    hugeNumber: BigInt!
+  }
+
+  input UpdatePostInput {
+    title: String
+    slug: String
+    author: String
+    body: String
+    image: String
+    postedAt: DateTime
+    isPinned: Boolean
+    readTime: Float
+    rating: Float
+    upvotes: Int
+    metadata: JSON
+    hugeNumber: BigInt
+  }
+
+  type Mutation {
+    createPost(input: CreatePostInput!): Post! @requireAuth
+    updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
+    deletePost(id: Int!): Post! @requireAuth
+  }
+\`
+"
+`;
+
 exports[`in javascript (default) mode > creates a edit page 1`] = `
 "import EditPostCell from 'src/components/Post/EditPostCell'
 
