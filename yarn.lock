@@ -8176,6 +8176,7 @@ __metadata:
     title-case: "npm:3.0.3"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
+    unionfs: "npm:4.5.4"
     uuid: "npm:10.0.0"
     vitest: "npm:2.0.5"
     yargs: "npm:17.7.2"
@@ -18087,6 +18088,13 @@ __metadata:
   dependencies:
     minipass: "npm:^5.0.0"
   checksum: 10c0/34726f25b968ac05f6122ea7e9457fe108c7ae3b82beff0256953b0e405def61af2850570e32be2eb05c1e7660b663f24e14b6ab882d1d8a858314faacc4c972
+  languageName: node
+  linkType: hard
+
+"fs-monkey@npm:^1.0.0":
+  version: 1.0.6
+  resolution: "fs-monkey@npm:1.0.6"
+  checksum: 10c0/6f2508e792a47e37b7eabd5afc79459c1ea72bce2a46007d2b7ed0bfc3a4d64af38975c6eb7e93edb69ac98bbb907c13ff1b1579b2cf52d3d02dbc0303fca79f
   languageName: node
   linkType: hard
 
@@ -29438,6 +29446,15 @@ __metadata:
     strip-literal: "npm:^2.1.0"
     unplugin: "npm:^1.14.1"
   checksum: 10c0/58fa3800f800681b33b1accf653e47b1efe84bc6e412e46f4dae6ff2bac518954fcc5e6959ef5e9937f630f47640a93aabe011ccde7814fcdb6d65082b6f6da9
+  languageName: node
+  linkType: hard
+
+"unionfs@npm:4.5.4":
+  version: 4.5.4
+  resolution: "unionfs@npm:4.5.4"
+  dependencies:
+    fs-monkey: "npm:^1.0.0"
+  checksum: 10c0/f1d832aff214c372a79f1938e1e0b0302ecaea30dc9487963c0539b8aad8f6305071e1da3e4662d3f0b5fd115205f71b975c8ab92f45154c61bc51a17c6261f7
   languageName: node
   linkType: hard
 
