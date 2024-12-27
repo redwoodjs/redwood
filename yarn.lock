@@ -7951,7 +7951,7 @@ __metadata:
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/yargs": "npm:17.0.33"
     concurrently: "npm:8.2.2"
-    memfs: "npm:4.13.0"
+    memfs: "npm:4.15.1"
     publint: "npm:0.2.11"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
@@ -8049,7 +8049,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     jest: "npm:29.7.0"
     listr2: "npm:6.6.1"
-    memfs: "npm:4.13.0"
+    memfs: "npm:4.15.1"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.19.1"
     typescript: "npm:5.6.2"
@@ -8160,7 +8160,7 @@ __metadata:
     latest-version: "npm:5.1.0"
     listr2: "npm:6.6.1"
     lodash: "npm:4.17.21"
-    memfs: "npm:4.13.0"
+    memfs: "npm:4.15.1"
     pascalcase: "npm:1.0.0"
     pluralize: "npm:8.0.0"
     portfinder: "npm:1.0.32"
@@ -8949,7 +8949,7 @@ __metadata:
     glob: "npm:11.0.0"
     http-proxy-middleware: "npm:3.0.3"
     isbot: "npm:5.1.17"
-    memfs: "npm:4.13.0"
+    memfs: "npm:4.15.1"
     publint: "npm:0.2.11"
     react: "npm:18.3.1"
     react-server-dom-webpack: "npm:19.0.0-rc-8269d55d-20240802"
@@ -22497,15 +22497,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memfs@npm:4.13.0":
-  version: 4.13.0
-  resolution: "memfs@npm:4.13.0"
+"memfs@npm:4.15.1":
+  version: 4.15.1
+  resolution: "memfs@npm:4.15.1"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
     "@jsonjoy.com/util": "npm:^1.3.0"
     tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/b0cb47cefdafc8e84ced864a24654dc83d57b4019a2cef3fe8f0cb0f841da95d5f46bf5149d88fa41b8af05841c392776def801e1d293ecc4cbaf087244cbd12
+  checksum: 10c0/9afcf2c491374ffcd12f57aaf4773d40b0372806824eed260280db2404987d949ce81887ec2ae1346b8e11b613f6553ceef57ef2f5eaf91f0762670ec43ee0de
   languageName: node
   linkType: hard
 
