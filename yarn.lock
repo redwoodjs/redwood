@@ -8075,7 +8075,7 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@types/yargs-parser": "npm:21.0.3"
     chalk: "npm:4.1.2"
-    dotenv: "npm:16.4.5"
+    dotenv: "npm:16.4.7"
     dotenv-defaults: "npm:5.0.2"
     execa: "npm:5.1.1"
     listr2: "npm:6.6.1"
@@ -15912,10 +15912,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.4.5, dotenv@npm:^16.0.0, dotenv@npm:^16.4.4, dotenv@npm:~16.4.5":
-  version: 16.4.5
-  resolution: "dotenv@npm:16.4.5"
-  checksum: 10c0/48d92870076832af0418b13acd6e5a5a3e83bb00df690d9812e94b24aff62b88ade955ac99a05501305b8dc8f1b0ee7638b18493deb6fe93d680e5220936292f
+"dotenv@npm:16.4.7, dotenv@npm:^16.0.0, dotenv@npm:^16.4.4, dotenv@npm:~16.4.5":
+  version: 16.4.7
+  resolution: "dotenv@npm:16.4.7"
+  checksum: 10c0/be9f597e36a8daf834452daa1f4cc30e5375a5968f98f46d89b16b983c567398a330580c88395069a77473943c06b877d1ca25b4afafcdd6d4adb549e8293462
   languageName: node
   linkType: hard
 
@@ -26949,7 +26949,7 @@ __metadata:
     cypress-fail-fast: "npm:7.1.1"
     cypress-wait-until: "npm:3.0.2"
     dependency-cruiser: "npm:16.4.2"
-    dotenv: "npm:16.4.5"
+    dotenv: "npm:16.4.7"
     eslint: "npm:8.57.1"
     eslint-plugin-react: "npm:7.36.1"
     eslint-plugin-react-hooks: "npm:4.6.0"
