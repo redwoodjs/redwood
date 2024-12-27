@@ -50,7 +50,7 @@
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.1",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "5.1.2",
+    "@rollup/pluginutils": "5.1.4",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
