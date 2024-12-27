@@ -47,6 +47,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('yes', {
+      alias: 'y',
+      describe: 'Skip prompts and use defaults',
+      default: false,
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference for the upgrade command',
@@ -85,13 +91,14 @@ export const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
+export const handler = async ({ dryRun, tag, verbose, dedupe, yes }) => {
   recordTelemetryAttributes({
     command: 'upgrade',
     dryRun,
     tag,
     verbose,
     dedupe,
+    yes,
   })
 
   // structuring as nested tasks to avoid bug with task.title causing duplicates
@@ -100,11 +107,24 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
       {
         title: 'Confirm upgrade',
         task: async (ctx, task) => {
+          if (yes) {
+            task.skip('Skipping confirmation prompt because of --yes flag.')
+            return
+          }
+
           const proceed = await task.prompt({
             type: 'Confirm',
             message:
               'This will upgrade your RedwoodJS project to the latest version. Do you want to proceed?',
-            initial: true,
+            initial: 'Y',
+            default: '(Yes/no)',
+            format: function (value) {
+              if (this.state.submitted) {
+                return this.isTrue(value) ? 'yes' : 'no'
+              }
+
+              return 'Yes'
+            },
           })
           if (!proceed) {
             task.skip('Upgrade cancelled by user.')
