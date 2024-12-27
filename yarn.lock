@@ -5344,19 +5344,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.1":
-  version: 0.4.1
-  resolution: "@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.1"
+"@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.2":
+  version: 0.4.2
+  resolution: "@joshwooding/vite-plugin-react-docgen-typescript@npm:0.4.2"
   dependencies:
     magic-string: "npm:^0.27.0"
     react-docgen-typescript: "npm:^2.2.2"
   peerDependencies:
     typescript: ">= 4.3.x"
-    vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+    vite: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/bd8f1fd723fdf8110831cd07eae5e9ad988331d7232150b72c2e2b49bccdd939a5735ba6b1b146a2a9632bba80bbd3b1782f8cf81279c7add45354d6f7b3e02d
+  checksum: 10c0/355d13ad92a9da786b561a25250e6c94a8e51d235ced345e54ebfe709abc45ab60c2a8d06599df6ec0441fba01720f189883429943cb62dff9a4c31b59f0939c
   languageName: node
   linkType: hard
 
@@ -27867,7 +27867,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
-    "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.4.1"
+    "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.4.2"
     "@redwoodjs/testing": "workspace:*"
     "@rollup/pluginutils": "npm:5.1.2"
     "@storybook/addon-essentials": "npm:7.6.17"
