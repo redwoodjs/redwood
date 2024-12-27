@@ -1,7 +1,7 @@
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { paramCase } from 'change-case'
-import fs from 'fs-extra'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'
 import terminalLink from 'terminal-link'

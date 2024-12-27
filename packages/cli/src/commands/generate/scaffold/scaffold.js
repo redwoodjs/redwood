@@ -1,9 +1,9 @@
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import camelcase from 'camelcase'
 import { paramCase } from 'change-case'
 import execa from 'execa'
-import fs from 'fs-extra'
 import humanize from 'humanize-string'
 import { Listr } from 'listr2'
 import pascalcase from 'pascalcase'

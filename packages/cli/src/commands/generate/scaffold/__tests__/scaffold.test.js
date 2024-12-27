@@ -1,8 +1,9 @@
 globalThis.__dirname = __dirname
-import path from 'path'
+import path from 'node:path'
 
-import { vol } from 'memfs'
-import { vi, describe, test, expect, beforeAll } from 'vitest'
+import { vol, fs as memfs } from 'memfs'
+import { ufs } from 'unionfs'
+import { vi, describe, test, expect, afterAll, beforeAll } from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
@@ -11,7 +12,14 @@ import { getDefaultArgs } from '../../../../lib'
 import { yargsDefaults as defaults } from '../../helpers'
 import * as scaffold from '../scaffold'
 
-vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
+vi.mock('node:fs', async (importOriginal) => {
+  const originalFs = await importOriginal()
+
+  ufs.use(originalFs).use(memfs)
+
+  return { ...ufs, default: { ...ufs } }
+})
+
 vi.mock('execa')
 
 beforeAll(() => {
@@ -842,6 +850,132 @@ describe("'use client' directive", () => {
       files[
         path.normalize(
           '/path/to/project/web/src/components/Post/EditPostCell/EditPostCell.jsx',
+        )
+      ],
+    ).toMatchSnapshot()
+  })
+})
+
+describe('custom templates', () => {
+  let tsFiles
+  let originalRwjsCwd
+
+  beforeAll(async () => {
+    originalRwjsCwd = process.env.RWJS_CWD
+    process.env.RWJS_CWD = '/path/to/project'
+
+    vol.fromJSON(
+      {
+        'redwood.toml': '',
+        'web/generators/scaffold/pages/EditNamePage.tsx.template':
+          'export default function CustomEditPage() { return null }',
+        'web/generators/scaffold/pages/NewNamePage.tsx.template':
+          'export default function CustomNewPage() { return null }',
+        'web/generators/scaffold/pages/NamePage.tsx.template':
+          'export default function CustomPage() { return null }',
+        'web/generators/scaffold/pages/NamesPage.tsx.template':
+          'export default function CustomPluralPage() { return null }',
+      },
+      process.env.RWJS_CWD,
+    )
+
+    tsFiles = await scaffold.files({
+      force: false,
+      model: 'Post',
+      typescript: true,
+      tests: true,
+      nestScaffoldByModel: true,
+    })
+  })
+
+  afterAll(() => {
+    vol.reset()
+    process.env.RWJS_CWD = originalRwjsCwd
+  })
+
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
+  })
+
+  test('creates an Edit page', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/EditPostPage/EditPostPage.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "export default function CustomEditPage() {
+        return null
+      }
+      "
+    `)
+  })
+
+  test('creates an Index page', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostsPage/PostsPage.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "export default function CustomPluralPage() {
+        return null
+      }
+      "
+    `)
+  })
+
+  test('creates a New page', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/NewPostPage/NewPostPage.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "export default function CustomNewPage() {
+        return null
+      }
+      "
+    `)
+  })
+
+  test('creates a Show page', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "export default function CustomPage() {
+        return null
+      }
+      "
+    `)
+  })
+
+  // SDL
+  // (Including this in the test just to make sure we're testing at least one
+  // api-side file)
+
+  test('creates an sdl', () => {
+    expect(tsFiles).toHaveProperty([
+      path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts'),
+    ])
+  })
+
+  // Layout
+  // (Including this in the test just to make sure we're testing at least one
+  // web-side file that we don't have a custom template for)
+
+  test('creates a layout', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/layouts/ScaffoldLayout/ScaffoldLayout.tsx',
         )
       ],
     ).toMatchSnapshot()
