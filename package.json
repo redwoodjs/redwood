@@ -82,7 +82,7 @@
     "@testing-library/user-event": "14.5.2",
     "@types/babel__generator": "7.6.8",
     "@types/fs-extra": "11.0.4",
-    "@types/jest": "29.5.13",
+    "@types/jest": "29.5.14",
     "@types/jscodeshift": "0.12.0",
     "@types/ncp": "2.0.8",
     "@types/prompts": "2.4.9",
