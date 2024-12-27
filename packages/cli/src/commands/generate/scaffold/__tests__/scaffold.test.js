@@ -882,6 +882,28 @@ describe('custom templates', () => {
           'export default function CustomPage() { return null }',
         'web/generators/scaffold/pages/NamesPage.tsx.template':
           'export default function CustomPluralPage() { return null }',
+        'web/generators/scaffold/pages/NamePage.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/pages/NamePage.test.tsx.template':
+          "it('renders page successfully', () => {})",
+        'web/generators/scaffold/components/EditNameCell.tsx.template':
+          'export const Success = () => null',
+        'web/generators/scaffold/components/Name.tsx.template':
+          'export default function ${singularPascalName}() { return null }',
+        'web/generators/scaffold/components/NameCell.tsx.template':
+          'export const Success = () => null',
+        'web/generators/scaffold/components/NameForm.tsx.template':
+          'export default function ${singularPascalName}Form() { return null }',
+        'web/generators/scaffold/components/Names.tsx.template':
+          'export default function ${singularPascalName}List() { return null }',
+        'web/generators/scaffold/components/NamesCell.tsx.template':
+          'export const Success = () => null',
+        'web/generators/scaffold/components/NewName.tsx.template':
+          'export default function New${singularPascalName}() { return null }',
+        'web/generators/scaffold/components/Name.mock.ts.template':
+          'export const standard = () => ({ custom: "" })',
+        'web/generators/scaffold/components/Name.test.tsx.template':
+          "it('renders component successfully', () => {})",
       },
       process.env.RWJS_CWD,
     )
@@ -900,8 +922,8 @@ describe('custom templates', () => {
     process.env.RWJS_CWD = originalRwjsCwd
   })
 
-  test('returns exactly 19 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(19)
+  test('returns exactly 23 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(23)
   })
 
   test('creates an Edit page', async () => {
@@ -960,6 +982,60 @@ describe('custom templates', () => {
       "export default function CustomPage() {
         return null
       }
+      "
+    `)
+  })
+
+  test('creates a Show page story', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.stories.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "const customMeta = {}
+      export default customMeta
+      export const Primary = {}
+      "
+    `)
+  })
+
+  test('creates a Show page test', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/pages/Post/PostPage/PostPage.test.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "it('renders page successfully', () => {})
+      "
+    `)
+  })
+
+  test('creates a test for the index component', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Post/Post.test.tsx',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "it('renders component successfully', () => {})
+      "
+    `)
+  })
+
+  test('creates mocks for the index component', async () => {
+    expect(
+      tsFiles[
+        path.normalize(
+          '/path/to/project/web/src/components/Post/Post/Post.mock.ts',
+        )
+      ],
+    ).toMatchInlineSnapshot(`
+      "export const standard = () => ({ custom: '' })
       "
     `)
   })
