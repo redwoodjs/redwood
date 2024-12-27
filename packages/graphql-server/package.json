@@ -59,7 +59,7 @@
     "@whatwg-node/fetch": "0.9.21",
     "jest": "29.7.0",
     "jsonwebtoken": "9.0.2",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "typescript": "5.6.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
