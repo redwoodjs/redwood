@@ -79,6 +79,7 @@
     "systeminformation": "5.23.8",
     "terminal-link": "2.1.1",
     "title-case": "3.0.3",
+    "unionfs": "4.5.4",
     "uuid": "10.0.0",
     "yargs": "17.7.2"
   },
