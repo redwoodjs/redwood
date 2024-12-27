@@ -267,9 +267,9 @@ describe('serverConfigWithDefaults', () => {
     expect(config.branch).toEqual('moon')
   })
 
-  it('does not provide default freeSpaceRequired', () => {
+  it('provides default freeSpaceRequired', () => {
     const config = baremetal.serverConfigWithDefaults({}, {})
-    expect(config.freeSpaceRequired).toBeUndefined()
+    expect(config.freeSpaceRequired).toEqual(2048)
   })
 })
 
@@ -688,9 +688,9 @@ describe('deployTasks', () => {
     expect(tasks[0].skip()).toBeTruthy()
   })
 
-  it('warns if there is not enough available space on the server and freeSpaceRequired is not configured', async () => {
+  it('throws an error if there is not enough available space on the server and freeSpaceRequired is not configured', () => {
     const ssh = {
-      exec: () => ({ stdout: 'df:1875' }),
+      exec: () => ({ stdout: 'df:1875893' }),
     }
 
     const { freeSpaceRequired: _, ...serverConfig } = defaultServerConfig
@@ -702,29 +702,29 @@ describe('deployTasks', () => {
       {}, // lifecycle
     )
 
-    await tasks[0].task({}, mockTask)
-
-    expect(mockTask.skip).toHaveBeenCalledWith(
-      expect.stringContaining(
-        'Warning: Your server is running low on disk space.',
-      ),
+    expect(() => tasks[0].task({}, {})).rejects.toThrowError(
+      /Not enough disk space\. You need at least 2048MB free space to continue\. \(Currently 1832MB available\)/,
     )
   })
 
   it('throws an error if there is less available space on the server than freeSpaceRequired', () => {
     const ssh = {
-      exec: () => ({ stdout: 'df:1875' }),
+      exec: () => ({ stdout: 'df:3875893' }),
     }
 
     const tasks = baremetal.deployTasks(
       defaultYargs,
       ssh,
-      { ...defaultServerConfig, sides: ['api', 'web'] },
+      {
+        ...defaultServerConfig,
+        sides: ['api', 'web'],
+        freeSpaceRequired: 4096,
+      },
       {}, // lifecycle
     )
 
     expect(() => tasks[0].task({}, {})).rejects.toThrowError(
-      /Not enough disk space/,
+      /Not enough disk space\. You need at least 4096MB free space to continue/,
     )
   })
 

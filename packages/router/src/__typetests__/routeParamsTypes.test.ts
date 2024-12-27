@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'tstyche'
 
-import type { RouteParams, ParamType } from '../routeParamsTypes.js'
+import type { RouteParams, ParamType } from '@redwoodjs/router'
 
 /**
  * FAQ:

@@ -37,7 +37,7 @@ function createNonSuspendingCell<
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
   }),
-  afterQuery = (data) => ({ ...data }),
+  afterQuery = (data) => data,
   isEmpty = isDataEmpty,
   Loading = () => <>Loading...</>,
   Failure,

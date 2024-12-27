@@ -100,6 +100,10 @@ export const files = async ({ name, typescript, ...options }) => {
     webPathSection: REDWOOD_WEB_PATH_NAME,
     generator: 'cell',
     templatePath: 'test.js.template',
+    templateVars: {
+      idName: shouldGenerateList ? undefined : idName,
+      mockIdValues: shouldGenerateList ? undefined : mockIdValues,
+    },
   })
 
   const storiesFile = await templateForComponentFile({

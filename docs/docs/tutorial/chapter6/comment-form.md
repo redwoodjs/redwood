@@ -219,7 +219,14 @@ export default CommentForm
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+```tsx title="web/src/components/CommentForm/CommentForm.tsx"
+// highlight-start
+import type {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
+// highlight-end
+
 import {
   Form,
   // highlight-next-line
@@ -231,11 +238,16 @@ import {
   // highlight-next-line
   SubmitHandler,
 } from '@redwoodjs/forms'
-// highlight-next-line
+// highlight-start
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
+// highlight-end
 
 // highlight-start
-const CREATE = gql`
+const CREATE: TypedDocumentNode<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+> = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
     createComment(input: $input) {
       id
@@ -275,6 +287,7 @@ const CommentForm = () => {
           wrapperClassName="bg-red-100 text-red-900 text-sm p-3 rounded"
         />
         // highlight-end
+
         <Label
           name="name"
           className="block text-xs font-semibold text-gray-500 uppercase"
@@ -838,9 +851,14 @@ export default CommentForm
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/CommentForm/CommentForm.tsx"
+```tsx title="web/src/components/CommentForm/CommentForm.tsx"
 // highlight-next-line
 import { useState } from 'react'
+
+import type {
+  CreateCommentMutation,
+  CreateCommentMutationVariables,
+} from 'types/graphql'
 
 import {
   Form,
@@ -850,13 +868,17 @@ import {
   TextAreaField,
   Submit,
 } from '@redwoodjs/forms'
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 // highlight-next-line
 import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
 
-const CREATE = gql`
+const CREATE: TypedDocumentNode<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+> = gql`
   mutation CreateCommentMutation($input: CreateCommentInput!) {
     createComment(input: $input) {
       id
@@ -1027,7 +1049,7 @@ export default BlogLayout
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
+```tsx title="web/src/layouts/BlogLayout/BlogLayout.tsx"
 import { Link, routes } from '@redwoodjs/router'
 // highlight-next-line
 import { Toaster } from '@redwoodjs/web/toast'
@@ -1589,7 +1611,7 @@ const Article = ({ article, summary = false }) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```jsx title="web/src/components/Article/Article.tsx"
+```tsx title="web/src/components/Article/Article.tsx"
 const Article = ({ article, summary = false }) => {
   return (
     <article>
@@ -1642,18 +1664,19 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```graphql title="web/src/components/CommentsCell/CommentsCell.tsx"
-export const QUERY = gql`
-  // highlight-start
-  query CommentsQuery($postId: Int!) {
-    comments(postId: $postId) {
-    // highlight-end
-      id
-      name
-      body
-      createdAt
+export const QUERY: TypedDocumentNode<CommentsQuery, CommentsQueryVariables> =
+  gql`
+    // highlight-start
+    query CommentsQuery($postId: Int!) {
+      comments(postId: $postId) {
+      // highlight-end
+        id
+        name
+        body
+        createdAt
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>

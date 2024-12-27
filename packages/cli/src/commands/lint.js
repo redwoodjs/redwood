@@ -42,6 +42,9 @@ export const handler = async ({ path, fix }) => {
         fix && '--fix',
         !pathString && fs.existsSync(getPaths().web.src) && 'web/src',
         !pathString && fs.existsSync(getPaths().web.config) && 'web/config',
+        !pathString &&
+          fs.existsSync(getPaths().web.storybook) &&
+          'web/.storybook',
         !pathString && fs.existsSync(getPaths().scripts) && 'scripts',
         !pathString && fs.existsSync(getPaths().api.src) && 'api/src',
         pathString,

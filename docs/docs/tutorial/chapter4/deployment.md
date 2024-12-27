@@ -32,7 +32,7 @@ Grove is currently under development and is not meant to your production-ready a
 You'll only need to do this once, and then you'll have the `grove` CLI command and can deploy any Redwood app directly from your development machine:
 
 ```bash
-curl -L https://install.grove.dev | sh
+curl -L https://grove.dev/install.sh | sh
 ```
 
 That will download a simple bash script and then run it, installing the Grove CLI tool, which is written in Go.
@@ -119,7 +119,7 @@ const signupOptions = {
   // ...
 ```
 
-The signup page itself is still visible, however. To remove it completely, remove the `<Route>` in the Router, and remove the "Don't have an acocunt? Sign up!" link on the login page.
+The signup page itself is still visible, however. To remove it completely, remove the `<Route>` in the Router, and remove the "Don't have an account? Sign up!" link on the login page.
 
 Be sure to save your changes, then run `grove deploy` to push the changes live. Take that, hackers!
 

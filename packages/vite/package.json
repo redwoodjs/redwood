@@ -56,7 +56,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/generator": "7.25.6",
+    "@babel/generator": "7.25.7",
     "@babel/parser": "^7.22.16",
     "@babel/traverse": "^7.22.20",
     "@redwoodjs/auth": "workspace:*",
@@ -77,7 +77,7 @@
     "core-js": "3.38.1",
     "dotenv-defaults": "5.0.2",
     "execa": "5.1.1",
-    "express": "4.21.0",
+    "express": "4.21.2",
     "find-my-way": "8.2.2",
     "fs-extra": "11.2.0",
     "http-proxy-middleware": "3.0.3",
@@ -103,7 +103,7 @@
     "@types/yargs-parser": "21.0.3",
     "concurrently": "8.2.2",
     "glob": "11.0.0",
-    "memfs": "4.13.0",
+    "memfs": "4.15.1",
     "publint": "0.2.11",
     "rollup": "4.24.0",
     "tsx": "4.19.1",

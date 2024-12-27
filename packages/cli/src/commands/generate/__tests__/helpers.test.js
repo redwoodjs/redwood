@@ -223,7 +223,7 @@ test('templateForComponentFile can override output path', async () => {
     apiPathSection: 'functions',
     generator: 'function',
     templatePath: 'function.ts.template',
-    templateVars: { name: 'func' },
+    templateVars: { name: 'func', typescript: false },
     outputPath: path.normalize('/path/to/project/api/src/functions/func.ts'),
   })
 

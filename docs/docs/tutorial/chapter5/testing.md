@@ -49,7 +49,7 @@ Note that the summary on the bottom indicates that there was 1 test that failed.
 
 If you continued with your own repo from chapters 1-4, you may see some other failures here or none at all: we made a lot of changes to the pages, components and cells we generated, but didn't update the tests to reflect the changes we made. (Another reason to start with the [example repo](../intermission.md#using-the-example-repo-recommended)!)
 
-To switch back to the default mode where test are **o**nly run for changed files, press `o` now (or quit and restart `yarn rw test`).
+To switch back to the default mode where test are **only** run for changed files, press `o` now (or quit and restart `yarn rw test`).
 
 What we want to aim for is all green in that left column and no failed tests. In fact best practices tell us you should not even commit any code to your repo unless the test suite passes locally. Not everyone adheres to this policy quite as strictly as others..._&lt;cough, cough&gt;_
 
