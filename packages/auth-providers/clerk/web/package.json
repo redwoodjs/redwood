@@ -57,7 +57,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/react": "^18.2.55",
     "concurrently": "8.2.2",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "react": "18.3.1",
     "tsx": "4.19.1",
     "typescript": "5.6.2",

@@ -48,7 +48,7 @@
     "@types/aws-lambda": "8.10.145",
     "@types/jsonwebtoken": "9.0.7",
     "concurrently": "8.2.2",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
     "vitest": "2.0.5"

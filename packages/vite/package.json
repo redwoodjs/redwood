@@ -104,7 +104,7 @@
     "concurrently": "8.2.2",
     "glob": "11.0.0",
     "memfs": "4.15.1",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "rollup": "4.24.0",
     "tsx": "4.19.1",
     "typescript": "5.6.2",
