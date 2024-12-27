@@ -57,7 +57,7 @@
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/lodash": "4.17.10",
     "publint": "0.2.12",
-    "tsx": "4.19.1"
+    "tsx": "4.19.2"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
