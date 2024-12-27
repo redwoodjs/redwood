@@ -48,7 +48,7 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.2",
     "@redwoodjs/testing": "workspace:*",
     "@rollup/pluginutils": "5.1.2",
     "@storybook/addon-essentials": "7.6.17",
