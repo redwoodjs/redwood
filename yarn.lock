@@ -8949,7 +8949,7 @@ __metadata:
     fs-extra: "npm:11.2.0"
     glob: "npm:11.0.0"
     http-proxy-middleware: "npm:3.0.3"
-    isbot: "npm:5.1.17"
+    isbot: "npm:5.1.19"
     memfs: "npm:4.15.1"
     publint: "npm:0.2.12"
     react: "npm:18.3.1"
@@ -20315,10 +20315,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isbot@npm:5.1.17":
-  version: 5.1.17
-  resolution: "isbot@npm:5.1.17"
-  checksum: 10c0/b4adee17c54bee4cfca5ed9ab1b3151f4df558a1d3b37c94bbd3b7e1f7e4a5130efdc2f54bae83e6fe3371d40576dcd90cd7072823a85b9e0a517eb51e057074
+"isbot@npm:5.1.19":
+  version: 5.1.19
+  resolution: "isbot@npm:5.1.19"
+  checksum: 10c0/ee3401a9dd5db52771582e6ccd673928d5ec3b050f3b7456f050ed0d4771af73dbbf498c188f1a13457925ab84d2108761f7a3b437a15c836e450c3a62b63a86
   languageName: node
   linkType: hard
 
