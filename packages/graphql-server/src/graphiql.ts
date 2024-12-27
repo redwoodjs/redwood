@@ -19,9 +19,7 @@ export const configureGraphiQLPlayground = ({
   return !disableGraphiQL
     ? {
         title: 'Redwood GraphQL Playground',
-        headers: generateGraphiQLHeader
-          ? generateGraphiQLHeader()
-          : {},
+        headers: generateGraphiQLHeader?.(),
         defaultQuery: DEFAULT_QUERY,
         headerEditorEnabled: true,
       }
