@@ -100,7 +100,7 @@
     "chalk": "4.1.2",
     "core-js": "3.38.1",
     "deepmerge": "4.3.1",
-    "esbuild": "0.24.0",
+    "esbuild": "0.24.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "graphql": "16.9.0",
@@ -120,8 +120,8 @@
     "@types/fs-extra": "11.0.4",
     "concurrently": "8.2.2",
     "graphql-tag": "2.12.6",
-    "publint": "0.2.11",
-    "tsx": "4.19.1",
+    "publint": "0.2.12",
+    "tsx": "4.19.2",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

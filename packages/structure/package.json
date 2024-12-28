@@ -54,9 +54,9 @@
     "@babel/cli": "7.25.7",
     "@babel/core": "^7.22.20",
     "@types/fs-extra": "11.0.4",
-    "@types/lodash": "4.17.10",
+    "@types/lodash": "4.17.13",
     "@types/node": "20.16.11",
-    "@types/vscode": "1.94.0",
+    "@types/vscode": "1.96.0",
     "typescript": "5.6.2",
     "vitest": "2.0.5"
   },

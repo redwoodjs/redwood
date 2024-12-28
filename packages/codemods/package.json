@@ -55,9 +55,9 @@
     "@types/jscodeshift": "0.12.0",
     "@types/yargs": "17.0.33",
     "fs-extra": "11.2.0",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "tempy": "1.0.1",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

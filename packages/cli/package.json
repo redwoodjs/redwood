@@ -88,7 +88,7 @@
     "@babel/core": "^7.22.20",
     "@types/archiver": "^6",
     "memfs": "4.15.1",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "typescript": "5.6.2",
     "vitest": "2.0.5"
   },

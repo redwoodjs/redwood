@@ -25,6 +25,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@types/node": "^22.10.2",
     "chalk": "5.3.0",
     "ci-info": "4.0.0",
     "enquirer": "2.4.1",
@@ -44,7 +45,7 @@
     "@types/which": "3.0.4",
     "@types/yauzl-promise": "4.0.1",
     "concurrently": "^8.2.2",
-    "esbuild": "0.24.0",
+    "esbuild": "0.24.2",
     "eslint": "^9.7.0",
     "eslint-plugin-jsdoc": "^48.7.0",
     "eslint-plugin-jsonc": "^2.16.0",
@@ -66,7 +67,7 @@
     "rimraf": "^6.0.1",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^7.16.1",
+    "typescript-eslint": "^8.0.0",
     "zx": "^8.1.4"
   },
   "engines": {
