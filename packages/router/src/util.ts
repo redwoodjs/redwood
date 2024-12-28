@@ -308,7 +308,9 @@ export function replaceParams(
   })
 
   const paramNames = params.map((param) => param[0])
-  const extraArgKeys = Object.keys(args).filter((x) => !paramNames.includes(x))
+  const extraArgKeys = Object.keys(args)
+    .filter((x) => !paramNames.includes(x))
+    .filter((x) => args[x] !== undefined && args[x] !== null)
 
   // Append any unnamed params as search params.
   if (extraArgKeys.length) {
