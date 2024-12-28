@@ -2186,16 +2186,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.32.3":
-  version: 4.32.3
-  resolution: "@clerk/clerk-react@npm:4.32.3"
+"@clerk/clerk-react@npm:4.32.4":
+  version: 4.32.4
+  resolution: "@clerk/clerk-react@npm:4.32.4"
   dependencies:
-    "@clerk/shared": "npm:1.4.1"
-    "@clerk/types": "npm:3.65.3"
+    "@clerk/shared": "npm:1.4.2"
+    "@clerk/types": "npm:3.65.4"
     tslib: "npm:2.4.1"
   peerDependencies:
     react: ">=16"
-  checksum: 10c0/531de3a3e814ae7f8b0f46281fb8d95e8ab89e62c2331fe90183e2a37f0744a88b68bc70a99e475185084eeac53827087f63af7889e1d2770d416cc39d4033c8
+  checksum: 10c0/ff068ae4f45c0c983bae95f85448b9614cecb1e800d88bc3a42afb7cdd7a6351ebde541da90bb42208b1358433e80545651c32de5290380a244aee45422d2efc
   languageName: node
   linkType: hard
 
@@ -2232,12 +2232,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/shared@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@clerk/shared@npm:1.4.2"
+  dependencies:
+    glob-to-regexp: "npm:0.4.1"
+    js-cookie: "npm:3.0.1"
+    swr: "npm:2.2.0"
+  peerDependencies:
+    react: ">=16"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/7fa73d5b5a4a25957c266bb26f80998cccb33ed5f56413d607c0a13509b16d90a90e4685a8c8186a713ff7c4e3196a8b51d394fa2bf0bb167d5501d880d5dfa6
+  languageName: node
+  linkType: hard
+
 "@clerk/types@npm:3.65.3":
   version: 3.65.3
   resolution: "@clerk/types@npm:3.65.3"
   dependencies:
     csstype: "npm:3.1.1"
   checksum: 10c0/bd48bbd0e0d697fac83c82867d6283d4f1da14b928fb5368e963c49238ce5a0e65d750eab079a71064fbb9d0438c86f6ab5154f78204cfd05576b2dafd9f55ea
+  languageName: node
+  linkType: hard
+
+"@clerk/types@npm:3.65.4":
+  version: 3.65.4
+  resolution: "@clerk/types@npm:3.65.4"
+  dependencies:
+    csstype: "npm:3.1.1"
+  checksum: 10c0/2137b0b54387842a3da667076d80093c432e3db3d89ab50cb5a1288005249cb461cfa56486c4595fe2b0adbd00670c4be5e39a11e0c067794ced913f8d3a915d
   languageName: node
   linkType: hard
 
@@ -7627,7 +7652,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
   dependencies:
-    "@clerk/clerk-react": "npm:4.32.3"
+    "@clerk/clerk-react": "npm:4.32.4"
     "@clerk/types": "npm:3.65.3"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -7639,7 +7664,7 @@ __metadata:
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    "@clerk/clerk-react": 4.32.3
+    "@clerk/clerk-react": 4.32.4
   languageName: unknown
   linkType: soft
 
