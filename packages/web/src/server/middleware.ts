@@ -14,7 +14,7 @@ export type MiddlewareInvokeOptions = {
   route?: RWRouteManifestItem
   cssPaths?: string[]
   params?: Record<string, unknown>
-  viteDevServer?: ViteDevServer
+  viteSsrDevServer?: ViteDevServer
 }
 
 export type Middleware = (

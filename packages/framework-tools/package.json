@@ -35,11 +35,11 @@
     "esbuild": "0.24.0",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
-    "zx": "8.1.8"
+    "zx": "8.1.9"
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "type-fest": "4.26.1",
     "typescript": "5.6.2"
   },

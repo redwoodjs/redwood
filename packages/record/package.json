@@ -38,8 +38,8 @@
     "@prisma/internals": "5.20.0",
     "@redwoodjs/framework-tools": "workspace:*",
     "esbuild": "0.24.0",
-    "publint": "0.2.11",
-    "tsx": "4.19.1",
+    "publint": "0.2.12",
+    "tsx": "4.19.2",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

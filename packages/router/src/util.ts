@@ -1,19 +1,5 @@
 // These are utils that can be shared between both server- and client components
 
-import type { ReactNode } from 'react'
-import { Children, isValidElement } from 'react'
-
-export function flattenAll(children: ReactNode): ReactNode[] {
-  const childrenArray = Children.toArray(children)
-
-  return childrenArray.flatMap((child) => {
-    if (isValidElement(child) && child.props.children) {
-      return [child, ...flattenAll(child.props.children)]
-    }
-
-    return [child]
-  })
-}
 /**
  * Get param name, type, and match for a route.
  *

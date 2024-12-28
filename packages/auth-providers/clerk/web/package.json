@@ -53,13 +53,13 @@
   },
   "devDependencies": {
     "@clerk/clerk-react": "4.32.3",
-    "@clerk/types": "3.65.3",
+    "@clerk/types": "3.65.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/react": "^18.2.55",
     "concurrently": "8.2.2",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "react": "19.0.0-rc-f2df5694-20240916",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "typescript": "5.6.2",
     "vitest": "2.0.5"
   },

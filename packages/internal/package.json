@@ -78,7 +78,7 @@
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/plugin-transform-typescript": "^7.22.15",
-    "@babel/runtime-corejs3": "7.25.6",
+    "@babel/runtime-corejs3": "7.25.7",
     "@babel/traverse": "^7.22.20",
     "@graphql-codegen/add": "4.0.1",
     "@graphql-codegen/cli": "3.3.1",
@@ -105,11 +105,11 @@
     "fs-extra": "11.2.0",
     "graphql": "16.9.0",
     "kill-port": "1.6.1",
-    "prettier": "3.3.3",
+    "prettier": "3.4.2",
     "rimraf": "6.0.1",
     "source-map": "0.7.4",
     "string-env-interpolation": "1.0.1",
-    "systeminformation": "5.23.5",
+    "systeminformation": "5.23.8",
     "terminal-link": "2.1.1",
     "ts-node": "10.9.2",
     "typescript": "5.6.2"
@@ -120,8 +120,8 @@
     "@types/fs-extra": "11.0.4",
     "concurrently": "8.2.2",
     "graphql-tag": "2.12.6",
-    "publint": "0.2.11",
-    "tsx": "4.19.1",
+    "publint": "0.2.12",
+    "tsx": "4.19.2",
     "vitest": "2.0.5"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"

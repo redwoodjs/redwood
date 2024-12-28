@@ -6,7 +6,6 @@
 // fe-server. And it's already created, but this hasn't been moved over yet.
 
 import path from 'node:path'
-import process from 'node:process'
 import url from 'node:url'
 
 import { createServerAdapter } from '@whatwg-node/server'
@@ -15,7 +14,6 @@ import express from 'express'
 import type { HTTPMethod } from 'find-my-way'
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import type { Manifest as ViteBuildManifest } from 'vite'
-import WebSocket, { WebSocketServer } from 'ws'
 
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { getRscStylesheetLinkGenerator } from '@redwoodjs/router/rscCss'
@@ -28,6 +26,7 @@ import type { Middleware } from '@redwoodjs/web/dist/server/middleware'
 import { registerFwGlobalsAndShims } from './lib/registerFwGlobalsAndShims.js'
 import { invoke } from './middleware/invokeMiddleware.js'
 import { createMiddlewareRouter } from './middleware/register.js'
+import { createWebSocketServer } from './rsc/rscWebSocketServer.js'
 import { createReactStreamingHandler } from './streaming/createReactStreamingHandler.js'
 import type { RWRouteManifest } from './types.js'
 import { convertExpressHeaders, getFullUrl } from './utils.js'
@@ -170,7 +169,7 @@ export async function runFeServer() {
     // Mounting middleware at /rw-rsc will strip /rw-rsc from req.url
     app.use(
       '/rw-rsc',
-      createRscRequestHandler({
+      await createRscRequestHandler({
         getMiddlewareRouter: async () => middlewareRouter,
       }),
     )
@@ -202,36 +201,6 @@ export async function runFeServer() {
   console.log(
     `Started production FE server on http://localhost:${rwConfig.web.port}`,
   )
-
-  if (typeof process.send !== 'undefined') {
-    process.send('server ready')
-  }
-}
-
-function createWebSocketServer() {
-  const wsServer = new WebSocketServer({ port: 18998 })
-
-  wsServer.on('connection', (ws) => {
-    console.log('A new client connected.')
-
-    // Event listener for incoming messages. The `data` is a Buffer
-    ws.on('message', (data) => {
-      const message = data.toString()
-      console.log('Received message:', message)
-
-      // Broadcast the message to all connected clients
-      wsServer.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(message)
-        }
-      })
-    })
-
-    // Event listener for client disconnection
-    ws.on('close', () => {
-      console.log('A client disconnected.')
-    })
-  })
 }
 
 runFeServer()

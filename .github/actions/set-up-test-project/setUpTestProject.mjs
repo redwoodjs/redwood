@@ -54,7 +54,9 @@ async function setUpTestProject({ canary }) {
 
   if (canary) {
     console.log(`Upgrading project to canary`)
-    await execInProject('yarn rw upgrade -t canary')
+    await execInProject('yarn rw upgrade -t canary', {
+      input: Buffer.from('Y'),
+    })
     console.log()
   }
 

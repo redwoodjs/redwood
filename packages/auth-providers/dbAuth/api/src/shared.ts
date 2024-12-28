@@ -40,34 +40,34 @@ const getPort = () => {
 // When in development environment, check for auth impersonation cookie
 // if user has generated graphiql headers
 const eventGraphiQLHeadersCookie = (event: APIGatewayProxyEvent | Request) => {
-  if (process.env.NODE_ENV === 'development') {
-    const impersationationHeader = getEventHeader(
-      event,
-      'rw-studio-impersonation-cookie',
-    )
-
-    if (impersationationHeader) {
-      return impersationationHeader
-    }
-
-    // TODO: Remove code below when we remove the old way of passing the cookie
-    // from Studio, and decide it's OK to break compatibility with older Studio
-    // versions
-    try {
-      if (!isFetchApiRequest(event)) {
-        const jsonBody = JSON.parse(event.body ?? '{}')
-        return (
-          jsonBody?.extensions?.headers?.cookie ||
-          jsonBody?.extensions?.headers?.Cookie
-        )
-      }
-    } catch {
-      // sometimes the event body isn't json
-      return
-    }
+  if (process.env.NODE_ENV !== 'development') {
+    return
   }
 
-  return
+  const impersationationHeader = getEventHeader(
+    event,
+    'rw-studio-impersonation-cookie',
+  )
+
+  if (impersationationHeader) {
+    return impersationationHeader
+  }
+
+  // TODO: Remove code below when we remove the old way of passing the cookie
+  // from Studio, and decide it's OK to break compatibility with older Studio
+  // versions
+  try {
+    if (!isFetchApiRequest(event)) {
+      const jsonBody = JSON.parse(event.body ?? '{}')
+      return (
+        jsonBody?.extensions?.headers?.cookie ||
+        jsonBody?.extensions?.headers?.Cookie
+      )
+    }
+  } catch {
+    // sometimes the event body isn't json
+    return
+  }
 }
 
 // decrypts session text using old CryptoJS algorithm (using node:crypto library)
@@ -97,6 +97,7 @@ const legacyDecryptSession = (encryptedText: string) => {
 export const extractCookie = (event: APIGatewayProxyEvent | Request) => {
   return eventGraphiQLHeadersCookie(event) || getEventHeader(event, 'Cookie')
 }
+
 // whether this encrypted session was made with the old CryptoJS algorithm
 export const isLegacySession = (text: string | undefined) => {
   if (!text) {
@@ -159,22 +160,24 @@ export const encryptSession = (dataString: string) => {
 // returns the actual value of the session cookie
 export const getSession = (
   text: string | undefined,
-  cookieNameOption: string | undefined,
+  cookieNameTemplate: string | undefined,
 ) => {
   if (typeof text === 'undefined' || text === null) {
     return null
   }
 
+  const cookieName = generateCookieName(cookieNameTemplate)
+
   const cookies = text.split(';')
   const sessionCookie = cookies.find((cookie) => {
-    return cookie.split('=')[0].trim() === cookieName(cookieNameOption)
+    return cookie.split('=')[0].trim() === cookieName
   })
 
-  if (!sessionCookie || sessionCookie === `${cookieName(cookieNameOption)}=`) {
+  if (!sessionCookie || sessionCookie === `${cookieName}=`) {
     return null
   }
 
-  return sessionCookie.replace(`${cookieName(cookieNameOption)}=`, '').trim()
+  return sessionCookie.replace(`${cookieName}=`, '').trim()
 }
 
 // Convenience function to get session, decrypt, and return session data all
@@ -182,7 +185,7 @@ export const getSession = (
 // name of the dbAuth session cookie
 export const dbAuthSession = (
   event: APIGatewayProxyEvent | Request,
-  cookieNameOption: string | undefined,
+  cookieNameTemplate: string | undefined,
 ) => {
   const sessionCookie = extractCookie(event)
 
@@ -192,7 +195,7 @@ export const dbAuthSession = (
 
   // This is a browser making a request
   const [session, _csrfToken] = decryptSession(
-    getSession(sessionCookie, cookieNameOption),
+    getSession(sessionCookie, cookieNameTemplate),
   )
   return session
 }
@@ -251,9 +254,9 @@ export const legacyHashPassword = (text: string, salt?: string) => {
   ]
 }
 
-export const cookieName = (name: string | undefined) => {
+export function generateCookieName(template: string | undefined) {
   const port = getPort()
-  const cookieName = name?.replace('%port%', '' + port) ?? 'session'
+  const cookieName = template?.replace('%port%', '' + port) ?? 'session'
 
   return cookieName
 }
@@ -295,18 +298,34 @@ export function getDbAuthResponseBuilder(
     const setCookieHeaders = response.headers?.getSetCookie() || []
 
     if (setCookieHeaders.length > 0) {
-      if ('multiValueHeaders' in event) {
+      delete headers['set-cookie']
+      delete headers['Set-Cookie']
+
+      if (supportsMultiValueHeaders(event)) {
         dbAuthResponse.multiValueHeaders = {
+          // Netlify wants 'Set-Cookie' headers to be capitalized
+          // https://github.com/redwoodjs/redwood/pull/10889
           'Set-Cookie': setCookieHeaders,
         }
-        delete headers['set-cookie']
       } else {
+        // If we do this for Netlify the lambda function will throw an error
+        // https://github.com/redwoodjs/redwood/pull/10889
         headers['set-cookie'] = setCookieHeaders
       }
     }
 
     return dbAuthResponse
   }
+}
+
+// `'multiValueHeaders' in event` is true for both Netlify and Vercel
+// but only Netlify actually supports it. Vercel will just ignore it
+// https://github.com/vercel/vercel/issues/7820
+function supportsMultiValueHeaders(event: APIGatewayProxyEvent | Request) {
+  return (
+    'multiValueHeaders' in event &&
+    (!event.headers || !('x-vercel-id' in event.headers))
+  )
 }
 
 export const extractHashingOptions = (text: string): ScryptOptions => {

@@ -21,7 +21,7 @@ We use [yargs](http://yargs.js.org/) and borrow its syntax here:
 yarn redwood generate page <name> [path] --option
 ```
 
-- `redwood g page` is the command.
+- `redwood generate page` is the command.
 - `<name>` and `[path]` are positional arguments.
   - `<>` denotes a required argument.
   - `[]` denotes an optional argument.

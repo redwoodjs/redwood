@@ -1,11 +1,11 @@
 import { expect, test } from 'tstyche'
 
-import { createUploadsConfig, setupStorage } from 'src/index.js'
+import { createUploadsConfig, setupStorage } from '@redwoodjs/storage'
 
 import { MemoryStorage } from '../adapters/MemoryStorage/MemoryStorage.js'
 import { type UploadsConfig } from '../prismaExtension.js'
 
-// Use the createUplodsConfig helper here....
+// Use the createUploadsConfig helper here....
 // otherwise the types won't be accurate
 const uploadsConfig = createUploadsConfig({
   dummy: {
@@ -25,7 +25,7 @@ const { saveFiles } = setupStorage({
 
 // const prismaClient = new PrismaClient().$extends(storagePrismaExtension)
 
-test('only configured models have savers', async () => {
+test('only configured models have savers', () => {
   expect(saveFiles).type.toHaveProperty('forDummy')
   expect(saveFiles).type.toHaveProperty('forDumbo')
 
@@ -52,7 +52,7 @@ test('inline config for save files is OK!', () => {
   expect(saveFiles).type.not.toHaveProperty('forDumbo')
 })
 
-test('UploadsConfig accepts all available models with their fields', async () => {
+test('UploadsConfig accepts all available models with their fields', () => {
   expect<UploadsConfig>().type.toHaveProperty('dummy')
   expect<UploadsConfig>().type.toHaveProperty('dumbo')
   expect<UploadsConfig>().type.toHaveProperty('book')
