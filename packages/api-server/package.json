@@ -53,7 +53,7 @@
   "devDependencies": {
     "@redwoodjs/framework-tools": "8.4.2",
     "@types/aws-lambda": "8.10.145",
-    "@types/lodash": "4.17.10",
+    "@types/lodash": "4.17.13",
     "@types/qs": "6.9.16",
     "@types/split2": "4.2.3",
     "@types/yargs": "17.0.33",
