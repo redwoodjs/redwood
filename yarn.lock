@@ -12,11 +12,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/cache@npm:3.2.4":
-  version: 3.2.4
-  resolution: "@actions/cache@npm:3.2.4"
+"@actions/cache@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@actions/cache@npm:3.3.0"
   dependencies:
-    "@actions/core": "npm:^1.10.0"
+    "@actions/core": "npm:^1.11.1"
     "@actions/exec": "npm:^1.0.1"
     "@actions/glob": "npm:^0.1.0"
     "@actions/http-client": "npm:^2.1.1"
@@ -25,12 +25,11 @@ __metadata:
     "@azure/ms-rest-js": "npm:^2.6.0"
     "@azure/storage-blob": "npm:^12.13.0"
     semver: "npm:^6.3.1"
-    uuid: "npm:^3.3.3"
-  checksum: 10c0/81bbf9dd1712d44eb92a1b832cd76a10bd17b72a379d0c7a73ae209d152d1e5b0fb310449622c511c48ace72e92572b2927993a4c85ac98eae2f6677c42a6a6a
+  checksum: 10c0/e4206205bfdf8a108f2c36c582ae08acdb5d8e43ee424dde0e5248a270fa57b232709c2448b625536bfc4dd67ad037268e9796c35e1517ea6ce56083710a1ff2
   languageName: node
   linkType: hard
 
-"@actions/core@npm:1.11.1, @actions/core@npm:^1.10.0, @actions/core@npm:^1.2.6, @actions/core@npm:^1.9.1":
+"@actions/core@npm:1.11.1, @actions/core@npm:^1.11.1, @actions/core@npm:^1.2.6, @actions/core@npm:^1.9.1":
   version: 1.11.1
   resolution: "@actions/core@npm:1.11.1"
   dependencies:
@@ -27095,7 +27094,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@actions/cache": "npm:3.2.4"
+    "@actions/cache": "npm:3.3.0"
     "@actions/core": "npm:1.11.1"
     "@actions/exec": "npm:1.1.1"
     "@actions/glob": "npm:0.5.0"
@@ -29973,15 +29972,6 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^3.3.3":
-  version: 3.4.0
-  resolution: "uuid@npm:3.4.0"
-  bin:
-    uuid: ./bin/uuid
-  checksum: 10c0/1c13950df865c4f506ebfe0a24023571fa80edf2e62364297a537c80af09c618299797bbf2dbac6b1f8ae5ad182ba474b89db61e0e85839683991f7e08795347
   languageName: node
   linkType: hard
 
