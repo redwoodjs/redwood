@@ -1,5 +1,5 @@
 import { Response as PonyResponse } from '@whatwg-node/fetch'
-import cookie from 'cookie'
+import * as cookie from 'cookie'
 
 import { CookieJar } from '@redwoodjs/cookie-jar'
 
