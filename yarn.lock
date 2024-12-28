@@ -2241,6 +2241,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@clerk/types@npm:3.65.4":
+  version: 3.65.4
+  resolution: "@clerk/types@npm:3.65.4"
+  dependencies:
+    csstype: "npm:3.1.1"
+  checksum: 10c0/2137b0b54387842a3da667076d80093c432e3db3d89ab50cb5a1288005249cb461cfa56486c4595fe2b0adbd00670c4be5e39a11e0c067794ced913f8d3a915d
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -7628,7 +7637,7 @@ __metadata:
   resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
   dependencies:
     "@clerk/clerk-react": "npm:4.32.3"
-    "@clerk/types": "npm:3.65.3"
+    "@clerk/types": "npm:3.65.4"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@types/react": "npm:^18.2.55"
