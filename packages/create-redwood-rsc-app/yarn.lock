@@ -1989,7 +1989,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-compat-utils@npm:^0.5.0, eslint-compat-utils@npm:^0.5.1":
+"eslint-compat-utils@npm:^0.5.1":
   version: 0.5.1
   resolution: "eslint-compat-utils@npm:0.5.1"
   dependencies:
@@ -2171,17 +2171,17 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-yml@npm:^1.14.0":
-  version: 1.14.0
-  resolution: "eslint-plugin-yml@npm:1.14.0"
+  version: 1.16.0
+  resolution: "eslint-plugin-yml@npm:1.16.0"
   dependencies:
     debug: "npm:^4.3.2"
-    eslint-compat-utils: "npm:^0.5.0"
+    eslint-compat-utils: "npm:^0.6.0"
     lodash: "npm:^4.17.21"
     natural-compare: "npm:^1.4.0"
     yaml-eslint-parser: "npm:^1.2.1"
   peerDependencies:
     eslint: ">=6.0.0"
-  checksum: 10c0/27c427773b705c90c0eb73393629a75eaf7a7f5908887c42af24689e17fcf1f8da9e914919ac47855e1be76c515e0ca801e76d40dc813f9d848a842fbfc140c5
+  checksum: 10c0/35052c2f77fb1d143141329444ca975dbc3190393595051ce4890b7f990aaf79286b52ff18c8ffb66e9739ad779fb23efe0eb9011e761d2b26a3244e20e5a925
   languageName: node
   linkType: hard
 
