@@ -1,8 +1,9 @@
-import cookie from 'cookie'
+import * as cookie from 'cookie'
+import type { CookieSerializeOptions } from 'cookie'
 
 export type CookieParams = {
   value: string
-  options?: cookie.CookieSerializeOptions
+  options?: CookieSerializeOptions
 }
 
 /** Specialized cookie map, that lets you set cookies with options */
@@ -23,11 +24,7 @@ export class CookieJar {
     }
   }
 
-  public set(
-    name: string,
-    value: string,
-    options?: cookie.CookieSerializeOptions,
-  ) {
+  public set(name: string, value: string, options?: CookieSerializeOptions) {
     this.map.set(name, {
       value,
       options,
