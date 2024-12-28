@@ -25,6 +25,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@types/node": "^22.10.2",
     "chalk": "5.3.0",
     "ci-info": "4.0.0",
     "enquirer": "2.4.1",
