@@ -1,119 +1,127 @@
+// import terminalLink from 'terminal-link'
 import path from 'path'
 
-import execa from 'execa'
+import { getSchema, getConfig } from '@prisma/internals'
 import fs from 'fs-extra'
-import terminalLink from 'terminal-link'
+import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
-import { getPaths } from '@redwoodjs/project-config'
+import { errorTelemetry } from '@redwoodjs/telemetry'
 
-// It's easy for the api side to exceed Render's free-plan limit.
-// Because telemetryMiddleware is added to Yargs as middleware,
-// we need to set the env var here outside the handler to correctly disable it.
-if (process.argv.slice(2).includes('api')) {
-  process.env.REDWOOD_DISABLE_TELEMETRY = 1
+import { getPaths, writeFilesTask, printSetupNotes } from '../../../../lib'
+import c from '../../../../lib/colors'
+import { addFilesTask, updateApiURLTask } from '../helpers'
+import {
+  POSTGRES_YAML,
+  RENDER_HEALTH_CHECK,
+  RENDER_YAML,
+  SQLITE_YAML,
+} from '../templates/render'
+
+export const command = 'render'
+export const description = 'Setup Render deploy'
+
+export const getRenderYamlContent = async (database) => {
+  if (database === 'none') {
+    return {
+      path: path.join(getPaths().base, 'render.yaml'),
+      content: RENDER_YAML(''),
+    }
+  }
+  if (!fs.existsSync('api/db/schema.prisma')) {
+    throw new Error("Could not find prisma schema at 'api/db/schema.prisma'")
+  }
+
+  const schema = await getSchema('api/db/schema.prisma')
+  const config = await getConfig({ datamodel: schema })
+  const detectedDatabase = config.datasources[0].activeProvider
+
+  if (detectedDatabase === database) {
+    switch (database) {
+      case 'postgresql':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(POSTGRES_YAML),
+        }
+      case 'sqlite':
+        return {
+          path: path.join(getPaths().base, 'render.yaml'),
+          content: RENDER_YAML(SQLITE_YAML),
+        }
+      default:
+        throw new Error(`
+       Unexpected datasource provider found: ${database}`)
+    }
+  } else {
+    throw new Error(`
+    Prisma datasource provider is detected to be ${detectedDatabase}.
+
+    Option 1: Update your schema.prisma provider to be ${database}, then run
+    yarn rw prisma migrate dev
+    yarn rw setup deploy render --database ${database}
+
+    Option 2: Rerun setup deploy command with current schema.prisma provider:
+    yarn rw setup deploy render --database ${detectedDatabase}`)
+  }
 }
 
-export const command = 'render <side>'
-export const description = 'Build, migrate, and serve command for Render deploy'
-
-export const builder = (yargs) => {
-  yargs
-    .positional('side', {
-      choices: ['api', 'web'],
-      description: 'Side to deploy',
-      type: 'string',
-    })
-    .option('prisma', {
-      description: 'Apply database migrations',
-      type: 'boolean',
-      default: true,
-    })
-    .option('data-migrate', {
-      description: 'Apply data migrations',
-      type: 'boolean',
-      default: true,
-      alias: 'dm',
-    })
-    .epilogue(
-      `For more commands, options, and examples, see ${terminalLink(
-        'Redwood CLI Reference',
-        'https://redwoodjs.com/docs/cli-commands#deploy',
-      )}`,
-    )
-}
-
-export const handler = async ({ side, prisma, dataMigrate }) => {
-  recordTelemetryAttributes({
-    command: 'deploy render',
-    side,
-    prisma,
-    dataMigrate,
+export const builder = (yargs) =>
+  yargs.option('database', {
+    alias: 'd',
+    choices: ['none', 'postgresql', 'sqlite'],
+    description: 'Database deployment for Render only',
+    default: 'postgresql',
+    type: 'string',
   })
 
-  const rwjsPaths = getPaths()
+// any notes to print out when the job is done
+const notes = [
+  'You are ready to deploy to Render!\n',
+  'Go to https://dashboard.render.com/iacs to create your account and deploy to Render',
+  'Check out the deployment docs at https://render.com/docs/deploy-redwood for detailed instructions',
+  'Note: After first deployment to Render update the rewrite rule destination in `./render.yaml`',
+]
 
-  const execaConfig = {
-    cwd: rwjsPaths.base,
-    shell: true,
-    stdio: 'inherit',
-  }
+const additionalFiles = [
+  {
+    path: path.join(getPaths().base, 'api/src/functions/healthz.js'),
+    content: RENDER_HEALTH_CHECK,
+  },
+]
 
-  async function runApiCommands() {
-    if (prisma) {
-      console.log('Running database migrations...')
-      execa.commandSync(
-        `node_modules/.bin/prisma migrate deploy --schema "${rwjsPaths.api.dbSchema}"`,
-        execaConfig,
-      )
-    }
+export const handler = async ({ force, database }) => {
+  recordTelemetryAttributes({
+    command: 'setup deploy render',
+    force,
+    database,
+  })
+  const tasks = new Listr(
+    [
+      {
+        title: 'Adding render.yaml',
+        task: async () => {
+          const fileData = await getRenderYamlContent(database)
+          let files = {}
+          files[fileData.path] = fileData.content
+          return writeFilesTask(files, { overwriteExisting: force })
+        },
+      },
+      updateApiURLTask('/.redwood/functions'),
+      // Add health check api function
+      addFilesTask({
+        files: additionalFiles,
+        force,
+      }),
+      printSetupNotes(notes),
+    ],
+    { rendererOptions: { collapseSubtasks: false } },
+  )
 
-    if (dataMigrate) {
-      console.log('Running data migrations...')
-      const packageJson = fs.readJsonSync(
-        path.join(rwjsPaths.base, 'package.json'),
-      )
-      const hasDataMigratePackage =
-        !!packageJson.devDependencies['@redwoodjs/cli-data-migrate']
-
-      if (!hasDataMigratePackage) {
-        console.error(
-          [
-            "Skipping data migrations; your project doesn't have the `@redwoodjs/cli-data-migrate` package as a dev dependency.",
-            "Without it installed, you're likely to run into memory issues during deploy.",
-            "If you want to run data migrations, add the package to your project's root package.json and deploy again:",
-            '',
-            '```',
-            'yarn add -D @redwoodjs/cli-data-migrate',
-            '```',
-          ].join('\n'),
-        )
-      } else {
-        execa.commandSync('yarn rw dataMigrate up', execaConfig)
-      }
-    }
-
-    const serverFilePath = path.join(rwjsPaths.api.dist, 'server.js')
-    const hasServerFile = fs.pathExistsSync(serverFilePath)
-
-    if (hasServerFile) {
-      execa(`yarn node ${serverFilePath}`, execaConfig)
-    } else {
-      const { handler } = await import(
-        '@redwoodjs/api-server/dist/apiCLIConfigHandler.js'
-      )
-      handler()
-    }
-  }
-
-  async function runWebCommands() {
-    execa.commandSync('yarn install', execaConfig)
-    execa.commandSync('yarn rw build web --verbose', execaConfig)
-  }
-
-  if (side === 'api') {
-    runApiCommands()
-  } else if (side === 'web') {
-    runWebCommands()
+  try {
+    await tasks.run()
+  } catch (e) {
+    errorTelemetry(process.argv, e.message)
+    console.error(c.error(e.message))
+    process.exit(e?.exitCode || 1)
   }
 }
