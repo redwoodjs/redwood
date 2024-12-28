@@ -2186,16 +2186,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@clerk/clerk-react@npm:4.32.3":
-  version: 4.32.3
-  resolution: "@clerk/clerk-react@npm:4.32.3"
+"@clerk/clerk-react@npm:4.32.4":
+  version: 4.32.4
+  resolution: "@clerk/clerk-react@npm:4.32.4"
   dependencies:
-    "@clerk/shared": "npm:1.4.1"
-    "@clerk/types": "npm:3.65.3"
+    "@clerk/shared": "npm:1.4.2"
+    "@clerk/types": "npm:3.65.4"
     tslib: "npm:2.4.1"
   peerDependencies:
     react: ">=16"
-  checksum: 10c0/531de3a3e814ae7f8b0f46281fb8d95e8ab89e62c2331fe90183e2a37f0744a88b68bc70a99e475185084eeac53827087f63af7889e1d2770d416cc39d4033c8
+  checksum: 10c0/ff068ae4f45c0c983bae95f85448b9614cecb1e800d88bc3a42afb7cdd7a6351ebde541da90bb42208b1358433e80545651c32de5290380a244aee45422d2efc
   languageName: node
   linkType: hard
 
@@ -2229,6 +2229,22 @@ __metadata:
     react:
       optional: true
   checksum: 10c0/5b77019ef1093131765012cef634d88c79f9a638b67a0d22284f43815af6b0248c9ced0fb4a0016274ad10eeb9106c688ec7aa070c15d9d8aeac4cdc2f044fc4
+  languageName: node
+  linkType: hard
+
+"@clerk/shared@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@clerk/shared@npm:1.4.2"
+  dependencies:
+    glob-to-regexp: "npm:0.4.1"
+    js-cookie: "npm:3.0.1"
+    swr: "npm:2.2.0"
+  peerDependencies:
+    react: ">=16"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/7fa73d5b5a4a25957c266bb26f80998cccb33ed5f56413d607c0a13509b16d90a90e4685a8c8186a713ff7c4e3196a8b51d394fa2bf0bb167d5501d880d5dfa6
   languageName: node
   linkType: hard
 
@@ -7696,7 +7712,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-clerk-web@workspace:packages/auth-providers/clerk/web"
   dependencies:
-    "@clerk/clerk-react": "npm:4.32.3"
+    "@clerk/clerk-react": "npm:4.32.4"
     "@clerk/types": "npm:3.65.4"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
@@ -7708,7 +7724,7 @@ __metadata:
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
   peerDependencies:
-    "@clerk/clerk-react": 4.32.3
+    "@clerk/clerk-react": 4.32.4
   languageName: unknown
   linkType: soft
 
@@ -10685,11 +10701,11 @@ __metadata:
   linkType: hard
 
 "@types/archiver@npm:^6":
-  version: 6.0.3
-  resolution: "@types/archiver@npm:6.0.3"
+  version: 6.0.2
+  resolution: "@types/archiver@npm:6.0.2"
   dependencies:
     "@types/readdir-glob": "npm:*"
-  checksum: 10c0/59c6be3d81da240a35f7e4a70348012ee462a74c56fb37c86add2e11562fae46a8e243dcca29a34ed2dc401239b6f3dd9623584570ca5b07c2aa61ee7822f91f
+  checksum: 10c0/01ca91d76c57b38ae030a24a07b46664bf3ae9d303c0cdd2b342e06a4b53dccd0d0c375ff3f9af966a93512554f82ef97c515fcc47536e7dbb29a7d9bc09a540
   languageName: node
   linkType: hard
 
@@ -11360,11 +11376,11 @@ __metadata:
   linkType: hard
 
 "@types/nodemailer@npm:^6":
-  version: 6.4.17
-  resolution: "@types/nodemailer@npm:6.4.17"
+  version: 6.4.16
+  resolution: "@types/nodemailer@npm:6.4.16"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/689abb3005cf36cf89c2abe56f0aa4469a37e0814633a73fbeb35732e856f4b0d7ab32b6d91585038b6941f5b70db58ec2bd147ebe9f73e528eb6c99604f4e82
+  checksum: 10c0/63a9e9ad8916675aeb0828dd969e6def6e24344c1bd2b93674ad1933160d532c6d9c2a56ec3f2efc1a866cacaa468a2969be33447304fb94af507d6cd3b94e83
   languageName: node
   linkType: hard
 
@@ -19773,8 +19789,8 @@ __metadata:
   linkType: hard
 
 "ioredis@npm:^5.3.2":
-  version: 5.4.2
-  resolution: "ioredis@npm:5.4.2"
+  version: 5.4.1
+  resolution: "ioredis@npm:5.4.1"
   dependencies:
     "@ioredis/commands": "npm:^1.1.1"
     cluster-key-slot: "npm:^1.1.0"
@@ -19785,7 +19801,7 @@ __metadata:
     redis-errors: "npm:^1.2.0"
     redis-parser: "npm:^3.0.0"
     standard-as-callback: "npm:^2.1.0"
-  checksum: 10c0/e59d2cceb43ed74b487d7b50fa91b93246e734e5d4835c7e62f64e44da072f12ab43b044248012e6f8b76c61a7c091a2388caad50e8ad69a8ce5515a730b23b8
+  checksum: 10c0/5d28b7c89a3cab5b76d75923d7d4ce79172b3a1ca9be690133f6e8e393a7a4b4ffd55513e618bbb5504fed80d9e1395c9d9531a7c5c5c84aa4c4e765cca75456
   languageName: node
   linkType: hard
 
