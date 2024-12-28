@@ -13,22 +13,21 @@ export class CookieJar {
   // This allows CookieJar to be used in MWRequest.cookie also
   // note that options are not available when constructed this way
   constructor(cookieString?: string | null) {
-    if (cookieString) {
-      const parsedCookies = cookie.parse(cookieString)
-
-      this.map = new Map(
-        Object.entries(parsedCookies).map(([key, value]) => {
-          return [key, { value }]
-        }),
-      )
+    if (!cookieString) {
+      return
     }
+
+    const parsedCookies = cookie.parse(cookieString)
+
+    this.map = new Map(
+      Object.entries(parsedCookies).map(([key, value]) => {
+        return [key, { value }]
+      }),
+    )
   }
 
   public set(name: string, value: string, options?: CookieSerializeOptions) {
-    this.map.set(name, {
-      value,
-      options,
-    })
+    this.map.set(name, { value, options })
 
     return this
   }
