@@ -22,9 +22,9 @@ export const globalTypes: GlobalTypes = {
 }
 
 /**
- * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} 
+ * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator}
  */
-const withI18n = function WithI18n (Story: StoryFn, context: StoryContext) {
+const withI18n = function WithI18n(Story: StoryFn, context: StoryContext) {
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
@@ -36,8 +36,8 @@ const withI18n = function WithI18n (Story: StoryFn, context: StoryContext) {
   )
 }
 
-const preview: Preview = { 
-  decorators: [withI18n]
+const preview: Preview = {
+  decorators: [withI18n],
 }
 
 export default preview
