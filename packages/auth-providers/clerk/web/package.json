@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@clerk/clerk-react": "4.32.4",
-    "@clerk/types": "3.65.3",
+    "@clerk/types": "3.65.4",
     "@redwoodjs/framework-tools": "workspace:*",
     "@types/react": "^18.2.55",
     "concurrently": "8.2.2",

@@ -22,28 +22,22 @@ export const globalTypes: GlobalTypes = {
 }
 
 /**
- * We're following Storybook's naming convention here. See for example
- * https://github.com/storybookjs/addon-kit/blob/main/src/withGlobals.ts
- * Unfortunately that will make eslint complain, so we have to disable it when
- * using a hook below
- *
- * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} 
+ * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator}
  */
-const withI18n = (StoryFn: StoryFn, context: StoryContext) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const withI18n = function WithI18n(Story: StoryFn, context: StoryContext) {
   React.useEffect(() => {
     i18n.changeLanguage(context.globals.locale)
   }, [context.globals.locale])
 
   return (
     <I18nextProvider i18n={i18n}>
-      <StoryFn />
+      <Story />
     </I18nextProvider>
   )
 }
 
-const preview: Preview = { 
-  decorators: [withI18n]
+const preview: Preview = {
+  decorators: [withI18n],
 }
 
 export default preview
