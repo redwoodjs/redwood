@@ -24,6 +24,27 @@ describe('CookieJar', () => {
     expect(cookieJar.get('tz')).toStrictEqual('Asia/Bangkok')
   })
 
+  test('instatiation behavior with invalid string', () => {
+    expect(new CookieJar('; session').get('foo')).toBeUndefined()
+    expect(new CookieJar('; session').get('session')).toBeUndefined()
+    expect(new CookieJar('session').get('session')).toBeUndefined()
+    expect(new CookieJar('; session=woof-1234').get('session')).toEqual(
+      'woof-1234',
+    )
+    expect(new CookieJar('kittens; session=woof-1234').get('session')).toEqual(
+      'woof-1234',
+    )
+    expect(
+      new CookieJar('kittens; session=woof-1234').get('kittens'),
+    ).toBeUndefined()
+    expect(
+      new CookieJar('kittens; session=woof-1234; foo').get('foo'),
+    ).toBeUndefined()
+    expect(
+      new CookieJar('kittens; session=woof-1234; foo=').get('foo'),
+    ).toEqual('')
+  })
+
   test('getWithOptions', () => {
     const jar = new CookieJar()
     jar.set('kittens', 'soft', { path: '/bazinga' })
