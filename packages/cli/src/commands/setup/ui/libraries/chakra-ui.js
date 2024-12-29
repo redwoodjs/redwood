@@ -30,12 +30,12 @@ export function builder(yargs) {
 }
 
 const CHAKRA_THEME_AND_COMMENTS = `\
-import type { ChakraTheme, DeepPartial } from '@chakra-ui/react'
+import type { ChakraTheme, DeepPartial, extendTheme } from '@chakra-ui/react'
 
 // This object will be used to override Chakra-UI theme defaults.
 // See https://chakra-ui.com/docs/styled-system/theming/theme for theming options
 const theme: DeepPartial<ChakraTheme> = {}
-export default theme
+export default extendTheme(theme)
 `
 
 export async function handler({ force, install }) {
@@ -80,15 +80,14 @@ export async function handler({ force, install }) {
           extendJSXFile(rwPaths.web.app, {
             insertComponent: {
               name: 'ChakraProvider',
-              props: { theme: 'extendedTheme' },
+              props: { theme: 'theme' },
               within: 'RedwoodProvider',
               insertBefore: '<ColorModeScript />',
             },
             imports: [
-              "import { ChakraProvider, ColorModeScript, extendTheme } from '@chakra-ui/react'",
+              "import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'",
               "import * as theme from 'config/chakra.config'",
             ],
-            moduleScopeLines: ['const extendedTheme = extendTheme(theme)'],
           }),
       },
       {
