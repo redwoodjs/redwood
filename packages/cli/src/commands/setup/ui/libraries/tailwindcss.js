@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { outputFileSync } from 'fs-extra'
@@ -252,9 +253,10 @@ export const handler = async ({ force, install }) => {
           )
         },
         task: async (_ctx, task) => {
+          const prompt = task.prompt(ListrEnquirerPromptAdapter)
           const overrideScaffoldCss =
             force ||
-            (await task.prompt({
+            (await prompt.run({
               type: 'Confirm',
               message:
                 "Do you want to override your 'scaffold.css' to use tailwind classes?",

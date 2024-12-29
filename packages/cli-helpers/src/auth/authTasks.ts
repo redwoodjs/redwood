@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import type { ListrRenderer, ListrTask, ListrTaskWrapper } from 'listr2'
 
 import { getConfig, resolveFile } from '@redwoodjs/project-config'
@@ -467,7 +468,8 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
         // Confirm that we're about to overwrite some files
         const filesToOverwrite = findExistingFiles(filesRecord)
 
-        const overwrite = await task.prompt({
+        const prompt = task.prompt(ListrEnquirerPromptAdapter)
+        const overwrite = await prompt.run<boolean>({
           type: 'confirm',
           message: `Overwrite existing ${filesToOverwrite.join(', ')}?`,
           initial: false,
@@ -492,22 +494,24 @@ export const generateAuthApiFiles = <Renderer extends typeof ListrRenderer>(
     },
   }
 }
-/**
- * Returns a map of file names (not full paths) that already exist
- */
+
+/** Returns a map of file names (not full paths) that already exist */
 function findExistingFiles(filesMap: Record<string, string>) {
   return Object.keys(filesMap)
     .filter((filePath) => fs.existsSync(filePath))
     .map((filePath) => filePath.replace(getPaths().base, ''))
 }
 
-export const addAuthConfigToGqlApi = <Renderer extends typeof ListrRenderer>(
+export const addAuthConfigToGqlApi = <
+  Renderer extends typeof ListrRenderer,
+  FallbackRenderer extends typeof ListrRenderer,
+>(
   authDecoderImport?: string,
 ) => ({
   title: 'Adding auth config to GraphQL API...',
   task: (
     ctx: AuthGeneratorCtx,
-    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>,
+    _task: ListrTaskWrapper<AuthGeneratorCtx, Renderer, FallbackRenderer>,
   ) => {
     if (graphFunctionDoesExist()) {
       addApiConfig({
@@ -535,14 +539,17 @@ export interface AuthGeneratorCtx {
   force: boolean
 }
 
-export const setAuthSetupMode = <Renderer extends typeof ListrRenderer>(
+export const setAuthSetupMode = <
+  Renderer extends typeof ListrRenderer,
+  FallbackRenderer extends typeof ListrRenderer,
+>(
   force: boolean,
 ) => {
   return {
     title: 'Checking project for existing auth...',
     task: async (
       ctx: AuthGeneratorCtx,
-      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer>,
+      task: ListrTaskWrapper<AuthGeneratorCtx, Renderer, FallbackRenderer>,
     ) => {
       if (force) {
         ctx.setupMode = 'FORCE'

@@ -106,8 +106,9 @@ export const writeFile = <Renderer extends typeof ListrRenderer>(
   { existingFiles = 'FAIL' }: { existingFiles?: ExistingFiles } = {},
   // TODO: Remove type cast by finding all places `writeFile` is used and
   // making sure a proper task is passed in
-  task: ListrTaskWrapper<never, Renderer> = {} as ListrTaskWrapper<
+  task: ListrTaskWrapper<never, Renderer, Renderer> = {} as ListrTaskWrapper<
     never,
+    Renderer,
     Renderer
   >,
 ) => {
@@ -152,6 +153,7 @@ export const writeFilesTask = <Renderer extends typeof ListrRenderer>(
           _ctx: never,
           task: ListrTaskWrapper<
             never,
+            ListrGetRendererClassFromValue<Renderer>,
             ListrGetRendererClassFromValue<Renderer>
           >,
         ) => {
