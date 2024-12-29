@@ -5,7 +5,7 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths, writeFile } from '../../../../lib'
+import { getPaths, transformTSToJS, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
@@ -93,21 +93,18 @@ export async function handler({ force, install }) {
       {
         title: `Creating Theme File...`,
         task: async () => {
-          const ts = isTypeScriptProject()
+          const isTs = isTypeScriptProject()
           const themeFilePath = path.join(
             rwPaths.web.config,
-            `chakra.config.${ts ? 'ts' : 'js'}`,
+            `chakra.config.${isTs ? 'ts' : 'js'}`,
           )
-          writeFile(themeFilePath, CHAKRA_THEME_AND_COMMENTS, {
-            overwriteExisting: force,
-          })
-          if (ts === false) {
-            writeFile(
-              themeFilePath,
-              await transformTSToJS(themeFilePath, templateContent),
-              { overwriteExisting: force },
-            )
-          }
+          writeFile(
+            themeFilePath,
+            isTs
+              ? CHAKRA_THEME_AND_COMMENTS
+              : await transformTSToJS(themeFilePath, CHAKRA_THEME_AND_COMMENTS),
+            { overwriteExisting: force },
+          )
         },
       },
       {
