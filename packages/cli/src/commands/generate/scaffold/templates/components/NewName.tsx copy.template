@@ -1,0 +1,55 @@
+${useClientDirective}import type {
+  Create${singularPascalName}Mutation,
+  Create${singularPascalName}Input,
+  Create${singularPascalName}MutationVariables
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import ${singularPascalName}Form from '${importComponentNameForm}'
+
+const CREATE_${singularConstantName}_MUTATION: TypedDocumentNode<
+  Create${singularPascalName}Mutation,
+  Create${singularPascalName}MutationVariables
+> = gql`
+  mutation Create${singularPascalName}Mutation($input: Create${singularPascalName}Input!) {
+    create${singularPascalName}(input: $input) {
+      ${idName}
+    }
+  }
+`
+
+const New${singularPascalName} = () => {
+  const [create${singularPascalName}, { loading, error }] = useMutation(
+    CREATE_${singularConstantName}_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('${singularPascalName} created')
+        navigate(routes.${pluralRouteName}())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
+
+  const onSave = (input: Create${singularPascalName}Input) => {
+    create${singularPascalName}({ variables: { input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">New ${singularPascalName}</h2>
+      </header>
+      <div className="rw-segment-main">
+        <${singularPascalName}Form onSave={onSave} loading={loading} error={error} />
+      </div>
+    </div>
+  )
+}
+
+export default New${singularPascalName}

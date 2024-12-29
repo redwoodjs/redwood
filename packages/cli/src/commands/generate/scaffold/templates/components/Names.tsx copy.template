@@ -1,0 +1,88 @@
+import type { Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables, Find${pluralPascalName} } from 'types/graphql'
+
+import { Link, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import { QUERY } from '${importComponentNamesCell}'
+import { ${listFormattersImports} } from 'src/lib/formatters'
+
+
+const DELETE_${singularConstantName}_MUTATION: TypedDocumentNode<Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables> = gql`
+  mutation Delete${singularPascalName}Mutation($${idName}: ${idType}!) {
+    delete${singularPascalName}(${idName}: $${idName}) {
+      ${idName}
+    }
+  }
+`
+
+const ${pluralPascalName}List = ({ ${pluralCamelName} }: Find${pluralPascalName}) => {
+  const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
+    onCompleted: () => {
+      toast.success('${singularPascalName} deleted')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+    // This refetches the query on the list page. Read more about other ways to
+    // update the cache over here:
+    // https://www.apollographql.com/docs/react/data/mutations/#making-all-other-cache-updates
+    refetchQueries: [{ query: QUERY }],
+    awaitRefetchQueries: true,
+  })
+
+  const onDeleteClick = (${idName}: Delete${singularPascalName}MutationVariables['${idName}']) => {
+    if (confirm('Are you sure you want to delete ${singularCamelName} ' + ${idName} + '?')) {
+      delete${singularPascalName}({ variables: { ${idName} } })
+    }
+  }
+
+  return (
+    <div className="rw-segment rw-table-wrapper-responsive">
+      <table className="rw-table">
+        <thead>
+          <tr><% columns.forEach(column => { %>
+            <th>${column.label}</th><% }) %>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          {${pluralCamelName}.map((${singularCamelName}) => (
+            <tr key={${singularCamelName}.${idName}}><% columns.forEach(column => { %>
+              <td>{${column.listDisplayFunction}(${singularCamelName}.${column.name})}</td><% }) %>
+              <td>
+                <nav className="rw-table-actions">
+                  <Link
+                    to={routes.${singularRouteName}({ ${idName}: ${singularCamelName}.${idName} })}
+                    title={'Show ${singularCamelName} ' + ${singularCamelName}.${idName} + ' detail'}
+                    className="rw-button rw-button-small"
+                  >
+                    Show
+                  </Link>
+                  <Link
+                    to={routes.${editRouteName}({ ${idName}: ${singularCamelName}.${idName} })}
+                    title={'Edit ${singularCamelName} ' + ${singularCamelName}.${idName}}
+                    className="rw-button rw-button-small rw-button-blue"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    type="button"
+                    title={'Delete ${singularCamelName} ' + ${singularCamelName}.${idName}}
+                    className="rw-button rw-button-small rw-button-red"
+                    onClick={() => onDeleteClick(${singularCamelName}.${idName})}
+                  >
+                    Delete
+                  </button>
+                </nav>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+export default ${pluralPascalName}List

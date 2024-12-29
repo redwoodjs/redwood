@@ -1,0 +1,74 @@
+${useClientDirective}import type {
+  Edit${singularPascalName}By${pascalIdName},
+  Update${singularPascalName}Input,
+  Update${singularPascalName}MutationVariables
+} from 'types/graphql'
+
+import { navigate, routes } from '@redwoodjs/router'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+import { useMutation } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import ${singularPascalName}Form from '${importComponentNameForm}'
+
+export const QUERY: TypedDocumentNode<Edit${singularPascalName}By${pascalIdName}> = gql`
+  query Edit${singularPascalName}By${pascalIdName}($${idName}: ${idType}!) {
+    ${singularCamelName}: ${singularCamelName}(${idName}: $${idName}) {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
+    }
+  }
+`
+
+const UPDATE_${singularConstantName}_MUTATION: TypedDocumentNode<
+  Edit${singularPascalName}ById,
+  Update${singularPascalName}MutationVariables
+> = gql`
+  mutation Update${singularPascalName}Mutation($${idName}: ${idType}!, $input: Update${singularPascalName}Input!) {
+    update${singularPascalName}(${idName}: $${idName}, input: $input) {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Failure = ({ error }: CellFailureProps) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ ${singularCamelName} }: CellSuccessProps<Edit${singularPascalName}By${pascalIdName}>) => {
+  const [update${singularPascalName}, { loading, error }] = useMutation(
+    UPDATE_${singularConstantName}_MUTATION,
+    {
+      onCompleted: () => {
+        toast.success('${singularPascalName} updated')
+        navigate(routes.${pluralRouteName}())
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      },
+    }
+  )
+
+  const onSave = (
+    input: Update${singularPascalName}Input,
+    id: Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']['id']
+  ) => {
+    update${singularPascalName}({ variables: { id, input } })
+  }
+
+  return (
+    <div className="rw-segment">
+      <header className="rw-segment-header">
+        <h2 className="rw-heading rw-heading-secondary">Edit ${singularPascalName} {${singularCamelName}?.id}</h2>
+      </header>
+      <div className="rw-segment-main">
+        <${singularPascalName}Form ${singularCamelName}={${singularCamelName}} onSave={onSave} error={error} loading={loading} />
+      </div>
+    </div>
+  )
+}

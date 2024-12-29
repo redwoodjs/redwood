@@ -1,0 +1,123 @@
+import type { Edit${singularPascalName}By${pascalIdName}, Update${singularPascalName}Input } from 'types/graphql'
+
+import type { RWGqlError } from '@redwoodjs/forms'
+import {
+  Form,
+  FormError,
+  FieldError,
+  Label,
+  ${fieldsToImport.join(',\n  ')},
+  Submit,
+} from '@redwoodjs/forms'
+
+<% if (fieldsToImport.includes('DatetimeLocalField')) { %>
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\d{2}\.\d{3}\w/, '')
+  }
+}
+<% } %>
+
+type Form${singularPascalName} = NonNullable<Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']>
+
+interface ${singularPascalName}FormProps {
+  ${singularCamelName}?: Edit${singularPascalName}By${pascalIdName}['${singularCamelName}']
+  onSave: (data: Update${singularPascalName}Input, ${idName}?: Form${singularPascalName}['${idName}']) => void
+  error: RWGqlError
+  loading: boolean
+}
+
+const ${singularPascalName}Form = (props: ${singularPascalName}FormProps) => {
+  const onSubmit = (data: Form${singularPascalName}) => {
+  <% editableColumns.forEach(column => { %>
+    <% if (column.isEnum && !column.isList && !column.isRequired) { %>
+      if (data.${column.name} === '') {
+        data.${column.name} = null
+      }
+    <% } %>
+    <% if (column.isEnum && column.isList) { %>
+      if (data.${column.name}) {
+        data.${column.name} = data.${column.name}.filter((value) => !!value)
+      }
+    <% } %>
+  <% }) %>
+    props.onSave(data, props?.${singularCamelName}?.${idName})
+  }
+
+  return (
+    <div className="rw-form-wrapper">
+      <Form<Form${singularPascalName}> onSubmit={onSubmit} error={props.error}>
+        <FormError
+          error={props.error}
+          wrapperClassName="rw-form-error-wrapper"
+          titleClassName="rw-form-error-title"
+          listClassName="rw-form-error-list"
+        />
+      <% editableColumns.forEach(column => { %>
+        <Label
+          name="${column.name}"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          ${column.label}
+        </Label>
+        <% if (column.isEnum) { %>
+          <% if (!column.isRequired) { %>
+          <div className="rw-check-radio-items">
+            <${column.component}
+              ${idName}="${singularCamelName}-${column.name}-none"
+              name="${column.name}"
+              defaultValue=""
+              ${column.defaultProp}={!props.${singularCamelName}?.${column.name}}
+              className="rw-input"
+              errorClassName="rw-input rw-input-error"
+            />
+            <div className="rw-check-radio-item-none">
+              None
+            </div>
+          </div>
+          <% } %>
+          <% column.values?.forEach((value, i) => {
+            const columnComponentName = column.isList ? `${column.name}[${i}]` : column.name
+            %>
+        <div className="rw-check-radio-items">
+          <${column.component}
+            ${idName}="${singularCamelName}-${column.name}-${i}"
+            name="${columnComponentName}"
+            defaultValue="${value.name}"
+            ${column.defaultProp}={props.${singularCamelName}?.${column.name}?.includes('${value.name}')}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+          <div>
+            ${value.name.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}
+          </div>
+        </div>
+          <% }) %>
+        <% } else { %>
+          <${column.component}
+            name="${column.name}"
+            ${column.defaultProp}={${column.deserializeFunction && column.deserializeFunction + '('}props.${singularCamelName}?.<%= column.name %>${column.deserializeFunction && ')'}}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            <%= !column.validation ? '' : `validation=${column.validation}` %>
+            <%= column.isRelationalField && !column.isRequired ? `emptyAs={'undefined'}` : '' %>
+          />
+        <% } %>
+
+        <FieldError name="${column.name}" className="rw-field-error" />
+<% }) %>
+        <div className="rw-button-group">
+          <Submit
+            disabled={props.loading}
+            className="rw-button rw-button-blue"
+          >
+            Save
+          </Submit>
+        </div>
+      </Form>
+    </div>
+  )
+}
+
+export default ${singularPascalName}Form

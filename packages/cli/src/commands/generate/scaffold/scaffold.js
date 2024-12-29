@@ -43,6 +43,7 @@ import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
 import {
   files as serviceFiles,
   builder as serviceBuilder,
+  buildScenario,
 } from '../service/service'
 
 // note a better way to do this is in https://github.com/redwoodjs/redwood/pull/3783/files
@@ -436,6 +437,7 @@ const modelRelatedVariables = (model) => {
     editableColumns,
     listFormattersImports,
     formattersImports,
+    relations,
   }
 }
 
@@ -559,6 +561,36 @@ const pageFiles = async (
   return fileList
 }
 
+/**
+ * Builds mock data for a given model.
+ *
+ * @param {Object} model - The model object containing information about the model.
+ * @param {string} model.name - The name of the model.
+ * @param {Array} model.fields - The fields of the model.
+ * @param {boolean} model.fields[].isId - Indicates if the field is an ID field.
+ * @param {string} model.fields[].type - The type of the field.
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of mock data objects.
+ */
+const buildMockData = async (model) => {
+  const singularName = pascalcase(singularize(model.name))
+  const camelName = camelcase(singularName)
+  const scenario = await buildScenario(singularName)
+  const idType = getIdType(model)
+  const intMockIdValues = [42, 43, 44]
+
+  const mockIdValues =
+    idType === 'String'
+      ? intMockIdValues.map((value) => `'${value}'`)
+      : intMockIdValues
+
+  // this assumes scenario will only have two objects
+  return Object.entries(scenario[camelName]).map(([_key, value], index) => ({
+    __typename: singularName,
+    id: mockIdValues[index],
+    ...value.data,
+  }))
+}
+
 const componentFiles = async (
   name,
   pascalScaffoldPath = '',
@@ -623,6 +655,7 @@ const componentFiles = async (
         useClientDirective,
         ...templateStrings,
         ...modelRelatedVariables(model),
+        mockData: await buildMockData(model),
       },
     )
 

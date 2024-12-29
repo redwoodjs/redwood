@@ -1,0 +1,79 @@
+import type { Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables, Find${singularPascalName}By${pascalIdName} } from 'types/graphql'
+
+import { Link, routes, navigate } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
+import type { TypedDocumentNode } from '@redwoodjs/web'
+import { toast } from '@redwoodjs/web/toast'
+
+import { ${formattersImports} } from 'src/lib/formatters'
+
+const DELETE_${singularConstantName}_MUTATION: TypedDocumentNode<Delete${singularPascalName}Mutation, Delete${singularPascalName}MutationVariables> = gql`
+  mutation Delete${singularPascalName}Mutation($${idName}: ${idType}!) {
+    delete${singularPascalName}(${idName}: $${idName}) {
+      ${idName}
+    }
+  }
+`
+
+interface Props {
+  ${singularCamelName}: NonNullable<Find${singularPascalName}By${pascalIdName}['${singularCamelName}']>
+}
+
+const ${singularPascalName} = ({ ${singularCamelName} }: Props) => {
+  const [delete${singularPascalName}] = useMutation(DELETE_${singularConstantName}_MUTATION, {
+    onCompleted: () => {
+      toast.success('${singularPascalName} deleted')
+      navigate(routes.${pluralRouteName}())
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const onDeleteClick = (${idName}: Delete${singularPascalName}MutationVariables['${idName}']) => {
+    if (confirm('Are you sure you want to delete ${singularCamelName} ' + ${idName} + '?')) {
+      delete${singularPascalName}({ variables: { ${idName} } })
+    }
+  }
+
+  return (
+    <>
+      <div className="rw-segment">
+        <header className="rw-segment-header">
+          <h2 className="rw-heading rw-heading-secondary">
+            ${singularPascalName} {${singularCamelName}.${idName}} Detail
+          </h2>
+        </header>
+        <table className="rw-table">
+          <tbody>
+            <% columns.forEach(column => { %><tr>
+              <th><%= column.label %></th><%
+              if (column.displayFunction) { %>
+              <td>{${column.displayFunction}(${singularCamelName}.${column.name})}</td><%
+              } else { %>
+              <td>{${singularCamelName}.${column.name}}</td><%
+              } %>
+            </tr><% }) %>
+          </tbody>
+        </table>
+      </div>
+      <nav className="rw-button-group">
+        <Link
+          to={routes.${editRouteName}({ ${idName}: ${singularCamelName}.${idName} })}
+          className="rw-button rw-button-blue"
+        >
+          Edit
+        </Link>
+        <button
+          type="button"
+          className="rw-button rw-button-red"
+          onClick={() => onDeleteClick(${singularCamelName}.${idName})}
+        >
+          Delete
+        </button>
+      </nav>
+    </>
+  )
+}
+
+export default ${singularPascalName}

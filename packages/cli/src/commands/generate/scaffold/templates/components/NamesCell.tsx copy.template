@@ -1,0 +1,45 @@
+${useClientDirective}import type { Find${pluralPascalName}, Find${pluralPascalName}Variables } from 'types/graphql'
+
+import { Link, routes } from '@redwoodjs/router'
+import type {
+  CellSuccessProps,
+  CellFailureProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+
+import ${pluralPascalName} from '${importComponentNames}'
+
+export const QUERY: TypedDocumentNode<
+  Find${pluralPascalName},
+  Find${pluralPascalName}Variables
+> = gql`
+  query Find${pluralPascalName} {
+    ${pluralCamelName} {<% columns.forEach(column => { %>
+      <%= column.name %><% }) %>
+    }
+  }
+`
+
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => {
+  return (
+    <div className="rw-text-center">
+      No ${pluralCamelName} yet.{' '}
+      <Link
+        to={routes.${newRouteName}()}
+        className="rw-link"
+      >
+        Create one?
+      </Link>
+    </div>
+  )
+}
+
+export const Failure = ({ error }: CellFailureProps<Find${pluralPascalName}>) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({ ${pluralCamelName} }: CellSuccessProps<Find${pluralPascalName}, Find${pluralPascalName}Variables>) => {
+  return <${pluralPascalName} ${pluralCamelName}={${pluralCamelName}} />
+}
