@@ -1,7 +1,7 @@
 export * from './parseJWT'
 
 import type { APIGatewayProxyEvent, Context as LambdaContext } from 'aws-lambda'
-import { parse as parseCookie } from 'cookie'
+import * as cookie from 'cookie'
 
 import { getEventHeader } from '../event'
 
@@ -29,26 +29,26 @@ export interface AuthorizationHeader {
 }
 
 export type AuthorizationCookies = {
-  parsedCookie: Record<string, string>
+  parsedCookie: Record<string, string | undefined>
   rawCookie: string
-  type: string
+  type: string | undefined
 } | null
 
 export const parseAuthorizationCookie = (
   event: APIGatewayProxyEvent | Request,
 ): AuthorizationCookies => {
-  const cookie = getEventHeader(event, 'Cookie')
+  const cookieHeader = getEventHeader(event, 'Cookie')
 
   // Unauthenticated request
-  if (!cookie) {
+  if (!cookieHeader) {
     return null
   }
 
-  const parsedCookie = parseCookie(cookie)
+  const parsedCookie = cookie.parse(cookieHeader)
 
   return {
     parsedCookie,
-    rawCookie: cookie,
+    rawCookie: cookieHeader,
     // When not unauthenticated, this will be null/undefined
     // Remember that the cookie header could contain other (unrelated) values!
     type: parsedCookie[AUTH_PROVIDER_HEADER],
