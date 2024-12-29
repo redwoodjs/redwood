@@ -100,11 +100,16 @@ describe('dbAuth handler WebAuthn task title', () => {
     })
 
     await dbAuth.handler({
+      usernameLabel: 'email',
+      passwordLabel: 'password',
       enquirer: customEnquirer,
       listr2: { silentRendererCondition: true },
     })
 
-    expect(Listr2Mock.executedTaskTitles[1]).toEqual(
+    const taskTitles = Listr2Mock.executedTaskTitles
+    console.log('taskTitles', taskTitles)
+
+    expect(Listr2Mock.executedTaskTitles[0]).toEqual(
       'Querying WebAuthn addition: WebAuthn addition included',
     )
   })
@@ -193,9 +198,11 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
     await dbAuth.handler({
       enquirer: customEnquirer,
       listr2: { silentRendererCondition: true },
+      usernameLabel: 'email',
+      passwordLabel: 'password',
     })
 
-    expect(Listr2Mock.executedTaskTitles[1]).toEqual(
+    expect(Listr2Mock.executedTaskTitles[0]).toEqual(
       'Querying WebAuthn addition: WebAuthn addition not included',
     )
   })
@@ -210,9 +217,11 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       enquirer: customEnquirer,
       listr2: { silentRendererCondition: true },
       webauthn: true,
+      usernameLabel: 'email',
+      passwordLabel: 'password',
     })
 
-    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: argument webauthn passed, WebAuthn included',
     )
   })
@@ -227,9 +236,11 @@ export const { AuthProvider, useAuth } = createAuth(dbAuthClient)
       enquirer: customEnquirer,
       listr2: { silentRendererCondition: true },
       webauthn: false,
+      usernameLabel: 'email',
+      passwordLabel: 'password',
     })
 
-    expect(Listr2Mock.skippedTaskTitles[0]).toEqual(
+    expect(Listr2Mock.skippedTaskTitles[1]).toEqual(
       'Querying WebAuthn addition: argument webauthn passed, WebAuthn not included',
     )
   })
