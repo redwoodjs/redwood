@@ -3,6 +3,7 @@ import * as React from 'react'
 import { ChakraProvider, extendTheme, useColorMode } from '@chakra-ui/react'
 import type { GlobalTypes } from '@storybook/csf'
 import type { Preview, StoryContext, StoryFn } from '@storybook/react'
+
 import theme from 'config/chakra.config'
 
 const extendedTheme = extendTheme(theme)
@@ -31,7 +32,7 @@ const ColorModeSwitch = ({ colorMode }: { colorMode: 'light' | 'dark' }) => {
 }
 
 const withChakra = (Story: StoryFn, context: StoryContext) => {
-  theme.config.initialColorMode = context.globals.theme // avoids flash on reload for non-default color mode
+  extendedTheme.config.initialColorMode = context.globals.theme // avoids flash on reload for non-default color mode
   return (
     <ChakraProvider theme={extendedTheme}>
       <ColorModeSwitch colorMode={context.globals.theme} />
