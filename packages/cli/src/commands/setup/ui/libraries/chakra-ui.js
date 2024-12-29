@@ -9,6 +9,7 @@ import { getPaths, writeFile } from '../../../../lib'
 import c from '../../../../lib/colors'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
 import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
+import { isTypeScriptProject } from '../../../../lib/project'
 
 export const command = 'chakra-ui'
 export const description = 'Set up Chakra UI'
@@ -29,9 +30,11 @@ export function builder(yargs) {
 }
 
 const CHAKRA_THEME_AND_COMMENTS = `\
+import type { ChakraTheme, DeepPartial } from '@chakra-ui/react'
+
 // This object will be used to override Chakra-UI theme defaults.
 // See https://chakra-ui.com/docs/styled-system/theming/theme for theming options
-const theme = {}
+const theme: DeepPartial<ChakraTheme> = {}
 export default theme
 `
 
@@ -90,12 +93,22 @@ export async function handler({ force, install }) {
       },
       {
         title: `Creating Theme File...`,
-        task: () => {
-          writeFile(
-            path.join(rwPaths.web.config, 'chakra.config.js'),
-            CHAKRA_THEME_AND_COMMENTS,
-            { overwriteExisting: force },
+        task: async () => {
+          const ts = isTypeScriptProject()
+          const themeFilePath = path.join(
+            rwPaths.web.config,
+            `chakra.config.${ts ? 'ts' : 'js'}`,
           )
+          writeFile(themeFilePath, CHAKRA_THEME_AND_COMMENTS, {
+            overwriteExisting: force,
+          })
+          if (ts === false) {
+            writeFile(
+              themeFilePath,
+              await transformTSToJS(themeFilePath, templateContent),
+              { overwriteExisting: force },
+            )
+          }
         },
       },
       {
