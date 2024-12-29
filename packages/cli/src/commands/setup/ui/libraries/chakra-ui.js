@@ -51,7 +51,7 @@ export async function handler({ force, install }) {
     '@chakra-ui/react@^2',
     '@emotion/react@^11',
     '@emotion/styled@^11',
-    'framer-motion@^9',
+    'framer-motion@^11',
   ]
 
   const tasks = new Listr(

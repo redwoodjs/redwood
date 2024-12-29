@@ -84,7 +84,7 @@ export const handler = async ({ force, verbose }) => {
             }
           }
         },
-        options: { persistentOutput: true },
+        rendererOptions: { persistentOutput: true },
       },
       // We are using two different yarn commands here which is fine because they're operating on different
       // workspaces - web and the root

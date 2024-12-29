@@ -31,7 +31,7 @@
     "dotenv-defaults": "5.0.2",
     "execa": "5.1.1",
     "fs-extra": "11.2.0",
-    "listr2": "6.6.1",
+    "listr2": "7.0.2",
     "terminal-link": "2.1.1",
     "yargs": "17.7.2"
   },
