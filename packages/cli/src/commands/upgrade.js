@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import latestVersion from 'latest-version'
@@ -112,7 +113,8 @@ export const handler = async ({ dryRun, tag, verbose, dedupe, yes }) => {
             return
           }
 
-          const proceed = await task.prompt({
+          const prompt = task.prompt(ListrEnquirerPromptAdapter)
+          const proceed = await prompt.run({
             type: 'Confirm',
             message:
               'This will upgrade your RedwoodJS project to the latest version. Do you want to proceed?',
@@ -126,6 +128,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe, yes }) => {
               return 'Yes'
             },
           })
+
           if (!proceed) {
             task.skip('Upgrade cancelled by user.')
             process.exit(0)

@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
 
@@ -72,7 +73,7 @@ export const handler = async ({ force, verbose }) => {
             }
           }
         },
-        options: { persistentOutput: true },
+        rendererOptions: { persistentOutput: true },
       },
       {
         title: `Adding entry.client${ext}...`,
@@ -94,7 +95,8 @@ export const handler = async ({ force, verbose }) => {
           let overwriteExisting = force
 
           if (!force) {
-            overwriteExisting = await task.prompt({
+            const prompt = task.prompt(ListrEnquirerPromptAdapter)
+            overwriteExisting = await prompt.run({
               type: 'Confirm',
               message: `Overwrite ${entryClientPath}?`,
             })
@@ -109,7 +111,7 @@ export const handler = async ({ force, verbose }) => {
 
           writeFile(entryClientPath, entryClientContent, { overwriteExisting })
         },
-        options: { persistentOutput: true },
+        rendererOptions: { persistentOutput: true },
       },
       {
         title: `Adding entry.server${ext}...`,

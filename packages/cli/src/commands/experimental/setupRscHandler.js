@@ -76,7 +76,7 @@ export const handler = async ({ force, verbose }) => {
             }
           }
         },
-        options: { persistentOutput: true },
+        rendererOptions: { persistentOutput: true },
       },
       {
         title: `Overwriting entry.client${ext}...`,
