@@ -13,6 +13,7 @@ import {
 } from '../paths'
 
 const RWJS_CWD = process.env.RWJS_CWD
+
 /**
  * All paths relevant to the redwood stack as defined in
  * {@link ../paths | paths.ts}, relative from project root
@@ -52,7 +53,7 @@ const DEFAULT_PATHS = {
     jobsConfig: ['api', 'src', 'lib', 'jobs'],
     distJobsConfig: ['api', 'dist', 'lib', 'jobs'],
     logger: ['api', 'src', 'lib', 'logger.ts'],
-  } as Record<string, null | string[]>,
+  },
   web: {
     routes: ['web', 'src', 'Routes.tsx'],
     base: ['web'],
@@ -84,7 +85,7 @@ const DEFAULT_PATHS = {
     entryClient: ['web', 'src', 'entry.client.tsx'], // new vite/stream entry point for client
     entryServer: ['web', 'src', 'entry.server'],
     graphql: ['web', 'src', 'graphql'],
-  } as Record<string, null | string[]>,
+  },
 }
 
 /**
@@ -136,11 +137,7 @@ describe('paths', () => {
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -180,7 +177,7 @@ describe('paths', () => {
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -278,11 +275,7 @@ describe('paths', () => {
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -322,7 +315,7 @@ describe('paths', () => {
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -466,11 +459,7 @@ describe('paths', () => {
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -511,7 +500,7 @@ describe('paths', () => {
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -616,11 +605,7 @@ describe('paths', () => {
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
@@ -657,7 +642,7 @@ describe('paths', () => {
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
