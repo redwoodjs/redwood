@@ -13,7 +13,6 @@ import {
 } from '../paths'
 
 const RWJS_CWD = process.env.RWJS_CWD
-
 /**
  * All paths relevant to the redwood stack as defined in
  * {@link ../paths | paths.ts}, relative from project root
@@ -53,8 +52,7 @@ const DEFAULT_PATHS = {
     jobsConfig: ['api', 'src', 'lib', 'jobs'],
     distJobsConfig: ['api', 'dist', 'lib', 'jobs'],
     logger: ['api', 'src', 'lib', 'logger.ts'],
-  },
-
+  } as Record<string, null | string[]>,
   web: {
     routes: ['web', 'src', 'Routes.tsx'],
     base: ['web'],
@@ -86,8 +84,33 @@ const DEFAULT_PATHS = {
     entryClient: ['web', 'src', 'entry.client.tsx'], // new vite/stream entry point for client
     entryServer: ['web', 'src', 'entry.server'],
     graphql: ['web', 'src', 'graphql'],
-  },
+  } as Record<string, null | string[]>,
 }
+
+/**
+ * Recursively traverse {@link DEFAULT_PATHS} and apply path.join
+ */
+const getExpectedPaths = (baseDir: string, pathsTemplate) =>
+  Object.fromEntries(
+    Object.entries(pathsTemplate).map(([key, val]) => [
+      key,
+      val === null
+        ? null
+        : val instanceof Array
+          ? path.join(baseDir, ...val)
+          : getExpectedPaths(baseDir, val),
+    ]),
+  )
+
+const forJavascriptProject = (expectedPaths) =>
+  Object.fromEntries(
+    Object.entries(expectedPaths).map(([key, val]) => [
+      key,
+      val instanceof Array
+        ? val.map((str) => str.replace(/\.tsx|\.ts/, '.js'))
+        : forJavascriptProject(val),
+    ]),
+  )
 
 describe('paths', () => {
   describe('within empty project', () => {
@@ -124,137 +147,22 @@ describe('paths', () => {
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          document: null, // this fixture doesnt have a document
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          // Vite paths ~ not configured in empty-project
-          viteConfig: null,
-          entryClient: null,
-          entryServer: null,
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-        },
-      }
+      const pathTemplate = structuredClone(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        distJobsConfig: null,
+        jobsConfig: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesnt have a document
+        storybookPreviewConfig: null,
+        // Vite paths ~ not configured in empty-project
+        viteConfig: null,
+        entryClient: null,
+        entryServer: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
@@ -398,138 +306,22 @@ describe('paths', () => {
     })
 
     it('gets the correct paths', () => {
-      // todo api.routes tsx → '.js', web.app tsx  → js
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: null,
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
-          document: null, // this fixture doesnt have a document
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-          // New Vite paths
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: null, // doesn't exist in example-todo-main
-          entryServer: null, // doesn't exist in example-todo-main
-        },
-      }
+      const pathTemplate = forJavascriptProject(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+        logger: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesn't have a document
+        entryClient: null, // doesn't exist in example-todo-main
+        entryServer: null, // doesn't exist in example-todo-main
+        storybookPreviewConfig: null,
+        viteConfig: ['web', 'vite.config.ts'], // although this is a JS project, vite config is TS
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
@@ -719,137 +511,23 @@ describe('paths', () => {
     })
 
     it('gets the correct paths', () => {
-      // todo api.routes .tsx → .js
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: null,
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          document: null, // this fixture doesnt have a document
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: null,
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          viteConfig: null, // no vite config in example-todo-main-with-errors
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          entryClient: null,
-          entryServer: null,
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ), // this is constructed regardless of presence of src/Document
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-        },
-      }
+      const pathTemplate = forJavascriptProject(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+        logger: null,
+      })
+      Object.assign(pathTemplate.web, {
+        app: null,
+        document: null, // this fixture doesnt have a document
+        entryClient: null,
+        entryServer: null,
+        viteConfig: null, // no vite config in example-todo-main-with-errors
+        storybookPreviewConfig: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
@@ -999,137 +677,19 @@ describe('paths', () => {
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          document: null, // this fixture doesnt have a document
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-          // Vite paths
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
-          entryServer: null,
-        },
-      }
+      const pathTemplate = structuredClone(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesn't have a document
+        storybookPreviewConfig: null,
+        entryServer: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
