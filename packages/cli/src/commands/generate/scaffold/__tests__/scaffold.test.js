@@ -876,34 +876,84 @@ describe('custom templates', () => {
         'redwood.toml': '',
         'web/generators/scaffold/pages/EditNamePage.tsx.template':
           'export default function CustomEditPage() { return null }',
+        'web/generators/scaffold/pages/EditNamePage.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/pages/EditNamePage.test.tsx.template':
+          "it('renders page successfully', () => {})",
         'web/generators/scaffold/pages/NewNamePage.tsx.template':
           'export default function CustomNewPage() { return null }',
+        'web/generators/scaffold/pages/NewNamePage.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/pages/NewNamePage.test.tsx.template':
+          "it('renders page successfully', () => {})",
         'web/generators/scaffold/pages/NamePage.tsx.template':
           'export default function CustomPage() { return null }',
-        'web/generators/scaffold/pages/NamesPage.tsx.template':
-          'export default function CustomPluralPage() { return null }',
         'web/generators/scaffold/pages/NamePage.stories.tsx.template':
           'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
         'web/generators/scaffold/pages/NamePage.test.tsx.template':
           "it('renders page successfully', () => {})",
+        'web/generators/scaffold/pages/NamesPage.tsx.template':
+          'export default function CustomPluralPage() { return null }',
+        'web/generators/scaffold/pages/NamesPage.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/pages/NamesPage.test.tsx.template':
+          "it('renders page successfully', () => {})",
         'web/generators/scaffold/components/EditNameCell.tsx.template':
           'export const Success = () => null',
-        'web/generators/scaffold/components/Name.tsx.template':
-          'export default function ${singularPascalName}() { return null }',
+        'web/generators/scaffold/components/EditNameCell.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/EditNameCell.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/EditNameCell.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/components/NameCell.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/NameCell.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/NameCell.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
         'web/generators/scaffold/components/NameCell.tsx.template':
           'export const Success = () => null',
         'web/generators/scaffold/components/NameForm.tsx.template':
           'export default function ${singularPascalName}Form() { return null }',
+        'web/generators/scaffold/components/NameForm.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/NameForm.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/NameForm.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
         'web/generators/scaffold/components/Names.tsx.template':
           'export default function ${singularPascalName}List() { return null }',
+        'web/generators/scaffold/components/Names.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/Names.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/Names.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
         'web/generators/scaffold/components/NamesCell.tsx.template':
           'export const Success = () => null',
+        'web/generators/scaffold/components/NamesCell.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/NamesCell.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/NamesCell.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
         'web/generators/scaffold/components/NewName.tsx.template':
           'export default function New${singularPascalName}() { return null }',
+        'web/generators/scaffold/components/NewName.mock.tsx.template':
+          'export const standard = () => ({})',
+        'web/generators/scaffold/components/NewName.test.tsx.template':
+          "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/NewName.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
+        'web/generators/scaffold/components/Name.tsx.template':
+          'export default function ${singularPascalName}() { return null }',
         'web/generators/scaffold/components/Name.mock.ts.template':
           'export const standard = () => ({ custom: "" })',
         'web/generators/scaffold/components/Name.test.tsx.template':
           "it('renders component successfully', () => {})",
+        'web/generators/scaffold/components/Name.stories.tsx.template':
+          'const customMeta = {}\nexport default customMeta\nexport const Primary = {}',
       },
       process.env.RWJS_CWD,
     )
@@ -922,8 +972,8 @@ describe('custom templates', () => {
     process.env.RWJS_CWD = originalRwjsCwd
   })
 
-  test('returns exactly 23 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(23)
+  test('returns exactly 48 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(48)
   })
 
   test('creates an Edit page', async () => {
