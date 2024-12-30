@@ -40,13 +40,12 @@ describe('in javascript (default) mode', () => {
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
-  test('returns exactly 48 files', async () => {
-    expect(Object.keys(files).length).toEqual(48)
+  test('returns exactly 19 files', async () => {
+    expect(Object.keys(files).length).toEqual(19)
   })
   // SDL
 
@@ -299,7 +298,6 @@ describe('in javascript (default) mode', () => {
       scaffold.files({
         ...getDefaultArgs(defaults),
         model: 'NoEditableField',
-        tests: true,
         nestScaffoldByModel: true,
       }),
     ).rejects.toThrow(
@@ -461,13 +459,12 @@ describe('in typescript mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       typescript: true,
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
-  test('returns exactly 48 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(48)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
   })
 
   // SDL
@@ -962,8 +959,10 @@ describe('custom templates', () => {
       force: false,
       model: 'Post',
       typescript: true,
-      tests: true,
       nestScaffoldByModel: true,
+      tests: true,
+      stories: true,
+      serviceTests: true,
     })
   })
 
@@ -1097,6 +1096,24 @@ describe('custom templates', () => {
   test('creates an sdl', () => {
     expect(
       tsFiles[path.normalize('/path/to/project/api/src/graphql/posts.sdl.ts')],
+    ).toMatchSnapshot()
+  })
+
+  // Service
+
+  test('creates a service', () => {
+    expect(
+      tsFiles[
+        path.normalize('/path/to/project/api/src/services/posts/posts.ts')
+      ],
+    ).toMatchSnapshot()
+  })
+
+  test('creates a service test', () => {
+    expect(
+      tsFiles[
+        path.normalize('/path/to/project/api/src/services/posts/posts.test.ts')
+      ],
     ).toMatchSnapshot()
   })
 

@@ -22,14 +22,13 @@ describe('admin/pages/post', () => {
     filesNestedLower = await scaffold.files({
       model: 'Post',
       path: 'admin/pages',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 48 files', () => {
-      expect(Object.keys(filesNestedLower).length).toEqual(48)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedLower).length).toEqual(19)
     })
 
     // Layout
@@ -363,14 +362,13 @@ describe('Admin/Pages/Post/Post', () => {
     filesNestedUpper = await scaffold.files({
       model: 'Post',
       path: 'Admin/Pages',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 48 files', () => {
-      expect(Object.keys(filesNestedUpper).length).toEqual(48)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesNestedUpper).length).toEqual(19)
     })
 
     // Layout

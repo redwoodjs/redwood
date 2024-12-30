@@ -22,14 +22,13 @@ describe('AdminPages/Post', () => {
     filesMultiwordUpper = await scaffold.files({
       model: 'Post',
       path: 'AdminPages',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 48 files', () => {
-      expect(Object.keys(filesMultiwordUpper).length).toEqual(48)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordUpper).length).toEqual(19)
     })
 
     // Layout
@@ -363,14 +362,13 @@ describe('admin-pages/Post', () => {
     filesMultiwordDash = await scaffold.files({
       model: 'Post',
       path: 'admin-pages',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 48 files', () => {
-      expect(Object.keys(filesMultiwordDash).length).toEqual(48)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordDash).length).toEqual(19)
     })
 
     // Layout
@@ -704,14 +702,13 @@ describe('admin_pages/Post', () => {
     filesMultiwordUnderscore = await scaffold.files({
       model: 'Post',
       path: 'admin_pages',
-      tests: true,
       nestScaffoldByModel: true,
     })
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 48 files', () => {
-      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(48)
+    test('returns exactly 19 files', () => {
+      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(19)
     })
 
     // Layout

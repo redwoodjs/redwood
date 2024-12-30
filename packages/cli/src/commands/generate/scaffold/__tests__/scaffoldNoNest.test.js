@@ -22,13 +22,12 @@ describe('in javascript (default) mode', () => {
     files = await scaffold.files({
       ...getDefaultArgs(defaults),
       model: 'Post',
-      tests: true,
       nestScaffoldByModel: false,
     })
   })
 
-  test('returns exactly 48 files', () => {
-    expect(Object.keys(files).length).toEqual(48)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(files).length).toEqual(19)
   })
   // SDL
 
@@ -303,13 +302,12 @@ describe('in typescript mode', () => {
       ...getDefaultArgs(defaults),
       model: 'Post',
       typescript: true,
-      tests: true,
       nestScaffoldByModel: false,
     })
   })
 
-  test('returns exactly 48 files', () => {
-    expect(Object.keys(tsFiles).length).toEqual(48)
+  test('returns exactly 19 files', () => {
+    expect(Object.keys(tsFiles).length).toEqual(19)
   })
 
   // SDL

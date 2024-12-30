@@ -143,11 +143,13 @@ export const files = async ({
   docs,
   model: name,
   path: scaffoldPath = '',
-  tests = true,
+  tests,
   typescript = false,
   tailwind = false,
   force = false,
   nestScaffoldByModel,
+  stories,
+  serviceTests = true,
 }) => {
   const model = await getSchema(name)
   if (typeof nestScaffoldByModel === 'undefined') {
@@ -168,8 +170,10 @@ export const files = async ({
       name,
       pascalScaffoldPath,
       typescript,
+      tests,
       nestScaffoldByModel,
       templateStrings,
+      stories,
     )),
     ...(await sdlFiles({
       ...getDefaultArgs(sdlBuilder),
@@ -182,7 +186,7 @@ export const files = async ({
       name,
       crud: true,
       relations: relationsForModel(model),
-      tests,
+      tests: serviceTests || tests,
       typescript,
     })),
     ...(await assetFiles(name, tailwind)),
@@ -193,7 +197,9 @@ export const files = async ({
       pascalScaffoldPath,
       typescript,
       nestScaffoldByModel,
+      tests,
       templateStrings,
+      stories,
     )),
   }
 }
@@ -498,7 +504,9 @@ const pageFiles = async (
   pascalScaffoldPath = '',
   generateTypescript,
   nestScaffoldByModel = true,
+  tests,
   templateStrings,
+  stories,
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(singularize(name))
@@ -509,13 +517,24 @@ const pageFiles = async (
 
   let fileList = {}
 
-  const pages = fs.readdirSync(
-    customOrDefaultTemplatePath({
-      side: 'web',
-      generator: 'scaffold',
-      templatePath: 'pages',
-    }),
-  )
+  const pages = fs
+    .readdirSync(
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: 'pages',
+      }),
+    )
+    .filter((c) => {
+      if (!tests && c.match(/\.test\./)) {
+        return false
+      }
+
+      if (!stories && c.match(/\.stories\./)) {
+        return false
+      }
+      return true
+    })
 
   for (const page of pages) {
     // Sanitize page names
@@ -595,8 +614,10 @@ const componentFiles = async (
   name,
   pascalScaffoldPath = '',
   generateTypescript,
+  tests,
   nestScaffoldByModel = true,
   templateStrings,
+  stories,
 ) => {
   const pluralName = pascalcase(pluralize(name))
   const singularName = pascalcase(singularize(name))
@@ -607,13 +628,28 @@ const componentFiles = async (
   const intForeignKeys = intForeignKeysForModel(model)
   let fileList = {}
 
-  const components = fs.readdirSync(
-    customOrDefaultTemplatePath({
-      side: 'web',
-      generator: 'scaffold',
-      templatePath: 'components',
-    }),
-  )
+  const components = fs
+    .readdirSync(
+      customOrDefaultTemplatePath({
+        side: 'web',
+        generator: 'scaffold',
+        templatePath: 'components',
+      }),
+    )
+    .filter((c) => {
+      if (!tests && c.match(/\.test\./)) {
+        return false
+      }
+
+      if (!stories && c.match(/\.stories\./)) {
+        return false
+      }
+
+      if (!stories && !tests && c.match(/\.mock\./)) {
+        return false
+      }
+      return true
+    })
 
   for (const component of components) {
     const outputComponentName = component
@@ -809,6 +845,15 @@ export const builder = (yargs) => {
       description: 'Generate test files',
       type: 'boolean',
     })
+    .option('serviceTests', {
+      description: 'Generate test files for the service',
+      type: 'boolean',
+      default: true,
+    })
+    .option('stories', {
+      description: 'Generate storybook files',
+      type: 'boolean',
+    })
     .option('tailwind', {
       description:
         'Generate TailwindCSS version of scaffold.css (automatically set to `true` if TailwindCSS config exists)',
@@ -841,6 +886,8 @@ export const tasks = ({
   typescript,
   javascript,
   tailwind,
+  stories,
+  serviceTests,
 }) => {
   return new Listr(
     [
@@ -856,6 +903,8 @@ export const tasks = ({
             javascript,
             tailwind,
             force,
+            stories,
+            serviceTests,
           })
           return writeFilesTask(f, { overwriteExisting: force })
         },
@@ -908,9 +957,17 @@ export const handler = async ({
   tailwind,
   docs = false,
   rollback,
+  stories,
+  serviceTests = true,
 }) => {
   if (tests === undefined) {
     tests = getConfig().generate.tests
+  }
+  if (stories === undefined) {
+    stories = getConfig().generate.stories
+  }
+  if (serviceTests === undefined) {
+    serviceTests = getConfig().generate.serviceTests
   }
   recordTelemetryAttributes({
     command: 'generate scaffold',
@@ -920,6 +977,8 @@ export const handler = async ({
     tailwind,
     docs,
     rollback,
+    stories,
+    serviceTests,
   })
 
   const { model, path } = splitPathAndModel(modelArg)
@@ -936,6 +995,8 @@ export const handler = async ({
       tests,
       typescript,
       tailwind,
+      stories,
+      serviceTests,
     })
     if (rollback && !force) {
       prepareForRollback(t)
