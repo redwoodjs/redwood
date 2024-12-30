@@ -3,12 +3,13 @@ import type * as Listr from 'listr2'
 import type { vi } from 'vitest'
 
 type Ctx = Record<string, any>
+type TRenderer = typeof Listr.ListrRenderer
 
 type EnquirerPromptOptions = Parameters<Enquirer['prompt']>[0]
 type Function = { length: number; name: string }
 type PlainPromptOptions = ReturnType<Extract<EnquirerPromptOptions, Function>>
 type ListrPromptOptions = Parameters<
-  Listr.ListrTaskWrapper<Ctx, typeof Listr.ListrRenderer>['prompt']
+  Listr.ListrTaskWrapper<Ctx, TRenderer, TRenderer>['prompt']
 >[0]
 
 function isSupportedOptionsType(
@@ -25,7 +26,7 @@ function isSupportedOptionsType(
 }
 
 class Listr2TaskWrapper {
-  task: Listr.ListrTask<Ctx, typeof Listr.ListrRenderer>
+  task: Listr.ListrTask<Ctx, TRenderer>
   promptOutput: string
 
   // This is part of Listr.TaskWrapper, but we don't need it
@@ -36,7 +37,7 @@ class Listr2TaskWrapper {
     task,
     options,
   }: {
-    task: Listr.ListrTask<Ctx, typeof Listr.ListrRenderer>
+    task: Listr.ListrTask<Ctx, TRenderer>
     options?: Record<PropertyKey, any> | undefined
   }) {
     this.task = task
@@ -75,56 +76,65 @@ class Listr2TaskWrapper {
       ctx,
       // TODO: fix this by removing the type casts.
       // The reason we have to do this is because of private fields in
-      // Listr.ListrTaskWrapper
+      // Listr.ListrTaskWrapper (this was at least the case for Listr2 v6)
       task as unknown as Listr.ListrTaskWrapper<
         Ctx,
+        typeof Listr.ListrRenderer,
         typeof Listr.ListrRenderer
       >,
     )
   }
 
-  async prompt<T extends object = any>(options: ListrPromptOptions) {
-    const enquirer = Listr2Mock.mockPrompt
-      ? { prompt: Listr2Mock.mockPrompt }
-      : this.listrOptions?.injectWrapper?.enquirer
+  public prompt(..._args: any[]) {
+    const ctxEnquirer = this.listrOptions?.ctx?.enquirer
 
-    if (!enquirer) {
-      throw new Error('Enquirer instance not available')
-    }
+    const run = async <T extends object = any>(options: ListrPromptOptions) => {
+      const enquirer = Listr2Mock.mockPrompt
+        ? { prompt: Listr2Mock.mockPrompt }
+        : ctxEnquirer
 
-    if (!isSupportedOptionsType(options)) {
-      console.error('Unsupported prompt options', options)
-      throw new Error('Unsupported prompt options type')
-    }
-
-    const enquirerOptions = !Array.isArray(options)
-      ? [{ ...options, name: 'default' }]
-      : options
-
-    if (enquirerOptions.length === 1) {
-      enquirerOptions[0].name = 'default'
-    }
-
-    const response = await enquirer.prompt(enquirerOptions)
-
-    if (enquirerOptions.length === 1) {
-      if (typeof response !== 'object') {
-        throw new Error(
-          'Expected an object response from prompt().\n' +
-            'Make sure you\'re returning `{ default: "value" }` if you\'re ' +
-            'mocking the prompt return value',
-        )
+      if (!enquirer) {
+        throw new Error('Enquirer instance not available')
       }
 
-      if ('default' in response) {
-        // The type cast here isn't great. But Listr2 itself also type cast
-        // the response (but they cast it to `any`)
-        // https://github.com/listr2/listr2/blob/b4f544ebce9582f56b2b42fdbe834d70678ce966/packages/prompt-adapter-enquirer/src/prompt.ts#L74
-        return response.default as T
+      if (!isSupportedOptionsType(options)) {
+        console.error('Unsupported prompt options', options)
+        throw new Error('Unsupported prompt options type')
       }
+
+      const enquirerOptions = !Array.isArray(options)
+        ? [{ ...options, name: 'default' }]
+        : options
+
+      if (enquirerOptions.length === 1) {
+        enquirerOptions[0].name = 'default'
+      }
+
+      const response = await enquirer.prompt(enquirerOptions)
+
+      if (enquirerOptions.length === 1) {
+        if (typeof response !== 'object') {
+          throw new Error(
+            'Expected an object response from prompt().\n' +
+              'Make sure you\'re returning `{ default: "value" }` if you\'re ' +
+              'mocking the prompt return value',
+          )
+        }
+
+        if ('default' in response) {
+          // The type cast here isn't great. But Listr2 itself also type cast
+          // the response (but they cast it to `any`)
+          // https://github.com/listr2/listr2/blob/b4f544ebce9582f56b2b42fdbe834d70678ce966/packages/prompt-adapter-enquirer/src/prompt.ts#L74
+          return response.default as T
+        }
+      }
+
+      return response
     }
 
-    return response
+    return {
+      run,
+    }
   }
 
   skip(msg: string) {
@@ -151,13 +161,16 @@ export class Listr2Mock {
     tasks: Listr.ListrTask<Ctx, typeof Listr.ListrRenderer>[],
     options?: Listr.ListrOptions,
   ) {
-    this.ctx = {}
+    this.ctx = options?.ctx || {}
     this.tasks = tasks.map((task) => new Listr2TaskWrapper({ task, options }))
   }
 
-  async run() {
-    Listr2Mock.executedTaskTitles = []
-    Listr2Mock.skippedTaskTitles = []
+  async run(
+    executedTaskTitles: string[] = [],
+    skippedTaskTitles: string[] = [],
+  ) {
+    Listr2Mock.executedTaskTitles = executedTaskTitles
+    Listr2Mock.skippedTaskTitles = skippedTaskTitles
 
     for (const task of this.tasks) {
       const skip =
@@ -178,7 +191,14 @@ export class Listr2Mock {
         continue
       }
 
-      await task.run(this.ctx, task)
+      const runReturnValue = await task.run(this.ctx, task)
+
+      if (runReturnValue instanceof Listr2Mock) {
+        await runReturnValue.run(
+          Listr2Mock.executedTaskTitles,
+          Listr2Mock.skippedTaskTitles,
+        )
+      }
 
       // storing the title after running the task in case the task
       // modifies its own title

@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
@@ -103,7 +104,7 @@ export const handler = async ({ force, verbose }) => {
           )}`,
         ].join('\n')
       },
-      options: { persistentOutput: true },
+      rendererOptions: { persistentOutput: true },
     },
     {
       title: 'Notice: GraphQL function update (server file)...',
@@ -126,7 +127,7 @@ export const handler = async ({ force, verbose }) => {
           )}`,
         ].join('\n')
       },
-      options: { persistentOutput: true },
+      rendererOptions: { persistentOutput: true },
     },
     addApiPackages(opentelemetryPackages),
   ]
@@ -193,7 +194,8 @@ export const handler = async ({ force, verbose }) => {
       {
         title: 'Confirmation',
         task: async (_ctx, task) => {
-          const confirmation = await task.prompt({
+          const prompt = task.prompt(ListrEnquirerPromptAdapter)
+          const confirmation = await prompt.run({
             type: 'Confirm',
             message: 'OpenTelemetry support is experimental. Continue?',
           })

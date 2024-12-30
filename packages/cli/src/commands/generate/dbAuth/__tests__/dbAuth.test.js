@@ -129,7 +129,7 @@ describe('dbAuth', () => {
       mockConsoleInfo.mockRestore()
     })
 
-    it('prompt for username label', async () => {
+    it('prompts for username label', async () => {
       let correctPrompt = false
 
       const customEnquirer = new Enquirer({ show: false })
@@ -166,7 +166,7 @@ describe('dbAuth', () => {
       expect(correctPrompt).toBe(false)
     })
 
-    it('prompt for password label', async () => {
+    it('prompts for password label', async () => {
       let correctPrompt = false
 
       const customEnquirer = new Enquirer({ show: false })
