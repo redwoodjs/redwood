@@ -28,8 +28,8 @@ describe('AdminPages/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesMultiwordUpper).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesMultiwordUpper).length).toEqual(48)
     })
 
     // Layout
@@ -369,8 +369,8 @@ describe('admin-pages/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesMultiwordDash).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesMultiwordDash).length).toEqual(48)
     })
 
     // Layout
@@ -710,8 +710,8 @@ describe('admin_pages/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesMultiwordUnderscore).length).toEqual(48)
     })
 
     // Layout

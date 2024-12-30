@@ -528,7 +528,7 @@ const pageFiles = async (
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
       outputPageName
-        .replace(/(?:\.test|\.mock|\.stories)(?=\.ts)/, '')
+        .replace(/(?:\.test|\.mock|\.stories)(?=\.ts|\.js)/, '')
         .replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(
@@ -625,7 +625,7 @@ const componentFiles = async (
     const finalFolder =
       (nestScaffoldByModel ? singularName + '/' : '') +
       outputComponentName
-        .replace(/(?:\.test|\.mock|\.stories)(?=\.ts)/, '')
+        .replace(/(?:\.test|\.mock|\.stories)(?=\.ts|\.js)/, '')
         .replace(/\.[jt]sx?/, '')
 
     const outputPath = path.join(

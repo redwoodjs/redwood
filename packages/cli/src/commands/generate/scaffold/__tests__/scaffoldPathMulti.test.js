@@ -28,8 +28,8 @@ describe('admin/pages/post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesNestedLower).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesNestedLower).length).toEqual(48)
     })
 
     // Layout
@@ -369,8 +369,8 @@ describe('Admin/Pages/Post/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesNestedUpper).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesNestedUpper).length).toEqual(48)
     })
 
     // Layout

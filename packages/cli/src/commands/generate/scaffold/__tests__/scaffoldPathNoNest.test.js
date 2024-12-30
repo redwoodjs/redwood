@@ -28,8 +28,8 @@ describe('admin/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesLower).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesLower).length).toEqual(48)
     })
 
     // Layout
@@ -357,8 +357,8 @@ describe('Admin/Post', () => {
   })
 
   describe('creates the correct files with the correct imports', () => {
-    test('returns exactly 19 files', () => {
-      expect(Object.keys(filesUpper).length).toEqual(19)
+    test('returns exactly 48 files', () => {
+      expect(Object.keys(filesUpper).length).toEqual(48)
     })
 
     // Layout
