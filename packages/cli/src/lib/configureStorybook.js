@@ -25,7 +25,7 @@ export default async function extendStorybookConfiguration(
   const ts = isTypeScriptProject()
   const sbPreviewConfigPath =
     webPaths.storybookPreviewConfig ??
-    `${webPaths.config}/storybook.preview.${ts ? 'tsx' : 'js'}`
+    `${webPaths.storybook}/preview.${ts ? 'tsx' : 'js'}`
   const read = (path) => fse.readFileSync(path, { encoding: 'utf-8' })
 
   if (!fse.existsSync(sbPreviewConfigPath)) {

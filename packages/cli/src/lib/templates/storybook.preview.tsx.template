@@ -8,7 +8,7 @@ export const globalTypes: GlobalTypes = {}
 
 /**
  * An example, no-op storybook decorator. Use a function like this to create decorators.
- * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator} 
+ * @see {@link https://storybook.js.org/docs/7/essentials/toolbars-and-globals#create-a-decorator | Create a decorator}
  */
 const _exampleDecorator = (StoryFn: StoryFn, _context: StoryContext) => (
   <StoryFn />
@@ -17,5 +17,3 @@ const _exampleDecorator = (StoryFn: StoryFn, _context: StoryContext) => (
 const preview: Preview = {
   decorators: [],
 }
-
-export default preview
