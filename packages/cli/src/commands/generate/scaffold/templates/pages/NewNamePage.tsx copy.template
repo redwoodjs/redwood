@@ -1,7 +1,0 @@
-import New${singularPascalName} from '${importComponentNewName}'
-
-const New${singularPascalName}Page = () => {
-  return <New${singularPascalName} />
-}
-
-export default New${singularPascalName}Page
