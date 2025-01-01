@@ -526,13 +526,14 @@ const pageFiles = async (
       }),
     )
     .filter((c) => {
-      if (!tests && c.match(/\.test\./)) {
+      if (!tests && /\.test\./.test(c)) {
         return false
       }
 
-      if (!stories && c.match(/\.stories\./)) {
+      if (!stories && /\.stories\./.test(c)) {
         return false
       }
+
       return true
     })
 
@@ -637,17 +638,18 @@ const componentFiles = async (
       }),
     )
     .filter((c) => {
-      if (!tests && c.match(/\.test\./)) {
+      if (!tests && /\.test\./.test(c)) {
         return false
       }
 
-      if (!stories && c.match(/\.stories\./)) {
+      if (!stories && /\.stories\./.test(c)) {
         return false
       }
 
-      if (!stories && !tests && c.match(/\.mock\./)) {
+      if (!stories && !tests && /\.mock\./.test(c)) {
         return false
       }
+
       return true
     })
 
