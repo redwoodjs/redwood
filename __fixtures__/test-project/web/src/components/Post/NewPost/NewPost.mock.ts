@@ -7,7 +7,7 @@ export const standard = (/* vars, { ctx, req } */) => ({
     body: 'String',
     author: {
       create: {
-        email: 'String9882351',
+        email: 'String10',
         hashedPassword: 'String',
         fullName: 'String',
         salt: 'String',
