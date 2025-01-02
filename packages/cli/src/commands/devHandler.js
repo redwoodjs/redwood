@@ -180,12 +180,12 @@ export const handler = async ({
       name: 'api',
       command: [
         'yarn nodemon',
-        '  --quiet',
-        `  --watch "${redwoodConfigPath}"`,
-        '  --exec "yarn rw-api-server-watch',
-        `    --port ${apiAvailablePort}`,
-        `    ${getApiDebugFlag()}`,
-        '    | rw-log-formatter"',
+        '--quiet',
+        `--watch "${redwoodConfigPath}"`,
+        '--exec "yarn rw-api-server-watch',
+        `--port ${apiAvailablePort}`,
+        `${getApiDebugFlag()}`,
+        '| rw-log-formatter"',
       ].join(' '),
       env: {
         NODE_ENV: 'development',
