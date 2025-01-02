@@ -184,7 +184,7 @@ export const handler = async ({
         `--watch "${redwoodConfigPath}"`,
         '--exec "yarn rw-api-server-watch',
         `--port ${apiAvailablePort}`,
-        `${getApiDebugFlag()}`,
+        getApiDebugFlag(),
         '| rw-log-formatter"',
       ].join(' '),
       env: {
