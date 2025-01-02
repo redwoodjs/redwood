@@ -532,7 +532,7 @@ const dedupeDeps = async (task, { verbose }) => {
       await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
     } else {
       // Redwood projects should not be using yarn 1.x as we specify a version of yarn in the package.json
-      // with "packageManager": "yarn@4.1.1" or similar.
+      // with "packageManager": "yarn@4.6.0" or similar.
       // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
       // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
       task.skip(
