@@ -542,7 +542,7 @@ const dedupeDeps = async (task, { verbose }) => {
   } catch (e) {
     console.log(c.error(e.message))
     throw new Error(
-      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing',
+      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn >= 3 run `yarn dedupe` before continuing',
     )
   }
   await yarnInstall({ verbose })
