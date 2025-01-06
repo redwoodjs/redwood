@@ -86,7 +86,7 @@
     "@types/jscodeshift": "0.12.0",
     "@types/ncp": "2.0.8",
     "@types/prompts": "2.4.9",
-    "@typescript-eslint/eslint-plugin": "8.5.0",
+    "@typescript-eslint/eslint-plugin": "8.19.1",
     "@typescript-eslint/parser": "8.19.1",
     "@yarnpkg/types": "4.0.0",
     "all-contributors-cli": "6.26.1",
