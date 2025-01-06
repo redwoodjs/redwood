@@ -186,7 +186,9 @@ export const handler = async ({
         `    --port ${apiAvailablePort}`,
         `    ${getApiDebugFlag()}`,
         '    | rw-log-formatter"',
-      ].join(' '),
+      ]
+        .join(' ')
+        .replace(/\s+/g, ' '),
       env: {
         NODE_ENV: 'development',
         NODE_OPTIONS: getDevNodeOptions(),
