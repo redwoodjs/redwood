@@ -14,6 +14,105 @@ import {
 
 const RWJS_CWD = process.env.RWJS_CWD
 
+/**
+ * All paths relevant to the redwood stack as defined in
+ * {@link ../paths | paths.ts}, relative from project root
+ */
+const DEFAULT_PATHS = {
+  base: [],
+  generated: {
+    base: ['.redwood'],
+    schema: ['.redwood', 'schema.graphql'],
+    types: {
+      includes: ['.redwood', 'types', 'includes'],
+      mirror: ['.redwood', 'types', 'mirror'],
+    },
+    prebuild: ['.redwood', 'prebuild'],
+  },
+  scripts: ['scripts'],
+  api: {
+    base: ['api'],
+    dataMigrations: ['api', 'db', 'dataMigrations'],
+    db: ['api', 'db'],
+    dbSchema: ['api', 'db', 'schema.prisma'],
+    functions: ['api', 'src', 'functions'],
+    graphql: ['api', 'src', 'graphql'],
+    lib: ['api', 'src', 'lib'],
+    generators: ['api', 'generators'],
+    config: ['api', 'src', 'config'],
+    services: ['api', 'src', 'services'],
+    directives: ['api', 'src', 'directives'],
+    subscriptions: ['api', 'src', 'subscriptions'],
+    src: ['api', 'src'],
+    dist: ['api', 'dist'],
+    types: ['api', 'types'],
+    models: ['api', 'src', 'models'],
+    mail: ['api', 'src', 'mail'],
+    jobs: ['api', 'src', 'jobs'],
+    distJobs: ['api', 'dist', 'jobs'],
+    jobsConfig: ['api', 'src', 'lib', 'jobs'],
+    distJobsConfig: ['api', 'dist', 'lib', 'jobs'],
+    logger: ['api', 'src', 'lib', 'logger.ts'],
+  },
+  web: {
+    routes: ['web', 'src', 'Routes.tsx'],
+    base: ['web'],
+    pages: ['web', 'src', 'pages/'],
+    components: ['web', 'src', 'components'],
+    layouts: ['web', 'src', 'layouts/'],
+    src: ['web', 'src'],
+    storybook: ['web', '.storybook'],
+    generators: ['web', 'generators'],
+    app: ['web', 'src', 'App.tsx'],
+    document: ['web', 'src', 'Document'],
+    html: ['web', 'src', 'index.html'],
+    config: ['web', 'config'],
+    viteConfig: ['web', 'vite.config.ts'],
+    postcss: ['web', 'config', 'postcss.config.js'],
+    storybookConfig: ['web', '.storybook', 'main.js'],
+    storybookPreviewConfig: ['web', '.storybook', 'preview.js'],
+    storybookManagerConfig: ['web', '.storybook', 'manager.js'],
+    dist: ['web', 'dist'],
+    distBrowser: ['web', 'dist', 'browser'],
+    distRsc: ['web', 'dist', 'rsc'],
+    distSsr: ['web', 'dist', 'ssr'],
+    distSsrDocument: ['web', 'dist', 'ssr', 'Document.mjs'],
+    distSsrEntryServer: ['web', 'dist', 'ssr', 'entry.server.mjs'],
+    distRouteHooks: ['web', 'dist', 'ssr', 'routeHooks'],
+    distRscEntries: ['web', 'dist', 'rsc', 'entries.mjs'],
+    routeManifest: ['web', 'dist', 'ssr', 'route-manifest.json'],
+    types: ['web', 'types'],
+    entryClient: ['web', 'src', 'entry.client.tsx'], // new vite/stream entry point for client
+    entryServer: ['web', 'src', 'entry.server'],
+    graphql: ['web', 'src', 'graphql'],
+  },
+}
+
+/**
+ * Recursively traverse {@link DEFAULT_PATHS} and apply path.join
+ */
+const getExpectedPaths = (baseDir: string, pathsTemplate) =>
+  Object.fromEntries(
+    Object.entries(pathsTemplate).map(([key, val]) => [
+      key,
+      val === null
+        ? null
+        : val instanceof Array
+          ? path.join(baseDir, ...val)
+          : getExpectedPaths(baseDir, val),
+    ]),
+  )
+
+const forJavascriptProject = (expectedPaths) =>
+  Object.fromEntries(
+    Object.entries(expectedPaths).map(([key, val]) => [
+      key,
+      val instanceof Array
+        ? val.map((str) => str.replace(/\.tsx|\.ts/, '.js'))
+        : forJavascriptProject(val),
+    ]),
+  )
+
 describe('paths', () => {
   describe('within empty project', () => {
     const FIXTURE_BASEDIR = path.join(
@@ -33,176 +132,52 @@ describe('paths', () => {
       process.env.RWJS_CWD = RWJS_CWD
     })
 
-    it('finds the correct base directory', () => {
-      expect(getBaseDir()).toBe(FIXTURE_BASEDIR)
-    })
+    it('finds the correct base directory', () =>
+      expect(getBaseDir()).toBe(FIXTURE_BASEDIR))
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          document: null, // this fixture doesnt have a document
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          // Vite paths ~ not configured in empty-project
-          viteConfig: null,
-          entryClient: null,
-          entryServer: null,
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-        },
-      }
+      const pathTemplate = structuredClone(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        distJobsConfig: null,
+        jobsConfig: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesnt have a document
+        storybookPreviewConfig: null,
+        // Vite paths ~ not configured in empty-project
+        viteConfig: null,
+        entryClient: null,
+        entryServer: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
 
     it('switches windows slashes in import statements', () => {
       const originalPlatform = process.platform
-      Object.defineProperty(process, 'platform', {
-        value: 'win32',
-      })
+      Object.defineProperty(process, 'platform', { value: 'win32' })
 
       const inputPath = 'C:\\Users\\Bob\\dev\\Redwood\\UserPage\\UserPage'
       const outputPath = importStatementPath(inputPath)
 
-      Object.defineProperty(process, 'platform', {
-        value: originalPlatform,
-      })
+      Object.defineProperty(process, 'platform', { value: originalPlatform })
 
       expect(outputPath).toEqual('C:/Users/Bob/dev/Redwood/UserPage/UserPage')
     })
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -241,48 +216,36 @@ describe('paths', () => {
     describe('ensurePosixPath', () => {
       it('Returns unmodified input if not on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'NotWindows',
-        })
+        Object.defineProperty(process, 'platform', { value: 'NotWindows' })
 
         const testPath = 'X:\\some\\weird\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual(testPath)
       })
 
       it('Transforms paths on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = '..\\some\\relative\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('../some/relative/path')
       })
 
       it('Handles drive letters', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = 'C:\\some\\full\\path\\to\\file.ext'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('/c/some/full/path/to/file.ext')
       })
@@ -307,176 +270,52 @@ describe('paths', () => {
       process.env.RWJS_CWD = RWJS_CWD
     })
 
-    it('finds the correct base directory', () => {
-      expect(getBaseDir()).toBe(FIXTURE_BASEDIR)
-    })
+    it('finds the correct base directory', () =>
+      expect(getBaseDir()).toBe(FIXTURE_BASEDIR))
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: null,
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.js'),
-          document: null, // this fixture doesnt have a document
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-          // New Vite paths
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: null, // doesn't exist in example-todo-main
-          entryServer: null, // doesn't exist in example-todo-main
-        },
-      }
+      const pathTemplate = forJavascriptProject(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+        logger: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesn't have a document
+        entryClient: null, // doesn't exist in example-todo-main
+        entryServer: null, // doesn't exist in example-todo-main
+        storybookPreviewConfig: null,
+        viteConfig: ['web', 'vite.config.ts'], // although this is a JS project, vite config is TS
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
 
     it('switches windows slashes in import statements', () => {
       const originalPlatform = process.platform
-      Object.defineProperty(process, 'platform', {
-        value: 'win32',
-      })
+      Object.defineProperty(process, 'platform', { value: 'win32' })
 
       const inputPath = 'C:\\Users\\Bob\\dev\\Redwood\\UserPage\\UserPage'
       const outputPath = importStatementPath(inputPath)
 
-      Object.defineProperty(process, 'platform', {
-        value: originalPlatform,
-      })
+      Object.defineProperty(process, 'platform', { value: originalPlatform })
 
       expect(outputPath).toEqual('C:/Users/Bob/dev/Redwood/UserPage/UserPage')
     })
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -561,48 +400,36 @@ describe('paths', () => {
     describe('ensurePosixPath', () => {
       it('Returns unmodified input if not on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'NotWindows',
-        })
+        Object.defineProperty(process, 'platform', { value: 'NotWindows' })
 
         const testPath = 'X:\\some\\weird\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual(testPath)
       })
 
       it('Transforms paths on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = '..\\some\\relative\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('../some/relative/path')
       })
 
       it('Handles drive letters', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = 'C:\\some\\full\\path\\to\\file.ext'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('/c/some/full/path/to/file.ext')
       })
@@ -627,175 +454,53 @@ describe('paths', () => {
       process.env.RWJS_CWD = RWJS_CWD
     })
 
-    it('finds the correct base directory', () => {
-      expect(getBaseDir()).toBe(FIXTURE_BASEDIR)
-    })
+    it('finds the correct base directory', () =>
+      expect(getBaseDir()).toBe(FIXTURE_BASEDIR))
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: null,
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.js'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          document: null, // this fixture doesnt have a document
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: null,
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          viteConfig: null, // no vite config in example-todo-main-with-errors
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          entryClient: null,
-          entryServer: null,
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ), // this is constructed regardless of presence of src/Document
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-        },
-      }
+      const pathTemplate = forJavascriptProject(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+        logger: null,
+      })
+      Object.assign(pathTemplate.web, {
+        app: null,
+        document: null, // this fixture doesnt have a document
+        entryClient: null,
+        entryServer: null,
+        viteConfig: null, // no vite config in example-todo-main-with-errors
+        storybookPreviewConfig: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
 
     it('switches windows slashes in import statements', () => {
       const originalPlatform = process.platform
-      Object.defineProperty(process, 'platform', {
-        value: 'win32',
-      })
+      Object.defineProperty(process, 'platform', { value: 'win32' })
 
       const inputPath = 'C:\\Users\\Bob\\dev\\Redwood\\UserPage\\UserPage'
       const outputPath = importStatementPath(inputPath)
 
-      Object.defineProperty(process, 'platform', {
-        value: originalPlatform,
-      })
+      Object.defineProperty(process, 'platform', { value: originalPlatform })
 
       expect(outputPath).toEqual('C:/Users/Bob/dev/Redwood/UserPage/UserPage')
     })
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -840,48 +545,36 @@ describe('paths', () => {
     describe('ensurePosixPath', () => {
       it('Returns unmodified input if not on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'NotWindows',
-        })
+        Object.defineProperty(process, 'platform', { value: 'NotWindows' })
 
         const testPath = 'X:\\some\\weird\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual(testPath)
       })
 
       it('Transforms paths on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = '..\\some\\relative\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('../some/relative/path')
       })
 
       it('Handles drive letters', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = 'C:\\some\\full\\path\\to\\file.ext'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('/c/some/full/path/to/file.ext')
       })
@@ -912,170 +605,44 @@ describe('paths', () => {
 
     it('finds the correct base directory from a file', () => {
       const projectFilePath = path.join(
-        FIXTURE_BASEDIR,
-        'web',
-        'src',
-        'pages',
-        'AboutPage',
+        ...[FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages, 'AboutPage'],
       )
       expect(getBaseDirFromFile(projectFilePath)).toBe(FIXTURE_BASEDIR)
     })
 
     it('gets the correct paths', () => {
-      const expectedPaths = {
-        base: FIXTURE_BASEDIR,
-        generated: {
-          base: path.join(FIXTURE_BASEDIR, '.redwood'),
-          schema: path.join(FIXTURE_BASEDIR, '.redwood', 'schema.graphql'),
-          types: {
-            includes: path.join(
-              FIXTURE_BASEDIR,
-              '.redwood',
-              'types',
-              'includes',
-            ),
-            mirror: path.join(FIXTURE_BASEDIR, '.redwood', 'types', 'mirror'),
-          },
-          prebuild: path.join(FIXTURE_BASEDIR, '.redwood', 'prebuild'),
-        },
-        scripts: path.join(FIXTURE_BASEDIR, 'scripts'),
-        api: {
-          base: path.join(FIXTURE_BASEDIR, 'api'),
-          dataMigrations: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'db',
-            'dataMigrations',
-          ),
-          db: path.join(FIXTURE_BASEDIR, 'api', 'db'),
-          dbSchema: path.join(FIXTURE_BASEDIR, 'api', 'db', 'schema.prisma'),
-          functions: path.join(FIXTURE_BASEDIR, 'api', 'src', 'functions'),
-          graphql: path.join(FIXTURE_BASEDIR, 'api', 'src', 'graphql'),
-          lib: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib'),
-          generators: path.join(FIXTURE_BASEDIR, 'api', 'generators'),
-          config: path.join(FIXTURE_BASEDIR, 'api', 'src', 'config'),
-          services: path.join(FIXTURE_BASEDIR, 'api', 'src', 'services'),
-          directives: path.join(FIXTURE_BASEDIR, 'api', 'src', 'directives'),
-          subscriptions: path.join(
-            FIXTURE_BASEDIR,
-            'api',
-            'src',
-            'subscriptions',
-          ),
-          src: path.join(FIXTURE_BASEDIR, 'api', 'src'),
-          dist: path.join(FIXTURE_BASEDIR, 'api', 'dist'),
-          types: path.join(FIXTURE_BASEDIR, 'api', 'types'),
-          models: path.join(FIXTURE_BASEDIR, 'api', 'src', 'models'),
-          mail: path.join(FIXTURE_BASEDIR, 'api', 'src', 'mail'),
-          jobs: path.join(FIXTURE_BASEDIR, 'api', 'src', 'jobs'),
-          jobsConfig: null,
-          distJobs: path.join(FIXTURE_BASEDIR, 'api', 'dist', 'jobs'),
-          distJobsConfig: null,
-          logger: path.join(FIXTURE_BASEDIR, 'api', 'src', 'lib', 'logger.ts'),
-        },
-        web: {
-          routes: path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes.tsx'),
-          routeManifest: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'route-manifest.json',
-          ),
-          base: path.join(FIXTURE_BASEDIR, 'web'),
-          pages: path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages/'),
-          components: path.join(FIXTURE_BASEDIR, 'web', 'src', 'components'),
-          layouts: path.join(FIXTURE_BASEDIR, 'web', 'src', 'layouts/'),
-          document: null, // this fixture doesnt have a document
-          src: path.join(FIXTURE_BASEDIR, 'web', 'src'),
-          generators: path.join(FIXTURE_BASEDIR, 'web', 'generators'),
-          app: path.join(FIXTURE_BASEDIR, 'web', 'src', 'App.tsx'),
-          html: path.join(FIXTURE_BASEDIR, 'web', 'src', 'index.html'),
-          config: path.join(FIXTURE_BASEDIR, 'web', 'config'),
-          postcss: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'config',
-            'postcss.config.js',
-          ),
-          storybook: path.join(FIXTURE_BASEDIR, 'web', '.storybook'),
-          storybookConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'main.js',
-          ),
-          storybookPreviewConfig: null,
-          storybookManagerConfig: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            '.storybook',
-            'manager.js',
-          ),
-          dist: path.join(FIXTURE_BASEDIR, 'web', 'dist'),
-          distSsrEntryServer: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'entry.server.mjs',
-          ),
-          distSsrDocument: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'Document.mjs',
-          ),
-          distRouteHooks: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'ssr',
-            'routeHooks',
-          ),
-          distBrowser: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'browser'),
-          distRsc: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'rsc'),
-          distSsr: path.join(FIXTURE_BASEDIR, 'web', 'dist', 'ssr'),
-          distRscEntries: path.join(
-            FIXTURE_BASEDIR,
-            'web',
-            'dist',
-            'rsc',
-            'entries.mjs',
-          ),
-          types: path.join(FIXTURE_BASEDIR, 'web', 'types'),
-          graphql: path.join(FIXTURE_BASEDIR, 'web', 'src', 'graphql'),
-          // Vite paths
-          viteConfig: path.join(FIXTURE_BASEDIR, 'web', 'vite.config.ts'),
-          entryClient: path.join(FIXTURE_BASEDIR, 'web/src/entry.client.tsx'),
-          entryServer: null,
-        },
-      }
+      const pathTemplate = structuredClone(DEFAULT_PATHS)
 
+      Object.assign(pathTemplate.api, {
+        jobsConfig: null,
+        distJobsConfig: null,
+      })
+      Object.assign(pathTemplate.web, {
+        document: null, // this fixture doesn't have a document
+        storybookPreviewConfig: null,
+        entryServer: null,
+      })
+
+      const expectedPaths = getExpectedPaths(FIXTURE_BASEDIR, pathTemplate)
       const paths = getPaths()
       expect(paths).toStrictEqual(expectedPaths)
     })
 
     it('switches windows slashes in import statements', () => {
       const originalPlatform = process.platform
-      Object.defineProperty(process, 'platform', {
-        value: 'win32',
-      })
+      Object.defineProperty(process, 'platform', { value: 'win32' })
 
       const inputPath = 'C:\\Users\\Bob\\dev\\Redwood\\UserPage\\UserPage'
       const outputPath = importStatementPath(inputPath)
 
-      Object.defineProperty(process, 'platform', {
-        value: originalPlatform,
-      })
+      Object.defineProperty(process, 'platform', { value: originalPlatform })
 
       expect(outputPath).toEqual('C:/Users/Bob/dev/Redwood/UserPage/UserPage')
     })
 
     describe('processPagesDir', () => {
       it('it accurately finds and names the pages', () => {
-        const pagesDir = path.join(FIXTURE_BASEDIR, 'web', 'src', 'pages')
+        const pagesDir = path.join(FIXTURE_BASEDIR, ...DEFAULT_PATHS.web.pages)
 
         const pages = processPagesDir(pagesDir)
 
@@ -1175,48 +742,36 @@ describe('paths', () => {
     describe('ensurePosixPath', () => {
       it('Returns unmodified input if not on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'NotWindows',
-        })
+        Object.defineProperty(process, 'platform', { value: 'NotWindows' })
 
         const testPath = 'X:\\some\\weird\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual(testPath)
       })
 
       it('Transforms paths on Windows', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = '..\\some\\relative\\path'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('../some/relative/path')
       })
 
       it('Handles drive letters', () => {
         const originalPlatform = process.platform
-        Object.defineProperty(process, 'platform', {
-          value: 'win32',
-        })
+        Object.defineProperty(process, 'platform', { value: 'win32' })
 
         const testPath = 'C:\\some\\full\\path\\to\\file.ext'
         const posixPath = ensurePosixPath(testPath)
 
-        Object.defineProperty(process, 'platform', {
-          value: originalPlatform,
-        })
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
 
         expect(posixPath).toEqual('/c/some/full/path/to/file.ext')
       })
