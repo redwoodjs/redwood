@@ -78,6 +78,7 @@ export {
   UrlField,
   WeekField,
 } from './InputComponents'
+export type { InputFieldProps } from './InputComponents'
 export { Label } from './Label'
 export { SelectField } from './SelectField'
 export { ServerErrorsContext } from './ServerErrorsContext'
