@@ -64,7 +64,7 @@ export const createUploadSavers = <MNames extends ModelNames = ModelNames>(
 
     savers[saverKey] = async (data, overrideSaveOptions) => {
       const updatedFields = {} as Record<string, string>
-      for await (const field of currentModelUploadFields) {
+      for (const field of currentModelUploadFields) {
         if (data[field]) {
           const file = data[field]
 
