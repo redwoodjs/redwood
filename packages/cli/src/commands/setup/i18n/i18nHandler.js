@@ -45,10 +45,10 @@ export const handler = async ({ force }) => {
             [
               {
                 title:
-                  'Install i18n, i18next, react-i18next and i18next-browser-languagedetector',
+                  'Install i18next, react-i18next and i18next-browser-languagedetector',
                 task: async () => {
                   /**
-                   * Install i18n, i18next, react-i18next and i18next-browser-languagedetector
+                   * Install i18next, react-i18next and i18next-browser-languagedetector
                    */
                   await execa('yarn', [
                     'workspace',
