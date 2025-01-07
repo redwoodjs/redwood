@@ -72,10 +72,10 @@ export const handler = async ({
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (
       [
-        'watch',
         'collect-coverage',
         'db-push',
         'loadEnvFiles',
+        'watch',
         '$0',
         '_',
       ].includes(flagName)
