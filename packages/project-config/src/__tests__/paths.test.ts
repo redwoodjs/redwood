@@ -187,7 +187,7 @@ describe('paths', () => {
           (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
-        expect(fatalErrorPage.importPath).toEqual(
+        expect(fatalErrorPage?.importPath).toEqual(
           importStatementPath(
             path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
           ),
@@ -197,14 +197,15 @@ describe('paths', () => {
           (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
-        expect(notFoundPage.importPath).toEqual(
+        expect(notFoundPage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
       })
     })
 
     test('resolveFile', () => {
-      const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
+      const p =
+        resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App')) || ''
       expect(path.extname(p)).toEqual('.tsx')
 
       const q = resolveFile(
@@ -325,7 +326,7 @@ describe('paths', () => {
           (page) => page.importName === 'adminEditUserPage',
         )
         expect(adminEditUserPage).not.toBeUndefined()
-        expect(adminEditUserPage.importPath).toEqual(
+        expect(adminEditUserPage?.importPath).toEqual(
           importStatementPath(
             path.join(pagesDir, 'admin/EditUserPage/EditUserPage'),
           ),
@@ -333,7 +334,7 @@ describe('paths', () => {
 
         const barPage = pages.find((page) => page.importName === 'BarPage')
         expect(barPage).not.toBeUndefined()
-        expect(barPage.importPath).toEqual(
+        expect(barPage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'BarPage/BarPage')),
         )
 
@@ -341,7 +342,7 @@ describe('paths', () => {
           (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
-        expect(fatalErrorPage.importPath).toEqual(
+        expect(fatalErrorPage?.importPath).toEqual(
           importStatementPath(
             path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
           ),
@@ -349,13 +350,13 @@ describe('paths', () => {
 
         const fooPage = pages.find((page) => page.importName === 'FooPage')
         expect(fooPage).not.toBeUndefined()
-        expect(fooPage.importPath).toEqual(
+        expect(fooPage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'FooPage/FooPage')),
         )
 
         const homePage = pages.find((page) => page.importName === 'HomePage')
         expect(homePage).not.toBeUndefined()
-        expect(homePage.importPath).toEqual(
+        expect(homePage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'HomePage/HomePage')),
         )
 
@@ -363,7 +364,7 @@ describe('paths', () => {
           (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
-        expect(notFoundPage.importPath).toEqual(
+        expect(notFoundPage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
 
@@ -371,7 +372,7 @@ describe('paths', () => {
           (page) => page.importName === 'TypeScriptPage',
         )
         expect(typeScriptPage).not.toBeUndefined()
-        expect(typeScriptPage.importPath).toEqual(
+        expect(typeScriptPage?.importPath).toEqual(
           importStatementPath(
             path.join(pagesDir, 'TypeScriptPage/TypeScriptPage'),
           ),
@@ -381,14 +382,15 @@ describe('paths', () => {
           (page) => page.importName === 'PrivatePage',
         )
         expect(privatePage).not.toBeUndefined()
-        expect(privatePage.importPath).toEqual(
+        expect(privatePage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'PrivatePage/PrivatePage')),
         )
       })
     })
 
     test('resolveFile', () => {
-      const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App'))
+      const p =
+        resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'App')) || ''
       expect(path.extname(p)).toEqual('.js')
 
       const q = resolveFile(
@@ -510,7 +512,7 @@ describe('paths', () => {
           (page) => page.importName === 'FatalErrorPage',
         )
         expect(fatalErrorPage).not.toBeUndefined()
-        expect(fatalErrorPage.importPath).toEqual(
+        expect(fatalErrorPage?.importPath).toEqual(
           importStatementPath(
             path.join(pagesDir, 'FatalErrorPage/FatalErrorPage'),
           ),
@@ -518,7 +520,7 @@ describe('paths', () => {
 
         const homePage = pages.find((page) => page.importName === 'HomePage')
         expect(homePage).not.toBeUndefined()
-        expect(homePage.importPath).toEqual(
+        expect(homePage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'HomePage/HomePage')),
         )
 
@@ -526,14 +528,15 @@ describe('paths', () => {
           (page) => page.importName === 'NotFoundPage',
         )
         expect(notFoundPage).not.toBeUndefined()
-        expect(notFoundPage.importPath).toEqual(
+        expect(notFoundPage?.importPath).toEqual(
           importStatementPath(path.join(pagesDir, 'NotFoundPage/NotFoundPage')),
         )
       })
     })
 
     test('resolveFile', () => {
-      const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'index'))
+      const p =
+        resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'index')) || ''
       expect(path.extname(p)).toEqual('.js')
 
       const q = resolveFile(
@@ -666,7 +669,7 @@ describe('paths', () => {
         pageNames.forEach((pageName) => {
           const thisPage = pages.find((page) => page.importName === pageName)
           expect(thisPage).not.toBeUndefined()
-          expect(thisPage.importPath).toEqual(
+          expect(thisPage?.importPath).toEqual(
             importStatementPath(path.join(pagesDir, `${pageName}/${pageName}`)),
           )
         })
@@ -678,7 +681,7 @@ describe('paths', () => {
             (page) => page.importName === `${pageName}Edit${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
-          expect(page.importPath).toEqual(
+          expect(page?.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
@@ -691,7 +694,7 @@ describe('paths', () => {
             (page) => page.importName === `${pageName}New${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
-          expect(page.importPath).toEqual(
+          expect(page?.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
@@ -704,7 +707,7 @@ describe('paths', () => {
             (page) => page.importName === `${pageName}${pageName}Page`,
           )
           expect(page).not.toBeUndefined()
-          expect(page.importPath).toEqual(
+          expect(page?.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
@@ -717,7 +720,7 @@ describe('paths', () => {
             (page) => page.importName === `${pageName}${pageName}sPage`,
           )
           expect(page).not.toBeUndefined()
-          expect(page.importPath).toEqual(
+          expect(page?.importPath).toEqual(
             importStatementPath(
               path.join(
                 pagesDir,
@@ -730,7 +733,8 @@ describe('paths', () => {
     })
 
     test('resolveFile', () => {
-      const p = resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes'))
+      const p =
+        resolveFile(path.join(FIXTURE_BASEDIR, 'web', 'src', 'Routes')) || ''
       expect(path.extname(p)).toEqual('.tsx')
 
       const q = resolveFile(
