@@ -84,20 +84,15 @@ export const handler = async ({
       return []
     } else {
       // and forward on the other flags
+      const flag = flagName.length > 1 ? `--${flagName}` : `-${flagName}`
       const flagValue = others[flagName]
 
       if (Array.isArray(flagValue)) {
         // jest does not collapse flags e.g. --coverageReporters=html --coverageReporters=text
         // so we pass it on. Yargs collapses these flags into an array of values
-        return flagValue.flatMap((val) => [
-          flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
-          val,
-        ])
+        return flagValue.flatMap((val) => [flag, val])
       } else {
-        return [
-          flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
-          flagValue,
-        ]
+        return [flag, flagValue]
       }
     }
   })
