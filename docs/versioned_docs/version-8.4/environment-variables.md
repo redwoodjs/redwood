@@ -137,10 +137,10 @@ yarn-error.log
 
 For all the variables in your `.env` and `.env.defaults` files to make their way to `process.env`, there has to be a call to `dotenv`'s `config` function somewhere. So where is it?
 
-It's in [the CLI](https://github.com/redwoodjs/redwood/blob/v8.4.2/packages/cli/src/lib/loadEnvFiles.js#L38-L44)&mdash;every time you run a `yarn rw` command:
+It's in [the CLI](https://github.com/redwoodjs/redwood/blob/v8.4.2/packages/cli-helpers/src/lib/loadEnvFiles.ts#L35-L43)&mdash;every time you run a `yarn rw` command:
 
-```jsx title="packages/cli/src/lib/loadEnvFiles.js"
-export function loadDefaultEnvFiles(cwd) {
+```ts title="packages/cli/src/lib/loadEnvFiles.js"
+export function loadDefaultEnvFiles(cwd: string) {
   dotenvDefaultsConfig({
     path: path.join(cwd, '.env'),
     defaults: path.join(cwd, '.env.defaults'),
