@@ -3,6 +3,7 @@
 
 export * from './lib/index.js'
 export * from './lib/colors.js'
+export { loadEnvFiles } from './lib/loadEnvFiles.js'
 export * from './lib/paths.js'
 export * from './lib/project.js'
 export * from './lib/version.js'
