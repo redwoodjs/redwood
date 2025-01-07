@@ -6,10 +6,10 @@ import {
   loadDefaultEnvFiles,
   loadNodeEnvDerivedEnvFile,
   loadUserSpecifiedEnvFiles,
-} from '../lib/loadEnvFiles'
+} from '../loadEnvFiles.js'
 
 describe('loadEnvFiles', () => {
-  let originalProcessEnv
+  let originalProcessEnv: NodeJS.Process['env']
   beforeAll(() => {
     originalProcessEnv = { ...process.env }
   })
@@ -133,7 +133,7 @@ describe('loadEnvFiles', () => {
       loadUserSpecifiedEnvFiles(cwd, ['missing'])
     } catch (error) {
       // Just testing that the error message reports the file it tried to load.
-      expect(error.message).toMatch(/\.env\.missing/)
+      expect((error as Error).message).toMatch(/\.env\.missing/)
     }
   })
 })
