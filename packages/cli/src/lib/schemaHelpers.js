@@ -10,14 +10,14 @@ import { singularize, isPlural } from './rwPluralize'
 import { getPaths } from './'
 
 /**
- * Used to memoize results from `getSchema` so we don't have to go through
- * the work of open the file and parsing it from scratch each time getSchema()
+ * Used to memoize results from `getSchema()` so we don't have to go through
+ * the work of opening and parsing the file from scratch each time `getSchema()`
  * is called with the same model name.
  */
 const schemaMemo = {}
 
 /**
- * Searches for the given model (ignoring case) in schema.prisma
+ * Searches for the given model (ignoring case) in `schema.prisma`
  * and returns the name as it is written by the user, or
  * `undefined` if no model could be found
  */
@@ -70,7 +70,6 @@ export const getSchema = async (name) => {
   const model = schema.datamodel.models.find(
     (model) => model.name === modelName,
   )
-
   if (!model) {
     return undefined // can this happen, and if yes, should we prefer throwing an error?
   }
@@ -89,9 +88,9 @@ export const getSchema = async (name) => {
 }
 
 /**
- * Returns the enum defined with the given `name` parsed from
- * the schema.prisma of the target application. If no `name` is given then the
- * all enum definitions are returned
+ * Returns the enum defined with the given `name` parsed from the
+ * `schema.prisma` of the target application. If no `name` is given
+ * then all enum definitions are returned
  */
 export const getEnum = async (name) => {
   const schema = await getSchemaDefinitions()
