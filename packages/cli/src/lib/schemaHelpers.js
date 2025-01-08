@@ -67,9 +67,9 @@ export const getSchema = async (name) => {
   }
 
   const schema = await getSchemaDefinitions()
-  const model = schema.datamodel.models.find((model) => {
-    return model.name === modelName
-  })
+  const model = schema.datamodel.models.find(
+    (model) => model.name === modelName,
+  )
 
   if (!model) {
     return undefined // can this happen, and if yes, should we prefer throwing an error?
@@ -78,9 +78,7 @@ export const getSchema = async (name) => {
   // look for any fields that are enums and attach the possible enum values
   // so we can put them in generated test files
   model.fields.forEach((field) => {
-    const fieldEnum = schema.datamodel.enums.find((e) => {
-      return field.type === e.name
-    })
+    const fieldEnum = schema.datamodel.enums.find((e) => field.type === e.name)
     if (fieldEnum) {
       field.enumValues = fieldEnum.values
     }
@@ -101,10 +99,7 @@ export const getEnum = async (name) => {
     return schema.metadata.datamodel.enums
   }
 
-  const model = schema.datamodel.enums.find((model) => {
-    return model.name === name
-  })
-
+  const model = schema.datamodel.enums.find((model) => model.name === name)
   if (!model) {
     throw new Error(
       `No enum schema definition found for \`${name}\` in schema.prisma file`,
@@ -131,11 +126,10 @@ export const getSchemaDefinitions = () => {
 /*
  * Returns the config info defined in `schema.prisma` (provider, datasource, etc.)
  */
-export const getSchemaConfig = () => {
-  return getConfig({
+export const getSchemaConfig = () =>
+  getConfig({
     datamodel: getDataModel(),
   })
-}
 
 export async function verifyModelName(options) {
   const modelName =
