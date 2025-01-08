@@ -62,30 +62,32 @@ export const getSchema = async (name) => {
     )
   }
 
-  if (!schemaMemo[modelName]) {
-    const schema = await getSchemaDefinitions()
-    const model = schema.datamodel.models.find((model) => {
-      return model.name === modelName
-    })
-
-    if (model) {
-      // look for any fields that are enums and attach the possible enum values
-      // so we can put them in generated test files
-      model.fields.forEach((field) => {
-        const fieldEnum = schema.datamodel.enums.find((e) => {
-          return field.type === e.name
-        })
-        if (fieldEnum) {
-          field.enumValues = fieldEnum.values
-        }
-      })
-
-      // memoize based on the model name
-      schemaMemo[modelName] = model
-    }
+  if (schemaMemo[modelName]) {
+    return schemaMemo[modelName]
   }
 
-  return schemaMemo[modelName]
+  const schema = await getSchemaDefinitions()
+  const model = schema.datamodel.models.find((model) => {
+    return model.name === modelName
+  })
+
+  if (!model) {
+    return undefined // can this happen, and if yes, should we prefer throwing an error?
+  }
+
+  // look for any fields that are enums and attach the possible enum values
+  // so we can put them in generated test files
+  model.fields.forEach((field) => {
+    const fieldEnum = schema.datamodel.enums.find((e) => {
+      return field.type === e.name
+    })
+    if (fieldEnum) {
+      field.enumValues = fieldEnum.values
+    }
+  })
+
+  // memoize based on the model name
+  return (schemaMemo[modelName] = model)
 }
 
 /**
