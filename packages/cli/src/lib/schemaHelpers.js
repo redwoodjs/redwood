@@ -35,8 +35,8 @@ const getExistingModelName = async (name) => {
     }
   }
 
-  const schema = await getSchemaDefinitions()
-  for (let model of schema.datamodel.models) {
+  const schema = (await getSchemaDefinitions()).datamodel
+  for (let model of schema.models) {
     if (model.name.toLowerCase() === modelName) {
       return model.name
     }
@@ -51,8 +51,9 @@ const getExistingModelName = async (name) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
+  const schema = (await getSchemaDefinitions()).datamodel
   if (!name) {
-    return (await getSchemaDefinitions()).datamodel
+    return schema
   }
 
   const modelName = await getExistingModelName(name)
@@ -66,10 +67,7 @@ export const getSchema = async (name) => {
     return schemaMemo[modelName]
   }
 
-  const schema = await getSchemaDefinitions()
-  const model = schema.datamodel.models.find(
-    (model) => model.name === modelName,
-  )
+  const model = schema.models.find((model) => model.name === modelName)
   if (!model) {
     return undefined // can this happen, and if yes, should we prefer throwing an error?
   }
@@ -77,7 +75,7 @@ export const getSchema = async (name) => {
   // look for any fields that are enums and attach the possible enum values
   // so we can put them in generated test files
   model.fields.forEach((field) => {
-    const fieldEnum = schema.datamodel.enums.find((e) => field.type === e.name)
+    const fieldEnum = schema.enums.find((e) => field.type === e.name)
     if (fieldEnum) {
       field.enumValues = fieldEnum.values
     }
