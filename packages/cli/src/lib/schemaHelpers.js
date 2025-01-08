@@ -51,39 +51,41 @@ const getExistingModelName = async (name) => {
  * entire schema is returned.
  */
 export const getSchema = async (name) => {
-  if (name) {
-    const modelName = await getExistingModelName(name)
-    if (!modelName) {
-      throw new Error(
-        `No schema definition found for \`${name}\` in schema.prisma file`,
-      )
-    }
-    if (!schemaMemo[modelName]) {
-      const schema = await getSchemaDefinitions()
-      const model = schema.datamodel.models.find((model) => {
-        return model.name === modelName
-      })
-
-      if (model) {
-        // look for any fields that are enums and attach the possible enum values
-        // so we can put them in generated test files
-        model.fields.forEach((field) => {
-          const fieldEnum = schema.datamodel.enums.find((e) => {
-            return field.type === e.name
-          })
-          if (fieldEnum) {
-            field.enumValues = fieldEnum.values
-          }
-        })
-
-        // memoize based on the model name
-        schemaMemo[modelName] = model
-      }
-    }
-    return schemaMemo[modelName]
-  } else {
+  if (!name) {
     return (await getSchemaDefinitions()).datamodel
   }
+
+  const modelName = await getExistingModelName(name)
+  if (!modelName) {
+    throw new Error(
+      `No schema definition found for \`${name}\` in schema.prisma file`,
+    )
+  }
+
+  if (!schemaMemo[modelName]) {
+    const schema = await getSchemaDefinitions()
+    const model = schema.datamodel.models.find((model) => {
+      return model.name === modelName
+    })
+
+    if (model) {
+      // look for any fields that are enums and attach the possible enum values
+      // so we can put them in generated test files
+      model.fields.forEach((field) => {
+        const fieldEnum = schema.datamodel.enums.find((e) => {
+          return field.type === e.name
+        })
+        if (fieldEnum) {
+          field.enumValues = fieldEnum.values
+        }
+      })
+
+      // memoize based on the model name
+      schemaMemo[modelName] = model
+    }
+  }
+
+  return schemaMemo[modelName]
 }
 
 /**
@@ -93,22 +95,21 @@ export const getSchema = async (name) => {
  */
 export const getEnum = async (name) => {
   const schema = await getSchemaDefinitions()
-
-  if (name) {
-    const model = schema.datamodel.enums.find((model) => {
-      return model.name === name
-    })
-
-    if (model) {
-      return model
-    } else {
-      throw new Error(
-        `No enum schema definition found for \`${name}\` in schema.prisma file`,
-      )
-    }
+  if (!name) {
+    return schema.metadata.datamodel.enums
   }
 
-  return schema.metadata.datamodel.enums
+  const model = schema.datamodel.enums.find((model) => {
+    return model.name === name
+  })
+
+  if (!model) {
+    throw new Error(
+      `No enum schema definition found for \`${name}\` in schema.prisma file`,
+    )
+  }
+
+  return model
 }
 
 /*
