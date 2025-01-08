@@ -25,10 +25,10 @@ const getExistingModelName = async (name) => {
   if (!name) {
     return undefined
   }
-  // Support PascalCase, camelCase, kebab-case, UPPER_CASE, and lowercase model
-  // names
-  const modelName = name.replace(/[_-]/g, '').toLowerCase()
 
+  // Support PascalCase, camelCase, kebab-case, UPPER_CASE,
+  // and lowercase model names
+  const modelName = name.replace(/[_-]/g, '').toLowerCase()
   for (let model of Object.values(schemaMemo)) {
     if (model.name.toLowerCase() === modelName) {
       return model.name
@@ -36,12 +36,12 @@ const getExistingModelName = async (name) => {
   }
 
   const schema = await getSchemaDefinitions()
-
   for (let model of schema.datamodel.models) {
     if (model.name.toLowerCase() === modelName) {
       return model.name
     }
   }
+
   return undefined
 }
 
