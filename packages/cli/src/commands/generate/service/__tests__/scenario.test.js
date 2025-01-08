@@ -23,6 +23,7 @@ describe('the scenario generator', () => {
         hasDefaultValue: false,
         isGenerated: false,
         isUpdatedAt: false,
+        nativeType: null,
       },
       {
         hasDefaultValue: false,
@@ -36,6 +37,7 @@ describe('the scenario generator', () => {
         kind: 'scalar',
         name: 'userId',
         type: 'Int',
+        nativeType: null,
       },
     ])
   })
@@ -56,6 +58,7 @@ describe('the scenario generator', () => {
         hasDefaultValue: false,
         isGenerated: false,
         isUpdatedAt: false,
+        nativeType: null,
       },
       {
         name: 'likes',
@@ -69,6 +72,7 @@ describe('the scenario generator', () => {
         hasDefaultValue: false,
         isGenerated: false,
         isUpdatedAt: false,
+        nativeType: null,
       },
     ])
   })
