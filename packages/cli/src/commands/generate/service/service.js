@@ -170,7 +170,7 @@ export const fieldTypes = async (model) => {
 
   // Example value
   // {
-  //   name: 'score',
+  //   name: 'username',
   //   kind: 'scalar',
   //   isList: false,
   //   isRequired: true,
@@ -178,9 +178,10 @@ export const fieldTypes = async (model) => {
   //   isId: false,
   //   isReadOnly: false,
   //   hasDefaultValue: false,
-  //   type: 'Int',
+  //   type: 'String',
   //   isGenerated: false,
-  //   isUpdatedAt: false
+  //   isUpdatedAt: false,
+  //   nativeType: ["VarChar", ["300"]]
   // }
   return scalarFields.reduce((acc, value) => {
     acc[value.name] = value.type
