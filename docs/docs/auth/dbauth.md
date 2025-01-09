@@ -319,7 +319,7 @@ cookie: {
   attributes: {
     HttpOnly: true,
     Path: '/',
-    SameSite: 'Strict',
+    SameSite: 'Lax',
     Secure: true,
     // Domain: 'example.com',
   },
@@ -360,7 +360,7 @@ cookie: {
   attributes: {
     HttpOnly: true,
     Path: '/',
-    SameSite: 'Strict',
+    SameSite: 'Lax',
     Secure: process.env.NODE_ENV !== 'development' ? true : false,
     // highlight-next-line
     Domain: 'example.com'
@@ -564,7 +564,7 @@ export const handler = async (event, context) => {
       attributes: {
         HttpOnly: true,
         Path: '/',
-        SameSite: 'Strict',
+        SameSite: 'Lax',
         Secure: process.env.NODE_ENV !== 'development' ? true : false,
       },
     },

@@ -268,7 +268,7 @@ test('Retrieving request details in a', async ({ page }) => {
       expires: Math.floor(Date.now() / 1000) + 300, // 5 minutes from now in seconds
       secure: true,
       httpOnly: true,
-      sameSite: 'Strict',
+      sameSite: 'Lax',
     },
   ])
 

@@ -182,7 +182,7 @@ export const handler = async (
       attributes: {
         HttpOnly: true,
         Path: '/',
-        SameSite: 'Strict',
+        SameSite: 'Lax',
         Secure: process.env.NODE_ENV !== 'development',
 
         // If you need to allow other domains (besides the api side) access to
