@@ -636,7 +636,7 @@ const secureCookie = (user) => {
     `Expires=${expires.toUTCString()}`,
     'HttpOnly=true',
     'Path=/',
-    'SameSite=Strict',
+    'SameSite=Lax',
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })
@@ -731,7 +731,7 @@ const secureCookie = (user) => {
     `Expires=${expires.toUTCString()}`,
     'HttpOnly=true',
     'Path=/',
-    'SameSite=Strict',
+    'SameSite=Lax',
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })
