@@ -109,7 +109,7 @@ const authHandler = new DbAuthHandler(event, context, {
   cookie: {
     HttpOnly: true,
     Path: '/',
-    SameSite: 'Strict',
+    SameSite: 'Lax',
     Secure: true,
   },
   forgotPassword: forgotPasswordOptions,

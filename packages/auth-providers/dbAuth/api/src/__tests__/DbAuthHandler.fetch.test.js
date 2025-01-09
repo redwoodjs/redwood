@@ -2568,7 +2568,7 @@ describe('dbAuth', () => {
             attributes: {
               Path: '/',
               HttpOnly: true,
-              SameSite: 'Strict',
+              SameSite: 'Lax',
               Secure: true,
               Domain: 'example.com',
             },
