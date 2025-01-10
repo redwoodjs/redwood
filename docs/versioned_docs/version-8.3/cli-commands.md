@@ -2126,7 +2126,7 @@ Starts Storybook locally
 yarn redwood storybook
 ```
 
-[Storybook](https://storybook.js.org/docs/react/get-started/introduction) is a tool for UI development that allows you to develop your components in isolation, away from all the conflated cruft of your real app.
+[Storybook](https://storybook.js.org/docs/7/get-started/install) is a tool for UI development that allows you to develop your components in isolation, away from all the conflated cruft of your real app.
 
 > "Props in, views out! Make it simple to reason about."
 
