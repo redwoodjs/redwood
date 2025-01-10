@@ -51,7 +51,7 @@ Since `storybook.config.js` configures Storybook's server, changes you make may 
 
 :::
 
-While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
+While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/6/configure) in `storybook.config.js`, you'll probably only want to configure `addons`:
 
 ```javascript title="web/config/storybook.config.js"
 module.exports = {
@@ -82,4 +82,4 @@ export const decorators = [
 ]
 ```
 
-For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/react/configure/overview#configure-story-rendering).
+For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/6/configure#configure-story-rendering).
