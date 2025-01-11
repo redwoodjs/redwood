@@ -8401,7 +8401,7 @@ __metadata:
     publint: "npm:0.2.12"
     react: "npm:19.0.0-rc-f2df5694-20240916"
     react-dom: "npm:19.0.0-rc-f2df5694-20240916"
-    react-hook-form: "npm:7.53.0"
+    react-hook-form: "npm:7.54.2"
     tsx: "npm:4.19.2"
     typescript: "npm:5.6.2"
     vitest: "npm:2.0.5"
@@ -25955,12 +25955,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.53.0":
-  version: 7.53.0
-  resolution: "react-hook-form@npm:7.53.0"
+"react-hook-form@npm:7.54.2":
+  version: 7.54.2
+  resolution: "react-hook-form@npm:7.54.2"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 10c0/6d62b150618a833c17d59e669b707661499e2bb516a8d340ca37699f99eb448bbba7b5b78324938c8948014e21efaa32e3510c2ba246fd5e97a96fca0cfa7c98
+  checksum: 10c0/6eebead2900e3d369a989e7a20429f390dc75b3897142aa3107f1f6dabb9ae64fed201ea98cdcd8676e40466c97748aeb0c0d83264f5bd3a84dbc0b8e4863415
   languageName: node
   linkType: hard
 

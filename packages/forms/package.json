@@ -35,7 +35,7 @@
   "dependencies": {
     "graphql": "16.9.0",
     "pascalcase": "1.0.0",
-    "react-hook-form": "7.53.0"
+    "react-hook-form": "7.54.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "workspace:*",
