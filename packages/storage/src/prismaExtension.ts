@@ -101,7 +101,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           const createDatas = args.data as []
 
           // If the create fails, we need to delete the uploaded files
-          for await (const createData of createDatas) {
+          for (const createData of createDatas) {
             await removeUploadedFiles(uploadFields, createData)
           }
 
@@ -258,7 +258,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
           return async () => {
             const base64UploadFields: Record<keyof typeof needs, string> = {}
 
-            for await (const field of uploadFields) {
+            for (const field of uploadFields) {
               base64UploadFields[field] = await fileToDataUri(
                 modelData[field] as string,
                 storageAdapter,
@@ -329,7 +329,7 @@ export const createUploadsExtension = <MNames extends ModelNames = ModelNames>(
       return
     }
 
-    for await (const field of fieldsToDelete) {
+    for (const field of fieldsToDelete) {
       const uploadLocation = data?.[field]
       if (uploadLocation) {
         try {
