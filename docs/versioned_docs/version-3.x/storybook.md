@@ -46,7 +46,7 @@ All of these files get merged with Redwood's default configurations, which you c
 
 > Since `storybook.config.js` configures Storybook's server, note that any changes you make require restarting Storybook.
 
-While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/react/configure/overview#configure-your-storybook-project) in `storybook.config.js`, you'll probably only want to configure `addons`:
+While you can configure [any of Storybook server's available options](https://storybook.js.org/docs/6/configure) in `storybook.config.js`, you'll probably only want to configure `addons`:
 
 ```javascript title="web/config/storybook.config.js"
 module.exports = {
@@ -77,7 +77,7 @@ export const decorators = [
 ]
 ```
 
-For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/react/configure/overview#configure-story-rendering).
+For more, see the Storybook docs on [configuring how stories render](https://storybook.js.org/docs/6/configure#configure-story-rendering).
 
 ### Configuring the UI with `storybook.manager.js`
 
@@ -88,7 +88,7 @@ For more, see the Storybook docs on [configuring how stories render](https://sto
 > yarn rw storybook --no-manager-cache
 > ```
 
-You can [theme Storybook's UI](https://storybook.js.org/docs/react/configure/theming) by installing two packages and making a few changes to Redwood's initial configuration.
+You can [theme Storybook's UI](https://storybook.js.org/docs/6/configure/user-interface/theming) by installing two packages and making a few changes to Redwood's initial configuration.
 
 From the root of your RedwoodJS project:
 
@@ -107,4 +107,4 @@ addons.setConfig({
 })
 ```
 
-Check out [Storybook's theming quickstart](https://storybook.js.org/docs/react/configure/theming#create-a-theme-quickstart) for a guide on creating your own theme. You may also want to export your theme to [re-use it with Storybook Docs](https://storybook.js.org/docs/react/configure/theming#theming-docs).
+Check out [Storybook's theming quickstart](https://storybook.js.org/docs/6/configure/user-interface/theming#create-a-theme-quickstart) for a guide on creating your own theme. You may also want to export your theme to [re-use it with Storybook Docs](https://storybook.js.org/docs/6/configure/user-interface/theming#theming-docs).

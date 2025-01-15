@@ -59,7 +59,7 @@ exports[`creates a multi word component story 1`] = `
 // }
 // \`\`\`
 //
-// See https://storybook.js.org/docs/react/writing-stories/args.
+// See https://storybook.js.org/docs/7/writing-stories/args
 
 import UserProfile from './UserProfile'
 
@@ -112,7 +112,7 @@ exports[`creates a single word component story 1`] = `
 // }
 // \`\`\`
 //
-// See https://storybook.js.org/docs/react/writing-stories/args.
+// See https://storybook.js.org/docs/7/writing-stories/args
 
 import User from './User'
 
