@@ -52,6 +52,7 @@ const getExistingModelName = async (name) => {
  */
 export const getSchema = async (name) => {
   const schema = (await getSchemaDefinitions()).datamodel
+
   if (!name) {
     return schema
   }
@@ -69,10 +70,11 @@ export const getSchema = async (name) => {
 
   const model = schema.models.find((model) => model.name === modelName)
   if (!model) {
-    return undefined // can this happen, and if yes, should we prefer throwing an error?
+    // TODO: Can this happen, and if yes, should we prefer throwing an error?
+    return undefined
   }
 
-  // look for any fields that are enums and attach the possible enum values
+  // Look for any fields that are enums and attach the possible enum values
   // so we can put them in generated test files
   model.fields.forEach((field) => {
     const fieldEnum = schema.enums.find((e) => field.type === e.name)
@@ -81,8 +83,10 @@ export const getSchema = async (name) => {
     }
   })
 
-  // memoize based on the model name
-  return (schemaMemo[modelName] = model)
+  // Memoize based on the model name
+  schemaMemo[modelName] = model
+
+  return model
 }
 
 /**
