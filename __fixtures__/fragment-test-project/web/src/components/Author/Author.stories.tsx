@@ -8,7 +8,7 @@
 // }
 // ```
 //
-// See https://storybook.js.org/docs/react/writing-stories/args.
+// See https://storybook.js.org/docs/7/writing-stories/args
 
 import type { Meta, StoryObj } from '@storybook/react'
 
