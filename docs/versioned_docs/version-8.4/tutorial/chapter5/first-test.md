@@ -307,11 +307,14 @@ export const Success = ({ articles }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx
-// highlight-next-line
-export const Success = ({ articles }: CellSuccessProps<ArticlesQuery>) => {
-  return (
-    { articles.map((article) => <Article article={article} />) }
-  )
+export const Success = ({
+  // highlight-next-line
+  articles,
+}: CellSuccessProps<ArticlesQuery, ArticlesQueryVariables>) => {
+  return
+  {
+    articles.map((article) => <Article article={article} />)
+  }
 }
 ```
 

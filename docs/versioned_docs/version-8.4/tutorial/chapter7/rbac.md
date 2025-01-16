@@ -86,7 +86,7 @@ export const getCurrentUser = async (session) => {
 </TabItem>
 <TabItem value="ts" label="TypeScript">
 
-```javascript title="api/src/lib/auth.ts"
+```typescript title="api/src/lib/auth.ts"
 export const getCurrentUser = async (session) => {
   return await db.user.findUnique({
     where: { id: session.id },
@@ -494,19 +494,25 @@ export default Comment
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/Comment/Comment.tsx"
-// highlight-next-line
+// highlight-start
+import type {
+  Comment as IComment,
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables,
+} from 'types/graphql'
+
+import type { TypedDocumentNode } from '@redwoodjs/web'
 import { useMutation } from '@redwoodjs/web'
 
+import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
+// highlight-end
 import { useAuth } from 'src/auth'
 
-// highlight-next-line
-import { QUERY as CommentsQuery } from 'src/components/CommentsCell'
-
-// highlight-next-line
-import type { Comment as IComment } from 'types/graphql'
-
 // highlight-start
-const DELETE = gql`
+const DELETE: TypedDocumentNode<
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables
+> = gql`
   mutation DeleteCommentMutation($id: Int!) {
     deleteComment(id: $id) {
       postId
@@ -583,8 +589,6 @@ We'll also need to update the `CommentsQuery` we're importing from `CommentsCell
 <TabItem value="js" label="JavaScript">
 
 ```jsx title="web/src/components/CommentsCell/CommentsCell.jsx"
-import Comment from 'src/components/Comment'
-
 export const QUERY = gql`
   query CommentsQuery($postId: Int!) {
     comments(postId: $postId) {
@@ -603,20 +607,20 @@ export const QUERY = gql`
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
-import Comment from 'src/components/Comment'
-
-export const QUERY = gql`
-  query CommentsQuery($postId: Int!) {
-    comments(postId: $postId) {
-      id
-      name
-      body
-      // highlight-next-line
-      postId
-      createdAt
+//
+export const QUERY: TypedDocumentNode<CommentsQuery, CommentsQueryVariables> =
+  gql`
+    query CommentsQuery($postId: Int!) {
+      comments(postId: $postId) {
+        id
+        name
+        body
+        // highlight-next-line
+        postId
+        createdAt
+      }
     }
-  }
-`
+  `
 ```
 
 </TabItem>

@@ -314,16 +314,16 @@ By default no setting is required. This is because each db has its own rules for
 
 These options determine how the cookie that tracks whether the client is authorized is stored in the browser. The default configuration should work for most use cases. If you serve your web and api sides from different domains you'll need to make some changes: set `SameSite` to `None` and then add [CORS configuration](#cors-config).
 
-```js title="api/src/functions/auth.js"
+```javascript
 cookie: {
   attributes: {
     HttpOnly: true,
     Path: '/',
-    SameSite: 'Strict',
+    SameSite: 'Lax',
     Secure: true,
     // Domain: 'example.com',
   },
-  // name: 'session_%port%' 
+  // name: 'session_%port%',
 }
 ```
 
@@ -360,7 +360,7 @@ cookie: {
   attributes: {
     HttpOnly: true,
     Path: '/',
-    SameSite: 'Strict',
+    SameSite: 'Lax',
     Secure: process.env.NODE_ENV !== 'development' ? true : false,
     // highlight-next-line
     Domain: 'example.com'
@@ -564,9 +564,9 @@ export const handler = async (event, context) => {
       attributes: {
         HttpOnly: true,
         Path: '/',
-        SameSite: 'Strict',
+        SameSite: 'Lax',
         Secure: process.env.NODE_ENV !== 'development' ? true : false,
-      }
+      },
     },
 
     forgotPassword: forgotPasswordOptions,

@@ -83,34 +83,44 @@ export const Success = ({ comments }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
+import type { CommentsQuery, CommentsQueryVariables } from 'types/graphql'
+
+import type {
+  CellFailureProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
+
 // highlight-next-line
 import Comment from 'src/components/Comment'
 
-import type { CommentsQuery } from 'types/graphql'
-import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
-
-export const QUERY = gql`
-  query CommentsQuery {
-    comments {
-      id
-      // highlight-start
-      name
-      body
-      createdAt
-      // highlight-end
+export const QUERY: TypedDocumentNode<CommentsQuery, CommentsQueryVariables> =
+  gql`
+    query CommentsQuery {
+      comments {
+        id
+        // highlight-start
+        name
+        body
+        createdAt
+        // highlight-end
+      }
     }
-  }
-`
+  `
 
 export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }: CellFailureProps) => (
+export const Failure = ({
+  error,
+}: CellFailureProps<CommentsQueryVariables>) => (
   <div style={{ color: 'red' }}>Error: {error.message}</div>
 )
 
-export const Success = ({ comments }: CellSuccessProps<CommentsQuery>) => {
+export const Success = ({
+  comments,
+}: CellSuccessProps<CommentsQuery, CommentsQueryVariables>) => {
   return (
     // highlight-start
     <>
@@ -214,7 +224,9 @@ export const Success = ({ comments }) => {
 <TabItem value="ts" label="TypeScript">
 
 ```tsx title="web/src/components/CommentsCell/CommentsCell.tsx"
-export const Success = ({ comments }) => {
+export const Success = ({
+  comments,
+}: CellSuccessProps<CommentsQuery, CommentsQueryVariables>) => {
   return (
     // highlight-next-line
     <div className="space-y-8">

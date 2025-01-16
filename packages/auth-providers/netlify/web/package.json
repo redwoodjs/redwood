@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-netlify-web",
-  "version": "8.4.2",
+  "version": "8.4.3",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",

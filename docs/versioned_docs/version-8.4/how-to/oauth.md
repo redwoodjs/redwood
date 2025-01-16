@@ -2,6 +2,10 @@
 
 If you're using an auth provider like [Auth0](/docs/auth/auth0), OAuth login to third party services (GitHub, Google, Facebook) is usually just a setting you can toggle on in your provider's dashboard. But if you're using [dbAuth](/docs/auth/dbauth) you'll only have username/password login to start. But, adding one or more OAuth clients isn't hard. This recipe will walk you through it from scratch, adding OAuth login via GitHub.
 
+Alternatively, consider using the [redwoodjs-dbauth-oauth](https://github.com/spoonjoy/redwoodjs-dbauth-oauth) community package. This package streamlines the setup, includes support for multiple providers, and even includes UI components that you can use for making setup even easier.
+
+If you do prefer to set this up manually or are just curious how OAuth and dbAuth can work together, read on!
+
 ## Prerequisites
 
 This article assumes you have an app set up and are using dbAuth. We're going to make use of the dbAuth system to validate that you're who you say you are. If you just want to try this code out in a sandbox app, you can create a test blog app from scratch by checking out the [Redwood codebase](https://github.com/redwoodjs/redwood) itself and then running a couple of commands:
@@ -636,7 +640,7 @@ const secureCookie = (user) => {
     `Expires=${expires.toUTCString()}`,
     'HttpOnly=true',
     'Path=/',
-    'SameSite=Strict',
+    'SameSite=Lax',
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })
@@ -731,7 +735,7 @@ const secureCookie = (user) => {
     `Expires=${expires.toUTCString()}`,
     'HttpOnly=true',
     'Path=/',
-    'SameSite=Strict',
+    'SameSite=Lax',
     `Secure=${process.env.NODE_ENV !== 'development'}`,
   ]
   const data = JSON.stringify({ id: user.id })

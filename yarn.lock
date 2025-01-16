@@ -7418,12 +7418,12 @@ __metadata:
   dependencies:
     "@fastify/multipart": "npm:8.3.0"
     "@fastify/url-data": "npm:5.4.0"
-    "@redwoodjs/context": "npm:8.4.2"
-    "@redwoodjs/fastify-web": "npm:8.4.2"
-    "@redwoodjs/framework-tools": "npm:8.4.2"
-    "@redwoodjs/internal": "npm:8.4.2"
-    "@redwoodjs/project-config": "npm:8.4.2"
-    "@redwoodjs/web-server": "npm:8.4.2"
+    "@redwoodjs/context": "npm:8.4.3"
+    "@redwoodjs/fastify-web": "npm:8.4.3"
+    "@redwoodjs/framework-tools": "npm:8.4.3"
+    "@redwoodjs/internal": "npm:8.4.3"
+    "@redwoodjs/project-config": "npm:8.4.3"
+    "@redwoodjs/web-server": "npm:8.4.3"
     "@types/aws-lambda": "npm:8.10.145"
     "@types/lodash": "npm:4.17.13"
     "@types/qs": "npm:6.9.16"
@@ -7447,7 +7447,7 @@ __metadata:
     vitest: "npm:2.0.5"
     yargs: "npm:17.7.2"
   peerDependencies:
-    "@redwoodjs/graphql-server": 8.4.2
+    "@redwoodjs/graphql-server": 8.4.3
   peerDependenciesMeta:
     "@redwoodjs/graphql-server":
       optional: true
@@ -8077,7 +8077,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/cli-helpers@npm:8.4.2, @redwoodjs/cli-helpers@workspace:*, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
+"@redwoodjs/cli-helpers@npm:8.4.3, @redwoodjs/cli-helpers@workspace:*, @redwoodjs/cli-helpers@workspace:packages/cli-helpers":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-helpers@workspace:packages/cli-helpers"
   dependencies:
@@ -8115,15 +8115,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli-storybook-vite@workspace:packages/cli-packages/storybook-vite"
   dependencies:
-    "@redwoodjs/cli-helpers": "npm:8.4.2"
-    "@redwoodjs/framework-tools": "npm:8.4.2"
-    "@redwoodjs/project-config": "npm:8.4.2"
-    "@redwoodjs/telemetry": "npm:8.4.2"
+    "@redwoodjs/cli-helpers": "npm:8.4.3"
+    "@redwoodjs/framework-tools": "npm:8.4.3"
+    "@redwoodjs/project-config": "npm:8.4.3"
+    "@redwoodjs/telemetry": "npm:8.4.3"
     "@types/yargs": "npm:17.0.33"
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
     storybook: "npm:7.6.17"
-    storybook-framework-redwoodjs-vite: "npm:8.4.2"
+    storybook-framework-redwoodjs-vite: "npm:8.4.3"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.19.2"
     typescript: "npm:5.6.2"
@@ -8248,7 +8248,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/context@npm:8.4.2, @redwoodjs/context@workspace:*, @redwoodjs/context@workspace:packages/context":
+"@redwoodjs/context@npm:8.4.3, @redwoodjs/context@workspace:*, @redwoodjs/context@workspace:packages/context":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/context@workspace:packages/context"
   dependencies:
@@ -8365,7 +8365,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/fastify-web@npm:8.4.2, @redwoodjs/fastify-web@workspace:*, @redwoodjs/fastify-web@workspace:packages/adapters/fastify/web":
+"@redwoodjs/fastify-web@npm:8.4.3, @redwoodjs/fastify-web@workspace:*, @redwoodjs/fastify-web@workspace:packages/adapters/fastify/web":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/fastify-web@workspace:packages/adapters/fastify/web"
   dependencies:
@@ -8410,7 +8410,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/framework-tools@npm:8.4.2, @redwoodjs/framework-tools@workspace:*, @redwoodjs/framework-tools@workspace:packages/framework-tools":
+"@redwoodjs/framework-tools@npm:8.4.3, @redwoodjs/framework-tools@workspace:*, @redwoodjs/framework-tools@workspace:packages/framework-tools":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/framework-tools@workspace:packages/framework-tools"
   dependencies:
@@ -8472,7 +8472,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/internal@npm:8.4.2, @redwoodjs/internal@workspace:*, @redwoodjs/internal@workspace:packages/internal":
+"@redwoodjs/internal@npm:8.4.3, @redwoodjs/internal@workspace:*, @redwoodjs/internal@workspace:packages/internal":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/internal@workspace:packages/internal"
   dependencies:
@@ -8686,7 +8686,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/project-config@npm:8.4.2, @redwoodjs/project-config@workspace:*, @redwoodjs/project-config@workspace:packages/project-config":
+"@redwoodjs/project-config@npm:8.4.3, @redwoodjs/project-config@workspace:*, @redwoodjs/project-config@workspace:packages/project-config":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/project-config@workspace:packages/project-config"
   dependencies:
@@ -8858,7 +8858,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/telemetry@npm:8.4.2, @redwoodjs/telemetry@workspace:*, @redwoodjs/telemetry@workspace:packages/telemetry":
+"@redwoodjs/telemetry@npm:8.4.3, @redwoodjs/telemetry@workspace:*, @redwoodjs/telemetry@workspace:packages/telemetry":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/telemetry@workspace:packages/telemetry"
   dependencies:
@@ -8879,7 +8879,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/testing@npm:8.4.2, @redwoodjs/testing@workspace:*, @redwoodjs/testing@workspace:packages/testing":
+"@redwoodjs/testing@npm:8.4.3, @redwoodjs/testing@workspace:*, @redwoodjs/testing@workspace:packages/testing":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/testing@workspace:packages/testing"
   dependencies:
@@ -8993,7 +8993,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@redwoodjs/web-server@npm:8.4.2, @redwoodjs/web-server@workspace:*, @redwoodjs/web-server@workspace:packages/web-server":
+"@redwoodjs/web-server@npm:8.4.3, @redwoodjs/web-server@workspace:*, @redwoodjs/web-server@workspace:packages/web-server":
   version: 0.0.0-use.local
   resolution: "@redwoodjs/web-server@workspace:packages/web-server"
   dependencies:
@@ -9111,7 +9111,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:5.1.4":
+"@rollup/pluginutils@npm:5.1.4, @rollup/pluginutils@npm:^5.0.1, @rollup/pluginutils@npm:^5.1.0":
   version: 5.1.4
   resolution: "@rollup/pluginutils@npm:5.1.4"
   dependencies:
@@ -9124,22 +9124,6 @@ __metadata:
     rollup:
       optional: true
   checksum: 10c0/6d58fbc6f1024eb4b087bc9bf59a1d655a8056a60c0b4021d3beaeec3f0743503f52467fd89d2cf0e7eccf2831feb40a05ad541a17637ea21ba10b21c2004deb
-  languageName: node
-  linkType: hard
-
-"@rollup/pluginutils@npm:^5.0.1, @rollup/pluginutils@npm:^5.1.0":
-  version: 5.1.2
-  resolution: "@rollup/pluginutils@npm:5.1.2"
-  dependencies:
-    "@types/estree": "npm:^1.0.0"
-    estree-walker: "npm:^2.0.2"
-    picomatch: "npm:^2.3.1"
-  peerDependencies:
-    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
-  peerDependenciesMeta:
-    rollup:
-      optional: true
-  checksum: 10c0/30f4a98e91a8699b6666b64ecdc665439bd53dddbe964bbeca56da81ff889cfde3a3e059144b80c5a2d9b48aa158df18a45e9a847a33b757d3e8336b278b8836
   languageName: node
   linkType: hard
 
@@ -25050,14 +25034,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1.0.0, picocolors@npm:^1.0.1, picocolors@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "picocolors@npm:1.1.0"
-  checksum: 10c0/86946f6032148801ef09c051c6fb13b5cf942eaf147e30ea79edb91dd32d700934edebe782a1078ff859fb2b816792e97ef4dab03d7f0b804f6b01a0df35e023
-  languageName: node
-  linkType: hard
-
-"picocolors@npm:^1.1.1":
+"picocolors@npm:^1.0.0, picocolors@npm:^1.0.1, picocolors@npm:^1.1.0, picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
   checksum: 10c0/e2e3e8170ab9d7c7421969adaa7e1b31434f789afb9b3f115f6b96d91945041ac3ceb02e9ec6fe6510ff036bcc0bf91e69a1772edc0b707e12b19c0f2d6bcf58
@@ -27915,12 +27892,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-framework-redwoodjs-vite@npm:8.4.2, storybook-framework-redwoodjs-vite@workspace:packages/storybook":
+"storybook-framework-redwoodjs-vite@npm:8.4.3, storybook-framework-redwoodjs-vite@workspace:packages/storybook":
   version: 0.0.0-use.local
   resolution: "storybook-framework-redwoodjs-vite@workspace:packages/storybook"
   dependencies:
     "@joshwooding/vite-plugin-react-docgen-typescript": "npm:0.4.2"
-    "@redwoodjs/testing": "npm:8.4.2"
+    "@redwoodjs/testing": "npm:8.4.3"
     "@rollup/pluginutils": "npm:5.1.4"
     "@storybook/addon-essentials": "npm:7.6.17"
     "@storybook/builder-vite": "npm:7.6.17"
@@ -27933,8 +27910,8 @@ __metadata:
     unplugin-auto-import: "npm:0.18.3"
     vite: "npm:5.4.8"
   peerDependencies:
-    "@redwoodjs/project-config": 8.4.2
-    "@redwoodjs/router": 8.4.2
+    "@redwoodjs/project-config": 8.4.3
+    "@redwoodjs/router": 8.4.3
     react: 18.3.1
     react-dom: 18.3.1
     storybook: 7.6.17
