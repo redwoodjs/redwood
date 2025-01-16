@@ -38,6 +38,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.7.0",
     "@docusaurus/tsconfig": "3.7.0",
+    "@types/react": "^18.2.55",
     "typescript": "5.6.2"
   },
   "packageManager": "yarn@4.6.0"
