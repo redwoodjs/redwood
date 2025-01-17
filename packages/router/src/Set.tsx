@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from 'react'
 import React from 'react'
 
-import type { AvailableRoutes } from '@redwoodjs/router'
+import type { routes } from '@redwoodjs/router'
 
 type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
   /**
@@ -22,7 +22,7 @@ type SetProps<P> = (P extends React.FC ? React.ComponentProps<P> : unknown) & {
    *
    * @deprecated Please use `<PrivateSet>` instead and specify this prop there
    */
-  unauthenticated?: keyof AvailableRoutes
+  unauthenticated?: keyof typeof routes
   /**
    * Route is permitted when authenticated and user has any of the provided
    * roles such as "admin" or ["admin", "editor"]
@@ -47,7 +47,7 @@ export function Set<WrapperProps>(props: SetProps<WrapperProps>) {
 
 type PrivateSetProps<P> = Omit<SetProps<P>, 'private' | 'unauthenticated'> & {
   /** The page name where a user will be redirected when not authenticated */
-  unauthenticated: keyof AvailableRoutes
+  unauthenticated: keyof typeof routes
 }
 
 /** @deprecated Please use `<PrivateSet>` instead */
