@@ -71,25 +71,28 @@ export const handler = async ({
   const rwjsPaths = getPaths()
   const forwardJestFlags = Object.keys(others).flatMap((flagName) => {
     if (
-      ['watch', 'collect-coverage', 'db-push', '$0', '_'].includes(flagName)
+      [
+        'collect-coverage',
+        'db-push',
+        'loadEnvFiles',
+        'watch',
+        '$0',
+        '_',
+      ].includes(flagName)
     ) {
       // filter out flags meant for the rw test command only
       return []
     } else {
       // and forward on the other flags
+      const flag = flagName.length > 1 ? `--${flagName}` : `-${flagName}`
       const flagValue = others[flagName]
 
       if (Array.isArray(flagValue)) {
         // jest does not collapse flags e.g. --coverageReporters=html --coverageReporters=text
         // so we pass it on. Yargs collapses these flags into an array of values
-        return flagValue.flatMap((val) => {
-          return [flagName.length > 1 ? `--${flagName}` : `-${flagName}`, val]
-        })
+        return flagValue.flatMap((val) => [flag, val])
       } else {
-        return [
-          flagName.length > 1 ? `--${flagName}` : `-${flagName}`,
-          flagValue,
-        ]
+        return [flag, flagValue]
       }
     }
   })
