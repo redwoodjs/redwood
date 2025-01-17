@@ -13,6 +13,7 @@ import {
 
 import type { AuthContextInterface, UseAuth } from '@redwoodjs/auth'
 
+import type { GeneratedRoutesMap } from '../analyzeRoutes.js'
 import {
   back,
   routes as generatedRoutes,
@@ -26,7 +27,6 @@ import {
 } from '../index.js'
 import { useParams } from '../params.js'
 import { Set } from '../Set.js'
-import type { GeneratedRoutesMap } from '../util.js'
 
 type UnknownAuthContextInterface = AuthContextInterface<
   unknown,
