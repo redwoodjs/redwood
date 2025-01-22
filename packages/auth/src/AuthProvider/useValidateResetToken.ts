@@ -16,7 +16,6 @@ export const useValidateResetToken = <
   TResetPasswordOptions,
   TResetPassword,
   TValidateResetToken,
-  TClient,
 >(
   authImplementation: AuthImplementation<
     TUser,
@@ -31,8 +30,7 @@ export const useValidateResetToken = <
     TForgotPassword,
     TResetPasswordOptions,
     TResetPassword,
-    TValidateResetToken,
-    TClient
+    TValidateResetToken
   >,
 ) => {
   return useCallback(
