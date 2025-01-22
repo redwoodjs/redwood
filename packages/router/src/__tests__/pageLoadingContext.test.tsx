@@ -65,6 +65,7 @@ type UnknownAuthContextInterface = AuthContextInterface<
   unknown,
   unknown,
   unknown,
+  unknown,
   unknown
 >
 
