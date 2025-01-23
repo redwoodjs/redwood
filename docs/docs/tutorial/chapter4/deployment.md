@@ -119,7 +119,7 @@ const signupOptions = {
   // ...
 ```
 
-The signup page itself is still visible, however. To remove it completely, remove the `<Route>` in the Router, and remove the "Don't have an acocunt? Sign up!" link on the login page.
+The signup page itself is still visible, however. To remove it completely, remove the `<Route>` in the Router, and remove the "Don't have an account? Sign up!" link on the login page.
 
 Be sure to save your changes, then run `grove deploy` to push the changes live. Take that, hackers!
 

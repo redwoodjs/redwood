@@ -43,12 +43,7 @@ export const getWebSideBabelPlugins = (
 
   const plugins = [
     // It is important that this plugin run first, as noted here: https://react.dev/learn/react-compiler
-    useReactCompiler && [
-      'babel-plugin-react-compiler',
-      {
-        // No specific config at this time...
-      },
-    ],
+    useReactCompiler && ['babel-plugin-react-compiler', { target: 19 }],
     // === Import path handling
     [
       'babel-plugin-module-resolver',

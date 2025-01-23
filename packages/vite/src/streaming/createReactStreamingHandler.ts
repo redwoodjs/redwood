@@ -41,11 +41,11 @@ export const createReactStreamingHandler = async (
     getStylesheetLinks,
     getMiddlewareRouter,
   }: CreateReactStreamingHandlerOptions,
-  viteDevServer?: ViteDevServer,
+  viteSsrDevServer?: ViteDevServer,
 ) => {
   const rwPaths = getPaths()
   const rwConfig = getConfig()
-  const isProd = !viteDevServer
+  const isProd = !viteSsrDevServer
   const middlewareRouter: Router.Instance<any> = await getMiddlewareRouter()
   let entryServerImport: EntryServer
   let fallbackDocumentImport: Record<string, any>
@@ -115,7 +115,7 @@ export const createReactStreamingHandler = async (
           route: currentRoute,
           cssPaths: cssLinks,
           params: matchedMw?.params,
-          viteDevServer,
+          viteSsrDevServer,
         },
       )
 
@@ -144,8 +144,8 @@ export const createReactStreamingHandler = async (
     // Do this inside the handler for **dev-only**.
     // This makes sure that changes to entry-server are picked up on refresh
     if (!isProd) {
-      entryServerImport = await ssrLoadEntryServer(viteDevServer)
-      fallbackDocumentImport = await viteDevServer.ssrLoadModule(
+      entryServerImport = await ssrLoadEntryServer(viteSsrDevServer)
+      fallbackDocumentImport = await viteSsrDevServer.ssrLoadModule(
         rwPaths.web.document,
       )
     }
@@ -173,13 +173,15 @@ export const createReactStreamingHandler = async (
         req,
         parsedParams,
       },
-      viteDevServer,
+      viteSsrDevServer,
     })
 
     metaTags = routeHookOutput.meta
 
     // On dev, we don't need to add the slash (for windows support) any more
-    const jsBundles = [viteDevServer ? clientEntryPath : '/' + clientEntryPath]
+    const jsBundles = [
+      viteSsrDevServer ? clientEntryPath : '/' + clientEntryPath,
+    ]
     if (currentRoute.bundle) {
       jsBundles.push('/' + currentRoute.bundle)
     }
@@ -201,14 +203,14 @@ export const createReactStreamingHandler = async (
       {
         waitForAllReady: isSeoCrawler,
         onError: (err) => {
-          if (!isProd && viteDevServer) {
-            viteDevServer.ssrFixStacktrace(err)
+          if (!isProd && viteSsrDevServer) {
+            viteSsrDevServer.ssrFixStacktrace(err)
           }
 
           console.error(err)
         },
       },
-      viteDevServer,
+      viteSsrDevServer,
     )
 
     return reactResponse

@@ -24,7 +24,7 @@ describe('${pascalName}Cell', () => {
 
   it('renders Failure successfully', async () => {
     expect(() => {
-      render(<Failure error={new Error('Oh no')} />)
+      render(<Failure <% if (idName) { %>${idName}={${mockIdValues[0]}} <% } %>error={new Error('Oh no')} />)
     }).not.toThrow()
   })
 
@@ -36,7 +36,7 @@ describe('${pascalName}Cell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success ${camelName}={standard().${camelName}} />)
+      render(<Success <% if (idName) { %>${idName}={${mockIdValues[0]}} <% } %>${camelName}={standard().${camelName}} />)
     }).not.toThrow()
   })
 })

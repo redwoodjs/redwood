@@ -35,7 +35,7 @@ If you're new to connecting to remote servers, check out the [Intro to Servers](
 The Baremetal deploy runs several commands in sequence. These can be customized, to an extent, and some of them skipped completely:
 
 1. `git clone --depth=1` to retrieve the latest code
-2. Symlink the latest deploy `.env` to the shared `.env` in the app dir
+2. Create a `.env` symlink to the shared `.env` in the app dir
 3. `yarn install` - installs dependencies
 4. Runs prisma DB migrations
 5. Generate Prisma client libs

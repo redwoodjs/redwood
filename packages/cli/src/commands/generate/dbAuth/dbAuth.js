@@ -1,7 +1,7 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import { camelCase } from 'camel-case'
-import Enquirer from 'enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import { Listr } from 'listr2'
@@ -273,47 +273,60 @@ const tasks = ({
       {
         title: 'Determining UI labels...',
         skip: () => {
-          return usernameLabel && passwordLabel
+          return !!(usernameLabel && passwordLabel)
         },
         task: async (ctx, task) => {
-          return task.newListr([
-            {
-              title: 'Username label',
-              task: async (subctx, subtask) => {
-                if (usernameLabel) {
-                  subtask.skip(
-                    `Argument username-label is set, using: "${usernameLabel}"`,
+          return task.newListr(
+            [
+              {
+                title: 'Username label',
+                task: async (subCtx, subtask) => {
+                  if (usernameLabel) {
+                    subtask.skip(
+                      `Argument username-label is set, using: "${usernameLabel}"`,
+                    )
+                    return
+                  }
+
+                  const prompt = subtask.prompt(ListrEnquirerPromptAdapter)
+                  usernameLabel = await prompt.run(
+                    {
+                      type: 'input',
+                      name: 'username',
+                      message: 'What would you like the username label to be:',
+                      default: 'Username',
+                    },
+                    { enquirer: subCtx.enquirer || ctx.enquirer },
                   )
-                  return
-                }
-                usernameLabel = await subtask.prompt({
-                  type: 'input',
-                  name: 'username',
-                  message: 'What would you like the username label to be:',
-                  default: 'Username',
-                })
-                subtask.title = `Username label: "${usernameLabel}"`
+                  subtask.title = `Username label: "${usernameLabel}"`
+                },
               },
-            },
-            {
-              title: 'Password label',
-              task: async (subctx, subtask) => {
-                if (passwordLabel) {
-                  subtask.skip(
-                    `Argument password-label passed, using: "${passwordLabel}"`,
+              {
+                title: 'Password label',
+                task: async (subCtx, subtask) => {
+                  if (passwordLabel) {
+                    subtask.skip(
+                      `Argument password-label passed, using: "${passwordLabel}"`,
+                    )
+                    return
+                  }
+
+                  const prompt = subtask.prompt(ListrEnquirerPromptAdapter)
+                  passwordLabel = await prompt.run(
+                    {
+                      type: 'input',
+                      name: 'password',
+                      message: 'What would you like the password label to be:',
+                      default: 'Password',
+                    },
+                    { enquirer: subCtx.enquirer || ctx.enquirer },
                   )
-                  return
-                }
-                passwordLabel = await subtask.prompt({
-                  type: 'input',
-                  name: 'password',
-                  message: 'What would you like the password label to be:',
-                  default: 'Password',
-                })
-                subtask.title = `Password label: "${passwordLabel}"`
+                  subtask.title = `Password label: "${passwordLabel}"`
+                },
               },
-            },
-          ])
+            ],
+            { ctx: { enquirer } },
+          )
         },
       },
       {
@@ -353,12 +366,18 @@ const tasks = ({
             return
           }
 
-          const response = await task.prompt({
-            type: 'confirm',
-            name: 'answer',
-            message: `Enable WebAuthn support (TouchID/FaceID) on LoginPage? See https://redwoodjs.com/docs/auth/dbAuth#webAuthn`,
-            default: false,
-          })
+          const prompt = task.prompt(ListrEnquirerPromptAdapter)
+          const response = await prompt.run(
+            {
+              type: 'confirm',
+              name: 'answer',
+              message:
+                'Enable WebAuthn support (TouchID/FaceID) on LoginPage? See ' +
+                'https://redwoodjs.com/docs/auth/dbAuth#webAuthn',
+              default: false,
+            },
+            { enquirer: ctx.enquirer },
+          )
 
           ctx.webauthn = webauthn = response
 
@@ -415,7 +434,7 @@ const tasks = ({
     {
       silentRendererCondition: () => listr2?.silentRendererCondition,
       rendererOptions: { collapseSubtasks: false },
-      injectWrapper: { enquirer: enquirer || new Enquirer() },
+      ctx: { enquirer },
       exitOnError: true,
     },
   )

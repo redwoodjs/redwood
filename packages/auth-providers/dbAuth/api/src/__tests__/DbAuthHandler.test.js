@@ -2367,7 +2367,7 @@ describe('dbAuth', () => {
             attributes: {
               Path: '/',
               HttpOnly: true,
-              SameSite: 'Strict',
+              SameSite: 'Lax',
               Secure: true,
               Domain: 'example.com',
             },
@@ -2380,7 +2380,7 @@ describe('dbAuth', () => {
       expect(attributes.length).toEqual(6)
       expect(attributes[0]).toEqual('Path=/')
       expect(attributes[1]).toEqual('HttpOnly')
-      expect(attributes[2]).toEqual('SameSite=Strict')
+      expect(attributes[2]).toEqual('SameSite=Lax')
       expect(attributes[3]).toEqual('Secure')
       expect(attributes[4]).toEqual('Domain=example.com')
       expect(attributes[5]).toMatch(`Expires=`)

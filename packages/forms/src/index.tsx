@@ -49,6 +49,7 @@
 export * from 'react-hook-form'
 
 export { CheckboxField } from './CheckboxField'
+export type { EmptyAsValue, RedwoodRegisterOptions } from './coercion'
 export { FieldError } from './FieldError'
 export { Form, FormProps } from './Form'
 export { default as FormError } from './FormError'
@@ -77,6 +78,7 @@ export {
   UrlField,
   WeekField,
 } from './InputComponents'
+export type { InputFieldProps } from './InputComponents'
 export { Label } from './Label'
 export { SelectField } from './SelectField'
 export { ServerErrorsContext } from './ServerErrorsContext'

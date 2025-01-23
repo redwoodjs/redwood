@@ -7,27 +7,29 @@
     "directory": "packages/ogimage-gen"
   },
   "license": "MIT",
+  "type": "commonjs",
   "exports": {
     "./plugin": {
+      "types": "./dist/vite-plugin-ogimage-gen.d.ts",
       "import": "./dist/vite-plugin-ogimage-gen.js",
-      "default": "./cjsWrappers/plugin.js",
-      "types": "./dist/vite-plugin-ogimage-gen.d.ts"
+      "default": "./cjsWrappers/plugin.js"
     },
     "./middleware": {
+      "types": "./dist/OgImageMiddleware.d.ts",
       "import": "./dist/OgImageMiddleware.js",
-      "default": "./cjsWrappers/middleware.js",
       "react-server": "./empty.js",
-      "types": "./dist/OgImageMiddleware.d.ts"
+      "default": "./cjsWrappers/middleware.js"
     },
     "./hooks": {
+      "types": "./dist/hooks.d.ts",
       "import": "./dist/hooks.js",
-      "default": "./cjsWrappers/hooks.js",
-      "types": "./dist/hooks.d.ts"
+      "default": "./cjsWrappers/hooks.js"
     }
   },
   "files": [
     "dist",
-    "cjsWrappers"
+    "cjsWrappers",
+    "empty.js"
   ],
   "scripts": {
     "build": "tsx ./build.mts && yarn build:types",
@@ -48,10 +50,10 @@
     "react-dom": "19.0.0-rc-f2df5694-20240916"
   },
   "devDependencies": {
-    "@playwright/test": "1.47.2",
+    "@playwright/test": "1.49.1",
     "@redwoodjs/framework-tools": "workspace:*",
     "ts-toolbelt": "9.6.0",
-    "tsx": "4.19.1",
+    "tsx": "4.19.2",
     "typescript": "5.6.2",
     "vite": "5.4.8",
     "vitest": "2.0.5"

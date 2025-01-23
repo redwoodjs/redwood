@@ -1,4 +1,5 @@
 export type { AuthContextInterface, CurrentUser } from './AuthContext.js'
+export type { AuthProviderProps } from './AuthProvider/AuthProvider.js'
 export { useNoAuth } from './useAuth.js'
 export type { UseAuth } from './useAuth.js'
 export { createAuthentication } from './authFactory.js'

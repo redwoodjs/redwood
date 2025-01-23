@@ -27,6 +27,7 @@ declare global {
   var __rwjs__vite_ssr_runtime: ViteRuntime | undefined
   var __rwjs__vite_rsc_runtime: ViteRuntime | undefined
   var __rwjs__client_references: Set<string> | undefined
+  var __rwjs__server_references: Set<string> | undefined
 
   var __REDWOOD__HELMET_CONTEXT: { helmet?: HelmetServerState }
 

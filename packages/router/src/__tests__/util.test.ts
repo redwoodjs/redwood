@@ -451,4 +451,10 @@ describe('replaceParams', () => {
 
     expect(replaceParams('/calc', { expr: '1+2' })).toEqual('/calc?expr=1%2B2')
   })
+
+  it('skips search parameters with `undefined` and `null` values', () => {
+    expect(replaceParams('/s', { a: '', b: 0, c: undefined, d: null })).toEqual(
+      '/s?a=&b=0',
+    )
+  })
 })

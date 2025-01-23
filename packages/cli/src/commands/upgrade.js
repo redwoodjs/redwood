@@ -1,5 +1,6 @@
 import path from 'path'
 
+import { ListrEnquirerPromptAdapter } from '@listr2/prompt-adapter-enquirer'
 import execa from 'execa'
 import fs from 'fs-extra'
 import latestVersion from 'latest-version'
@@ -47,6 +48,12 @@ export const builder = (yargs) => {
       type: 'boolean',
       default: true,
     })
+    .option('yes', {
+      alias: 'y',
+      describe: 'Skip prompts and use defaults',
+      default: false,
+      type: 'boolean',
+    })
     .epilogue(
       `Also see the ${terminalLink(
         'Redwood CLI Reference for the upgrade command',
@@ -85,18 +92,49 @@ export const validateTag = (tag) => {
   return tag
 }
 
-export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
+export const handler = async ({ dryRun, tag, verbose, dedupe, yes }) => {
   recordTelemetryAttributes({
     command: 'upgrade',
     dryRun,
     tag,
     verbose,
     dedupe,
+    yes,
   })
 
   // structuring as nested tasks to avoid bug with task.title causing duplicates
   const tasks = new Listr(
     [
+      {
+        title: 'Confirm upgrade',
+        task: async (ctx, task) => {
+          if (yes) {
+            task.skip('Skipping confirmation prompt because of --yes flag.')
+            return
+          }
+
+          const prompt = task.prompt(ListrEnquirerPromptAdapter)
+          const proceed = await prompt.run({
+            type: 'Confirm',
+            message:
+              'This will upgrade your RedwoodJS project to the latest version. Do you want to proceed?',
+            initial: 'Y',
+            default: '(Yes/no)',
+            format: function (value) {
+              if (this.state.submitted) {
+                return this.isTrue(value) ? 'yes' : 'no'
+              }
+
+              return 'Yes'
+            },
+          })
+
+          if (!proceed) {
+            task.skip('Upgrade cancelled by user.')
+            process.exit(0)
+          }
+        },
+      },
       {
         title: 'Checking latest version',
         task: async (ctx) => setLatestVersionToContext(ctx, tag),
@@ -183,7 +221,7 @@ export const handler = async ({ dryRun, tag, verbose, dedupe }) => {
       },
     ],
     {
-      renderer: verbose && 'verbose',
+      renderer: verbose ? 'verbose' : 'default',
       rendererOptions: { collapseSubtasks: false },
     },
   )
@@ -494,7 +532,7 @@ const dedupeDeps = async (task, { verbose }) => {
       await execa('yarn', ['dedupe'], baseExecaArgsForDedupe)
     } else {
       // Redwood projects should not be using yarn 1.x as we specify a version of yarn in the package.json
-      // with "packageManager": "yarn@4.1.1" or similar.
+      // with "packageManager": "yarn@4.6.0" or similar.
       // Although we could (and previous did) automatically run `npx yarn-deduplicate` here, that would require
       // the user to have `npx` installed, which is not guaranteed and we do not wish to enforce that.
       task.skip(
@@ -504,7 +542,7 @@ const dedupeDeps = async (task, { verbose }) => {
   } catch (e) {
     console.log(c.error(e.message))
     throw new Error(
-      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn 3 run `yarn dedupe` before continuing',
+      'Could not finish de-duplication. For yarn 1.x, please run `npx yarn-deduplicate`, or for yarn >= 3 run `yarn dedupe` before continuing',
     )
   }
   await yarnInstall({ verbose })

@@ -48,9 +48,9 @@
     "build:types": "tsc --build --verbose"
   },
   "dependencies": {
-    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.1",
+    "@joshwooding/vite-plugin-react-docgen-typescript": "0.4.2",
     "@redwoodjs/testing": "workspace:*",
-    "@rollup/pluginutils": "5.1.2",
+    "@rollup/pluginutils": "5.1.4",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
     "@storybook/react": "7.6.17",
@@ -59,8 +59,8 @@
     "unplugin-auto-import": "0.18.3"
   },
   "devDependencies": {
-    "@types/node": "20.16.11",
-    "tsx": "4.19.1",
+    "@types/node": "20.17.10",
+    "tsx": "4.19.2",
     "typescript": "5.6.2",
     "vite": "5.4.8"
   },
