@@ -16,6 +16,14 @@ export interface TuiTaskDef {
   task: () => Promise<unknown> | void
 }
 
+interface TuiTaskListItem {
+  title: string
+  enabled?: boolean | (() => boolean)
+  task: () => Promise<unknown> | void
+}
+
+export type TuiTaskList = TuiTaskListItem[]
+
 export function isAwaitable(promise: unknown): promise is Promise<unknown> {
   return (
     !!promise &&
@@ -23,4 +31,10 @@ export function isAwaitable(promise: unknown): promise is Promise<unknown> {
     'then' in promise &&
     typeof promise.then === 'function'
   )
+}
+
+export function isTuiError(
+  error: unknown,
+): error is { message?: string; exitCode?: number } {
+  return error instanceof Object
 }

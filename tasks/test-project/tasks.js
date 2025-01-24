@@ -388,7 +388,6 @@ async function apiTasks(outputPath, { verbose, linkWithLatestFwBuild }) {
     await execa(
       'yarn rw g dbAuth --no-webauthn --username-label=username --password-label=password',
       [],
-      execaOptions,
     )
 
     // update directive in contacts.sdl.ts
