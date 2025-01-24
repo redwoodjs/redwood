@@ -1,7 +1,11 @@
 /* eslint-env node, es2021*/
-//@ts-check
-const fs = require('fs')
-const path = require('path')
+
+import fs from 'node:fs'
+import path from 'node:path'
+
+import type { Options as ExecaOptions, ExecaChildProcess } from 'execa'
+
+import type { TuiTaskList } from './typing.js'
 
 const {
   getExecaOptions: utilGetExecaOptions,
@@ -10,18 +14,17 @@ const {
   exec,
 } = require('./util')
 
-/** @type {(string) => import('execa').Options} */
-function getExecaOptions(cwd) {
+function getExecaOptions(cwd: string): ExecaOptions {
   return { ...utilGetExecaOptions(cwd), stdio: 'pipe' }
 }
 
 // This variable gets used in other functions
 // and is set when webTasks or apiTasks are called
-let OUTPUT_PATH
+let OUTPUT_PATH: string
 
 const RW_FRAMEWORK_PATH = path.join(__dirname, '../../')
 
-function fullPath(name, { addExtension } = { addExtension: true }) {
+function fullPath(name: string, { addExtension } = { addExtension: true }) {
   if (addExtension) {
     if (name.startsWith('api')) {
       name += '.ts'
@@ -34,7 +37,7 @@ function fullPath(name, { addExtension } = { addExtension: true }) {
 }
 
 // TODO: Import from ./util.js when everything is using @rwjs/tui
-async function applyCodemod(codemod, target) {
+async function applyCodemod(codemod: string, target: string) {
   const args = [
     '--fail-on-error',
     '-t',
@@ -56,14 +59,14 @@ async function applyCodemod(codemod, target) {
 }
 
 /**
- * @param {string} cmd The command to run
- * @returns {((positionalArguments: string | string[]) => import('execa').ExecaChildProcess<string>)
- *           & (() => import('execa').ExecaChildProcess<string>)}
+ * @param cmd The command to run
  */
-const createBuilder = (cmd) => {
+function createBuilder(cmd: string) {
   const execaOptions = getExecaOptions(OUTPUT_PATH)
 
-  return function (positionalArguments) {
+  return function (
+    positionalArguments?: string | string[],
+  ): ExecaChildProcess<string> {
     const subprocess = exec(
       cmd,
       Array.isArray(positionalArguments)
@@ -76,7 +79,10 @@ const createBuilder = (cmd) => {
   }
 }
 
-async function webTasks(outputPath, { linkWithLatestFwBuild }) {
+async function webTasks(
+  outputPath: string,
+  { linkWithLatestFwBuild }: { linkWithLatestFwBuild: boolean },
+) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -84,8 +90,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   const createPages = async () => {
     const createPage = createBuilder('yarn redwood g page')
 
-    /** @type import('./typing').TuiTaskList */
-    const tuiTaskList = [
+    const tuiTaskList: TuiTaskList = [
       {
         title: 'Creating home page',
         task: async () => {
@@ -317,8 +322,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
     )
   }
 
-  /** @type import('./typing').TuiTaskList */
-  const tuiTaskList = [
+  const tuiTaskList: TuiTaskList = [
     {
       title: 'Creating pages',
       task: () => createPages(),
@@ -389,7 +393,7 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
   return tuiTaskList
 }
 
-async function addModel(schema) {
+async function addModel(schema: string) {
   const path = `${OUTPUT_PATH}/api/db/schema.prisma`
 
   const current = fs.readFileSync(path, 'utf-8')
@@ -397,7 +401,10 @@ async function addModel(schema) {
   fs.writeFileSync(path, `${current.trim()}\n\n${schema}\n`)
 }
 
-async function apiTasks(outputPath, { linkWithLatestFwBuild }) {
+async function apiTasks(
+  outputPath: string,
+  { linkWithLatestFwBuild }: { linkWithLatestFwBuild: boolean },
+) {
   OUTPUT_PATH = outputPath
 
   const execaOptions = getExecaOptions(outputPath)
@@ -714,8 +721,7 @@ export default DoublePage`
 
   const generateScaffold = createBuilder('yarn rw g scaffold')
 
-  /** @type import('./typing').TuiTaskList */
-  const tuiTaskList = [
+  const tuiTaskList: TuiTaskList = [
     {
       title: 'Adding post and user model to prisma',
       task: async () => {
@@ -917,11 +923,10 @@ export default DoublePage`
  * Tasks to add GraphQL Fragments support to the test-project, and some queries
  * to test fragments
  */
-async function fragmentsTasks(outputPath) {
+async function fragmentsTasks(outputPath: string) {
   OUTPUT_PATH = outputPath
 
-  /** @type import('./typing').TuiTaskList */
-  const tuiTaskList = [
+  const tuiTaskList: TuiTaskList = [
     {
       title: 'Enable fragments',
       task: async () => {
