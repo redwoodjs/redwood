@@ -7425,7 +7425,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
-    "@types/lodash": "npm:4.17.13"
+    "@types/lodash": "npm:4.17.14"
     "@types/qs": "npm:6.9.16"
     "@types/split2": "npm:4.2.3"
     "@types/yargs": "npm:17.0.33"
@@ -8087,7 +8087,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/telemetry": "workspace:*"
     "@types/dotenv-defaults": "npm:^2.0.4"
-    "@types/lodash": "npm:4.17.13"
+    "@types/lodash": "npm:4.17.14"
     "@types/pascalcase": "npm:1.0.3"
     "@types/semver": "npm:^7"
     "@types/yargs": "npm:17.0.33"
@@ -8290,7 +8290,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/testing": "workspace:*"
     "@redwoodjs/web-server": "workspace:*"
-    "@types/lodash": "npm:4.17.13"
+    "@types/lodash": "npm:4.17.14"
     graphql-tag: "npm:2.12.6"
     lodash: "npm:4.17.21"
     nodemon: "npm:3.1.9"
@@ -8455,7 +8455,7 @@ __metadata:
     "@redwoodjs/realtime": "workspace:*"
     "@types/aws-lambda": "npm:8.10.145"
     "@types/jsonwebtoken": "npm:9.0.7"
-    "@types/lodash": "npm:4.17.13"
+    "@types/lodash": "npm:4.17.14"
     "@types/uuid": "npm:10.0.0"
     "@whatwg-node/fetch": "npm:0.9.21"
     core-js: "npm:3.38.1"
@@ -8653,7 +8653,7 @@ __metadata:
     ts-toolbelt: "npm:9.6.0"
     tsx: "npm:4.19.2"
     typescript: "npm:5.6.2"
-    vite: "npm:5.4.8"
+    vite: "npm:5.4.12"
     vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
@@ -8831,7 +8831,7 @@ __metadata:
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
     "@types/line-column": "npm:1.0.2"
-    "@types/lodash": "npm:4.17.13"
+    "@types/lodash": "npm:4.17.14"
     "@types/node": "npm:20.17.10"
     "@types/vscode": "npm:1.96.0"
     camelcase: "npm:6.3.0"
@@ -8978,7 +8978,7 @@ __metadata:
     rollup: "npm:4.24.0"
     tsx: "npm:4.19.2"
     typescript: "npm:5.6.2"
-    vite: "npm:5.4.8"
+    vite: "npm:5.4.12"
     vite-plugin-cjs-interop: "npm:2.1.4"
     vite-plugin-node-polyfills: "npm:0.22.0"
     vitest: "npm:2.0.5"
@@ -11123,10 +11123,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.17.13, @types/lodash@npm:^4.14.167":
-  version: 4.17.13
-  resolution: "@types/lodash@npm:4.17.13"
-  checksum: 10c0/c3d0b7efe7933ac0369b99f2f7bff9240d960680fdb74b41ed4bd1b3ca60cca1e31fe4046d9abbde778f941a41bc2a75eb629abf8659fa6c27b66efbbb0802a9
+"@types/lodash@npm:4.17.14, @types/lodash@npm:^4.14.167":
+  version: 4.17.14
+  resolution: "@types/lodash@npm:4.17.14"
+  checksum: 10c0/343c6f722e0b39969036a885ad5aad6578479ead83987128c9b994e6b7f2fb9808244d802d4d332396bb09096f720a6c7060de16a492f5460e06a44560360322
   languageName: node
   linkType: hard
 
@@ -27896,7 +27896,7 @@ __metadata:
     tsx: "npm:4.19.2"
     typescript: "npm:5.6.2"
     unplugin-auto-import: "npm:0.18.3"
-    vite: "npm:5.4.8"
+    vite: "npm:5.4.12"
   peerDependencies:
     "@redwoodjs/project-config": "workspace:*"
     "@redwoodjs/router": "workspace:*"
@@ -29943,9 +29943,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:5.4.8, vite@npm:^5.0.0":
-  version: 5.4.8
-  resolution: "vite@npm:5.4.8"
+"vite@npm:5.4.12, vite@npm:^5.0.0":
+  version: 5.4.12
+  resolution: "vite@npm:5.4.12"
   dependencies:
     esbuild: "npm:^0.21.3"
     fsevents: "npm:~2.3.3"
@@ -29982,7 +29982,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/af70af6d6316a3af71f44ebe3ab343bd66450d4157af73af3b32239e1b6ec43ff6f651d7cc4193b21ed3bff2e9356a3de9e96aee53857f39922e4a2d9fad75a1
+  checksum: 10c0/a0f130e3e0c781f54c60ee4b7cccf92c266e4117be1f65ab55c02abc27b29fa70dc0ed05eca54a9983f76450063a47f86db06ac49f28ee96392a0dc362b17da8
   languageName: node
   linkType: hard
 
