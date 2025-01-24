@@ -349,9 +349,10 @@ async function webTasks(outputPath, { linkWithLatestFwBuild }) {
     {
       title: 'Install tailwind dependencies',
       // @NOTE: use rwfw, because calling the copy function doesn't seem to work here
+      // TODO: Try using tarsync. See if that removes the need for this workaround
       task: async () => {
         await exec(
-          'yarn workspace web add -D postcss postcss-loader tailwindcss autoprefixer prettier-plugin-tailwindcss@^0.5.12',
+          'yarn workspace web add -D postcss postcss-loader tailwindcss@^3.4.17 autoprefixer prettier-plugin-tailwindcss@^0.5.12',
           [],
           getExecaOptions(outputPath),
         )
