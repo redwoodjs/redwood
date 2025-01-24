@@ -121,7 +121,7 @@ export const handler = async ({ force, install }) => {
   const webWorkspacePackages = [
     'postcss',
     'postcss-loader',
-    'tailwindcss',
+    'tailwindcss@^3.4.17',
     'autoprefixer',
   ]
 
@@ -138,12 +138,18 @@ export const handler = async ({ force, install }) => {
                 task: async () => {
                   const yarnVersion = await execa('yarn', ['--version'])
                   const isYarnV1 = yarnVersion.stdout.trim().startsWith('1')
-                  await execa('yarn', [
-                    'add',
-                    '-D',
-                    ...(isYarnV1 ? ['-W'] : []),
-                    ...projectPackages,
-                  ])
+                  await execa(
+                    'yarn',
+                    [
+                      'add',
+                      '-D',
+                      ...(isYarnV1 ? ['-W'] : []),
+                      ...projectPackages,
+                    ],
+                    {
+                      cwd: rwPaths.base,
+                    },
+                  )
                 },
               },
             ],
@@ -160,13 +166,13 @@ export const handler = async ({ force, install }) => {
               {
                 title: `Install ${webWorkspacePackages.join(', ')}`,
                 task: async () => {
-                  await execa('yarn', [
-                    'workspace',
-                    'web',
-                    'add',
-                    '-D',
-                    ...webWorkspacePackages,
-                  ])
+                  await execa(
+                    'yarn',
+                    ['workspace', 'web', 'add', '-D', ...webWorkspacePackages],
+                    {
+                      cwd: rwPaths.base,
+                    },
+                  )
                 },
               },
             ],
