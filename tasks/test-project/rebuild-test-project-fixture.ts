@@ -15,7 +15,7 @@ import {
   copyFrameworkPackages,
 } from './frameworkLinking'
 import { webTasks, apiTasks } from './tui-tasks'
-import { isAwaitable } from './typing'
+import { isAwaitable, isTuiError } from './typing'
 import type { TuiTaskDef } from './typing'
 import {
   getExecaOptions as utilGetExecaOptions,
@@ -140,13 +140,16 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
         'stdout:\n' + e.stdout + '\n\n' + 'stderr:\n' + e.stderr,
       )
     } else {
+      const message = isTuiError(e) ? e.message : ''
+
       tui.displayError(
         'Failed ' + title.toLowerCase().replace('...', ''),
-        e.message,
+        message || '',
       )
     }
 
-    process.exit(e.exitCode)
+    const exitCode = isTuiError(e) ? e.exitCode : undefined
+    process.exit(exitCode)
   }
 
   if (isAwaitable(promise)) {
@@ -197,11 +200,8 @@ async function tuiTask({ step, title, content, task, parent }: TuiTaskDef) {
 /**
  * Function that returns a string to show when skipping the task, or just
  * true|false to indicate whether the task should be skipped or not.
- *
- * @param {string} startStep
- * @param {string} currentStep
  */
-function skipFn(startStep, currentStep) {
+function skipFn(startStep: string, currentStep: string) {
   const startStepNrs = startStep.split('.').map((s) => parseInt(s, 10))
   const currentStepNrs = currentStep.split('.').map((s) => parseInt(s, 10))
 

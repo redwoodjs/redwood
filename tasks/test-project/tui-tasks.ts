@@ -79,7 +79,7 @@ function createBuilder(cmd: string) {
   }
 }
 
-async function webTasks(
+export async function webTasks(
   outputPath: string,
   { linkWithLatestFwBuild }: { linkWithLatestFwBuild: boolean },
 ) {
@@ -401,7 +401,7 @@ async function addModel(schema: string) {
   fs.writeFileSync(path, `${current.trim()}\n\n${schema}\n`)
 }
 
-async function apiTasks(
+export async function apiTasks(
   outputPath: string,
   { linkWithLatestFwBuild }: { linkWithLatestFwBuild: boolean },
 ) {
@@ -923,7 +923,7 @@ export default DoublePage`
  * Tasks to add GraphQL Fragments support to the test-project, and some queries
  * to test fragments
  */
-async function fragmentsTasks(outputPath: string) {
+export async function fragmentsTasks(outputPath: string) {
   OUTPUT_PATH = outputPath
 
   const tuiTaskList: TuiTaskList = [
@@ -1033,10 +1033,4 @@ async function fragmentsTasks(outputPath: string) {
   ]
 
   return tuiTaskList
-}
-
-module.exports = {
-  apiTasks,
-  webTasks,
-  fragmentsTasks,
 }

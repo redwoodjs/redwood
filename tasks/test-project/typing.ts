@@ -32,3 +32,9 @@ export function isAwaitable(promise: unknown): promise is Promise<unknown> {
     typeof promise.then === 'function'
   )
 }
+
+export function isTuiError(
+  error: unknown,
+): error is { message?: string; exitCode?: number } {
+  return error instanceof Object
+}
