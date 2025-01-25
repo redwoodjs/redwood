@@ -20,9 +20,12 @@ const createHistory = () => {
       globalThis.addEventListener('popstate', listener)
       return listenerId
     },
-    navigate: (to: string, options: NavigateOptions = {
-      scroll: true
-    }) => {
+    navigate: (
+      to: string,
+      options: NavigateOptions = {
+        scroll: true,
+      },
+    ) => {
       const performNavigation = () => {
         const { pathname, search, hash } = new URL(
           globalThis?.location?.origin + to,

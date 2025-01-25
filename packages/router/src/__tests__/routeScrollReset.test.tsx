@@ -90,15 +90,14 @@ describe('Router scroll reset', () => {
     expect(globalThis.scrollTo).not.toHaveBeenCalled()
   })
 
-
   it('when scroll option is false, does NOT reset on location/path change', async () => {
     act(() =>
       navigate(
         // @ts-expect-error - AvailableRoutes built in project only
         routes.page2(),
         {
-          scroll: false
-        }
+          scroll: false,
+        },
       ),
     )
 
@@ -116,7 +115,7 @@ describe('Router scroll reset', () => {
         }),
         {
           scroll: false,
-        }
+        },
       ),
     )
 
@@ -134,8 +133,8 @@ describe('Router scroll reset', () => {
           queryParam1: 'foo',
         }),
         {
-          scroll: false
-        }
+          scroll: false,
+        },
       ),
     )
 

@@ -87,7 +87,8 @@ class LocationProvider extends React.Component<
       this.setState((lastState) => {
         if (
           (context?.pathname !== lastState?.context?.pathname ||
-          context?.search !== lastState?.context?.search) && options?.scroll === true
+            context?.search !== lastState?.context?.search) &&
+          options?.scroll === true
         ) {
           globalThis?.scrollTo(0, 0)
         }
