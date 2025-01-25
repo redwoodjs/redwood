@@ -3330,7 +3330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/busboy@npm:^2.0.0, @fastify/busboy@npm:^2.1.0":
+"@fastify/busboy@npm:^2.0.0":
   version: 2.1.1
   resolution: "@fastify/busboy@npm:2.1.1"
   checksum: 10c0/6f8027a8cba7f8f7b736718b013f5a38c0476eea67034c94a0d3c375e2b114366ad4419e6a6fa7ffc2ef9c6d3e0435d76dd584a7a1cbac23962fda7650b579e3
@@ -3351,10 +3351,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/deepmerge@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "@fastify/deepmerge@npm:2.0.1"
+  checksum: 10c0/043c7e5e028d01b4bdd6b99588e8f82e5b91399d68bcbcf11726c2d058faf6f0fdeecad837dded1e184430938cf29cfc65ae0d0ac4872ee865d32f6a3e86681f
+  languageName: node
+  linkType: hard
+
 "@fastify/error@npm:^3.0.0, @fastify/error@npm:^3.3.0, @fastify/error@npm:^3.4.0":
   version: 3.4.1
   resolution: "@fastify/error@npm:3.4.1"
   checksum: 10c0/1f1a0faa8c86639afb6f4bd47a9cdc1f0f20ce0d6944340fbdec8218aaba91dc9cae9ed78e24e61bceb782a867efda2b9a6320091f00dcbb896d9c8a9bdf5f96
+  languageName: node
+  linkType: hard
+
+"@fastify/error@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@fastify/error@npm:4.0.0"
+  checksum: 10c0/074b8a6c350c29a8fc8314298d9457fe0c1ba6e7f160e9ae6ba0e18853f1ec7427d768f966700cbf67a4694f3a9a593c6a23e42ce3ed62e40fecdf8026040d9a
   languageName: node
   linkType: hard
 
@@ -3379,17 +3393,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fastify/multipart@npm:8.3.0":
-  version: 8.3.0
-  resolution: "@fastify/multipart@npm:8.3.0"
+"@fastify/multipart@npm:8.3.1":
+  version: 8.3.1
+  resolution: "@fastify/multipart@npm:8.3.1"
   dependencies:
-    "@fastify/busboy": "npm:^2.1.0"
-    "@fastify/deepmerge": "npm:^1.0.0"
-    "@fastify/error": "npm:^3.0.0"
+    "@fastify/busboy": "npm:^3.0.0"
+    "@fastify/deepmerge": "npm:^2.0.0"
+    "@fastify/error": "npm:^4.0.0"
     fastify-plugin: "npm:^4.0.0"
     secure-json-parse: "npm:^2.4.0"
     stream-wormhole: "npm:^1.1.0"
-  checksum: 10c0/1021675af149435b1e585cfcaf8aba848c3799cbc213c18a0e3d74c6d64d21db27572a99295a8da5263f5562869452234dea2680e83e248456d97b560fb627eb
+  checksum: 10c0/f60beb6b4fa8fba2a66343cd5be58914e5605fe4a49f26f22e189f120afbd1fe1906c363a538da5b361d7257e962570e2a7f0ff4bc42dc61a2e8a118712a55e1
   languageName: node
   linkType: hard
 
@@ -7416,7 +7430,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/api-server@workspace:packages/api-server"
   dependencies:
-    "@fastify/multipart": "npm:8.3.0"
+    "@fastify/multipart": "npm:8.3.1"
     "@fastify/url-data": "npm:5.4.0"
     "@redwoodjs/context": "npm:8.4.4"
     "@redwoodjs/fastify-web": "npm:8.4.4"
