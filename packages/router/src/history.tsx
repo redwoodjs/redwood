@@ -1,8 +1,9 @@
 export interface NavigateOptions {
   replace?: boolean
+  scroll?: boolean
 }
 
-export type Listener = (ev?: PopStateEvent) => any
+export type Listener = (ev?: PopStateEvent, options?: NavigateOptions) => any
 export type BeforeUnloadListener = (ev: BeforeUnloadEvent) => any
 export type BlockerCallback = (tx: { retry: () => void }) => void
 export type Blocker = { id: string; callback: BlockerCallback }
@@ -19,7 +20,12 @@ const createHistory = () => {
       globalThis.addEventListener('popstate', listener)
       return listenerId
     },
-    navigate: (to: string, options?: NavigateOptions) => {
+    navigate: (
+      to: string,
+      options: NavigateOptions = {
+        scroll: true,
+      },
+    ) => {
       const performNavigation = () => {
         const { pathname, search, hash } = new URL(
           globalThis?.location?.origin + to,
@@ -38,7 +44,7 @@ const createHistory = () => {
         }
 
         for (const listener of Object.values(listeners)) {
-          listener()
+          listener(undefined, options)
         }
       }
 
