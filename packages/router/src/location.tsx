@@ -82,12 +82,13 @@ class LocationProvider extends React.Component<
   // componentDidMount() is not called during server rendering (aka SSR and
   // prerendering)
   componentDidMount() {
-    this.HISTORY_LISTENER_ID = gHistory.listen(() => {
+    this.HISTORY_LISTENER_ID = gHistory.listen((_, options) => {
       const context = this.getContext()
       this.setState((lastState) => {
         if (
-          context?.pathname !== lastState?.context?.pathname ||
-          context?.search !== lastState?.context?.search
+          (context?.pathname !== lastState?.context?.pathname ||
+            context?.search !== lastState?.context?.search) &&
+          options?.scroll === true
         ) {
           globalThis?.scrollTo(0, 0)
         }

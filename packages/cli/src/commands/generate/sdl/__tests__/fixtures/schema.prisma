@@ -66,6 +66,18 @@ enum Color {
 }
 
 model CustomData {
-  id       Int    @id @default(autoincrement())
-  data     String
+  id   Int    @id @default(autoincrement())
+  data String
+}
+
+// This would be seeded with available car brands
+model CarBrand {
+  brand String @id
+  cars  Car[]
+}
+
+model Car {
+  id       Int      @id @default(autoincrement())
+  brand    String
+  carBrand CarBrand @relation(fields: [brand], references: [brand])
 }

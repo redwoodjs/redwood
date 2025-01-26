@@ -29,7 +29,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@fastify/multipart": "8.3.0",
+    "@fastify/multipart": "8.3.1",
     "@fastify/url-data": "5.4.0",
     "@redwoodjs/context": "workspace:*",
     "@redwoodjs/fastify-web": "workspace:*",

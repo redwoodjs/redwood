@@ -236,6 +236,37 @@ const itCreatesAnSDLFileWithByteDefinitions = (baseArgs = {}) => {
   })
 }
 
+const itCreatesAnSslFileForModelWithOnlyIdAndRelation = (baseArgs = {}) => {
+  test('create an sdl file for model with only id and relation', async () => {
+    const files = {
+      ...(await sdl.files({
+        ...baseArgs,
+        name: 'Car',
+        crud: true,
+      })),
+      ...(await sdl.files({
+        ...baseArgs,
+        name: 'CarBrand',
+        crud: true,
+      })),
+    }
+    const extension = extensionForBaseArgs(baseArgs)
+
+    expect(
+      files[
+        path.normalize(`/path/to/project/api/src/graphql/cars.sdl.${extension}`)
+      ],
+    ).toMatchSnapshot()
+    expect(
+      files[
+        path.normalize(
+          `/path/to/project/api/src/graphql/carBrands.sdl.${extension}`,
+        )
+      ],
+    ).toMatchSnapshot()
+  })
+}
+
 describe('without graphql documentations', () => {
   describe('in javascript mode', () => {
     const baseArgs = { ...getDefaultArgs(sdl.defaults), tests: true }
@@ -249,6 +280,7 @@ describe('without graphql documentations', () => {
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
     itCreatesAnSDLFileWithByteDefinitions(baseArgs)
+    itCreatesAnSslFileForModelWithOnlyIdAndRelation(baseArgs)
   })
 
   describe('in typescript mode', () => {
@@ -267,6 +299,7 @@ describe('without graphql documentations', () => {
     itCreatesAnSDLFileWithEnumDefinitions(baseArgs)
     itCreatesAnSDLFileWithJsonDefinitions(baseArgs)
     itCreatesAnSDLFileWithByteDefinitions(baseArgs)
+    itCreatesAnSslFileForModelWithOnlyIdAndRelation(baseArgs)
   })
 })
 

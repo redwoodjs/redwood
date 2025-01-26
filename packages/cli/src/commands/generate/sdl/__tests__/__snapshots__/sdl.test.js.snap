@@ -1572,6 +1572,66 @@ exports[`with graphql documentations > in typescript mode > creates a single wor
 "
 `;
 
+exports[`without graphql documentations > in javascript mode > create an sdl file for model with only id and relation 1`] = `
+"export const schema = gql\`
+  type Car {
+    id: Int!
+    brand: String!
+    carBrand: CarBrand!
+  }
+
+  type Query {
+    cars: [Car!]! @requireAuth
+    car(id: Int!): Car @requireAuth
+  }
+
+  input CreateCarInput {
+    brand: String!
+  }
+
+  input UpdateCarInput {
+    brand: String
+  }
+
+  type Mutation {
+    createCar(input: CreateCarInput!): Car! @requireAuth
+    updateCar(id: Int!, input: UpdateCarInput!): Car! @requireAuth
+    deleteCar(id: Int!): Car! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`without graphql documentations > in javascript mode > create an sdl file for model with only id and relation 2`] = `
+"export const schema = gql\`
+  type CarBrand {
+    brand: String!
+    cars: [Car]!
+  }
+
+  type Query {
+    carBrands: [CarBrand!]! @requireAuth
+    carBrand(brand: String!): CarBrand @requireAuth
+  }
+
+  input CreateCarBrandInput {
+    brand: String!
+  }
+
+  input UpdateCarBrandInput {
+    brand: String!
+  }
+
+  type Mutation {
+    createCarBrand(input: CreateCarBrandInput!): CarBrand! @requireAuth
+    updateCarBrand(brand: String!, input: UpdateCarBrandInput!): CarBrand!
+      @requireAuth
+    deleteCarBrand(brand: String!): CarBrand! @requireAuth
+  }
+\`
+"
+`;
+
 exports[`without graphql documentations > in javascript mode > creates a multi word sdl file 1`] = `
 "export const schema = gql\`
   type UserProfile {
@@ -1804,6 +1864,66 @@ exports[`without graphql documentations > in javascript mode > creates a single 
     createPost(input: CreatePostInput!): Post! @requireAuth
     updatePost(id: Int!, input: UpdatePostInput!): Post! @requireAuth
     deletePost(id: Int!): Post! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`without graphql documentations > in typescript mode > create an sdl file for model with only id and relation 1`] = `
+"export const schema = gql\`
+  type Car {
+    id: Int!
+    brand: String!
+    carBrand: CarBrand!
+  }
+
+  type Query {
+    cars: [Car!]! @requireAuth
+    car(id: Int!): Car @requireAuth
+  }
+
+  input CreateCarInput {
+    brand: String!
+  }
+
+  input UpdateCarInput {
+    brand: String
+  }
+
+  type Mutation {
+    createCar(input: CreateCarInput!): Car! @requireAuth
+    updateCar(id: Int!, input: UpdateCarInput!): Car! @requireAuth
+    deleteCar(id: Int!): Car! @requireAuth
+  }
+\`
+"
+`;
+
+exports[`without graphql documentations > in typescript mode > create an sdl file for model with only id and relation 2`] = `
+"export const schema = gql\`
+  type CarBrand {
+    brand: String!
+    cars: [Car]!
+  }
+
+  type Query {
+    carBrands: [CarBrand!]! @requireAuth
+    carBrand(brand: String!): CarBrand @requireAuth
+  }
+
+  input CreateCarBrandInput {
+    brand: String!
+  }
+
+  input UpdateCarBrandInput {
+    brand: String!
+  }
+
+  type Mutation {
+    createCarBrand(input: CreateCarBrandInput!): CarBrand! @requireAuth
+    updateCarBrand(brand: String!, input: UpdateCarBrandInput!): CarBrand!
+      @requireAuth
+    deleteCarBrand(brand: String!): CarBrand! @requireAuth
   }
 \`
 "

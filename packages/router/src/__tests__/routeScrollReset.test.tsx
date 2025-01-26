@@ -89,4 +89,57 @@ describe('Router scroll reset', () => {
 
     expect(globalThis.scrollTo).not.toHaveBeenCalled()
   })
+
+  it('when scroll option is false, does NOT reset on location/path change', async () => {
+    act(() =>
+      navigate(
+        // @ts-expect-error - AvailableRoutes built in project only
+        routes.page2(),
+        {
+          scroll: false,
+        },
+      ),
+    )
+
+    screen.getByText('Page 2')
+
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(0)
+  })
+
+  it('when scroll option is false, does NOT reset on location/path and queryChange change', async () => {
+    act(() =>
+      navigate(
+        // @ts-expect-error - AvailableRoutes built in project only
+        routes.page2({
+          tab: 'three',
+        }),
+        {
+          scroll: false,
+        },
+      ),
+    )
+
+    screen.getByText('Page 2')
+
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(0)
+  })
+
+  it('when scroll option is false, does NOT reset scroll on query params (search) change on the same page', async () => {
+    act(() =>
+      // We're staying on page 1, but changing the query params
+      navigate(
+        // @ts-expect-error - AvailableRoutes built in project only
+        routes.page1({
+          queryParam1: 'foo',
+        }),
+        {
+          scroll: false,
+        },
+      ),
+    )
+
+    screen.getByText('Page 1')
+
+    expect(globalThis.scrollTo).toHaveBeenCalledTimes(0)
+  })
 })

@@ -75,11 +75,13 @@ const modelFieldToSDL = ({
     Bytes: 'Byte',
   }
 
-  const fieldContent = `${field.name}: ${field.isList ? '[' : ''}${
-    prismaTypeToGraphqlType[field.type] || field.type
-  }${field.isList ? ']' : ''}${
-    (field.isRequired && required) | field.isList ? '!' : ''
-  }`
+  const gqlType = prismaTypeToGraphqlType[field.type] || field.type
+  const type = field.isList ? `[${gqlType}]` : gqlType
+  // lists and id fields are always required (lists can be empty, that's fine)
+  const isRequired =
+    (field.isRequired && required) || field.isList || field.isId
+  const fieldContent = `${field.name}: ${type}${isRequired ? '!' : ''}`
+
   if (docs) {
     return addFieldGraphQLComment(field, fieldContent)
   } else {
@@ -98,7 +100,8 @@ const inputSDL = (model, required, types = {}, docs = false) => {
     .filter((field) => {
       const idField = model.fields.find((field) => field.isId)
 
-      if (idField) {
+      // Only ignore the id field if it has a default value
+      if (idField && idField.default) {
         ignoredFields.push(idField.name)
       }
 
@@ -162,7 +165,7 @@ const idName = (model, crud) => {
 const sdlFromSchemaModel = async (name, crud, docs = false) => {
   const model = await getSchema(name)
 
-  // get models for user-defined types referenced
+  // get models for referenced user-defined types
   const types = (
     await Promise.all(
       model.fields
