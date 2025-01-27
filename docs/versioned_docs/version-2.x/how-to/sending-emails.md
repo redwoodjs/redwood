@@ -382,4 +382,4 @@ That's it! We just import the audits service and call the exported `createAudit`
 
 To view the audit logs you can use the scaffolded pages we created earlier. Just navigate to http://localhost:8910/audits and you should see them there.
 
-Thanks for reading this! If you liked it, or have any questions, don't hesitate to reach out on [our forums](https://community.redwoodjs.com) or in our [Discord chat](https://discord.gg/jjSYEQd).
+Thanks for reading this! If you liked it, or have any questions, don't hesitate to reach out on [our forums](https://community.redwoodjs.com) or in our [Discord chat](https://discord.com/invite/redwoodjs).
