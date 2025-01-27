@@ -10,7 +10,7 @@ Love Redwood and want to get involved? You’re in the right place and in good c
 
 There are several ways you can contribute to Redwood:
 
-- join the [community Forums](https://community.redwoodjs.com/) and [Discord server](https://discord.gg/jjSYEQd) — encourage and help others 🙌
+- join the [community Forums](https://community.redwoodjs.com/) and [Discord server](https://discord.com/invite/redwoodjs) — encourage and help others 🙌
 - [triage issues on the repo](https://github.com/redwoodjs/redwood/issues) and [review PRs](https://github.com/redwoodjs/redwood/pulls) 🩺
 - write and edit [docs](#contributing-docs) ✍️
 - and of course, write code! 👩‍💻
