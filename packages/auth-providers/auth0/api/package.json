@@ -46,7 +46,7 @@
     "@arethetypeswrong/cli": "0.16.4",
     "@redwoodjs/api": "workspace:*",
     "@redwoodjs/framework-tools": "workspace:*",
-    "@types/jsonwebtoken": "9.0.7",
+    "@types/jsonwebtoken": "9.0.8",
     "concurrently": "8.2.2",
     "publint": "0.2.12",
     "tsx": "4.19.2",
