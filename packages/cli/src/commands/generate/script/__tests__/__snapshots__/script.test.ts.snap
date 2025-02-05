@@ -1,10 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`creates a JavaScript function to execute 1`] = `
-"// To access your database
-// Append api/* to import from api and web/* to import from web
-import { db } from 'api/src/lib/db'
+"// Append api/* to import from api and web/* to import from web
 
+// To access your database uncomment the line below
+// import { db } from 'api/src/lib/db'
 
 export default async ({ args }) => {
   // Your script here...
@@ -15,12 +15,17 @@ export default async ({ args }) => {
 `;
 
 exports[`creates a TypeScript function to execute 1`] = `
-"// To access your database
-// Append api/* to import from api and web/* to import from web
-import { db } from 'api/src/lib/db'
+"// Append api/* to import from api and web/* to import from web
 
+// To access your database uncomment the line below
+// import { db } from 'api/src/lib/db'
 
-export default async ({ args }) => {
+interface Args {
+  _: string[]
+  [key: string]: unknown
+}
+
+export default async ({ args }: Args) => {
   // Your script here...
   console.log(':: Executing script with args ::')
   console.log(args)

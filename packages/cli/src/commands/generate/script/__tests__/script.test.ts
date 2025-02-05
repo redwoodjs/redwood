@@ -7,10 +7,10 @@ import path from 'path'
 import { test, expect } from 'vitest'
 import yargs from 'yargs'
 
-import * as script from '../script'
+import * as script from '../script.js'
 
-test('creates a JavaScript function to execute', () => {
-  const output = script.files({
+test('creates a JavaScript function to execute', async () => {
+  const output = await script.files({
     name: 'scriptyMcScript',
     typescript: false,
   })
@@ -23,8 +23,8 @@ test('creates a JavaScript function to execute', () => {
   expect(output[expectedOutputPath]).toMatchSnapshot()
 })
 
-test('creates a TypeScript function to execute', () => {
-  const output = script.files({
+test('creates a TypeScript function to execute', async () => {
+  const output = await script.files({
     name: 'typescriptyTypescript',
     typescript: true,
   })
