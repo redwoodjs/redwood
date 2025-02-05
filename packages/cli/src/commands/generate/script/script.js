@@ -7,7 +7,7 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFilesTask } from '../../../lib'
+import { getPaths, writeFilesTask, transformTSToJS } from '../../../lib'
 import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
 import { validateName, yargsDefaults } from '../helpers'
@@ -19,14 +19,18 @@ const TSCONFIG_TEMPLATE = path.resolve(
   'tsconfig.json.template',
 )
 
-export const files = ({ name, typescript = false }) => {
+export const files = async ({ name, typescript = false }) => {
   const outputFilename = `${name}.${typescript ? 'ts' : 'js'}`
   const outputPath = path.join(getPaths().scripts, outputFilename)
 
   const scriptTsConfigPath = path.join(getPaths().scripts, 'tsconfig.json')
 
+  const template = fs.readFileSync(TEMPLATE_PATH, 'utf-8')
+
   return {
-    [outputPath]: fs.readFileSync(TEMPLATE_PATH, 'utf-8'),
+    [outputPath]: typescript
+      ? template
+      : await transformTSToJS(outputPath, template),
 
     // Add tsconfig for type and cmd+click support if project is TS
     ...(typescript &&
