@@ -12,7 +12,7 @@ import c from '../../../lib/colors'
 import { prepareForRollback } from '../../../lib/rollback'
 import { validateName, yargsDefaults } from '../helpers'
 
-const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.js.template')
+const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'script.ts.template')
 const TSCONFIG_TEMPLATE = path.resolve(
   __dirname,
   'templates',
