@@ -87,7 +87,9 @@ export const handler = async ({ force, ...args }) => {
     [
       {
         title: 'Generating script file...',
-        task: writeFilesTask(await files(args), { overwriteExisting: force }),
+        task: async () => {
+          return writeFilesTask(await files(args), { overwriteExisting: force })
+        },
       },
       {
         title: 'Next steps...',
