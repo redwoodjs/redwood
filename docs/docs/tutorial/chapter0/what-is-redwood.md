@@ -16,7 +16,7 @@ Now that the elevator pitch is out of the way, what does that actually _mean_? A
 
 What do we mean when we say a "full-stack web application?" We're talking about your classic web app: a UI that's visible in the browser (the frontend), backed by a server and database (the backend). Until React Server Components came along (more on those later) React had no idea a server and/or database existed: it was up to you to somehow get data into your app. Maybe this was done with a `fetch()` or in a build step which would pre-bake some of the data needed right into your components. However the data got there, it wasn't an ideal solution.
 
-One of the core principals behind Redwood was that getting data from the backend should be as simple as possible, going so far as to create conventions around it so that retrieving data for display in a component was as easy as adding a couple of lines of code directly into the component itself. Oh and while we're at it, Redwood will automatically show a loading message while waiting for the data, a different state if there's an error, and even a separate message if the data returned from the server is empty (the classic "blank slate").
+One of the core principles behind Redwood was that getting data from the backend should be as simple as possible, going so far as to create conventions around it so that retrieving data for display in a component was as easy as adding a couple of lines of code directly into the component itself. Oh and while we're at it, Redwood will automatically show a loading message while waiting for the data, a different state if there's an error, and even a separate message if the data returned from the server is empty (the classic "blank slate").
 
 ## How a Redwood App Works
 
