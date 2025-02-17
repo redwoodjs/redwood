@@ -14,6 +14,7 @@ export const clerkAuthDecoder: Decoder = async (
     const jwtPayload = await verifyToken(token, {
       jwtKey: process.env.CLERK_JWT_KEY,
       secretKey: process.env.CLERK_SECRET_KEY,
+      apiUrl: process.env.CLERK_API_URL,
     })
 
     if (!jwtPayload.sub) {
