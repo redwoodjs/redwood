@@ -39,7 +39,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@clerk/clerk-sdk-node": "4.13.21"
+    "@clerk/backend": "^1.24.1"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.16.4",
