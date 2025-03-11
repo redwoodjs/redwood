@@ -1635,7 +1635,7 @@ The [GraphQL Playground](https://www.graphql-yoga.com/docs/features/graphiql) is
 
 > Because both introspection and the playground share possibly sensitive information about your data model, your data, your queries and mutations, best practices for deploying a GraphQL Server call to disable these in production, RedwoodJS **, by default, only enables introspection and the playground when running in development**. That is when `process.env.NODE_ENV === 'development'`.
 
-However, there may be cases where you want to enable introspection as well as the GraphQL PLaygrouns. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
+However, there may be cases where you want to enable introspection as well as the GraphQL Playground. You can enable introspection by setting the `allowIntrospection` option to `true` and enable GraphiQL by setting `allowGraphiQL` to `true`.
 
 Here is an example of `createGraphQLHandler` function with the `allowIntrospection` and `allowGraphiQL` options set to `true`:
 
