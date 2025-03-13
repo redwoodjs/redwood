@@ -46,7 +46,7 @@ export const builder = (yargs: Argv) => {
   return yargs
 }
 
-type handlerParams = {
+interface HandlerArgs {
   side: 'api' | 'web'
   prisma: boolean
   serve: boolean
@@ -58,7 +58,7 @@ export const handler = async ({
   serve,
   prisma,
   dm: dataMigrate,
-}: handlerParams) => {
+}: HandlerArgs) => {
   recordTelemetryAttributes({
     command: 'deploy flightcontrol',
     side,
