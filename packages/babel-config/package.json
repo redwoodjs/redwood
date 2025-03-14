@@ -22,7 +22,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-class-properties": "^7.22.5",
     "@babel/plugin-transform-private-methods": "^7.22.5",
