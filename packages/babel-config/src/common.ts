@@ -6,10 +6,10 @@ import { parseConfigFileTextToJson } from 'typescript'
 
 import { getPaths } from '@redwoodjs/project-config'
 
+import pkgJson from '../package.json'
+
 import { getWebSideBabelPlugins } from './web'
 import type { Flags as WebFlags } from './web'
-
-const pkgJson = require('../package.json')
 
 export interface RegisterHookOptions {
   /**
