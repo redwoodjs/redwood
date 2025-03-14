@@ -430,9 +430,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/cli@npm:7.25.7":
-  version: 7.25.7
-  resolution: "@babel/cli@npm:7.25.7"
+"@babel/cli@npm:7.26.4":
+  version: 7.26.4
+  resolution: "@babel/cli@npm:7.26.4"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@nicolo-ribaudo/chokidar-2": "npm:2.1.8-no-fsevents.3"
@@ -453,7 +453,7 @@ __metadata:
   bin:
     babel: ./bin/babel.js
     babel-external-helpers: ./bin/babel-external-helpers.js
-  checksum: 10c0/bbbc53eef15844b0bfb737d7d134f979d42c51a269e2aee994b02eb9216a22e8dd3d790d5ae9f5b5c003e01eccfc164c14aaa1ad989695e0154f66a588f77d42
+  checksum: 10c0/f2d4fc3c4a34dd3001e3bd7084b78b38211003c36afaf2dc8fedf4565c0442bd59b1c64a9f91a0b7b2450e089123f197e09577ae50dc994307c3348b310ce34c
   languageName: node
   linkType: hard
 
@@ -7737,7 +7737,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-setup@workspace:packages/auth-providers/dbAuth/setup"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@prisma/internals": "npm:5.20.0"
@@ -7758,7 +7758,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/auth-dbauth-web@workspace:packages/auth-providers/dbAuth/web"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@redwoodjs/auth": "workspace:*"
@@ -8150,7 +8150,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/cli@workspace:packages/cli"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@listr2/prompt-adapter-enquirer": "npm:2.0.12"
@@ -8224,7 +8224,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/codemods@workspace:packages/codemods"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/parser": "npm:^7.22.16"
     "@babel/plugin-transform-typescript": "npm:^7.22.15"
@@ -8295,7 +8295,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/core@workspace:packages/core"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@redwoodjs/api-server": "workspace:*"
     "@redwoodjs/cli": "workspace:*"
     "@redwoodjs/eslint-config": "workspace:*"
@@ -8338,7 +8338,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/eslint-config@workspace:packages/eslint-config"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/eslint-parser": "npm:7.25.7"
     "@babel/eslint-plugin": "npm:7.25.7"
@@ -8446,7 +8446,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/graphql-server@workspace:packages/graphql-server"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@envelop/core": "npm:5.0.2"
@@ -8772,7 +8772,7 @@ __metadata:
   resolution: "@redwoodjs/router@workspace:packages/router"
   dependencies:
     "@arethetypeswrong/cli": "npm:0.16.4"
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@redwoodjs/auth": "workspace:*"
@@ -8838,7 +8838,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@redwoodjs/structure@workspace:packages/structure"
   dependencies:
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/runtime-corejs3": "npm:7.25.7"
     "@prisma/internals": "npm:5.20.0"
@@ -9033,7 +9033,7 @@ __metadata:
     "@apollo/client": "npm:3.11.1"
     "@apollo/client-react-streaming": "npm:0.10.0"
     "@arethetypeswrong/cli": "npm:0.16.4"
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/plugin-transform-runtime": "npm:7.25.7"
     "@babel/runtime": "npm:7.25.7"
@@ -26946,7 +26946,7 @@ __metadata:
     "@actions/core": "npm:1.11.1"
     "@actions/exec": "npm:1.1.1"
     "@actions/glob": "npm:0.5.0"
-    "@babel/cli": "npm:7.25.7"
+    "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.22.20"
     "@babel/generator": "npm:7.25.7"
     "@babel/node": "npm:7.25.7"
