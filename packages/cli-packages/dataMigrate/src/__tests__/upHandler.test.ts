@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 import { fs as memfs, vol } from 'memfs'
 import {
   afterAll,
@@ -14,7 +12,6 @@ import {
 import type { MockInstance } from 'vitest'
 
 import { getPaths } from '@redwoodjs/project-config'
-import type * as ProjectConfig from '@redwoodjs/project-config'
 
 import { handler, NO_PENDING_MIGRATIONS_MESSAGE } from '../commands/upHandler'
 
@@ -43,32 +40,6 @@ afterEach(() => {
 
 vi.mock('fs', () => ({ ...memfs, default: { ...memfs } }))
 vi.mock('node:fs', () => ({ default: memfs }))
-
-// TODO: See if we can remove this mock
-vi.mock('@redwoodjs/project-config', async (importOriginal) => {
-  const originalProjectConfig = await importOriginal<typeof ProjectConfig>()
-
-  return {
-    ...originalProjectConfig,
-    getPaths: () => {
-      // TODO: use the same variable as the tests use (`redwoodProjectPath`)
-      const BASE_PATH = '/redwood-app'
-
-      return {
-        base: BASE_PATH,
-        api: {
-          base: BASE_PATH,
-          lib: path.join(BASE_PATH, 'api', 'src', 'lib'),
-          dataMigrations: path.join(BASE_PATH, 'api', 'db', 'dataMigrations'),
-          dist: path.join(BASE_PATH, 'api', 'dist'),
-        },
-        web: {
-          base: path.join(BASE_PATH, 'web'),
-        },
-      }
-    },
-  }
-})
 
 const mockDataMigrations: { current: any[] } = { current: [] }
 
