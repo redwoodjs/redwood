@@ -142,7 +142,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.11.1",
-    "@babel/runtime-corejs3": "7.25.7",
+    "@babel/runtime-corejs3": "7.26.10",
     "@redwoodjs/auth": "workspace:*",
     "@redwoodjs/server-store": "workspace:*",
     "@whatwg-node/fetch": "0.9.21",
