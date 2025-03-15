@@ -105,7 +105,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.16.4",
     "@babel/cli": "7.26.4",
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@redwoodjs/framework-tools": "workspace:*",
     "@testing-library/jest-dom": "6.5.0",
     "@types/react": "^18.2.55",

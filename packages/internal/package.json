@@ -74,7 +74,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@babel/parser": "^7.22.16",
     "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/plugin-transform-typescript": "^7.22.15",
