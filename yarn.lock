@@ -8401,7 +8401,7 @@ __metadata:
     "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/core": "npm:^7.26.10"
     "@babel/parser": "npm:^7.22.16"
-    "@babel/plugin-transform-react-jsx": "npm:^7.25.9"
+    "@babel/plugin-transform-react-jsx": "npm:7.25.9"
     "@babel/plugin-transform-typescript": "npm:^7.26.8"
     "@babel/runtime-corejs3": "npm:7.26.10"
     "@babel/traverse": "npm:^7.22.20"
