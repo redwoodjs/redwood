@@ -60,7 +60,7 @@
     "@actions/exec": "1.1.1",
     "@actions/glob": "0.5.0",
     "@babel/cli": "7.26.4",
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@babel/generator": "7.25.7",
     "@babel/node": "7.25.7",
     "@babel/plugin-proposal-decorators": "7.25.7",

@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.26.4",
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@envelop/testing": "7.0.0",
     "@envelop/types": "5.0.0",
     "@redwoodjs/framework-tools": "workspace:*",
