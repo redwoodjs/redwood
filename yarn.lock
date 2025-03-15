@@ -524,19 +524,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:7.25.7":
-  version: 7.25.7
-  resolution: "@babel/generator@npm:7.25.7"
-  dependencies:
-    "@babel/types": "npm:^7.25.7"
-    "@jridgewell/gen-mapping": "npm:^0.3.5"
-    "@jridgewell/trace-mapping": "npm:^0.3.25"
-    jsesc: "npm:^3.0.2"
-  checksum: 10c0/c03a26c79864d60d04ce36b649c3fa0d6fd7b2bf6a22e22854a0457aa09206508392dd73ee40e7bc8d50b3602f9ff068afa47770cda091d332e7db1ca382ee96
-  languageName: node
-  linkType: hard
-
-"@babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.23.0, @babel/generator@npm:^7.25.7, @babel/generator@npm:^7.26.10, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:7.26.10, @babel/generator@npm:^7.14.0, @babel/generator@npm:^7.18.13, @babel/generator@npm:^7.23.0, @babel/generator@npm:^7.25.7, @babel/generator@npm:^7.26.10, @babel/generator@npm:^7.7.2":
   version: 7.26.10
   resolution: "@babel/generator@npm:7.26.10"
   dependencies:
@@ -8948,7 +8936,7 @@ __metadata:
   resolution: "@redwoodjs/vite@workspace:packages/vite"
   dependencies:
     "@arethetypeswrong/cli": "npm:0.16.4"
-    "@babel/generator": "npm:7.25.7"
+    "@babel/generator": "npm:7.26.10"
     "@babel/parser": "npm:^7.22.16"
     "@babel/traverse": "npm:^7.22.20"
     "@hyrious/esbuild-plugin-commonjs": "npm:0.2.4"
@@ -26958,7 +26946,7 @@ __metadata:
     "@actions/glob": "npm:0.5.0"
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/generator": "npm:7.25.7"
+    "@babel/generator": "npm:7.26.10"
     "@babel/node": "npm:7.25.7"
     "@babel/plugin-proposal-decorators": "npm:7.25.7"
     "@babel/plugin-transform-class-properties": "npm:^7.22.5"
