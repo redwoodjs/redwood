@@ -2010,13 +2010,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:7.25.7":
-  version: 7.25.7
-  resolution: "@babel/runtime-corejs3@npm:7.25.7"
+"@babel/runtime-corejs3@npm:7.26.10":
+  version: 7.26.10
+  resolution: "@babel/runtime-corejs3@npm:7.26.10"
   dependencies:
     core-js-pure: "npm:^3.30.2"
     regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/37217edf5f02c0e7ccb78af380b26b06dadc9b031a1bcec22a9cfb540d85470b61ebe1e5cd7e32689a6c0f786015c2ee1a73a16852574c3a46341105e457a87c
+  checksum: 10c0/897b61d84809d6e63e08566d436cd08a3a78f218283641bb53533948d4bcd5524c6a1f83613e20485cf7fa8d054da20dd9039d17e06c92cf282f25d4d4f57250
   languageName: node
   linkType: hard
 
@@ -7727,7 +7727,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@prisma/internals": "npm:5.20.0"
     "@redwoodjs/cli-helpers": "workspace:*"
     "@simplewebauthn/browser": "npm:7.4.0"
@@ -7748,7 +7748,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@redwoodjs/auth": "workspace:*"
     "@simplewebauthn/browser": "npm:7.4.0"
     "@simplewebauthn/typescript-types": "npm:7.4.0"
@@ -8033,7 +8033,7 @@ __metadata:
     "@babel/preset-react": "npm:^7.22.15"
     "@babel/preset-typescript": "npm:^7.22.15"
     "@babel/register": "npm:^7.22.15"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@babel/traverse": "npm:^7.22.20"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -8140,7 +8140,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@listr2/prompt-adapter-enquirer": "npm:2.0.12"
     "@opentelemetry/api": "npm:1.8.0"
     "@opentelemetry/core": "npm:1.22.0"
@@ -8216,7 +8216,7 @@ __metadata:
     "@babel/core": "npm:^7.26.10"
     "@babel/parser": "npm:^7.22.16"
     "@babel/plugin-transform-typescript": "npm:^7.22.15"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@babel/traverse": "npm:^7.22.20"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
@@ -8436,7 +8436,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@envelop/core": "npm:5.0.2"
     "@envelop/depth-limit": "npm:4.0.0"
     "@envelop/disable-introspection": "npm:6.0.0"
@@ -8483,7 +8483,7 @@ __metadata:
     "@babel/parser": "npm:^7.22.16"
     "@babel/plugin-transform-react-jsx": "npm:^7.22.15"
     "@babel/plugin-transform-typescript": "npm:^7.22.15"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@babel/traverse": "npm:^7.22.20"
     "@graphql-codegen/add": "npm:4.0.1"
     "@graphql-codegen/cli": "npm:3.3.1"
@@ -8762,7 +8762,7 @@ __metadata:
     "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/server-store": "workspace:*"
@@ -8827,7 +8827,7 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@prisma/internals": "npm:5.20.0"
     "@redwoodjs/project-config": "workspace:*"
     "@types/fs-extra": "npm:11.0.4"
@@ -9025,7 +9025,7 @@ __metadata:
     "@babel/core": "npm:^7.26.10"
     "@babel/plugin-transform-runtime": "npm:7.25.7"
     "@babel/runtime": "npm:7.25.7"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/internal": "workspace:*"
@@ -26958,7 +26958,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.22.20"
     "@babel/preset-react": "npm:^7.22.15"
     "@babel/preset-typescript": "npm:^7.22.15"
-    "@babel/runtime-corejs3": "npm:7.25.7"
+    "@babel/runtime-corejs3": "npm:7.26.10"
     "@faker-js/faker": "npm:8.4.1"
     "@npmcli/arborist": "npm:7.5.4"
     "@playwright/test": "npm:1.49.1"
