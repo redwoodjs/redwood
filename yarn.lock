@@ -749,7 +749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.22.16, @babel/parser@npm:^7.23.0, @babel/parser@npm:^7.24.7, @babel/parser@npm:^7.25.8, @babel/parser@npm:^7.26.10, @babel/parser@npm:^7.26.9, @babel/parser@npm:^7.3.2":
+"@babel/parser@npm:7.26.10, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.1.6, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.16.8, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.23.0, @babel/parser@npm:^7.24.7, @babel/parser@npm:^7.25.8, @babel/parser@npm:^7.26.10, @babel/parser@npm:^7.26.9, @babel/parser@npm:^7.3.2":
   version: 7.26.10
   resolution: "@babel/parser@npm:7.26.10"
   dependencies:
@@ -1915,7 +1915,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/register@npm:^7.22.15, @babel/register@npm:^7.24.6, @babel/register@npm:^7.25.9":
+"@babel/register@npm:7.25.9, @babel/register@npm:^7.22.15, @babel/register@npm:^7.24.6, @babel/register@npm:^7.25.9":
   version: 7.25.9
   resolution: "@babel/register@npm:7.25.9"
   dependencies:
@@ -1960,7 +1960,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.9, @babel/traverse@npm:^7.22.20, @babel/traverse@npm:^7.23.2, @babel/traverse@npm:^7.25.7, @babel/traverse@npm:^7.25.9, @babel/traverse@npm:^7.26.10, @babel/traverse@npm:^7.26.5, @babel/traverse@npm:^7.26.8, @babel/traverse@npm:^7.26.9":
+"@babel/traverse@npm:7.26.10, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.8, @babel/traverse@npm:^7.18.9, @babel/traverse@npm:^7.23.2, @babel/traverse@npm:^7.25.7, @babel/traverse@npm:^7.25.9, @babel/traverse@npm:^7.26.10, @babel/traverse@npm:^7.26.5, @babel/traverse@npm:^7.26.8, @babel/traverse@npm:^7.26.9":
   version: 7.26.10
   resolution: "@babel/traverse@npm:7.26.10"
   dependencies:
@@ -7943,7 +7943,7 @@ __metadata:
   resolution: "@redwoodjs/babel-config@workspace:packages/babel-config"
   dependencies:
     "@babel/core": "npm:^7.26.10"
-    "@babel/parser": "npm:^7.22.16"
+    "@babel/parser": "npm:7.26.10"
     "@babel/plugin-transform-class-properties": "npm:7.25.9"
     "@babel/plugin-transform-private-methods": "npm:7.25.9"
     "@babel/plugin-transform-private-property-in-object": "npm:7.25.9"
@@ -7952,9 +7952,9 @@ __metadata:
     "@babel/preset-env": "npm:7.26.9"
     "@babel/preset-react": "npm:7.26.3"
     "@babel/preset-typescript": "npm:7.26.0"
-    "@babel/register": "npm:^7.22.15"
+    "@babel/register": "npm:7.25.9"
     "@babel/runtime-corejs3": "npm:7.26.10"
-    "@babel/traverse": "npm:^7.22.20"
+    "@babel/traverse": "npm:7.26.10"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@types/babel-plugin-tester": "npm:9.0.10"
@@ -8134,10 +8134,10 @@ __metadata:
   dependencies:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/parser": "npm:^7.22.16"
+    "@babel/parser": "npm:7.26.10"
     "@babel/plugin-transform-typescript": "npm:^7.26.8"
     "@babel/runtime-corejs3": "npm:7.26.10"
-    "@babel/traverse": "npm:^7.22.20"
+    "@babel/traverse": "npm:7.26.10"
     "@redwoodjs/framework-tools": "workspace:*"
     "@redwoodjs/project-config": "workspace:*"
     "@svgr/core": "npm:8.1.0"
@@ -8400,11 +8400,11 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/core": "npm:^7.26.10"
-    "@babel/parser": "npm:^7.22.16"
+    "@babel/parser": "npm:7.26.10"
     "@babel/plugin-transform-react-jsx": "npm:7.25.9"
     "@babel/plugin-transform-typescript": "npm:^7.26.8"
     "@babel/runtime-corejs3": "npm:7.26.10"
-    "@babel/traverse": "npm:^7.22.20"
+    "@babel/traverse": "npm:7.26.10"
     "@graphql-codegen/add": "npm:4.0.1"
     "@graphql-codegen/cli": "npm:3.3.1"
     "@graphql-codegen/client-preset": "npm:4.3.3"
@@ -8857,8 +8857,8 @@ __metadata:
   dependencies:
     "@arethetypeswrong/cli": "npm:0.16.4"
     "@babel/generator": "npm:7.26.10"
-    "@babel/parser": "npm:^7.22.16"
-    "@babel/traverse": "npm:^7.22.20"
+    "@babel/parser": "npm:7.26.10"
+    "@babel/traverse": "npm:7.26.10"
     "@hyrious/esbuild-plugin-commonjs": "npm:0.2.4"
     "@redwoodjs/auth": "workspace:*"
     "@redwoodjs/babel-config": "workspace:*"
