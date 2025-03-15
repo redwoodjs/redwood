@@ -751,11 +751,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/node@npm:7.25.7":
-  version: 7.25.7
-  resolution: "@babel/node@npm:7.25.7"
+"@babel/node@npm:7.26.0":
+  version: 7.26.0
+  resolution: "@babel/node@npm:7.26.0"
   dependencies:
-    "@babel/register": "npm:^7.25.7"
+    "@babel/register": "npm:^7.25.9"
     commander: "npm:^6.2.0"
     core-js: "npm:^3.30.2"
     node-environment-flags: "npm:^1.0.5"
@@ -765,7 +765,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
   bin:
     babel-node: ./bin/babel-node.js
-  checksum: 10c0/c6cde4ab65bdfd69e7ab1b8981f676b9e01fe39f0c304d20af1ac132d93f518403a3de18c812ba245ba623088386ec3ebd268b02807927c5d29316b99a71a0ab
+  checksum: 10c0/be550912ed66ec8d84ae6a11866db4db82637958ae4b1ac911ba024154ab9006305fdcb151e9489af949e4e92c95fcb1a94a6276a9a91cabb41d16917ffeb8c2
   languageName: node
   linkType: hard
 
@@ -1995,9 +1995,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/register@npm:^7.22.15, @babel/register@npm:^7.24.6, @babel/register@npm:^7.25.7":
-  version: 7.25.7
-  resolution: "@babel/register@npm:7.25.7"
+"@babel/register@npm:^7.22.15, @babel/register@npm:^7.24.6, @babel/register@npm:^7.25.9":
+  version: 7.25.9
+  resolution: "@babel/register@npm:7.25.9"
   dependencies:
     clone-deep: "npm:^4.0.1"
     find-cache-dir: "npm:^2.0.0"
@@ -2006,7 +2006,7 @@ __metadata:
     source-map-support: "npm:^0.5.16"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/af32db39edb2ed0c46d05bcb09cb2c14f8ee452d112f08a96a2e2daeaddc127d4f2269354aa968d0c01cd286523ad7e865b0abed1da9229833fd440ee6831199
+  checksum: 10c0/f988437c94e0fe449308eecad00c04108c5f1a2b4c4b428635e3f402d9a38655e1884d594c80160e977a0e91455b9443de59829cc45f4d4f91e16b042e4c96d1
   languageName: node
   linkType: hard
 
@@ -26947,7 +26947,7 @@ __metadata:
     "@babel/cli": "npm:7.26.4"
     "@babel/core": "npm:^7.26.10"
     "@babel/generator": "npm:7.26.10"
-    "@babel/node": "npm:7.25.7"
+    "@babel/node": "npm:7.26.0"
     "@babel/plugin-proposal-decorators": "npm:7.25.7"
     "@babel/plugin-transform-class-properties": "npm:^7.22.5"
     "@babel/plugin-transform-nullish-coalescing-operator": "npm:7.25.7"
