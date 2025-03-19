@@ -2,7 +2,7 @@
 
 Security is really important. Sometimes you don't want to integrate with a third-party authentication services. Whatever the reason, Redwood has you covered with Redwood's dbAuth to authenticate users. This is a great option.
 
-One thing though is now you're collecting the user's login and password. If you'd like to not collect that, an alternative is to generate a token in place of the password. The only data needed for passwordless is the users email address.
+One thing though is now you're collecting the user's login and password. If you'd like to not collect that, an alternative is to generate a token in place of the password. The only data needed for passwordless is the user's email address.
 
 In this how-to I'll show you how to set up dbAuth to be passwordless, you'll still need to set up a way to [send emails](../how-to/sending-emails.md), but there's plenty of ways to do that.
 
@@ -22,9 +22,9 @@ That token is generated randomly and is stored in the database.
 
 ### 1. Modify the Prisma schema
 
-First, we need to modify the Prisma schema.
+First, you need to modify the Prisma schema.
 
-If you followed the tutorial you'll have a `User` model. Here's is what it looks like with after the changes.
+If you followed the tutorial you'll have a `User` model. Here's is what it looks like with the changes you need to make.
 
 ```jsx {4-6}
 model User {
@@ -47,9 +47,7 @@ yarn rw prisma migrate dev
 
 ### 2. Setting up the generateToken function
 
-Next, we need to create a function that will generate a token and an expiration date.
-
-If you followed the tutorial, you might not have a `/api/src/services/users/users.js` file. If that's the case, you can create it with the following command using your terminal.
+Next, we need to create a function that will generate a token and an expiration date. For this you will need a Users service. If you don't already have a `/api/src/services/users/users.{js|ts}` file you can generate one with the following command.
 
 ```bash
 yarn rw g service users
@@ -58,9 +56,11 @@ yarn rw g service users
 Now that you have the file, let's add the `generateToken` function.
 
 ```javascript title="/api/src/services/users/users.js"
-// add the following two imports to the top of the file
+// add the following three imports to the top of the file
 import crypto from 'node:crypto'
+
 import { hashPassword } from '@redwoodjs/auth-dbauth-api'
+import { UserInputError } from '@redwoodjs/graphql-server'
 
 // add this to the bottom of the file
 export const generateLoginToken = async ({ email }) => {
@@ -69,6 +69,7 @@ export const generateLoginToken = async ({ email }) => {
     const lookupUser = await db.user.findFirst({ where: { email } })
 
     if (!lookupUser) {
+      console.debug('User not found')
       return { message: 'Login Request received' }
     }
 
@@ -77,20 +78,21 @@ export const generateLoginToken = async ({ email }) => {
       .randomInt(0, 1_000_000)
       .toString()
       .padStart(6, '0')
-    console.log({ randomNumber }) // email the user this number
+    console.log('OTP:', randomNumber) // email the user this number
 
     const [loginToken, salt] = hashPassword(randomNumber)
-    // now we'll update the user with the new salt and loginToken
+
     const loginTokenExpiresAt = new Date()
     loginTokenExpiresAt.setMinutes(loginTokenExpiresAt.getMinutes() + 15)
-    const data = {
-      salt,
-      loginToken,
-      loginTokenExpiresAt,
-    }
+
+    // now we'll update the user with the new salt and loginToken
     await db.user.update({
       where: { id: lookupUser.id },
-      data,
+      data: {
+        salt,
+        loginToken,
+        loginTokenExpiresAt,
+      },
     })
 
     return { message: 'Login Request received' }
@@ -112,47 +114,50 @@ export const schema = gql`
     name: String
     email: String!
   }
+
   input CreateUserInput {
     name: String
     email: String!
   }
+
   input UpdateUserInput {
     name: String
     email: String!
   }
-  type userTokenResponse {
+
+  // highlight-start
+  type UserTokenResponse {
     message: String!
   }
+  // highlight-end
+
   type Mutation {
     createUser(input: CreateUserInput!): User! @requireAuth
     updateUser(id: Int!, input: UpdateUserInput!): User! @requireAuth
     deleteUser(id: Int!): User! @requireAuth
-    generateToken(email: String!): userTokenResponse! @skipAuth
+    // highlight-next-line
+    generateLoginToken(email: String!): UserTokenResponse! @skipAuth
   }
 ```
 
 ### 4. Modify the auth function
 
-We need to consider how we want to limit the authentication. I've added a expiration date to the token, so we'll need to check that.
+We need to consider how we want to limit the authentication. I've added an expiration date to the token, so we'll need to check that.
 
 ```js title="/api/src/functions/auth.js"
 // ... other functions
 const loginOptions = {
   handler: async (user) => {
-    let loginExpiresAt = new Date(user?.loginTokenExpiresAt)
-    let now = new Date()
+    const loginExpiresAt = new Date(user.loginTokenExpiresAt)
+    const now = new Date()
 
     if (loginExpiresAt < now) {
-      throw 'Login token expired'
+      throw new Error('Login token expired')
     }
-    // if the user logged in with a token we need to break
-    // the token.  We'll do this by clearing the salt and
-    // expiration
-    // this will make the token a one-time use
-    // if the user logged in with a token we need to break
-    // the token.  We'll do this by clearing the salt and
-    // expiration
-    // this will make the token a one-time use
+
+    // If the user logged in with a token we need to break the token. We'll do
+    // this by clearing the salt and expiration. This will make the token a
+    // one-time use token
     db.user.update({
       where: { id: user.id },
       data: {
@@ -160,6 +165,7 @@ const loginOptions = {
         salt: null,
       },
     })
+
     return user
   },
   errors: {
@@ -167,7 +173,8 @@ const loginOptions = {
     incorrectPassword: 'Incorrect token',
   },
 }
-// we also need to update the signupOptions
+
+// we also need to update signupOptions
 const signupOptions = {
   handler: ({ username, hashedPassword, userAttributes }) => {
     return db.user.create({
@@ -181,20 +188,24 @@ const signupOptions = {
   },
   // ... othter stuff
 }
+
 // and last we need to update the authFields
 const authHandler = new DbAuthHandler(event, context, {
   db: db,
   authModelAccessor: 'user',
   authFields: {
     id: 'id',
+    username: 'email',
     hashedPassword: 'loginToken',
     salt: 'salt',
+    resetToken: 'resetToken',
+    resetTokenExpiresAt: 'resetTokenExpiresAt',
   },
   // ... other stuff
 })
 ```
 
-As of right now, nothing works, lets fix that.
+As of right now, nothing works – let's fix that!
 
 ### 5. Making the login form
 
@@ -206,22 +217,16 @@ Let's start with the generator.
 yarn rw g component LoginPasswordlessForm
 ```
 
-This created a component in `web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js`. Let's update it.
+This created a component in `web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.{js|tsx}`. Let's update it.
 
 ```jsx title="/web/src/components/LoginPasswordlessForm/LoginPasswordlessForm.js"
-import {
-  Form,
-  Label,
-  TextField,
-  PasswordField,
-  Submit,
-  FieldError,
-} from '@redwoodjs/forms'
-import { navigate, routes, Link } from '@redwoodjs/router'
+import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
+import { routes, Link } from '@redwoodjs/router'
 import { Metadata, useMutation } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-const GENERATE_LOGIN_TOKEN = gql`
-  mutation generateLoginToken($email: String!) {
+
+const GENERATE_LOGIN_TOKEN_MUTATION = gql`
+  mutation GenerateLoginTokenMutation($email: String!) {
     generateLoginToken(email: $email) {
       message
     }
@@ -229,21 +234,21 @@ const GENERATE_LOGIN_TOKEN = gql`
 `
 
 const LoginPasswordlessForm = ({ setWaitingForCode, setEmail }) => {
-  const [generateLoginToken] = useMutation(
-    GENERATE_LOGIN_TOKEN,
-    {
-      onCompleted: () => {
-        toast.success('Check your email for a login link')
-        setWaitingForCode(true)
-      },
-    }
-  )
+  const [generateLoginToken] = useMutation(GENERATE_LOGIN_TOKEN_MUTATION, {
+    onCompleted: () => {
+      toast.success('Check your email for a login link')
+      setWaitingForCode(true)
+    },
+  })
+
   const onSubmit = async (data) => {
     setEmail(data.email)
+
     const response = await generateLoginToken({
       variables: { email: data.email },
       fetchPolicy: 'no-cache',
     })
+
     if (response.error) {
       toast.error(response.error)
     }
@@ -320,18 +325,11 @@ yarn rw g component LoginPasswordlessTokenForm
 ```
 
 ```jsx title="/web/src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm.js"
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
-import {
-  Form,
-  Label,
-  TextField,
-  PasswordField,
-  Submit,
-  FieldError,
-} from '@redwoodjs/forms'
+import { Form, Label, TextField, Submit, FieldError } from '@redwoodjs/forms'
 import { navigate, routes, Link } from '@redwoodjs/router'
-import { Metadata, useMutation } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
@@ -342,15 +340,18 @@ const LoginPasswordlessTokenForm = ({ setWaitingForCode, email, code }) => {
     if (isAuthenticated) {
       navigate(routes.home())
     }
+
     if (email && code) {
       console.log('email', email)
       logIn({ username: email, password: code })
     }
   }, [isAuthenticated, email, code, logIn])
+
   const onSubmit = async (data) => {
     // login expects a username and password for dbauth
     // so we are passing them.
     const response = await logIn({ username: email, password: data.loginToken })
+
     if (response.error) {
       toast.error(response.error)
     }
@@ -458,20 +459,22 @@ import LoginPasswordlessForm from 'src/components/LoginPasswordlessForm/LoginPas
 import LoginPasswordlessTokenForm from 'src/components/LoginPasswordlessTokenForm/LoginPasswordlessTokenForm'
 
 const LoginPasswordlessPage = () => {
-  let [waitingForCode, setWaitingForCode] = useState(false)
-  let [email, setEmail] = useState()
-  let [code, setCode] = useState()
-  // onload set email from query string
-  let { search } = useLocation()
+  const [waitingForCode, setWaitingForCode] = useState(false)
+  const [email, setEmail] = useState('')
+  const [code, setCode] = useState('')
+
+  const { search } = useLocation()
+
   useEffect(() => {
-    let params = new URLSearchParams(search)
-    // decode magic param
-    let magic = params.get('magic')
-    let decoded = window.atob(params.get('magic'))
+    const params = new URLSearchParams(search)
+    const magic = params.get('magic')
+    const decoded = window.atob(magic)
+
     // if magic param exists, set email and waitingForCode
     if (magic) {
-          // decoded is email:code
-      let [email, code] = decoded.split(':')
+      // decoded is email:code
+      const [email, code] = decoded.split(':')
+
       setEmail(email)
       setCode(code)
       setWaitingForCode(true)
@@ -485,17 +488,16 @@ const LoginPasswordlessPage = () => {
         description="LoginPasswordless page"
       />
 
-      {!waitingForCode && (
-        <LoginPasswordlessForm
-          setWaitingForCode={setWaitingForCode}
-          setEmail={setEmail}
-        />
-      )}
-      {waitingForCode && (
+      {waitingForCode ? (
         <LoginPasswordlessTokenForm
           email={email}
           setWaitingForCode={setWaitingForCode}
           code={code}
+        />
+      ) : (
+        <LoginPasswordlessForm
+          setWaitingForCode={setWaitingForCode}
+          setEmail={setEmail}
         />
       )}
     </>
@@ -510,35 +512,33 @@ export default LoginPasswordlessPage
 We need to update the signup page to just take the email.
 
 ```jsx title="/web/src/pages/SignupPage/SignupPage.js"
-import { useRef } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-import {
-  Form,
-  Label,
-  TextField,
-  PasswordField,
-  FieldError,
-  Submit,
-} from '@redwoodjs/forms'
+import { Form, Label, TextField, FieldError, Submit } from '@redwoodjs/forms'
 import { Link, navigate, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 
 import { useAuth } from 'src/auth'
 
+function randomString(length) {
+  const defaultLength = 32
+  const characterSet =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const array = new Uint8Array(length || defaultLength)
+
+  window.crypto.getRandomValues(array)
+
+  const returnString = Array.from(array)
+    .map((value) => characterSet[value % characterSet.length])
+    .join('')
+
+  return returnString
+}
+
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
-  let randomString = (length) {
-    if(typeof length == undefined) length = 32;
-    const characterSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const array = new Uint8Array(length);
-    window.crypto.getRandomValues(array);
-    const returnString = Array.from(array)
-      .map((value) => characterSet[value % characterSet.length])
-      .join('');
-    return returnString;
-  }
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate(routes.home())
