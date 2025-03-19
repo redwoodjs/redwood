@@ -1,11 +1,14 @@
 import { useEngine } from '@envelop/core'
-import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 import { beforeEach, vi, describe, expect, it } from 'vitest'
 
 import type * as Api from '@redwoodjs/api'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
+import {
+  createSpiedPlugin,
+  createTestkit,
+} from '../__fixtures__/envelop-testing'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
 const authDecoder = async (token: string) => ({ token })

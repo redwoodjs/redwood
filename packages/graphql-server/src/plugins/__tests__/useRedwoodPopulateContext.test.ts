@@ -1,9 +1,12 @@
 import { useEngine } from '@envelop/core'
-import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 import { beforeEach, vi, describe, expect, it } from 'vitest'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
+import {
+  createSpiedPlugin,
+  createTestkit,
+} from '../__fixtures__/envelop-testing'
 import { useRedwoodPopulateContext } from '../useRedwoodPopulateContext'
 
 describe('Populates context', () => {

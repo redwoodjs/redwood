@@ -8380,6 +8380,7 @@ __metadata:
     "@types/lodash": "npm:4.17.15"
     "@types/uuid": "npm:10.0.0"
     "@whatwg-node/fetch": "npm:0.9.21"
+    "@whatwg-node/promise-helpers": "npm:^1.3.0"
     core-js: "npm:3.38.1"
     graphql: "npm:16.9.0"
     graphql-scalars: "npm:1.23.0"
@@ -11824,6 +11825,15 @@ __metadata:
     fast-querystring: "npm:^1.1.1"
     tslib: "npm:^2.6.3"
   checksum: 10c0/d0693ff047f0e51e94a36e77d3d39f323f74a4205c2116add44e2fc0991e4d6044bde55a867d1cf78d7c4a406d73d75df5975876a32831c0cc5829811172335e
+  languageName: node
+  linkType: hard
+
+"@whatwg-node/promise-helpers@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@whatwg-node/promise-helpers@npm:1.3.0"
+  dependencies:
+    tslib: "npm:^2.6.3"
+  checksum: 10c0/79b3d4fd264a7ce82fe977690191bade5c6da50f085c63bf1b548c2066c7bb9ccb9088ad064fbb0ff8da9bea7b336a527973556d8475642bac639e75bedec7ea
   languageName: node
   linkType: hard
 

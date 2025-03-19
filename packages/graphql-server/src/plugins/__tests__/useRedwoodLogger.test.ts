@@ -3,7 +3,6 @@ import os from 'os'
 import { join } from 'path'
 
 import { useEngine } from '@envelop/core'
-import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
 import { describe, expect, it } from 'vitest'
 
@@ -18,6 +17,7 @@ import {
   testFilteredQuery,
   testValidationErrorQuery,
 } from '../__fixtures__/common'
+import { createTestkit } from '../__fixtures__/envelop-testing'
 import type { LoggerConfig } from '../useRedwoodLogger'
 import { useRedwoodLogger } from '../useRedwoodLogger'
 
