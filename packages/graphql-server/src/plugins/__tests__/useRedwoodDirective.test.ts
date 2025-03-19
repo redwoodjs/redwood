@@ -5,6 +5,7 @@ import * as GraphQLJS from 'graphql'
 import { getDirectiveValues } from 'graphql'
 import type { Plugin } from 'graphql-yoga'
 import { createSchema } from 'graphql-yoga'
+import { describe, expect, it } from 'vitest'
 
 import type { GraphQLTypeWithFields } from '../../index'
 import { useRedwoodDirective, DirectiveType } from '../useRedwoodDirective'

@@ -1,16 +1,20 @@
 import { useEngine } from '@envelop/core'
 import { createSpiedPlugin, createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
+import { beforeEach, vi, describe, expect, it } from 'vitest'
+
+import type * as Api from '@redwoodjs/api'
 
 import { testSchema, testQuery } from '../__fixtures__/common'
 import { useRedwoodAuthContext } from '../useRedwoodAuthContext'
 
 const authDecoder = async (token: string) => ({ token })
 
-jest.mock('@redwoodjs/api', () => {
+vi.mock('@redwoodjs/api', async (importOriginal) => {
+  const originalApi = await importOriginal<typeof Api>()
   return {
-    ...jest.requireActual('@redwoodjs/api'),
-    getAuthenticationContext: jest.fn().mockResolvedValue([
+    ...originalApi,
+    getAuthenticationContext: vi.fn().mockResolvedValue([
       { sub: '1', email: 'ba@zin.ga' },
       {
         type: 'mocked-auth-type',
@@ -43,7 +47,7 @@ describe('useRedwoodAuthContext', () => {
       name: 'Mockity MockFace',
     }
 
-    const mockedGetCurrentUser = jest.fn().mockResolvedValue(MOCK_USER)
+    const mockedGetCurrentUser = vi.fn().mockResolvedValue(MOCK_USER)
 
     const testkit = createTestkit(
       [
@@ -72,7 +76,7 @@ describe('useRedwoodAuthContext', () => {
   })
 
   it('Does not swallow exceptions raised in getCurrentUser', async () => {
-    const mockedGetCurrentUser = jest
+    const mockedGetCurrentUser = vi
       .fn()
       .mockRejectedValue(new Error('Could not fetch user from db.'))
 

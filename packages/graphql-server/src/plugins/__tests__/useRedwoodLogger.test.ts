@@ -5,6 +5,7 @@ import { join } from 'path'
 import { useEngine } from '@envelop/core'
 import { createTestkit } from '@envelop/testing'
 import * as GraphQLJS from 'graphql'
+import { describe, expect, it } from 'vitest'
 
 import type { Logger, LoggerOptions } from '@redwoodjs/api/logger'
 import { createLogger } from '@redwoodjs/api/logger'
@@ -20,7 +21,7 @@ import {
 import type { LoggerConfig } from '../useRedwoodLogger'
 import { useRedwoodLogger } from '../useRedwoodLogger'
 
-const watchFileCreated = (filename) => {
+const watchFileCreated = (filename: string) => {
   return new Promise((resolve, reject) => {
     const TIMEOUT = 800
     const INTERVAL = 100
@@ -41,7 +42,7 @@ const watchFileCreated = (filename) => {
   })
 }
 
-const parseLogFile = (logFile) => {
+const parseLogFile = (logFile: string) => {
   const parsedLogFile = JSON.parse(
     `[${readFileSync(logFile)
       .toString()
@@ -70,7 +71,7 @@ const setupLogger = (
 describe('Populates context', () => {
   const logFile = join(
     os.tmpdir(),
-    '_' + Math.random().toString(36).substr(2, 9),
+    '_' + Math.random().toString(36).substring(2, 11),
   )
 
   const { logger } = setupLogger({ level: 'trace' }, logFile)

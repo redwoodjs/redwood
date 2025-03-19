@@ -1,10 +1,13 @@
 import type { APIGatewayProxyEvent, Context } from 'aws-lambda'
+import { vi, describe, expect, it } from 'vitest'
 
+import type { Decoder } from '@redwoodjs/api'
 import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
+import type { GraphQLHandlerOptions } from '../../types'
 
-jest.mock('../../makeMergedSchema', () => {
+vi.mock('../../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
 
   // Return executable schema
@@ -44,22 +47,11 @@ jest.mock('../../makeMergedSchema', () => {
   }
 })
 
-jest.mock('../../directives/makeDirectives', () => {
+vi.mock('../../directives/makeDirectives', () => {
   return {
     makeDirectivesForPlugin: () => [],
   }
 })
-
-type Decoded = Record<string, unknown> | null
-
-type Decoder = (
-  token: string,
-  type: string,
-  req: {
-    event: APIGatewayProxyEvent
-    context: Context
-  },
-) => Promise<Decoded>
 
 interface MockLambdaParams {
   headers?: { [key: string]: string }
@@ -143,12 +135,16 @@ describe('createGraphQLHandler', () => {
     }
   }
 
-  const getCurrentUser = async (decoded) => {
-    if (decoded.userId === 'admin-one') {
+  const getCurrentUser: GraphQLHandlerOptions['getCurrentUser'] = async (
+    decoded,
+  ) => {
+    if (decoded?.userId === 'admin-one') {
       return { ...decoded, roles: ['admin'] }
-    } else if (decoded.userId === 'customer-one') {
+    } else if (decoded?.userId === 'customer-one') {
       return { ...decoded, roles: ['user'] }
     }
+
+    return null
   }
 
   it('should allow you to pass an auth decoder', async () => {
