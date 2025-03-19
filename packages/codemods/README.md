@@ -267,7 +267,7 @@ const root = j(file.source)
 
 const graphQLClientConfig = j.jsxAttribute(
   j.jsxIdentifier('graphQLClientConfig'),
-  j.jsxExpressionContainer(j.objectExpression([]))
+  j.jsxExpressionContainer(j.objectExpression([])),
 )
 
 console.log('graphQLClientConfig prop', j(graphQLClientConfig).toSource())
@@ -288,7 +288,7 @@ const redwoodApolloProvider = root.findJSXElements('RedwoodApolloProvider')
 
 console.log(
   '<RedwoodApolloProvider>',
-  j(redwoodApolloProvider.get(0).node).toSource()
+  j(redwoodApolloProvider.get(0).node).toSource(),
 )
 // Will log:
 // <RedwoodApolloProvider useAuth={useAuth}>
