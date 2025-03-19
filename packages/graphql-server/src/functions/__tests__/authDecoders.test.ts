@@ -5,7 +5,7 @@ import type { Decoder } from '@redwoodjs/api'
 import { createLogger } from '@redwoodjs/api/logger'
 
 import { createGraphQLHandler } from '../../functions/graphql'
-import type { GraphQLHandlerOptions } from '../../types'
+import type { GetCurrentUser, GraphQLHandlerOptions } from '../../types'
 
 vi.mock('../../makeMergedSchema', () => {
   const { makeExecutableSchema } = require('@graphql-tools/schema')
@@ -29,16 +29,18 @@ vi.mock('../../makeMergedSchema', () => {
         `,
         resolvers: {
           Query: {
-            me: () => {
-              const globalContext = require('@redwoodjs/context').context
-              const currentUser = globalContext.currentUser
+            me: async () => {
+              const globalContext = (await import('@redwoodjs/context')).context
+              const currentUser = globalContext.currentUser as Awaited<
+                ReturnType<GetCurrentUser>
+              >
 
               return {
                 firstName: 'Ba',
                 lastName: 'Zinga',
-                id: currentUser.userId,
-                token: currentUser.token,
-                roles: currentUser.roles,
+                id: currentUser?.userId,
+                token: currentUser?.token,
+                roles: currentUser?.roles,
               }
             },
           },
