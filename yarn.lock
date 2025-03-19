@@ -8362,7 +8362,6 @@ __metadata:
     "@envelop/disable-introspection": "npm:6.0.0"
     "@envelop/filter-operation-type": "npm:6.0.0"
     "@envelop/on-resolve": "npm:4.1.1"
-    "@envelop/testing": "npm:7.0.0"
     "@envelop/types": "npm:5.0.0"
     "@escape.tech/graphql-armor": "npm:3.0.1"
     "@graphql-tools/merge": "npm:9.0.7"
