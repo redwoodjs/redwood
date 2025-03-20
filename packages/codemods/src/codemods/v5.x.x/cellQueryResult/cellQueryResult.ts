@@ -1,4 +1,4 @@
-import type { FileInfo, API, Property, RestElement } from 'jscodeshift'
+import type { FileInfo, API } from 'jscodeshift'
 
 // We need to check all of the cell functions
 const cellFunctionsToCheck = ['Success', 'Failure', 'Loading', 'Empty']

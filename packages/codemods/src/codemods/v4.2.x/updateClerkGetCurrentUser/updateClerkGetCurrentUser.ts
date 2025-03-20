@@ -1,4 +1,4 @@
-import type { FileInfo, API, ObjectExpression } from 'jscodeshift'
+import type { FileInfo, API } from 'jscodeshift'
 
 const newReturn = `userWithoutPrivateMetadata`
 const destructureStatement = `const { privateMetadata, ...${newReturn} } = decoded`
