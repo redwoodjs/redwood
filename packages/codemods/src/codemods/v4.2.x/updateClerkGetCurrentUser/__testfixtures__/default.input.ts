@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { parseJWT } from '@redwoodjs/api'
 import { AuthenticationError, ForbiddenError } from '@redwoodjs/graphql-server'
 
@@ -29,18 +30,11 @@ export const getCurrentUser = async (
 
   const { roles } = parseJWT({ decoded })
 
-  const { privateMetadata, ...userWithoutPrivateMetadata } = decoded
-
   if (roles) {
-    return {
-      roles,
-      ...userWithoutPrivateMetadata,
-    }
+    return { ...decoded, roles }
   }
 
-  return {
-    ...userWithoutPrivateMetadata
-  }
+  return { ...decoded }
 }
 
 /**
