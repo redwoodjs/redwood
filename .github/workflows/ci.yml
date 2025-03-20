@@ -215,6 +215,7 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      NODE_OPTIONS: --no-experimental-require-module
 
     steps:
       - name: Checkout the framework code
@@ -305,6 +306,7 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      NODE_OPTIONS: --no-experimental-require-module
 
     steps:
       - name: Checkout the framework code
@@ -414,6 +416,7 @@ jobs:
     env:
       REDWOOD_CI: 1
       REDWOOD_VERBOSE_TELEMETRY: 1
+      NODE_OPTIONS: --no-experimental-require-module
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
