@@ -32,7 +32,7 @@ runs:
     - name: ⬢ Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 20.18.3
 
     # We have to enable Corepack again for Windows. 🤷
     # In general, we're waiting on [this issue](https://github.com/actions/setup-node/issues/531)
