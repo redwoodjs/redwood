@@ -8042,9 +8042,11 @@ __metadata:
     "@redwoodjs/framework-tools": "npm:7.7.4"
     "@redwoodjs/project-config": "npm:7.7.4"
     "@redwoodjs/telemetry": "npm:7.7.4"
+    "@types/semver": "npm:^7"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
+    semver: "npm:7.6.3"
     storybook: "npm:7.6.17"
     storybook-framework-redwoodjs-vite: "npm:7.7.4"
     terminal-link: "npm:2.1.1"
@@ -11423,6 +11425,13 @@ __metadata:
   version: 0.16.3
   resolution: "@types/scheduler@npm:0.16.3"
   checksum: 10c0/c249d4b96fa05165ac22c214f94a045ee0af8beedefdbc54b769febd0044cab3a874e55419841a0dcc76439e379a63e257f3253c87168e3261e7bc783d623302
+  languageName: node
+  linkType: hard
+
+"@types/semver@npm:^7":
+  version: 7.7.0
+  resolution: "@types/semver@npm:7.7.0"
+  checksum: 10c0/6b5f65f647474338abbd6ee91a6bbab434662ddb8fe39464edcbcfc96484d388baad9eb506dff217b6fc1727a88894930eb1f308617161ac0f376fe06be4e1ee
   languageName: node
   linkType: hard
 
@@ -30064,6 +30073,15 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/97d3441e97ace8be4b1976433d1c32658f6afaff09f143e52c593bae7eef33de19e3e369c88bd985ce1042c6f441c80c6803078d1de2a9988080b66684cbb30c
+  languageName: node
+  linkType: hard
+
+"semver@npm:7.6.3":
+  version: 7.6.3
+  resolution: "semver@npm:7.6.3"
+  bin:
+    semver: bin/semver.js
+  checksum: 10c0/88f33e148b210c153873cb08cfe1e281d518aaa9a666d4d148add6560db5cd3c582f3a08ccb91f38d5f379ead256da9931234ed122057f40bb5766e65e58adaf
   languageName: node
   linkType: hard
 
