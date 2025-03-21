@@ -7674,10 +7674,10 @@ __metadata:
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/react": "npm:^18.2.55"
     core-js: "npm:3.38.1"
-    jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     react: "npm:18.3.1"
     typescript: "npm:5.6.2"
+    vitest: "npm:2.0.5"
   languageName: unknown
   linkType: soft
 
