@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "build": "yarn build:js && yarn build:types",
-    "build:js": "babel src -d dist --extensions \".js,.jsx,.ts,.tsx\" --copy-files --no-copy-ignored",
+    "build //": "Including .snap in extensions because of https://github.com/babel/babel/issues/11394",
+    "build:js": "babel src -d dist --extensions \".js,.ts,.snap\" --copy-files --no-copy-ignored",
     "build:pack": "yarn pack -o redwoodjs-auth-dbauth-setup.tgz",
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
