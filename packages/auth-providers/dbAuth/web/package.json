@@ -20,7 +20,7 @@
     "build:types": "tsc --build --verbose",
     "build:watch": "nodemon --watch src --ext \"js,jsx,ts,tsx,template\" --ignore dist --exec \"yarn build\"",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "test": "jest src",
+    "test": "yarn vitest run src",
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
