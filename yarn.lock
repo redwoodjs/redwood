@@ -7654,8 +7654,6 @@ __metadata:
     "@simplewebauthn/typescript-types": "npm:7.4.0"
     "@types/yargs": "npm:17.0.33"
     core-js: "npm:3.38.1"
-    jest: "npm:29.7.0"
-    jest-environment-node: "npm:29.7.0"
     prompts: "npm:2.4.2"
     terminal-link: "npm:2.1.1"
     typescript: "npm:5.6.2"
@@ -20607,7 +20605,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-environment-node@npm:29.7.0, jest-environment-node@npm:^29.7.0":
+"jest-environment-node@npm:^29.7.0":
   version: 29.7.0
   resolution: "jest-environment-node@npm:29.7.0"
   dependencies:
