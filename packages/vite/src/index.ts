@@ -53,12 +53,8 @@ const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
     )
 
     if (fs.existsSync(indexCjsDistPath)) {
-      isInRwVite = true
       console.log(`Found alternative path: ${indexCjsDistPath}`)
-      console.log(
-        'Contents:',
-        JSON.stringify(fs.readdirSync(indexCjsDistPath), null, 2),
-      )
+      isInRwVite = true
     }
   }
 
@@ -75,9 +71,11 @@ const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
         )
       if (m) {
         if (isInRwVite) {
-          return `node_modules/@redwoodjs/vite/node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.cjs`
+          const fullPath = `${nmPath}/@redwoodjs/vite/node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.cjs`
+          console.log('resolving full path:', fullPath)
+          return fullPath
         } else {
-          return `node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.mjs`
+          return `${nmPath}/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.mjs`
         }
       } else {
         if (typeof origPlugin.resolveId === 'function') {
