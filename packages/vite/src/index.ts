@@ -27,25 +27,43 @@ const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
   console.log('__filename', __filename)
   console.log('__dirname', __dirname)
   const nmPath = path.join(__dirname, '..', '..', '..', '..')
-  const distPath = path.join(
+  let isInRwVite = false
+  let indexCjsDistPath = path.join(
     nmPath,
     'vite-plugin-node-polyfills',
     'shims',
     'buffer',
     'dist',
+    'index.cjs',
   )
   console.log('nmPath', nmPath)
-  console.log(
-    'shims',
-    fs.readdirSync(path.join(nmPath, 'vite-plugin-node-polyfills', 'shims')),
-  )
-  console.log(
-    'shims/buffer',
-    fs.readdirSync(
-      path.join(nmPath, 'vite-plugin-node-polyfills', 'shims', 'buffer'),
-    ),
-  )
-  console.log('shims/buffer/dist', fs.readdirSync(distPath))
+  console.log('indexCjsDistPath', indexCjsDistPath)
+  if (!fs.existsSync(indexCjsDistPath)) {
+    console.log(`File does not exist: ${indexCjsDistPath}`)
+    indexCjsDistPath = path.join(
+      nmPath,
+      '@redwoodjs',
+      'vite',
+      'node_modules',
+      'vite-plugin-node-polyfills',
+      'shims',
+      'buffer',
+      'dist',
+      'index.cjs',
+    )
+
+    if (fs.existsSync(indexCjsDistPath)) {
+      isInRwVite = true
+      console.log(`Found alternative path: ${indexCjsDistPath}`)
+      console.log(
+        'Contents:',
+        JSON.stringify(fs.readdirSync(indexCjsDistPath), null, 2),
+      )
+    }
+  }
+
+  console.log('isInRwVite', isInRwVite)
+
   const origPlugin = nodePolyfills(options)
   return {
     ...origPlugin,
@@ -56,7 +74,11 @@ const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
           source,
         )
       if (m) {
-        return `node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.cjs`
+        if (isInRwVite) {
+          return `node_modules/@redwoodjs/vite/node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.cjs`
+        } else {
+          return `node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.mjs`
+        }
       } else {
         if (typeof origPlugin.resolveId === 'function') {
           return origPlugin.resolveId.call(this, source, importer, opts)
