@@ -24,10 +24,12 @@ import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.j
  * See https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/81
  */
 const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
+  console.log('__filename', __filename)
   const origPlugin = nodePolyfills(options)
   return {
     ...origPlugin,
     resolveId(this, source: string, importer: string | undefined, opts: any) {
+      console.log('source', source)
       const m =
         /^vite-plugin-node-polyfills\/shims\/(buffer|global|process)$/.exec(
           source,
