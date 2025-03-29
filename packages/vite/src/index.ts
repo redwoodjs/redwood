@@ -25,6 +25,27 @@ import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.j
  */
 const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
   console.log('__filename', __filename)
+  console.log('__dirname', __dirname)
+  const nmPath = path.join(__dirname, '..', '..', '..', '..')
+  const distPath = path.join(
+    nmPath,
+    'vite-plugin-node-polyfills',
+    'shims',
+    'buffer',
+    'dist',
+  )
+  console.log('nmPath', nmPath)
+  console.log(
+    'shims',
+    fs.readdirSync(path.join(nmPath, 'vite-plugin-node-polyfills', 'shims')),
+  )
+  console.log(
+    'shims/buffer',
+    fs.readdirSync(
+      path.join(nmPath, 'vite-plugin-node-polyfills', 'shims', 'buffer'),
+    ),
+  )
+  console.log('shims/buffer/dist', fs.readdirSync(distPath))
   const origPlugin = nodePolyfills(options)
   return {
     ...origPlugin,
