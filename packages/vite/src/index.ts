@@ -2,9 +2,10 @@ import fs from 'fs'
 import path from 'path'
 
 import react from '@vitejs/plugin-react'
-import type { PluginOption } from 'vite'
+import type { PluginOption, Plugin } from 'vite'
 import { normalizePath } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import type { PolyfillOptions } from 'vite-plugin-node-polyfills'
 
 import { getWebSideDefaultBabelConfig } from '@redwoodjs/babel-config'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
@@ -13,6 +14,34 @@ import { getMergedConfig } from './lib/getMergedConfig.js'
 import { handleJsAsJsx } from './plugins/vite-plugin-jsx-loader.js'
 import { removeFromBundle } from './plugins/vite-plugin-remove-from-bundle.js'
 import { swapApolloProvider } from './plugins/vite-plugin-swap-apollo-provider.js'
+
+// TOOD: Remove this when RW projects are ESM
+// Also consider moving to https://github.com/unjs/unenv, which
+// vite-plugin-node-polyfills also wants to do:
+// https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/72
+/**
+ * Fix CJS issue with vite-plugin-node-polyfills
+ * See https://github.com/davidmyersdev/vite-plugin-node-polyfills/issues/81
+ */
+const nodePolyfillsFix = (options?: PolyfillOptions): Plugin => {
+  const origPlugin = nodePolyfills(options)
+  return {
+    ...origPlugin,
+    resolveId(this, source: string, importer: string | undefined, opts: any) {
+      const m =
+        /^vite-plugin-node-polyfills\/shims\/(buffer|global|process)$/.exec(
+          source,
+        )
+      if (m) {
+        return `node_modules/vite-plugin-node-polyfills/shims/${m[1]}/dist/index.cjs`
+      } else {
+        if (typeof origPlugin.resolveId === 'function') {
+          return origPlugin.resolveId.call(this, source, importer, opts)
+        }
+      }
+    },
+  }
+}
 
 /**
  * Pre-configured vite plugin, with required config for Redwood apps.
@@ -63,7 +92,7 @@ export default function redwoodPluginVite(): PluginOption[] {
     // Only include the Buffer polyfill for non-rsc dev, for DevFatalErrorPage
     // Including the polyfill plugin in any form in RSC breaks
     !rscEnabled && {
-      ...nodePolyfills({
+      ...nodePolyfillsFix({
         include: ['buffer'],
         globals: {
           Buffer: true,
