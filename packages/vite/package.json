@@ -87,7 +87,7 @@
     "rimraf": "6.0.1",
     "vite": "5.4.15",
     "vite-plugin-cjs-interop": "2.1.4",
-    "vite-plugin-node-polyfills": "0.22.0",
+    "vite-plugin-node-polyfills": "0.23.0",
     "ws": "8.18.0",
     "yargs-parser": "21.1.1"
   },
