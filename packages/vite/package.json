@@ -33,7 +33,7 @@
     "@vitejs/plugin-react": "4.2.1",
     "buffer": "6.0.3",
     "core-js": "3.37.1",
-    "vite": "4.5.2",
+    "vite": "4.5.11",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {

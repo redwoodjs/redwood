@@ -63,7 +63,7 @@
     "@types/node": "20.12.12",
     "tsx": "4.15.2",
     "typescript": "5.4.5",
-    "vite": "4.5.2"
+    "vite": "4.5.11"
   },
   "peerDependencies": {
     "@redwoodjs/project-config": "7.7.4",
