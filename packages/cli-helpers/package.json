@@ -54,7 +54,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@babel/core": "^7.22.20",
+    "@babel/core": "^7.26.10",
     "@opentelemetry/api": "1.8.0",
     "@redwoodjs/project-config": "workspace:*",
     "@redwoodjs/telemetry": "workspace:*",
