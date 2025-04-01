@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-azure-active-directory-setup",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/cli-helpers": "7.7.4",
+    "@redwoodjs/cli-helpers": "7.7.5",
     "core-js": "3.37.1"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/web-server",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "Redwood's server for the Web side",
   "repository": {
     "type": "git",
@@ -25,8 +25,8 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@redwoodjs/fastify-web": "7.7.4",
-    "@redwoodjs/project-config": "7.7.4",
+    "@redwoodjs/fastify-web": "7.7.5",
+    "@redwoodjs/project-config": "7.7.5",
     "chalk": "4.1.2",
     "dotenv-defaults": "5.0.2",
     "fastify": "4.27.0",
@@ -34,7 +34,7 @@
     "yargs": "17.7.2"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.7.4",
+    "@redwoodjs/framework-tools": "7.7.5",
     "tsx": "4.15.2",
     "typescript": "5.4.5"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/structure",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "noun: the arrangement of and relations between the parts or elements of something complex",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
     "@prisma/internals": "5.14.0",
-    "@redwoodjs/project-config": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
     "@types/line-column": "1.0.2",
     "camelcase": "6.3.0",
     "core-js": "3.37.1",

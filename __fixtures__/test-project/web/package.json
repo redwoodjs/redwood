@@ -11,16 +11,16 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/auth-dbauth-web": "7.7.4",
-    "@redwoodjs/forms": "7.7.4",
-    "@redwoodjs/router": "7.7.4",
-    "@redwoodjs/web": "7.7.4",
+    "@redwoodjs/auth-dbauth-web": "7.7.5",
+    "@redwoodjs/forms": "7.7.5",
+    "@redwoodjs/router": "7.7.5",
+    "@redwoodjs/web": "7.7.5",
     "humanize-string": "2.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "7.7.4",
+    "@redwoodjs/vite": "7.7.5",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "autoprefixer": "^10.4.18",

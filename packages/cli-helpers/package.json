@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/cli-helpers",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -29,8 +29,8 @@
   "dependencies": {
     "@babel/core": "^7.22.20",
     "@opentelemetry/api": "1.8.0",
-    "@redwoodjs/project-config": "7.7.4",
-    "@redwoodjs/telemetry": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
+    "@redwoodjs/telemetry": "7.7.5",
     "chalk": "4.1.2",
     "dotenv": "16.4.5",
     "execa": "5.1.1",

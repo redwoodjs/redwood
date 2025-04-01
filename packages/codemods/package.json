@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/codemods",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "Codemods to ease upgrading a RedwoodJS Project",
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "@babel/plugin-transform-typescript": "^7.22.15",
     "@babel/runtime-corejs3": "7.24.5",
     "@babel/traverse": "^7.22.20",
-    "@redwoodjs/project-config": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
     "@svgr/core": "8.1.0",
     "@svgr/plugin-jsx": "8.1.0",
     "@vscode/ripgrep": "1.15.9",

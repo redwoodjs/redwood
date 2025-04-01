@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/babel-config",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -35,7 +35,7 @@
     "@babel/register": "^7.22.15",
     "@babel/runtime-corejs3": "7.24.5",
     "@babel/traverse": "^7.22.20",
-    "@redwoodjs/project-config": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
     "babel-plugin-auto-import": "1.1.0",
     "babel-plugin-graphql-tag": "3.3.0",
     "babel-plugin-module-resolver": "5.0.2",
@@ -45,7 +45,7 @@
     "typescript": "5.4.5"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.7.4",
+    "@redwoodjs/framework-tools": "7.7.5",
     "@types/babel-plugin-tester": "9.0.10",
     "@types/babel__core": "7.20.5",
     "@types/node": "20.12.12",

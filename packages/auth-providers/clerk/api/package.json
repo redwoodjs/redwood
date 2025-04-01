@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-clerk-api",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.7.4",
+    "@redwoodjs/api": "7.7.5",
     "@types/aws-lambda": "8.10.138",
     "typescript": "5.4.5",
     "vitest": "1.6.1"

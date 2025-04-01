@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/project-config",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -33,7 +33,7 @@
     "string-env-interpolation": "1.0.1"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.7.4",
+    "@redwoodjs/framework-tools": "7.7.5",
     "rimraf": "5.0.7",
     "tsx": "4.15.2",
     "typescript": "5.4.5",

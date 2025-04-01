@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-handler-in-memory",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -20,10 +20,10 @@
     "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "dependencies": {
-    "@redwoodjs/mailer-core": "7.7.4"
+    "@redwoodjs/mailer-core": "7.7.5"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.7.4",
+    "@redwoodjs/framework-tools": "7.7.5",
     "tsx": "4.15.2",
     "typescript": "5.4.5"
   },

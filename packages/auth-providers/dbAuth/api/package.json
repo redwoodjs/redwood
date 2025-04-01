@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-dbauth-api",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "7.24.5",
-    "@redwoodjs/project-config": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
     "base64url": "3.0.1",
     "core-js": "3.37.1",
     "md5": "2.3.0",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@babel/cli": "7.24.5",
     "@babel/core": "^7.22.20",
-    "@redwoodjs/api": "7.7.4",
+    "@redwoodjs/api": "7.7.5",
     "@simplewebauthn/server": "7.4.0",
     "@types/md5": "2.3.5",
     "@types/uuid": "9.0.8",

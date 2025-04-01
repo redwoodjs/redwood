@@ -1,7 +1,7 @@
 {
   "name": "storybook-framework-redwoodjs-vite",
   "type": "module",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "description": "Storybook for RedwoodJS with Vite",
   "keywords": [
     "Storybook",
@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@joshwooding/vite-plugin-react-docgen-typescript": "0.3.1",
-    "@redwoodjs/testing": "7.7.4",
+    "@redwoodjs/testing": "7.7.5",
     "@rollup/pluginutils": "^5.0.2",
     "@storybook/addon-essentials": "7.6.17",
     "@storybook/builder-vite": "7.6.17",
@@ -66,8 +66,8 @@
     "vite": "4.5.11"
   },
   "peerDependencies": {
-    "@redwoodjs/project-config": "7.7.4",
-    "@redwoodjs/router": "7.7.4",
+    "@redwoodjs/project-config": "7.7.5",
+    "@redwoodjs/router": "7.7.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "storybook": "7.6.17"

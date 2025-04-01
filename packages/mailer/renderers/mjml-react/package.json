@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/mailer-renderer-mjml-react",
-  "version": "7.7.4",
+  "version": "7.7.5",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",
@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@faire/mjml-react": "3.3.0",
-    "@redwoodjs/mailer-core": "7.7.4",
+    "@redwoodjs/mailer-core": "7.7.5",
     "mjml": "4.15.3"
   },
   "devDependencies": {
-    "@redwoodjs/framework-tools": "7.7.4",
+    "@redwoodjs/framework-tools": "7.7.5",
     "@types/mjml": "4",
     "tsx": "4.15.2",
     "typescript": "5.4.5"
