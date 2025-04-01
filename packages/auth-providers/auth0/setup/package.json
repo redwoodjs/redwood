@@ -32,7 +32,7 @@
     "@babel/core": "^7.22.20",
     "@types/yargs": "17.0.32",
     "typescript": "5.4.5",
-    "vitest": "1.6.0"
+    "vitest": "1.6.1"
   },
   "gitHead": "3905ed045508b861b495f8d5630d76c7a157d8f1"
 }
