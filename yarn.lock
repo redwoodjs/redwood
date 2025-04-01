@@ -8046,7 +8046,7 @@ __metadata:
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
-    semver: "npm:7.6.3"
+    semver: "npm:7.6.2"
     storybook: "npm:7.6.17"
     storybook-framework-redwoodjs-vite: "npm:7.7.4"
     terminal-link: "npm:2.1.1"
@@ -8068,9 +8068,11 @@ __metadata:
     "@storybook/addon-docs": "npm:7.6.17"
     "@storybook/addon-essentials": "npm:7.6.17"
     "@storybook/react-webpack5": "npm:7.6.17"
+    "@types/semver": "npm:^7"
     "@types/yargs": "npm:17.0.32"
     chalk: "npm:4.1.2"
     execa: "npm:5.1.1"
+    semver: "npm:7.6.2"
     storybook: "npm:7.6.17"
     terminal-link: "npm:2.1.1"
     tsx: "npm:4.15.2"
@@ -11428,17 +11430,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7":
+"@types/semver@npm:^7, @types/semver@npm:^7.3.12, @types/semver@npm:^7.3.4":
   version: 7.7.0
   resolution: "@types/semver@npm:7.7.0"
   checksum: 10c0/6b5f65f647474338abbd6ee91a6bbab434662ddb8fe39464edcbcfc96484d388baad9eb506dff217b6fc1727a88894930eb1f308617161ac0f376fe06be4e1ee
-  languageName: node
-  linkType: hard
-
-"@types/semver@npm:^7.3.12, @types/semver@npm:^7.3.4":
-  version: 7.5.8
-  resolution: "@types/semver@npm:7.5.8"
-  checksum: 10c0/8663ff927234d1c5fcc04b33062cb2b9fcfbe0f5f351ed26c4d1e1581657deebd506b41ff7fdf89e787e3d33ce05854bc01686379b89e9c49b564c4cfa988efa
   languageName: node
   linkType: hard
 
@@ -30073,15 +30068,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/97d3441e97ace8be4b1976433d1c32658f6afaff09f143e52c593bae7eef33de19e3e369c88bd985ce1042c6f441c80c6803078d1de2a9988080b66684cbb30c
-  languageName: node
-  linkType: hard
-
-"semver@npm:7.6.3":
-  version: 7.6.3
-  resolution: "semver@npm:7.6.3"
-  bin:
-    semver: bin/semver.js
-  checksum: 10c0/88f33e148b210c153873cb08cfe1e281d518aaa9a666d4d148add6560db5cd3c582f3a08ccb91f38d5f379ead256da9931234ed122057f40bb5766e65e58adaf
   languageName: node
   linkType: hard
 

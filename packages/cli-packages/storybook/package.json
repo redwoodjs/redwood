@@ -29,12 +29,14 @@
     "@storybook/react-webpack5": "7.6.17",
     "chalk": "4.1.2",
     "execa": "5.1.1",
+    "semver": "7.6.2",
     "storybook": "7.6.17",
     "terminal-link": "2.1.1",
     "yargs": "17.7.2"
   },
   "devDependencies": {
     "@redwoodjs/framework-tools": "7.7.4",
+    "@types/semver": "^7",
     "@types/yargs": "17.0.32",
     "tsx": "4.15.2",
     "typescript": "5.4.5"
