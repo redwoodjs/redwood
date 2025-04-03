@@ -1,6 +1,6 @@
 {
   "name": "@redwoodjs/auth-firebase-web",
-  "version": "8.6.0",
+  "version": "8.6.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/redwoodjs/redwood.git",

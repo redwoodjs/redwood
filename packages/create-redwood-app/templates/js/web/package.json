@@ -11,14 +11,14 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/forms": "8.6.0",
-    "@redwoodjs/router": "8.6.0",
-    "@redwoodjs/web": "8.6.0",
+    "@redwoodjs/forms": "8.6.1",
+    "@redwoodjs/router": "8.6.1",
+    "@redwoodjs/web": "8.6.1",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "8.6.0",
+    "@redwoodjs/vite": "8.6.1",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19"
   }
