@@ -9,16 +9,16 @@ import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/gen
 import { getConfig } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import c from '../../../lib/colors.js'
 import {
   addRoutesToRouterTask,
   transformTSToJS,
   writeFilesTask,
-} from '../../../lib'
-import c from '../../../lib/colors'
+} from '../../../lib/index.js'
 import {
   prepareForRollback,
   addFunctionToRollback,
-} from '../../../lib/rollback'
+} from '../../../lib/rollback.js'
 import {
   createYargsForComponentGeneration,
   pathName,
@@ -26,7 +26,7 @@ import {
   mapRouteParamTypeToTsType,
   removeGeneratorName,
   validateName,
-} from '../helpers'
+} from '../helpers.js'
 
 const COMPONENT_SUFFIX = 'Page'
 const REDWOOD_WEB_PATH_NAME = 'pages'

@@ -10,14 +10,14 @@ import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/gen
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
 // Move this check out of experimental when server file is moved as well
+import c from '../../../lib/colors.js'
 import {
   generateTemplate,
   getPaths,
   transformTSToJS,
   writeFile,
-} from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
+} from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
 import { isRealtimeSetup, isServerFileSetup } from '../../experimental/util.js'
 
 const templateVariables = (name) => {

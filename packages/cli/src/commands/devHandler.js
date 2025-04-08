@@ -8,12 +8,12 @@ import { shutdownPort } from '@redwoodjs/internal/dist/dev'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
-import { exitWithError } from '../lib/exit'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
-import { getFreePort } from '../lib/ports'
-import { serverFileExists } from '../lib/project'
+import c from '../lib/colors.js'
+import { exitWithError } from '../lib/exit.js'
+import { generatePrismaClient } from '../lib/generatePrismaClient.js'
+import { getPaths } from '../lib/index.js'
+import { getFreePort } from '../lib/ports.js'
+import { serverFileExists } from '../lib/project.js'
 
 const defaultApiDebugPort = 18911
 

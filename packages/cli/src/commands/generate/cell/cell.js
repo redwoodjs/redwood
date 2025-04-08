@@ -2,18 +2,18 @@ import pascalcase from 'pascalcase'
 
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 
-import { nameVariants, transformTSToJS } from '../../../lib'
-import { isWordPluralizable } from '../../../lib/pluralHelpers'
-import { addFunctionToRollback } from '../../../lib/rollback'
-import { isPlural, singularize } from '../../../lib/rwPluralize'
-import { getSchema } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
+import { nameVariants, transformTSToJS } from '../../../lib/index.js'
+import { isWordPluralizable } from '../../../lib/pluralHelpers.js'
+import { addFunctionToRollback } from '../../../lib/rollback.js'
+import { isPlural, singularize } from '../../../lib/rwPluralize.js'
+import { getSchema } from '../../../lib/schemaHelpers.js'
+import { yargsDefaults } from '../helpers.js'
 import {
   templateForComponentFile,
   createYargsForComponentGeneration,
   forcePluralizeWord,
   removeGeneratorName,
-} from '../helpers'
+} from '../helpers.js'
 
 import {
   checkProjectForQueryField,
@@ -21,7 +21,7 @@ import {
   getIdType,
   operationNameIsUnique,
   uniqueOperationName,
-} from './utils/utils'
+} from './utils/utils.js'
 
 const COMPONENT_SUFFIX = 'Cell'
 const REDWOOD_WEB_PATH_NAME = 'components'

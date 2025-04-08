@@ -7,7 +7,7 @@ import fse from 'fs-extra'
 import { findApiDistFunctions } from '@redwoodjs/internal/dist/files'
 import { ensurePosixPath, getPaths } from '@redwoodjs/project-config'
 
-import * as nftPacker from '../packing/nft'
+import * as nftPacker from '../packing/nft.js'
 
 const ZIPBALL_DIR = './api/dist/zipball'
 

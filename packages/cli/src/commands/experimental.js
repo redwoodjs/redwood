@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import detectRwVersion from '../middleware/detectProjectRwVersion'
+import detectRwVersion from '../middleware/detectProjectRwVersion.js'
 
 export const command = 'experimental <command>'
 export const aliases = ['exp']

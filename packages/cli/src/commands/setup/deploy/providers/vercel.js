@@ -5,9 +5,9 @@ import { Listr } from 'listr2'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, printSetupNotes, writeFile } from '../../../../lib'
-import c from '../../../../lib/colors'
-import { updateApiURLTask } from '../helpers'
+import c from '../../../../lib/colors.js'
+import { getPaths, printSetupNotes, writeFile } from '../../../../lib/index.js'
+import { updateApiURLTask } from '../helpers.js'
 
 export const command = 'vercel'
 export const description = 'Setup Vercel deploy'

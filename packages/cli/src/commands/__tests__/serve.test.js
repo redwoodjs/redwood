@@ -4,7 +4,7 @@ import yargs from 'yargs/yargs'
 import * as apiServerCLIConfig from '@redwoodjs/api-server/dist/apiCLIConfig'
 import * as bothServerCLIConfig from '@redwoodjs/api-server/dist/bothCLIConfig'
 
-import { builder } from '../serve'
+import { builder } from '../serve.js'
 
 globalThis.__dirname = __dirname
 

@@ -7,10 +7,10 @@ import { format } from 'prettier'
 import { addApiPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-import { runTransform } from '../../../lib/runTransform'
+import c from '../../../lib/colors.js'
+import { getPaths, transformTSToJS, writeFile } from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
+import { runTransform } from '../../../lib/runTransform.js'
 
 export const handler = async ({ force }) => {
   const projectIsTypescript = isTypeScriptProject()

@@ -8,7 +8,7 @@ import { writeFile } from '@redwoodjs/cli-helpers'
 import { getConfig, getConfigPath, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 
 export async function handler({ force }) {
   const TEMPLATE_DIR = path.join(__dirname, 'templates')

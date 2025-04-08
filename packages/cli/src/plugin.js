@@ -1,10 +1,10 @@
-import { getConfig } from './lib'
+import { getConfig } from './lib/index.js'
 import {
   loadCommandCache,
   checkPluginListAndWarn,
   saveCommandCache,
   loadPluginPackage,
-} from './lib/plugin'
+} from './lib/plugin.js'
 
 /**
  * Attempts to load all CLI plugins as defined in the redwood.toml file

@@ -12,9 +12,9 @@ import {
 } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { runTransform } from '../../../../../lib/runTransform'
+import { runTransform } from '../../../../../lib/runTransform.js'
 
-import type { Args } from './fragments'
+import type { Args } from './fragments.js'
 
 export const command = 'fragments'
 export const description = 'Set up Fragments for GraphQL'

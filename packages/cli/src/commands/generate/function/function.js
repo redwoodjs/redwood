@@ -7,11 +7,15 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
-import { validateName, templateForComponentFile } from '../helpers'
+import c from '../../../lib/colors.js'
+import {
+  getPaths,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib/index.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { yargsDefaults } from '../helpers.js'
+import { validateName, templateForComponentFile } from '../helpers.js'
 
 export const files = async ({
   name,

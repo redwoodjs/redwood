@@ -10,8 +10,8 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, usingVSCode } from '../../../../lib'
-import c from '../../../../lib/colors'
+import c from '../../../../lib/colors.js'
+import { getPaths, usingVSCode } from '../../../../lib/index.js'
 
 export const command = 'tailwindcss'
 export const aliases = ['tailwind', 'tw']

@@ -6,10 +6,10 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 import extendStorybookConfiguration from '../../../lib/configureStorybook.js'
-import { fileIncludes } from '../../../lib/extendFile'
+import { fileIncludes } from '../../../lib/extendFile.js'
+import { getPaths, writeFile } from '../../../lib/index.js'
 
 const APP_JS_PATH = getPaths().web.app
 

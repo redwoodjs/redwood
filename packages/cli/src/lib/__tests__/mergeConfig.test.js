@@ -3,15 +3,15 @@ import path from 'path'
 import fs from 'fs-extra'
 import { expect, it, describe, test } from 'vitest'
 
-import { merge } from '../merge'
+import { merge } from '../merge/index.js'
 import {
   concatUnique,
   interleave,
   keepBoth,
   keepBothStatementParents,
-} from '../merge/strategy'
+} from '../merge/strategy.js'
 
-import { unindented } from './fixtures/unindented'
+import { unindented } from './fixtures/unindented.js'
 
 // A particular merge strategy for combining JS-config-style files.
 // This is the only strategy tested in this file.

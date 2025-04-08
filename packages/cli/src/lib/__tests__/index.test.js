@@ -21,7 +21,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import { vi, test, expect, describe } from 'vitest'
 
-import * as index from '../index'
+import * as index from '../index.js'
 
 test('nameVariants returns a single word cased variables', () => {
   const names = ['Home', 'home']

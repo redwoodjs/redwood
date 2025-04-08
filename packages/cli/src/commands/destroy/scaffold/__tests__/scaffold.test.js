@@ -8,13 +8,13 @@ import { vi, test, describe, beforeEach, afterEach, expect } from 'vitest'
 
 import '../../../../lib/test'
 
-import { getPaths, getDefaultArgs } from '../../../../lib'
+import { getPaths, getDefaultArgs } from '../../../../lib/index.js'
 import {
   yargsDefaults as defaults,
   customOrDefaultTemplatePath,
-} from '../../../generate/helpers'
-import { files } from '../../../generate/scaffold/scaffold'
-import { tasks } from '../scaffold'
+} from '../../../generate/helpers.js'
+import { files } from '../../../generate/scaffold/scaffold.js'
+import { tasks } from '../scaffold.js'
 
 vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('fs-extra')

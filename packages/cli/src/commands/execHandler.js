@@ -12,10 +12,10 @@ import {
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { findScripts } from '@redwoodjs/internal/dist/files'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
-import { runScriptFunction } from '../lib/exec'
-import { generatePrismaClient } from '../lib/generatePrismaClient'
+import c from '../lib/colors.js'
+import { runScriptFunction } from '../lib/exec.js'
+import { generatePrismaClient } from '../lib/generatePrismaClient.js'
+import { getPaths } from '../lib/index.js'
 
 const printAvailableScriptsToConsole = () => {
   // Loop through all scripts and get their relative path

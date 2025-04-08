@@ -6,7 +6,7 @@ import fs from 'fs-extra'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { getResources } from './resource'
+import { getResources } from './resource.js'
 
 async function main() {
   // Log out the telemetry notice

@@ -1,7 +1,7 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../lib'
-import c from '../lib/colors'
+import c from '../lib/colors.js'
+import { getPaths } from '../lib/index.js'
 
 export const command = 'check'
 export const aliases = ['diagnostics']

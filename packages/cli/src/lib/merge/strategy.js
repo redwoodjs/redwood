@@ -1,7 +1,7 @@
 import * as t from '@babel/types'
 import _ from 'lodash'
 
-import { nodeIs, sieve } from './algorithms'
+import { nodeIs, sieve } from './algorithms.js'
 
 const OPAQUE_UID_TAG =
   'RW_MERGE_OPAQUE_UID_Q2xldmVyIHlvdSEgSGF2ZSBhIGNvb2tpZS4='

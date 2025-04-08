@@ -8,12 +8,12 @@ import { prettify } from '@redwoodjs/cli-helpers'
 import { getConfig, getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../lib'
-import c from '../../lib/colors'
-import { isTypeScriptProject } from '../../lib/project'
+import c from '../../lib/colors.js'
+import { getPaths, transformTSToJS, writeFile } from '../../lib/index.js'
+import { isTypeScriptProject } from '../../lib/project.js'
 
-import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRsc'
-import { printTaskEpilogue } from './util'
+import { command, description, EXPERIMENTAL_TOPIC_ID } from './setupRsc.js'
+import { printTaskEpilogue } from './util.js'
 
 export const handler = async ({ force, verbose }) => {
   const rwPaths = getPaths()

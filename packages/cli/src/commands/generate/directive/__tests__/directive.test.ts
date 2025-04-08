@@ -7,7 +7,7 @@ import path from 'path'
 import { test, expect } from 'vitest'
 import yargs from 'yargs/yargs'
 
-import * as directive from '../directive'
+import * as directive from '../directive.js'
 
 test('creates a JavaScript validator directive', async () => {
   const output = await directive.files({

@@ -5,11 +5,15 @@ import terminalLink from 'terminal-link'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths, writeFilesTask, generateTemplate } from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { verifyModelName } from '../../../lib/schemaHelpers'
-import { validateName, yargsDefaults } from '../helpers'
+import c from '../../../lib/colors.js'
+import {
+  getPaths,
+  writeFilesTask,
+  generateTemplate,
+} from '../../../lib/index.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { verifyModelName } from '../../../lib/schemaHelpers.js'
+import { validateName, yargsDefaults } from '../helpers.js'
 const TEMPLATE_PATH = path.resolve(__dirname, 'templates', 'model.js.template')
 
 const files = async ({ name, typescript = false }) => {

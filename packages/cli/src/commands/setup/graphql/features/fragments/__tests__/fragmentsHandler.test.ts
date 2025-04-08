@@ -13,8 +13,8 @@ vi.mock('../../../../../../lib/runTransform', () => {
 import { vol, fs as memfsFs } from 'memfs'
 import { vi, beforeAll, afterAll, test, expect } from 'vitest'
 
-import { Listr2Mock } from '../../../../../../__tests__/Listr2Mock'
-import { handler } from '../fragmentsHandler'
+import { Listr2Mock } from '../../../../../../__tests__/Listr2Mock.js'
+import { handler } from '../fragmentsHandler.js'
 
 vi.mock('listr2', () => ({
   Listr: Listr2Mock,

@@ -11,7 +11,10 @@ import { getPaths, getRawConfig } from '@redwoodjs/project-config'
 import { DefaultHost } from '@redwoodjs/structure/dist/hosts'
 import { RWProject } from '@redwoodjs/structure/dist/model/RWProject'
 
-import { name as packageName, version as packageVersion } from '../../package'
+import {
+  name as packageName,
+  version as packageVersion,
+} from '../../package.js'
 
 export async function getResources() {
   // Read the UUID from the file within .redwood or generate a new one if it doesn't exist

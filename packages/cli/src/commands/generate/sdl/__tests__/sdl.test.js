@@ -52,8 +52,8 @@ import '../../../../lib/test'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import { getDefaultArgs } from '../../../../lib'
-import * as sdl from '../sdl'
+import { getDefaultArgs } from '../../../../lib/index.js'
+import * as sdl from '../sdl.js'
 
 afterEach(() => {
   vi.clearAllMocks()

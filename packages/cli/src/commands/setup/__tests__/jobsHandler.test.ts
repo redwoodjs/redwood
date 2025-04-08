@@ -15,7 +15,7 @@ import {
 
 import type * as ProjectConfig from '@redwoodjs/project-config'
 
-import { Listr2Mock } from '../../../__tests__/Listr2Mock'
+import { Listr2Mock } from '../../../__tests__/Listr2Mock.js'
 // @ts-expect-error - This is a JS file
 import * as jobsHandler from '../jobs/jobsHandler.js'
 

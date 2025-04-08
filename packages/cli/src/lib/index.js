@@ -21,9 +21,9 @@ import {
   findUp,
 } from '@redwoodjs/project-config'
 
-import c from './colors'
-import { addFileToRollback } from './rollback'
-import { pluralize, singularize } from './rwPluralize'
+import c from './colors.js'
+import { addFileToRollback } from './rollback.js'
+import { pluralize, singularize } from './rwPluralize.js'
 
 export { findUp }
 

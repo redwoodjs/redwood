@@ -9,16 +9,16 @@ import { addApiPackages } from '@redwoodjs/cli-helpers'
 import { getConfigPath, resolveFile } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../lib'
-import c from '../../lib/colors'
-import { isTypeScriptProject } from '../../lib/project'
+import c from '../../lib/colors.js'
+import { getPaths, transformTSToJS, writeFile } from '../../lib/index.js'
+import { isTypeScriptProject } from '../../lib/project.js'
 
 import {
   command,
   description,
   EXPERIMENTAL_TOPIC_ID,
-} from './setupOpentelemetry'
-import { printTaskEpilogue } from './util'
+} from './setupOpentelemetry.js'
+import { printTaskEpilogue } from './util.js'
 
 export const handler = async ({ force, verbose }) => {
   const ts = isTypeScriptProject()

@@ -7,8 +7,8 @@ import { vol } from 'memfs'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 
 import '../../../../lib/test'
-import { getPaths } from '../../../../lib'
-import { updateApiURLTask } from '../helpers'
+import { getPaths } from '../../../../lib/index.js'
+import { updateApiURLTask } from '../helpers.js'
 // Mock telemetry and other things
 
 vi.mock('../../../../lib', async (importOriginal) => {

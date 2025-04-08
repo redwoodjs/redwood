@@ -5,9 +5,9 @@ import path from 'node:path'
 import tempy from 'tempy'
 import { expect } from 'vitest'
 
-import runTransform from '../testLib/runTransform'
+import runTransform from '../testLib/runTransform.js'
 
-import { formatCode } from './index'
+import { formatCode } from './index.js'
 
 const require = createRequire(import.meta.url)
 

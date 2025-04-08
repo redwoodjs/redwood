@@ -9,12 +9,16 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { transformTSToJS } from '../../../lib'
-import { generateTemplate, getPaths, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-import { prepareForRollback } from '../../../lib/rollback'
-import { customOrDefaultTemplatePath } from '../helpers'
+import c from '../../../lib/colors.js'
+import {
+  generateTemplate,
+  getPaths,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { customOrDefaultTemplatePath } from '../helpers.js'
 
 export const files = async ({ pagePath, typescript = false }) => {
   const extension = typescript ? '.tsx' : '.jsx'

@@ -13,7 +13,7 @@ import {
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { exitWithError } from '../lib/exit'
+import { exitWithError } from '../lib/exit.js'
 
 export const bothServerFileHandler = async (argv) => {
   if (

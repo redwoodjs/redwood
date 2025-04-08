@@ -4,10 +4,10 @@ import {
   getSchema as getSchemaPrisma,
 } from '@prisma/internals'
 
-import { ensureUniquePlural } from './pluralHelpers'
-import { singularize, isPlural } from './rwPluralize'
+import { ensureUniquePlural } from './pluralHelpers.js'
+import { singularize, isPlural } from './rwPluralize.js'
 
-import { getPaths } from './'
+import { getPaths } from './index.js'
 
 /**
  * Used to memoize results from `getSchema()` so we don't have to go through

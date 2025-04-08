@@ -6,10 +6,10 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths, writeFile } from '../../../../lib'
-import c from '../../../../lib/colors'
+import c from '../../../../lib/colors.js'
 import extendStorybookConfiguration from '../../../../lib/configureStorybook.js'
-import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile'
+import { extendJSXFile, fileIncludes } from '../../../../lib/extendFile.js'
+import { getPaths, writeFile } from '../../../../lib/index.js'
 
 export const command = 'mantine'
 export const description = 'Set up Mantine UI'

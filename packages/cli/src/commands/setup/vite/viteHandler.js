@@ -6,9 +6,9 @@ import { Listr } from 'listr2'
 import { addWebPackages } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
+import c from '../../../lib/colors.js'
+import { getPaths, transformTSToJS, writeFile } from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
 
 const { version } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), 'utf-8'),

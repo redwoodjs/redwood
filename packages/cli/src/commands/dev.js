@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 
-import c from '../lib/colors'
-import { checkNodeVersion } from '../middleware/checkNodeVersion'
+import c from '../lib/colors.js'
+import { checkNodeVersion } from '../middleware/checkNodeVersion.js'
 
 export const command = 'dev [side..]'
 export const description = 'Start development servers for api, and web'

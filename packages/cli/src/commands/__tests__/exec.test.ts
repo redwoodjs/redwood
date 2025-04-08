@@ -3,9 +3,9 @@ import path from 'node:path'
 import { fs as memfs, vol } from 'memfs'
 import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest'
 
-import { runScriptFunction } from '../../lib/exec'
+import { runScriptFunction } from '../../lib/exec.js'
 import '../../lib/mockTelemetry'
-import { handler } from '../execHandler'
+import { handler } from '../execHandler.js'
 
 vi.mock('@redwoodjs/babel-config', () => ({
   getWebSideDefaultBabelConfig: () => ({

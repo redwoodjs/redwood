@@ -23,8 +23,8 @@ import { vi, beforeEach, afterEach, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
-import { files } from '../../../generate/cell/cell'
-import { tasks } from '../cell'
+import { files } from '../../../generate/cell/cell.js'
+import { tasks } from '../cell.js'
 
 beforeEach(() => {
   vi.spyOn(console, 'info').mockImplementation(() => {})

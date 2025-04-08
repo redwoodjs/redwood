@@ -13,6 +13,7 @@ import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { generate as generateTypes } from '@redwoodjs/internal/dist/generate/generate'
 import { getConfig } from '@redwoodjs/project-config'
 
+import c from '../../../lib/colors.js'
 import {
   generateTemplate,
   readFile,
@@ -24,26 +25,25 @@ import {
   addScaffoldImport,
   transformTSToJS,
   nameVariants,
-} from '../../../lib'
-import c from '../../../lib/colors'
+} from '../../../lib/index.js'
 import {
   prepareForRollback,
   addFunctionToRollback,
-} from '../../../lib/rollback'
-import { pluralize, singularize } from '../../../lib/rwPluralize'
-import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults } from '../helpers'
+} from '../../../lib/rollback.js'
+import { pluralize, singularize } from '../../../lib/rwPluralize.js'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers.js'
+import { yargsDefaults } from '../helpers.js'
 import {
   customOrDefaultTemplatePath,
   relationsForModel,
   intForeignKeysForModel,
   mapPrismaScalarToPagePropTsType,
-} from '../helpers'
-import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl'
+} from '../helpers.js'
+import { files as sdlFiles, builder as sdlBuilder } from '../sdl/sdl.js'
 import {
   files as serviceFiles,
   builder as serviceBuilder,
-} from '../service/service'
+} from '../service/service.js'
 
 // Any assets that should not trigger an overwrite error and require a --force
 const SKIPPABLE_ASSETS = ['scaffold.css']

@@ -3,7 +3,7 @@ import terminalLink from 'terminal-link'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import c from '../../../lib/colors'
+import c from '../../../lib/colors.js'
 
 export const deployBuilder = (yargs) => {
   yargs

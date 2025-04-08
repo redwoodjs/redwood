@@ -20,9 +20,9 @@ import {
   afterAll,
 } from 'vitest'
 
-import { Listr2Mock } from '../../../../__tests__/Listr2Mock'
-import { getPaths } from '../../../../lib'
-import * as dbAuth from '../dbAuth'
+import { Listr2Mock } from '../../../../__tests__/Listr2Mock.js'
+import { getPaths } from '../../../../lib/index.js'
+import * as dbAuth from '../dbAuth.js'
 
 vi.mock('listr2', () => ({
   Listr: Listr2Mock,

@@ -6,7 +6,7 @@ import { vi, describe, beforeAll, test, expect } from 'vitest'
 
 import '../../../../lib/test'
 
-import * as scaffold from '../scaffold'
+import * as scaffold from '../scaffold.js'
 
 vi.mock('fs', async () => ({ default: (await import('memfs')).fs }))
 vi.mock('execa')
