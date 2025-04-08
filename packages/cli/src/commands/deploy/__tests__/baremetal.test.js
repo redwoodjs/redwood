@@ -688,7 +688,7 @@ describe('deployTasks', () => {
     expect(tasks[0].skip()).toBeTruthy()
   })
 
-  it('throws an error if there is not enough available space on the server and freeSpaceRequired is not configured', () => {
+  it('throws an error if there is not enough available space on the server and freeSpaceRequired is not configured', async () => {
     const ssh = {
       exec: () => ({ stdout: 'df:1875893' }),
     }
@@ -702,12 +702,12 @@ describe('deployTasks', () => {
       {}, // lifecycle
     )
 
-    expect(() => tasks[0].task({}, {})).rejects.toThrowError(
+    await expect(() => tasks[0].task({}, {})).rejects.toThrowError(
       /Not enough disk space\. You need at least 2048MB free space to continue\. \(Currently 1832MB available\)/,
     )
   })
 
-  it('throws an error if there is less available space on the server than freeSpaceRequired', () => {
+  it('throws an error if there is less available space on the server than freeSpaceRequired', async () => {
     const ssh = {
       exec: () => ({ stdout: 'df:3875893' }),
     }
@@ -723,7 +723,7 @@ describe('deployTasks', () => {
       {}, // lifecycle
     )
 
-    expect(() => tasks[0].task({}, {})).rejects.toThrowError(
+    await expect(() => tasks[0].task({}, {})).rejects.toThrowError(
       /Not enough disk space\. You need at least 4096MB free space to continue/,
     )
   })
