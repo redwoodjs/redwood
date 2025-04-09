@@ -231,7 +231,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: corepack enable
+      - run: npm i -g corepack
       # install all the dependencies
       - run: yarn install
       # build the redwood app
@@ -329,7 +329,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: corepack enable
+      - run: npm i -g corepack
       # install all the dependencies
       - run: yarn install
       # build the redwood app

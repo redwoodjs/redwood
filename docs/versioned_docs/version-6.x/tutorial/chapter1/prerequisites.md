@@ -55,7 +55,7 @@ Using the recommended [LTS version from Nodejs.org](https://nodejs.org/en/) is p
 As of Node.js v18+, Node.js ships with a CLI tool called [Corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html) to manage package managers. All you have to do is enable it, then you'll have Yarn:
 
 ```
-corepack enable
+npm i -g corepack
 yarn -v
 ```
 

@@ -57,7 +57,7 @@ Replace `your-username` with your GitHub username below:
 ```terminal
 git clone https://github.com/your-username/redwood.git
 cd redwood
-corepack enable
+npm i -g corepack
 yarn install
 ```
 

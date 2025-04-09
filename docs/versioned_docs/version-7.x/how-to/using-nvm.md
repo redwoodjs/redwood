@@ -83,7 +83,7 @@ You'll need to [install yarn](https://yarnpkg.com/getting-started/install) **for
 [Corepack](https://nodejs.org/dist/latest/docs/api/corepack.html) is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:
 
 ```bash
-corepack enable
+npm i -g corepack
 ```
 
 We also have a doc specifically for [working with yarn](./using-yarn).

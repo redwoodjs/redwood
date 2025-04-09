@@ -85,10 +85,10 @@ Just remember to change the `apt-get` instructions further down too if needed.
 
 :::
 
-Moving on, next we have `corepack enable`:
+Moving on, next we have `npm i -g corepack`:
 
 ```Dockerfile
-RUN corepack enable
+RUN npm i -g corepack
 ```
 
 [Corepack](https://nodejs.org/docs/latest-v18.x/api/corepack.html), Node's manager for package managers, needs to be enabled so that Yarn can use the `packageManager` field in your project's root `package.json` to pick the right version of itself.
@@ -203,7 +203,7 @@ The `api_serve` stage serves your GraphQL api and functions:
 ```Dockerfile
 FROM node:18-bookworm-slim as api_serve
 
-RUN corepack enable
+RUN npm i -g corepack
 
 RUN apt-get update && apt-get install -y \
     openssl \
@@ -311,7 +311,7 @@ The key line here is the first one—this stage uses the `api_build` stage as it
 ```Dockerfile
 FROM node:18-bookworm-slim as web_serve
 
-RUN corepack enable
+RUN npm i -g corepack
 
 USER node
 WORKDIR /home/node/app

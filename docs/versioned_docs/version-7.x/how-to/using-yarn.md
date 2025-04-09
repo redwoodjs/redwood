@@ -11,7 +11,7 @@
 Corepack is included with all Node.js >=16.10 installs, but you must opt-in. To enable it, run the following command:
 
 ```bash
-corepack enable
+npm i -g corepack
 ```
 
 ## Using the correct version of yarn
@@ -36,7 +36,7 @@ If this command fails, you may need to [uninstall the current version of Yarn fi
 ```terminal
 corepack disable
 npm uninstall -g yarn --force
-corepack enable
+npm i -g corepack
 ```
 :::
 
