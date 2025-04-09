@@ -1,8 +1,8 @@
-import path from 'path'
+import path from "path";
 
-import { getPaths } from '../../../../lib'
+import { getPaths } from "../../../../lib";
 
-export const PROJECT_NAME = path.basename(getPaths().base)
+export const PROJECT_NAME = path.basename(getPaths().base);
 
 export const RENDER_YAML = (database) => {
   return `# Quick links to the docs:
@@ -13,7 +13,7 @@ services:
 - name: ${PROJECT_NAME}-web
   type: web
   env: static
-  buildCommand: corepack enable && yarn install && yarn rw deploy render web
+  buildCommand: npm i -g corepack && yarn install && yarn rw deploy render web
   staticPublishPath: ./web/dist
 
   envVars:
@@ -38,13 +38,13 @@ services:
   plan: free
   env: node
   region: oregon
-  buildCommand: corepack enable && yarn install && yarn rw build api
+  buildCommand: npm i -g corepack && yarn install && yarn rw build api
   startCommand: yarn rw deploy render api
 
   envVars:
 ${database}
-`
-}
+`;
+};
 
 export const POSTGRES_YAML = `\
   - key: DATABASE_URL
@@ -54,7 +54,7 @@ export const POSTGRES_YAML = `\
 
 databases:
   - name: ${PROJECT_NAME}-db
-    region: oregon`
+    region: oregon`;
 
 export const SQLITE_YAML = `\
   - key: DATABASE_URL
@@ -62,7 +62,7 @@ export const SQLITE_YAML = `\
   disk:
     name: sqlite-data
     mountPath: /opt/render/project/src/api/db/data
-    sizeGB: 1`
+    sizeGB: 1`;
 
 export const RENDER_HEALTH_CHECK = `\
 // render-health-check
@@ -71,4 +71,4 @@ export const handler = async () => {
     statusCode: 200,
   }
 }
-`
+`;

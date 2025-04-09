@@ -2,7 +2,7 @@
 # ----
 FROM node:20-bookworm-slim as base
 
-RUN corepack enable
+RUN npm i -g corepack
 
 # We tried to make the Dockerfile as lean as possible. In some cases, that means we excluded a dependency your project needs.
 # By far the most common is Python. If you're running into build errors because `python3` isn't available,
@@ -61,7 +61,7 @@ RUN yarn rw build web --no-prerender
 # ---------
 FROM node:20-bookworm-slim as api_serve
 
-RUN corepack enable
+RUN npm i -g corepack
 
 RUN apt-get update && apt-get install -y \
   openssl \
@@ -105,7 +105,7 @@ CMD [ "node_modules/.bin/rw-server", "api" ]
 # ---------
 FROM node:20-bookworm-slim as web_serve
 
-RUN corepack enable
+RUN npm i -g corepack
 
 USER node
 WORKDIR /home/node/app
