@@ -8,7 +8,7 @@ inputs:
     description: >
       For some actions, setting up the yarn cache takes longer than it would to just yarn install.
     required: false
-    default: 'true'
+    default: "true"
 
   yarn-install-directory:
     description: >
@@ -19,7 +19,7 @@ inputs:
     description: >
       Whether or not to run `yarn build` to build all the framework packages.
     required: false
-    default: 'true'
+    default: "true"
 
 runs:
   using: composite
@@ -27,7 +27,7 @@ runs:
   steps:
     - name: ⬢ Enable Corepack
       shell: bash
-      run: corepack enable
+      run: npm i -g corepack
 
     - name: ⬢ Set up Node.js
       uses: actions/setup-node@v4
@@ -40,7 +40,7 @@ runs:
     - name: ⬢ Enable Corepack
       if: runner.os == 'Windows'
       shell: bash
-      run: corepack enable
+      run: npm i -g corepack
 
     - name: 🐈 Set up yarn cache
       if: inputs.set-up-yarn-cache == 'true'
