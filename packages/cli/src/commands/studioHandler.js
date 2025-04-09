@@ -5,7 +5,7 @@ import semver from 'semver'
 
 import { getPaths } from '@redwoodjs/project-config'
 
-import { isModuleInstalled, installModule } from '../lib/packages'
+import { isModuleInstalled, installModule } from '../lib/packages.js'
 
 export const handler = async (options) => {
   try {

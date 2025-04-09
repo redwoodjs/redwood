@@ -8,15 +8,15 @@ import semver from 'semver'
 import { getConfigPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, writeFile } from '../../lib'
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
+import { getPaths, writeFile } from '../../lib/index.js'
 
 import {
   command,
   description,
   EXPERIMENTAL_TOPIC_ID,
-} from './setupReactCompiler'
-import { printTaskEpilogue } from './util'
+} from './setupReactCompiler.js'
+import { printTaskEpilogue } from './util.js'
 
 export const handler = async ({ force, verbose }) => {
   const rwPaths = getPaths()

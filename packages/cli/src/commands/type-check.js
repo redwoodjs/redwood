@@ -1,6 +1,6 @@
 import terminalLink from 'terminal-link'
 
-import { sides } from '../lib/project'
+import { sides } from '../lib/project.js'
 
 export const command = 'type-check [sides..]'
 export const aliases = ['tsc', 'tc']

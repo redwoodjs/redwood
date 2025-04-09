@@ -9,7 +9,7 @@ import {
   standardAuthBuilder,
 } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../../../lib/'
+import { getPaths } from '../../../lib/index.js'
 
 export const command = 'auth <provider>'
 

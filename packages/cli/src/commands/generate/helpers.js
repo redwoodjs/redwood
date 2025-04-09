@@ -13,10 +13,10 @@ import {
 import { getConfig, ensurePosixPath } from '@redwoodjs/project-config'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { generateTemplate, getPaths, writeFilesTask } from '../../lib'
-import c from '../../lib/colors'
-import { prepareForRollback } from '../../lib/rollback'
-import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize'
+import c from '../../lib/colors.js'
+import { generateTemplate, getPaths, writeFilesTask } from '../../lib/index.js'
+import { prepareForRollback } from '../../lib/rollback.js'
+import { pluralize, isPlural, isSingular } from '../../lib/rwPluralize.js'
 
 /**
  * Returns the full path to a custom generator template, if found in the app.

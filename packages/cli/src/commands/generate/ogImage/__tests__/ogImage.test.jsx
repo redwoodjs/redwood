@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, test, expect, vi } from 'vitest'
 
 import { ensurePosixPath } from '@redwoodjs/project-config'
 
-import * as ogImage from '../ogImage'
+import * as ogImage from '../ogImage.js'
 
 vi.mock('fs', () => ({ ...memfs, default: { ...memfs } }))
 vi.mock('node:fs', () => ({ ...memfs, default: { ...memfs } }))

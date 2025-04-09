@@ -4,7 +4,7 @@ import '../../../../lib/test'
 
 import { describe, test, expect } from 'vitest'
 
-import * as service from '../service'
+import * as service from '../service.js'
 
 describe('the scenario generator', () => {
   test('parseSchema returns an object with required scalar fields', async () => {

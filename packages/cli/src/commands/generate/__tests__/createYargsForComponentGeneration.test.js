@@ -6,7 +6,7 @@ vi.mock('listr2')
 import { Listr } from 'listr2'
 import { vi, test, expect } from 'vitest'
 
-import * as helpers from '../helpers'
+import * as helpers from '../helpers.js'
 
 test('createYargsForComponentGeneration generates a yargs handler as expected', async () => {
   const result = helpers.createYargsForComponentGeneration({

@@ -1,7 +1,7 @@
 import type { TagDescriptor } from '@redwoodjs/web'
 
-import App from './App'
-import { Document } from './Document'
+import App from './App.js'
+import { Document } from './Document.js'
 
 interface Props {
   css: string[]

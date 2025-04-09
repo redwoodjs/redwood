@@ -92,7 +92,7 @@ export const getNamedExports = (ast: types.Node): NamedExports[] => {
   traverse(ast, {
     ExportNamedDeclaration(path) {
       // Re-exports from other modules
-      // Eg: export { a, b } from './module'
+      // Eg: export { a, b } from './module.js'
       const specifiers = path.node?.specifiers
       if (specifiers.length) {
         for (const s of specifiers) {

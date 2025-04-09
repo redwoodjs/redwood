@@ -1,6 +1,6 @@
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getEpilogue } from './util'
+import { getEpilogue } from './util.js'
 
 export const command = 'setup-react-compiler'
 

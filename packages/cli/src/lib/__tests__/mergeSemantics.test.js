@@ -1,7 +1,7 @@
 import { parse, traverse } from '@babel/core'
 import { describe, it, expect } from 'vitest'
 
-import { semanticIdentity } from '../merge/semanticIdentity'
+import { semanticIdentity } from '../merge/semanticIdentity.js'
 
 function expectSemanticId(rootPath, type, predicate, expectedIdentity) {
   const state = { result: undefined }

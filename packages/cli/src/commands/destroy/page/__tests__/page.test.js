@@ -54,9 +54,9 @@ vi.mock('@redwoodjs/internal/dist/generate/generate', () => {
   }
 })
 
-import { getPaths } from '../../../../lib'
-import { files } from '../../../generate/page/page'
-import { tasks } from '../page'
+import { getPaths } from '../../../../lib/index.js'
+import { files } from '../../../generate/page/page.js'
+import { tasks } from '../page.js'
 
 beforeEach(async () => {
   const f = await files({ name: 'About' })

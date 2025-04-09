@@ -35,8 +35,8 @@ import {
 
 import { getConfig } from '@redwoodjs/project-config'
 
-import { setLock } from '../locking'
-import * as updateCheck from '../updateCheck'
+import { setLock } from '../locking.js'
+import * as updateCheck from '../updateCheck.js'
 
 const TESTING_CURRENT_DATETIME = 1640995200000
 

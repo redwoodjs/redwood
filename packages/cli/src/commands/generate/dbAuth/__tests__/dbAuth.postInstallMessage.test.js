@@ -11,8 +11,8 @@ const actualFs = await vi.importActual('fs-extra')
 import { vol } from 'memfs'
 import { afterEach, beforeEach, vi, describe, it, expect } from 'vitest'
 
-import { getPaths } from '../../../../lib'
-import * as dbAuth from '../dbAuth'
+import { getPaths } from '../../../../lib/index.js'
+import * as dbAuth from '../dbAuth.js'
 
 vi.mock('listr2', async () => {
   return {

@@ -2,7 +2,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 
-import { getPaths } from '.'
+import { getPaths } from './index.js'
 
 export const isTypeScriptProject = () => {
   const paths = getPaths()

@@ -10,6 +10,7 @@ import { titleCase } from 'title-case'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
+import c from '../../../lib/colors.js'
 import {
   addRoutesToRouterTask,
   addScaffoldImport,
@@ -17,11 +18,10 @@ import {
   getPaths,
   transformTSToJS,
   writeFilesTask,
-} from '../../../lib'
-import c from '../../../lib/colors'
-import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
-import { templateForComponentFile } from '../helpers'
+} from '../../../lib/index.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { yargsDefaults } from '../helpers.js'
+import { templateForComponentFile } from '../helpers.js'
 
 const ROUTES = [
   `<Route path="/login" page={LoginPage} name="login" />`,

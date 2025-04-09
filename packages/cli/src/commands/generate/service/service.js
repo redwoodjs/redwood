@@ -1,14 +1,14 @@
 import camelcase from 'camelcase'
 import terminalLink from 'terminal-link'
 
-import { transformTSToJS } from '../../../lib'
-import { pluralize, singularize } from '../../../lib/rwPluralize'
-import { getSchema, verifyModelName } from '../../../lib/schemaHelpers'
-import { yargsDefaults, relationsForModel } from '../helpers'
+import { transformTSToJS } from '../../../lib/index.js'
+import { pluralize, singularize } from '../../../lib/rwPluralize.js'
+import { getSchema, verifyModelName } from '../../../lib/schemaHelpers.js'
+import { yargsDefaults, relationsForModel } from '../helpers.js'
 import {
   createYargsForComponentGeneration,
   templateForComponentFile,
-} from '../helpers'
+} from '../helpers.js'
 
 const DEFAULT_SCENARIO_NAMES = ['one', 'two']
 

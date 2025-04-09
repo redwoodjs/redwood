@@ -1,6 +1,6 @@
 import execa from 'execa'
 
-import { getPaths } from '../lib/index'
+import { getPaths } from '../lib/index.js'
 
 export const handler = async ({
   _,

@@ -1,5 +1,5 @@
-import { files as directiveFiles } from '../../generate/directive/directive'
-import { createYargsForComponentDestroy } from '../helpers'
+import { files as directiveFiles } from '../../generate/directive/directive.js'
+import { createYargsForComponentDestroy } from '../helpers.js'
 
 export const description = 'Destroy a directive'
 

@@ -3,13 +3,16 @@ import { Listr } from 'listr2'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { deleteFilesTask, removeRoutesFromRouterTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { pathName } from '../../generate/helpers'
+import c from '../../../lib/colors.js'
+import {
+  deleteFilesTask,
+  removeRoutesFromRouterTask,
+} from '../../../lib/index.js'
+import { pathName } from '../../generate/helpers.js'
 import {
   files as pageFiles,
   paramVariants as templateVars,
-} from '../../generate/page/page'
+} from '../../generate/page/page.js'
 
 export const command = 'page <name> [path]'
 export const description = 'Destroy a page and route component'

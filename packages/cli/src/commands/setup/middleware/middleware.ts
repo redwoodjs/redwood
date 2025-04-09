@@ -1,7 +1,7 @@
 import terminalLink from 'terminal-link'
 import type { Argv } from 'yargs'
 
-import * as ogImageCommand from './ogImage/ogImage'
+import * as ogImageCommand from './ogImage/ogImage.js'
 
 export const command = 'middleware <type>'
 export const description = 'Set up a middleware'

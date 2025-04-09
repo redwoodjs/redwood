@@ -22,8 +22,8 @@ import {
   beforeAll,
 } from 'vitest'
 
-import { getPaths } from '../../../../lib'
-import * as dbAuth from '../dbAuth'
+import { getPaths } from '../../../../lib/index.js'
+import * as dbAuth from '../dbAuth.js'
 
 // Mock files needed for each test
 const mockFiles = {}

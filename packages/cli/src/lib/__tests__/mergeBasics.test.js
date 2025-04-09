@@ -1,9 +1,9 @@
 import { expect, it, describe } from 'vitest'
 
-import { merge } from '../merge'
-import { concatUnique } from '../merge/strategy'
+import { merge } from '../merge/index.js'
+import { concatUnique } from '../merge/strategy.js'
 
-import { unindented } from './fixtures/unindented'
+import { unindented } from './fixtures/unindented.js'
 
 const expectMerged = async (base, ext, merged, strategy = {}) => {
   expect(await merge(unindented(base), unindented(ext), strategy)).toBe(

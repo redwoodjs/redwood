@@ -2,7 +2,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 
-import { getPaths } from './index'
+import { getPaths } from './index.js'
 
 /**
  * Creates the ".redwood/locks" directory if it does not exist

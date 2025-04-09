@@ -3,21 +3,21 @@ import pascalcase from 'pascalcase'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
+import c from '../../../lib/colors.js'
 import {
   deleteFilesTask,
   getPaths,
   readFile,
   removeRoutesFromRouterTask,
   writeFile,
-} from '../../../lib'
-import c from '../../../lib/colors'
-import { pluralize } from '../../../lib/rwPluralize'
-import { verifyModelName } from '../../../lib/schemaHelpers'
+} from '../../../lib/index.js'
+import { pluralize } from '../../../lib/rwPluralize.js'
+import { verifyModelName } from '../../../lib/schemaHelpers.js'
 import {
   files,
   routes as scaffoldRoutes,
   splitPathAndModel,
-} from '../../generate/scaffold/scaffold'
+} from '../../generate/scaffold/scaffold.js'
 
 export const command = 'scaffold <model>'
 export const description =

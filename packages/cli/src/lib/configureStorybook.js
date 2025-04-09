@@ -3,16 +3,16 @@ import path from 'path'
 import fse from 'fs-extra'
 import prettier from 'prettier'
 
-import { merge } from './merge'
+import { merge } from './merge/index.js'
 import {
   interleave,
   concatUnique,
   keepBoth,
   keepBothStatementParents,
-} from './merge/strategy'
-import { isTypeScriptProject } from './project'
+} from './merge/strategy.js'
+import { isTypeScriptProject } from './project.js'
 
-import { getPaths, transformTSToJS, writeFile } from '.'
+import { getPaths, transformTSToJS, writeFile } from './index.js'
 
 /**
  * Extends the Storybook configuration file with the new configuration file

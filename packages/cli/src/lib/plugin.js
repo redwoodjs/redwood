@@ -5,9 +5,9 @@ import fs from 'fs-extra'
 
 import { getCompatibilityData } from '@redwoodjs/cli-helpers'
 
-import { installModule, isModuleInstalled } from './packages'
+import { installModule, isModuleInstalled } from './packages.js'
 
-import { getPaths } from './index'
+import { getPaths } from './index.js'
 
 const { Select } = require('enquirer')
 

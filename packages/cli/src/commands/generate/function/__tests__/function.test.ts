@@ -7,7 +7,7 @@ import path from 'path'
 import { describe, it, expect, test } from 'vitest'
 import yargs from 'yargs/yargs'
 
-import * as functionGenerator from '../function'
+import * as functionGenerator from '../function.js'
 
 // Should be refactored as it's repeated
 type WordFilesType = { [key: string]: string }

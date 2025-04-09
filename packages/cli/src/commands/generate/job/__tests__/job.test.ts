@@ -7,7 +7,7 @@ import path from 'path'
 import { describe, it, expect } from 'vitest'
 
 // @ts-expect-error - Jobs is a JavaScript file
-import * as jobGenerator from '../job'
+import * as jobGenerator from '../job.js'
 
 describe('Single word default files', async () => {
   const files = await jobGenerator.files({

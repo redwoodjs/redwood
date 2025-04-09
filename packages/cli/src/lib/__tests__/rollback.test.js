@@ -7,7 +7,7 @@ import { Listr } from 'listr2'
 import { vol } from 'memfs'
 import { vi, it, expect, beforeEach } from 'vitest'
 
-import * as rollback from '../rollback'
+import * as rollback from '../rollback.js'
 
 beforeEach(() => {
   vol.reset()

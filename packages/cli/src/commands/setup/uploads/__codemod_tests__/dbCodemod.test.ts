@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import { describe, it, expect } from 'vitest'
 
-import { runTransform } from '../../../../lib/runTransform'
+import { runTransform } from '../../../../lib/runTransform.js'
 
 describe('Db codemod', () => {
   it('Handles the default db case', async () => {

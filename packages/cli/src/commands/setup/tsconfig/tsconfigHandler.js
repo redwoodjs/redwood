@@ -4,12 +4,12 @@ import { Listr } from 'listr2'
 
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
+import c from '../../../lib/colors.js'
 import {
   getInstalledRedwoodVersion,
   getPaths,
   saveRemoteFileToDisk,
-} from '../../../lib'
-import c from '../../../lib/colors'
+} from '../../../lib/index.js'
 
 export const handler = async ({ force }) => {
   const installedRwVersion = getInstalledRedwoodVersion()

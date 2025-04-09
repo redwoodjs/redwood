@@ -12,8 +12,8 @@ import { loadAndValidateSdls } from '@redwoodjs/internal/dist/validateSchema'
 import { detectPrerenderRoutes } from '@redwoodjs/prerender/detection'
 import { timedTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, getConfig } from '../lib'
-import { generatePrismaCommand } from '../lib/generatePrismaClient'
+import { generatePrismaCommand } from '../lib/generatePrismaClient.js'
+import { getPaths, getConfig } from '../lib/index.js'
 
 export const handler = async ({
   side = ['api', 'web'],

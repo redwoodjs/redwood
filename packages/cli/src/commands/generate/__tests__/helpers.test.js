@@ -7,8 +7,8 @@ import { vi, test, expect, describe, it } from 'vitest'
 globalThis.__dirname = __dirname
 import '../../../lib/test'
 
-import * as helpers from '../helpers'
-import * as page from '../page/page'
+import * as helpers from '../helpers.js'
+import * as page from '../page/page.js'
 
 test('customOrDefaultTemplatePath returns the default path if no custom templates exist', () => {
   const output = helpers.customOrDefaultTemplatePath({

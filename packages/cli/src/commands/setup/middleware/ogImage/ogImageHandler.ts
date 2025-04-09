@@ -7,7 +7,7 @@ import { format } from 'prettier'
 import { addWebPackages, getPrettierOptions } from '@redwoodjs/cli-helpers'
 import { getConfig, getPaths } from '@redwoodjs/project-config'
 
-import { runTransform } from '../../../../lib/runTransform'
+import { runTransform } from '../../../../lib/runTransform.js'
 
 export async function handler({ force }: { force: boolean }) {
   const rwPaths = getPaths()

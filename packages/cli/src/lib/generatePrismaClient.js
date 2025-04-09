@@ -4,7 +4,7 @@ import path from 'path'
 
 import fs from 'fs-extra'
 
-import { runCommandTask, getPaths } from '../lib'
+import { runCommandTask, getPaths } from '../lib/index.js'
 
 const skipTask = (schema = getPaths().api.dbSchema) => {
   if (!fs.existsSync(schema)) {

@@ -5,7 +5,7 @@ import { vi, describe, it, expect, test, beforeAll } from 'vitest'
 
 // Load mocks
 import '../../../../lib/test'
-import * as cell from '../cell'
+import * as cell from '../cell.js'
 
 vi.mock('@redwoodjs/structure', () => {
   return {

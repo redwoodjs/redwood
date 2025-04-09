@@ -3,7 +3,7 @@ import '../../lib/mockTelemetry'
 
 import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest'
 
-import { handler } from '../info'
+import { handler } from '../info.js'
 
 vi.mock('envinfo', () => ({ default: { run: () => '' } }))
 vi.mock('@redwoodjs/project-config', () => ({ getPaths: () => ({}) }))

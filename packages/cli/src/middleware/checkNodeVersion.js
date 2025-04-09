@@ -1,6 +1,6 @@
 import semver from 'semver'
 
-import c from '../lib/colors'
+import c from '../lib/colors.js'
 
 export function checkNodeVersion() {
   const checks = { ok: true }

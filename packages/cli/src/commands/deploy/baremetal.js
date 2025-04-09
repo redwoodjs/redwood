@@ -10,10 +10,10 @@ import { titleCase } from 'title-case'
 
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 
-import { getPaths } from '../../lib'
-import c from '../../lib/colors'
+import c from '../../lib/colors.js'
+import { getPaths } from '../../lib/index.js'
 
-import { SshExecutor } from './baremetal/SshExecutor'
+import { SshExecutor } from './baremetal/SshExecutor.js'
 
 const CONFIG_FILENAME = 'deploy.toml'
 const SYMLINK_FLAGS = '-nsf'

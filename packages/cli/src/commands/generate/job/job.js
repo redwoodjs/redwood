@@ -9,12 +9,16 @@ import terminalLink from 'terminal-link'
 import { recordTelemetryAttributes } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { getPaths, transformTSToJS, writeFilesTask } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
-import { prepareForRollback } from '../../../lib/rollback'
-import { yargsDefaults } from '../helpers'
-import { validateName, templateForComponentFile } from '../helpers'
+import c from '../../../lib/colors.js'
+import {
+  getPaths,
+  transformTSToJS,
+  writeFilesTask,
+} from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
+import { prepareForRollback } from '../../../lib/rollback.js'
+import { yargsDefaults } from '../helpers.js'
+import { validateName, templateForComponentFile } from '../helpers.js'
 
 // Try to make the name end up looking like: `WelcomeNotice` even if the user
 // called it `welcome-notice` or `welcomeNoticeJob` or something like that

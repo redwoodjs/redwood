@@ -6,9 +6,9 @@ import { Listr } from 'listr2'
 import { addEnvVarTask } from '@redwoodjs/cli-helpers'
 import { errorTelemetry } from '@redwoodjs/telemetry'
 
-import { addPackagesTask, getPaths, writeFile } from '../../../lib'
-import c from '../../../lib/colors'
-import { isTypeScriptProject } from '../../../lib/project'
+import c from '../../../lib/colors.js'
+import { addPackagesTask, getPaths, writeFile } from '../../../lib/index.js'
+import { isTypeScriptProject } from '../../../lib/project.js'
 
 const CLIENT_PACKAGE_MAP = {
   memcached: 'memjs',

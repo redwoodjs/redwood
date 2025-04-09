@@ -1,7 +1,7 @@
 import { vi, describe, it, expect, beforeEach, type Mock } from 'vitest'
 import yargs from 'yargs'
 
-import { handler, builder } from '../flightcontrol'
+import { handler, builder } from '../flightcontrol.js'
 
 vi.mock('path')
 vi.mock('execa')
